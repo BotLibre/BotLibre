@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:gravity="fill_vertical"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+    <TextView
+        android:id="@+id/nameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Channel"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="64sp"
+        android:layout_height="64sp"
+        android:scaleType="fitStart"
+        android:adjustViewBounds="true"
+        android:src="@drawable/bot" />
+    
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+    
+        <ListView
+            android:id="@+id/usersList"
+            android:layout_width="64sp"
+            android:layout_height="match_parent"
+	        android:choiceMode="singleChoice" 
+            android:textSize="10sp"
+	        android:listSelector="@android:color/darker_gray"/>
+        
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:fillViewport="true"
+            android:scrollbars="vertical" >
+
+            <WebView
+                android:id="@+id/logText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+            
+        </ScrollView>
+        
+    </LinearLayout>
+
+    <WebView
+        android:id="@+id/responseText"
+        android:layout_width="wrap_content"
+        android:layout_height="80sp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="You say"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
+
+        <ImageButton
+            android:id="@+id/speakButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="speak"
+            android:src="@android:drawable/ic_btn_speak_now" />
+        
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/lgrey"
+        android:orientation="horizontal" />
+        
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="42sp"
+	        android:layout_height="42sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+		
+		<Button
+	        android:id="@+id/acceptButton"
+	        android:layout_width="42sp"
+	        android:layout_height="42sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/login"
+	        android:onClick="accept"
+	        android:text="" />
+	    
+		<Button
+	        android:id="@+id/sendImageButton"
+	        android:layout_width="42sp"
+	        android:layout_height="42sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/sendfile"
+	        android:onClick="sendImage"
+	        android:text="" />
+		
+		<Button
+	        android:id="@+id/chimeButton"
+	        android:layout_width="42sp"
+	        android:layout_height="42sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/sound"
+	        android:onClick="chime"
+	        android:text="" />
+		
+		<Button
+	        android:id="@+id/speechButton"
+	        android:layout_width="42sp"
+	        android:layout_height="42sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/voiceoff"
+	        android:onClick="speech"
+	        android:text="" />
+		
+		<Button
+	        android:id="@+id/exitButton"
+	        android:layout_width="42sp"
+	        android:layout_height="42sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/logout"
+	        android:onClick="exit"
+	        android:text="" />
+
+    </LinearLayout>
+
+</LinearLayout>

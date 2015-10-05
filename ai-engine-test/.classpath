@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/html/htmlcleaner2_1.jar"/>
+	<classpathentry kind="lib" path="lib/irc/chatengine.jar"/>
+	<classpathentry kind="lib" path="lib/jpa/eclipselink.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/json/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/json/json-lib-2.3-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/jpa/postgresql-9.0-801.jdbc4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/jpa/persistence.jar"/>
+	<classpathentry kind="lib" path="lib/freebase/google-api-services-freebase-v1-rev37-1.15.0-rc.jar"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-core-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/mail/dsn-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/gimap-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/imap-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/javax.mail-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/javax.mail-api-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/mailapi-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/pop3-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/smtp-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.2.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Bot Libre - AI Engine"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

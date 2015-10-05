@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#FFFFFF"
+	android:gravity="fill_vertical"
+	android:orientation="vertical" >
+	
+	<!--com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView-->
+    
+	<LinearLayout
+		android:id="@+id/avatarLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="0px"
+		android:layout_weight="3"
+		android:orientation="horizontal" >
+		
+	<ImageView
+		android:id="@+id/imageView"
+		android:layout_width="0px"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:adjustViewBounds="true"
+		android:contentDescription="bot"
+		android:src="@drawable/bot" />
+		
+	<RelativeLayout
+		android:id="@+id/videoLayout"
+		android:layout_width="0px"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:orientation="horizontal"
+		android:visibility="gone" >
+		
+	<VideoView
+		android:id="@+id/videoView"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+		android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+		android:contentDescription="avatar"
+		android:background="@android:color/transparent" />
+	
+	</RelativeLayout>
+	
+    <ListView
+        android:id="@+id/chatList"
+        android:layout_width="0px"
+        android:layout_height="fill_parent"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
+        
+    </LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/responseLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="0px"
+		android:layout_weight="1"
+		android:orientation="horizontal" >
+		
+		<ImageView
+			android:id="@+id/responseImageView"
+			android:layout_width="40sp"
+			android:layout_height="40sp"
+			android:adjustViewBounds="true"
+			android:contentDescription="bot"
+			android:src="@drawable/bot" />
+				
+		<ScrollView
+				android:id="@+id/responseScroll"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+		    
+			<WebView
+				android:id="@+id/responseText"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		</ScrollView>
+		
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+		
+		<EditText
+			android:id="@+id/messageText"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:ems="10"
+			android:hint="You say"
+			android:imeOptions="actionDone"
+			android:inputType="text" />
+
+		<ImageButton
+			android:id="@+id/speakButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="speak"
+			android:src="@android:drawable/ic_btn_speak_now" />
+		
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="1dp"
+		android:background="@color/lgrey"
+		android:orientation="horizontal" />
+		
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+		
+		<Button
+			android:id="@+id/menuButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/menu"
+			android:onClick="menu"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/soundButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/sound"
+			android:onClick="toggleSound"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/correctionButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/check2"
+			android:onClick="toggleCorrection"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/flagButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/flag2"
+			android:onClick="toggleFlag"
+			android:text="" />
+		
+		<Spinner
+			android:id="@+id/emoteSpin"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	</LinearLayout>
+
+</LinearLayout>

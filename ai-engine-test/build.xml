@@ -1,0 +1,52 @@
+<project name="botlibre-ai-test" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="source" location="source"/>
+	<property name="build" location="build"/>
+	<property name="lib"  location="lib"/>
+
+	<target name="init" depends="clean">
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init"
+	        description="compile the source " >
+	    <!-- Compile the java code from ${source} into ${build} -->
+	    <javac srcdir="${source}" destdir="${build}" debug="on" encoding="utf8">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+		    <fileset dir="${source}"/>
+		</copy>
+	</target>
+	
+	<target name="gui" description="launch the test gui " >
+	    <java classname="org.botlibre.client.gui.BotFrame" maxmemory="512m" fork="true">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			    <include name="*.jar"/>
+			  </fileset>
+			</classpath>
+		</java>
+	</target>
+	
+	<target name="dist" depends="compile"
+	        description="generate the distribution" >
+	    <jar jarfile="${lib}/botlibre-ai-test.jar" basedir="${build}"/>
+	</target>
+	
+	<target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} directory -->
+	    <delete dir="${build}"/>
+	    <delete file="${lib}/botlibre-ai-test.jar"/>
+	</target>
+
+</project>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="network">
+		<xsd:annotation>
+			<xsd:documentation>Root element describing a network (interconnected set of vertices)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="vertices">
+					<xsd:annotation>
+						<xsd:documentation>Set of vertices</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="vertex" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Element describing a vertex</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:all>
+										<xsd:element name="creation-date" type="xsd:string"/>
+										<xsd:element name="access-date" type="xsd:string"/>
+										<xsd:element name="access-count" type="xsd:integer"/>
+										<xsd:element name="data">
+											<xsd:complexType>
+												<xsd:attribute name="type" type="xsd:string"/>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:all>
+									<xsd:attribute name="id" type="xsd:integer"/>
+									<xsd:attribute name="access-count" type="xsd:integer"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="relations">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="relationship" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Element describing a relationship</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:attribute name="source-id" type="xsd:integer"/>
+									<xsd:attribute name="target-id" type="xsd:integer"/>
+									<xsd:attribute name="type-id" type="xsd:integer"/>
+									<xsd:attribute name="correctness" type="xsd:integer"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

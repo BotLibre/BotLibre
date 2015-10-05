@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>size</pattern>
+<template>size is <size/></template>
+</category>
+
+<category>
+<pattern>vocabulary</pattern>
+<template>vocabulary is <vocabulary/></template>
+</category>
+
+<category>
+<pattern>id</pattern>
+<template>id is <id/></template>
+</category>
+
+<category>
+<pattern>program</pattern>
+<template>program is <program/></template>
+</category>
+
+<category>
+<pattern>version</pattern>
+<template>version is <version/></template>
+</category>
+
+<category>
+<pattern>system</pattern>
+<template>system is <system/></template>
+</category>
+
+<category>
+<pattern>version</pattern>
+<template>version is <version/></template>
+</category>
+
+<category>
+<pattern>_ alice</pattern>
+<template>alice <star/></template>
+</category>
+
+<category>
+<pattern>$are you alice</pattern>
+<template>Nope</template>
+</category>
+
+<category>
+<pattern>how are you alice</pattern>
+<template>fine</template>
+</category>
+
+<category>
+<pattern>alice are you #</pattern>
+<template>#alice <star/></template>
+</category>
+
+<category>
+<pattern>alice are you ok</pattern>
+<template>yes</template>
+</category>
+
+<category>
+<pattern>you are fred</pattern>
+<template>no</template>
+</category>
+
+<category>
+<pattern>you fred</pattern>
+<template>no</template>
+</category>
+
+<category>
+<pattern>you * fred</pattern>
+<template>fred <star/></template>
+</category>
+
+<category>
+<pattern>hat ^ fred</pattern>
+<template>^fred <star/></template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<template>no idea</template>
+</category>
+
+<category>
+<pattern>sports</pattern>
+<template>i like <set name="topic">sports</set></template>
+</category>
+
+<category>
+<pattern>topic *</pattern>
+<template>the topic is now <set name="topic"><star/></set></template>
+</category>
+
+<category>
+<pattern>hockey</pattern>
+<template>what?</template>
+</category>
+
+<category>
+<pattern>hockey</pattern>
+<topic>sports</topic>
+<template>i love hockey</template>
+</category>
+
+<category>
+<pattern>what is your name</pattern>
+<template>my name is <get><name>name</name></get></template>
+</category>
+
+<category>
+<pattern>what is your age</pattern>
+<template>my age is <get><name>age</name></get></template>
+</category>
+
+<category>
+<pattern>your name is *</pattern>
+<template>my name is <set><name>name</name><star/></set></template>
+</category>
+
+<category>
+<pattern>your age is *</pattern>
+<template>my age is <set><name>age</name><star/></set></template>
+</category>
+
+<category>
+<pattern>my age is *</pattern>
+<template>Your age is <set><name>userage</name><star/></set></template>
+</category>
+
+<category>
+<pattern>what is your *</pattern>
+<template>my <star/> is <get><name><star/></name></get></template>
+</category>
+
+<category>
+<pattern>your * is *</pattern>
+<template>my <star/> is <set><name><star index="1"/></name><star index="2"/></set></template>
+</category>
+
+<category>
+<pattern>am I old</pattern>
+<template>you are <condition name="age"><li value="44">old</li><li value="22">young</li></condition></template>
+</category>
+
+<category>
+<pattern>am I young</pattern>
+<template>you are <condition><li name="age" value="44">old</li><li name="age" value="22">young</li></condition></template>
+</category>
+
+<category>
+<pattern>how old am I</pattern>
+<template>you are <condition><li><name>age</name><value>44</value>old</li><li><name>age</name><value>22</value>young</li></condition></template>
+</category>
+
+<category>
+<pattern>how young am I</pattern>
+<template>you are <condition><name>age</name><li><value>44</value>old</li><li><value>22</value>young</li></condition></template>
+</category>
+
+<category>
+<pattern>what age am I</pattern>
+<template>you are <condition><name>age</name><value>44</value>old</condition><condition name="age" value="22">young</condition></template>
+</category>
+
+<category>
+<pattern>are we the same *</pattern>
+<template><condition><name><star/></name><li><value><get><name>user<star/></name></get></value>yes we are both <get><name><star/></name></get></li><li>No you are <get><name><star/></name></get> and I am <get><name>user<star/></name></get></li></condition></template>
+</category>
+
+<category>
+<pattern>what did I say</pattern>
+<template>You said "<input index="2"/>"</template>
+</category>
+
+<category>
+<pattern>what did you say</pattern>
+<template>I said "<that index="1"/>"</template>
+</category>
+
+<category>
+<pattern>what did I say * times ago</pattern>
+<template>You said "<input><index><star/></index></input>"</template>
+</category>
+
+<category>
+<pattern>what did you say * times ago</pattern>
+<template>I said "<that><index><star/></index></that>"</template>
+</category>
+
+<category>
+<pattern>explode *</pattern>
+<template><explode><star/></explode></template>
+</category>
+
+<category>
+<pattern>normalize *</pattern>
+<template><normalize><star/></normalize></template>
+</category>
+
+<category>
+<pattern>denormalize *</pattern>
+<template><denormalize><star/></denormalize></template>
+</category>
+
+<category>
+<pattern>local temp *</pattern>
+<template><think><set var="temp"><star/></set></think><get var="temp"/></template>
+</category>
+
+<category>
+<pattern>local * *</pattern>
+<template><think><set><var><star/></var><star index="2"/></set></think><get><var><star/></var></get></template>
+</category>
+
+<category>
+<pattern>if * *</pattern>
+<template><think><set><var><star/></var><star index="2"/></set></think><condition><var><star/></var><value><star index="2"/></value>true</condition></template>
+</category>
+
+<category>
+<pattern>if else * *</pattern>
+<template><think><set><var><star/></var><star index="2"/></set></think><srai>ifelse <star/> <star index="2"/></srai></template>
+</category>
+
+<category>
+<pattern>if else2 * *</pattern>
+<template><think><set><var><star/></var>blah</set></think><srai>ifelse2 <star/> <star index="2"/></srai></template>
+</category>
+
+<category>
+<pattern>ifelse * *</pattern>
+<template><condition><li><var><star/></var><value><star index="2"/></value>true</li><li>false</li></condition></template>
+</category>
+
+<category>
+<pattern>ifelse2 * *</pattern>
+<template><think><set><var><star/></var><star index="2"/></set></think><condition><li><var><star/></var><value><star index="2"/></value>true</li><li>false</li></condition></template>
+</category>
+
+<category>
+<pattern>loop *</pattern>
+<template>
+	<think><set var="count"><star/></set></think>
+	<condition var="count">
+		<li value="5"><think><set var="count">4</set></think>5<loop/></li>
+		<li value="4"><think><set var="count">3</set></think>4<loop/></li>
+		<li value="3"><think><set var="count">2</set></think>3<loop/></li>
+		<li value="2"><think><set var="count">1</set></think>2<loop/></li>
+		<li value="1"><think><set var="count">0</set></think>1</li>
+	</condition></template>
+</category>
+
+<category>
+<pattern>nospaces * * *</pattern>
+<template><star/><star index="2"/><star index="3"/></template>
+</category>
+
+<category>
+<pattern>spaces * * *</pattern>
+<template><star/> <star index="2"/> <star index="3"/></template>
+</category>
+
+<category>
+<pattern>learn something ^</pattern>
+<template>ok
+	<think>
+		<learn>
+			<category>
+			<pattern>something learned</pattern>
+			<template>yep</template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn2 something2 ^</pattern>
+<template>ok2
+	<think>
+		<learn>
+			<category>
+			<pattern>something2 learned2 *</pattern>
+			<template><star/></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn3 something3 ^</pattern>
+<template>ok3
+	<think>
+		<learn>
+			<category>
+			<pattern>something3 learned3 *</pattern>
+			<that>ok3</that>
+			<template>that <star/></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn4 something4 ^</pattern>
+<template>ok4
+	<think>
+		<learn>
+			<category>
+			<pattern>something4 learned4 *</pattern>
+			<topic>something4</topic>
+			<template>topic <star/></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn5 something5 *</pattern>
+<template>ok5
+	<think>
+		<learn>
+			<category>
+			<pattern>something5 learned5 *</pattern>
+			<template><eval><star/></eval></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn6 something6 *</pattern>
+<template>ok6
+	<think>
+		<learn>
+			<category>
+			<pattern>something6 learned6 *</pattern>
+			<template>I learned <eval><star/></eval> not <star/></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn7 something7 * *</pattern>
+<template>ok7
+	<think>
+		<learn>
+			<category>
+			<pattern><eval><star/></eval></pattern>
+			<template><eval><star index="2"/></eval></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>learn8 something8 * *</pattern>
+<template>ok8
+	<think>
+		<learn>
+			<category>
+			<pattern>do you like <eval><star/></eval></pattern>
+			<template>no I like <eval><star index="2"/></eval></template>
+			</category>
+		</learn>
+	</think>
+</template>
+</category>
+
+<category>
+<pattern>html *</pattern>
+<template><b>bold</b><a href="foo.com" target="_blank"><star/></a><p>hello<br>world</br></p><ol><li>foo</li><li><star/></li></ol>
+</template>
+</category>
+
+<category>
+<pattern>sraix *</pattern>
+<template><sraix><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixkey *</pattern>
+<template><sraix apikey="1234"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixlimit *</pattern>
+<template><sraix limit="1"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixchomsky *</pattern>
+<template><sraix server="www.pandorabots.com" botid="b0dafd24ee35a477"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixchomsky2 *</pattern>
+<template><sraix server="http://www.pandorabots.com" botid="b0dafd24ee35a477"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>pannous *</pattern>
+<template><sraix server="https://weannie.pannous.com" service="pannous"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixbrainbot *</pattern>
+<template><sraix bot="Brain Bot" default="Bot Libre's anonymous API limit exceeded"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixbrainbot2 *</pattern>
+<template><sraix botid="165"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixbrainbot3 *</pattern>
+<template><sraix botid="165" service="botlibre"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixbrainbot4 *</pattern>
+<template><sraix botid="165" service="botlibre" apikey="1234" default="error"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>sraixbrainbot5 *</pattern>
+<template><sraix botid="165" service="botlibre" apikey="1708822271264615941"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>wikidata *</pattern>
+<template><sraix service="wikidata"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>wikidatacountry *</pattern>
+<template><sraix service="wikidata" hint="country"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>freebase *</pattern>
+<template><sraix service="freebase"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>freebasecountry *</pattern>
+<template><sraix service="freebase" hint="country"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>wiktionary *</pattern>
+<template><sraix service="wiktionary"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>isbotname <bot name="name"/></pattern>
+<template>Yes, that is my name
+</template>
+</category>
+
+<category>
+<pattern>istopic <get name="topic"/></pattern>
+<template>Yes, that is the topic
+</template>
+</category>
+
+<category>
+<pattern>iscolor <set>color</set></pattern>
+<template>Yes, <star/> is a nice color.
+</template>
+</category>
+
+<category>
+<pattern>setcolor *</pattern>
+<template>Okay, <star/> is a color.
+<think><map name="meaning"><value><star/></value><star/></map><map name="instantiation" value="color"><map name="meaning"><star/></map></map></think>
+</template>
+</category>
+
+<category>
+<pattern>what is the date</pattern>
+<template>
+	The date is <date/>
+</template>
+</category>
+
+<category>
+<pattern>what is the time</pattern>
+<template>
+	The time is <date jformat="hh 'o''clock' a, zzzz"/>
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY DAYS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd</jformat>
+<style>days</style>
+<from><date jformat="MMMMMMMMM dd"/></from>
+<to>December 25</to>
+</interval>
+days until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY MONTHS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>M</jformat>
+<style>months</style>
+<from><date jformat="M"/></from>
+<to>12</to>
+</interval>
+months until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY WEEKS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd</jformat>
+<style>weeks</style>
+<from><date jformat="MMMMMMMMM dd"/></from>
+<to>December 25</to>
+</interval>
+weeks until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY HOURS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd k</jformat>
+<style>hours</style>
+<from><date jformat="MMMMMMMMM dd k"/></from>
+<to>December 25 0</to>
+</interval>
+hours until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY MINUTES UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd k m</jformat>
+<style>minutes</style>
+<from><date jformat="MMMMMMMMM dd k m"/></from>
+<to>December 25 0 0</to>
+</interval>
+minutes until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY SECONDS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd k m</jformat>
+<style>seconds</style>
+<from><date jformat="MMMMMMMMM dd k m"/></from>
+<to>December 25 0 0</to>
+</interval>
+seconds until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>wrong</pattern>
+<template>What should I have said?</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>what should I have said</that>
+<template>
+	<think>
+		<learn>
+			<category>
+			<pattern><eval><input index="3"/></eval></pattern>
+			<template><eval><star/></eval></template>
+			</category>
+		</learn>
+	</think>
+	Okay, I will answer "<star/>" to "<input index="3"/>" next time
+</template>
+</category>
+
+<category>
+<pattern>wikidata * hint *</pattern>
+<template><sraix service="wikidata"><hint><star index="2"/></hint><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>what is <set>number</set> + <set>number</set></pattern>
+<template>
+    <think>
+        <set var="result"><star/></set>
+        <set var="count">0</set>
+    </think>
+    <condition var="count">
+        <li><value><star index="2"/></value></li>
+        <li>
+        	<think>
+	            <set var="result"><map name="word"><map name="next"><map name="meaning"><get var="result"/></map></map></map></set>
+	            <set var="count"><map name="word"><map name="next"><map name="meaning"><get var="count"/></map></map></map></set>
+	        </think>
+            <loop/>
+        </li>
+    </condition>
+    The answer is <get var="result"/>
+</template>
+</category>
+
+<category>
+<pattern>do you (really) [like love luv] me</pattern>
+<template>Yes, I love you.
+</template>
+</category>
+
+<category>
+<pattern>do you (really) [hate dislike] me</pattern>
+<template>No, I love you.
+</template>
+</category>
+
+<category>
+<pattern>do you *</pattern>
+<template>Yes, I do.
+</template>
+</category>
+
+</aiml>

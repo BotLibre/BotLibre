@@ -1,0 +1,216 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.paphus.sdk.activity"
+    android:versionCode="4"
+    android:versionName="2.3.1">
+
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="24"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>    
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 
+    	This is the application manifest.
+    	To build your own application you need to choose you main activity and updates its label and the app version.
+    	** you must use your own globally unique package name above, this will require you to rename the R impports in the activities to your new package **
+     -->
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:allowBackup="true" >
+        <activity
+            android:name="com.paphus.sdk.activity.MainActivity"
+            android:label="Project Libre SDK" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.BrowseActivity"
+            android:label="Browse Bots"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ForumBrowseActivity"
+            android:label="Browse Forums"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.BrowsePostsActivity"
+            android:label="Browse Posts"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.ChannelBrowseActivity"
+            android:label="Browse Channels"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.ChooseBotActivity"
+            android:label="Choose Bot"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.BrowseActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ChooseForumActivity"
+            android:label="Choose Forum"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumBrowseActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ChoosePostActivity"
+            android:label="View Posts"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.BrowsePostsActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.ChooseChannelActivity"
+            android:label="Choose Channel"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelBrowseActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.ChooseDomainActivity"
+            android:label="Choose Domain"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.ChatActivity"
+            android:label="Chat"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.InstanceActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.CreateForumPostActivity"
+            android:label="New Post"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.ForumActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.CreateReplyActivity"
+            android:label="Reply"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.ForumPostActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.EditForumPostActivity"
+            android:label="Edit Post"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.ForumPostActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.CreateUserActivity"
+            android:label="Sign Up"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.LoginActivity"
+            android:label="Sign In"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.EditUserActivity"
+            android:label="Edit User"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.InstanceActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.ViewUserActivity"
+            android:label="View User"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.InstanceActivity"
+            android:label="View Bot"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.BrowseActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ForumActivity"
+            android:label="Forum"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumBrowseActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ForumPostActivity"
+            android:label="View Post"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.BrowsePostActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.ChannelActivity"
+            android:label="Channel"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelBrowseActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.DomainActivity"
+            android:label="Domain"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.LiveChatActivity"
+            android:label="Live Chat"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+        </activity>
+    </application>
+
+</manifest>

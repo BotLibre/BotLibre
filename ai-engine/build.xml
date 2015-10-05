@@ -1,0 +1,59 @@
+<project name="botlibre-ai" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="source" location="source"/>
+	<property name="build" location="build"/>
+	<property name="lib"  location="lib"/>
+	
+	<target name="define.task">	
+	    <taskdef name="weave" classname="org.eclipse.persistence.tools.weaving.jpa.StaticWeaveAntTask"/>
+	</target>
+	
+	<target name="weaving" depends="define.task, compile">
+	    <weave source="${build}"
+	            target="${build}"
+	            persistenceinfo="${build}"
+	            loglevel="info">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			  </fileset>
+			</classpath>	
+	    </weave>
+	</target>
+
+	<target name="init" depends="clean">
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init"
+	        description="compile the source " >
+	    <!-- Compile the java code from ${source} into ${build} -->
+	    <javac srcdir="${source}" destdir="${build}" debug="on" encoding="utf8">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+		    <fileset dir="${source}"/>
+		</copy>
+	</target>
+	
+	<target name="dist" depends="weaving"
+	        description="generate the distribution" >
+	    <!-- Put everything in ${build} into botlibre-ai.jar file -->
+	    <jar jarfile="${lib}/botlibre-ai.jar" basedir="${build}"/>
+	</target>
+	
+	<target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} directory -->
+	    <delete dir="${build}"/>
+	    <delete file="${lib}/botlibre-ai.jar"/>
+	</target>
+
+</project>

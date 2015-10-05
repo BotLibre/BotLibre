@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/persistence persistence_1_0.xsd"
+                version="1.0">
+    <persistence-unit name="Bot" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <mapping-file>META-INF/knowledge-orm.xml</mapping-file>
+        <properties>
+        	<!--property name="eclipselink.jdbc.connections.min" value="1"/-->
+        	
+        	<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:postgres"/>
+        	<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+        	<property name="javax.persistence.jdbc.user" value="postgres"/>
+        	<property name="javax.persistence.jdbc.password" value="password"/>
+        	
+        	<!-- property name="eclipselink.ddl-generation" value="create-tables"/-->
+        	<!-- roperty name="eclipselink.ddl-generation" value="create-or-extend-tables"/-->
+
+        	<property name="eclipselink.persistence-context.flush-mode" value="commit"/>
+        	<property name="eclipselink.order-updates" value="true"/>
+        	<property name="eclipselink.cache.type.default" value="SoftWeak"/>
+        	<property name="eclipselink.cache.type.BasicRelationship" value="Weak"/>
+        	<!-- property name="eclipselink.weaving" value="true"/-->
+        	<!-- property name="eclipselink.weaving.internal" value="true"/>
+        	<property name="eclipselink.weaving.changetracking" value="true"/>
+        	<property name="eclipselink.weaving.lazy" value="true"/-->
+        	<property name="eclipselink.weaving.fetchgroups" value="false"/>
+        	<property name="eclipselink.logging.level" value="fine"/>
+        	<!-- property name="eclipselink.orm.validate.schema" value="true"/-->
+        	<property name="eclipselink.logging.parameters" value="true"/>
+        </properties>
+    </persistence-unit>
+    
+    <persistence-unit name="import" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <mapping-file>META-INF/knowledge-orm.xml</mapping-file>
+        <properties>
+        	
+        	<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:postgres"/>
+        	<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+        	<property name="javax.persistence.jdbc.user" value="postgres"/>
+        	<property name="javax.persistence.jdbc.password" value="password"/>
+        	
+        	<property name="eclipselink.persistence-context.flush-mode" value="commit"/>
+        	<property name="eclipselink.order-updates" value="true"/>
+        	<!-- property name="eclipselink.weaving" value="true"/-->
+        	<property name="eclipselink.weaving.fetchgroups" value="false"/>
+        	<property name="eclipselink.logging.parameters" value="true"/>
+        </properties>
+    </persistence-unit>
+    
+</persistence>

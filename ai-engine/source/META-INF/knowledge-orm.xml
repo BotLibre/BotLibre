@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.2"
+        xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.eclipse.org/eclipselink/xsds/
+        eclipselink_orm_2_2.xsd">
+    <entity name="Vertex" class="org.botlibre.knowledge.BasicVertex" access="PROPERTY">
+    	<!-- change-tracking type="DEFERRED"/-->
+    	<table name="VERTEX">
+    		<unique-constraint>
+    			<column-name>DATAVALUE</column-name>
+    			<column-name>DATATYPE</column-name>
+    		</unique-constraint>
+    	</table>
+    	<index  name="VT_DV_INDX">
+    		<column-name>DATAVALUE</column-name>
+    	</index>
+    	<named-query name="findVertexByData">
+    		<query>Select v from Vertex v where v.dataValue = :data and v.dataType = :type</query>
+    		<hint name="eclipselink.query-type" value="ReadObject"/>
+    		<hint name="eclipselink.query-cache" value="true"/>
+    		<hint name="eclipselink.query-cache.size" value="1000"/>
+    		<hint name="eclipselink.query-results-cache.invalidate-on-change" value="false"/>
+    		<hint name="eclipselink.query-results-cache.ignore-null" value="true"/>
+    	</named-query>
+    	<named-query name="findVertexByName">
+    		<query>Select v from Vertex v where v.name = :name</query>
+    	</named-query>
+        <attributes>
+            <id name="id">
+            	<generated-value/>
+            </id>
+            <basic name="dataValue">
+            	<column length="1024"/>
+            </basic>
+            <basic name="dataType">
+            	<column length="256"/>
+            </basic>
+            <basic name="name">
+            	<column length="1024"/>
+            </basic>
+            <basic name="creationDate">
+            	<temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="accessDate">
+            	<temporal>TIMESTAMP</temporal>
+            </basic>
+            <one-to-many name="allRelationships" target-entity="org.botlibre.knowledge.BasicRelationship" mapped-by="source">
+            	<cascade>
+            		<cascade-persist/>
+            	</cascade>
+            	<!--private-owned/-->
+            </one-to-many>
+            <transient name="data"/>
+            <transient name="original"/>
+            <transient name="consciousnessLevel"/>
+            <transient name="network"/>
+            <transient name="relationships"/>
+        </attributes>
+    </entity>
+    <entity name="Relationship" class="org.botlibre.knowledge.BasicRelationship" access="FIELD">
+    	<index name="RL_SRC_INDX">
+    		<column-name>SOURCE_ID</column-name>
+    	</index>
+    	<index name="RL_TRG_INDX">
+    		<column-name>TARGET_ID</column-name>
+    	</index>
+    	<index name="RL_TYP_INDX">
+    		<column-name>TYPE_ID</column-name>
+    	</index>
+    	<index name="RL_META_INDX2">
+    		<column-name>META_ID</column-name>
+    	</index>
+        <attributes>
+            <id name="id">
+            	<generated-value/>
+            </id>
+            <basic name="index">
+                <!-- INDEX is reserve word -->
+            	<column name="SOURCE_INDEX"/>
+            </basic>
+            <basic name="creationDate">
+            	<temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="accessDate">
+            	<temporal>TIMESTAMP</temporal>
+            </basic>
+            <many-to-one name="source" fetch="LAZY" target-entity="org.botlibre.knowledge.BasicVertex">
+            	<join-column nullable="false"/>
+            </many-to-one>
+            <many-to-one name="target" fetch="LAZY"  target-entity="org.botlibre.knowledge.BasicVertex">
+            	<join-column nullable="false"/>
+                <!-- batch-fetch type="JOIN"/-->
+            </many-to-one>
+            <many-to-one name="type" fetch="LAZY"  target-entity="org.botlibre.knowledge.BasicVertex">
+            	<join-column nullable="false"/>
+            </many-to-one>
+            <many-to-one name="meta" fetch="LAZY"  target-entity="org.botlibre.knowledge.BasicVertex"/>
+            <transient name="consciousnessLevel"/>
+        </attributes>
+    </entity>
+    <entity name="ImageData" class="org.botlibre.knowledge.ImageData" access="FIELD">
+        <attributes>
+            <id name="id">
+            	<generated-value/>
+            </id>
+            <basic name="image">
+            	<column name="IMAGE_DATA"/>
+            	<lob/>
+            </basic>
+        </attributes>
+	</entity>
+    <entity name="TextData" class="org.botlibre.knowledge.TextData" access="FIELD">
+        <attributes>
+            <id name="id">
+            	<generated-value/>
+            </id>
+            <basic name="text">
+            	<column name="TEXT_DATA"/>
+            	<lob/>
+            </basic>
+        </attributes>
+	</entity>
+</entity-mappings>

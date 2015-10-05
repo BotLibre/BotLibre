@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuSignIn"
+          android:title="Sign In" />
+    
+    <item android:id="@+id/menuSignUp"
+          android:title="Sign Up" />
+    
+    <item android:id="@+id/menuSignOut"
+          android:title="Sign Out" />
+    
+    <item android:id="@+id/menuViewUser"
+          android:title="View User" />
+    
+    <item android:id="@+id/menuEditUser"
+          android:title="Edit User" />
+     
+</menu>
