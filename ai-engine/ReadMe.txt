@@ -4,7 +4,7 @@ The Bot Libre AI engine is written in Java.  It requires a database to run (Post
 
 Bot Libre includes an AIML and Self compiler/interpreter.
 
-This components only includes the AI engine, the web and REST interfaces are separate components.
+This component only includes the AI engine, the web and REST interfaces are separate components.
 
 The prebuild jar file is in /lib/botlibre-ai.jar
 
