@@ -18,3 +18,4 @@ The AI engine requires a PostgreSQL database.  The default user/password is post
 To change the user/password or database, edit the file, ai-engine/source/META-INF/persistence.xml.
 You will need to rebuild the botlibre-ai.jar and copy it to the ai-engine-test lib directory.
 
+The Twitter, Facebook, and Freebase support also require developers keys from Twitter, Facebook, and Google.
