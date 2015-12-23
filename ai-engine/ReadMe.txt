@@ -10,7 +10,10 @@ The prebuild jar file is in /lib/botlibre-ai.jar
 
 To build the source code the ant command line build tool is used.
 You can download ant from, http://ant.apache.org/
-To build run ant, or the build.bat file.
+To build run the build.bat file, or run ant,
+ant -lib .\lib\jpa\eclipselink.jar -lib .\lib\jpa\persistence.jar
+or,
+ant -lib ./lib/jpa/eclipselink.jar -lib ./lib/jpa/persistence.jar (unix/mac)
 
 The project is developed in Eclipse.  There is an Eclipse .project file in the root directory.
 You can download Eclipse from, https://eclipse.org/
