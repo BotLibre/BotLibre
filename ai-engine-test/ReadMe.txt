@@ -13,3 +13,8 @@ You can download Eclipse from, https://eclipse.org/
 
 This component also includes a standalone GUI that can be used for testing or to create and access a bot instance.
 To run the GUI run "ant gui" or the gui.bat file.
+
+The AI engine requires a PostgreSQL database.  The default user/password is postgres/password.
+To change the user/password or database, edit the file, ai-engine/source/META-INF/persistence.xml.
+You will need to rebuild the botlibre-ai.jar and copy it to the ai-engine-test lib directory.
+
