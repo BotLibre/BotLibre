@@ -7,6 +7,6 @@ An open platform for artificial intelligence, chat bots, virtual agents, social 
 
 ## Components
 
-* ai-engine : 
-* ai-engine-test : 
-* sdk : 
+* ai-engine : artificial intelligence engine, Java library
+* ai-engine-test : JUnit test cases, Java, test GUI
+* sdk : Android, iOS, web SDK, (Java, objective C, JavaScript)
