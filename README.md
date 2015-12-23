@@ -4,3 +4,9 @@ An open platform for artificial intelligence, chat bots, virtual agents, social 
 * http://www.botlibre.org
 * http://www.botlibre.com
 * https://sourceforge.net/projects/botlibre
+
+## Components
+
+* ai-engine : 
+* ai-engine-test : 
+* sdk : 
