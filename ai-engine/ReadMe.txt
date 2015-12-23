@@ -12,6 +12,9 @@ To build the source code the ant command line build tool is used.
 You can download ant from, http://ant.apache.org/
 To build run ant, or the build.bat file.
 
+The project is developed in Eclipse.  There is an Eclipse .project file in the root directory.
+You can download Eclipse from, https://eclipse.org/
+
 The botlibre-ai.jar is just a library.  It is not runnable, and does not contain any interface.  It can be used from a Java web server such as Tomcat, or a standalone Java application.
 The AI engine has not yet been ported or tested on Android.  To run on Android the database would need to be changed to use an Android compatible database.
 
