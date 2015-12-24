@@ -24,6 +24,7 @@ The AI engine has not yet been ported or tested on Android.  To run on Android t
 The AI engine is not required for the Android and iOS SDK.  The SDK accesses the free Bot Libre server.  The AI engine library is only required to create your own server, or standalone application.
 
 A GUI and examples can be found in the ai-engine-test directory.  That is the best place to start.
+The database can also be initialize from the test directory.
 
 Note, the AI engine requires a PostgreSQL database.  The default user/password is postgres/password.
 To change the user/password or database, edit the file, ai-engine/source/META-INF/persistence.xml, and rebuild the jar.
