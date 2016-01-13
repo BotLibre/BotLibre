@@ -116,7 +116,7 @@ public class TestFreebase extends TextTest {
 			
 			text.input("where is Montreal?");
 			String response = waitForOutput(output);
-			if (!response.equals("Montreal is in Québec.")
+			if (!response.equals("Montreal is in QuÃ©bec.")
 					&& !response.equals("Montreal is in Canada.")
 					&& !response.equals("Montreal is in Urban agglomeration of Montreal.")) {
 				fail("Incorrect: " + response);
@@ -125,11 +125,11 @@ public class TestFreebase extends TextTest {
 			Utils.sleep(SLEEP);
 			text.input("where is that?");
 			response = waitForOutput(output);
-			if (!response.equals("Québec is in Canada.")
+			if (!response.equals("QuÃ©bec is in Canada.")
 					&& !response.equals("Urban agglomeration of Montreal is in Canada.")
 					&& !response.equals("Canada is in Americas.")
 					&& !response.equals("Canada is in DVD Region 1.")
-					&& !response.equals("Québec is in Canada.")) {
+					&& !response.equals("QuÃ©bec is in Canada.")) {
 				fail("Incorrect: " + response);
 			}
 	
