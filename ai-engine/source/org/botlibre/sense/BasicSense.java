@@ -157,6 +157,13 @@ public class BasicSense implements Sense {
 	public void awake() {
 		getBot().log(this, "Awake", Bot.FINE);
 	}
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
+		
+	}
 	
 	/**
 	 * Stop sensing.
@@ -424,5 +431,9 @@ public class BasicSense implements Sense {
 	
 	public synchronized void removeListener(ExceptionEventListener listener) {
 		this.listeners.remove(listener);
+	}
+	
+	public void saveProperties() {
+		
 	}
 }

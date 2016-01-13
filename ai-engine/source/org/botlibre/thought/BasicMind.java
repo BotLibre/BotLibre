@@ -17,14 +17,16 @@
  ******************************************************************************/
 package org.botlibre.thought;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Memory;
+import org.botlibre.api.knowledge.MemoryEventListener;
+import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.api.thought.Mind;
 import org.botlibre.api.thought.Thought;
 
@@ -36,50 +38,7 @@ public class BasicMind implements Mind {
 	public static long UNACTIVE_TO_ASLEEP = 10 * 60 * 1000; // 10 minutes.
 	public static long UNACTIVE_TO_BORED = 1 * 60 * 1000; // 1 minute.
 	
-	//public static ExecutorService threadPool = Executors.newCachedThreadPool();
-		
-	/**
-	 * Thread to process subconscious thoughts in the background.
-	 */
-	public class SubconsciousThread implements Runnable {
-		//protected Thought thought;
-		
-		public SubconsciousThread() {
-			//this.thought = thought;
-		}
-		
-		public void run() {
-			while (isConscious()) {
-				try {
-					/*if (this.thought.isStopped()) {
-						return;
-					}
-					if (this.state.ordinal() < MentalState.ALERT.ordinal()) {
-						this.thought.think();
-					}*/
-					for (Thought thought : getThoughts().values()) {
-						if (!thought.isConscious()) {
-							if (!isConscious()) {
-								break;
-							}
-							if (thought.isStopped()) {
-								continue;
-							}
-							// Don't run when busy.
-							if (thought.isCritical() || state.ordinal() < MentalState.ALERT.ordinal()) {
-								thought.think();
-							}
-							try {
-								Thread.sleep(1);
-							} catch (Exception interupted) {}
-						}
-					}
-				} catch (Exception failed) {
-					bot.log(this, failed);
-				}
-			}
-		}
-	}
+	public static ExecutorService threadPool = Executors.newCachedThreadPool();
 	
 	/**
 	 * Defines the states of mind.
@@ -96,26 +55,30 @@ public class BasicMind implements Mind {
 	protected long lastActiveTime;
 	
 	protected Bot bot;
-	// toDo: conscious, Unconscious, priority level on Thought.
-	// threading
+	
 	/**
 	 * List of thoughts, order represents priority.
 	 */
 	protected Map<String, Thought> thoughts;
+	
 	/**
 	 * List of thoughts, by simple name. 
 	 */
 	protected Map<String, Thought> thoughtsBySimpleName;
 	
 	protected Thread consciousThread;
-	protected List<Thread> subconsciousThreads;
+	protected volatile boolean consciousRunRequired;
+	
+	protected Thread subconsciousThread;
+	protected volatile boolean subconsciousRunRequired;
+	
+	protected MemoryEventListener listener;
 		
 	public BasicMind() {
 		this.thoughts = new LinkedHashMap<String, Thought>();
 		this.thoughtsBySimpleName = new LinkedHashMap<String, Thought>();
 		this.state = MentalState.UNCONSCIOUS;
 		this.lastActiveTime = System.currentTimeMillis();
-		this.subconsciousThreads = new ArrayList<Thread>();
 	}
 	
 	/**
@@ -238,16 +201,28 @@ public class BasicMind implements Mind {
 					}
 				}
 			}
-			this.consciousThread.join(1000);
-			for (Thread thread : this.subconsciousThreads) {
-				thread.join(5000);
+			for (int count = 0; count < 10; count++) {
+				if (this.consciousThread == null) {
+					break;
+				}
+				Thread.sleep(100);
+			}
+			for (int count = 0; count < 50; count++) {
+				if (this.subconsciousThread == null) {
+					break;
+				}
+				Thread.sleep(100);
 			}
 			for (Thought thought : getThoughts().values()) {
 				thought.stop();
 			}
-			for (Thread thread : this.subconsciousThreads) {
-				thread.join(5000);
+			for (int count = 0; count < 50; count++) {
+				if (this.subconsciousThread == null) {
+					break;
+				}
+				Thread.sleep(100);
 			}
+			this.bot.memory().removeListener(this.listener);
 		} catch (InterruptedException ignore) {}
 		this.bot.log(this, "Shutdown complete", Bot.FINE);
 	}
@@ -276,29 +251,67 @@ public class BasicMind implements Mind {
 			}
 		}
 		setState(MentalState.BORED);
-		this.consciousThread = new Thread(new Runnable() {
-			public void run() {
-				processConsciousThoughts();
+		
+		this.listener = new MemoryEventListener() {
+			public void addActiveMemory(Vertex vertex) {
+				if (!isConscious()) {
+					return;
+				}
+				try {
+					consciousRunRequired = true;
+					subconsciousRunRequired = true;
+					if (consciousThread == null) {
+						threadPool.execute(new Runnable() {
+							public void run() {
+								consciousThread = Thread.currentThread();
+								try {
+									while (consciousRunRequired) {
+										consciousRunRequired = false;
+										processConsciousThoughts();
+									}
+								} finally {
+									consciousThread = null;
+								}
+							}
+						});
+					}
+					if (subconsciousThread == null) {
+						threadPool.execute(new Runnable() {
+							public void run() {
+								subconsciousThread = Thread.currentThread();
+								try {
+									while (subconsciousRunRequired) {
+										subconsciousRunRequired = false;
+										for (Thought thought : getThoughts().values()) {
+											if (!thought.isConscious()) {
+												if (!isConscious()) {
+													break;
+												}
+												if (thought.isStopped()) {
+													continue;
+												}
+												// Don't run when busy.
+												if (thought.isCritical() || state.ordinal() < MentalState.ALERT.ordinal()) {
+													thought.think();
+												}
+												try {
+													Thread.sleep(1);
+												} catch (Exception interupted) {}
+											}
+										}
+									}
+								} finally {
+									subconsciousThread = null;
+								}
+							}
+						});
+					}
+				} catch (Exception failed) {
+					bot.log(this, failed);
+				}
 			}
-		});
-		/*threadPool.execute(new Runnable() {
-			public void run() {
-				processConsciousThoughts();
-			}
-		});*/
-		this.consciousThread.start();
-		// Process sub-conscious thoughts concurrently.
-		/*for (Thought thought : getThoughts().values()) {
-			if (!thought.isConscious()) {
-				Thread thread = new Thread(new SubconsciousThread(thought));
-				thread.start();
-				this.subconsciousThreads.add(thread);
-			}
-		}*/
-		//threadPool.execute(new SubconsciousThread());
-		Thread thread = new Thread(new SubconsciousThread());
-		thread.start();
-		this.subconsciousThreads.add(thread);
+		};
+		this.bot.memory().addListener(this.listener);
 	}
 	
 	/**
@@ -307,80 +320,80 @@ public class BasicMind implements Mind {
 	 */
 	public void processConsciousThoughts() {
 		Memory memory = this.bot.memory();
-		while (isConscious()) {			
-			// Ensure no senses add to the network while processing.
-			try {
-				synchronized (memory) {
+		// Ensure no senses add to the network while processing.
+		try {
+			synchronized (memory) {
+				try {
+					memory.wait(10);
+				} catch (InterruptedException exception) {}
+				if (!isConscious()) {
+					return;
+				}
+				if (!memory.getActiveMemory().isEmpty()) {
+					incrementState(MentalState.ACTIVE);
+					// Save reset vertices in memory to allow picking up new relationships.
+					memory.save();
+					// Process emotion
+					this.bot.mood().evaluate();
+					// Process each conscious thought serially.
+					// (sub-conscious are processed concurrently), but conscious has a single shared memory.					
+					for (Thought thought : this.thoughts.values()) {
+						try {
+							if (thought.isConscious()) {
+								thought.think();
+							}
+						} catch (Exception failed) {
+							this.bot.log(this, failed);
+						}
+					}
+					// Clear active.
+					memory.getActiveMemory().clear();
+					memory.save();
+					setLastActiveTime(System.currentTimeMillis());
 					try {
 						memory.wait(10);
 					} catch (InterruptedException exception) {}
-					if (!memory.getActiveMemory().isEmpty()) {
-						incrementState(MentalState.ACTIVE);
-						// Save reset vertices in memory to allow picking up new relationships.
-						memory.save();
-						// Process emotion
-						this.bot.mood().evaluate();
-						// Process each conscious thought serially.
-						// (sub-conscious are processed concurrently), but conscious has a single shared memory.					
-						for (Thought thought : this.thoughts.values()) {
-							try {
-								if (thought.isConscious()) {
-									thought.think();
-								}
-							} catch (Exception failed) {
-								this.bot.log(this, failed);
-							}
-						}
-						// Clear active.
-						memory.getActiveMemory().clear();
-						memory.save();
-						setLastActiveTime(System.currentTimeMillis());
+					// If another event has occurred during the processing of the current events, then increase the stress level.
+					int size = memory.getActiveMemory().size();
+					if (size > 0) {
+						incrementState(MentalState.ALERT);
 						try {
-							memory.wait(10);
+							memory.wait(1);
 						} catch (InterruptedException exception) {}
-						// If another event has occurred during the processing of the current events, then increase the stress level.
-						int size = memory.getActiveMemory().size();
-						if (size > 0) {
-							incrementState(MentalState.ALERT);
-							try {
-								memory.wait(1);
-							} catch (InterruptedException exception) {}
-							if (memory.getActiveMemory().size() > size) {
-								log("Sensory overload", Bot.WARNING, size);
-								incrementState(MentalState.PANIC);
-							}
-						}
-					} else {
-						try {
-							memory.wait(100);
-						} catch (InterruptedException exception) {}
-						// If no event has occurred decrease the stress level.
-						if (memory.getActiveMemory().isEmpty()) {
-							int state = this.state.ordinal();
-							if (state >= MentalState.PANIC.ordinal()) {
-								decrementState(MentalState.ALERT);
-							} else if (state >= MentalState.ALERT.ordinal()) {
-								decrementState(MentalState.ACTIVE);
-							} else if (state >= MentalState.BORED.ordinal()) {
-								long unactiveTime = getUnactiveTime();
-								if (unactiveTime > UNACTIVE_TO_ASLEEP) {
-									decrementState(MentalState.ASLEEP);
-								} else if (unactiveTime > UNACTIVE_TO_BORED) {
-									decrementState(MentalState.BORED);
-								}
-							}
+						if (memory.getActiveMemory().size() > size) {
+							log("Sensory overload", Bot.WARNING, size);
+							incrementState(MentalState.PANIC);
 						}
 					}
 				}
-			} catch (Exception exception) {
-				log(exception);
-			} catch (Throwable exception) {
-				log(exception);
-				memory.getActiveMemory().clear();
-				memory.getShortTermMemory().clear();
-				memory.getLongTermMemory().clear();
-				memory.freeMemory();
+				try {
+					memory.wait(10);
+				} catch (InterruptedException exception) {}
+				// If no event has occurred decrease the stress level.
+				if (memory.getActiveMemory().isEmpty()) {
+					int state = this.state.ordinal();
+					if (state >= MentalState.PANIC.ordinal()) {
+						decrementState(MentalState.ALERT);
+					} else if (state >= MentalState.ALERT.ordinal()) {
+						decrementState(MentalState.ACTIVE);
+					} else if (state >= MentalState.BORED.ordinal()) {
+						long unactiveTime = getUnactiveTime();
+						if (unactiveTime > UNACTIVE_TO_ASLEEP) {
+							decrementState(MentalState.ASLEEP);
+						} else if (unactiveTime > UNACTIVE_TO_BORED) {
+							decrementState(MentalState.BORED);
+						}
+					}
+				}
 			}
+		} catch (Exception exception) {
+			log(exception);
+		} catch (Throwable exception) {
+			log(exception);
+			memory.getActiveMemory().clear();
+			memory.getShortTermMemory().clear();
+			memory.getLongTermMemory().clear();
+			memory.freeMemory();
 		}
 	}
 

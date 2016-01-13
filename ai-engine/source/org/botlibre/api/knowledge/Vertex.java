@@ -224,6 +224,15 @@ public interface Vertex {
 	 */
 	void setPinned(boolean pinned);
 
+	/**
+	 * Return if the vertex is temporary, and not persistent.
+	 */
+	boolean isTemporary();
+
+	/**
+	 * Set if the vertex is temporary, and not persistent.
+	 */
+	void setIsTemporary(boolean pinned);
 	
 	/**
 	 * Pin the vertex and all of its descendants into memory.
@@ -384,6 +393,21 @@ public interface Vertex {
 	 * Return the target vertex related by the type, with the high consciousness level and correctness greater than the value.
 	 */
 	Vertex mostConscious(Primitive type, float min);
+	
+	/**
+	 * Return the target vertex related by the type, with the high consciousness level and correctness greater than the value.
+	 */
+	Vertex nextMostConscious(Primitive type, Set<Vertex> ignoring);
+	
+	/**
+	 * Return the target vertex related by the type, with the high consciousness level and correctness greater than the value.
+	 */
+	Vertex nextMostConscious(Vertex type, Set<Vertex> ignoring, float min, boolean inverse);
+	
+	/**
+	 * Return the target vertex related by the type, with the high consciousness level and correctness greater than the value.
+	 */
+	Relationship nextMostConsciousRelationship(Vertex type, Set<Vertex> ignoring, float min, boolean inverse);
 	
 	/**
 	 * Return the target vertex related by the type, with the high consciousness level and correctness greater than the value.
@@ -678,13 +702,13 @@ public interface Vertex {
 	 * Apply the quotient.
 	 * Apply the equation to the variable matches.
 	 */
-	Vertex applyQuotient(Map<Vertex, Vertex> variables);
+	Vertex applyQuotient(Map<Vertex, Vertex> variables, Network network);
 
 	/**
 	 * Evaluates any eval functions in the equation or formula..
 	 * This is used by learn.
 	 */
-	public Vertex applyEval(Map<Vertex, Vertex> variables);
+	public Vertex applyEval(Map<Vertex, Vertex> variables, Network network);
 	
 	/**
 	 * Compare if the two vertices match.
@@ -838,5 +862,7 @@ public interface Vertex {
 	/**
 	 * User friendly toString.
 	 */
-	public String displayString();
+	String displayString();
+	
+	void init();
 }

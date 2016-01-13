@@ -69,7 +69,8 @@ public abstract class TextTest {
 		}
 		synchronized (output) {
 			try {
-				output.wait(10000);
+				output.wait(100000);
+				//output.wait(1000000);
 			} catch (InterruptedException exception) {}
 		}
 		if (output.isEmpty()) {
@@ -92,10 +93,10 @@ public abstract class TextTest {
 	 * Reset.
 	 */
 	public static void reset() {
-		DatabaseMemory.TEST = true;
 		DatabaseMemory.RECREATE_DATABASE = true;
 		//Bot.DEFAULT_DEBUG_LEVEL = Bot.FINE;
 		bot = Bot.createInstance();
+		bot.setName("test");
 		DatabaseMemory.RECREATE_DATABASE = false;
 	}
 	

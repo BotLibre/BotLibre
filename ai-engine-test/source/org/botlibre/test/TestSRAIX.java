@@ -57,7 +57,7 @@ public class TestSRAIX extends TextTest {
 		Utils.sleep(5000);
 		
 		bot.shutdown();
-		RemoteService.SERVER = "http://localhost:9080/botlibre";
+		//RemoteService.SERVER = "http://localhost:9080/botlibre";
 	}
 
 	@org.junit.Test
@@ -77,7 +77,7 @@ public class TestSRAIX extends TextTest {
 		
 		text.input("sraixkey 2+2");
 		response = waitForOutput(output);
-		if (!response.equals("4")) {
+		if (!response.equals("4") && !response.equals("Uh, Four.")) {
 			fail("Incorrect response: " + response);
 		}
 		

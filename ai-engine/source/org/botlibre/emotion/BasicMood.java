@@ -60,9 +60,7 @@ public class BasicMood implements Mood {
 
 	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
-		Vertex vertex = memory.createVertex(getClass());
-		vertex.setRelationship(Primitive.ENABLED, memory.createVertex(isEnabled()));
-		vertex.pinChildren();
+		memory.saveProperty("Mood.enabled", String.valueOf(isEnabled()), true);
 		memory.save();
 	}
 	
@@ -112,12 +110,29 @@ public class BasicMood implements Mood {
 	@Override
 	public void awake() {
 		getBot().log(this, "Awake", Bot.FINE);
+		String enabled = this.bot.memory().getProperty("Mood.enabled");
+		if (enabled != null) {
+			setEnabled(Boolean.valueOf(enabled));
+		}
+	}
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
 		Network memory = getBot().memory().newMemory();
-		Vertex language = memory.createVertex(getClass());
-		Vertex property = language.getRelationship(Primitive.ENABLED);
+		Vertex mood = memory.createVertex(getClass());
+		Vertex property = mood.getRelationship(Primitive.ENABLED);
 		if (property != null) {
 			setEnabled((Boolean)property.getData());
 		}
+		
+		// Remove old properties.
+		mood.internalRemoveRelationships(Primitive.ENABLED);
+		
+		memory.save();
+		
+		saveProperties();
 	}
 	
 	@Override
@@ -255,7 +270,6 @@ public class BasicMood implements Mood {
 			// Increment or decrement each emotional state based on the input.
 			for (Relationship relationship : emotions) {
 				Vertex emotionVertex = relationship.getTarget();
-				System.out.println(emotionVertex.getDataValue());
 				Emotion emotion = getEmotion(emotionVertex.getDataValue());
 				try {
 					float value = relationship.getCorrectness();

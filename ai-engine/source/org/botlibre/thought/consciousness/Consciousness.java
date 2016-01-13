@@ -215,19 +215,34 @@ public class Consciousness extends BasicThought {
 
 	@Override
 	public void awake() {
-		Network memory = this.bot.memory().newMemory();
-		Vertex language = memory.createVertex(getPrimitive());
-		Vertex property = language.getRelationship(Primitive.ENABLED);
+		String enabled = this.bot.memory().getProperty("Consciousness.enabled");
+		if (enabled != null) {
+			setEnabled(Boolean.valueOf(enabled));
+		}
+	}
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
+		Network memory = getBot().memory().newMemory();
+		Vertex mood = memory.createVertex(getClass());
+		Vertex property = mood.getRelationship(Primitive.ENABLED);
 		if (property != null) {
 			setEnabled((Boolean)property.getData());
 		}
+		
+		// Remove old properties.
+		mood.internalRemoveRelationships(Primitive.ENABLED);
+		
+		memory.save();
+		
+		saveProperties();
 	}
 
 	public void saveProperties() {
 		Network memory = this.bot.memory().newMemory();
-		Vertex vertex = memory.createVertex(getPrimitive());
-		vertex.setRelationship(Primitive.ENABLED, memory.createVertex(isEnabled()));
-		vertex.pinChildren();
+		memory.saveProperty("Consciousness.enabled", String.valueOf(isEnabled()), true);
 		memory.save();
 	}
 	

@@ -118,7 +118,7 @@ public class RemoteService extends BasicSense {
 			if (thats == null || thats.getLength() == 0) {
 				return null;
 			}
-			String text = thats.item(0).getTextContent();
+			String text = thats.item(0).getTextContent().trim();
 			if (limit > 0) {
 				StringWriter writer = new StringWriter();
 				TextStream textStream = new TextStream(text);

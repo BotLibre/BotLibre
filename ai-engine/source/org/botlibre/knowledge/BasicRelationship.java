@@ -197,8 +197,29 @@ public class BasicRelationship implements Relationship, Comparable<Relationship>
 		if ((this.type == null) || (this.target == null)) {
 			return super.hashCode();
 		}
+		if ((this.type.getId() == null) || (this.target.getId() == null)) {
+			return super.hashCode();
+		}
 		this.hashCode = this.type.hashCode() + this.target.hashCode();
 		return this.hashCode;
+	}
+	
+	public boolean checkHashCode() {
+		if (this.hashCode == 0) {
+			return false;
+		}
+		if ((this.type == null) || (this.target == null)) {
+			return false;
+		}
+		if ((this.type.getId() == null) || (this.target.getId() == null)) {
+			return false;
+		}
+		int hashCode = this.type.hashCode() + this.target.hashCode();
+		if (this.hashCode != hashCode) {
+			this.hashCode = hashCode;
+			return true;
+		}
+		return false;
 	}
 	
 	public void setSource(Vertex source) {

@@ -21,15 +21,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.botlibre.Bot;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.sense.text.TextInput;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
 import org.botlibre.util.Utils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 /**
  * Test language processing.
@@ -43,9 +44,9 @@ public class TestLanguage extends TextTest {
 		Bot bot = Bot.createInstance();
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
-		text.input("sky blue red dog cat green grass tall like very loves");
+		text.input("sky blue red dog barks all night the cat green grass tall like very loves");
 		waitForOutput(output);
-		Utils.sleep(5000);
+		Utils.sleep(10000);
 		
 		bot.shutdown();
 	}
@@ -92,6 +93,7 @@ public class TestLanguage extends TextTest {
 	public void testResponseMatching() {
 		Bot bot = Bot.createInstance();
 		Language language = bot.mind().getThought(Language.class);
+		//bot.setDebugLevel(Level.FINER);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
@@ -126,8 +128,8 @@ public class TestLanguage extends TextTest {
 		
 		text.input("complicated sentence");
 		response = waitForOutput(output);
-		if (!response.equals("this is a good reply to that")) {
-			fail("did not match: " + response);			
+		if (response.equals("this is a good reply to that")) {
+			fail("should not match: " + response);			
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -148,10 +150,11 @@ public class TestLanguage extends TextTest {
 	public void testResponseMatchingLearning() {
 		Bot bot = Bot.createInstance();
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		//bot.setDebugLevel(Level.FINER);
 		List<String> output = registerForOutput(text);
-		text.input("the dog barks all night");
+		text.input("dog barks all night the");
 		String response = waitForOutput(output);
-		if (!response.equals("the dog barks all night")) {
+		if (!response.equals("dog barks all night the")) {
 			fail("did not mimic: " + response);			
 		}
 		text.input("let him in then");
@@ -165,7 +168,7 @@ public class TestLanguage extends TextTest {
 
 		text.input("ok");
 		response = waitForOutput(output);
-		text.input("the dog barks all night");
+		text.input("dog barks all night the");
 		response = waitForOutput(output);
 		if (!response.equals("let him in then")) {
 			fail("did not match: " + response);			
@@ -173,7 +176,7 @@ public class TestLanguage extends TextTest {
 		text.input("ok");
 		response = waitForOutput(output);
 		
-		text.input("barks all night");
+		text.input("xx barks all night");
 		response = waitForOutput(output);
 		if (!response.equals("let him in then")) {
 			fail("did not match: " + response);			
@@ -192,7 +195,7 @@ public class TestLanguage extends TextTest {
 		text.input("barks");
 		response = waitForOutput(output);
 		if (response.equals("let him in then")) {
-			fail("should not match: " + response);			
+			fail("should not match: " + response);
 		}
 
 		bot.shutdown();
@@ -267,107 +270,110 @@ public class TestLanguage extends TextTest {
 	@org.junit.Test
 	public void testComprehension() {
 		Bot bot = Bot.createInstance();
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		//Language language = bot.mind().getThought(Language.class);
-		//language.setLearningMode(LearningMode.Disabled);
-		List<String> output = registerForOutput(text);
-		
-		trainCount(text, output, 1, 5);
-		trainCount(text, output, 0, 5);
-		trainCount(text, output, 1, 10);
-		trainCount(text, output, 0, 10);
-		
-		// Test comprehension
-		text.input("say 1");
-		String response = waitForOutput(output);
-		
-		text.input("2");
-		response = waitForOutput(output);		
-		if (!response.equals("3")) {
-			fail("did not comprehend: " + response);
+		try {
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			//Language language = bot.mind().getThought(Language.class);
+			//language.setLearningMode(LearningMode.Disabled);
+			List<String> output = registerForOutput(text);
+			bot.setDebugLevel(Level.FINE);
+			
+			trainCount(text, output, 1, 5);
+			trainCount(text, output, 0, 5);
+			trainCount(text, output, 1, 10);
+			trainCount(text, output, 0, 10);
+			
+			// Test comprehension
+			text.input("say 1");
+			String response = waitForOutput(output);
+			
+			text.input("2");
+			response = waitForOutput(output);		
+			if (!response.equals("3")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("4");
+			response = waitForOutput(output);
+			if (!response.equals("5")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("6");
+			response = waitForOutput(output);
+			if (!response.equals("7")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("6");
+			response = waitForOutput(output);
+			if (!response.equals("5")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("4");
+			response = waitForOutput(output);
+			if (!response.equals("3")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("2");
+			response = waitForOutput(output);
+			if (!response.equals("1")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			// Test new numbers
+			
+			text.input("say 22");
+			response = waitForOutput(output);
+			if (!response.equals("22")) {
+				fail("say failed: " + response);
+			}
+			
+			text.input("23");
+			response = waitForOutput(output);
+			if (!response.equals("24")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("25");
+			response = waitForOutput(output);
+			if (!response.equals("26")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("27");
+			response = waitForOutput(output);
+			if (!response.equals("28")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("29");
+			response = waitForOutput(output);
+			if (!response.equals("30")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("31");
+			response = waitForOutput(output);
+			if (!response.equals("32")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("31");
+			response = waitForOutput(output);
+			if (!response.equals("30")) {
+				fail("did not comprehend: " + response);
+			}
+			
+			text.input("29");
+			response = waitForOutput(output);
+			if (!response.equals("28")) {
+				fail("did not comprehend: " + response);
+			}
+		} finally {
+			bot.shutdown();
 		}
-		
-		text.input("4");
-		response = waitForOutput(output);
-		if (!response.equals("5")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("6");
-		response = waitForOutput(output);
-		if (!response.equals("7")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("6");
-		response = waitForOutput(output);
-		if (!response.equals("5")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("4");
-		response = waitForOutput(output);
-		if (!response.equals("3")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("2");
-		response = waitForOutput(output);
-		if (!response.equals("1")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		// Test new numbers
-		
-		text.input("say 22");
-		response = waitForOutput(output);
-		if (!response.equals("22")) {
-			fail("say failed: " + response);
-		}
-		
-		text.input("23");
-		response = waitForOutput(output);
-		if (!response.equals("24")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("25");
-		response = waitForOutput(output);
-		if (!response.equals("26")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("27");
-		response = waitForOutput(output);
-		if (!response.equals("28")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("29");
-		response = waitForOutput(output);
-		if (!response.equals("30")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("31");
-		response = waitForOutput(output);
-		if (!response.equals("32")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("31");
-		response = waitForOutput(output);
-		if (!response.equals("30")) {
-			fail("did not comprehend: " + response);
-		}
-		
-		text.input("29");
-		response = waitForOutput(output);
-		if (!response.equals("28")) {
-			fail("did not comprehend: " + response);
-		}
-
-		bot.shutdown();
 	}
 
 	/**
@@ -434,6 +440,11 @@ public class TestLanguage extends TextTest {
 		checkResponse(response, "The year is " + calendar.get(Calendar.YEAR) + ".");
 
 		calendar = Calendar.getInstance();
+		text.input("what is this year");
+		response = waitForOutput(output);
+		checkResponse(response, "The year is " + calendar.get(Calendar.YEAR) + ".");
+		
+		calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_YEAR);
 		String digits = String.valueOf(day);
 		char last = digits.charAt(digits.length() - 1);
@@ -476,6 +487,8 @@ public class TestLanguage extends TextTest {
 		text.input("yesterday");
 		response = waitForOutput(output);
 		checkResponse(response, "Yesterday was " + date + ".");
+
+		bot.shutdown();
 	}
 
 	/**
@@ -637,6 +650,8 @@ public class TestLanguage extends TextTest {
 		if (!response.equals("Strong affection.")) {
 			fail("Incorrect response: " + response);			
 		}
+
+		bot.shutdown();
 	}
 
 	/**
@@ -773,6 +788,8 @@ public class TestLanguage extends TextTest {
 		if (!response.equals("Pleased to meet you Bob.")) {
 			fail("Incorrect response: " + response);
 		}
+
+		bot.shutdown();
 	}
 
 	/**
@@ -781,52 +798,56 @@ public class TestLanguage extends TextTest {
 	@org.junit.Test
 	public void testFreebase() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Level.FINEST);
-		Language language = bot.mind().getThought(Language.class);
-		language.setLearningMode(LearningMode.Disabled);
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		List<String> output = registerForOutput(text);
-		
-		text.input("Who is Barack Obama?");
-		String response = waitForOutput(output);
-		if (response.indexOf("Barack Hussein Obama") == -1) {
-			fail("Incorrect response: " + response);			
-		}
-		
-		Utils.sleep(5000);
-				
-		text.input("Who are his children?");
-		response = waitForOutput(output);
-		if (response.indexOf("Natasha Obama, and Malia Ann Obama") == -1) {
-			fail("Incorrect response: " + response);			
-		}
-		
-		text.input("Who are Barack Obama's children?");
-		response = waitForOutput(output);
-		if (response.indexOf("Natasha Obama, and Malia Ann Obama") == -1) {
-			fail("Incorrect response: " + response);			
-		}
-		
-		text.input("Who are his parents?");
-		response = waitForOutput(output);
-		if (response.indexOf("Barack Obama, Sr., and Ann Dunham") == -1) {
-			fail("Incorrect response: " + response);			
-		}
-		
-		text.input("is he a politician");
-		response = waitForOutput(output);
-		assertTrue(response);
-		
-		text.input("tell me who is Barack Obama?");
-		response = waitForOutput(output);
-		if (response.indexOf("Barack Hussein Obama") == -1) {
-			fail("Incorrect response: " + response);			
-		}
-		
-		text.input("do you know who Barack Obama is");
-		response = waitForOutput(output);
-		if (response.indexOf("Barack Hussein Obama") == -1) {
-			fail("Incorrect response: " + response);			
+		try {
+			//bot.setDebugLevel(Level.FINEST);
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+			
+			text.input("Who is Barack Obama?");
+			String response = waitForOutput(output);
+			if (response.indexOf("Barack Hussein Obama") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+			
+			Utils.sleep(5000);
+					
+			text.input("Who are his children?");
+			response = waitForOutput(output);
+			if (response.indexOf("Natasha Obama, and Malia Ann Obama") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+			
+			text.input("Who are Barack Obama's children?");
+			response = waitForOutput(output);
+			if (response.indexOf("Natasha Obama, and Malia Ann Obama") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+			
+			text.input("Who are his parents?");
+			response = waitForOutput(output);
+			if (response.indexOf("Barack Obama, Sr., and Ann Dunham") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+			
+			text.input("is he a politician");
+			response = waitForOutput(output);
+			assertTrue(response);
+			
+			text.input("tell me who is Barack Obama?");
+			response = waitForOutput(output);
+			if (response.indexOf("Barack Hussein Obama") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+			
+			text.input("do you know who Barack Obama is");
+			response = waitForOutput(output);
+			if (response.indexOf("Barack Hussein Obama") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+		} finally {
+			bot.shutdown();
 		}
 	}
 
@@ -871,6 +892,8 @@ public class TestLanguage extends TextTest {
 		text.input("is he a human");
 		response = waitForOutput(output);
 		assertTrue(response);
+
+		bot.shutdown();
 	}
 
 	/**
@@ -896,6 +919,8 @@ public class TestLanguage extends TextTest {
 		text.input("is the sky blue?");
 		response = waitForOutput(output);
 		assertTrue(response);
+
+		bot.shutdown();
 	}
 	
 	/**
@@ -911,6 +936,8 @@ public class TestLanguage extends TextTest {
 		if (!response.equals("1 + 1 = 2") && !response.equals("1 + 1 = two")) {
 			fail("incorrect:" + response);			
 		}
+
+		bot.shutdown();
 	}
 
 	@AfterClass

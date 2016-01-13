@@ -26,9 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 
-import org.botlibre.api.knowledge.MemoryEventListener;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
@@ -36,6 +36,7 @@ import org.botlibre.knowledge.BasicVertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.thought.BasicThought;
 import org.botlibre.util.Utils;
+import org.eclipse.persistence.internal.helper.IdentityHashSet;
 
 /**
  * Forgetfulness is a sub-conscious thought that cleans up the memory to remove unused vertices and reduce relationship size.
@@ -52,28 +53,10 @@ public class Forgetfulness extends BasicThought {
 	public long expiry = EXPIRY;
 	public int maxSize = MAX_SIZE;
 	public int maxRelationships = MAX_RELATIONSHIPS;
-
-	protected boolean isDirty;
 	
 	public enum ForgetType { Unreferenced, UnreferencedData, OldConversations, LeastReferenced, UnreferencedPinned, Grammar, FixResponses, FixRelationships }
 	
 	public Forgetfulness() { }
-
-	/**
-	 * Add a listener to the memory to avoid checking if no changes.
-	 */
-	@Override
-	public void awake() {
-		super.awake();
-		this.bot.memory().addListener(new MemoryEventListener() {
-			public void addActiveMemory(Vertex vertex) {
-				setDirty(true);
-				synchronized (Forgetfulness.this) {
-					Forgetfulness.this.notify();
-				}
-			}
-		});
-	}
 	
 	/**
 	 * Analyse the active memory.
@@ -88,21 +71,9 @@ public class Forgetfulness extends BasicThought {
 			if (this.isStopped) {
 				return;
 			}
-			synchronized (this) {
-				try {
-					wait(1000);
-				} catch (InterruptedException ignore) {}
-			}
-			if (!this.bot.mind().isConscious()) {
-				return;
-			}
-			if (this.isStopped) {
-				return;
-			}
-			if (this.isEnabled && this.isDirty) {
+			if (this.isEnabled) {
 				// Only count 1 in 20, to help concurrency.
 				if (Utils.random().nextInt(20) >= 19) {
-					setDirty(false);
 					Network memory = this.bot.memory().newMemory();
 					Vertex forgetfulness = memory.createVertex(getPrimitive());
 					Vertex activeCount = forgetfulness.getRelationship(Primitive.COUNT);
@@ -242,7 +213,7 @@ public class Forgetfulness extends BasicThought {
 			found = unreferenced.size() > 0;
 			int failures = 0;
 			for (Vertex vertex : unreferenced) {
-				if ((System.currentTimeMillis() - vertex.getCreationDate().getTime()) < Utils.HOUR) {
+				if ((System.currentTimeMillis() - vertex.getCreationDate().getTime()) < (10 * Utils.MINUTE)) {
 					log("Ignoring new vertex", Level.FINER, vertex, numberToDelete);
 					numberToDelete--;
 					failures++;
@@ -260,9 +231,7 @@ public class Forgetfulness extends BasicThought {
 					} else if (type == ForgetType.FixRelationships) {
 						for (Iterator<Relationship> iterator = vertex.allRelationships(); iterator.hasNext(); ) {
 							Relationship relationship = iterator.next();
-							int hashCode = relationship.hashCode();
-							relationship.resetHashCode();
-							if (hashCode != relationship.hashCode()) {
+							if (relationship.checkHashCode()) {
 								log("Fixing relationship hashcode", Level.INFO, relationship);
 							}
 						}
@@ -403,6 +372,26 @@ public class Forgetfulness extends BasicThought {
 					break;
 				}
 				log("Vertex has too many relationships", Level.FINER, vertex);
+				// Check for corruption.
+				if (vertex.getAllRelationships().size() != vertex.totalRelationships()) {
+					log("Vertex has corrupt relationships", Level.FINER, vertex, vertex.getAllRelationships().size(), vertex.totalRelationships());
+					Set<Relationship> valid = new IdentityHashSet();
+					for (Iterator<Relationship> iterator = vertex.allRelationships(); iterator.hasNext(); ) {
+						valid.add(iterator.next());
+					}
+					for (Relationship relationship : new ArrayList<Relationship>(vertex.getAllRelationships())) {
+						if (!valid.contains(relationship)) {
+							log("Removing corrupt relationship", Level.FINER, relationship);
+							vertex.internalRemoveRelationship(relationship);
+						}
+					}
+				}
+				// Check hashcodes
+				for (Relationship relationship : new ArrayList<Relationship>(vertex.getAllRelationships())) {
+					if (relationship.checkHashCode()) {
+						log("Fixing relationship hashcode", Level.FINER, relationship);
+					}
+				}
 				// Remove all references.
 				for (Entry<Vertex, Map<Relationship, Relationship>> entry : vertex.getRelationships().entrySet()) {
 					log("Relationship size", Level.FINER, entry.getKey(), entry.getValue().size());
@@ -496,14 +485,6 @@ public class Forgetfulness extends BasicThought {
 	@Override
 	public boolean isCritical() {
 		return true;
-	}
-
-	public boolean isDirty() {
-		return isDirty;
-	}
-
-	public void setDirty(boolean isDirty) {
-		this.isDirty = isDirty;
 	}
 
 	public long getExpiry() {

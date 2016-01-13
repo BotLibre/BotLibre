@@ -88,6 +88,8 @@ public class TestAIML2 extends TextTest {
 		if (!response.equals("i love hockey")) {
 			fail("Incorrect response: " + response);
 		}
+		
+		bot.shutdown();
 	}
 
 	@org.junit.Test
@@ -120,7 +122,7 @@ public class TestAIML2 extends TextTest {
 		christmas.set(Calendar.MONTH, 11);
 		christmas.set(Calendar.DAY_OF_MONTH, 25);
 		Calendar date = Calendar.getInstance();
-		int days = christmas.get(Calendar.DAY_OF_YEAR) - date.get(Calendar.DAY_OF_YEAR);
+		int days = christmas.get(Calendar.DAY_OF_YEAR) - date.get(Calendar.DAY_OF_YEAR) - 1;
 		if (!response.equals("" + days + " days until Christmas.")) {
 			fail("Incorrect response: " + response);
 		}
@@ -136,7 +138,7 @@ public class TestAIML2 extends TextTest {
 		text.input("how many weeks until Christmas?");
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
-		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR);
+		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR) - 1;
 		if (!response.equals("" + weeks + " weeks until Christmas.")) {
 			fail("Incorrect response: " + response);
 		}
@@ -145,7 +147,7 @@ public class TestAIML2 extends TextTest {
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
 		int hours = (christmas.get(Calendar.DAY_OF_YEAR) * 24)
-				- ((date.get(Calendar.DAY_OF_YEAR) * 24) + date.get(Calendar.HOUR_OF_DAY));
+				- ((date.get(Calendar.DAY_OF_YEAR) * 24) + date.get(Calendar.HOUR_OF_DAY)) - 24;
 		if (!response.equals("" + hours + " hours until Christmas.")) {
 			fail("Incorrect response: " + response);
 		}
@@ -155,7 +157,7 @@ public class TestAIML2 extends TextTest {
 		response = waitForOutput(output);
 		
 		long minutes = (christmas.get(Calendar.DAY_OF_YEAR) * 24L * 60L)
-				- (((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE));
+				- (((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE)) - (24 * 60);
 		if (!response.equals("" + minutes + " minutes until Christmas.")) {
 			fail("Incorrect response: " + response + " - should be " + minutes);
 		}
@@ -164,10 +166,12 @@ public class TestAIML2 extends TextTest {
 		date = Calendar.getInstance();
 		response = waitForOutput(output);
 		long seconds = (christmas.get(Calendar.DAY_OF_YEAR) * 24L * 60L * 60L)
-				- ((((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE)) * 60L);
+				- ((((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE)) * 60L) - (24 * 60 * 60);
 		if (!response.equals("" + seconds + " seconds until Christmas.")) {
 			fail("Incorrect response: " + response + " - should be " + seconds);
 		}
+		
+		bot.shutdown();
 	}
 
 	@org.junit.Test
@@ -211,167 +215,173 @@ public class TestAIML2 extends TextTest {
 		
 		text.input("what is 0 + 1");
 		response = waitForOutput(output);
-		if (!response.equals("The answer is 1")) {
+		if (!response.toLowerCase().equals("the answer is 1")) {
 			fail("Incorrect response: " + response);
 		}
 		
 		text.input("what is 10 + 22");
 		response = waitForOutput(output);
-		if (!response.equals("The answer is 32")) {
+		if (!response.toLowerCase().equals("the answer is 32")) {
 			fail("Incorrect response: " + response);
 		}
+		
+		bot.shutdown();
 	}
 
 	@org.junit.Test
 	public void testLearn() {
 		Bot bot = Bot.createInstance();
-		Language language = bot.mind().getThought(Language.class);
-		language.setLearningMode(LearningMode.Disabled);
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		List<String> output = registerForOutput(text);
-		bot.setDebugLevel(Level.FINER);
-		
-		text.input("something learned");
-		String response = waitForOutput(output);
-		if (!response.equals("no idea")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn something");
-		response = waitForOutput(output);
-		if (!response.equals("Ok")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something learned");
-		response = waitForOutput(output);
-		if (!response.equals("yep")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something2 learned2");
-		response = waitForOutput(output);
-		if (!response.equals("no idea")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn2 something2");
-		response = waitForOutput(output);
-		if (!response.equals("Ok2")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something2 learned2 cool stuff");
-		response = waitForOutput(output);
-		if (!response.equals("Cool stuff")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn3 something3");
-		response = waitForOutput(output);
-		if (!response.equals("Ok3")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something3 learned3 cool stuff");
-		response = waitForOutput(output);
-		if (!response.equals("That cool stuff")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn4 something4");
-		response = waitForOutput(output);
-		if (!response.equals("Ok4")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something4 learned4 cool stuff");
-		response = waitForOutput(output);
-		if (!response.equals("no idea")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("topic something4");
-		response = waitForOutput(output);
-		if (!response.equals("The topic is now something4")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something4 learned4 cool stuff");
-		response = waitForOutput(output);
-		if (!response.equals("Topic cool stuff")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn5 something5 a new response");
-		response = waitForOutput(output);
-		if (!response.equals("Ok5")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something5 learned5 ok");
-		response = waitForOutput(output);
-		if (!response.equals("A new response")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn6 something6 cool stuff");
-		response = waitForOutput(output);
-		if (!response.equals("Ok6")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("something6 learned6 other stuff");
-		response = waitForOutput(output);
-		if (!response.equals("I learned cool stuff not other stuff")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn7 something7 whatup notin");
-		response = waitForOutput(output);
-		if (!response.equals("Ok7")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("whatup");
-		response = waitForOutput(output);
-		if (!response.equals("Notin")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("learn8 something8 flowers candy");
-		response = waitForOutput(output);
-		if (!response.equals("Ok8")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("do you like flowers?");
-		response = waitForOutput(output);
-		if (!response.equals("No I like candy")) {
-			fail("Incorrect response: " + response);
-		}
-
-		text.input("xxx");
-		response = waitForOutput(output);
-
-		text.input("wrong");
-		response = waitForOutput(output);
-		if (!response.equals("What should I have said?")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		if (!isChatLog()) {
-			text.input("yyy");
-			response = waitForOutput(output);
-			if (!response.equals("Okay, I will answer \"yyy\" to \"xxx\" next time")) {
+		try {
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+			//bot.setDebugLevel(Level.FINER);
+			
+			text.input("something learned");
+			String response = waitForOutput(output);
+			if (!response.equals("no idea")) {
 				fail("Incorrect response: " + response);
 			}
 			
-			text.input("xxx");
+			text.input("learn something");
 			response = waitForOutput(output);
-			if (!response.equals("Yyy")) {
+			if (!response.equals("Ok")) {
 				fail("Incorrect response: " + response);
 			}
+			
+			text.input("something learned");
+			response = waitForOutput(output);
+			if (!response.equals("yep")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something2 learned2");
+			response = waitForOutput(output);
+			if (!response.equals("no idea")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn2 something2");
+			response = waitForOutput(output);
+			if (!response.equals("Ok2")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something2 learned2 cool stuff");
+			response = waitForOutput(output);
+			if (!response.equals("Cool stuff")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn3 something3");
+			response = waitForOutput(output);
+			if (!response.equals("Ok3")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something3 learned3 cool stuff");
+			response = waitForOutput(output);
+			if (!response.equals("That cool stuff")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn4 something4");
+			response = waitForOutput(output);
+			if (!response.equals("Ok4")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something4 learned4 cool stuff");
+			response = waitForOutput(output);
+			if (!response.equals("no idea")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("topic something4");
+			response = waitForOutput(output);
+			if (!response.equals("The topic is now something4")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something4 learned4 cool stuff");
+			response = waitForOutput(output);
+			if (!response.equals("Topic cool stuff")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn5 something5 a new response");
+			response = waitForOutput(output);
+			if (!response.equals("Ok5")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something5 learned5 ok");
+			response = waitForOutput(output);
+			if (!response.equals("A new response")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn6 something6 cool stuff");
+			response = waitForOutput(output);
+			if (!response.equals("Ok6")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("something6 learned6 other stuff");
+			response = waitForOutput(output);
+			if (!response.equals("I learned cool stuff not other stuff")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn7 something7 whatup notin");
+			response = waitForOutput(output);
+			if (!response.equals("Ok7")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("whatup");
+			response = waitForOutput(output);
+			if (!response.equals("Notin")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("learn8 something8 flowers candy");
+			response = waitForOutput(output);
+			if (!response.equals("Ok8")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			text.input("do you like flowers?");
+			response = waitForOutput(output);
+			if (!response.equals("No I like candy")) {
+				fail("Incorrect response: " + response);
+			}
+	
+			text.input("xxx");
+			response = waitForOutput(output);
+	
+			text.input("wrong");
+			response = waitForOutput(output);
+			if (!response.equals("What should I have said?")) {
+				fail("Incorrect response: " + response);
+			}
+			
+			if (!isChatLog()) {
+				text.input("yyy");
+				response = waitForOutput(output);
+				if (!response.equals("Okay, I will answer \"yyy\" to \"xxx\" next time")) {
+					fail("Incorrect response: " + response);
+				}
+				
+				text.input("xxx");
+				response = waitForOutput(output);
+				if (!response.equals("Yyy")) {
+					fail("Incorrect response: " + response);
+				}
+			}
+		} finally {
+			bot.shutdown();
 		}
 	}
 
@@ -419,6 +429,8 @@ public class TestAIML2 extends TextTest {
 		if (!response.equals("True")) {
 			fail("Incorrect response: " + response);
 		}
+		
+		bot.shutdown();
 	}
 
 	@org.junit.Test
@@ -579,6 +591,8 @@ public class TestAIML2 extends TextTest {
 		if (!response.equals("You said \"are we the same age?\"")) {
 			fail("Incorrect response: " + response);
 		}
+		
+		bot.shutdown();
 	}
 
 	@org.junit.Test
@@ -655,6 +669,8 @@ public class TestAIML2 extends TextTest {
 		if (!response.equals("Joe@foo-bar.com")) {
 			fail("Incorrect response: " + response);
 		}
+		
+		bot.shutdown();
 	}
 
 
@@ -793,6 +809,12 @@ public class TestAIML2 extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
+		text.input("do you really me?");
+		response = waitForOutput(output);
+		if (response.equals("Yes, I love you.")) {
+			fail("Incorrect response: " + response);
+		}
+		
 		text.input("do you hate me?");
 		response = waitForOutput(output);
 		if (!response.equals("No, I love you.")) {
@@ -805,6 +827,7 @@ public class TestAIML2 extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
+		bot.shutdown();		
 	}
 
 	/**
@@ -825,6 +848,7 @@ public class TestAIML2 extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
+		bot.shutdown();		
 	}
 
 	@AfterClass

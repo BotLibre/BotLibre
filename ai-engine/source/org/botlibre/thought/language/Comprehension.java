@@ -43,19 +43,35 @@ public class Comprehension extends SubconsciousThought {
 
 	@Override
 	public void awake() {
-		Network memory = getBot().memory().newMemory();
-		Vertex comprehension = memory.createVertex(getPrimitive());
-		Vertex enabled = comprehension.getRelationship(Primitive.ENABLED);
+		String enabled = this.bot.memory().getProperty("Comprehension.enabled");
 		if (enabled != null) {
-			setEnabled((Boolean)enabled.getData());
+			setEnabled(Boolean.valueOf(enabled));
 		}
 		super.awake();
 	}
 
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
+		Network memory = getBot().memory().newMemory();
+		Vertex thought = memory.createVertex(getClass());
+		Vertex property = thought.getRelationship(Primitive.ENABLED);
+		if (property != null) {
+			setEnabled((Boolean)property.getData());
+		}
+		
+		// Remove old properties.
+		thought.internalRemoveRelationships(Primitive.ENABLED);
+		
+		memory.save();
+		
+		saveProperties();
+	}
+
 	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
-		Vertex comprehension = memory.createVertex(getPrimitive());
-		comprehension.setRelationship(Primitive.ENABLED, memory.createVertex(isEnabled()));
+		memory.saveProperty("Comprehension.enabled", String.valueOf(isEnabled()), true);
 		memory.save();
 	}
 	

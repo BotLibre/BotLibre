@@ -125,7 +125,7 @@ public class TestWikidata extends TextTest {
 		Utils.sleep(SLEEP);
 		text.input("who is George Bush?");
 		response = waitForOutput(output);
-		if (response.indexOf("43rd president") == -1) {
+		if (response.indexOf("43rd President") == -1) {
 			fail("Incorrect: " + response);
 		}
 

@@ -18,6 +18,7 @@
 package org.botlibre.knowledge;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +44,20 @@ public class BasicMemory implements Memory {
 	protected Network shortTermMemory;
 	protected Network longTermMemory;
 	protected List<MemoryEventListener> listeners;
+	protected Map<String, String> properties;
 	
 	public BasicMemory() {
+		this.activeMemory = new ArrayList<Vertex>();
+		this.listeners = new ArrayList<MemoryEventListener>();
+		this.properties = new HashMap<String, String>();
+		initMemory();
+	}
+	
+	public void initMemory() {
 		this.longTermMemory = new BasicNetwork();
 		this.longTermMemory.setBot(getBot());
 		this.shortTermMemory = new BasicNetwork(this.longTermMemory);
-		this.shortTermMemory.setBot(getBot());
-		this.activeMemory = new ArrayList<Vertex>();
-		this.listeners = new ArrayList<MemoryEventListener>();
+		this.shortTermMemory.setBot(getBot());		
 	}
 
 	/**
@@ -58,6 +65,35 @@ public class BasicMemory implements Memory {
 	 */
 	public String getMemoryName() {
 		return "Basic";
+	}
+
+	/**
+	 * Return the property setting.
+	 */
+	public String getProperty(String property) {
+		return this.properties.get(property);
+	}
+
+	/**
+	 * Save the property setting.
+	 */
+	public String setProperty(String property, String value) {
+		return this.properties.put(property, value);
+	}
+
+	/**
+	 * Remove the property setting.
+	 */
+	public String removeProperty(String property) {
+		return this.properties.remove(property);
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
 	}
 
 	/**
@@ -79,6 +115,21 @@ public class BasicMemory implements Memory {
 	 */
 	public void initialize(Map<String, Object> properties) {
 		return;
+	}
+	
+	/**
+	 * Load any properties and init.
+	 */
+	public void awake() {
+		
+	}
+	
+	public void loadProperties(String propertySet) {
+		
+	}
+
+	public void clearProperties(String propertySet) {
+		
 	}
 	
 	/**
@@ -162,14 +213,14 @@ public class BasicMemory implements Memory {
 	/**
 	 * This implementation does not support persistence.
 	 */
-	public void fastRestore(String database) {
+	public void fastRestore(String database, boolean isSchema) {
 		getBot().log(this, "Restoring", Bot.FINE, this, database);
 	}
 		
 	/**
 	 * This implementation does not support persistence.
 	 */
-	public void restore(String database) {
+	public void restore(String database, boolean isSchema) {
 		getBot().log(this, "Restoring", Bot.FINE, this, database);
 	}
 
@@ -181,12 +232,31 @@ public class BasicMemory implements Memory {
 	/**
 	 * Create a memory database.
 	 */
-	public void createMemoryFromTemplate(String database, String template) { }
+	public void createMemory(String database, boolean isSchema) { }
+
+	/**
+	 * Create a memory database.
+	 */
+	public void createMemoryFromTemplate(String database, String template) {
+		createMemoryFromTemplate(database, false, template, false);
+	}
+
+	/**
+	 * Create a memory database.
+	 */
+	public void createMemoryFromTemplate(String database, boolean templateIsSchema, String template, boolean isSchema) { }
 
 	/**
 	 * Destroy the database.
 	 */
-	public void destroyMemory(String database) { }
+	public void destroyMemory(String database) {
+		destroyMemory(database, false);
+	}
+
+	/**
+	 * Destroy the database.
+	 */
+	public void destroyMemory(String database, boolean isSchema) { }
 	
 	/**
 	 * Delete all content from the database.
@@ -207,6 +277,11 @@ public class BasicMemory implements Memory {
 	 * Allow switching to another memory location.
 	 */
 	public void switchMemory(String location) { }
+	
+	/**
+	 * Allow switching to another memory location.
+	 */
+	public void switchMemory(String location, boolean isSchema) { }
 	
 	/**
 	 * Shutdown the memory.

@@ -19,6 +19,7 @@ package org.botlibre.test;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -53,12 +54,14 @@ public class TestUnderstanding extends TextTest {
 			}
 		}
 		network.save();
+		
+		//bot.setDebugLevel(Bot.FINE);
 				
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
-		text.input("sky blue red dog cat green grass tall like very big tall fat small");
+		text.input("sky blue red dog cat green grass tall like very big tall fat small human nice");
 		waitForOutput(output);
-		Utils.sleep(5000);
+		Utils.sleep(10000);
 		
 		bot.shutdown();
 	}
@@ -69,7 +72,7 @@ public class TestUnderstanding extends TextTest {
 	@org.junit.Test
 	public void testUnderstanding() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Bot.FINE);
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
@@ -133,6 +136,11 @@ public class TestUnderstanding extends TextTest {
 		assertKnown(response);
 		assertKeyword(response, "a dog");
 		
+		text.input("am I a dog");
+		response = waitForOutput(output);
+		assertTrue(response);
+		assertKeyword(response, "a dog");
+		
 		text.input("I am a cat?");
 		response = waitForOutput(output);
 		assertFalse(response);
@@ -162,43 +170,74 @@ public class TestUnderstanding extends TextTest {
 	@org.junit.Test
 	public void testCompoundAdjectives() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Bot.FINE);
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		
-		text.input("the sky is blue");
+		text.input("the grass is green");
 		String response = waitForOutput(output);
 		assertKnown(response);
 		
-		text.input("is the sky very very blue?");
+		text.input("is the grass very very green?");
 		response = waitForOutput(output);
 		assertUncertain(response);
-		assertKeyword(response, "very very blue");
+		assertKeyword(response, "very very green");
 		
-		text.input("the sky is very very blue");
+		text.input("the grass is very very green");
 		response = waitForOutput(output);
 		assertKnown(response);
-		assertKeyword(response, "very very blue");
+		assertKeyword(response, "very very green");
 		
-		text.input("is the sky very very blue?");
+		text.input("is the grass very very green?");
 		response = waitForOutput(output);
 		assertTrue(response);
-		assertKeyword(response, "the sky is very very blue");
+		assertKeyword(response, "the grass is very very green");
 		
-		text.input("what is very very blue?");
+		text.input("what is very very green?");
 		response = waitForOutput(output);
-		assertKeyword(response, "sky is very very blue");
+		assertKeyword(response, "grass is very very green");
 		
-		text.input("sky is not very very blue");
+		text.input("grass is not very very green");
 		response = waitForOutput(output);
 		assertKnown(response);
-		assertKeyword(response, "sky is not very very blue");
+		assertKeyword(response, "grass is not very very green");
 		
-		text.input("what is very very blue?");
+		text.input("what is very very green?");
 		response = waitForOutput(output);
 		assertUnknown(response);
+		
+		text.input("I am a very nice human");
+		response = waitForOutput(output);
+		assertKnown(response);
+		assertKeyword(response, "a very nice human");
+		
+		text.input("am I a very nice human?");
+		response = waitForOutput(output);
+		assertTrue(response);
+		assertKeyword(response, "a very nice human");
+		
+		text.input("am I a human?");
+		response = waitForOutput(output);
+		assertTrue(response);
+		assertKeyword(response, "a human");
+		
+		text.input("am I dog human?");
+		response = waitForOutput(output);
+		assertKeyword(response, "am I dog human?");
+		
+		text.input("am I a dog human?");
+		response = waitForOutput(output);
+		assertKeyword(response, "am I a dog human?");
+		
+		text.input("I am dog human?");
+		response = waitForOutput(output);
+		assertKeyword(response, "I am dog human?");
+		
+		text.input("I am a dog human?");
+		response = waitForOutput(output);
+		assertKeyword(response, "I am a dog human?");
 
 		bot.shutdown();
 	}
@@ -209,85 +248,152 @@ public class TestUnderstanding extends TextTest {
 	@org.junit.Test
 	public void testAndOr() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Bot.FINE);
-		Language language = bot.mind().getThought(Language.class);
-		language.setLearningMode(LearningMode.Disabled);
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		List<String> output = registerForOutput(text);
-		
-		text.input("are you big or fat?");
-		String response = waitForOutput(output);
-		assertUnknown(response);
-		assertKeyword(response, "big or fat");
-		
-		text.input("you are big");
-		response = waitForOutput(output);
-		assertKnown(response);
-		assertKeyword(response, "I am big");
-		
-		text.input("are you big or fat?");
-		response = waitForOutput(output);
-		assertUnknown(response);
-		assertKeyword(response, "I am big");
-		
-		text.input("you are not fat");
-		response = waitForOutput(output);
-		assertKnown(response);
-		assertKeyword(response, "I am not fat");
-		
-		text.input("are you big or fat?");
-		response = waitForOutput(output);
-		assertKeyword(response, "I am big not fat");
-		
-		text.input("you are fat");
-		response = waitForOutput(output);
-		assertKnown(response);
-		assertKeyword(response, "I am fat");
-		
-		text.input("are you big or fat?");
-		response = waitForOutput(output);
-		assertKeyword(response, "I am big and fat");
-		
-		text.input("are you big, small or fat?");
-		response = waitForOutput(output);
-		assertUnknown(response);
-		assertKeyword(response, "I am big and fat");
-		
-		text.input("you are small");
-		response = waitForOutput(output);
-		assertKnown(response);
-		assertKeyword(response, "I am small");
-		
-		text.input("are you big, small, or fat?");
-		response = waitForOutput(output);
-		assertKeyword(response, "I am big, small and fat");
-		
-		text.input("are you big and fat?");
-		response = waitForOutput(output);
-		assertTrue(response);
-		assertKeyword(response, "I am big and fat");
-		
-		text.input("you are not fat");
-		response = waitForOutput(output);
-		assertKnown(response);
-		assertKeyword(response, "I am not fat");
-		
-		text.input("are you big and fat and small?");
-		response = waitForOutput(output);
-		assertFalse(response);
-		assertKeyword(response, "I am big and small not fat");
-		
-		text.input("are you big and blue?");
-		response = waitForOutput(output);
-		assertUnknown(response);
-		assertKeyword(response, "I am big");
-		
-		text.input("are you not big and small?");
-		response = waitForOutput(output);
-		assertFalse(response);
-		assertKeyword(response, "I am big and small");
-
-		bot.shutdown();
+		try {
+			//bot.setDebugLevel(Bot.FINE);
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+			
+			text.input("are you big or fat?");
+			String response = waitForOutput(output);
+			assertUnknown(response);
+			assertKeyword(response, "big or fat");
+			
+			text.input("you are big");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "I am big");
+			
+			text.input("are you big or fat?");
+			response = waitForOutput(output);
+			assertUnknown(response);
+			assertKeyword(response, "I am big");
+			
+			text.input("you are not fat");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "I am not fat");
+			
+			text.input("are you big or fat?");
+			response = waitForOutput(output);
+			assertKeyword(response, "I am big not fat");
+			
+			text.input("you are big or fat");
+			response = waitForOutput(output);
+			assertKeyword(response, "I am big not fat");
+			
+			text.input("you are fat");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "I am fat");
+			
+			text.input("are you big or fat?");
+			response = waitForOutput(output);
+			assertKeyword(response, "I am big and fat");
+			
+			text.input("are you big, small or fat?");
+			response = waitForOutput(output);
+			assertUnknown(response);
+			assertKeyword(response, "I am big and fat");
+			
+			text.input("you are small");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "I am small");
+			
+			text.input("are you big, small, or fat?");
+			response = waitForOutput(output);
+			assertKeyword(response, "I am big, small and fat");
+			
+			text.input("are you big and fat?");
+			response = waitForOutput(output);
+			assertTrue(response);
+			assertKeyword(response, "I am big and fat");
+			
+			text.input("you are big and fat");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "I am big and fat");
+			
+			text.input("you are not fat");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "I am not fat");
+			
+			text.input("are you big and fat and small?");
+			response = waitForOutput(output);
+			assertFalse(response);
+			assertKeyword(response, "I am big and small not fat");
+			
+			text.input("are you big and blue?");
+			response = waitForOutput(output);
+			assertUnknown(response);
+			assertKeyword(response, "I am big");
+			
+			text.input("are you not big and small?");
+			response = waitForOutput(output);
+			assertFalse(response);
+			assertKeyword(response, "I am big and small");
+			
+			text.input("are you cat or dog?");
+			response = waitForOutput(output);
+			assertUnknown(response);
+			assertKeyword(response, "cat or dog");
+			
+			text.input("you are cat and dog");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "cat and dog");
+			
+			text.input("are you cat or dog?");
+			response = waitForOutput(output);
+			assertKeyword(response, "I am cat and dog");
+			
+			text.input("are you a cat or a dog?");
+			response = waitForOutput(output);
+			assertUnknown(response);
+			assertKeyword(response, "a cat or a dog");
+			
+			text.input("you are a cat and a dog");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "a cat and a dog");
+			
+			text.input("are you a cat?");
+			response = waitForOutput(output);
+			assertTrue(response);
+			
+			text.input("are you a dog?");
+			response = waitForOutput(output);
+			assertTrue(response);
+			
+			text.input("are you a cat and a dog?");
+			response = waitForOutput(output);
+			assertTrue(response);
+			assertKeyword(response, "I am a cat and a dog");
+			
+			text.input("are you a cat or a dog?");
+			response = waitForOutput(output);
+			assertKeyword(response, "I am a cat and a dog");
+			
+			text.input("I am me");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "you are you");
+			
+			text.input("am I me?");
+			response = waitForOutput(output);
+			assertTrue(response);
+			assertKeyword(response, "you are you");
+			
+			text.input("am I me or you?");
+			response = waitForOutput(output);
+			assertKeyword(response, "you are you");
+			assertKeyword(response, "you are not me");
+		} finally {
+			bot.shutdown();
+		}
 	}
 
 

@@ -156,6 +156,6 @@ public interface Relationship extends Comparable<Relationship> {
 	 */
 	void setPinned(boolean pinned);
 
-	void resetHashCode();
+	boolean checkHashCode();
 
 }

@@ -33,8 +33,6 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.eclipse.persistence.jpa.JpaEntityManager;
-import org.eclipse.persistence.sessions.UnitOfWork;
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Data;
 import org.botlibre.api.knowledge.Network;
@@ -43,7 +41,10 @@ import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.AbstractNetwork;
 import org.botlibre.knowledge.BasicVertex;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.knowledge.Property;
 import org.botlibre.thought.consciousness.Consciousness;
+import org.eclipse.persistence.jpa.JpaEntityManager;
+import org.eclipse.persistence.sessions.UnitOfWork;
 
 /**
  * Network using JPA to access a Derby database.
@@ -51,7 +52,7 @@ import org.botlibre.thought.consciousness.Consciousness;
 
 public class DatabaseNetwork extends AbstractNetwork {
 	
-	//Set<Vertex> newObjects = new HashSet<Vertex>();
+	private Boolean trackAccessCount;
 
 	private EntityManager entityManager;
 	/** Cache the size query result. */
@@ -72,7 +73,14 @@ public class DatabaseNetwork extends AbstractNetwork {
 	}
 	
 	protected void addRelationship(Relationship relationship) {
-		getEntityManager().persist(relationship);
+		this.entityManager.persist(relationship);
+	}
+	
+	protected boolean trackAccessCount() {
+		if (trackAccessCount == null) {
+			trackAccessCount = this.bot.mind().getThought(Consciousness.class).isEnabled();
+		}
+		return trackAccessCount;
 	}
 
 	/**
@@ -80,8 +88,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 * Keep the MAX_SIZE number of most conscious vertices in memory.
 	 */
 	public void resume() {
-		getBot().log(this, "Resuming", Bot.FINE, this);
-		if (!getBot().mind().getThought(Consciousness.class).isEnabled()) {
+		this.bot.log(this, "Resuming", Bot.FINE, this);
+		if (!this.bot.mind().getThought(Consciousness.class).isEnabled()) {
 			clear();
 			return;
 		}
@@ -104,7 +112,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 			if (newVertex != null) { // Can be null if save failed.
 				newVertex.setConsciousnessLevel(oldVertex.getConsciousnessLevel());
 				if (newVertex.hasData()) {
-					getVerticiesByData().put(newVertex.getData(), newVertex);
+					this.verticiesByData.put(newVertex.getData(), newVertex);
 				}
 			}
 		}
@@ -114,18 +122,18 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 * Execute and commit the native query.
 	 */
 	public int executeNativeQuery(String sql) {
-		getBot().log(this, "SQL", Bot.FINE, sql);
+		this.bot.log(this, "SQL", Bot.FINE, sql);
 		int rowCount = 0;
-		synchronized (getBot().memory()) {
+		synchronized (this.bot.memory()) {
 			try {
-				getEntityManager().getTransaction().begin();
-				rowCount = getEntityManager().createNativeQuery(sql).executeUpdate();
-				getEntityManager().getTransaction().commit();
+				this.entityManager.getTransaction().begin();
+				rowCount = this.entityManager.createNativeQuery(sql).executeUpdate();
+				this.entityManager.getTransaction().commit();
 				resetSize();
 			} catch (RuntimeException failed) {
-				getBot().log(this, failed);
-				if (getEntityManager().getTransaction().isActive()) {
-					getEntityManager().getTransaction().rollback();
+				this.bot.log(this, failed);
+				if (this.entityManager.getTransaction().isActive()) {
+					this.entityManager.getTransaction().rollback();
 				}
 				// If commit fails, clear short-term memory to avoid
 				// repeated failures.
@@ -133,7 +141,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 				throw failed;
 			}
 		}
-		((DatabaseNetwork)getBot().memory().getLongTermMemory()).resetSize();
+		((DatabaseNetwork)this.bot.memory().getLongTermMemory()).resetSize();
 		return rowCount;
 	}
 
@@ -141,18 +149,18 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 * Execute and commit the update query.
 	 */
 	public int executeQuery(String jpql) {
-		getBot().log(this, "JPQL", Level.FINE, jpql);
+		this.bot.log(this, "JPQL", Level.FINE, jpql);
 		int rowCount = 0;
-		synchronized (getBot().memory()) {
+		synchronized (this.bot.memory()) {
 			try {
-				getEntityManager().getTransaction().begin();
-				rowCount = getEntityManager().createQuery(jpql).executeUpdate();
-				getEntityManager().getTransaction().commit();
+				this.entityManager.getTransaction().begin();
+				rowCount = this.entityManager.createQuery(jpql).executeUpdate();
+				this.entityManager.getTransaction().commit();
 				resetSize();
 			} catch (RuntimeException failed) {
-				getBot().log(this, failed);
-				if (getEntityManager().getTransaction().isActive()) {
-					getEntityManager().getTransaction().rollback();
+				this.bot.log(this, failed);
+				if (this.entityManager.getTransaction().isActive()) {
+					this.entityManager.getTransaction().rollback();
 				}
 				// If commit fails, clear short-term memory to avoid
 				// repeated failures.
@@ -160,7 +168,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 				throw failed;
 			}
 		}
-		((DatabaseNetwork)getBot().memory().getLongTermMemory()).resetSize();
+		((DatabaseNetwork)this.bot.memory().getLongTermMemory()).resetSize();
 		return rowCount;
 	}
 
@@ -168,16 +176,16 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 * Commit memory to the database.
 	 */
 	public void save() {
-		getBot().log(this, "Saving", Level.FINE); //, newObjects);
-		synchronized (getBot().memory()) {
+		this.bot.log(this, "Saving", Level.FINE); //, newObjects);
+		synchronized (this.bot.memory()) {
 			try {
-				getEntityManager().getTransaction().begin();
-				getEntityManager().getTransaction().commit();
+				this.entityManager.getTransaction().begin();
+				this.entityManager.getTransaction().commit();
 				resetSize();
 			} catch (RuntimeException failed) {
-				getBot().log(this, failed);
-				if (getEntityManager().getTransaction().isActive()) {
-					getEntityManager().getTransaction().rollback();
+				this.bot.log(this, failed);
+				if (this.entityManager.getTransaction().isActive()) {
+					this.entityManager.getTransaction().rollback();
 				}
 				// If commit fails, clear short-term memory to avoid
 				// repeated failures.
@@ -185,7 +193,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 				throw failed;
 			}
 		}
-		((DatabaseNetwork)getBot().memory().getLongTermMemory()).resetSize();
+		((DatabaseNetwork)this.bot.memory().getLongTermMemory()).resetSize();
 		//newObjects = new HashSet<Vertex>();
 	}
 	
@@ -194,10 +202,10 @@ public class DatabaseNetwork extends AbstractNetwork {
 	}
 	
 	public synchronized void clear() {
-		getEntityManager().clear();
-		getVerticiesByData().clear();
+		this.entityManager.clear();
+		this.verticiesByData.clear();
 		resetSize();
-		getEntityManager().unwrap(UnitOfWork.class).setProperty("network", this);
+		this.entityManager.unwrap(UnitOfWork.class).setProperty("network", this);
 	}
 
 	/**
@@ -207,13 +215,39 @@ public class DatabaseNetwork extends AbstractNetwork {
 	public synchronized void addVertex(Vertex vertex) {
 		vertex.setNetwork(this);
 		if (vertex.hasData() && (vertex.getData() instanceof Data)) {
-			getEntityManager().persist(vertex.getData());			
+			this.entityManager.persist(vertex.getData());			
 		}
-		getEntityManager().persist(vertex);
+		this.entityManager.persist(vertex);
 		if (vertex.hasData()) {
-			getVerticiesByData().put(vertex.getData(), vertex);
+			this.verticiesByData.put(vertex.getData(), vertex);
 		}
 		//newObjects.add(vertex);
+	}
+
+	/**
+	 * Save the property setting to the current transaction.
+	 */
+	public void saveProperty(String propertyName, String value, boolean startup) {
+		Property property = this.entityManager.find(Property.class, propertyName);
+		if (property != null) {
+			property.setValue(value);
+			property.setStartup(startup);
+		} else {
+			property = new Property(propertyName, value, startup);
+			this.entityManager.persist(property);
+		}
+		super.saveProperty(propertyName, value, startup);
+	}
+
+	/**
+	 * Remove the property setting to the current transaction.
+	 */
+	public void removeProperty(String propertyName) {
+		Property property = this.entityManager.find(Property.class, propertyName);
+		if (property != null) {
+			this.entityManager.remove(property);
+		}
+		super.removeProperty(propertyName);
 	}
 	
 	public Network getParent() {
@@ -225,14 +259,14 @@ public class DatabaseNetwork extends AbstractNetwork {
 	}
 
 	public int size() {
-		if (!getEntityManager().isOpen()) {
+		if (!this.entityManager.isOpen()) {
 			return 0;
 		}
 		if (isShortTerm()) {
 			return allActive().size();
 		}
 		if (this.size == -1) {
-			this.size = ((Number)getEntityManager().createQuery("Select count(v) from Vertex v").getSingleResult()).intValue();
+			this.size = ((Number)this.entityManager.createQuery("Select count(v) from Vertex v").getSingleResult()).intValue();
 		}
 		return this.size;
 	}
@@ -246,11 +280,11 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (managed == null) {
 			return;
 		}
-		getEntityManager().remove(managed);
+		this.entityManager.remove(managed);
 		if (vertex.hasData()) {
-			getVerticiesByData().remove(vertex.getData());
+			this.verticiesByData.remove(vertex.getData());
 			if (vertex.getData() instanceof Data) {
-				getEntityManager().remove(findData((Data)vertex.getData()));				
+				this.entityManager.remove(findData((Data)vertex.getData()));				
 			}
 		}
 	}
@@ -267,7 +301,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 		// Remove all references.
 		while (iterator.hasNext()) {
 			Relationship relationship = iterator.next();
-			//if (!((UnitOfWorkImpl)getEntityManager().unwrap(UnitOfWork.class)).isObjectDeleted(relationship.getSource())) {
+			//if (!((UnitOfWorkImpl)this.entityManager.unwrap(UnitOfWork.class)).isObjectDeleted(relationship.getSource())) {
 				relationship.getSource().internalRemoveRelationship(relationship);
 			//}
 		}
@@ -282,9 +316,9 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (relationship.getId() == null) {
 			return;
 		}
-		Relationship managed = getEntityManager().find(relationship.getClass(), relationship.getId());
+		Relationship managed = this.entityManager.find(relationship.getClass(), relationship.getId());
 		if (managed != null) {
-			getEntityManager().remove(managed);
+			this.entityManager.remove(managed);
 		}
 	}
 	
@@ -293,12 +327,16 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized List<Vertex> allActive() {
-		UnitOfWork unitOfWork = getEntityManager().unwrap(JpaEntityManager.class).getUnitOfWork();
+		UnitOfWork unitOfWork = this.entityManager.unwrap(JpaEntityManager.class).getUnitOfWork();
 		try {
 			return unitOfWork.getIdentityMapAccessor().getAllFromIdentityMap(null, BasicVertex.class, null, null);
 		} catch (Exception exception) {
 			return new ArrayList<Vertex>();
 		}
+	}
+	
+	public void setHints(Query query) {
+		
 	}
 	
 	/**
@@ -316,7 +354,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (isShortTerm()) {
 			return allActive();
 		}
-		Query query = getEntityManager().createQuery("Select v from Vertex v");
+		Query query = this.entityManager.createQuery("Select v from Vertex v");
+		setHints(query);
 		query.setFirstResult(page * pageSize);
 		query.setMaxResults(pageSize);
 		return query.getResultList();
@@ -336,12 +375,13 @@ public class DatabaseNetwork extends AbstractNetwork {
 	public synchronized List<Vertex> findAllLike(String filter, int pageSize, int page) {
 		Query query = null;
 		if (filter.indexOf('*') == -1) {
-			query = getEntityManager().createQuery("Select v from Vertex v where v.dataValue = :filter");
+			query = this.entityManager.createQuery("Select v from Vertex v where v.dataValue = :filter");
 			query.setParameter("filter", filter);
 		} else {
-			query = getEntityManager().createQuery("Select v from Vertex v where v.dataValue like :filter");
+			query = this.entityManager.createQuery("Select v from Vertex v where v.dataValue like :filter");
 			query.setParameter("filter", filter.replace('*', '%'));			
 		}
+		setHints(query);
 		query.setFirstResult(page * pageSize);
 		query.setMaxResults(pageSize);
 		return query.getResultList();
@@ -353,7 +393,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public synchronized List<Vertex> findAllQuery(String jpql, Map parameters, int pageSize, int page) {
 		try {
-			Query query = getEntityManager().createQuery(jpql);
+			Query query = this.entityManager.createQuery(jpql);
+			setHints(query);
 			query.setFirstResult(pageSize * page);
 			query.setMaxResults(pageSize);
 			for (Map.Entry parameter : (Set<Map.Entry>)parameters.entrySet()) {
@@ -361,7 +402,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 			}
 			return query.getResultList();
 		} catch (Exception badQuery) {
-			getBot().log(this, badQuery);
+			this.bot.log(this, badQuery);
 			return new ArrayList<Vertex>();
 		}
 	}
@@ -377,7 +418,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 * Return all vertices.
 	 */
 	public synchronized int countAll() {
-		Query query = getEntityManager().createQuery("Select count(v) from Vertex v");
+		Query query = this.entityManager.createQuery("Select count(v) from Vertex v");
+		setHints(query);
 		return ((Number)query.getSingleResult()).intValue();
 	}
 	
@@ -387,12 +429,13 @@ public class DatabaseNetwork extends AbstractNetwork {
 	public synchronized int countAllLike(String filter) {
 		Query query = null;
 		if (filter.indexOf('*') == -1) {
-			query = getEntityManager().createQuery("Select count(v) from Vertex v where v.dataValue = :filter");
+			query = this.entityManager.createQuery("Select count(v) from Vertex v where v.dataValue = :filter");
 			query.setParameter("filter", filter);
 		} else {
-			query = getEntityManager().createQuery("Select count(v) from Vertex v where v.dataValue like :filter");
+			query = this.entityManager.createQuery("Select count(v) from Vertex v where v.dataValue like :filter");
 			query.setParameter("filter", filter.replace('*', '%'));			
 		}
+		setHints(query);
 		return ((Number)query.getSingleResult()).intValue();
 	}
 	
@@ -402,11 +445,12 @@ public class DatabaseNetwork extends AbstractNetwork {
 	@SuppressWarnings("unchecked")
 	public synchronized List<Vertex> findAllQuery(String jpql, int max) {
 		try {
-			Query query = getEntityManager().createQuery(jpql);
+			Query query = this.entityManager.createQuery(jpql);
+			setHints(query);
 			query.setMaxResults(max);
 			return query.getResultList();
 		} catch (Exception badQuery) {
-			getBot().log(this, badQuery);
+			this.bot.log(this, badQuery);
 			return new ArrayList<Vertex>();
 		}
 	}
@@ -419,14 +463,15 @@ public class DatabaseNetwork extends AbstractNetwork {
 		try {
 			Query query = null;
 			if (type ==  null) {
-				query = getEntityManager().createNativeQuery(sql);
+				query = this.entityManager.createNativeQuery(sql);
 			} else {
-				query = getEntityManager().createNativeQuery(sql, type);				
+				query = this.entityManager.createNativeQuery(sql, type);				
 			}
+			setHints(query);
 			query.setMaxResults(max);
 			return query.getResultList();
 		} catch (Exception badQuery) {
-			getBot().log(this, badQuery);
+			this.bot.log(this, badQuery);
 			return new ArrayList();
 		}
 	}
@@ -436,7 +481,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized List<Relationship> findAllRelationshipsTo(Vertex vertex) {
-		Query query = getEntityManager().createQuery("Select r from Relationship r where r.target = :vertex or r.type = :vertex");
+		Query query = this.entityManager.createQuery("Select r from Relationship r where r.target = :vertex or r.type = :vertex");
+		setHints(query);
 		query.setParameter("vertex", vertex);
 		return query.getResultList();
 	}
@@ -446,7 +492,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized List<Relationship> findAllRelationshipsTo(Vertex vertex, Vertex type) {
-		Query query = getEntityManager().createQuery("Select r from Relationship r where r.target = :vertex and r.type = :type");
+		Query query = this.entityManager.createQuery("Select r from Relationship r where r.target = :vertex and r.type = :type");
+		setHints(query);
 		query.setParameter("vertex", vertex);
 		query.setParameter("type", type);
 		return query.getResultList();
@@ -456,7 +503,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 * Return a query builder.
 	 */
 	public CriteriaBuilder getCriteriaBuilder() {
-		return getEntityManager().getCriteriaBuilder();
+		return this.entityManager.getCriteriaBuilder();
 	}
 	
 	/**
@@ -468,29 +515,26 @@ public class DatabaseNetwork extends AbstractNetwork {
 		Query query = null;
 		if (relationship != null) {
 			if (start == null) {
-				query = getEntityManager().createQuery(
+				query = this.entityManager.createQuery(
 						"Select distinct v from Vertex v join v.allRelationships r join v.allRelationships r2 where r.target = :type and r.type = :instantiation and r.correctness > 0"
 						+ " and r2.type = :relationship and r2.correctness > 0 order by r.creationDate desc");
-				BasicVertex parameter = new BasicVertex();
-				parameter.setId(relationship.getId());
-				query.setParameter("relationship", parameter);
+				query.setParameter("relationship", relationship.detach());
 			} else {
-				query = getEntityManager().createQuery(
+				query = this.entityManager.createQuery(
 						"Select distinct v from Vertex v join v.allRelationships r join v.allRelationships r2 where r.target = :type and r.type = :instantiation and r.correctness > 0"
 						+ " and r2.type = :relationship and r2.correctness > 0 and r2.creationDate >= :start order by r.creationDate desc");
-				BasicVertex parameter = new BasicVertex();
-				parameter.setId(relationship.getId());
-				query.setParameter("relationship", parameter);
+				query.setParameter("relationship", relationship.detach());
 				query.setParameter("start", new Date(start.getTimeInMillis()));
 			}
 		} else {
 			if (start == null) {
-				query = getEntityManager().createQuery("Select distinct v from Vertex v join v.allRelationships r where r.target = :type and r.type = :instantiation and r.correctness > 0 order by r.creationDate desc");
+				query = this.entityManager.createQuery("Select distinct v from Vertex v join v.allRelationships r where r.target = :type and r.type = :instantiation and r.correctness > 0 order by r.creationDate desc");
 			} else {
-				query = getEntityManager().createQuery("Select distinct v from Vertex v join v.allRelationships r where r.target = :type and r.type = :instantiation and r.correctness > 0 and r.creationDate >= :start order by r.creationDate desc");
+				query = this.entityManager.createQuery("Select distinct v from Vertex v join v.allRelationships r where r.target = :type and r.type = :instantiation and r.correctness > 0 and r.creationDate >= :start order by r.creationDate desc");
 				query.setParameter("start", new Date(start.getTimeInMillis()));
 			}
 		}
+		setHints(query);
 		query.setParameter("instantiation", instantiation);
 		query.setParameter("type", type);
 		query.setMaxResults(1000);
@@ -502,7 +546,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public synchronized List search(CriteriaQuery criteria, int page, int max) {
-		Query query = getEntityManager().createQuery(criteria);
+		Query query = this.entityManager.createQuery(criteria);
+		setHints(query);
 		query.setFirstResult(page * max);
 		query.setMaxResults(max);
 		return query.getResultList();
@@ -515,17 +560,20 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (data == null) {
 			return null;
 		}
-		Vertex vertex = getVerticiesByData().get(data);
+		Vertex vertex = this.verticiesByData.get(data);
 		if (vertex != null) {
 			return vertex;
 		}
-		Query query = getEntityManager().createNamedQuery("findVertexByData");
+		Query query = this.entityManager.createNamedQuery("findVertexByData");
+		setHints(query);
 		query.setParameter("data", BasicVertex.convertDataValue(data));
 		query.setParameter("type", BasicVertex.convertDataType(data));
 		try {
 			vertex = (Vertex)query.getSingleResult();
-			vertex.incrementAccessCount();
-			getVerticiesByData().put(vertex.getData(), vertex);
+			if (trackAccessCount()) {
+				vertex.incrementAccessCount();
+			}
+			this.verticiesByData.put(vertex.getData(), vertex);
 			return vertex;
 		} catch (NoResultException notFound) {
 			return null;
@@ -540,7 +588,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (name == null) {
 			return null;
 		}
-		Query query = getEntityManager().createNamedQuery("findVertexByName");
+		Query query = this.entityManager.createNamedQuery("findVertexByName");
+		setHints(query);
 		query.setParameter("name", name);
 		List<Vertex> result = query.getResultList();
 		if (result.isEmpty()) {
@@ -557,7 +606,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (id == null) {
 			return null;
 		}
-		return getEntityManager().find(BasicVertex.class, id);
+		return this.entityManager.find(BasicVertex.class, id);
 	}
 	
 	/**
@@ -567,7 +616,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (data == null) {
 			return null;
 		}
-		return getEntityManager().find(data.getClass(), data.getId());
+		return this.entityManager.find(data.getClass(), data.getId());
 	}
 
 	/**

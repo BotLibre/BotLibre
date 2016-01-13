@@ -43,8 +43,8 @@ import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
 
 /**
- * Utility class for printing the Self programming model.
- * Self is the language that Bot programs herself in.
+ * Self scripting language compiler.
+ * This compiler compiles Self to state and equation knowledge objects.
  */
 public class SelfCompiler {
 	public static int MAX_FILE_SIZE = 10000000; // 10meg
@@ -220,12 +220,10 @@ public class SelfCompiler {
 		PINNED.add(Primitive.DEFAULT);
 	}
 	
-	protected static SelfCompiler compiler;
+	protected static SelfCompiler compiler = new SelfByteCodeCompiler();
+	//protected static SelfCompiler compiler = new SelfCompiler();
 
 	public static SelfCompiler getCompiler() {
-		if (compiler == null) {
-			compiler = new SelfCompiler();
-		}
 		return compiler;
 	}
 
@@ -267,8 +265,10 @@ public class SelfCompiler {
 			Map<String, Map<String, Vertex>> elements = buildElementsMap(network);
 			List<String> comments = getComments(stream);
 			Vertex state = parseState(stream, elements, debug, network);
-			for (String comment : comments) {
-				state.addRelationship(Primitive.COMMENT, network.createVertex(comment));
+			if (debug) {
+				for (String comment : comments) {
+					state.addRelationship(Primitive.COMMENT, network.createVertex(comment), Integer.MAX_VALUE);
+				}
 			}
 			TextData text = new TextData();
 			text.setText(code);
@@ -287,15 +287,15 @@ public class SelfCompiler {
 	 * Parse and evaluate the code.
 	 */
 	public Vertex evaluateEquation(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
-		Vertex equation = SelfCompiler.getCompiler().parseEquation(code, speaker, target, debug, network);
+		Vertex equation = SelfCompiler.getCompiler().parseEquationForEvaluation(code, speaker, target, debug, network);
 		Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
-		return equation.applyQuotient(variables);
+		return equation.applyQuotient(variables, network);
 	}
-	
+
 	/**
-	 * Parse the code into a vertex equation defined in the network.
+	 * Parse the code into a temporary equation so it can be evaluated.
 	 */
-	public Vertex parseEquation(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
+	public Vertex parseEquationForEvaluation(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
 		TextStream stream = new TextStream(code);
 		try {
 			Map<String, Map<String, Vertex>> elements = new HashMap<String, Map<String, Vertex>>();
@@ -309,16 +309,12 @@ public class SelfCompiler {
 			if (peek.equalsIgnoreCase(EQUATION) || peek.equalsIgnoreCase(FUNCTION)) {
 				equation = parseEquation(stream, elements, debug, network);
 			} else {
-				equation = network.createInstance(Primitive.EQUATION);
-				Vertex operator = network.createVertex(Primitive.DO);
-				equation.addRelationship(Primitive.OPERATOR, operator);
-				stream.skipWhitespace();
-				stream.skipWhitespace();
-				Vertex element = parseElement(stream, elements, debug, network);
-				equation.addRelationship(Primitive.ARGUMENT, element, 0);				
+				equation = parseElement(stream, elements, debug, network);
 			}
-			for (String comment : comments) {
-				equation.addRelationship(Primitive.COMMENT, network.createVertex(comment));
+			if (debug) {
+				for (String comment : comments) {
+					equation.addRelationship(Primitive.COMMENT, network.createVertex(comment), Integer.MAX_VALUE);
+				}
 			}
 			network.getBot().log(this, "Compiled new equation", Level.INFO, equation);
 			return equation;
@@ -398,12 +394,21 @@ public class SelfCompiler {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
 			if (relationships != null) {
 				for (Relationship relationship : relationships) {
+					relationship.setPinned(true);
 					pin(relationship.getTarget(), relations, groupId, processed);
 				}
 			}
 		} else {
+			Vertex equation = element;
+			// Check for byte-code.
+			if (element.instanceOf(Primitive.EQUATION)) {
+				equation = SelfDecompiler.getDecompiler().decompileEquation(element, element.getNetwork());
+			}
+			if (element.instanceOf(Primitive.STATE)) {
+				equation = SelfDecompiler.getDecompiler().decompileState(element, element.getNetwork());
+			}
 			for (Primitive primitive : relations) {
-				Collection<Relationship> relationships = element.getRelationships(primitive);
+				Collection<Relationship> relationships = equation.getRelationships(primitive);
 				boolean isDo = primitive.equals(Primitive.DO);
 				if (relationships != null) {
 					for (Relationship relationship : relationships) {
@@ -456,11 +461,14 @@ public class SelfCompiler {
 		if (element.isPrimitive()) {
 			return;
 		}
-		if (!element.isPinned()) {
+		if (!element.isPinned() && !element.isTemporary()) {
 			return;
 		}
 		processed.add(element);
-		if (!element.hasData() || element.instanceOf(Primitive.PATTERN)) {
+		if (!element.hasData() || element.instanceOf(Primitive.PATTERN)
+					|| element.instanceOf(Primitive.FORMULA)
+					|| element.instanceOf(Primitive.EQUATION)
+					|| element.instanceOf(Primitive.STATE)) {
 			element.setPinned(false);
 		}
 		if (element.instanceOf(Primitive.VARIABLE)) {
@@ -472,14 +480,24 @@ public class SelfCompiler {
 			}
 		} else if (element.instanceOf(Primitive.FORMULA)) {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
-			for (Relationship relationship : relationships) {
-				if (relationship.getTarget().instanceOf(Primitive.EQUATION)) {
-					unpin(relationship.getTarget(), relations, processed);
+			if (relationships != null) {
+				for (Relationship relationship : relationships) {
+					if (relationship.getTarget().instanceOf(Primitive.EQUATION)) {
+						unpin(relationship.getTarget(), relations, processed);
+					}
 				}
 			}
 		} else {
+			Vertex equation = element;
+			// Check for byte-code.
+			if (element.instanceOf(Primitive.EQUATION)) {
+				equation = SelfDecompiler.getDecompiler().decompileEquation(element, element.getNetwork());
+			}
+			if (element.instanceOf(Primitive.STATE)) {
+				equation = SelfDecompiler.getDecompiler().decompileState(element, element.getNetwork());
+			}
 			for (Primitive primitive : relations) {
-				Collection<Relationship> relationships = element.getRelationships(primitive);
+				Collection<Relationship> relationships = equation.getRelationships(primitive);
 				if (relationships != null) {
 					for (Relationship relationship : relationships) {
 						if (relationship.isPinned()) {
@@ -490,7 +508,7 @@ public class SelfCompiler {
 				}
 			}
 		}
-		if (element.instanceOf(Primitive.STATE) || element.instanceOf(Primitive.EQUATION)) {
+		if (element.instanceOf(Primitive.STATE) || (element.instanceOf(Primitive.EQUATION) && (element.getName() != null))) {
 			element.internalRemoveAllRelationships();
 		}
 	}
@@ -513,10 +531,10 @@ public class SelfCompiler {
 			element = element.toLowerCase();
 			if (element.equals(CASE)) {
 				vertex = parseCase(stream, elements, debug, network);
-				state.addRelationship(Primitive.DO, vertex);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 			} else if (element.equals(PATTERN)) {
 				vertex = parsePattern(stream, elements, debug, network);
-				state.addRelationship(Primitive.DO, vertex);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 			} else if (element.equals(STATE)) {
 				vertex = parseState(stream, elements, debug, network);
 			} else if (element.equals(VAR) || element.equals(VARIABLE)) {
@@ -528,21 +546,21 @@ public class SelfCompiler {
 			} else if (element.equals(DO)) {
 				vertex = network.createInstance(Primitive.DO);
 				Vertex equation = network.createInstance(Primitive.EQUATION);
-				vertex.addRelationship(Primitive.DO, equation);
+				vertex.addRelationship(Primitive.DO, equation, Integer.MAX_VALUE);
 				parseOperator(equation, stream, elements, debug, network);
-				state.addRelationship(Primitive.DO, vertex);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 				ensureNext(';', stream);
 			} else if (element.equals(GOTO)) {
 				vertex = parseGoto(stream, elements, debug, network);
-				state.addRelationship(Primitive.DO, vertex);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 				ensureNext(';', stream);
 			} else if (element.equals(PUSH)) {
 				vertex = parsePush(stream, elements, debug, network);
-				state.addRelationship(Primitive.DO, vertex);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 				ensureNext(';', stream);
 			} else if (element.equals(RETURN)) {
 				vertex = parseReturn(stream, elements, debug, network);
-				state.addRelationship(Primitive.DO, vertex);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 				ensureNext(';', stream);
 			} else if (element.equals("/")) {
 				comments = getComments(stream);
@@ -553,9 +571,9 @@ public class SelfCompiler {
 			} else {
 				throw new SelfParseException("Unknown element: " + element, stream);
 			}
-			if ((comments != null) && (vertex != null)) {
+			if (debug && (comments != null) && (vertex != null)) {
 				for (String comment : comments) {
-					vertex.addRelationship(Primitive.COMMENT, network.createVertex(comment));
+					vertex.addRelationship(Primitive.COMMENT, network.createVertex(comment), Integer.MAX_VALUE);
 				}	
 				comments = null;
 			}
@@ -616,6 +634,16 @@ public class SelfCompiler {
 		}
 		ensureNext(';', stream);
 	}
+	
+	/**
+	 * Parse the equation element from a formula, pattern, or state.
+	 */
+	public Vertex parseEquationElement(TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
+		Vertex equation = network.createInstance(Primitive.EQUATION);
+		//equation.setName(token); - cannot set name as named functions can return
+		parseOperator(equation, stream, elements, debug, network);
+		return equation;		
+	}
 
 	/**
 	 * Parse the reference to either a state, variable, equation, or raw data.
@@ -644,12 +672,12 @@ public class SelfCompiler {
 				token = EQUATION;
 			}
 			if (OPERATORS.contains(token)) {
-				Vertex equation = network.createInstance(Primitive.EQUATION);
-				//equation.setName(token); - cannot set name as named functions can return
-				for (String comment : comments) {
-					equation.addRelationship(Primitive.COMMENT, network.createVertex(comment));
+				Vertex equation = parseEquationElement(stream, elements, debug, network);
+				if (debug) {
+					for (String comment : comments) {
+						equation.addRelationship(Primitive.COMMENT, network.createVertex(comment));
+					}
 				}
-				parseOperator(equation, stream, elements, debug, network);
 				if (debug) {
 					String source = stream.currentLine();
 					int lineNumber = stream.currentLineNumber();
@@ -821,7 +849,7 @@ public class SelfCompiler {
 	public void ensureNext(char expected, char other, TextStream stream) {
 		stream.skipWhitespace();
 		if (stream.atEnd()) {
-			throw SelfParseException.unexpectedEndOfFile(expected, stream);			
+			throw SelfParseException.unexpectedEndOfFile(expected, stream);
 		}
 		char next = stream.next();
 		if ((next != expected) && (next != other)) {
@@ -978,7 +1006,7 @@ public class SelfCompiler {
 				int index = 0;
 				for (Vertex nestedOperation : operation.orderedRelations(Primitive.ARGUMENT)) {
 					equation.addRelationship(Primitive.ARGUMENT, nestedOperation, index);
-					index++;					
+					index++;
 				}
 			}
 		}
@@ -986,8 +1014,8 @@ public class SelfCompiler {
 			int index = 0;
 			for (Vertex operation : operations) {
 				equation.addRelationship(Primitive.ARGUMENT, operation, index);
-				index++;					
-			}			
+				index++;
+			}
 		}
 		ensureNext('}', stream);
 		return equation;
@@ -1584,18 +1612,18 @@ public class SelfCompiler {
 					stream.skip();
 					stream.skipWhitespace();
 					Vertex argument = parseElement(stream, elements, debug, network);
-					equation.addRelationship(Primitive.ARGUMENT, argument);
+					equation.addRelationship(Primitive.ARGUMENT, argument, Integer.MAX_VALUE);
 					stream.skipWhitespace();
 					while (stream.peek() == ',') {
 						stream.skip();
 						stream.skipWhitespace();
 						argument = parseElement(stream, elements, debug, network);
-						equation.addRelationship(Primitive.ARGUMENT, argument);
+						equation.addRelationship(Primitive.ARGUMENT, argument, Integer.MAX_VALUE);
 					}
 					ensureNext(')', stream);
 				} else {
 					Vertex argument = parseElement(stream, elements, debug, network);
-					equation.addRelationship(Primitive.ARGUMENT, argument);
+					equation.addRelationship(Primitive.ARGUMENT, argument, Integer.MAX_VALUE);
 				}
 			}
 		}
@@ -1612,7 +1640,7 @@ public class SelfCompiler {
 		boolean gotoFinally = stream.peekWord().toLowerCase().equals(FINALLY);
 		if (gotoFinally) {
 			stream.nextWord();
-			equation.addRelationship(Primitive.FINALLY, Primitive.FINALLY);			
+			equation.addRelationship(Primitive.FINALLY, Primitive.FINALLY);
 		}
 		Vertex value = parseElement(stream, elements, debug, network);
 		equation.addRelationship(Primitive.GOTO, value);
@@ -1624,18 +1652,18 @@ public class SelfCompiler {
 					stream.skip();
 					stream.skipWhitespace();
 					Vertex argument = parseElement(stream, elements, debug, network);
-					equation.addRelationship(Primitive.ARGUMENT, argument);
+					equation.addRelationship(Primitive.ARGUMENT, argument, Integer.MAX_VALUE);
 					stream.skipWhitespace();
 					while (stream.peek() == ',') {
 						stream.skip();
 						stream.skipWhitespace();
 						argument = parseElement(stream, elements, debug, network);
-						equation.addRelationship(Primitive.ARGUMENT, argument);
+						equation.addRelationship(Primitive.ARGUMENT, argument, Integer.MAX_VALUE);
 					}
 					ensureNext(')', stream);
 				} else {
 					Vertex argument = parseElement(stream, elements, debug, network);
-					equation.addRelationship(Primitive.ARGUMENT, argument);
+					equation.addRelationship(Primitive.ARGUMENT, argument, Integer.MAX_VALUE);
 				}
 			}
 		}
@@ -1649,7 +1677,7 @@ public class SelfCompiler {
 		stream.nextWord();
 		Vertex equation = network.createInstance(Primitive.PUSH);
 		Vertex value = parseElement(stream, elements, debug, network);
-		equation.addRelationship(Primitive.ARGUMENT, value);
+		equation.addRelationship(Primitive.ARGUMENT, value, Integer.MAX_VALUE);
 		return equation;
 	}
 	

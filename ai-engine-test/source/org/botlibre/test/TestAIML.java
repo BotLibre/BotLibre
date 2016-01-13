@@ -116,6 +116,8 @@ public class TestAIML extends TextTest {
 		if (response.equals("say something else")) {
 			fail("Incorrect response: " + response);
 		}
+
+		bot.shutdown();
 	}
 
 	/**
@@ -360,7 +362,8 @@ public class TestAIML extends TextTest {
 		if (!response.equals("4 + 3")) {
 			fail("Incorrect response: '" + response + "'");
 		}
-		
+
+		bot.shutdown();		
 	}
 
 	/**
@@ -443,7 +446,8 @@ public class TestAIML extends TextTest {
 		if (!response.equals("Today is " + date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US) + ".")) {
 			fail("Incorrect response: " + response);			
 		}
-		
+
+		bot.shutdown();		
 	}
 
 	@AfterClass

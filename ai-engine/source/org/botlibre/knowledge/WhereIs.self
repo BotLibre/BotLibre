@@ -1,6 +1,6 @@
 // Respond to "What is x", "Who is x" sentences using Freebase
 State:WhereIs {
-	pattern "* is where" template formula:"{srai formula:"where is {:star}"}";
+	pattern "* is where" template redirect formula:"where is {:star}";
 	
 	case :input goto State:sentenceState for each #word of :sentence;
 
@@ -31,23 +31,23 @@ State:WhereIs {
 		}
 		
 		State:whatState {
-			pattern "what is the location of *" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what country is * in" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what continent is * in" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what state is * in" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what province is * in" template formula:"{srai formula:"where is {:star}"}";
+			pattern "what is the location of *" template redirect formula:"where is {:star}";
+			pattern "what country is * in" template redirect formula:"where is {:star}";
+			pattern "what continent is * in" template redirect formula:"where is {:star}";
+			pattern "what state is * in" template redirect formula:"where is {:star}";
+			pattern "what province is * in" template redirect formula:"where is {:star}";
 		}
 		
 		State:canState {
-			pattern "can you tell me where * is" template formula:"{srai formula:"where is {:star}"}";
+			pattern "can you tell me where * is" template redirect formula:"where is {:star}";
 		}
 		
 		State:doState {
-			pattern "do you know where * is" template formula:"{srai formula:"where is {:star}"}";
+			pattern "do you know where * is" template redirect formula:"where is {:star}";
 		}
 		
 		State:tellState {
-			pattern "tell me where * is" template formula:"{srai formula:"where is {:star}"}";
+			pattern "tell me where * is" template redirect formula:"where is {:star}";
 		}
 		
 		// 'Where...'

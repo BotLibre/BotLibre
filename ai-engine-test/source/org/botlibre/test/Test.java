@@ -20,7 +20,10 @@ package org.botlibre.test;
 import java.io.File;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.text.ParseException;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,7 +50,10 @@ public class Test {
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
 		try {
-			testFBDate();
+			test();
+			//testJDBC();
+			//testEscapeHTML();
+			//testFBDate();
 			//System.out.println(java.text.NumberFormat.getInstance().parse("1000,200,300,400,500,600,700,800,900e27"));
 			//System.out.println(new java.sql.Date(System.currentTimeMillis() - (Utils.DAY * 30)));
 			//testStrip();
@@ -72,6 +78,23 @@ public class Test {
 			error.printStackTrace();
 		}
 		System.out.println("Time: " + (System.currentTimeMillis() - start));
+	}
+	
+	public static void test() {
+		System.out.println((System.nanoTime() % 1000000) * 1000);
+	}
+	
+	public static void testJDBC() throws Exception {
+		Properties properties = new Properties();
+		properties.setProperty("user", "postgres");
+		properties.setProperty("password", "password");
+		Connection connection = DriverManager.getConnection("jdbc:postgresql:botlibre_bots?currentSchema=foo", properties);
+		//connection.createStatement().executeUpdate("CREATE EXTENSION dblink");
+		connection.createStatement().execute("select public.dblink_connect('dbconnection','dbname=test user=postgres password=password')");
+	}
+	
+	public static void testEscapeHTML() throws Exception {
+		System.out.println(org.owasp.encoder.Encode.forJavaScriptAttribute("I'm a dog"));
 	}
 	
 	public static void testFBDate() throws Exception {

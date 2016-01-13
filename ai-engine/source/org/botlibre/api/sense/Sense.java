@@ -128,4 +128,11 @@ public interface Sense {
 	Primitive getPrimitive();
 
 	void notifyExceptionListeners(Exception exception);
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	void migrateProperties();
+
+	void saveProperties();
 }

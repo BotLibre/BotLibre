@@ -23,6 +23,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.botlibre.Bot;
 import org.botlibre.sense.text.TextEntry;
+import org.botlibre.thought.consciousness.Consciousness;
+import org.botlibre.thought.language.Language;
+import org.botlibre.thought.language.Language.LearningMode;
 
 /**
  * Test mathematical processing.
@@ -44,15 +47,13 @@ public class TestMath extends TextTest {
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		
-		loadConsciousness(text, output);
+		configConsciousness(bot);
 		
 		text.input("one plus two");
 		String response = waitForOutput(output);
 		if (!response.equals("1 + 2 = 3")) {
 			fail("incorrect:" + response);			
 		}
-
-		loadConsciousness(text, output);
 		
 		text.input("what is seven divided by eight");
 		response = waitForOutput(output);
@@ -61,19 +62,47 @@ public class TestMath extends TextTest {
 			fail("incorrect:" + response);			
 		}
 		
-		loadConsciousness(text, output);
-		
 		text.input("two to the power of five");
 		response = waitForOutput(output);
-		if (!response.equals("2^5 = 32") && !response.equals("Two power 5 = 32") && !response.equals("Two power five = 32")) {
+		if (!response.equals("Two^5 = 32") && !response.equals("2^5 = 32") && !response.equals("Two power 5 = 32") && !response.equals("Two power five = 32")) {
 			fail("incorrect:" + response);			
 		}
+
+		text.input("add one to two");
+		response = waitForOutput(output);
+		if (!response.equals("1 + 2 = 3")) {
+			fail("incorrect:" + response);			
+		}
+
+		text.input("multiply one with two");
+		response = waitForOutput(output);
+		if (!response.equals("1 × 2 = 2") && !response.equals("1 * 2 = 2")) {
+			fail("incorrect:" + response);			
+		}
+
+		text.input("divide one by two");
+		response = waitForOutput(output);
+		if (!response.equals("1 / 2 = 0.5") && !response.equals("1 ÷ 2 = 0.5")) {
+			fail("incorrect:" + response);			
+		}
+
+		text.input("subtract one from two");
+		response = waitForOutput(output);
+		if (!response.equals("2 - 1 = 1")) {
+			fail("incorrect:" + response);			
+		}
+		
 		bot.shutdown();
 	}
 	
-	public void loadConsciousness(TextEntry text, List<String> output) {
-		text.input("1 + 2 + 3 / 7 * 8^2 + 5");
-		waitForOutput(output);
+	public void configConsciousness(Bot bot) {
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearnGrammar(false);
+		language.setLearningMode(LearningMode.Disabled);
+		Consciousness consciousness = bot.mind().getThought(Consciousness.class);
+		consciousness.setEnabled(false);
+		//text.input("1 + 2 + 3 / 7 * 8^2 + 5");
+		//waitForOutput(output);
 	}
 	
 	/**
@@ -84,6 +113,7 @@ public class TestMath extends TextTest {
 		Bot bot = Bot.createInstance();
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
+		
 		text.input("1 + 1");
 		String response = waitForOutput(output);
 		if (!response.equals("1 + 1 = 2") && !response.equals("1 + 1 = two")) {
@@ -216,6 +246,11 @@ public class TestMath extends TextTest {
 		if (!response.equals("4 * 0 = 0")) {
 			fail("incorrect:" + response);			
 		}
+		text.input("4 × 2 ÷ 2?");
+		response = waitForOutput(output);
+		if (!response.equals("4 × 2 ÷ 2 = 4")) {
+			fail("incorrect:" + response);			
+		}
 		text.input("4 + 12 - 2?");
 		response = waitForOutput(output);
 		if (!response.equals("4 + 12 - 2 = 14")) {
@@ -228,7 +263,7 @@ public class TestMath extends TextTest {
 		}
 		text.input("13 - 454 * 2 / 3 - 2 + 2?");
 		response = waitForOutput(output);
-		if (!response.equals("13 - 454 * 2 / 3 - 2 + 2 <br/> = 13 - 908 / 3 - 2 + 2 <br/> = 13 - 302.6666666667 - 2 + 2 <br/> = -289.6666666667")) {
+		if (!response.equals("13 - 454 * 2 ÷ 3 - 2 + 2 <br/> = 13 - 908 / 3 - 2 + 2 <br/> = 13 - 302.6666666667 - 2 + 2 <br/> = -289.6666666667")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("what is 7 * 7 - 1 / 2 + 6.6?");
@@ -336,71 +371,74 @@ public class TestMath extends TextTest {
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		
-		loadConsciousness(text, output);
+		configConsciousness(bot);
 		
 		text.input("sqrt 4");
 		String response = waitForOutput(output);
-		if (!response.equals("Sqrt 4 = 2") && !response.equals("Sqrt 4 = two")) {
+		if (!response.equals("√ 4 = 2") && !response.equals("Sqrt 4 = two")) {
 			fail("incorrect:" + response);			
 		}
 		
 		text.input("sqrt(4)");
 		response = waitForOutput(output);
-		if (!response.equals("Sqrt (4) <br/> = sqrt 4 <br/> = 2")) {
+		if (!response.equals("√ (4) <br/> = √ 4 <br/> = 2")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("(sqrt(4))");
 		response = waitForOutput(output);
-		if (!response.equals("(sqrt (4)) <br/> = (sqrt 4) <br/> = 2")) {
+		if (!response.equals("(√ (4)) <br/> = (√ 4) <br/> = 2")) {
 			fail("incorrect:" + response);			
 		}
 		
 		text.input("((sqrt (4))) + 2");
 		response = waitForOutput(output);
-		if (!response.equals("((sqrt (4))) + 2 <br/> = ((sqrt 4)) + 2 <br/> = (2) + 2 <br/> = 2 + 2 <br/> = 4")) {
+		if (!response.equals("((√ (4))) + 2 <br/> = ((√ 4)) + 2 <br/> = (2) + 2 <br/> = 2 + 2 <br/> = 4")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("sqrt 4 + 4 / sqrt (2+2)");
 		response = waitForOutput(output);
-		if (!response.equals("Sqrt 4 + 4 / sqrt (2 + 2) <br/> = 2 + 4 / sqrt 4 <br/> = 2 + 4 / 2 <br/> = 2 + 2 <br/> = 4")) {
+		if (!response.equals("√ 4 + 4 ÷ √ (2 + 2) <br/> = 2 + 4 ÷ √ 4 <br/> = 2 + 4 ÷ 2 <br/> = 2 + 2 <br/> = 4")
+				&& !response.equals("√ 4 + 4 / √ (2 + 2) <br/> = 2 + 4 / √ 4 <br/> = 2 + 4 / 2 <br/> = 2 + 2 <br/> = 4")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("sqrt sqrt 4");
 		response = waitForOutput(output);
-		if (!response.equals("Sqrt sqrt 4 <br/> = sqrt 2 <br/> = 1.4142135623730951") && !response.equals("Sqrt sqrt 4 <br/> = √ 2 <br/> = 1.4142135623730951")) {
+		if (!response.equals("√ √ 4 <br/> = √ 2 <br/> = 1.4142135623730951") && !response.equals("√ √ 4 <br/> = √ 2 <br/> = 1.4142135623730951")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("sqrt 4 + 2");
 		response = waitForOutput(output);
-		if (!response.equals("Sqrt 4 + 2 = 4")) {
+		if (!response.equals("√ 4 + 2 = 4")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("2 + sqrt 4");
 		response = waitForOutput(output);
-		if (!response.equals("2 + sqrt 4 <br/> = 2 + 2 <br/> = 4")) {
+		if (!response.equals("2 + √ 4 <br/> = 2 + 2 <br/> = 4")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("2 * sqrt 4");
 		response = waitForOutput(output);
-		if (!response.equals("2 * sqrt 4 <br/> = 2 * 2 <br/> = 4")) {
+		if (!response.equals("2 × √ 4 <br/> = 2 × 2 <br/> = 4")
+				&& !response.equals("2 * √ 4 <br/> = 2 * 2 <br/> = 4")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("sqrt 4 / 2");
 		response = waitForOutput(output);
-		if (!response.equals("Sqrt 4 / 2 = 1")) {
+		if (!response.equals("√ 4 ÷ 2 = 1") && !response.equals("√ 4 / 2 = 1")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("2 + sqrt 4 / 2");
 		response = waitForOutput(output);
-		if (!response.equals("2 + sqrt 4 / 2 <br/> = 2 + 2 / 2 <br/> = 2 + 1 <br/> = 3")) {
+		if (!response.equals("2 + √ 4 ÷ 2 <br/> = 2 + 2 ÷ 2 <br/> = 2 + 1 <br/> = 3")
+					&& !response.equals("2 + √ 4 / 2 <br/> = 2 + 2 / 2 <br/> = 2 + 1 <br/> = 3")) {
 			fail("incorrect:" + response);			
 		}
 
@@ -418,27 +456,27 @@ public class TestMath extends TextTest {
 
 		text.input("pi + 2");
 		response = waitForOutput(output);
-		if (!response.equals("Pi + 2 = 5.141592653589793")) {
+		if (!response.equals("Π + 2 = 5.141592653589793")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("pi^2");
 		response = waitForOutput(output);
-		if (!response.equals("Pi^2 = 9.869604401089358")) {
+		if (!response.equals("Π^2 = 9.869604401089358")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("square root of pi");
 		response = waitForOutput(output);
 		if (!response.equals("Sqrt pi = 1.7724538509055159")
-				&& !response.equals("Sqrt π = 1.7724538509055159")) {
+				&& !response.equals("√ π = 1.7724538509055159")) {
 			fail("incorrect:" + response);			
 		}
 
-		text.input("what is sqrt pi * 8 + tan 66");
+		text.input("what is sqrt pi × 8 + tan 66");
 		response = waitForOutput(output);
-		if (!response.equals("Sqrt pi * 8 + tan 66 <br/> = 14.1796308072441272 + 0.02656051777603939 <br/> = 14.20619132502016659")
-				&& !response.equals("Sqrt π * 8 + tan 66 <br/> = 14.1796308072441272 + 0.02656051777603939 <br/> = 14.20619132502016659")) {
+		if (!response.equals("√ pi * 8 + tan 66 <br/> = 14.1796308072441272 + 0.02656051777603939 <br/> = 14.20619132502016659")
+				&& !response.equals("√ π × 8 + tan 66 <br/> = 14.1796308072441272 + 0.02656051777603939 <br/> = 14.20619132502016659")) {
 			fail("incorrect:" + response);			
 		}
 
@@ -451,19 +489,19 @@ public class TestMath extends TextTest {
 
 		text.input("cos (9/0)");
 		response = waitForOutput(output);
-		if (!response.equals("Cos (9 / 0) <br/> = cos ∞ <br/> = undefined")) {
+		if (!response.equals("Cos (9 ÷ 0) <br/> = cos ∞ <br/> = undefined")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("sin (1/0)");
 		response = waitForOutput(output);
-		if (!response.equals("Sin (1 / 0) <br/> = sin ∞ <br/> = 0")) {
+		if (!response.equals("Sin (1 ÷ 0) <br/> = sin ∞ <br/> = 0") && !response.equals("Sin (1 / 0) <br/> = sin ∞ <br/> = 0")) {
 			fail("incorrect:" + response);			
 		}
 
 		text.input("sin (0/0)");
 		response = waitForOutput(output);
-		if (!response.equals("Sin (0 / 0) <br/> = sin undefined <br/> = undefined")) {
+		if (!response.equals("Sin (0 ÷ 0) <br/> = sin undefined <br/> = undefined") && !response.equals("Sin (0 / 0) <br/> = sin undefined <br/> = undefined")) {
 			fail("incorrect:" + response);			
 		}
 
@@ -481,7 +519,7 @@ public class TestMath extends TextTest {
 
 		text.input("tanh 5");
 		response = waitForOutput(output);
-		if (!response.equals("Tanh 5 = -3.380515006246586")) {
+		if (!response.equals("Tanh 5 = 0.9999092042625951")) {
 			fail("incorrect:" + response);			
 		}
 

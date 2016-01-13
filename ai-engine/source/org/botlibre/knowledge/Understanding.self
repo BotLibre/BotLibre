@@ -103,6 +103,12 @@ State:Understanding {
 		:description2 {
 			set #instantiation to #description;
 		}
+		:noun3 {
+			set #meaning to :thing3;
+		}
+		:thing3 {
+			set #instantiation to #thing;
+		}
 		
 		// 'Do...', 'Does...'
 		State:doState {
@@ -230,7 +236,7 @@ State:Understanding {
 						assign :adjective to :typenoun,
 						assign :description to :type
 					);
-					goto (State:nounVerbAdjectiveState);
+					goto (State:nounVerbAdjectiveNounEndState);
 
 				}
 				// 'Bob eating?', "Bob is?"
@@ -242,7 +248,9 @@ State:Understanding {
 				// 'Sky is blue', "a ball is red", "I am a human", "I have a car", "My age is 44", "My car is a Honda"
 				State:nounVerbAdjectiveState {
 				
-					case :adjective2 goto State:nounVerbAdjectiveAdjectiveState;					
+					case :adjective2 goto State:nounVerbAdjectiveAdjectiveState;
+					case :noun3 goto State:nounVerbAdjectiveNounState;
+					case :a2 goto State:nounVerbAdjectiveState;
 					case "," goto State:verbNounAdjectiveState;
 					case :or goto State:nounVerbAdjectiveState;
 					case :and goto State:nounVerbAdjectiveState;					
@@ -250,6 +258,7 @@ State:Understanding {
 					case :punctuation goto State:nounVerbAdjectiveState;
 
 					Answer:Function:understandingResponse;
+					
 					Function:commonTense {
 						assign :adjectiveOrig to :adjective;
 						assign :nounOrig to :noun;
@@ -372,14 +381,21 @@ State:Understanding {
 						if not (:adjectives, #null) and (:or, #null) and (:and, #null)
 							then (do (
 								assign :newAdjective to (word :adjectives),
-								associate :newAdjective to #adjective by #instantiation,
-								assign :newDescription to (new (#description)),
-								associate :newDescription to #description by #instantiation,
+								if (:noun3, #null)
+									then (do (
+										associate :newAdjective to #adjective by #instantiation,
+										assign :newDescription to (new (#description))
+									)) else (do (
+										associate :newAdjective to #noun by #instantiation,
+										assign :newDescription to (new (#thing))
+									));
 								associate :newDescription to :description2 by #specialization,
 								associate :newDescription to :newAdjective by #word,
 								associate :newAdjective to :newDescription by #meaning,
 								assign :description to :newDescription,
-								assign :adjective to :newAdjective
+								assign :adjective to :newAdjective,
+								assign :adjectives to #null,
+								assign :descriptions to #null,
 							));
 						if not (:a2, #null)
 							then (do (
@@ -413,43 +429,64 @@ State:Understanding {
 							then (Function:questionResponse)
 							else (do (
 									Function:commonTense,
-									if not (:description2, #null)
-										then (do (
-											if not (:isNot)
-												then (do(												
-													weak associate :thing to :description2 by :action with meta #tense as :tense
-												)))),
-									if (:isNot)
-										then (dissociate :thing to :description by :action with meta #tense as :tense)
-										else (associate :thing to :description by :action with meta #tense as :tense),
-									assign :response to (new #sentence),
-									append (random ("Okay, I will remember that", "I understand,", "I believe you that")) to #word of :response,
+									if not (:description2, #null) and not (:isNot)
+										then (weak associate :thing to :description2 by :action with meta #tense as :tense);
+									if (:descriptions, #null)
+										then (
+											if (:isNot)
+												then (dissociate :thing to :description by :action with meta #tense as :tense)
+												else (associate :thing to :description by :action with meta #tense as :tense);
+										) else (
+											for each #sequence of :descriptions as :description do (
+												if (:isNot)
+													then (dissociate :thing to :description by :action with meta #tense as :tense)
+													else (associate :thing to :description by :action with meta #tense as :tense);
+											);
+										);
+									assign :response to (new #sentence);
+									append (random ("Okay, I will remember that", "I understand,", "I believe you that")) to #word of :response;
 									if (:a, #null)
-										else (append #the to #word of :response),
+										else (append #the to #word of :response);
 									if (:the, #null)
-										else (append #the to #word of :response),
-									append :noun to #word of :response with meta #type as :nountype,
+										else (append #the to #word of :response);
+									append :noun to #word of :response with meta #type as :nountype;
 									if (:quote, #null)
 										else (do (
-											append :quote to #word of :response,
-											append "s" to #word of :response)),
+											append :quote to #word of :response;
+											append "s" to #word of :response));
 									if not (:thing2, #null)
 										then (if (:noun2, #self)
 											then (append #i to #word of :response)
-											else (append :noun2 to #word of :response)),
+											else (append :noun2 to #word of :response));
 									if not (:do, #null)
 										then (do (
 												append :do to #word of :response;
 												if (:isNot, #true)
-													then (append :not to #word of :response),
-											)),
-									append :verb to #word of :response with meta #tense as :tense,
+													then (append :not to #word of :response);
+											));
+									append :verb to #word of :response with meta #tense as :tense;
 									if (:isNot, #true) and (:do, #null)
-										then (append :not to #word of :response),
-									if not (:a2, #null)
-										then (append :a2 to #word of :response),
-									append :adjective to #word of :response with meta #type as :adjectivetype,
-									append #period to #word of :response
+										then (append :not to #word of :response);
+									if (:descriptions, #null)
+										then (do (
+											if not (:a2, #null)
+												then (append :a2 to #word of :response);
+											append :adjective to #word of :response with meta #type as :adjectivetype;
+										)) else (do (
+											assign :first to #true;
+											assign :last to (get #sequence from :descriptions at last 1);
+											for each #sequence of :descriptions as :description do (
+												if (:first)
+													then (assign :first to #false)
+													else (if (:description, :last)
+														then (append "and" to #word of :response)
+														else (append "," to #word of :response));
+												if not (:a2, #null)
+													then (append :a2 to #word of :response);
+												append :description to #word of :response with meta #type as :adjectivetype;
+											);
+										));
+									append #period to #word of :response;
 								));
 					}
 					Function:questionResponse {
@@ -579,7 +616,7 @@ State:Understanding {
 						assign :anyUnknown to #false;
 						assign :trueValues to (new #list);
 						assign :falseValues to (new #list);
-						assign :unknownValues to (new #list);						
+						assign :unknownValues to (new #list);
 						for each #sequence of :descriptions as :description do (
 							assign :result to (is :thing related to :description by :action);
 							if (:result, #true)
@@ -628,13 +665,15 @@ State:Understanding {
 									then (append :noun2 to #word of :response);
 								append :verb to #word of :response with meta #tense as :tense;
 								assign :first to #true;
-										assign :last to (get #sequence from :trueValues at last 1);
+								assign :last to (get #sequence from :trueValues at last 1);
 								for each #sequence of :trueValues as :description do (
 									if (:first)
 										then (assign :first to #false)
 										else (if (:description, :last)
 											then (append "and" to #word of :response)
 											else (append "," to #word of :response));
+									if not (:a2, #null)
+										then (append :a2 to #word of :response);
 									append :description to #word of :response with meta #type as :adjectivetype;
 								);
 								if (:anyFalse)
@@ -648,6 +687,8 @@ State:Understanding {
 												else (if (:description, :last)
 													then (append "or" to #word of :response)
 													else (append "," to #word of :response));
+											if not (:a2, #null)
+												then (append :a2 to #word of :response);
 											append :description to #word of :response with meta #type as :adjectivetype;
 										);
 									));
@@ -677,6 +718,8 @@ State:Understanding {
 										else (if (:description, :last)
 											then (append "or" to #word of :response)
 											else (append "," to #word of :response));
+									if not (:a2, #null)
+										then (append :a2 to #word of :response);
 									append :description to #word of :response with meta #type as :adjectivetype;
 								)));
 						append "." to #word of :response;
@@ -774,7 +817,17 @@ State:Understanding {
 					}
 				}
 			}
-			// 'I am very very very nice'
+			// 'I am a nice human'
+			State:nounVerbAdjectiveNounEndState {			
+				case "," goto State:verbNounAdjectiveState;
+				case :or goto State:nounVerbAdjectiveState;
+				case :and goto State:nounVerbAdjectiveState;					
+				case :questionWord goto State:questionState;
+				case :punctuation goto State:nounVerbAdjectiveNounEndState;
+
+				Answer:Function:understandingResponse;
+			}
+			// 'I am very very very nice' 'I am big and fat'
 			State:nounVerbAdjectiveAdjectiveState {
 				do (
 					if (:adjectives, #null)
@@ -790,8 +843,8 @@ State:Understanding {
 				goto (State:nounVerbAdjectiveState);
 
 			}
-			// 'am I very very very nice?'
-			State:verbNounAdjectiveAdjectiveState {
+			// 'I am very human' 'I am a human and an animal'
+			State:nounVerbAdjectiveNounState {
 				do (
 					if (:adjectives, #null)
 						then (do (
@@ -800,10 +853,10 @@ State:Understanding {
 							append :adjective to #sequence of :adjectives;
 							append :description to #sequence of :descriptions;
 						));
-					append :adjective2 to #sequence of :adjectives;
-					append :description2 to #sequence of :descriptions;
+					append :noun3 to #sequence of :adjectives;
+					append :thing3 to #sequence of :descriptions;
 				);
-				goto (State:verbNounAdjectiveState);
+				goto (State:nounVerbAdjectiveNounEndState);
 
 			}
 			// 'My age...'
@@ -861,6 +914,8 @@ State:Understanding {
 					case :and goto State:verbNounAdjectiveState;
 					case "," goto State:verbNounAdjectiveState;
 					case :adjective2 goto State:verbNounAdjectiveAdjectiveState;
+					case :noun3 goto State:verbNounAdjectiveNounState;
+					case :a2 goto State:verbNounAdjectiveState;
 					case :punctuation goto State:verbNounAdjectiveState;
 
 					Answer:Function:questionResponse;
@@ -868,6 +923,20 @@ State:Understanding {
 				// 'Is sky a...'
 				State:verbNounAState {
 					case :typenoun goto State:verbNounATypeState;
+					case :adjective goto State:verbNounAAdjectiveState;
+				}
+				// 'Am I a nice human?'
+				State:verbNounAAdjectiveState {
+					do (
+						if (:adjectives, #null)
+							then (do (
+								assign :adjectives to (new #list);
+								assign :descriptions to (new #list);
+							));
+						append :adjective to #sequence of :adjectives;
+						append :description to #sequence of :descriptions;
+					);
+					goto (State:verbNounAdjectiveNounEndState);	
 				}
 				// 'Is sky a thing'
 				State:verbNounATypeState {
@@ -875,7 +944,7 @@ State:Understanding {
 						assign :adjective to :typenoun,
 						assign :description to :type
 					);
-					goto (State:verbNounAdjectiveState);
+					goto (State:verbNounAdjectiveNounEndState);
 				}
 				// 'Is my car...' -> 'Is my car red', 'Is my car a car', 'Is my age 44'
 				State:verbNounNounState {
@@ -897,6 +966,47 @@ State:Understanding {
 						assign :description to :thing3
 					);
 					goto (State:verbNounAdjectiveState);
+				}
+				// 'am I very very very nice?' 'am I nice or naughty?'
+				State:verbNounAdjectiveAdjectiveState {
+					do (
+						if (:adjectives, #null)
+							then (do (
+								assign :adjectives to (new #list);
+								assign :descriptions to (new #list);
+								append :adjective to #sequence of :adjectives;
+								append :description to #sequence of :descriptions;
+							));
+						append :adjective2 to #sequence of :adjectives;
+						append :description2 to #sequence of :descriptions;
+					);
+					goto (State:verbNounAdjectiveState);
+	
+				}
+				// 'am I very human?' 'am I a human or a bot?'
+				State:verbNounAdjectiveNounState {
+					do (
+						if (:adjectives, #null)
+							then (do (
+								assign :adjectives to (new #list);
+								assign :descriptions to (new #list);
+								append :adjective to #sequence of :adjectives;
+								append :description to #sequence of :descriptions;
+							));
+						append :noun3 to #sequence of :adjectives;
+						append :thing3 to #sequence of :descriptions;
+					);
+					goto (State:verbNounAdjectiveNounEndState);
+				}
+				// 'am I very human'
+				State:verbNounAdjectiveNounEndState {
+					case :or goto State:verbNounAdjectiveState;
+					case :and goto State:verbNounAdjectiveState;
+					case "," goto State:verbNounAdjectiveState;
+					case :questionWord goto State:questionState;
+					case :punctuation goto State:verbNounAdjectiveNounEndState;
+	
+					Answer:Function:questionResponse;
 				}
 			}
 		

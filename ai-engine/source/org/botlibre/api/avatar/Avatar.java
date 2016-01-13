@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Vertex;
-import org.botlibre.knowledge.ImageData;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
 
 /**
@@ -36,7 +36,7 @@ public interface Avatar {
 	
 	void pool();
 
-	ImageData getCurrentImage();
+	BinaryData getCurrentImage();
 	
 	Bot getBot();
 	

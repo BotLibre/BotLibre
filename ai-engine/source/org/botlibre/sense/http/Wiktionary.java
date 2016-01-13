@@ -75,20 +75,35 @@ public class Wiktionary extends Http implements DiscoverySense {
 		super.awake();
 		Http http = (Http)getBot().awareness().getSense(Http.class);
 		http.getDomains().put(DOMAIN, this);
-		
+
+		String enabled = this.bot.memory().getProperty("Wiktionary.enabled");
+		if (enabled != null) {
+			setIsEnabled(Boolean.valueOf(enabled));
+		}
+	}
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
 		Network memory = getBot().memory().newMemory();
-		Vertex language = memory.createVertex(getPrimitive());
-		Vertex property = language.getRelationship(Primitive.ENABLED);
+		Vertex mood = memory.createVertex(getClass());
+		Vertex property = mood.getRelationship(Primitive.ENABLED);
 		if (property != null) {
 			setIsEnabled((Boolean)property.getData());
 		}
+		
+		saveProperties();
+		
+		// Remove old properties.
+		mood.internalRemoveRelationships(Primitive.ENABLED);
+		
+		memory.save();
 	}
 
 	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
-		Vertex vertex = memory.createVertex(getPrimitive());
-		vertex.setRelationship(Primitive.ENABLED, memory.createVertex(isEnabled()));
-		vertex.pinChildren();
+		memory.saveProperty("Wiktionary.enabled", String.valueOf(isEnabled()), true);
 		memory.save();
 	}
 
@@ -248,7 +263,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 					meaning.setName(text);
 					correctness = correctness / 2;
 					word.addWeakRelationship(Primitive.MEANING, meaning, correctness);
-					meaning.addRelationship(Primitive.WORD, word);
+					meaning.addRelationship(Primitive.WORD, word).setCorrectness(2.0f);
 				}
 				// Set definition
 				List<String> bullets = getNextNumberedList(header);
@@ -638,7 +653,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 										Vertex newMeaning = newNetwork.createVertex();
 										newMeaning.setName(text);
 										newWord.addWeakRelationship(Primitive.MEANING, newMeaning, cacheMeaningRelationship.getCorrectness());
-										newMeaning.addRelationship(Primitive.WORD, newWord);
+										newMeaning.addRelationship(Primitive.WORD, newWord).setCorrectness(2.0f);
 										copyDataRelationships(cacheMeaning, Primitive.SYNONYM, newMeaning, newNetwork);
 										copyDataRelationships(cacheMeaning, Primitive.ANTONYM, newMeaning, newNetwork);
 										copyDataRelationships(cacheMeaning, Primitive.CARDINALITY, newMeaning, newNetwork);

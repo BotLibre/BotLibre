@@ -17,12 +17,13 @@
  ******************************************************************************/
 package org.botlibre.knowledge.database;
 
+import org.botlibre.api.knowledge.Network;
+import org.botlibre.knowledge.BasicVertex;
 import org.eclipse.persistence.config.SessionCustomizer;
 import org.eclipse.persistence.descriptors.DescriptorEvent;
 import org.eclipse.persistence.descriptors.DescriptorEventAdapter;
+import org.eclipse.persistence.internal.sessions.AbstractSession;
 import org.eclipse.persistence.sessions.Session;
-import org.botlibre.api.knowledge.Network;
-import org.botlibre.knowledge.BasicVertex;
 
 /**
  * Need to set the network of all vertices when loaded from database.
@@ -33,7 +34,38 @@ public class MemorySessionCustomizer implements SessionCustomizer {
 			@Override
 			public void postClone(DescriptorEvent event) {
 				if (event.getSession().isUnitOfWork()) {
-					((BasicVertex)event.getSource()).setNetwork((Network)event.getSession().getProperty("network"));
+					Network network = (Network)event.getSession().getProperty("network");
+					if (network != null) {
+						((BasicVertex)event.getSource()).setNetwork(network);
+					}
+				}
+			}
+			@Override
+			public void postBuild(DescriptorEvent event) {
+				AbstractSession session = event.getSession();
+				while (session != null && !session.isServerSession()) {
+					session = session.getParent();
+				}
+				//System.out.println("postBuild : " + System.identityHashCode((BasicVertex)event.getSource()) + " : " + event.getSession().isServerSession() + " : " + event.getSession().getProperty("network"));
+				if (session != null) {
+					Network network = (Network)event.getSession().getProperty("network");
+					if (network != null) {
+						((BasicVertex)event.getSource()).setNetwork(network);
+					}
+				}
+			}
+			@Override
+			public void postMerge(DescriptorEvent event) {
+				AbstractSession session = event.getSession();
+				while (session != null && !session.isServerSession()) {
+					session = session.getParent();
+				}
+				//System.out.println("postMerge : " + System.identityHashCode((BasicVertex)event.getSource()) + " : " + event.getSession().isServerSession() + " : " + " : " + session.getProperty("network"));
+				if (session != null) {
+					Network network = (Network)session.getProperty("network");
+					if (network != null) {
+						((BasicVertex)event.getSource()).setNetwork(network);
+					}
 				}
 			}
 		});

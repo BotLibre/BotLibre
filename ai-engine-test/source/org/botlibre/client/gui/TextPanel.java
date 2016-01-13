@@ -35,19 +35,25 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.Keymap;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.api.sense.Sense;
 import org.botlibre.emotion.EmotionalState;
-import org.botlibre.knowledge.ImageData;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.sense.text.TextInput;
 import org.botlibre.thought.language.Language.LanguageState;
+import org.botlibre.util.Utils;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class TextPanel extends ChildPanel 
@@ -58,7 +64,7 @@ public class TextPanel extends ChildPanel
 	protected BotPanel BotPanel;
 	
 	protected JTextArea inputTextPane;
-	protected JTextArea outputTextPane;
+	protected JTextPane outputTextPane;
 	protected JScrollPane inputScrollPane;
 	protected JScrollPane outputScrollPane;
 	protected JButton submitButton;
@@ -89,16 +95,10 @@ public class TextPanel extends ChildPanel
 					Vertex result = SelfCompiler.getCompiler().evaluateEquation(
 							text.substring(2, text.length()), sense.getUser(memory), memory.createVertex(Primitive.SELF), false, memory);
 					memory.save();
-					outputTextPane.append("Script:");
-					outputTextPane.append(text.substring(2, text.length()));
-					outputTextPane.append("\n");
-					outputTextPane.append("Result:");
-					outputTextPane.append(result.toString());
-					outputTextPane.append("\n");
+					appendText("Script: " + text.substring(2, text.length()) + "\n");
+					appendText("Result: " + Utils.escapeHTML(result.toString()) + "\n");
 				} else {
-					outputTextPane.append("You:");
-					outputTextPane.append(text);
-					outputTextPane.append("\n");
+					appendText("You: " + text + "\n");
 		
 					TextInput textInput = new TextInput(text);
 					textInput.setCorrection(correctionCheckBox.isSelected());
@@ -116,6 +116,14 @@ public class TextPanel extends ChildPanel
 				    JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	
+	public void appendText(String text) {
+		try {			
+			HTMLEditorKit kit = (HTMLEditorKit)outputTextPane.getEditorKit();
+			StyledDocument document = (StyledDocument)outputTextPane.getDocument();
+			kit.insertHTML((HTMLDocument)document, document.getLength(), text, 0, 0, null);
+		} catch (Exception ignore) {}
 	}
 	
 	public class StateChangedAction implements ActionListener {
@@ -144,7 +152,7 @@ public class TextPanel extends ChildPanel
 		TextEntry text = getBot().awareness().getSense(TextEntry.class);
 		this.stateComboBox.setSelectedItem(text.getLanguageState());
 
-		ImageData image = getBot().avatar().getCurrentImage();
+		BinaryData image = getBot().avatar().getCurrentImage();
 		if (image != null) {
 		    ImageIcon icon = new ImageIcon(image.getImageIcon().getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
 			this.avatarLabel.setIcon(icon);
@@ -165,9 +173,16 @@ public class TextPanel extends ChildPanel
 		initKeyMap(this.inputTextPane);
 		this.inputScrollPane = new JScrollPane(this.inputTextPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		this.outputTextPane = new JTextArea();
+		this.outputTextPane = new JTextPane();
+		this.outputTextPane.setContentType("text/html");
+	    HTMLEditorKit kit = new HTMLEditorKit();
+	    HTMLDocument doc = new HTMLDocument();
+	    this.outputTextPane.setEditorKit(kit);
+	    this.outputTextPane.setDocument(doc);
 		this.outputTextPane.setEditable(false);
 		this.outputScrollPane = new JScrollPane(this.outputTextPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED ,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		DefaultCaret caret = (DefaultCaret) this.outputTextPane.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
 		this.submitButton = new JButton("Submit");
 		this.submitButton.addActionListener(new SubmitAction());
@@ -210,16 +225,15 @@ public class TextPanel extends ChildPanel
 		if (text != null) {
 			text.setWriter(new Writer() {
 				public void write(char[] text, int start, int end) {
-					outputTextPane.append("Bot:");
 					String response = new String(text, start, end);
-					response = response.replace("<br/>", "\n");
-					outputTextPane.append(response);
-					outputTextPane.append("\n");
-					try {
-						Thread.sleep(10);
-					} catch (Exception ignore) {}
-					outputScrollPane.getVerticalScrollBar().setValue(outputScrollPane.getVerticalScrollBar().getMaximum());
-					outputScrollPane.getVerticalScrollBar().setValue(outputScrollPane.getVerticalScrollBar().getMaximum());
+					//response = response.replace("<br/>", "\n");
+					appendText("Bot: " + response + "\n");
+					appendText("\n");
+					//try {
+					//	Thread.sleep(10);
+					//} catch (Exception ignore) {}
+					//outputScrollPane.getVerticalScrollBar().setValue(outputScrollPane.getVerticalScrollBar().getMaximum());
+					//outputScrollPane.getVerticalScrollBar().setValue(outputScrollPane.getVerticalScrollBar().getMaximum());
 					resetState();
 				}
 				public void flush() {

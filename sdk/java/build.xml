@@ -1,0 +1,42 @@
+<project name="libre-sdk" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="source" location="src"/>
+	<property name="build" location="bin/classes"/>
+	<property name="lib"  location="lib"/>
+
+	<target name="init" depends="clean">
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init" description="compile the source">
+		<javac srcdir="${source}" destdir="${build}" debug="on" encoding="utf8">
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<fileset dir="${lib}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir=".">
+					<include name="android.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+			<fileset dir="${source}"/>
+		</copy>
+	</target>
+	
+	<target name="dist" depends="clean, compile" description="generate the distribution" >
+		<!-- Put everything in ${build} into libre-sdk.jar file -->
+		<jar jarfile="libre-sdk.jar">
+			<fileset dir="${build}">
+				<include name="org/botlibre/sdk/**/*"/>
+			</fileset>
+		</jar>
+	</target>
+		
+	<target name="clean" description="clean up" >
+		<!-- Delete the ${build} directory -->
+		<delete file="libre-sdk.jar"/>
+	</target>
+</project>

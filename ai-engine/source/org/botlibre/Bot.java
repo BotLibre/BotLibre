@@ -61,7 +61,7 @@ import org.w3c.dom.NodeList;
  * It defines a singleton that represents the system.
  */
 
-public class Bot {
+public class Bot {	
 	public static String PROGRAM = "Bot";
 	public static String VERSION = "3.0 - 2015-10-05";
 	
@@ -134,15 +134,16 @@ public class Bot {
 	}
 
 	public static Bot createInstance() {
-		return createInstance(CONFIG_FILE, "");
+		return createInstance(CONFIG_FILE, "", false);
 	}
 	
-	public static Bot createInstance(String configFile, String memory) {
+	public static Bot createInstance(String configFile, String memory, boolean isSchema) {
 		Bot Bot = new Bot();
 		Bot.parseConfigFile(configFile);
 		Bot.setState(ActiveState.ACTIVE);
-		Bot.log(Bot, "Creating instance:", Level.INFO, configFile);
-		Bot.memory().restore(memory);
+		Bot.log(Bot, "Creating instance:", Level.INFO, configFile, memory, isSchema);
+		Bot.memory().restore(memory, isSchema);
+		Bot.memory().awake();
 		Bot.mind().awake();
 		Bot.mood().awake();
 		Bot.avatar().awake();
@@ -150,38 +151,39 @@ public class Bot {
 		return Bot;
 	}
 	
-	public static Bot fastCreateInstance(String configFile, String memory) {
-		Bot Bot = new Bot();
+	public static Bot fastCreateInstance(String configFile, String memory, boolean isSchema) {
+		Bot bot = new Bot();
 		long start = System.currentTimeMillis();
-		Bot.parseConfigFile(configFile);
+		bot.parseConfigFile(configFile);
 		long time = System.currentTimeMillis() - start;
 		if (time > 500) {
 			System.out.println("Connect parseConfigFile time: " + time);
 		}
-		Bot.setState(ActiveState.ACTIVE);
-		Bot.log(Bot, "Fast creating instance:", Level.INFO, configFile);
+		bot.setState(ActiveState.ACTIVE);
+		bot.log(bot, "Fast creating instance:", Level.INFO, configFile, memory, isSchema);
 		start = System.currentTimeMillis();
-		Bot.memory().fastRestore(memory);
+		bot.memory().fastRestore(memory, isSchema);
 		time = System.currentTimeMillis() - start;
 		if (time > 500) {
 			System.out.println("Connect fastRestore time: " + time);
 		}
 		start = System.currentTimeMillis();
-		Bot.mind().awake();
-		Bot.mood().awake();
-		Bot.avatar().awake();
-		Bot.awareness().awake();
+		bot.memory().awake();
+		bot.mind().awake();
+		bot.mood().awake();
+		bot.avatar().awake();
+		bot.awareness().awake();
 		time = System.currentTimeMillis() - start;
 		if (time > 500) {
 			System.out.println("Connect awake time: " + time);
 		}
-		return Bot;
+		return bot;
 	}
 	
 	/**
 	 * Return the cached instance from the pool if available, otherwise create a new instance.
 	 */
-	public static Bot createInstanceFromPool(String instanceName) {
+	public static Bot createInstanceFromPool(String instanceName, boolean isSchema) {
 		Bot instance = instances.remove(instanceName);
 		if (instance != null) {
 			instancesQueue.remove(instanceName);
@@ -196,7 +198,7 @@ public class Bot {
 		if (instance == null) {
 			//instance =  createInstance(CONFIG_FILE, instanceName);
 			long start = System.currentTimeMillis();
-			instance =  fastCreateInstance(CONFIG_FILE, instanceName);
+			instance =  fastCreateInstance(CONFIG_FILE, instanceName, isSchema);
 			long time = System.currentTimeMillis() - start;
 			instance.log(instance, "Creating new instance, time, cache size:", Level.INFO, instanceName, time, instance.memory().cacheSize());
 		}

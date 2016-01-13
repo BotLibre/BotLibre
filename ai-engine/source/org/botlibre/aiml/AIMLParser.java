@@ -42,6 +42,7 @@ import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.self.SelfParseException;
@@ -64,22 +65,26 @@ public class AIMLParser {
 	public static int PAGE = 100;
 	public static int MAX_IDENTIFIER = 100;
 
-	public static Set<String> htmlTags = new HashSet<String>(Arrays.asList(new String[] {"p", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio"}));
+	public static Set<String> htmlTags = new HashSet<String>(Arrays.asList(new String[] {
+			"p", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio",
+			"table", "tr", "td", "tablebody", "font", "tablehead", "th"}));
 
 	public static List<String> topicChildren = Arrays.asList(new String[] {"category", "#text"});
 	public static List<String> categoryChildren = Arrays.asList(new String[] {"pattern", "that", "template", "topic", "#text"});
 	public static List<String> patternChildren =
 			Arrays.asList(new String[] {"#text","bot", "name", "get", "set"});
-	public static List<String> templateChildren =
-			Arrays.asList(new String[] {
-					"br", "a", "p", "ul", "li", "b", "em", "i", "strong", "code", "img", "#text",
+	public static Set<String> templateChildren =
+			new HashSet<String>(Arrays.asList(new String[] {
+					"p", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio",
+					"table", "tr", "td", "tablebody", "font", "tablehead", "th",
+					"#text",
 					"bot", "name", "get", "set", "value", "index", "map", "new",
 					"think", "srai", "sraix", "sr", "random", "condition", "loop", "set",
 					"star", "input", "that", "thatstar", "topicstar", "request", "response",
 					"date", "interval", "size", "version", "id", "vocabulary", "program",
 					"person", "person2", "gender", "uppercase", "lowercase", "formal", "sentence",
 					"learn", "eval",
-					"explode", "normalize", "denormalize"});
+					"explode", "normalize", "denormalize"}));
 	public static Set<String> attributeNodes =
 			new HashSet<String>(Arrays.asList(new String[] {
 					"name", "index", "value", "var", "botname", "botid", "server", "service", "limit", "apikey", "default", "hint"}));
@@ -231,7 +236,7 @@ public class AIMLParser {
 		}
 	}
 	
-	public void checkSupportedChildren(Element element, List<String> tags, Network network) {
+	public void checkSupportedChildren(Element element, Collection<String> tags, Network network) {
 		NodeList list = element.getChildNodes();
 		for (int index2 = 0;  index2 < list.getLength(); index2++) {
 			Node child = list.item(index2);
@@ -321,16 +326,18 @@ public class AIMLParser {
 		if (!topics.isEmpty()) {
 			for (Element child : topics) {
 				text = getPattern(child, network).toLowerCase();
-				if (isPattern(text)) {
-					topic = network.createPattern(text);
-				} else {
-					topic = network.createSentence(Utils.reduce(text), false, true);
+				if (!text.isEmpty()) {
+					if (isPattern(text)) {
+						topic = network.createPattern(text);
+					} else {
+						topic = network.createSentence(Utils.reduce(text), false, true);
+					}
+					if (pin) {
+						topic.setPinned(true);
+					}
+					network.getBot().log(this, "Topic", Level.INFO, topic);
+					checkSupportedChildren(child, Collections.EMPTY_LIST, network);
 				}
-				if (pin) {
-					topic.setPinned(true);
-				}
-				network.getBot().log(this, "Topic", Level.INFO, topic);
-				checkSupportedChildren(child, Collections.EMPTY_LIST, network);
 			}
 		}
 		// <that>		
@@ -338,11 +345,7 @@ public class AIMLParser {
 		if (!thats.isEmpty()) {
 			for (Element child : thats) {
 				text = getPattern(child, network).toLowerCase();
-				if (isPattern(text)) {
-					that = network.createPattern(text);
-				} else {
-					that = network.createSentence(Utils.reduce(text), false, true);
-				}
+				that = network.createPattern(text);
 				if (pin) {
 					that.setPinned(true);
 				}
@@ -495,6 +498,15 @@ public class AIMLParser {
 					}
 				}
 				if (caseMatch == null) {
+					// Clear cache if byte code.
+					if (currentState.getData() instanceof BinaryData) {
+						BinaryData data = (BinaryData)currentState.getData();
+						data.setCache(null);
+						data = (BinaryData)network.getBot().memory().getLongTermMemory().findData(data);
+						if (data != null) {
+							data.setCache(null);
+						}
+					}					
 					caseMatch = network.createInstance(Primitive.CASE);
 					caseMatch.setName("c" + caseMatch.getId() + "_" + value.printString());
 					caseMatch.addRelationship(Primitive.CASE, value);
@@ -557,7 +569,7 @@ public class AIMLParser {
 				writer.write("}");
 			}
 		}
-		return writer.toString();
+		return writer.toString().trim();
 	}
 	
 	public void appendNestedString(Element child, boolean multiStar, boolean[] srai, StringWriter writer, Network network) {
@@ -680,9 +692,12 @@ public class AIMLParser {
 		if (valueElements != null && valueElements.size() > 0) {
 			StringWriter writer = new StringWriter();
 			if (primitive) {
-				writer.write("primitive ");
+				writer.write("(primitive ");
 			}
 			appendNestedString((Element)valueElements.get(0), multiStar, srai, writer, network);
+			if (primitive) {
+				writer.write(")");
+			}
 			return writer.toString();
 		}
 		Node child = node.getAttributes().getNamedItem(value);
@@ -1034,12 +1049,11 @@ public class AIMLParser {
 				} else {
 					writer.write(" from :conversation, ");
 				}
-				if (conditionValue.indexOf('*') != -1 || conditionValue.indexOf('_') != -1) {
+				boolean isText = conditionValue.startsWith("\"");
+				if (isText) {
 					writer.write("Pattern:");
-					writer.write(conditionValue);
-				} else {
-					writer.write(conditionValue);
 				}
+				writer.write(conditionValue);
 				writer.write(") then ");
 				appendNestedString(child, multiStar, srai, writer, network);
 				writer.write(" else \"\"");
@@ -1079,12 +1093,11 @@ public class AIMLParser {
 						} else {
 							writer.write(" from :conversation, ");
 						}
-						if (liValue.indexOf('*') != -1 || liValue.indexOf('_') != -1) {
+						boolean isText = liValue.startsWith("\"");
+						if (isText) {
 							writer.write("Pattern:");
-							writer.write(liValue);
-						} else {
-							writer.write(liValue);
 						}
+						writer.write(liValue);
 						writer.write(") then ");
 						appendNestedString(condition, multiStar, srai, writer, network);
 						writer.write(" else ");

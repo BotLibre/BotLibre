@@ -178,4 +178,15 @@ public class BasicThought implements Thought {
 	public void setStopped(boolean isStopped) {
 		this.isStopped = isStopped;
 	}
+
+	public void saveProperties() {
+		
+	}
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
+		
+	}
 }

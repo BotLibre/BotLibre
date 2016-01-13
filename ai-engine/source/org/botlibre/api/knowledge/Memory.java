@@ -73,12 +73,12 @@ public interface Memory {
 	/**
 	 * Restores the memory from a persisted state.
 	 */
-	void restore(String database) throws MemoryStorageException;
+	void restore(String database, boolean isSchema) throws MemoryStorageException;
 	
 	/**
 	 * Restores the memory from a persisted state.
 	 */
-	void fastRestore(String database) throws MemoryStorageException;
+	void fastRestore(String database, boolean isSchema) throws MemoryStorageException;
 
 	/**
 	 * Return the current connected database name.
@@ -93,12 +93,27 @@ public interface Memory {
 	/**
 	 * Create a memory database.
 	 */
+	void createMemory(String database, boolean isSchema);
+
+	/**
+	 * Create a memory database.
+	 */
 	void createMemoryFromTemplate(String database, String template);
+
+	/**
+	 * Create a memory database.
+	 */
+	void createMemoryFromTemplate(String database, boolean isSchema, String template, boolean templateIsSchema);
 
 	/**
 	 * Destroy the database.
 	 */
 	void destroyMemory(String database);
+
+	/**
+	 * Destroy the database.
+	 */
+	void destroyMemory(String database, boolean isSchema);
 	
 	/**
 	 * Delete all content from the database.
@@ -124,6 +139,11 @@ public interface Memory {
 	 * Allow switching to another memory location.
 	 */
 	void switchMemory(String location);
+	
+	/**
+	 * Allow switching to another memory location.
+	 */
+	void switchMemory(String location, boolean isSchema);
 
 	/**
 	 * Reset the short term and active memories.
@@ -139,6 +159,27 @@ public interface Memory {
 	 * Initialize any configurable settings from the properties.
 	 */
 	void initialize(Map<String, Object> properties);
+
+	void awake();
+	
+	void loadProperties(String propertySet);
+
+	void clearProperties(String propertySet);
+	
+	/**
+	 * Return the property setting.
+	 */
+	String getProperty(String property);
+
+	/**
+	 * Set the property setting.
+	 */
+	String setProperty(String property, String value);
+
+	/**
+	 * Remove the property setting.
+	 */
+	String removeProperty(String property);
 	
 	/**
 	 * Add the memory listener.

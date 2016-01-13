@@ -17,6 +17,8 @@
  ******************************************************************************/
 package org.botlibre.self;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -33,6 +35,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.AbstractNetwork;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.util.Utils;
 
@@ -111,6 +114,12 @@ public class SelfDecompiler {
 	 * Print the state and any referenced states or variables that have not yet been printed.
 	 */
 	public void printState(Vertex state, Writer writer, String indent, Set<Vertex> elements, Network network, long start, long timeout) throws IOException {
+		if (state.getData() instanceof BinaryData) {
+			Vertex detached = parseStateByteCode(state, (BinaryData)state.getData(), network);
+			elements.add(detached);
+			printState(detached, writer, indent, elements, network, start, timeout);
+			return;
+		}
 		printComments(state, writer, indent, false, network);
 		writer.write(indent);
 		printElement(state, writer, indent, null, null, elements, network);
@@ -235,6 +244,11 @@ public class SelfDecompiler {
 			if (vertex.getName() == null) {
 				if (!elements.contains(vertex)) {
 					String newIndent = indent + "\t";
+					if (vertex.getData() instanceof BinaryData) {
+						Vertex detached = parseEquationByteCode(vertex, (BinaryData)vertex.getData(), network);
+						elements.add(detached);
+						vertex = detached;
+					}
 					printOperator(vertex, writer, newIndent, equations, variables, elements, network);
 					return;
 				} else {
@@ -284,7 +298,7 @@ public class SelfDecompiler {
 			writer.write("Vertex:");
 			printId = true;
 		}
-		if (printId || (vertex.getName() == null)) {
+		if ((printId || (vertex.getName() == null)) && (vertex.getId() != null)) {
 			writer.write(vertex.getId().toString());
 		}
 		if (vertex.getName() != null) {
@@ -492,11 +506,64 @@ public class SelfDecompiler {
 			}
 		}
 	}
+
+	/**
+	 * Parse the operation arguments.
+	 */
+	public void parseArgumentsByteCode(Vertex equation, DataInputStream dataStream, Vertex type, Network network) throws IOException {
+		long id = dataStream.readLong();
+		while (id > 0) {
+			Vertex element = network.findById(id);
+			if (element == null) {
+				id = dataStream.readLong();
+				continue;
+			}
+			if (element.is(Primitive.EQUATION)) {
+				element = parseOperatorByteCode(dataStream, network);
+			}
+			equation.addRelationship(type, element, Integer.MAX_VALUE);
+			id = dataStream.readLong();
+		}
+	}
+	
+	/**
+	 * Check if the equation is bytecode and decompile.
+	 */
+	public Vertex decompileEquation(Vertex equation, Network network) {
+		if (equation.getData() instanceof BinaryData) {
+			try {
+				return parseEquationByteCode(equation, (BinaryData)equation.getData(), network);
+			} catch (IOException exception) {
+				throw new SelfExecutionException(equation, exception);
+			}
+		}
+		return equation;
+	}
+	
+	/**
+	 * Check if the state is bytecode and decompile.
+	 */
+	public Vertex decompileState(Vertex state, Network network) {
+		if (state.getData() instanceof BinaryData) {
+			try {
+				return parseStateByteCode(state, (BinaryData)state.getData(), network);
+			} catch (Exception exception) {
+				throw new SelfExecutionException(state, exception);
+			}
+		}
+		return state;
+	}
 	
 	/**
 	 * Print the equation and any equations it references that have not been printed.
 	 */
 	public void printEquation(Vertex equation, Writer writer, String indent, Set<Vertex> elements, Network network) throws IOException {
+		if (equation.getData() instanceof BinaryData) {
+			Vertex detached = parseEquationByteCode(equation, (BinaryData)equation.getData(), network);
+			elements.add(detached);
+			printEquation(detached, writer, indent, elements, network);
+			return;
+		}
 		printComments(equation, writer, indent, false, network);
 		List<Vertex> equations = new ArrayList<Vertex>();
 		List<Vertex> variables = new ArrayList<Vertex>();
@@ -526,6 +593,313 @@ public class SelfDecompiler {
 		}
 		for (Vertex element : equations) {
 			printEquation(element, writer, indent, elements, network);
+		}
+	}
+	
+	/**
+	 * Parse the equation from bytecode.
+	 */
+	public Vertex parseEquationByteCode(Vertex equation, BinaryData data, Network network) throws IOException {
+		if (data.getCache() != null) {
+			return (Vertex)data.getCache();
+		}
+		BinaryData bytes = data;
+		if (!equation.isTemporary()) {
+			bytes = (BinaryData)network.findData(data);
+			if (bytes == null) {
+				bytes = data;
+			}
+		}
+		ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes.getBytes());
+		DataInputStream dataStream = new DataInputStream(byteStream);
+		Vertex cache = parseOperatorByteCode(dataStream, network);
+		cache.setName(equation.getName());
+		data.setCache(cache);
+		bytes.setCache(cache);
+		return cache;
+	}
+	
+	/**
+	 * Parse the state from bytecode.
+	 */
+	public Vertex parseStateByteCode(Vertex state, BinaryData data, Network network) throws IOException {
+		if (data.getCache() != null) {
+			return (Vertex)data.getCache();
+		}
+		BinaryData bytes = data;
+		if (!state.isTemporary()) {
+			bytes = (BinaryData)network.findData(data);
+			if (bytes == null) {
+				bytes = data;
+			}
+		}
+		ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes.getBytes());
+		DataInputStream dataStream = new DataInputStream(byteStream);
+		Vertex cache = parseStateByteCode(dataStream, network);
+		// Add any dynamically added cases.
+		Collection<Relationship> cases = state.getRelationships(Primitive.DO);
+		if (cases != null) {
+			for (Relationship equation : cases) {
+				cache.addRelationship(equation, true);
+			}
+		}
+		cache.setName(state.getName());
+		data.setCache(cache);
+		bytes.setCache(cache);
+		return cache;
+	}
+
+	
+	/**
+	 * Parse the state and its cases from bytecode.
+	 */
+	public Vertex parseStateByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex state = network.createTemporyVertex();
+		state.addRelationship(Primitive.INSTANTIATION, Primitive.STATE);
+		long id = dataStream.readLong();
+		while (id > 0) {
+			Vertex next = network.findById(id);
+			Vertex vertex = null;
+			if (next == null) {
+				id = dataStream.readLong();
+				continue;
+			}
+			if (next.is(Primitive.CASE)) {
+				vertex = parseCaseByteCode(dataStream, network);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
+			} else if (next.is(Primitive.QUOTIENT)) {
+				parseQuotientByteCode(state, dataStream, network);
+			} else if (next.is(Primitive.DO)) {
+				vertex = parseDoByteCode(dataStream, network);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
+			} else if (next.is(Primitive.GOTO)) {
+				vertex = parseGotoByteCode(dataStream, network);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
+			} else if (next.is(Primitive.PUSH)) {
+				vertex = parsePushByteCode(dataStream, network);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
+			} else if (next.is(Primitive.RETURN)) {
+				vertex = parseReturnByteCode(dataStream, network);
+				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
+			}
+			id = dataStream.readLong();
+		}		
+		
+		return state;
+	}
+	
+	/**
+	 * Parse the CASE bytecode.
+	 */
+	public Vertex parseCaseByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex vertex = network.createTemporyVertex();
+		vertex.addRelationship(Primitive.INSTANTIATION, Primitive.CASE);
+		long id = dataStream.readLong();
+		if (id == 0) {
+			return vertex;
+		}
+		Vertex variable = network.findById(id);
+		if (variable == null) {
+			return vertex;
+		}
+		if (variable.is(Primitive.PATTERN)) {
+			id = dataStream.readLong();
+			if (id == 0) {
+				return vertex;
+			}
+			variable = network.findById(id);
+			if (variable == null) {
+				return vertex;
+			}
+			vertex.addRelationship(Primitive.PATTERN, variable);			
+		} else {
+			vertex.addRelationship(Primitive.CASE, variable);
+		}
+		id = dataStream.readLong();
+		while (id > 0) {
+			Vertex type = network.findById(id);
+			if (type == null) {
+				return vertex;
+			}
+			id = dataStream.readLong();
+			if (type.is(Primitive.GOTO) || type.is(Primitive.FOR)) {
+				while (id > 0) {
+					Vertex element = network.findById(id);
+					if (element == null) {
+						id = dataStream.readLong();
+						continue;
+					}
+					vertex.addRelationship(type, element);
+					id = dataStream.readLong();
+				}
+				id = dataStream.readLong();
+				continue;
+			}
+			Vertex element = network.findById(id);
+			if (element == null) {
+				id = dataStream.readLong();
+				continue;
+			}
+			if (element.is(Primitive.EQUATION)) {
+				element = parseOperatorByteCode(dataStream, network);
+			}
+			vertex.addRelationship(type, element);
+			id = dataStream.readLong();
+		}
+		return vertex;
+	}
+	
+	/**
+	 * Parse the PUSH bytecode.
+	 */
+	public Vertex parsePushByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex equation = network.createTemporyVertex();
+		equation.addRelationship(Primitive.INSTANTIATION, Primitive.PUSH);
+		long id = dataStream.readLong();
+		if (id == 0) {
+			return equation;
+		}
+		Vertex element = network.findById(id);
+		if (element != null) {
+			equation.addRelationship(Primitive.ARGUMENT, element, Integer.MAX_VALUE);
+		}
+		return equation;
+	}
+	
+	/**
+	 * Parse the DO bytecode.
+	 */
+	public Vertex parseDoByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex equation = network.createTemporyVertex();
+		equation.addRelationship(Primitive.INSTANTIATION, Primitive.DO);
+		Vertex operation = parseOperatorByteCode(dataStream, network);
+		equation.addRelationship(Primitive.DO, operation, Integer.MAX_VALUE);
+		return equation;
+	}
+	
+	/**
+	 * Parse the RETURN bytecode.
+	 */
+	public Vertex parseReturnByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex equation = network.createTemporyVertex();
+		equation.addRelationship(Primitive.INSTANTIATION, Primitive.RETURN);
+		long id = dataStream.readLong();
+		if (id == 0) {
+			return equation;
+		}
+		Vertex element = network.findById(id);
+		if (element != null) {
+			if (element.is(Primitive.ARGUMENT)) {
+				equation.addRelationship(Primitive.RETURN, element);
+				id = dataStream.readLong();
+				while (id > 0) {
+					element = network.findById(id);
+					if (element != null) {
+						equation.addRelationship(Primitive.ARGUMENT, element, Integer.MAX_VALUE);
+					}
+					id = dataStream.readLong();
+				}
+			} else {
+				equation.addRelationship(Primitive.RETURN, element);
+			}
+		}
+		return equation;
+	}
+	
+	/**
+	 * Parse the GOTO bytecode.
+	 */
+	public Vertex parseGotoByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex equation = network.createTemporyVertex();
+		equation.addRelationship(Primitive.INSTANTIATION, Primitive.GOTO);
+		long id = dataStream.readLong();
+		if (id == 0) {
+			return equation;
+		}
+		Vertex element = network.findById(id);
+		if (element == null) {
+			return equation;
+		}
+		if (element.is(Primitive.FINALLY)) {
+			equation.addRelationship(Primitive.FINALLY, Primitive.FINALLY);
+			id = dataStream.readLong();
+			if (id == 0) {
+				return equation;
+			}
+			element = network.findById(id);
+			if (element == null) {
+				return equation;
+			}
+		}
+		equation.addRelationship(Primitive.GOTO, element);
+		id = dataStream.readLong();
+		if (id == 0) {
+			return equation;
+		}
+		element = network.findById(id);
+		if (element == null) {
+			return equation;
+		}
+		if (element.is(Primitive.ARGUMENT)) {
+			id = dataStream.readLong();
+			while (id > 0) {
+				element = network.findById(id);
+				if (element != null) {
+					equation.addRelationship(Primitive.ARGUMENT, element, Integer.MAX_VALUE);
+				}
+				id = dataStream.readLong();
+			}
+			id = dataStream.readLong();
+		}
+		return equation;
+	}
+
+	
+	/**
+	 * Parse the GOTO bytecode.
+	 */
+	public void parseQuotientByteCode(Vertex state, DataInputStream dataStream, Network network) throws IOException {
+		float correctness = dataStream.readFloat();
+		long id = dataStream.readLong();
+		if (id == 0) {
+			return;
+		}
+		Vertex element = network.findById(id);
+		if (element == null) {
+			return;
+		}
+		Relationship relationship = state.addWeakRelationship(Primitive.QUOTIENT, element, correctness);
+		id = dataStream.readLong();
+		if (id == 0) {
+			return;
+		}
+		element = network.findById(id);
+		if (element == null) {
+			return;
+		}
+		if (element.is(Primitive.PREVIOUS)) {
+			id = dataStream.readLong();
+			Vertex meta = network.createTemporyVertex();
+			relationship.setMeta(meta);
+			while (id > 0) {
+				element = network.findById(id);
+				if (element != null) {
+					if (element.is(Primitive.NOT)) {
+						id = dataStream.readLong();
+						if (id == 0) {
+							return;
+						}
+						element = network.findById(id);
+						if (element == null) {
+							continue;
+						}
+						meta.removeRelationship(Primitive.PREVIOUS, element);
+					} else {
+						meta.addRelationship(Primitive.PREVIOUS, element);						
+					}
+				}
+				id = dataStream.readLong();
+			}
 		}
 	}
 	
@@ -599,7 +973,7 @@ public class SelfDecompiler {
 			printArguments(equation, Primitive.ARGUMENT, tokens, false, false, false, writer, indent, variables, equations, elements, true, network);
 		} else if (operator.is(Primitive.WHILE)) {
 			// Print arguments.
-			printArguments(equation, Primitive.ARGUMENT, null, false, (operator.is(Primitive.DO)), false, writer, indent, variables, equations, elements, true, network);
+			printArguments(equation, Primitive.ARGUMENT, null, false, false, false, writer, indent, variables, equations, elements, true, network);
 			// Print do.
 			Collection<Relationship> dos = equation.orderedRelationships(Primitive.DO);
 			if (dos != null) {
@@ -779,6 +1153,129 @@ public class SelfDecompiler {
 	}
 	
 	/**
+	 * Parse the operator and its arguments from bytecode.
+	 */
+	public Vertex parseOperatorByteCode(DataInputStream dataStream, Network network) throws IOException {
+		Vertex equation = network.createTemporyVertex();
+		equation.addRelationship(Primitive.INSTANTIATION, Primitive.EQUATION);
+		long id = dataStream.readLong();
+		Vertex operator = network.findById(id);
+		if (operator == null) {
+			return equation;
+		}
+		equation.addRelationship(Primitive.OPERATOR, operator);
+		id = dataStream.readLong();
+		if (id == 0) {
+			return equation;
+		}
+		Vertex next = network.findById(id);
+		if (next == null) {
+			return equation;
+		}
+		if (next.is(Primitive.NOT)) {
+			equation.addRelationship(Primitive.NOT, Primitive.NOT);
+			id = dataStream.readLong();
+			if (id == 0) {
+				return equation;
+			}
+		}
+		if (operator.is(Primitive.IF)) {
+			List<Vertex> stack = new ArrayList<Vertex>();
+			stack.add(equation);
+			Vertex top = equation;
+			// Handle AND / OR / NOT
+			next = network.findById(id);
+			if (next == null) {
+				return equation;
+			}
+			if (next.is(Primitive.ARGUMENT)) {
+				parseArgumentsByteCode(equation, dataStream, next, network);
+				id = dataStream.readLong();
+				if (id == 0) {
+					return equation;
+				}
+				next = network.findById(id);
+				if (next == null) {
+					return equation;
+				}				
+			}
+			while (next.is(Primitive.AND) || next.is(Primitive.OR)) {
+				Vertex operation = next;
+				Vertex condition = network.createTemporyVertex();
+				condition.addRelationship(Primitive.INSTANTIATION, Primitive.EQUATION);
+				id = dataStream.readLong();
+				if (id == 0) {
+					return equation;
+				}
+				next = network.findById(id);
+				if (next == null) {
+					return equation;
+				}
+				if (next.is(Primitive.NOT)) {
+					condition.addRelationship(Primitive.NOT, Primitive.NOT);
+					id = dataStream.readLong();
+					if (id == 0) {
+						return equation;
+					}
+					next = network.findById(id);
+					if (next == null) {
+						return equation;
+					}
+				}
+				boolean bracket = false;
+				while (next.is(Primitive.LEFTBRACKET)) {
+					bracket = true;
+					stack.add(condition);
+					id = dataStream.readLong();
+					if (id == 0) {
+						return equation;
+					}
+					next = network.findById(id);
+					if (next == null) {
+						return equation;
+					}
+				}
+				condition.addRelationship(Primitive.OPERATOR, operation);				
+				top.addRelationship(Primitive.CONDITION, condition);
+				parseArgumentsByteCode(condition, dataStream, next, network);
+				id = dataStream.readLong();
+				if (id == 0) {
+					return equation;
+				}
+				next = network.findById(id);
+				if (next == null) {
+					return equation;
+				}
+				if (bracket) {
+					stack.remove(stack.size() - 1);
+					top = stack.get(stack.size() - 1);
+					while (next.is(Primitive.RIGHTBRACKET)) {
+						stack.remove(stack.size() - 1);
+						top = stack.get(stack.size() - 1);
+						id = dataStream.readLong();
+						if (id == 0) {
+							return equation;
+						}
+						next = network.findById(id);
+						if (next == null) {
+							return equation;
+						}
+					}
+				}
+			}
+		}
+		while (id > 0) {
+			next = network.findById(id);
+			if (next == null) {
+				return equation;
+			}
+			parseArgumentsByteCode(equation, dataStream, next, network);
+			id = dataStream.readLong();
+		}
+		return equation;
+	}
+	
+	/**
 	 * Print the IF condition and any variables and states that it references.
 	 */
 	public void printCase(Vertex equation, Writer writer, String indent, Set<Vertex> elements,
@@ -804,14 +1301,14 @@ public class SelfDecompiler {
 			writer.write("pattern ");
 			variable = pattern;
 		} else {
-			writer.write("case ");			
+			writer.write("case ");
 		}
 		if (variable.instanceOf(Primitive.EQUATION)) {
 			writer.write("(");			
 		}
 		printElement(variable, writer, indent, newEquations, newVariables, elements, network);
 		if (variable.instanceOf(Primitive.EQUATION)) {
-			writer.write(")");			
+			writer.write(")");
 		}
 		if (as != null) {
 			writer.write(" as ");

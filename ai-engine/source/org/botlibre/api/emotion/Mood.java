@@ -92,5 +92,9 @@ public interface Mood {
 
 	void saveProperties();
 
+	/**
+	 * Migrate to new properties system.
+	 */
+	void migrateProperties();
 }
 

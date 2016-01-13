@@ -17,12 +17,15 @@
  ******************************************************************************/
 package org.botlibre.knowledge.database;
 
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -34,6 +37,18 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.metamodel.Metamodel;
 
+import org.botlibre.Bot;
+import org.botlibre.BotException;
+import org.botlibre.LogListener;
+import org.botlibre.api.knowledge.Network;
+import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.api.sense.Sense;
+import org.botlibre.api.thought.Thought;
+import org.botlibre.knowledge.BasicMemory;
+import org.botlibre.knowledge.BasicNetwork;
+import org.botlibre.knowledge.BasicVertex;
+import org.botlibre.knowledge.Property;
+import org.botlibre.util.Utils;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.internal.databaseaccess.Accessor;
 import org.eclipse.persistence.internal.jpa.EntityManagerFactoryDelegate;
@@ -43,20 +58,14 @@ import org.eclipse.persistence.internal.jpa.metadata.xml.XMLEntityMappingsReader
 import org.eclipse.persistence.jpa.JpaEntityManager;
 import org.eclipse.persistence.jpa.JpaEntityManagerFactory;
 import org.eclipse.persistence.logging.SessionLog;
+import org.eclipse.persistence.sessions.Connector;
 import org.eclipse.persistence.sessions.DatabaseLogin;
+import org.eclipse.persistence.sessions.DatasourceLogin;
 import org.eclipse.persistence.sessions.Project;
+import org.eclipse.persistence.sessions.Session;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.server.ConnectionPolicy;
 import org.eclipse.persistence.sessions.server.ServerSession;
-import org.botlibre.LogListener;
-import org.botlibre.Bot;
-import org.botlibre.BotException;
-import org.botlibre.api.knowledge.Network;
-import org.botlibre.api.knowledge.Vertex;
-import org.botlibre.knowledge.BasicMemory;
-import org.botlibre.knowledge.BasicNetwork;
-import org.botlibre.knowledge.BasicVertex;
-import org.botlibre.util.Utils;
 
 /**
  * Uses JPA to store the memory to a Derby database.
@@ -78,12 +87,13 @@ public class DatabaseMemory extends BasicMemory {
 	/* PostgreSQL */
 	public static String DATABASE_USER = "postgres";
 	public static String DATABASE_PASSWORD = "password";
-	public static String IMPORT_URL = "jdbc:postgresql:";
-	public static String DATABASE_URL = "jdbc:postgresql:postgres";
-	public static String DATABASE_TEST_URL = "jdbc:postgresql:test";
+	public static String DATABASE_URL_PREFIX = "jdbc:postgresql:";
+	public static String SCHEMA_URL_PREFIX = "jdbc:postgresql:botlibre_bots?currentSchema=";
+	public static String DATABASE_URL = "jdbc:postgresql:botlibre_bots";
+	public static String DATABASE_TEST_URL = "jdbc:postgresql:test_bots";
 	public static String DATABASE_DRIVER = "org.postgresql.Driver";
 	public static String CACHE_SIZE = "5000";
-	public static boolean TEST = true;
+	public static boolean TEST = false;
 	public static boolean RECREATE_DATABASE = false;
 	
 	public static ConcurrentMap<String, SessionInfo> sessions = new ConcurrentHashMap<String, SessionInfo>();
@@ -93,6 +103,7 @@ public class DatabaseMemory extends BasicMemory {
 	private LogListener listener;
 	private String database;
 	private boolean isFast;
+	private boolean isSchema;
 	
 	public class SessionInfo {
 		public ServerSession session;
@@ -112,9 +123,9 @@ public class DatabaseMemory extends BasicMemory {
 	public DatabaseMemory() {
 		super();
 		if (TEST) {
-			this.database = DATABASE_TEST_URL.substring(IMPORT_URL.length());
+			this.database = DATABASE_TEST_URL.substring(DATABASE_URL_PREFIX.length());
 		} else {
-			this.database = DATABASE_URL.substring(IMPORT_URL.length());
+			this.database = DATABASE_URL.substring(DATABASE_URL_PREFIX.length());
 		}
 	}
 	
@@ -162,6 +173,14 @@ public class DatabaseMemory extends BasicMemory {
 		this.entityManager = entityManager;
 	}
 
+	public boolean isSchema() {
+		return isSchema;
+	}
+
+	public void setSchema(boolean isSchema) {
+		this.isSchema = isSchema;
+	}
+
 	/**
 	 * Commit short-term memory to the database.
 	 */
@@ -204,7 +223,7 @@ public class DatabaseMemory extends BasicMemory {
 				session = this.entityManager.unwrap(ServerSession.class);
 				save();
 				this.entityManager.clear();
-				this.entityManager.close();
+				//this.entityManager.close();
 			}
 			if (getFactory() != null) {
 				getFactory().close();
@@ -250,23 +269,24 @@ public class DatabaseMemory extends BasicMemory {
 	 */
 	@Override
 	public void restore() {
-		restore("");
+		restore("", false);
 	}
 	
 	/**
 	 * Connect and create the EntityManager.
 	 */
 	@Override
-	public void restore(String database) {
-		restore(database, false);
+	public void restore(String database, boolean isSchema) {
+		restore(database, isSchema, false);
 	}
 	
 	public void checkSchemaVersion() {
+		int version = 0;
 		boolean schemaMigrationRequired = true;
 		// Check database version and migrate schema if required.
 		try {
-			int version = ((Number)this.entityManager.createNativeQuery("select version from schema_version").getSingleResult()).intValue();
-			if (version == 1) {
+			version = ((Number)this.entityManager.createNativeQuery("select version from schema_version").getSingleResult()).intValue();
+			if (version == 2) {
 				schemaMigrationRequired = false;
 			}
 		} catch (Exception missing) {
@@ -274,40 +294,58 @@ public class DatabaseMemory extends BasicMemory {
 			executeDDL("insert into schema_version (version) values (1)");
 		}
 		if (schemaMigrationRequired) {
-			this.bot.log(this, "Migrating schema", Level.WARNING);
-			executeDDL("update vertex set datavalue = replace(datavalue, 'org.pandora', 'org.botlibre') where datavalue like 'org.pandora.%'");
-			try {
-				this.entityManager.createNativeQuery("select wordcount from vertex where wordcount <> wordcount").getResultList();
-			} catch (Exception missing) {
-				executeDDL("alter table vertex ADD COLUMN wordcount int");
+			this.bot.log(this, "Migrating schema", Level.WARNING, version);
+			if (version < 1) {
+				executeDDL("update vertex set datavalue = replace(datavalue, 'org.pandora', 'org.botlibre') where datavalue like 'org.pandora.%'");
+				try {
+					this.entityManager.createNativeQuery("select wordcount from vertex where wordcount <> wordcount").getResultList();
+				} catch (Exception missing) {
+					executeDDL("alter table vertex ADD COLUMN wordcount int");
+				}
+				try {
+					this.entityManager.createNativeQuery("select groupid from vertex where groupid <> groupid").getResultList();
+				} catch (Exception missing) {
+					executeDDL("alter table vertex ADD COLUMN groupid int");
+				}
+				try {
+					this.entityManager.createNativeQuery("select hashcode from relationship where hashcode <> hashcode").getResultList();
+				} catch (Exception missing) {
+					executeDDL("alter table relationship ADD COLUMN hashcode int");
+				}
+				try {
+					this.entityManager.createNativeQuery("select id from textdata where id <> id").getResultList();
+				} catch (Exception missing) {
+					executeDDL("CREATE TABLE TEXTDATA (ID BIGINT NOT NULL, TEXT_DATA TEXT, PRIMARY KEY (ID))");
+				}
+				/*executeDDL("alter table relationship alter type_id set not null");
+				executeDDL("alter table relationship alter target_id set not null");
+				executeDDL("alter table relationship alter source_id set not null");
+				executeDDL("ALTER TABLE vertex ADD COLUMN groupid bigint");
+				executeDDL("ALTER TABLE relationship ADD COLUMN hashcode integer");*/
 			}
 			try {
-				this.entityManager.createNativeQuery("select groupid from vertex where groupid <> groupid").getResultList();
+				this.entityManager.createNativeQuery("select property from property where property <> property").getResultList();
 			} catch (Exception missing) {
-				executeDDL("alter table vertex ADD COLUMN groupid int");
+				executeDDL("CREATE TABLE PROPERTY (PROPERTY VARCHAR(255) NOT NULL, VALUE VARCHAR(1024), STARTUP BOOLEAN, PRIMARY KEY (PROPERTY))");
 			}
-			try {
-				this.entityManager.createNativeQuery("select hashcode from relationship where hashcode <> hashcode").getResultList();
-			} catch (Exception missing) {
-				executeDDL("alter table relationship ADD COLUMN hashcode int");
+			// Migrate to new properties.
+			for (Sense sense : this.bot.awareness().getSenses().values()) {
+				sense.migrateProperties();
 			}
-			try {
-				this.entityManager.createNativeQuery("select id from textdata where id <> id").getResultList();
-			} catch (Exception missing) {
-				executeDDL("CREATE TABLE TEXTDATA (ID BIGINT NOT NULL, TEXT_DATA TEXT, PRIMARY KEY (ID))");
+			for (Thought thought : this.bot.mind().getThoughts().values()) {
+				thought.migrateProperties();
 			}
-			/*executeDDL("alter table relationship alter type_id set not null");
-			executeDDL("alter table relationship alter target_id set not null");
-			executeDDL("alter table relationship alter source_id set not null");
-			executeDDL("ALTER TABLE vertex ADD COLUMN groupid bigint");
-			executeDDL("ALTER TABLE relationship ADD COLUMN hashcode integer");*/
+			this.bot.mood().migrateProperties();
+			executeDDL("delete from schema_version");
+			executeDDL("insert into schema_version (version) values (2)");
 		}
 	}
 	
 	/**
 	 * Connect and create the EntityManager.
 	 */
-	public void restore(String database, boolean recreateDatabase) {
+	public void restore(String database, boolean isSchema, boolean recreateDatabase) {
+		this.isSchema = isSchema;
 		try {
 			if (getFactory() != null) {
 				getFactory().close();
@@ -318,13 +356,17 @@ public class DatabaseMemory extends BasicMemory {
 			if (database.equals("")) {
 				if (TEST) {
 					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_TEST_URL);
-					this.database = DATABASE_TEST_URL.substring(IMPORT_URL.length());
+					this.database = DATABASE_TEST_URL.substring(DATABASE_URL_PREFIX.length());
 				} else {
 					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_URL);
-					this.database = DATABASE_URL.substring(IMPORT_URL.length());
+					this.database = DATABASE_URL.substring(DATABASE_URL_PREFIX.length());
 				}
 			} else {
-				properties.put(PersistenceUnitProperties.JDBC_URL, IMPORT_URL + database);
+				if (this.isSchema) {
+					properties.put(PersistenceUnitProperties.JDBC_URL, SCHEMA_URL_PREFIX + database);
+				} else {
+					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_URL_PREFIX + database);
+				}
 				this.database = database;
 			}
 			//properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
@@ -332,7 +374,7 @@ public class DatabaseMemory extends BasicMemory {
 			properties.put(PersistenceUnitProperties.CACHE_SIZE_DEFAULT, CACHE_SIZE);
 			properties.put(PersistenceUnitProperties.CACHE_STATEMENTS, "true");
 			properties.put(PersistenceUnitProperties.BATCH_WRITING, "JDBC");
-			if (recreateDatabase || (TEST && RECREATE_DATABASE)) {
+			if (recreateDatabase || RECREATE_DATABASE) {
 				properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
 			}
 			properties.put(PersistenceUnitProperties.SESSION_CUSTOMIZER, MemorySessionCustomizer.class.getName());
@@ -374,7 +416,7 @@ public class DatabaseMemory extends BasicMemory {
 			
 			if (recreateDatabase) {
 				this.entityManager.getTransaction().begin();
-				try {
+				try {					
 					Query query = this.entityManager.createNativeQuery("ALTER TABLE relationship DROP CONSTRAINT fk_relationship_source_id");
 					query.executeUpdate();
 					query = this.entityManager.createNativeQuery("ALTER TABLE relationship ADD CONSTRAINT fk_relationship_source_id FOREIGN KEY (source_id) " +
@@ -391,6 +433,24 @@ public class DatabaseMemory extends BasicMemory {
 					query.executeUpdate();
 					query = this.entityManager.createNativeQuery("ALTER TABLE relationship ADD CONSTRAINT fk_relationship_type_id FOREIGN KEY (type_id) " +
 								"REFERENCES vertex (id) ON DELETE CASCADE");
+					query.executeUpdate();
+					this.entityManager.getTransaction().commit();
+
+					this.entityManager.getTransaction().begin();
+					try {
+						query = this.entityManager.createNativeQuery("create table schema_version (version int)");
+						query.executeUpdate();
+					} catch (Exception ignore) {
+						this.entityManager.getTransaction().rollback();						
+					}
+					if (this.entityManager.getTransaction().isActive()) {
+						this.entityManager.getTransaction().commit();						
+					}
+					this.entityManager.getTransaction().begin();
+					
+					query = this.entityManager.createNativeQuery("delete from schema_version");
+					query.executeUpdate();
+					query = this.entityManager.createNativeQuery("insert into schema_version (version) values (2)");
 					query.executeUpdate();
 					
 					this.entityManager.getTransaction().commit();
@@ -427,12 +487,11 @@ public class DatabaseMemory extends BasicMemory {
 					}				
 				}
 			}
-			checkSchemaVersion();
 			
 			//this.entityManager.unwrap(JpaEntityManager.class).getServerSession().getLogin().setTransactionIsolation(java.sql.Connection.TRANSACTION_READ_COMMITTED);
 			//this.entityManager.unwrap(JpaEntityManager.class).getServerSession().logout();
 			//this.entityManager.unwrap(JpaEntityManager.class).getServerSession().login();
-			this.longTermMemory = new DatabaseNetwork(this.entityManager, false);
+			this.longTermMemory = new DatabaseReadOnlyNetwork(getFactory().createEntityManager(), false);
 			this.longTermMemory.setBot(this.bot);
 			this.shortTermMemory = new DatabaseNetwork(this.entityManager, true);
 			this.shortTermMemory.setBot(this.bot);
@@ -472,6 +531,10 @@ public class DatabaseMemory extends BasicMemory {
 			
 			this.bot.addLogListener(this.listener);
 			
+			if (!recreateDatabase) {
+				checkSchemaVersion();
+			}
+			
 		} catch (RuntimeException failed) {
 			this.bot.log(this, failed);
 			throw failed;
@@ -488,14 +551,20 @@ public class DatabaseMemory extends BasicMemory {
 		}
 	}
 	
+	public void initMemory() {
+		// Done in restore.
+	}
+	
 	/**
 	 * Connect and create the EntityManager.
 	 */
-	public void fastRestore(String database) {
+	@Override
+	public void fastRestore(String database, boolean isSchema) {
+		this.isSchema = isSchema;
 		try {
 			Bot cache = Bot.getSystemCache();
 			if (cache == null) {
-				restore(database);
+				restore(database, isSchema);
 				return;
 			}
 			if (getFactory() != null) {
@@ -523,7 +592,11 @@ public class DatabaseMemory extends BasicMemory {
 					ServerSession cacheSession = cacheMemory.getEntityManager().unwrap(ServerSession.class);
 					Project project = cacheSession.getProject().clone();
 					DatabaseLogin login = (DatabaseLogin)cacheSession.getLogin().clone();
-					login.setURL(IMPORT_URL + database);
+					if (isSchema) {
+						login.setURL(SCHEMA_URL_PREFIX + database);
+					} else {
+						login.setURL(DATABASE_URL_PREFIX + database);						
+					}
 					project.setLogin(login);
 					
 					session = new ServerSession(project, new ConnectionPolicy(ServerSession.DEFAULT_POOL), 1, 32, 32, login, login);
@@ -553,11 +626,9 @@ public class DatabaseMemory extends BasicMemory {
 			setFactory(factory);
 			setEntityManager(getFactory().createEntityManager());
 
-			checkSchemaVersion();
-
 			this.database = database;
 			this.isFast = true;
-			this.longTermMemory = new DatabaseNetwork(this.entityManager, false);
+			this.longTermMemory = new DatabaseReadOnlyNetwork(getFactory().createEntityManager(), false);
 			this.longTermMemory.setBot(this.bot);
 			this.shortTermMemory = new DatabaseNetwork(this.entityManager, true);
 			this.shortTermMemory.setBot(this.bot);
@@ -597,9 +668,48 @@ public class DatabaseMemory extends BasicMemory {
 			
 			this.bot.addLogListener(this.listener);
 			
+			checkSchemaVersion();
+			
 		} catch (RuntimeException failed) {
 			this.bot.log(this, failed);
 			throw failed;
+		}
+	}
+	
+	/**
+	 * Load any properties and init.
+	 */
+	@SuppressWarnings("unchecked")
+	public void awake() {
+		List<Property> properties = this.entityManager.createQuery("Select p from Property p where p.startup = true").getResultList();
+		for (Property property : properties) {
+			setProperty(property.getProperty(), property.getValue());
+		}
+	}
+	
+	/**
+	 * Load the property set.
+	 */
+	@SuppressWarnings("unchecked")
+	public void loadProperties(String propertySet) {
+		List<Property> properties = this.entityManager.createQuery("Select p from Property p where p.property like '" + propertySet + "%'").getResultList();
+		for (Property property : properties) {
+			setProperty(property.getProperty(), property.getValue());
+		}
+	}
+	
+	/**
+	 * Delete the property set.
+	 */
+	public void clearProperties(String propertySet) {
+		this.entityManager.getTransaction().begin();
+		try {
+			this.entityManager.createQuery("Delete from Property p where p.property like '" + propertySet + "%'").executeUpdate();
+			this.entityManager.getTransaction().commit();
+		} finally {
+			if (this.entityManager.getTransaction().isActive()) {
+				this.entityManager.getTransaction().rollback();
+			}
 		}
 	}
 
@@ -648,11 +758,26 @@ public class DatabaseMemory extends BasicMemory {
 	 */
 	@Override
 	public void createMemory(String database) {
+		createMemory(database, false);
+	}
+	
+	/**
+	 * Create the database.
+	 */
+	public void createMemory(String database, boolean schema) {
 		try {
 			Accessor accessor = ((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().acquireConnection();
 			Connection connection = accessor.getConnection();
-			connection.createStatement().executeUpdate("CREATE DATABASE " + database);
+			Statement statement = connection.createStatement();
+			if (schema) {
+				statement.executeUpdate("CREATE SCHEMA " + database);
+			} else {
+				statement.executeUpdate("CREATE DATABASE " + database);				
+			}
+			statement.close();
 			((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
+			shutdown();
+			restore(database, schema, true);
 		} catch (Exception failed) {
 			this.bot.log(this, failed);
 			throw new RuntimeException(failed);
@@ -662,31 +787,108 @@ public class DatabaseMemory extends BasicMemory {
 	/**
 	 * Create the database.
 	 */
-	@Override
-	public void createMemoryFromTemplate(String database, String template) {
+	public void createMemoryFromTemplate(String database, boolean isSchema, String template, boolean templateIsSchema) {
+		Accessor accessor = null;
+		Statement statement = null;
 		try {
-			Accessor accessor = ((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().acquireConnection();
+			accessor = ((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().acquireConnection();
 			Connection connection = accessor.getConnection();
-			connection.createStatement().executeUpdate("CREATE DATABASE " + database + " WITH TEMPLATE " + template);
-			((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
+			statement = connection.createStatement();
+			if (isSchema) {
+				statement.executeUpdate("CREATE SCHEMA " + database);
+				statement.close();
+				((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
+				shutdown();
+				restore(database, true, true);
+
+				accessor = ((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().acquireConnection();
+				connection = accessor.getConnection();
+				statement = connection.createStatement();
+				if (templateIsSchema) {
+					statement.executeUpdate("INSERT INTO VERTEX (SELECT * FROM " + template + ".VERTEX)");
+					statement.executeUpdate("INSERT INTO RELATIONSHIP (SELECT * FROM " + template + ".RELATIONSHIP)");
+					statement.executeUpdate("INSERT INTO TEXTDATA (SELECT * FROM " + template + ".TEXTDATA)");
+					statement.executeUpdate("INSERT INTO IMAGEDATA (SELECT * FROM " + template + ".IMAGEDATA)");
+					statement.executeUpdate("INSERT INTO PROPERTY (SELECT * FROM " + template + ".PROPERTY)");
+					statement.executeUpdate("delete from SEQUENCE");
+					statement.executeUpdate("INSERT INTO SEQUENCE (SELECT * FROM " + template + ".SEQUENCE)");
+				} else {
+					final Properties properties = new Properties();
+					DatasourceLogin login = (DatasourceLogin)((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().getLogin();
+					Connector connector = new Connector() {
+						public Connection connect(Properties p, Session session) {
+							properties.put("password", p.get("password"));
+							return null;
+						}						
+						public Object clone() { return null; }						
+						public void toString(PrintWriter writer) {}						
+						public String getConnectionDetails() { return null; }
+					};
+					Connector oldConnector = login.getConnector();
+					try {
+						login.setConnector(connector);
+						login.connectToDatasource(null, null);
+					} finally {
+						login.setConnector(oldConnector);
+					}
+					String pw = (String)properties.get("password");
+					try {
+						statement.executeUpdate("CREATE EXTENSION dblink schema public");
+					} catch (Exception alreadyExists) { }
+					statement.execute("select public.dblink_connect('dbconnection','dbname=" + template + " user=postgres password=" + pw + "')");
+					statement.executeUpdate(
+							"INSERT INTO VERTEX (id, accesscount, accessdate, creationdate, datatype, datavalue, dirty, groupid, hasresponse, name, pinned, wordcount) (SELECT id, accesscount, accessdate, creationdate, datatype, datavalue, dirty, groupid, hasresponse, name, pinned, wordcount FROM public.dblink('dbconnection', 'SELECT id, accesscount, accessdate, creationdate, datatype, datavalue, dirty, groupid, hasresponse, name, pinned, wordcount FROM VERTEX') AS T1(id bigint, accesscount integer, accessdate timestamp, creationdate timestamp, datatype varchar, datavalue varchar, dirty boolean, groupid bigint, hasresponse boolean, name varchar, pinned boolean, wordcount integer))");
+					statement.executeUpdate(
+							"INSERT INTO RELATIONSHIP (id, accesscount, accessdate, correctness, creationdate, hashcode, source_index, pinned, meta_id, source_id, target_id, type_id) (SELECT id, accesscount, accessdate, correctness, creationdate, hashcode, source_index, pinned, meta_id, source_id, target_id, type_id FROM public.dblink('dbconnection', 'SELECT id, accesscount, accessdate, correctness, creationdate, hashcode, source_index, pinned, meta_id, source_id, target_id, type_id FROM RELATIONSHIP') AS T1(id bigint, accesscount integer, accessdate timestamp, correctness double precision, creationdate timestamp, hashcode integer, source_index integer, pinned boolean, meta_id bigint, source_id bigint, target_id bigint, type_id bigint))");
+					statement.executeUpdate(
+							"INSERT INTO TEXTDATA (id, text_data) (SELECT id, text_data FROM public.dblink('dbconnection', 'SELECT id, text_data FROM TEXTDATA') AS T1(id bigint, text_data text))");
+					statement.executeUpdate(
+							"INSERT INTO IMAGEDATA (id, image_data) (SELECT id, image_data FROM public.dblink('dbconnection', 'SELECT id, image_data FROM IMAGEDATA') AS T1(id bigint, image_data bytea))");					
+					statement.executeUpdate(
+							"INSERT INTO PROPERTY (property, value, startup) (SELECT property, value, startup FROM public.dblink('dbconnection', 'SELECT property, value, startup FROM PROPERTY') AS T1(property varchar, value varchar, startup boolean))");
+					statement.executeUpdate("delete from SEQUENCE");					
+					statement.executeUpdate(
+							"INSERT INTO SEQUENCE (seq_name, seq_count) (SELECT seq_name, seq_count FROM public.dblink('dbconnection', 'SELECT seq_name, seq_count FROM SEQUENCE') AS T1(seq_name varchar, seq_count numeric))");
+					statement.execute("select public.dblink_disconnect('dbconnection')");
+				}
+				statement.close();
+				((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
+			} else {
+				statement.executeUpdate("CREATE DATABASE " + database + " WITH TEMPLATE " + template);
+				statement.close();
+				((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
+			}
 		} catch (Exception failed) {
 			this.bot.log(this, failed);
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (Exception ignore) {}
+			}
+			if (accessor != null) {
+				try {
+					((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
+				} catch (Exception ignore) {}
+			}
 			throw new RuntimeException(failed);
 		}
-	}	
+	}
 
 	/**
 	 * Drop the database.
 	 */
 	@Override
-	public void destroyMemory(String database) {
-		if (!TEST) {
-			throw new BotException("Can only destroy instance when in test mode.");
-		}
+	public void destroyMemory(String database, boolean isSchema) {
 		try {
 			Accessor accessor = ((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().acquireConnection();
 			Connection connection = accessor.getConnection();
-			connection.createStatement().executeUpdate("DROP DATABASE " + database);
+			Statement statement = connection.createStatement();
+			if (isSchema) {
+				statement.executeUpdate("DROP SCHEMA " + database + " CASCADE");				
+			} else {
+				statement.executeUpdate("DROP DATABASE " + database);
+			}
+			statement.close();
 			((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);
 		} catch (Exception failed) {
 			this.bot.log(this, failed);
@@ -699,10 +901,7 @@ public class DatabaseMemory extends BasicMemory {
 	 */
 	@Override
 	public void deleteMemory() {
-		if (!TEST) {
-			throw new BotException("Can only delete instance when in test mode.");
-		}
-		restore(getMemoryName(), true);
+		restore(getMemoryName(), this.isSchema, true);
 	}
 
 	/**
@@ -710,9 +909,17 @@ public class DatabaseMemory extends BasicMemory {
 	 */
 	@Override
 	public void switchMemory(String database) {
+		switchMemory(database, false);
+	}
+
+	/**
+	 * Switch to a different database.
+	 */
+	@Override
+	public void switchMemory(String database, boolean isSchema) {
 		RECREATE_DATABASE = false;
 		shutdown();
-		restore(database);
+		restore(database, isSchema);
 	}
 	
 	/**
@@ -723,7 +930,7 @@ public class DatabaseMemory extends BasicMemory {
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
 			//properties.put(PersistenceUnitProperties.JDBC_DRIVER, DATABASE_DRIVER);
-			properties.put(PersistenceUnitProperties.JDBC_URL, IMPORT_URL + database);
+			properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_URL_PREFIX + database);
 			//properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
 			//properties.put(PersistenceUnitProperties.JDBC_PASSWORD, DATABASE_PASSWORD);
 			Level debugLevel = this.bot.getDebugLevel();
@@ -781,6 +988,7 @@ public class DatabaseMemory extends BasicMemory {
 	
 	@Override
 	public void freeMemory() {
+		this.entityManager.clear();
 		this.entityManager.unwrap(ServerSession.class).getIdentityMapAccessor().initializeAllIdentityMaps();
 	}
 

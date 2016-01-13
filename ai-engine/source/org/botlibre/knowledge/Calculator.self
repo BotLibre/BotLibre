@@ -1,7 +1,7 @@
 // Language state machine for understanding math.
 // This can understand any BEDMAS (brackets, exponents, division, multiplication, addition, subtraction) expression.
 // It uses a 2 pass recursive state processing, first it extracts the expression terms from the text, then it processes the expression.
-State:CalculatorStateMachine {
+State:Calculator {
 	case :input goto State:sentenceState for each #word of :sentence;
 
 	:input {
@@ -23,6 +23,7 @@ State:CalculatorStateMachine {
 		case "whats" goto State:sentenceState;
 		case :quote goto State:sentenceState;
 		case "s" goto State:sentenceState;
+		case :operationWord goto State:operationPrefixState;
 		
 		// For now the entire sentence is searched for any mathematical expression.
 		// To only process precise math questions remove this.
@@ -100,6 +101,21 @@ State:CalculatorStateMachine {
 			goto State:evaluateState with :expression;
 		}
 		
+		// 'add ...'
+		State:operationPrefixState {
+			case :numeral goto State:operationPrefixNumeralState;
+		}
+		
+		// 'add 123 to ...'
+		State:operationPrefixNumeralState {
+			pattern "#minus * from *" answer redirect (formula:"{get #word from :star at 2} - {get #word from :star at 1}");
+			do (
+				Function:init,
+				append :number to #term of :expression
+			);
+			goto State:operationWordState;
+		}
+		
 		// '123...'
 		State:numeralState {
 			do (
@@ -120,8 +136,11 @@ State:CalculatorStateMachine {
 				do (
 					append :operation to #term of :expression
 				);
+				case "and" goto State:sentenceState;
+				case "to" goto State:sentenceState;
 				case "of" goto State:sentenceState;
 				case "by" goto State:sentenceState;
+				case "with" goto State:sentenceState;
 				case :numeral goto State:numeralState;
 				case :functionWord goto State:functionWordState;
 				case :bracketWord goto State:bracketWordState;

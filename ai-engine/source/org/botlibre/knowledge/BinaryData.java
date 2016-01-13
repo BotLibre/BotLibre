@@ -12,17 +12,19 @@ import javax.swing.ImageIcon;
 import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Data;
 
-public class ImageData implements Serializable, Data {
+public class BinaryData implements Serializable, Data {
 
 	protected long id;
 	
-	protected byte[] image;
+	protected byte[] bytes;
 	
-	transient ImageIcon icon;
+	protected transient ImageIcon icon;
 	
-	public ImageData() { }
+	protected transient Object cache;
 	
-	public ImageData(String id) {
+	public BinaryData() { }
+	
+	public BinaryData(String id) {
 		this.id = Long.valueOf(id);
 	}
 
@@ -34,13 +36,21 @@ public class ImageData implements Serializable, Data {
 	}
 	
 	public boolean equals(Object image) {
-		if (!(image instanceof ImageData)) {
+		if (!(image instanceof BinaryData)) {
 			return false;
 		}
-		if (this.id == 0 || ((ImageData)image).id == 0) {
+		if (this.id == 0 || ((BinaryData)image).id == 0) {
 			return super.equals(image);
 		}
-		return this.id == ((ImageData)image).id;
+		return this.id == ((BinaryData)image).id;
+	}
+
+	public Object getCache() {
+		return cache;
+	}
+
+	public void setCache(Object cache) {
+		this.cache = cache;
 	}
 
 	public long getId() {
@@ -51,12 +61,12 @@ public class ImageData implements Serializable, Data {
 		this.id = id;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public byte[] getBytes() {
+		return bytes;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setBytes(byte[] bytes) {
+		this.bytes = bytes;
 	}
 
 	public void setImage(InputStream stream, int maxSize) {
@@ -72,7 +82,7 @@ public class ImageData implements Serializable, Data {
 				next = stream.read();
 				size++;
 			}
-			this.image = writer.toByteArray();
+			this.bytes = writer.toByteArray();
 		} catch (Exception exception) {
 			throw new BotException(exception);
 		} finally {
@@ -85,11 +95,11 @@ public class ImageData implements Serializable, Data {
 	}
 
 	public void outputToFile(String path, boolean overWrite) throws IOException {
-		if (this.image != null) {
+		if (this.bytes != null) {
 			File file = new File(path);
 			if (overWrite || !file.exists()) {
 				FileOutputStream stream = new FileOutputStream(file);
-				stream.write(this.image);
+				stream.write(this.bytes);
 				stream.flush();
 				stream.close();
 			}
@@ -98,7 +108,7 @@ public class ImageData implements Serializable, Data {
 	
 	public ImageIcon getImageIcon() {
 		if (this.icon == null) {
-			this.icon = new ImageIcon(this.image);
+			this.icon = new ImageIcon(this.bytes);
 		}
 		return this.icon;
 	}

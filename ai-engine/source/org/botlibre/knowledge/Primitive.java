@@ -221,6 +221,9 @@ public class Primitive implements Serializable {
 	public static final Primitive KEYQUESTION = new Primitive("keyquestion");
 	public static final Primitive REQUIRED = new Primitive("required");
 	public static final Primitive REQUIRE = new Primitive("require");
+	public static final Primitive NOREPEAT = new Primitive("norepeat");
+	public static final Primitive ONREPEAT = new Primitive("onrepeat");
+	public static final Primitive LABEL = new Primitive("label");
 	
 	public static final Primitive GREETING = new Primitive("greeting");
 	public static final Primitive ENABLED = new Primitive("enabled");

@@ -32,7 +32,7 @@ public class TextStream {
 	public static final String HTTP =" \t\n\r\f\"";
 	public static final String TOKENS =" \t\n\r\f.,:;!()?[]{}+=^&*\"`~|/\\<>";
 	public static final String TERMINATORS =".?!。";
-	public static Set<String> ABBREVIATIONS = new HashSet<String>(Arrays.asList(new String[]{"mr","ms", "mrs", "dr", "inc", "sr", "jr", "st", "vs"}));
+	public static Set<String> ABBREVIATIONS = new HashSet<String>(Arrays.asList(new String[]{"mr","ms", "mrs", "dr", "inc", "sr", "jr", "st", "vs", "mt", "ltd", "co"}));
 	public static Set<String> IGNORABLE = new HashSet<String>(Arrays.asList(new String[]{"'","`", "\"", ","}));
 	
 	/**
@@ -590,15 +590,18 @@ public class TextStream {
 				backup();
 				String word = peekPreviousWord();
 				skip();
-				if (ABBREVIATIONS.contains(word.toLowerCase())
-						|| ((word.length() == 1) && (Character.isUpperCase(word.charAt(0))))) {
+				if (word != null && (ABBREVIATIONS.contains(word.toLowerCase())
+						|| ((word.length() == 1) && (Character.isUpperCase(word.charAt(0)))))) {
 					done = false;
 				} else {
 					break;
 				}
 			} else if (isWordSymbol(peek)) {
 				break;
-			}			
+			} else if (peek == '<') {
+				// Allow HTML as whitespace.
+				break;
+			}
 			skipToAny(TERMINATORS, true);
 		}
 		return this.text.substring(start, this.index);

@@ -50,7 +50,11 @@ public class TestLanguageDecompile extends TestLanguage {
 		Collection<Relationship> states = new ArrayList<Relationship>(language.getRelationships(Primitive.STATE));
 		for (Relationship state : states) {
 			String code = SelfDecompiler.getDecompiler().decompileStateMachine(state.getTarget(), network);
-			Vertex newState = SelfCompiler.getCompiler().parseStateMachine(code, false, network);
+			SelfCompiler compiler = SelfCompiler.getCompiler();
+			if ("Self".equals(state.getTarget().getName())) {
+				compiler = new SelfCompiler();
+			}
+			Vertex newState = compiler.parseStateMachine(code, false, network);
 			language.replaceRelationship(state, newState);
 			network.removeRelationship(state);
 		}
@@ -60,7 +64,7 @@ public class TestLanguageDecompile extends TestLanguage {
 		List<String> output = registerForOutput(text);
 		text.input("sky blue red dog cat green grass tall like very loves");
 		waitForOutput(output);
-		Utils.sleep(5000);
+		Utils.sleep(10000);
 		
 		bot.shutdown();
 	}

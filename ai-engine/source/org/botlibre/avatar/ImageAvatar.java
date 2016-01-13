@@ -24,7 +24,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.emotion.EmotionalState;
-import org.botlibre.knowledge.ImageData;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.util.Utils;
 
@@ -35,7 +35,7 @@ import org.botlibre.util.Utils;
 public class ImageAvatar extends BasicAvatar {
 	public static int MAX_UPLOAD_SIZE = 1000000; // 1meg
 	
-	protected ImageData currentImage;
+	protected BinaryData currentImage;
 			
 	public ImageAvatar() {
 	}
@@ -46,8 +46,8 @@ public class ImageAvatar extends BasicAvatar {
 		Network memory = getBot().memory().newMemory();
 		Vertex avatar = memory.createVertex(Primitive.AVATAR);
 		Vertex image = avatar.mostConscious(new Primitive(EmotionalState.NONE.name().toLowerCase()));
-		if ((image != null) && (image.getData() instanceof ImageData)) {
-			this.currentImage = (ImageData)memory.findData((ImageData)image.getData());
+		if ((image != null) && (image.getData() instanceof BinaryData)) {
+			this.currentImage = (BinaryData)memory.findData((BinaryData)image.getData());
 		}
 	}
 	
@@ -69,17 +69,17 @@ public class ImageAvatar extends BasicAvatar {
 				image = Utils.random(images).getTarget();
 			}
 		}
-		if ((image != null) && (image.getData() instanceof ImageData)) {
-			this.currentImage = (ImageData)memory.findData((ImageData)image.getData());
+		if ((image != null) && (image.getData() instanceof BinaryData)) {
+			this.currentImage = (BinaryData)memory.findData((BinaryData)image.getData());
 		}
 	}
 	
 	@Override
-	public ImageData getCurrentImage() {
+	public BinaryData getCurrentImage() {
 		return currentImage;
 	}
 
-	public void setCurrentImage(ImageData currentImage) {
+	public void setCurrentImage(BinaryData currentImage) {
 		this.currentImage = currentImage;
 	}
 

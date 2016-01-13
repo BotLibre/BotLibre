@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
@@ -49,11 +50,17 @@ import java.util.regex.Pattern;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.persistence.internal.helper.Helper;
 import org.owasp.encoder.Encode;
+import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 import org.botlibre.BotException;
 
 /**
@@ -70,6 +77,7 @@ public class Utils {
 	
 	public static ThreadLocal<Random> random = new ThreadLocal<Random>();
 	
+	public static DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
 	public static PolicyFactory sanitizer;
 	
 	static {
@@ -143,6 +151,13 @@ public class Utils {
 	public static PolicyFactory sanitizer() {
 		if (sanitizer == null) {
 			sanitizer = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.BLOCKS).and(Sanitizers.IMAGES).and(Sanitizers.STYLES);
+			PolicyFactory html = new HtmlPolicyBuilder()
+				.allowElements("table", "tr", "td", "thead", "tbody", "th", "font")
+				.allowAttributes("color").globally()
+				.allowAttributes("bgcolor").globally()
+				.allowAttributes("align").globally()
+				.toFactory();
+			sanitizer = sanitizer.and(html);
 		}
 		return sanitizer;
 	}
@@ -265,7 +280,7 @@ public class Utils {
 		}
 		if ((html.indexOf('<') == -1) || (html.indexOf('>') == -1)) {
 			return html;
-		}		
+		}
 		StringWriter writer = new StringWriter();
 		TextStream stream = new TextStream(html);
 		while (!stream.atEnd()) {
@@ -507,6 +522,18 @@ public class Utils {
 		}
 		return words;
 	}
+	
+	public static Element parseXML(String xml) {
+		try {
+			DocumentBuilder parser = xmlFactory.newDocumentBuilder();
+			StringReader reader = new StringReader(xml);
+			InputSource source = new InputSource(reader);
+			Document document = parser.parse(source);
+			return document.getDocumentElement();
+		} catch (Exception exception) {
+			return null;
+		}
+	}
 
 	/**
 	 * Parse the date of the form, "yyyy-MM-dd".
@@ -593,7 +620,9 @@ public class Utils {
 	public static void sleep(int millis) {
 		try {
 			Thread.sleep(millis);
-		} catch (InterruptedException ignore) {}
+		} catch (InterruptedException ignore) {
+			ignore.printStackTrace();
+		}
 	}
 	
 	/**

@@ -91,4 +91,11 @@ public interface Thought {
 	 * Return if this thought must run even under stress.
 	 */
 	boolean isCritical();
+
+	void saveProperties();
+	
+	/**
+	 * Migrate to new properties system.
+	 */
+	void migrateProperties();
 }

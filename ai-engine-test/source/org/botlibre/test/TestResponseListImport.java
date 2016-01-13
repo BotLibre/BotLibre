@@ -17,7 +17,10 @@
  ******************************************************************************/
 package org.botlibre.test;
 
+import java.io.File;
+import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -32,21 +35,19 @@ import org.botlibre.util.Utils;
  */
 
 public class TestResponseListImport extends TextTest {
-	static String log = "this is a very complicated sentence\n"
-			+ "this is a good reply to that\n\n"
-			+ "the dog barks all night\n"
-			+ "let him in then\n\n"
-			+ "this is a very very long sentence that is very long, yes, very long, it has one two three four five size seven eight nine ten or more words\n"
-			+ "how long?\n"
-			+ "keywords: sentence\n\n";
 
 	@BeforeClass
-	public static void setup() {
+	public static void setup() throws Exception {
 		reset();
 		Bot bot = Bot.createInstance();
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		text.processResponseLog(log, false);
-		Utils.sleep(2000);
+		URL url = TestAIML.class.getResource("test.res");
+		File file = new File(url.toURI());
+		bot.awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, true);
+		List<String> output = registerForOutput(text);
+		text.input("this is a very complicated sentence the dog barks all night this is a good reply to that");
+		waitForOutput(output);
+		Utils.sleep(5000);
 		bot.shutdown();
 	}
 
@@ -104,6 +105,7 @@ public class TestResponseListImport extends TextTest {
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
+		bot.setDebugLevel(Level.FINER);
 		
 		text.input("this is a very complicated sentence");
 		String response = waitForOutput(output);
@@ -113,7 +115,15 @@ public class TestResponseListImport extends TextTest {
 		text.input("ok");
 		response = waitForOutput(output);
 		
-		text.input("this very complicated");
+		text.input("this is very complicated sentence");
+		response = waitForOutput(output);
+		if (!response.equals("this is a good reply to that")) {
+			fail("did not match: " + response);			
+		}
+		text.input("ok");
+		response = waitForOutput(output);
+		
+		text.input("this is a very complicated");
 		response = waitForOutput(output);
 		if (!response.equals("this is a good reply to that")) {
 			fail("did not match: " + response);			
@@ -158,6 +168,32 @@ public class TestResponseListImport extends TextTest {
 		}
 		text.input("ok");
 		response = waitForOutput(output);
+		
+		bot.shutdown();
+	}
+
+	/**
+	 * Test response matching works.
+	 */
+	@org.junit.Test
+	public void testScript() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("do you like black");
+		String response = waitForOutput(output);
+		if (!response.equals("Yes, it is a nice color.")) {
+			fail("did not match: " + response);			
+		}
+		
+		text.input("What are you?");
+		response = waitForOutput(output);
+		if (!response.equals("I am a bot.")) {
+			fail("did not match: " + response);			
+		}
 		
 		bot.shutdown();
 	}

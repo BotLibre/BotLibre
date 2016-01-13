@@ -276,7 +276,7 @@ public class Chat extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, List<String> targetUserNames, boolean isWhisper, Network network) {
+	public void inputSentence(String text, String userName, List<String> targetUserNames, boolean isWhisper, Network network) {		
 		Vertex input = createInputSentence(text.trim(), network);
 		input.addRelationship(Primitive.INSTANTIATION, Primitive.CHAT);
 		if (isWhisper) {

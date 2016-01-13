@@ -1,5 +1,5 @@
 // Understand basic "<word> means <something>", "<thing> is a <type>" sentences
-State:WordMeansSomething {
+State:WordMeaning {
 	case :input goto State:sentenceState for each #word of :sentence;
 
 	:input {

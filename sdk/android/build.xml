@@ -31,8 +31,8 @@
 		<!-- Put everything in ${build} into libre-sdk.jar file -->
 		<jar jarfile="libre-sdk.jar">
 			<fileset dir="${build}">
-				<include name="com/paphus/sdk/*"/>
-				<include name="com/paphus/sdk/config/*"/>
+				<include name="org/botlibre/sdk/*"/>
+				<include name="org/botlibre/sdk/config/*"/>
 				<include name="de/**/*"/>
 			</fileset>
 		</jar>

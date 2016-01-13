@@ -11,7 +11,6 @@
 	<classpathentry kind="lib" path="lib/json/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/json/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/json/json-lib-2.3-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/jpa/postgresql-9.0-801.jdbc4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jpa/persistence.jar"/>
 	<classpathentry kind="lib" path="lib/freebase/google-api-services-freebase-v1-rev37-1.15.0-rc.jar"/>
@@ -26,5 +25,9 @@
 	<classpathentry kind="lib" path="lib/mail/smtp-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.2.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Bot Libre - AI Engine"/>
+	<classpathentry kind="lib" path="lib/oswap/encoder-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/guava.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/jsr305.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/owasp-java-html-sanitizer.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -39,6 +39,7 @@ import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.self.SelfDecompiler;
+import org.botlibre.thought.consciousness.Consciousness;
 import org.botlibre.thought.language.Comprehension;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
@@ -61,6 +62,9 @@ public class SelfPanel extends ChildPanel
 	protected JComboBox stateMachineComboBox;
 	protected JCheckBox comprehensionCheckBox;
 	protected JCheckBox learningCheckBox;
+	protected JCheckBox matchFirstCheckBox;
+	protected JCheckBox grammarCheckBox;
+	protected JCheckBox consciousnessCheckBox;
 		
 	public class DeleteAction extends AbstractAction implements ActionListener {
 		private static final long serialVersionUID = 1L;
@@ -117,6 +121,42 @@ public class SelfPanel extends ChildPanel
 				getBot().mind().getThought(Language.class).setLearningMode(LearningMode.Everyone);
 			} else {
 				getBot().mind().getThought(Language.class).setLearningMode(LearningMode.Disabled);
+			}
+		}
+	}
+	
+	public class ConsciousnessAction extends AbstractAction implements ActionListener {
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) {
+			if (consciousnessCheckBox.isSelected()) {
+				getBot().mind().getThought(Consciousness.class).setEnabled(true);
+			} else {
+				getBot().mind().getThought(Consciousness.class).setEnabled(false);
+			}
+		}
+	}
+	
+	public class GrammarAction extends AbstractAction implements ActionListener {
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) {
+			if (learningCheckBox.isSelected()) {
+				getBot().mind().getThought(Language.class).setLearnGrammar(true);
+			} else {
+				getBot().mind().getThought(Language.class).setLearnGrammar(false);
+			}
+		}
+	}
+	
+	public class MatchFirstAction extends AbstractAction implements ActionListener {
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) {
+			if (matchFirstCheckBox.isSelected()) {
+				getBot().mind().getThought(Language.class).setCheckExactMatchFirst(true);
+			} else {
+				getBot().mind().getThought(Language.class).setCheckExactMatchFirst(false);
 			}
 		}
 	}
@@ -209,18 +249,30 @@ public class SelfPanel extends ChildPanel
 		this.learningCheckBox = new JCheckBox("Learning");
 		this.learningCheckBox.addActionListener(new LearningAction());
 		this.learningCheckBox.setSelected(false);
+		this.matchFirstCheckBox = new JCheckBox("Match First");
+		this.matchFirstCheckBox.addActionListener(new MatchFirstAction());
+		this.matchFirstCheckBox.setSelected(true);
+		this.consciousnessCheckBox = new JCheckBox("Consciousness");
+		this.consciousnessCheckBox.addActionListener(new ConsciousnessAction());
+		this.consciousnessCheckBox.setSelected(true);
+		this.grammarCheckBox = new JCheckBox("Grammar");
+		this.grammarCheckBox.addActionListener(new GrammarAction());
+		this.grammarCheckBox.setSelected(true);
 		
 		this.stateMachineComboBox = new JComboBox();
 		this.stateMachineComboBox.addActionListener(new StateChangedAction());
 		
-		add(this.scrollPane, new GridBagConstraints(0,0,1,7, 1.0,1.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
-		add(this.errorScrollPane, new GridBagConstraints(0,7,1,6, 1.0,0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,100));
+		add(this.scrollPane, new GridBagConstraints(0,0,1,10, 1.0,1.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
+		add(this.errorScrollPane, new GridBagConstraints(0,10,1,6, 1.0,0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,100));
 		add(this.newButton, new GridBagConstraints(1,0,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
 		add(this.deleteButton, new GridBagConstraints(1,1,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
 		add(this.resetButton, new GridBagConstraints(1,2,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
 		add(this.stateMachineComboBox, new GridBagConstraints(1,3,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
 		add(this.comprehensionCheckBox, new GridBagConstraints(1,4,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
 		add(this.learningCheckBox, new GridBagConstraints(1,5,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
+		add(this.consciousnessCheckBox, new GridBagConstraints(1,6,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
+		add(this.grammarCheckBox, new GridBagConstraints(1,7,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
+		add(this.matchFirstCheckBox, new GridBagConstraints(1,8,1,1, 0.0,0.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(4,4,4,4), 0,0));
 		
 		resetState();
 	}

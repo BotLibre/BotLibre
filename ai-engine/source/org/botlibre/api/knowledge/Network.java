@@ -46,11 +46,23 @@ public interface Network {
 	 */
 	void save();
 	
+	boolean isReadOnly();
+	
 	/**
 	 * Create a new vertex in this network,
 	 * assign the id.
 	 */
 	Vertex createVertex();
+	
+	/**
+	 * Create a temporary, non-persistent vertex.
+	 */
+	Vertex createTemporyVertex();
+	
+	/**
+	 * Register the vertex with the network.
+	 */
+	void addVertex(Vertex vertex);
 	
 	/**
 	 * Return the matching registered vertex, or register if missing.
@@ -345,6 +357,16 @@ public interface Network {
 	 */
 	void checkReduction(Vertex sentence);
 
+	/**
+	 * Save the property setting to the current transaction.
+	 */
+	void saveProperty(String propertyName, String value, boolean startup);
+
+	/**
+	 * Remove the property setting to the current transaction.
+	 */
+	void removeProperty(String propertyName);
+	
 	/**
 	 * Return the associated Bot instance.
 	 */

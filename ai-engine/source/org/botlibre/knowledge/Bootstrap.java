@@ -37,8 +37,10 @@ import org.botlibre.api.sense.Tool;
 import org.botlibre.avatar.ImageAvatar;
 import org.botlibre.emotion.EmotionalState;
 import org.botlibre.knowledge.xml.NetworkXMLParser;
+import org.botlibre.self.SelfByteCodeCompiler;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.email.Email;
+import org.botlibre.sense.facebook.Facebook;
 import org.botlibre.sense.twitter.Twitter;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.Utils;
@@ -50,13 +52,15 @@ import org.botlibre.util.Utils;
  */
 
 public class Bootstrap {
+	
+	public static boolean optimizeByteCode = true;
 
 	public static void main(String[] args) {
 		//new Bootstrap().bootstrapSystem(Bot.createInstance());
 		//new Bootstrap().rebootstrapAll();
 		//new Bootstrap().deleteDeadInstances();
 		System.exit(0);
-	}	
+	}
 
 	/**
 	 * Initialize Bot with the bootstrap xml networks.
@@ -107,7 +111,7 @@ public class Bootstrap {
 	 * Initialize the memory with the basic bootstrap networks.
 	 * These defines basic concepts.
 	 */
-	public void renameMemory(Memory memory, String name) {
+	public void renameMemory(Memory memory, String name, boolean clearPrivateData) {
 		synchronized (memory) {
 			// Self
 			Vertex self = memory.getShortTermMemory().createVertex(Primitive.SELF);
@@ -120,14 +124,23 @@ public class Bootstrap {
 			birth.setPinned(true);
 			self.setRelationship(Primitive.BIRTH, birth);
 			
-			Vertex twitter = memory.getShortTermMemory().createVertex(Twitter.class);
-			twitter.unpinChildren();
-			twitter.internalRemoveAllRelationships();
-			Vertex email = memory.getShortTermMemory().createVertex(Email.class);
-			email.unpinChildren();
-			email.internalRemoveAllRelationships();
+			if (clearPrivateData) {
+				Vertex twitter = memory.getShortTermMemory().createVertex(Twitter.class);
+				twitter.unpinChildren();
+				twitter.internalRemoveAllRelationships();
+				Vertex email = memory.getShortTermMemory().createVertex(Email.class);
+				email.unpinChildren();
+				email.internalRemoveAllRelationships();
+				Vertex facebook = memory.getShortTermMemory().createVertex(Facebook.class);
+				facebook.unpinChildren();
+				facebook.internalRemoveAllRelationships();
+				
+				memory.clearProperties("Twitter");
+				memory.clearProperties("Facebook");
+				memory.clearProperties("Email");
+			}
 			
-			memory.save();			
+			memory.save();
 		}
 	}
 	
@@ -136,7 +149,7 @@ public class Bootstrap {
 	 * These defines basic concepts.
 	 */
 	public void renameMemory(Memory memory) {
-		renameMemory(memory, memory.getBot().getName());
+		renameMemory(memory, memory.getBot().getName(), true);
 	}
 	
 	/**
@@ -150,6 +163,7 @@ public class Bootstrap {
 			if (states != null) {
 				states = new ArrayList<Relationship>(language.getRelationships(Primitive.STATE));
 				for (Relationship relationship : states) {
+					SelfCompiler.getCompiler().fastLoad(relationship.getTarget());
 					SelfCompiler.getCompiler().unpin(relationship.getTarget());
 					//relationship.getTarget().unpinDescendants();
 					relationship.getSource().internalRemoveRelationship(relationship);
@@ -251,51 +265,53 @@ public class Bootstrap {
 	public void stateMachineNetwork(Network network) {
 		Vertex language = network.createVertex(new Primitive(Language.class.getName()));
 		
-		Vertex stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("Loop.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
+		SelfCompiler compiler = SelfCompiler.getCompiler();
 		
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("WordMeansSomething.self"), "", false, network);
+		Vertex stateMachine = compiler.parseStateMachine(getClass().getResource("Loop.self"), "", false, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("Calculator.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("Watch.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("Topic.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("MyNameIs.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("WhatIs.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("WhereIs.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
-
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("SayIt.self"), "", false, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
+		compiler.pin(stateMachine);
 		
-		stateMachine = createUnderstandingState(network);
+		stateMachine = compiler.parseStateMachine(getClass().getResource("WordMeansSomething.self"), "", false, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
+		compiler.pin(stateMachine);
 
-		stateMachine = SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("Reduction.self"), "", false, network);
+		stateMachine = compiler.parseStateMachine(getClass().getResource("Calculator.self"), "", false, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
-		SelfCompiler.getCompiler().pin(stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("Watch.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("Topic.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("MyNameIs.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("WhatIs.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("WhereIs.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("SayIt.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("Understanding.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("Reduction.self"), "", false, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
 		
-		stateMachine = createSelfState(network);
+		stateMachine = new SelfCompiler().parseStateMachine(getClass().getResource("EmptyStateMachine.self"), "", false, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		SelfCompiler.getCompiler().pin(stateMachine);
 		
@@ -317,7 +333,7 @@ public class Bootstrap {
 			URL resource = ImageAvatar.class.getResource(state.name().toLowerCase() + ".jpg");
 			if (resource != null) {
 				try {
-					ImageData data = new ImageData();
+					BinaryData data = new BinaryData();
 					InputStream stream = resource.openStream();
 					data.setImage(stream, 1000000);
 					Vertex image = network.createVertex(data);
@@ -332,31 +348,12 @@ public class Bootstrap {
 	/**
 	 * Define place holder for Self programmed state machine.
 	 */
-	public Vertex createSelfState(Network network) {
-		return SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("EmptyStateMachine.self"), "", false, network);
-	}
-
-	/**
-	 * Define place holder for Self programmed state machine.
-	 */
 	public static String getSelfStateText() {
 		try {
 			return Utils.loadTextFile(Bootstrap.class.getResource("EmptyStateMachine.self").openStream(), "", SelfCompiler.MAX_FILE_SIZE);
 		} catch (IOException exception) {
 			throw new BotException(exception);
 		}
-	}
-
-	/**
-	 * Define a basic language understanding state machine.
-	 * Understands simple sentences such as "Sky is blue", "Is sky blue?","Sky is not blue", "Is sky not blue?", "Bob is big", "Bob is big?", "Bob big", "Bob big?"
-	 */
-	public Vertex createUnderstandingState(Network network) {
-		return SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("Understanding.self"), "", false, network);
-	}
-		
-	public Vertex createPlusState(Network network) {
-		return SelfCompiler.getCompiler().parseStateMachine(getClass().getResource("PlusStateMachine.self"), "", false, network);
 	}
 		
 	/**
@@ -512,7 +509,7 @@ public class Bootstrap {
 		createWord("OK", known, network);
 		
 		Vertex not = network.createVertex(Primitive.NOT);
-		createWord("not", not, network);
+		createWord("not", not, true, network);
 		createWord("no", not, network);
 		createWord("negative", not, network);
 		createWord("inverse", not, network);
@@ -521,7 +518,7 @@ public class Bootstrap {
 		createWord("or", or, network);
 		
 		Vertex and = network.createVertex(Primitive.AND);
-		createWord("and", and, network);
+		createWord("and", and, true, network);
 		createWord("&", and, network);
 		
 		// Syntax
@@ -558,7 +555,7 @@ public class Bootstrap {
 		word = createPronoun("my", i, network, Primitive.POSSESSIVE);
 		word = createPronoun("myself", i, network, Primitive.REFLEXIVE);
 		word = createPronoun("mine", i, network, Primitive.POSSESSIVEPRONOUN);
-		createWord("I", i, network);
+		createWord("I", i, true, network);
 		
 		Vertex our = network.createVertex(Primitive.OUR);
 		our.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
@@ -569,7 +566,7 @@ public class Bootstrap {
 		word = createPronoun("us", our, network, Primitive.OBJECTIVE);
 		word = createPronoun("ours", our, network, Primitive.POSSESSIVEPRONOUN);
 		word = createPronoun("ourselves", our, network, Primitive.REFLEXIVE);
-		createWord("we", our, network);
+		createWord("we", our, true, network);
 		
 		Vertex they = network.createVertex(Primitive.THEY);
 		they.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
@@ -594,8 +591,8 @@ public class Bootstrap {
 		word = createPronoun("yours", you, network, Primitive.POSSESSIVEPRONOUN);
 		word = createPronoun("u", you, network, Primitive.SUBJECTIVE, Primitive.OBJECTIVE);
 		
-		createWord("you", you, network);
-		createWord("your", you, network);
+		createWord("you", you, true, network);
+		createWord("your", you, true, network);
 
 		
 		Vertex his = network.createVertex(Primitive.HIS);
@@ -661,7 +658,7 @@ public class Bootstrap {
 		word = createVerb("r", toBe, Primitive.PRESENT, network, new String[]{"u"});
 		word = createVerb("am", toBe, Primitive.PRESENT, network, new String[]{"i", "I"});
 		word = createVerb("will be", toBe, Primitive.FUTURE, network, null);
-		createWord("is", toBe, network);
+		createWord("is", toBe, true, network);
 		
 		Vertex have = network.createVertex(Primitive.HAVE);
 		have.addRelationship(Primitive.INSTANTIATION, action);
@@ -840,10 +837,10 @@ public class Bootstrap {
 			if (count < words.length) {
 				createWord(words[count], number, network, Primitive.NUMERAL);
 			}
-			if (count < ordinals.length) {
-				createOrdinal(ordinals[count], number, network);
+			if ((count > 0)  && (count < ordinals.length)) {
+				createOrdinal(ordinals[count-1], number, network);
 			}
-			createWord(String.valueOf(count), number, network, Primitive.NUMERAL);
+			createWord(String.valueOf(count), number, true, network, Primitive.NUMERAL, null, null, null, null);
 			if (previousNumber != null) {
 				previousNumber.addRelationship(Primitive.NEXT, number);
 				number.addRelationship(Primitive.PREVIOUS, previousNumber);
@@ -854,8 +851,7 @@ public class Bootstrap {
 		Vertex plus = network.createVertex(Primitive.PLUS);
 		createWord("add", plus, network);
 		createWord("plus", plus, network);
-		createWord("+", plus, network);
-		createWord("+", plus, network);
+		createWord("+", plus, true, network);
 		plus.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		plus.addRelationship(Primitive.INSTANTIATION, Primitive.OPERATION);
 		
@@ -863,8 +859,7 @@ public class Bootstrap {
 		createWord("minus", minus, network);
 		createWord("subtract", minus, network);
 		createWord("take away", minus, network);
-		createWord("-", minus, network);
-		createWord("-", minus, network);
+		createWord("-", minus, true, network);
 		minus.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		minus.addRelationship(Primitive.INSTANTIATION, Primitive.OPERATION);
 		
@@ -872,8 +867,7 @@ public class Bootstrap {
 		createWord("divide", divide, network);
 		createWord("divided", divide, network);
 		createWord("/", divide, network);
-		createWord("÷", divide, network);
-		createWord("÷", divide, network);
+		createWord("÷", divide, true, network);
 		divide.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		divide.addRelationship(Primitive.INSTANTIATION, Primitive.OPERATION);
 		
@@ -883,16 +877,14 @@ public class Bootstrap {
 		createWord("times", multiply, network);
 		createWord("*", multiply, network);
 		createWord("x", multiply, network);
-		createWord("×", multiply, network);
-		createWord("×", multiply, network);
+		createWord("×", multiply, true, network);
 		createWord("∙", multiply, network);
 		multiply.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		multiply.addRelationship(Primitive.INSTANTIATION, Primitive.OPERATION);
 
 		Vertex infinity = network.createVertex(Primitive.INFINITY);
 		createWord("infinity", infinity, network);
-		createWord("∞", infinity, network);
-		createWord("∞", infinity, network);
+		createWord("∞", infinity, true, network);
 		infinity.addRelationship(Primitive.INSTANTIATION, Primitive.NUMBER);
 
 		Vertex undefined = network.createVertex(Primitive.UNDEFINED);
@@ -901,27 +893,23 @@ public class Bootstrap {
 
 		Vertex ninfinity = network.createVertex(Primitive.NINFINITY);
 		createWord("negative infinity", ninfinity, network);
-		createWord("-∞", ninfinity, network);
-		createWord("-∞", ninfinity, network);
+		createWord("-∞", ninfinity, true, network);
 		ninfinity.addRelationship(Primitive.INSTANTIATION, Primitive.NUMBER);
 		
 		Vertex equals = network.createVertex(Primitive.EQUALS);
-		createWord("=", equals, network);
-		createWord("=", equals, network);
+		createWord("=", equals, true, network);
 		createWord("equals", equals, network);
 		createWord("equal", equals, network);
 		equals.addRelationship(Primitive.INSTANTIATION, Primitive.COMPARISON);
 
 		Vertex lessThan = network.createVertex(Primitive.LESSTHAN);
-		createWord("<", lessThan, network);
-		createWord("<", lessThan, network);
+		createWord("<", lessThan, true, network);
 		createWord("less than", lessThan, network);
 		createWord("is less than", lessThan, network);
 		lessThan.addRelationship(Primitive.INSTANTIATION, Primitive.COMPARISON);
 
 		Vertex greaterThan = network.createVertex(Primitive.GREATERTHAN);
-		createWord(">", greaterThan, network);
-		createWord(">", greaterThan, network);
+		createWord(">", greaterThan, true, network);
 		createWord("greater than", greaterThan, network);
 		createWord("is greater than", greaterThan, network);
 		greaterThan.addRelationship(Primitive.INSTANTIATION, Primitive.COMPARISON);
@@ -935,23 +923,20 @@ public class Bootstrap {
 		rb.addRelationship(Primitive.INSTANTIATION, Primitive.BRACKET);
 
 		Vertex piValue = network.createVertex(BigDecimal.valueOf(Math.PI));
-		Vertex pi = network.createVertex(BigDecimal.valueOf(Math.PI));
+		Vertex pi = network.createVertex(Primitive.PI);
 		createWord("pi", pi, network);
-		createWord("π", pi, network);
-		createWord("π", pi, network);
+		createWord("π", pi, true, network);
 		pi.addRelationship(Primitive.VALUE, piValue);
 		
 		createWord("pi", piValue, network);
-		createWord("π", piValue, network);
-		createWord("π", piValue, network);
+		createWord("π", piValue, true, network);
 		piValue.addRelationship(Primitive.SYMBOL, Primitive.PI);
 		
 		Vertex power = network.createVertex(Primitive.POWER);
 		createWord("power", power, network);
 		createWord("raised to", power, network);
 		createWord("to the power", power, network);
-		createWord("^", power, network);
-		createWord("^", power, network);
+		createWord("^", power, true, network);
 		power.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		power.addRelationship(Primitive.INSTANTIATION, Primitive.OPERATION);
 		
@@ -959,94 +944,81 @@ public class Bootstrap {
 		createWord("sqrt", sqrt, network);
 		createWord("root", sqrt, network);
 		createWord("square root", sqrt, network);
-		createWord("√", sqrt, network);
-		createWord("√", sqrt, network);
+		createWord("√", sqrt, true, network);
 		sqrt.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		sqrt.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex sin = network.createVertex(Primitive.SIN);
-		createWord("sin", sin, network);
-		createWord("sin", sin, network);
+		createWord("sin", sin, true, network);
 		createWord("sine", sin, network);
 		sin.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		sin.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex cos = network.createVertex(Primitive.COS);
-		createWord("cos", cos, network);
-		createWord("cos", cos, network);
+		createWord("cos", cos, true, network);
 		createWord("cosine", cos, network);
 		cos.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		cos.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex tan = network.createVertex(Primitive.TAN);
-		createWord("tan", tan, network);
-		createWord("tan", tan, network);
+		createWord("tan", tan, true, network);
 		createWord("tangent", tan, network);
 		tan.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		tan.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex asin = network.createVertex(Primitive.ASIN);
-		createWord("asin", asin, network);
-		createWord("asin", asin, network);
+		createWord("asin", asin, true, network);
 		createWord("arcsine", asin, network);
 		createWord("arc sine", asin, network);
 		asin.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		asin.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex acos = network.createVertex(Primitive.ACOS);
-		createWord("acos", acos, network);
-		createWord("acos", acos, network);
+		createWord("acos", acos, true, network);
 		createWord("arccosine", acos, network);
 		createWord("arc cosine", acos, network);
 		acos.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		acos.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex atan = network.createVertex(Primitive.ATAN);
-		createWord("atan", atan, network);
-		createWord("atan", atan, network);
+		createWord("atan", atan, true, network);
 		createWord("arctangent", atan, network);
 		createWord("arc tangent", atan, network);
 		atan.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		atan.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex sinh = network.createVertex(Primitive.SINH);
-		createWord("sinh", sinh, network);
-		createWord("sinh", sinh, network);
+		createWord("sinh", sinh, true, network);
 		createWord("hyperbolic sine", sinh, network);
 		sinh.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		sinh.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex cosh = network.createVertex(Primitive.COSH);
-		createWord("cosh", cosh, network);
-		createWord("cosh", cosh, network);
+		createWord("cosh", cosh, true, network);
 		createWord("hyperbolic cosine", cosh, network);
 		cosh.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		cosh.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
-		Vertex tanh = network.createVertex(Primitive.TAN);
-		createWord("tanh", tanh, network);
-		createWord("tanh", tanh, network);
+		Vertex tanh = network.createVertex(Primitive.TANH);
+		createWord("tanh", tanh, true, network);
 		createWord("hyperbolic tangent", tanh, network);
 		tanh.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		tanh.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex abs = network.createVertex(Primitive.ABS);
-		createWord("abs", abs, network);
-		createWord("abs", abs, network);
+		createWord("abs", abs, true, network);
 		createWord("absolute value", abs, network);
 		abs.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		abs.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex floor = network.createVertex(Primitive.FLOOR);
-		createWord("floor", floor, network);
-		createWord("floor", floor, network);
+		createWord("floor", floor, true, network);
 		createWord("round down", floor, network);
 		floor.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		floor.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex ceil = network.createVertex(Primitive.CEIL);
-		createWord("ceil", ceil, network);
-		createWord("ceil", ceil, network);
+		createWord("ceil", ceil, true, network);
 		createWord("round up", ceil, network);
 		ceil.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		ceil.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
@@ -1057,7 +1029,7 @@ public class Bootstrap {
 		round.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
 		
 		Vertex log = network.createVertex(Primitive.LOG);
-		createWord("log", log, network);
+		createWord("log", log, true, network);
 		createWord("logarithm", log, network);
 		log.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		log.addRelationship(Primitive.INSTANTIATION, Primitive.FUNCTION);
@@ -1121,7 +1093,7 @@ public class Bootstrap {
 	 * Create the verb with the meaning.
 	 */
 	public Vertex createVerb(String text, Vertex meaning, Primitive tense, Network network, String[] conjugations) {
-		Vertex word = createWord(text, meaning, network, Primitive.VERB, tense, null, null, conjugations);
+		Vertex word = createWord(text, meaning, false, network, Primitive.VERB, tense, null, null, conjugations);
 		return word;
 	}
 
@@ -1129,7 +1101,7 @@ public class Bootstrap {
 	 * Create the pronoun with the meaning.
 	 */
 	public Vertex createPronoun(String text, Vertex meaning, Network network, Primitive type, Primitive type2) {
-		Vertex word = createWord(text, meaning, network, Primitive.PRONOUN, null, type, type2, null);
+		Vertex word = createWord(text, meaning, false, network, Primitive.PRONOUN, null, type, type2, null);
 		return word;
 	}
 
@@ -1137,7 +1109,7 @@ public class Bootstrap {
 	 * Create the pronoun with the meaning.
 	 */
 	public Vertex createPronoun(String text, Vertex meaning, Network network, Primitive type) {
-		Vertex word = createWord(text, meaning, network, Primitive.PRONOUN, null, type, null, null);
+		Vertex word = createWord(text, meaning, false, network, Primitive.PRONOUN, null, type, null, null);
 		return word;
 	}
 
@@ -1161,14 +1133,21 @@ public class Bootstrap {
 	 * Create the word with the meaning.
 	 */
 	public Vertex createWord(String text, Vertex meaning, Network network) {
-		return createWord(text, meaning, network, null, null, null, null, null);
+		return createWord(text, meaning, false, network, null, null, null, null, null);
+	}
+
+	/**
+	 * Create the word with the meaning.
+	 */
+	public Vertex createWord(String text, Vertex meaning, boolean prime, Network network) {
+		return createWord(text, meaning, prime, network, null, null, null, null, null);
 	}
 
 	/**
 	 * Create the word with the meaning.
 	 */
 	public Vertex createWord(String text, Vertex meaning, Network network, Primitive classification) {
-		return createWord(text, meaning, network, classification, null, null, null, null);
+		return createWord(text, meaning, false, network, classification, null, null, null, null);
 	}
 	
 	/**
@@ -1188,13 +1167,16 @@ public class Bootstrap {
 	/**
 	 * Create the word with the meaning.
 	 */
-	public Vertex createWord(String text, Vertex meaning, Network network, Primitive classification, Primitive tense, Primitive type, Primitive type2, String[] conjugations) {
+	public Vertex createWord(String text, Vertex meaning, boolean prime, Network network, Primitive classification, Primitive tense, Primitive type, Primitive type2, String[] conjugations) {
 		Vertex word = network.createWord(text);
 		word.setPinned(true);
 		meaning.setPinned(true);
 		word.addRelationship(Primitive.MEANING, meaning);
 		if (classification != Primitive.TYPO) {
-			meaning.addRelationship(Primitive.WORD, word);
+			Relationship relationship = meaning.addRelationship(Primitive.WORD, word);
+			if (prime) {
+				relationship.setCorrectness(2.0f); // Enforce.
+			}
 		}
 		if (classification != null) {
 			word.addRelationship(Primitive.INSTANTIATION, classification);
@@ -1203,8 +1185,7 @@ public class Bootstrap {
 			word.addRelationship(Primitive.TENSE, tense);
 		}
 		if (type != null) {
-			word.addRelationship(Primitive.TYPE, type);
-			word.addRelationship(Primitive.TYPE, type); // Enforce.
+			word.addRelationship(Primitive.TYPE, type).setCorrectness(2.0f); // Enforce.
 		}
 		if (type2 != null) {
 			word.addRelationship(Primitive.TYPE, type2).setCorrectness(0.5f);
@@ -1214,7 +1195,6 @@ public class Bootstrap {
 				word.addRelationship(Primitive.CONJUGATION, network.createWord(conjugation));
 			}
 		}
-		
 		network.associateCaseInsensitivity(word);
 		return word;
 	}

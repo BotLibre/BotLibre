@@ -44,11 +44,13 @@ import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.aiml.AIMLParser;
+import org.botlibre.api.knowledge.MemoryStorageException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Path;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.api.knowledge.VertexIterator;
+import org.botlibre.self.SelfDecompiler;
 import org.botlibre.self.SelfExecutionException;
 import org.botlibre.sense.service.RemoteService;
 import org.botlibre.thought.forgetfulness.Forgetfulness;
@@ -91,6 +93,7 @@ public class BasicVertex implements Vertex, Serializable {
 	protected int wordCount;
 	protected boolean isDirty;
 	protected long groupId;
+	protected boolean isTemporary;
 	
 	public BasicVertex() {
 		this.accessCount = 0;
@@ -99,6 +102,20 @@ public class BasicVertex implements Vertex, Serializable {
 	public BasicVertex(Object data) {
 		this();
 		this.data = data;
+	}
+	
+	public void init() {
+		this.hasResponse = false;
+		this.creationDate = new Date();
+		incrementAccessCount();
+	}
+
+	public boolean isTemporary() {
+		return isTemporary;
+	}
+
+	public void setIsTemporary(boolean isTemporary) {
+		this.isTemporary = isTemporary;
 	}
 
 	public int getWordCount() {
@@ -454,6 +471,13 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Add the relation ensuring uniqueness.
 	 */
 	public synchronized Relationship addRelationship(Relationship relationship, boolean internal, boolean init, float correctnessMultiplier) {
+		if (!internal && !init && !this.isTemporary && (this.network.isReadOnly()
+					|| relationship.getType().getNetwork().isReadOnly()
+					|| relationship.getTarget().getNetwork().isReadOnly())) {
+			MemoryStorageException exception = new MemoryStorageException("Read-only vertices cannot be modified.");
+			exception.printStackTrace();
+			throw exception;
+		}
 		// Stored as map of maps.
 		Map<Relationship, Relationship> relationships = getRelationships().get(relationship.getType());
 		if (relationships == null) {
@@ -472,7 +496,7 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 			relationships.put(relationship, relationship);
 			// Also add to allRelationships for JPA change tracking.
-			if (!init) {
+			if (!init && (this.allRelationships != null)) {
 				this.allRelationships.add(relationship);
 			}
 			if (!internal) {
@@ -481,20 +505,22 @@ public class BasicVertex implements Vertex, Serializable {
 			existing = relationship;
 		} else if (! internal) {
 			float correctness = existing.getCorrectness();
-			// Either switch to positive as the inverse value,
-			// or increment its correctness by 1/2.
-			if (correctness < 0) {
-				correctness = (-1.0f - correctness) * -1.0f;
-				if (correctness <= -0.99) {
-					correctness = -1;
+			if (correctness != 2.0f) { // 2.0 is used to define prefer relationship
+				// Either switch to positive as the inverse value,
+				// or increment its correctness by 1/2.
+				if (correctness < 0) {
+					correctness = (-1.0f - correctness) * -1.0f;
+					if (correctness <= -0.99) {
+						correctness = -1;
+					}
+				} else {
+					correctness = correctness + ((1.0f - correctness) * correctnessMultiplier);
+					if (correctness >= 0.99) {
+						correctness = 1;
+					}
 				}
-			} else {
-				correctness = correctness + ((1.0f - correctness) * correctnessMultiplier);
-				if (correctness >= 0.99) {
-					correctness = 1;
-				}
+				existing.setCorrectness(correctness);
 			}
-			existing.setCorrectness(correctness);
 		}
 		if (!internal) {
 			existing.incrementAccessCount();
@@ -503,6 +529,13 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 			if (relationships.size() > Forgetfulness.MAX_RELATIONSHIPS) {
 				setIsDirty(true);  // direct access doesn't detect change...
+			}
+			if ((this.allRelationships != null) && (this.allRelationships.size() > Forgetfulness.MAX_RELATIONSHIPS)) {
+				if (this.allRelationships.size() != totalRelationships()) {
+					// Corruption detected.
+					System.out.println("Relationship corruption detected: " + this);
+					setIsDirty(true);  // direct access doesn't detect change...
+				}
 			}
 			
 		}
@@ -630,126 +663,130 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Apply the equation to the variable matches.
 	 * This is basically a meta-language (4GL) based on Equation objects (vertices).
 	 */
-	public synchronized Vertex applyQuotient(Map<Vertex, Vertex> variables) {
+	public synchronized Vertex applyQuotient(Map<Vertex, Vertex> variables, Network network) {
 		// TODO error handle invalid operations
 		Vertex result = null;
-		boolean isDebug = this.network.getBot().isDebugFiner();
+		boolean isDebug = network.getBot().isDebugFiner();
 		if (isVariable()) {
 			result = variables.get(this);
 			if (result == null) {
-				result = this.network.createVertex(Primitive.NULL);
+				result = network.createVertex(Primitive.NULL);
 			}
 		} else if (instanceOf(Primitive.EQUATION)) {
 			try {
-				Vertex equation = (Vertex)(Object)this;
+				// Check for byte-code.
+				if (getData() instanceof BinaryData) {
+					Vertex equation = SelfDecompiler.getDecompiler().parseEquationByteCode(this, (BinaryData)getData(), this.network);
+					return equation.applyQuotient(variables, network);
+				}
 				Vertex operator = getRelationship(Primitive.OPERATOR);
 				if (operator == null) {
-					return this.network.createVertex(Primitive.NULL);
+					return network.createVertex(Primitive.NULL);
 				}
 				List<Relationship> arguments = orderedRelationships(Primitive.ARGUMENT);
 				if (isDebug) {
-					Vertex source = equation.getRelationship(Primitive.SOURCE);
+					Vertex source = getRelationship(Primitive.SOURCE);
 					String sourceCode = "";
 					if (source != null) {
 						sourceCode = String.valueOf(source.getData()).trim();
 					} else if (operator.isPrimitive()) {
 						sourceCode = ((Primitive)operator.getData()).getIdentity().toUpperCase() + "(" + orderedRelations(Primitive.ARGUMENT) + ")";
 					}
-					Vertex number = equation.getRelationship(Primitive.LINE_NUMBER);
+					Vertex number = getRelationship(Primitive.LINE_NUMBER);
 					if (number != null) {
 						sourceCode = String.valueOf(number.getData()) + ":" + sourceCode;
 					}
-					this.network.getBot().log(SELF, sourceCode, Level.FINER);
+					network.getBot().log(SELF, sourceCode, Level.FINER);
 				}
 				// NOT :0
 				// Check if negated.
 				if (operator.is(Primitive.NOT)) {
-					equation = arguments.get(0).getTarget();
-					result = equation.applyQuotient(variables);
+					Vertex equation = arguments.get(0).getTarget();
+					result = equation.applyQuotient(variables, network);
 					if (result.is(Primitive.TRUE)) {
-						return this.network.createVertex(Primitive.FALSE);
+						result = network.createVertex(Primitive.FALSE);
 					} else if (result.is(Primitive.FALSE)) {
-						return this.network.createVertex(Primitive.TRUE);
+						result = network.createVertex(Primitive.TRUE);
 					} else if (result.is(Primitive.UNKNOWN)) {
-						return this.network.createVertex(Primitive.UNKNOWN);
+						result = network.createVertex(Primitive.UNKNOWN);
 					}
-					arguments = equation.orderedRelationships(Primitive.ARGUMENT);
-				}
-				if (operator.is(Primitive.RELATION)) {
-					result = applyRELATION(arguments, variables);
+				} else if (operator.is(Primitive.RELATION)) {
+					result = applyRELATION(arguments, variables, network);
 				} else if (operator.is(Primitive.RELATED)) {
-					result = applyRELATED(arguments, variables);
+					result = applyRELATED(arguments, variables, network);
 				} else if (operator.is(Primitive.ASSOCIATE) || operator.is(Primitive.DISSOCIATE) || operator.is(Primitive.WEAKASSOCIATE)) {
-					result = applyASSOCIATE(operator, arguments, variables);
+					result = applyASSOCIATE(operator, arguments, variables, network);
 				} else if (operator.is(Primitive.FOR)) {
-					result = applyFOR(equation, arguments, variables);					
+					result = applyFOR(arguments, variables, network);					
 				} else if (operator.is(Primitive.WHILE)) {
-					result = applyWHILE(equation, arguments, variables);					
+					result = applyWHILE(arguments, variables, network);					
 				} else if (operator.is(Primitive.ASSIGN)) {
 					// ASSIGN :0 TO :1
 					// Assign a variable a new value.
 					Vertex variable = arguments.get(0).getTarget();
-					Vertex value = arguments.get(1).getTarget().applyQuotient(variables);
+					Vertex value = arguments.get(1).getTarget().applyQuotient(variables, network);
 					if (value != null) {
 						variables.put(variable, value);
 					}
 					if (isDebug) {
-						this.network.getBot().log(SELF, "ASSIGN " + variable + " TO " + value, Level.FINER);
+						network.getBot().log(SELF, "ASSIGN " + variable + " TO " + value, Level.FINER);
 					}
 					result = value;
 				} else if (operator.is(Primitive.DEFINE)) {
 					// DEFINE :0 AS (:1, :2)
 					// Define the word(s) for something.
-					Vertex object = arguments.get(0).getTarget().applyQuotient(variables);
+					Vertex object = arguments.get(0).getTarget().applyQuotient(variables, network);
 					Iterator<Relationship> iterator = arguments.iterator();
 					iterator.next();
 					while (iterator.hasNext()) {
-						Vertex word = iterator.next().getTarget().applyQuotient(variables);
+						Vertex word = iterator.next().getTarget().applyQuotient(variables, network);
 						word.addRelationship(Primitive.MEANING, object);
 						object.addRelationship(Primitive.WORD, word);
-						this.network.associateCaseInsensitivity((String)word.getData(), object);
+						network.associateCaseInsensitivity((String)word.getData(), object);
 						if (isDebug) {
-							this.network.getBot().log(SELF, "DEFINE " + object + " AS " + word, Level.FINER);
+							network.getBot().log(SELF, "DEFINE " + object + " AS " + word, Level.FINER);
 						}
 					}
 					result = object;
 				} else if (operator.is(Primitive.RANDOM)) {
-					result = applyRANDOM(arguments, variables);
+					result = applyRANDOM(arguments, variables, network);
 				} else if (operator.is(Primitive.DEBUG)) {
-					result = applyDEBUG(arguments, variables);
+					result = applyDEBUG(arguments, variables, network);
 				} else if (operator.is(Primitive.IF)) {
-					result = applyIF(equation, arguments, variables);
+					result = applyIF(arguments, variables, network);
 				} else if (operator.is(Primitive.GREATER)) {
-					result = applyGREATER(arguments, variables);
+					result = applyGREATER(arguments, variables, network);
 				} else if (operator.is(Primitive.LESS)) {
-					result = applyLESS(arguments, variables);
+					result = applyLESS(arguments, variables, network);
 				} else if (operator.is(Primitive.EQUAL)) {
-					result = applyEQUAL(arguments, variables);
+					result = applyEQUAL(arguments, variables, network);
 				} else if (operator.is(Primitive.OR) || operator.is(Primitive.AND)) {
-					result = applyCONDITION(equation, arguments, variables);
+					result = applyCONDITION(arguments, variables, network);
 				} else if (operator.is(Primitive.DO)) {
 					// DO (:0, :1, :2, ...)
 					// Apply each equation in the arguments.
-					Vertex returnPrimitive = this.network.createVertex(Primitive.RETURN);
-					for (Relationship doEquation : arguments) {
-						result = doEquation.getTarget().applyQuotient(variables);
-						if (variables.containsKey(returnPrimitive)) {
-							// Clear return for named functions.
-							if (equation.hasName()) {
-								variables.remove(returnPrimitive);
+					Vertex returnPrimitive = network.createVertex(Primitive.RETURN);
+					if (arguments != null) {
+						for (Relationship doEquation : arguments) {
+							result = doEquation.getTarget().applyQuotient(variables, network);
+							if (variables.containsKey(returnPrimitive)) {
+								// Clear return for named functions.
+								if (hasName()) {
+									variables.remove(returnPrimitive);
+								}
+								return result;
 							}
-							return result;
 						}
 					}
 				} else if (operator.is(Primitive.THINK)) {
 					// THINK (:0, :1, :2, ...)
 					// Apply each equation in the arguments and return.
-					Vertex returnPrimitive = this.network.createVertex(Primitive.RETURN);
+					Vertex returnPrimitive = network.createVertex(Primitive.RETURN);
 					for (Relationship doEquation : arguments) {
-						result = doEquation.getTarget().applyQuotient(variables);
+						result = doEquation.getTarget().applyQuotient(variables, network);
 						if (variables.containsKey(returnPrimitive)) {
 							// Clear return for named functions.
-							if (equation.hasName()) {
+							if (hasName()) {
 								variables.remove(returnPrimitive);
 							}
 							return result;
@@ -757,90 +794,93 @@ public class BasicVertex implements Vertex, Serializable {
 					}
 					result = returnPrimitive;
 				} else if (operator.is(Primitive.WORD)) {
-					result = applyWORD(arguments, variables);
+					result = applyWORD(arguments, variables, network);
 				} else if (operator.is(Primitive.SENTENCE)) {
-					result = applySENTENCE(arguments, variables);
+					result = applySENTENCE(arguments, variables, network);
 				} else if (operator.is(Primitive.UPPERCASE)) {
-					result = applyFRAGMENT(arguments, variables, Primitive.UPPERCASE);
+					result = applyFRAGMENT(arguments, variables, network, Primitive.UPPERCASE);
 				} else if (operator.is(Primitive.LOWERCASE)) {
-					result = applyFRAGMENT(arguments, variables, Primitive.LOWERCASE);
+					result = applyFRAGMENT(arguments, variables, network, Primitive.LOWERCASE);
 				} else if (operator.is(Primitive.FORMAT)) {
 					Vertex as = getRelationship(Primitive.AS);
 					if (as != null) {
-						as = as.applyQuotient(variables);
+						as = as.applyQuotient(variables, network);
 					}
 					if (as != null && as.isPrimitive()) {
-						result = applyFRAGMENT(arguments, variables, (Primitive)as.getData());
+						result = applyFRAGMENT(arguments, variables, network, (Primitive)as.getData());
 					} else {
-						result = applyFRAGMENT(arguments, variables, null);
+						result = applyFRAGMENT(arguments, variables, network, null);
 					}
 				} else if (operator.is(Primitive.PRIMITIVE)) {
 					// PRIMITIVE (:0)
 					// Create a primitive from the string.
 					if (arguments.size() == 0) {
-						result = this.network.createVertex(Primitive.NULL);
+						result = network.createVertex(Primitive.NULL);
 					}
-					Vertex primitive = arguments.get(0).getTarget().applyQuotient(variables);
-					result = this.network.createVertex(new Primitive(((String.valueOf(primitive.getData()).toLowerCase()))));
+					Vertex primitive = arguments.get(0).getTarget().applyQuotient(variables, network);
+					result = network.createVertex(new Primitive(((String.valueOf(primitive.getData()).toLowerCase()))));
 				} else if (operator.is(Primitive.INPUT)) {
-					result = applyINPUT(equation, arguments, variables);
+					result = applyINPUT(arguments, variables, network);
 				} else if (operator.is(Primitive.GET)) {
-					result = applyGET(equation, arguments, variables);
+					result = applyGET(arguments, variables, network);
 				} else if (operator.is(Primitive.SET)) {
-					result = applySET(arguments, variables);
+					result = applySET(arguments, variables, network);
 				} else if (operator.is(Primitive.ALL)) {
-					result = applyALL(arguments, variables);
+					result = applyALL(arguments, variables, network);
 				} else if (operator.is(Primitive.COUNT)) {
-					result = applyCOUNT(arguments, variables);
+					result = applyCOUNT(arguments, variables, network);
 				} else if (operator.is(Primitive.APPEND)) {
-					result = applyAPPEND(arguments, variables);
+					result = applyAPPEND(arguments, variables, network);
 				} else if (operator.is(Primitive.NEW)) {
-					result = applyNEW(arguments, variables);
+					result = applyNEW(arguments, variables, network);
 				} else if (operator.is(Primitive.CALL)) {
-					result = applyCALL(arguments, variables);
+					result = applyCALL(arguments, variables, network);
 				} else if (operator.is(Primitive.LEARN)) {
-					result = applyLEARN(arguments, variables);
+					result = applyLEARN(arguments, variables, network);
 				} else if (operator.is(Primitive.SRAI) || operator.is(Primitive.REDIRECT)) {
-					result = applySRAI(arguments, variables);
+					result = applySRAI(arguments, variables, network);
 				} else if (operator.is(Primitive.SRAIX) || operator.is(Primitive.REQUEST)) {
-					result = applySRAIX(arguments, variables);
+					result = applySRAIX(arguments, variables, network);
 				} else if (operator.is(Primitive.RETURN)) {
 					// RETURN :0
 					if (arguments == null || arguments.isEmpty()) {
-						result = this.network.createVertex(Primitive.NULL);
+						result = network.createVertex(Primitive.NULL);
 					} else {
-						result = arguments.get(0).getTarget().applyQuotient(variables);
+						result = arguments.get(0).getTarget().applyQuotient(variables, network);
 					}
-					variables.put(this.network.createVertex(Primitive.RETURN), result);
+					variables.put(network.createVertex(Primitive.RETURN), result);
 				}
 				// Clear return for named functions.
-				if (equation.hasName()) {
+				if (hasName()) {
 					variables.remove(network.createVertex(Primitive.RETURN));
 				}
 			} catch (SelfExecutionException exception) {
 				throw exception;
 			} catch (Exception exception) {
-				this.network.getBot().log(this, exception);
+				network.getBot().log(this, exception);
 				throw new SelfExecutionException(this, exception);
 			}
 		} else {
 			result = (Vertex)(Object)this;
 		}
 		if (result == null) {
-			result = this.network.createVertex(Primitive.NULL);
+			result = network.createVertex(Primitive.NULL);
+		}
+		if (result.getNetwork() != network) {
+			result = network.createVertex(result);			
 		}
 		// Check for formula and transpose
 		if (result.instanceOf(Primitive.FORMULA)) {
-			Language language = this.network.getBot().mind().getThought(Language.class);
-			Vertex newResult = language.evaluateFormula(result, variables, this.network);
+			Language language = network.getBot().mind().getThought(Language.class);
+			Vertex newResult = language.evaluateFormula(result, variables, network);
 			if (newResult == null) {
 				language.log("Formula cannot be evaluated", Level.FINE, result);
-				result = this.network.createVertex(Primitive.NULL);
+				result = network.createVertex(Primitive.NULL);
 			} else {
-				result = language.getWord(newResult, this.network);
+				result = language.getWord(newResult, network);
 			}
 		}
-		this.network.getBot().log(this, "result:", Level.FINER, result);
+		network.getBot().log(this, "result:", Level.FINER, result);
 		return result;
 	}
 
@@ -848,85 +888,99 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Evaluates any eval functions in the equation or formula..
 	 * This is used by learn.
 	 */
-	public Vertex applyEval(Map<Vertex, Vertex> variables) {
+	public Vertex applyEval(Map<Vertex, Vertex> variables, Network network) {
 		Vertex result = null;
-		if (isVariable()) {
-			result = variables.get(this);
-			if (result == null) {
-				result = this.network.createVertex(Primitive.NULL);
-			}
-		} else if (instanceOf(Primitive.EQUATION)) {
-			try {
+		try {
+			if (isVariable()) {
+				result = variables.get(this);
+				if (result == null) {
+					result = network.createVertex(Primitive.NULL);
+				}
+			} else if (instanceOf(Primitive.EQUATION)) {
+				// Check for byte-code.
+				if (getData() instanceof BinaryData) {
+					Vertex equation = SelfDecompiler.getDecompiler().parseEquationByteCode(this, (BinaryData)getData(), this.network);
+					return equation.applyEval(variables, network);
+				}
 				Vertex operator = getRelationship(Primitive.OPERATOR);
 				List<Relationship> arguments = orderedRelationships(Primitive.ARGUMENT);
 				if (operator.is(Primitive.EVAL)) {
 					// EVAL :0
-					return arguments.get(0).getTarget().applyQuotient(variables);
+					return arguments.get(0).getTarget().applyQuotient(variables, network);
 				}
-			} catch (SelfExecutionException exception) {
-				throw exception;
-			} catch (Exception exception) {
-				throw new SelfExecutionException(this, exception);
+			} else {
+				result = (Vertex)(Object)this;
 			}
-		} else {
-			result = (Vertex)(Object)this;
-		}
-		if (result == null) {
-			result = this.network.createVertex(Primitive.NULL);
-		}
-		boolean formula = result.instanceOf(Primitive.FORMULA);
-		boolean pattern = result.instanceOf(Primitive.PATTERN);
-		// Check for formula and transpose
-		if (formula || pattern) {
-			List<Vertex> words = result.orderedRelations(Primitive.WORD);
-			if (words == null) {
-				return result;
+			if (result == null) {
+				result = network.createVertex(Primitive.NULL);
 			}
-			List<Vertex> newWords = new ArrayList<Vertex>(words.size());
-			boolean eval = false;
-			boolean formulaRequired = false;
-			for (Vertex word: words) {
-				if (word.instanceOf(Primitive.EQUATION)) {
-					Vertex operator = word.getRelationship(Primitive.OPERATOR);
-					if (operator != null && operator.is(Primitive.EVAL)) {
-						eval = true;
-						Vertex newWord = word.applyEval(variables);
-						if (newWord.instanceOf(Primitive.EQUATION) || newWord.instanceOf(Primitive.FORMULA)) {
-							formulaRequired = true;
+			if (result.getNetwork() != network) {
+				result = network.createVertex(result);
+			}
+			boolean formula = result.instanceOf(Primitive.FORMULA);
+			boolean pattern = result.instanceOf(Primitive.PATTERN);
+			// Check for formula and transpose
+			if (formula || pattern) {
+				List<Vertex> words = result.orderedRelations(Primitive.WORD);
+				if (words == null) {
+					return result;
+				}
+				List<Vertex> newWords = new ArrayList<Vertex>(words.size());
+				boolean eval = false;
+				boolean formulaRequired = false;
+				for (Vertex word: words) {
+					if (word.instanceOf(Primitive.EQUATION)) {
+						// Check for byte-code.
+						if (word.getData() instanceof BinaryData) {
+							word = SelfDecompiler.getDecompiler().parseEquationByteCode(word, (BinaryData)word.getData(), this.network);
 						}
-						newWords.add(newWord);
-					} else {
+						Vertex operator = word.getRelationship(Primitive.OPERATOR);
+						if (operator != null && operator.is(Primitive.EVAL)) {
+							eval = true;
+							Vertex newWord = word.applyEval(variables, network);
+							if (newWord.instanceOf(Primitive.EQUATION) || newWord.instanceOf(Primitive.FORMULA)) {
+								formulaRequired = true;
+							}
+							newWords.add(newWord);
+						} else {
+							formulaRequired = true;
+							newWords.add(word);
+						}
+					} else if (word.instanceOf(Primitive.VARIABLE)) {
 						formulaRequired = true;
 						newWords.add(word);
+					} else {
+						newWords.add(word);
 					}
-				} else if (word.instanceOf(Primitive.VARIABLE)) {
-					formulaRequired = true;
-					newWords.add(word);
-				} else {
-					newWords.add(word);
 				}
-			}
-			if (eval) {
-				if (pattern) {
-					result = this.network.createInstance(Primitive.PATTERN);
-				} else if (formulaRequired) {
-					result = this.network.createInstance(Primitive.FORMULA);
-				} else {
-					result = this.network.createInstance(Primitive.SENTENCE);					
-				}
-				int index = 0;
-				for (Vertex word : newWords) {
-					result.addRelationship(Primitive.WORD, word, index);
-					index++;
-				}
-				if (!formulaRequired) {
-					Language language = this.network.getBot().mind().getThought(Language.class);
-					result = language.createSentenceText(result, this.network);
+				if (eval) {
 					if (pattern) {
-						result = this.network.createSentence(Utils.reduce(result.printString()));
+						result = network.createTemporyVertex();
+						result.addRelationship(Primitive.INSTANTIATION, Primitive.PATTERN);
+					} else if (formulaRequired) {
+						result = network.createInstance(Primitive.FORMULA);
+					} else {
+						result = network.createTemporyVertex();
+						result.addRelationship(Primitive.INSTANTIATION, Primitive.SENTENCE);
+					}
+					int index = 0;
+					for (Vertex word : newWords) {
+						result.addRelationship(Primitive.WORD, word, index);
+						index++;
+					}
+					if (!formulaRequired) {
+						Language language = network.getBot().mind().getThought(Language.class);
+						result = language.createSentenceText(result, network);
+						if (pattern) {
+							result = network.createSentence(Utils.reduce(result.printString()));
+						}
 					}
 				}
 			}
+		} catch (SelfExecutionException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new SelfExecutionException(this, exception);
 		}
 		return result;
 	}
@@ -936,15 +990,15 @@ public class BasicVertex implements Vertex, Serializable {
 	 * WORD (:0, :1, :2, ...)
 	 * Create a compound word from the arguments.
 	 */
-	public Vertex applyWORD(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex nil = this.network.createVertex(Primitive.NULL);
+	public Vertex applyWORD(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex nil = network.createVertex(Primitive.NULL);
 		if (arguments.size() == 0) {
 			return nil;
 		}
 		StringWriter writer = new StringWriter();
 		List<Vertex> words = new ArrayList<Vertex>();
 		for (Relationship relationship : arguments) {
-			Vertex word = relationship.getTarget().applyQuotient(variables);
+			Vertex word = relationship.getTarget().applyQuotient(variables, network);
 			if (word.instanceOf(Primitive.LIST)) {
 				List<Vertex> elements = word.orderedRelations(Primitive.SEQUENCE);
 				if (elements != null) {
@@ -961,14 +1015,14 @@ public class BasicVertex implements Vertex, Serializable {
 			if (words.size() > (index + 1)) {
 				nextWord = words.get(index + 1);
 			}
-			word = Language.getWordFollowing(word, previousWord, nextWord, this.network);
+			word = Language.getWordFollowing(word, previousWord, nextWord, network);
 			writer.write(String.valueOf(word.getData()));
 			if ((index + 1) < words.size()) {
 				writer.write(" ");
 			}
 			previousWord = word;
 		}
-		return this.network.createWord(writer.toString());
+		return network.createWord(writer.toString());
 	}
 
 	/**
@@ -976,26 +1030,26 @@ public class BasicVertex implements Vertex, Serializable {
 	 * SENTENCE (:0, :1, :2, ...)
 	 * Create a sentence from printing the arguments.
 	 */
-	public Vertex applySENTENCE(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applySENTENCE(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		Vertex result = null;
-		Vertex nil = this.network.createVertex(Primitive.NULL);
+		Vertex nil = network.createVertex(Primitive.NULL);
 		if (arguments.size() == 0) {
 			result = nil;
 		} else if (arguments.size() == 1) {
-			result = arguments.get(0).getTarget().applyQuotient(variables);
+			result = arguments.get(0).getTarget().applyQuotient(variables, network);
 			if (!(result.getData() instanceof String)) {
 				StringWriter writer = new StringWriter();
 				Vertex text = Language.getWordFollowing(result, nil, nil, network);
 				writer.write(text.getDataValue());
-				result = this.network.createSentence(writer.toString());
+				result = network.createSentence(writer.toString());
 			} else {
-				result = this.network.createSentence((String)result.getData());				
+				result = network.createSentence((String)result.getData());				
 			}
 		} else {
 			StringWriter writer = new StringWriter();
 			List<Vertex> words = new ArrayList<Vertex>();
 			for (Relationship relationship : arguments) {
-				words.add(relationship.getTarget().applyQuotient(variables));
+				words.add(relationship.getTarget().applyQuotient(variables, network));
 			}
 			Vertex previousWord = nil;
 			for (int index = 0; index < words.size(); index++) {
@@ -1004,14 +1058,14 @@ public class BasicVertex implements Vertex, Serializable {
 				if (words.size() > (index + 1)) {
 					nextWord = words.get(index + 1);
 				}
-				word = Language.getWordFollowing(word, previousWord, nextWord, this.network);
+				word = Language.getWordFollowing(word, previousWord, nextWord, network);
 				writer.write(String.valueOf(word.getData()));
 				if ((index + 1) < words.size()) {
 					writer.write(" ");
 				}
 				previousWord = word;
 			}
-			result = this.network.createSentence(writer.toString());
+			result = network.createSentence(writer.toString());
 		}
 		return result;
 	}
@@ -1021,13 +1075,13 @@ public class BasicVertex implements Vertex, Serializable {
 	 * FRAGMENT (:0, :1, :2, ...)
 	 * Create a fragment from printing the arguments.
 	 */
-	public Vertex applyFRAGMENT(List<Relationship> arguments, Map<Vertex, Vertex> variables, Primitive format) {
+	public Vertex applyFRAGMENT(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network, Primitive format) {
 		String text = null;
-		Vertex nil = this.network.createVertex(Primitive.NULL);
+		Vertex nil = network.createVertex(Primitive.NULL);
 		if (arguments.size() == 0) {
 			return nil;
 		} else if (arguments.size() == 1) {
-			Vertex result = arguments.get(0).getTarget().applyQuotient(variables);
+			Vertex result = arguments.get(0).getTarget().applyQuotient(variables, network);
 			if (!(result.getData() instanceof String)) {
 				StringWriter writer = new StringWriter();
 				Vertex word = Language.getWordFollowing(result, nil, nil, network);
@@ -1040,7 +1094,7 @@ public class BasicVertex implements Vertex, Serializable {
 			StringWriter writer = new StringWriter();
 			List<Vertex> words = new ArrayList<Vertex>();
 			for (Relationship relationship : arguments) {
-				words.add(relationship.getTarget().applyQuotient(variables));
+				words.add(relationship.getTarget().applyQuotient(variables, network));
 			}
 			Vertex previousWord = nil;
 			for (int index = 0; index < words.size(); index++) {
@@ -1049,7 +1103,7 @@ public class BasicVertex implements Vertex, Serializable {
 				if (words.size() > (index + 1)) {
 					nextWord = words.get(index + 1);
 				}
-				word = Language.getWordFollowing(word, previousWord, nextWord, this.network);
+				word = Language.getWordFollowing(word, previousWord, nextWord, network);
 				writer.write(String.valueOf(word.getData()));
 				if ((index + 1) < words.size()) {
 					writer.write(" ");
@@ -1086,7 +1140,7 @@ public class BasicVertex implements Vertex, Serializable {
 				text = org.botlibre.tool.Utils.denormalize(text);
 			}
 		}
-		Vertex fragment = this.network.createFragment(text);
+		Vertex fragment = network.createFragment(text);
 		if (caseSensitive) {
 			fragment.addRelationship(Primitive.TYPE, Primitive.CASESENSITVE);
 		}
@@ -1098,13 +1152,13 @@ public class BasicVertex implements Vertex, Serializable {
 	 * ALL :0 FROM :1
 	 * Get all the relationship value of type ARGUMENT(0) from ARGUMENT(1) as a new list
 	 */
-	public Vertex applyALL(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyALL(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		Vertex result = null;
-		Vertex relationship = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex source = arguments.get(1).getTarget().applyQuotient(variables);
+		Vertex relationship = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex source = arguments.get(1).getTarget().applyQuotient(variables, network);
 		if (arguments.size() > 2) {
-			Vertex associate = arguments.get(2).getTarget().applyQuotient(variables);
-			Vertex associateRelationship = arguments.get(3).getTarget().applyQuotient(variables);
+			Vertex associate = arguments.get(2).getTarget().applyQuotient(variables, network);
+			Vertex associateRelationship = arguments.get(3).getTarget().applyQuotient(variables, network);
 			// TODO
 			result = source.mostConsciousWithAssoiate(relationship, associate, associateRelationship);
 		} else {
@@ -1130,9 +1184,9 @@ public class BasicVertex implements Vertex, Serializable {
 				}
 			}
 			if (values == null) {
-				result = this.network.createVertex(Primitive.NULL);
+				result = network.createVertex(Primitive.NULL);
 			} else {
-				result = this.network.createInstance(Primitive.LIST);
+				result = network.createInstance(Primitive.LIST);
 				int index = 0;
 				for (Relationship value : values) {
 					if (value.getCorrectness() > 0) {
@@ -1146,7 +1200,7 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 		}
 		if (result == null) {
-			result = this.network.createVertex(Primitive.NULL);
+			result = network.createVertex(Primitive.NULL);
 		}
 		return result;
 	}
@@ -1159,10 +1213,10 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Associate the left with the right by the association, or remove association if negated.
 	 * i.e. "Bob loves Jill" (associate Bob to Jill by #loves)
 	 */
-	public Vertex applyASSOCIATE(Vertex operator, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex source = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex target = arguments.get(1).getTarget().applyQuotient(variables);
-		Vertex association = arguments.get(2).getTarget().applyQuotient(variables);
+	public Vertex applyASSOCIATE(Vertex operator, List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex source = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex target = arguments.get(1).getTarget().applyQuotient(variables, network);
+		Vertex association = arguments.get(2).getTarget().applyQuotient(variables, network);
 		Relationship relationship = null;
 		if (operator.is(Primitive.DISSOCIATE)) {
 			if (source.hasRelationship(association, target)) {
@@ -1170,12 +1224,12 @@ public class BasicVertex implements Vertex, Serializable {
 			} else if (target.instanceOf(Primitive.WORD) && target.getData() instanceof String) {
 				// Check words case.
 				if (!Utils.isCapitalized((String)target.getData())) {
-					Vertex capitalized = this.network.createWord(Utils.capitalize((String)target.getData()));
+					Vertex capitalized = network.createWord(Utils.capitalize((String)target.getData()));
 					if (source.hasRelationship(association, capitalized)) {
 						relationship = source.removeRelationship(association, capitalized);
 					}
 				} else {
-					Vertex lower = this.network.createWord(((String)target.getData()).toLowerCase());
+					Vertex lower = network.createWord(((String)target.getData()).toLowerCase());
 					if (source.hasRelationship(association, lower)) {
 						relationship = source.removeRelationship(association, lower);
 					}
@@ -1209,24 +1263,24 @@ public class BasicVertex implements Vertex, Serializable {
 			if (relationship == null) {
 				relationship = source.removeRelationship(association, target);
 			}
-			this.network.getBot().log(this, "Removing relation", Level.FINE, source, association, target);
+			network.getBot().log(this, "Removing relation", Level.FINE, source, association, target);
 		} else if (operator.is(Primitive.WEAKASSOCIATE)) {
 			relationship = source.addWeakRelationship(association, target, 0.1f);
-			this.network.getBot().log(this, "Adding weak relation", Level.FINE, source, association, target);
+			network.getBot().log(this, "Adding weak relation", Level.FINE, source, association, target);
 		} else {
 			relationship = source.addRelationship(association, target);
-			this.network.getBot().log(this, "Adding relation", Level.FINE, source, association, target);
+			network.getBot().log(this, "Adding relation", Level.FINE, source, association, target);
 		}
 		if (arguments.size() == 5) {
-			Vertex metaType = arguments.get(3).getTarget().applyQuotient(variables);
-			Vertex metaTarget = arguments.get(4).getTarget().applyQuotient(variables);
+			Vertex metaType = arguments.get(3).getTarget().applyQuotient(variables, network);
+			Vertex metaTarget = arguments.get(4).getTarget().applyQuotient(variables, network);
 			if (!metaTarget.is(Primitive.NULL)) {
-				Vertex meta = this.network.createMeta(relationship);
+				Vertex meta = network.createMeta(relationship);
 				meta.addRelationship(metaType, metaTarget);
-				this.network.getBot().log(this, "Adding relation meta", Level.FINER, metaType, metaTarget);
+				network.getBot().log(this, "Adding relation meta", Level.FINER, metaType, metaTarget);
 			}
 		}
-		return this.network.createVertex(Primitive.KNOWN);
+		return network.createVertex(Primitive.KNOWN);
 	}
 
 	/**
@@ -1235,16 +1289,16 @@ public class BasicVertex implements Vertex, Serializable {
 	 * APPEND :0 TO :1 OF :2 WITH META :3 AS :4
 	 * Add the relationship value ARGUMENT(2) of type ARGUMENT(1) to ARGUMENT(0)
 	 */
-	public Vertex applyAPPEND(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex source = arguments.get(2).getTarget().applyQuotient(variables);
-		Vertex type = arguments.get(1).getTarget().applyQuotient(variables);
-		Vertex target = arguments.get(0).getTarget().applyQuotient(variables);
+	public Vertex applyAPPEND(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex source = arguments.get(2).getTarget().applyQuotient(variables, network);
+		Vertex type = arguments.get(1).getTarget().applyQuotient(variables, network);
+		Vertex target = arguments.get(0).getTarget().applyQuotient(variables, network);
 		Relationship relationship = source.addRelationship(type, target, Integer.MAX_VALUE);
 		if (arguments.size() == 5) {
-			Vertex metaType = arguments.get(3).getTarget().applyQuotient(variables);
-			Vertex metaTarget = arguments.get(4).getTarget().applyQuotient(variables);
+			Vertex metaType = arguments.get(3).getTarget().applyQuotient(variables, network);
+			Vertex metaTarget = arguments.get(4).getTarget().applyQuotient(variables, network);
 			if (!metaTarget.is(Primitive.NULL)) {
-				Vertex meta = this.network.createMeta(relationship);
+				Vertex meta = network.createMeta(relationship);
 				meta.addRelationship(metaType, metaTarget);
 			}
 		}
@@ -1255,19 +1309,19 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Apply the OR/AND condition.
 	 * IF (:0, :1) OR (:2, :3) THEN :0 ELSE :1
 	 */
-	public Vertex applyCONDITION(Vertex equation, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex first = arguments.get(0).getTarget().applyQuotient(variables);
+	public Vertex applyCONDITION(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex first = arguments.get(0).getTarget().applyQuotient(variables, network);
 		boolean result = false;
 		if (arguments.size() == 1) {
 			result = first.is(Primitive.TRUE);
 		} else {
-			Vertex second = arguments.get(1).getTarget().applyQuotient(variables);
+			Vertex second = arguments.get(1).getTarget().applyQuotient(variables, network);
 			result = first.matches(second, new HashMap<Vertex, Vertex>()) == Boolean.TRUE;
 		}
-		if (equation.hasRelationship(Primitive.NOT, Primitive.NOT)) {
+		if (hasRelationship(Primitive.NOT, Primitive.NOT)) {
 			result = !result;
 		}
-		Collection<Relationship> conditions = equation.getRelationships(Primitive.CONDITION);
+		Collection<Relationship> conditions = getRelationships(Primitive.CONDITION);
 		if (conditions != null) {
 			for (Relationship condition : conditions) {
 				Vertex operator = condition.getTarget().getRelationship(Primitive.OPERATOR);
@@ -1275,12 +1329,12 @@ public class BasicVertex implements Vertex, Serializable {
 					continue;
 				}
 				if (!result && operator.is(Primitive.OR)) {
-					Vertex value = condition.getTarget().applyQuotient(variables);
+					Vertex value = condition.getTarget().applyQuotient(variables, network);
 					if (value.is(Primitive.TRUE)) {
 						result = true;
 					}
 				} else if (result && operator.is(Primitive.AND)) {
-					Vertex value = condition.getTarget().applyQuotient(variables);
+					Vertex value = condition.getTarget().applyQuotient(variables, network);
 					if (value.is(Primitive.FALSE)) {
 						result = false;
 					}
@@ -1288,9 +1342,9 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 		}
 		if (result) {
-			return this.network.createVertex(Primitive.TRUE);
+			return network.createVertex(Primitive.TRUE);
 		} else {
-			return this.network.createVertex(Primitive.FALSE);			
+			return network.createVertex(Primitive.FALSE);			
 		}
 	}
 
@@ -1299,19 +1353,19 @@ public class BasicVertex implements Vertex, Serializable {
 	 * IF (:0, :1) OR (:2, :3) THEN :0 ELSE :1
 	 * If the first argument matches the second then apply the then, else apply the last then.
 	 */
-	public Vertex applyIF(Vertex equation, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex first = arguments.get(0).getTarget().applyQuotient(variables);
+	public Vertex applyIF(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex first = arguments.get(0).getTarget().applyQuotient(variables, network);
 		boolean result = false;
 		if (arguments.size() == 1) {
 			result = first.is(Primitive.TRUE);
 		} else {
-			Vertex second = arguments.get(1).getTarget().applyQuotient(variables);
+			Vertex second = arguments.get(1).getTarget().applyQuotient(variables, network);
 			result = first.matches(second, new HashMap<Vertex, Vertex>()) == Boolean.TRUE;
 		}
-		if (equation.hasRelationship(Primitive.NOT, Primitive.NOT)) {
+		if (hasRelationship(Primitive.NOT, Primitive.NOT)) {
 			result = !result;
 		}
-		Collection<Relationship> conditions = equation.getRelationships(Primitive.CONDITION);
+		Collection<Relationship> conditions = getRelationships(Primitive.CONDITION);
 		if (conditions != null) {
 			for (Relationship condition : conditions) {
 				Vertex operator = condition.getTarget().getRelationship(Primitive.OPERATOR);
@@ -1319,12 +1373,12 @@ public class BasicVertex implements Vertex, Serializable {
 					continue;
 				}
 				if (!result && operator.is(Primitive.OR)) {
-					Vertex value = condition.getTarget().applyQuotient(variables);
+					Vertex value = condition.getTarget().applyQuotient(variables, network);
 					if (value.is(Primitive.TRUE)) {
 						result = true;
 					}
 				} else if (result && operator.is(Primitive.AND)) {
-					Vertex value = condition.getTarget().applyQuotient(variables);
+					Vertex value = condition.getTarget().applyQuotient(variables, network);
 					if (value.is(Primitive.FALSE)) {
 						result = false;
 					}
@@ -1334,18 +1388,18 @@ public class BasicVertex implements Vertex, Serializable {
 		if (result) {
 			Vertex then = getRelationship(Primitive.THEN);
 			if (then != null) {
-				return then.applyQuotient(variables);
+				return then.applyQuotient(variables, network);
 			}
 		} else {
-			Vertex elseEquation = equation.getRelationship(Primitive.ELSE);
+			Vertex elseEquation = getRelationship(Primitive.ELSE);
 			if (elseEquation != null) {
-				return elseEquation.applyQuotient(variables);
+				return elseEquation.applyQuotient(variables, network);
 			}
 		}
 		if (result) {
-			return this.network.createVertex(Primitive.TRUE);
+			return network.createVertex(Primitive.TRUE);
 		} else {
-			return this.network.createVertex(Primitive.FALSE);			
+			return network.createVertex(Primitive.FALSE);			
 		}
 	}
 
@@ -1355,12 +1409,12 @@ public class BasicVertex implements Vertex, Serializable {
 	 * SET the left with the right by the association, replace any existing relationship.
 	 * i.e. "Bob only loves Jill" (set #loves to Jill on Bob)
 	 */
-	public Vertex applySET(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex association = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex source = arguments.get(2).getTarget().applyQuotient(variables);
-		Vertex target = arguments.get(1).getTarget().applyQuotient(variables);
+	public Vertex applySET(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex association = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex source = arguments.get(2).getTarget().applyQuotient(variables, network);
+		Vertex target = arguments.get(1).getTarget().applyQuotient(variables, network);
 		source.setRelationship(association, target);
-		this.network.getBot().log(this, "Setting relation", Level.FINER, source, association, target);
+		network.getBot().log(this, "Setting relation", Level.FINER, source, association, target);
 		// Following some crazy AIML implied rules here...
 		if (association.isPrimitive() && (association.is(Primitive.IT) || association.is(Primitive.HE) || association.is(Primitive.SHE))) {
 			return association;
@@ -1373,11 +1427,11 @@ public class BasicVertex implements Vertex, Serializable {
 	 * RANDOM (:0, :1, ...)
 	 * Return a random argument.
 	 */
-	public Vertex applyRANDOM(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyRANDOM(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		if (arguments.isEmpty()) {
-			return this.network.createVertex(Primitive.NULL);
+			return network.createVertex(Primitive.NULL);
 		}
-		return Utils.random(arguments).getTarget().applyQuotient(variables);		
+		return Utils.random(arguments).getTarget().applyQuotient(variables, network);		
 	}
 
 	/**
@@ -1385,8 +1439,8 @@ public class BasicVertex implements Vertex, Serializable {
 	 * DEBUG ("debug", :0, :2)
 	 * Log the arguments to the log.
 	 */
-	public Vertex applyDEBUG(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		if (this.network.getBot().isDebugFine()) {
+	public Vertex applyDEBUG(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		if (network.getBot().isDebugFine()) {
 			StringWriter writer = new StringWriter();
 			boolean first = true;
 			for (Relationship argument : arguments) {
@@ -1394,11 +1448,11 @@ public class BasicVertex implements Vertex, Serializable {
 					writer.write(" : ");
 				}
 				first = false;
-				writer.write(argument.getTarget().applyQuotient(variables).printString());
+				writer.write(argument.getTarget().applyQuotient(variables, network).printString());
 			}
-			this.network.getBot().log("DEBUG", writer.toString(), Level.FINE);
+			network.getBot().log("DEBUG", writer.toString(), Level.FINE);
 		}
-		return this.network.createVertex(Primitive.NULL);
+		return network.createVertex(Primitive.NULL);
 	}
 
 	/**
@@ -1406,14 +1460,14 @@ public class BasicVertex implements Vertex, Serializable {
 	 * COUNT :0 OF :1
 	 * Return if the number of elements.
 	 */
-	public Vertex applyCOUNT(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex source = arguments.get(0).getTarget().applyQuotient(variables);
+	public Vertex applyCOUNT(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex source = arguments.get(0).getTarget().applyQuotient(variables, network);
 		Vertex relationship;
 		if (arguments.size() == 1) {
-			relationship = this.network.createVertex(Primitive.SEQUENCE);
+			relationship = network.createVertex(Primitive.SEQUENCE);
 		} else {
 			relationship = source;
-			source = arguments.get(1).getTarget().applyQuotient(variables);			
+			source = arguments.get(1).getTarget().applyQuotient(variables, network);			
 		}
 		Collection<Relationship> values = source.getRelationships(relationship);
 		BigInteger count = null;
@@ -1422,7 +1476,7 @@ public class BasicVertex implements Vertex, Serializable {
 		} else {
 			count = BigInteger.valueOf(values.size());			
 		}
-		return this.network.createVertex(count);
+		return network.createVertex(count);
 	}
 
 	/**
@@ -1430,16 +1484,16 @@ public class BasicVertex implements Vertex, Serializable {
 	 * GREATER (:0, :2)
 	 * Return if the left is bigger than the right.
 	 */
-	public Vertex applyGREATER(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex left = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex right = arguments.get(1).getTarget().applyQuotient(variables);
+	public Vertex applyGREATER(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex left = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex right = arguments.get(1).getTarget().applyQuotient(variables, network);
 		if (!(left.getData() instanceof Number) || !(right.getData() instanceof Number))  {
-			return this.network.createVertex(Primitive.FALSE);
+			return network.createVertex(Primitive.FALSE);
 		}
 		if (((Number) left.getData()).doubleValue() > ((Number) right.getData()).doubleValue()) {
-			return this.network.createVertex(Primitive.TRUE);			
+			return network.createVertex(Primitive.TRUE);			
 		} else {
-			return this.network.createVertex(Primitive.FALSE);			
+			return network.createVertex(Primitive.FALSE);			
 		}
 	}
 
@@ -1448,16 +1502,16 @@ public class BasicVertex implements Vertex, Serializable {
 	 * LESS (:0, :2)
 	 * Return if the left is smaller than the right.
 	 */
-	public Vertex applyLESS(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex left = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex right = arguments.get(1).getTarget().applyQuotient(variables);
+	public Vertex applyLESS(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex left = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex right = arguments.get(1).getTarget().applyQuotient(variables, network);
 		if (!(left.getData() instanceof Number) || !(right.getData() instanceof Number))  {
-			return this.network.createVertex(Primitive.FALSE);
+			return network.createVertex(Primitive.FALSE);
 		}
 		if (((Number) left.getData()).doubleValue() < ((Number) right.getData()).doubleValue()) {
-			return this.network.createVertex(Primitive.TRUE);			
+			return network.createVertex(Primitive.TRUE);			
 		} else {
-			return this.network.createVertex(Primitive.FALSE);			
+			return network.createVertex(Primitive.FALSE);			
 		}
 	}
 
@@ -1466,13 +1520,13 @@ public class BasicVertex implements Vertex, Serializable {
 	 * RQUAL (:0, :2)
 	 * Return if the left is equal to the right.
 	 */
-	public Vertex applyEQUAL(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex left = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex right = arguments.get(1).getTarget().applyQuotient(variables);
+	public Vertex applyEQUAL(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex left = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex right = arguments.get(1).getTarget().applyQuotient(variables, network);
 		if (left.equals(right)) {
-			return this.network.createVertex(Primitive.TRUE);			
+			return network.createVertex(Primitive.TRUE);			
 		} else {
-			return this.network.createVertex(Primitive.FALSE);			
+			return network.createVertex(Primitive.FALSE);			
 		}
 	}
 
@@ -1481,15 +1535,15 @@ public class BasicVertex implements Vertex, Serializable {
 	 * FOR EACH #word OF :sentence AS :word [AND EACH :3 OF :4 AS :5] DO  (:0, :1, ...)
 	 * Evaluate the DO for each relationship.
 	 */
-	public Vertex applyFOR(Vertex equation, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyFOR(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		// Process a for loop, repeat the operation for each element in the sequence.
 		List<List<Relationship>> sequences = new ArrayList<List<Relationship>>();
 		List<Vertex> forVariables = new ArrayList<Vertex>();
 		// Process the tri-pairs of source.relationship=variable.
 		int maxSequenceSize = 0;
 		for (int index = 0; index < arguments.size(); index = index + 3) {
-			Vertex source = arguments.get(index + 1).getTarget().applyQuotient(variables);
-			Vertex relationship = arguments.get(index).getTarget().applyQuotient(variables);
+			Vertex source = arguments.get(index + 1).getTarget().applyQuotient(variables, network);
+			Vertex relationship = arguments.get(index).getTarget().applyQuotient(variables, network);
 			List<Relationship> sequence = source.orderedRelationships(relationship);
 			if (sequence == null) {
 				sequence = new ArrayList<Relationship>(0);
@@ -1505,7 +1559,7 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 			forVariables.add(variable);
 		}
-		List<Relationship> doEquations = equation.orderedRelationships(Primitive.DO);
+		List<Relationship> doEquations = orderedRelationships(Primitive.DO);
 		Vertex result;
 		for (int index = 0; index < maxSequenceSize; index++)  {
 			for (int variableIndex = 0; variableIndex < forVariables.size(); variableIndex++) {
@@ -1514,7 +1568,7 @@ public class BasicVertex implements Vertex, Serializable {
 					List<Relationship> sequence = sequences.get(variableIndex);
 					Vertex value = null;
 					if (index >= sequence.size()) {
-						value = this.network.createVertex(Primitive.NULL);
+						value = network.createVertex(Primitive.NULL);
 					} else {
 						value = sequence.get(index).getTarget();
 					}
@@ -1522,13 +1576,13 @@ public class BasicVertex implements Vertex, Serializable {
 				}
 			}
 			for (Relationship doEquation: doEquations) {
-				result = doEquation.getTarget().applyQuotient(variables);
-				if (variables.containsKey(this.network.createVertex(Primitive.RETURN))) {
+				result = doEquation.getTarget().applyQuotient(variables, network);
+				if (variables.containsKey(network.createVertex(Primitive.RETURN))) {
 					return result;
 				}
 			}
 		}
-		return this.network.createVertex(Primitive.NULL);
+		return network.createVertex(Primitive.NULL);
 	}
 
 	/**
@@ -1536,24 +1590,24 @@ public class BasicVertex implements Vertex, Serializable {
 	 * WHILE (:0, :1) DO  (:0, :1, ...)
 	 * Evaluate the DO while true or matching.
 	 */
-	public Vertex applyWHILE(Vertex equation, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyWHILE(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		// Process a while loop, repeat the operation until true or max depth
 		int depth = 0;
 		boolean condition = true;
-		List<Relationship> doEquations = equation.orderedRelationships(Primitive.DO);
-		Vertex result = this.network.createVertex(Primitive.NULL);
+		List<Relationship> doEquations = orderedRelationships(Primitive.DO);
+		Vertex result = network.createVertex(Primitive.NULL);
 		while (condition && depth < Language.MAX_STACK)  {
-			Vertex first = arguments.get(0).getTarget().applyQuotient(variables);
+			Vertex first = arguments.get(0).getTarget().applyQuotient(variables, network);
 			if (arguments.size() == 1) {
 				condition = first.is(Primitive.TRUE);
 			} else {
-				Vertex second = arguments.get(1).getTarget().applyQuotient(variables);
+				Vertex second = arguments.get(1).getTarget().applyQuotient(variables, network);
 				condition = first.matches(second, new HashMap<Vertex, Vertex>()) == Boolean.TRUE;
 			}
 			if (condition) {
 				for (Relationship doEquation: doEquations) {
-					result = doEquation.getTarget().applyQuotient(variables);
-					if (variables.containsKey(this.network.createVertex(Primitive.RETURN))) {
+					result = doEquation.getTarget().applyQuotient(variables, network);
+					if (variables.containsKey(network.createVertex(Primitive.RETURN))) {
 						return result;
 					}
 				}
@@ -1561,7 +1615,7 @@ public class BasicVertex implements Vertex, Serializable {
 			depth++;
 		}
 		if (depth >= Language.MAX_STACK) {
-			this.network.getBot().log(SELF, "Max stack exceeded on while loop", Level.WARNING, Language.MAX_STACK);
+			network.getBot().log(SELF, "Max stack exceeded on while loop", Level.WARNING, Language.MAX_STACK);
 		}
 		return result;
 	}
@@ -1571,9 +1625,9 @@ public class BasicVertex implements Vertex, Serializable {
 	 * INPUT :0 PART :1 FOR :2
 	 * Get the last input from the conversation for the speaker.
 	 */
-	public Vertex applyINPUT(Vertex equation, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
-		Vertex index = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex speaker = arguments.get(1).getTarget().applyQuotient(variables);
+	public Vertex applyINPUT(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
+		Vertex index = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex speaker = arguments.get(1).getTarget().applyQuotient(variables, network);
 		Vertex part = null;
 		int partValue = 1;
 		if (arguments.size() == 3) {
@@ -1583,12 +1637,12 @@ public class BasicVertex implements Vertex, Serializable {
 			} catch (Exception exception) {
 				// Ignore, use 1;
 			}
-			speaker = arguments.get(2).getTarget().applyQuotient(variables);
+			speaker = arguments.get(2).getTarget().applyQuotient(variables, network);
 		}
-		Vertex input = this.network.createVertex(Primitive.INPUT_VARIABLE);
+		Vertex input = network.createVertex(Primitive.INPUT_VARIABLE);
 		Vertex conversation = variables.get(input.getRelationship(Primitive.CONVERSATION));
 		if (conversation == null) {
-			return this.network.createVertex(Primitive.NULL);
+			return network.createVertex(Primitive.NULL);
 		}
 		int count = 0;
 		int value = 1;
@@ -1612,18 +1666,18 @@ public class BasicVertex implements Vertex, Serializable {
 						if (partValue == 1) {
 							return sentence;
 						}
-						return this.network.createVertex(Primitive.NULL);
+						return network.createVertex(Primitive.NULL);
 					}
 					List<Vertex> sentences = sentence.orderedRelations(Primitive.SENTENCE);
 					if (partValue > sentences.size()) {
-						return this.network.createVertex(Primitive.NULL);
+						return network.createVertex(Primitive.NULL);
 					}
 					return sentences.get(partValue - 1);
 				}
 			}
 			element--;
 		}
-		return this.network.createVertex(Primitive.NULL);
+		return network.createVertex(Primitive.NULL);
 	}
 
 	/**
@@ -1631,12 +1685,12 @@ public class BasicVertex implements Vertex, Serializable {
 	 * GET :0 FROM :1
 	 * Get the relationship value of type ARGUMENT(0) from ARGUMENT(1)
 	 */
-	public Vertex applyGET(Vertex equation, List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyGET(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		Vertex result = null;
-		Vertex relationship = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex source = arguments.get(1).getTarget().applyQuotient(variables);
-		Vertex index = equation.getRelationship(Primitive.INDEX);
-		Vertex lastindex = equation.getRelationship(Primitive.LASTINDEX);
+		Vertex relationship = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex source = arguments.get(1).getTarget().applyQuotient(variables, network);
+		Vertex index = getRelationship(Primitive.INDEX);
+		Vertex lastindex = getRelationship(Primitive.LASTINDEX);
 		if ((index != null) && (index.getData() instanceof Number)) {
 			int position = ((Number)index.getData()).intValue();
 			List<Vertex> values = source.orderedRelations(relationship);
@@ -1651,8 +1705,8 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 		} else {
 			if (arguments.size() > 2) {
-				Vertex associate = arguments.get(2).getTarget().applyQuotient(variables);
-				Vertex associateRelationship = arguments.get(3).getTarget().applyQuotient(variables);
+				Vertex associate = arguments.get(2).getTarget().applyQuotient(variables, network);
+				Vertex associateRelationship = arguments.get(3).getTarget().applyQuotient(variables, network);
 				result = source.mostConsciousWithAssoiate(relationship, associate, associateRelationship);
 			} else {
 				result = source.mostConscious(relationship);
@@ -1680,7 +1734,7 @@ public class BasicVertex implements Vertex, Serializable {
 				}
 			}
 			if (result == null) {
-				result = this.network.createVertex(Primitive.NULL);
+				result = network.createVertex(Primitive.NULL);
 			}
 		}
 		return result;
@@ -1692,11 +1746,11 @@ public class BasicVertex implements Vertex, Serializable {
 	 * i.e. new Number, Sequence
 	 * Create a new vertex as an instance of the argument types.
 	 */
-	public Vertex applyNEW(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyNEW(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		Vertex newVertex = null;
-		newVertex = this.network.createVertex();
+		newVertex = network.createVertex();
 		for (Relationship argument : arguments) {
-			Vertex type = argument.getTarget().applyQuotient(variables);
+			Vertex type = argument.getTarget().applyQuotient(variables, network);
 			newVertex.addRelationship(Primitive.INSTANTIATION, type);
 			// Assign the name of the type to the default name of the instance.
 			/*Collection<Relationship> names = type.getRelationships(Primitive.WORD);
@@ -1726,15 +1780,15 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Call out to the named sense, arguments and return value must be vertices.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Vertex applyCALL(List<Relationship> arguments, Map<Vertex, Vertex> variables) throws Exception {
-		String methodName = ((Primitive)arguments.get(0).getTarget().applyQuotient(variables).getData()).getIdentity();
-		String senseName = ((Primitive)arguments.get(1).getTarget().applyQuotient(variables).getData()).getIdentity();
-		Object source = this.network.getBot().awareness().getSense(senseName);
+	public Vertex applyCALL(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) throws Exception {
+		String methodName = ((Primitive)arguments.get(0).getTarget().applyQuotient(variables, network).getData()).getIdentity();
+		String senseName = ((Primitive)arguments.get(1).getTarget().applyQuotient(variables, network).getData()).getIdentity();
+		Object source = network.getBot().awareness().getSense(senseName);
 		if (source == null) {
-			source = this.network.getBot().mind().getThought(senseName);
+			source = network.getBot().mind().getThought(senseName);
 		}
 		if (source == null) {
-			source = this.network.getBot().awareness().getTool(senseName);
+			source = network.getBot().awareness().getTool(senseName);
 		}
 		if (source == null) {
 			throw new SelfExecutionException(this, "Missing calling sense, thought, or tool.");
@@ -1745,10 +1799,10 @@ public class BasicVertex implements Vertex, Serializable {
 			argumentTypes = new Class[1];
 			argumentTypes[0] = Network.class;
 			methodArguments = new Object[1];
-			methodArguments[0] = this.network;
+			methodArguments[0] = network;
 		} else {
 			for (int index = 2; index < arguments.size(); index++) {
-				Vertex argument = arguments.get(index).getTarget().applyQuotient(variables);
+				Vertex argument = arguments.get(index).getTarget().applyQuotient(variables, network);
 				methodArguments[index - 2] = argument;
 				argumentTypes[index - 2] = Vertex.class;
 			}
@@ -1756,9 +1810,9 @@ public class BasicVertex implements Vertex, Serializable {
 		Method method = source.getClass().getMethod(methodName, argumentTypes);
 		Vertex result = (Vertex)method.invoke(source, methodArguments);
 		if (result == null) {
-			result = this.network.createVertex(Primitive.NULL);
+			result = network.createVertex(Primitive.NULL);
 		} else {
-			result = this.network.createVertex(result);						
+			result = network.createVertex(result);						
 		}
 		return result;
 	}
@@ -1768,31 +1822,31 @@ public class BasicVertex implements Vertex, Serializable {
 	 * LEARN :0 THAT :that TOPIC :topic TEMPLATE :1
 	 * Evaluate and add the new response.
 	 */
-	public Vertex applyLEARN(List<Relationship> arguments, Map<Vertex, Vertex> variables) throws Exception {
-		Vertex pattern = arguments.get(0).getTarget().applyEval(variables);
-		Vertex template = arguments.get(1).getTarget().applyEval(variables);
+	public Vertex applyLEARN(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) throws Exception {
+		Vertex pattern = arguments.get(0).getTarget().applyEval(variables, network);
+		Vertex template = arguments.get(1).getTarget().applyEval(variables, network);
 		Relationship relationship = pattern.addRelationship(Primitive.RESPONSE, template);
 		template.addRelationship(Primitive.QUESTION, pattern);
 		Vertex that = getRelationship(Primitive.THAT);
 		if (that != null) {
-			that = that.applyEval(variables);
-			Vertex meta = this.network.createMeta(relationship);
+			that = that.applyEval(variables, network);
+			Vertex meta = network.createMeta(relationship);
 			meta.addRelationship(Primitive.PREVIOUS, that);
 			meta.addRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);
 		}
 		Vertex topic = getRelationship(Primitive.TOPIC);
 		if (topic != null) {
-			topic = topic.applyEval(variables);
-			Vertex meta = this.network.createMeta(relationship);
+			topic = topic.applyEval(variables, network);
+			Vertex meta = network.createMeta(relationship);
 			meta.addRelationship(Primitive.TOPIC, topic);
 			meta.addRelationship(Primitive.REQUIRE, Primitive.TOPIC);
 		}
-		this.network.getBot().log(this, "New response learned", Level.FINER, pattern, template, that, topic);
+		network.getBot().log(this, "New response learned", Level.FINER, pattern, template, that, topic);
 		if (!pattern.instanceOf(Primitive.PATTERN)) {
 			pattern.associateAll(Primitive.WORD, pattern, Primitive.QUESTION);
 		} else {
 			// Check for state and extend.
-			Vertex state = variables.get(this.network.createVertex(Primitive.STATE));
+			Vertex state = variables.get(network.createVertex(Primitive.STATE));
 			if (state != null) {
 				// Get first case that gets sentence from input.
 				List<Vertex> instructions = state.orderedRelations(Primitive.DO);
@@ -1809,7 +1863,10 @@ public class BasicVertex implements Vertex, Serializable {
 					}				
 				}
 				if (sentenceState != null) {
-					Vertex child = AIMLParser.parser().createState(pattern, sentenceState, this.network);
+					if (sentenceState.getNetwork() != network) {
+						sentenceState = network.createVertex(sentenceState);
+					}
+					Vertex child = AIMLParser.parser().createState(pattern, sentenceState, network);
 					Vertex equation = network.createInstance(Primitive.CASE);
 					equation.addRelationship(Primitive.PATTERN, pattern);
 					if (that != null) {
@@ -1831,17 +1888,17 @@ public class BasicVertex implements Vertex, Serializable {
 	 * SRAI "Hello"
 	 * Return the response to processing the input.
 	 */
-	public Vertex applySRAI(List<Relationship> arguments, Map<Vertex, Vertex> variables) throws Exception {
-		Vertex sentence = arguments.get(0).getTarget().applyQuotient(variables);
+	public Vertex applySRAI(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) throws Exception {
+		Vertex sentence = arguments.get(0).getTarget().applyQuotient(variables, network);
 		if (!sentence.instanceOf(Primitive.SENTENCE) && sentence.instanceOf(Primitive.FRAGMENT)) {
 			sentence.addRelationship(Primitive.INSTANTIATION, Primitive.SENTENCE);
 		}
-		Vertex input = variables.get(this.network.createVertex(Primitive.INPUT_VARIABLE));
+		Vertex input = variables.get(network.createVertex(Primitive.INPUT_VARIABLE));
 		input = input.copy();
 		input.setRelationship(Primitive.INPUT, sentence);
-		Vertex response = this.network.getBot().mind().getThought(Language.class).input(input, sentence, variables, this.network);
+		Vertex response = network.getBot().mind().getThought(Language.class).input(input, sentence, variables, network);
 		if (response == null) {
-			return this.network.createVertex(Primitive.NULL);
+			return network.createVertex(Primitive.NULL);
 		}
 		return response;
 	}
@@ -1851,42 +1908,42 @@ public class BasicVertex implements Vertex, Serializable {
 	 * SRAIX "what is love" BOT "Brain Bot" LIMIT 5 SERVICE #botlibre APIKEY 12345 BOTID 12345 HINT "google" DEFAULT "Brain Bot is offline"
 	 * Execute the remote service call, and return the response.
 	 */
-	public Vertex applySRAIX(List<Relationship> arguments, Map<Vertex, Vertex> variables) throws Exception {
-		Vertex sentence = arguments.get(0).getTarget().applyQuotient(variables);
+	public Vertex applySRAIX(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) throws Exception {
+		Vertex sentence = arguments.get(0).getTarget().applyQuotient(variables, network);
 		Vertex apikey = getRelationship(Primitive.APIKEY);
 		String apikeyValue = null;
 		if (apikey != null) {
-			apikey = apikey.applyQuotient(variables);
+			apikey = apikey.applyQuotient(variables, network);
 			apikeyValue = apikey.printString();
 		}
 		Vertex limit = getRelationship(Primitive.LIMIT);
 		int limitValue = -1;
 		if (limit != null) {
-			limit = limit.applyQuotient(variables);
+			limit = limit.applyQuotient(variables, network);
 			limitValue = Integer.parseInt(limit.getDataValue());
 		}
 		Vertex bot = getRelationship(Primitive.BOT);
 		String botValue = null;
 		if (bot != null) {
-			bot = bot.applyQuotient(variables);
+			bot = bot.applyQuotient(variables, network);
 			botValue = bot.printString();
 		}
 		Vertex botid = getRelationship(Primitive.BOTID);
 		String botidValue = null;
 		if (botid != null) {
-			botid = botid.applyQuotient(variables);
+			botid = botid.applyQuotient(variables, network);
 			botidValue = botid.printString();
 		}
 		Vertex server = getRelationship(Primitive.SERVER);
 		String serverValue = null;
 		if (server != null) {
-			server = server.applyQuotient(variables);
+			server = server.applyQuotient(variables, network);
 			serverValue = server.printString();
 		}
 		Vertex service = getRelationship(Primitive.SERVICE);
 		Primitive serviceValue = null;
 		if (service != null) {
-			service = service.applyQuotient(variables);
+			service = service.applyQuotient(variables, network);
 			if (service.isPrimitive()) {
 				serviceValue = (Primitive)service.getData();
 			}
@@ -1894,38 +1951,38 @@ public class BasicVertex implements Vertex, Serializable {
 		Vertex hint = getRelationship(Primitive.HINT);
 		String hintValue = null;
 		if (hint != null) {
-			hint = hint.applyQuotient(variables);
+			hint = hint.applyQuotient(variables, network);
 			hintValue = hint.printString();
 		}
 		Vertex defaultResponse = getRelationship(Primitive.DEFAULT);
 		String defaultValue = null;
 		if (defaultResponse != null) {
-			defaultResponse = defaultResponse.applyQuotient(variables);
+			defaultResponse = defaultResponse.applyQuotient(variables, network);
 			defaultValue = defaultResponse.printString();
 		}
 		try {
 			String message = sentence.printString();
-			String response = this.network.getBot().awareness().getSense(RemoteService.class).request(message, botValue, botidValue, serverValue, serviceValue, apikeyValue, limitValue, hintValue, this.network);
+			String response = network.getBot().awareness().getSense(RemoteService.class).request(message, botValue, botidValue, serverValue, serviceValue, apikeyValue, limitValue, hintValue, network);
 			if (response == null) {
 				if (defaultValue != null && !defaultValue.isEmpty()) {
-					return this.network.createSentence(defaultValue);					
+					return network.createSentence(defaultValue);					
 				}
-				return this.network.createVertex(Primitive.NULL);
+				return network.createVertex(Primitive.NULL);
 			}
-			return this.network.createSentence(response);
+			return network.createSentence(response);
 		} catch (Exception exception) {
-			this.network.getBot().log(this, exception);
+			network.getBot().log(this, exception);
 			if (defaultValue != null && !defaultValue.isEmpty()) {
-				return this.network.createSentence(defaultValue);					
+				return network.createSentence(defaultValue);					
 			}
-			return this.network.createVertex(Primitive.NULL);
+			return network.createVertex(Primitive.NULL);
 		}
 	}
 
 	/**
 	 * Check if any of the words have the relationship.
 	 */
-	public Vertex checkRelationTargetForAllWords(List<Relationship> arguments, Map<Vertex, Vertex> variables, Vertex left, Vertex right, Vertex relation, Collection<Relationship> words) {
+	public Vertex checkRelationTargetForAllWords(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network, Vertex left, Vertex right, Vertex relation, Collection<Relationship> words) {
 		// Check all meanings of all words.
 		if (words != null && !right.instanceOf(Primitive.WORD)) {
 			Set<Vertex> processed = new HashSet<Vertex>();
@@ -1938,10 +1995,10 @@ public class BasicVertex implements Vertex, Serializable {
 							processed.add(meaning.getTarget());
 							if (left.hasOrInheritsRelationship(relation, meaning.getTarget())) {
 								// Left has the relationship, return true.
-								return this.network.createVertex(Primitive.TRUE);
+								return network.createVertex(Primitive.TRUE);
 							} else if (left.hasOrInheritsInverseRelationship(relation, meaning.getTarget())) {
 								// Left has an inverse relationship to the right, return false.
-								return this.network.createVertex(Primitive.FALSE);
+								return network.createVertex(Primitive.FALSE);
 							}
 						}
 					}
@@ -1954,7 +2011,7 @@ public class BasicVertex implements Vertex, Serializable {
 	/**
 	 * Check if any of the words have the relationship.
 	 */
-	public Vertex checkRelationRelationshipForAllWords(List<Relationship> arguments, Map<Vertex, Vertex> variables, Vertex left, Vertex right, Vertex relation, Collection<Relationship> words) {
+	public Vertex checkRelationRelationshipForAllWords(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network, Vertex left, Vertex right, Vertex relation, Collection<Relationship> words) {
 		// Check all meanings of all words.
 		if (words != null && !right.instanceOf(Primitive.WORD)) {
 			Set<Vertex> processed = new HashSet<Vertex>();
@@ -1967,10 +2024,10 @@ public class BasicVertex implements Vertex, Serializable {
 							processed.add(meaning.getTarget());
 							if (left.hasOrInheritsRelationship(meaning.getTarget(), right)) {
 								// Left has the relationship, return true.
-								return this.network.createVertex(Primitive.TRUE);
+								return network.createVertex(Primitive.TRUE);
 							} else if (left.hasOrInheritsInverseRelationship(meaning.getTarget(), right)) {
 								// Left has an inverse relationship to the right, return false.
-								return this.network.createVertex(Primitive.FALSE);
+								return network.createVertex(Primitive.FALSE);
 							}
 						}
 					}
@@ -1988,20 +2045,20 @@ public class BasicVertex implements Vertex, Serializable {
 	 * or also "Bob love's?" (what does Bob have a #loves relationship to?)
 	 * or "Bob feels how to Jill?" (what is Bob's relationship to Jill?)
 	 */
-	public Vertex applyRELATION(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyRELATION(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		Vertex result = null;
 		Vertex relation = null;
-		Vertex left = arguments.get(0).getTarget().applyQuotient(variables);
-		Vertex right = arguments.get(1).getTarget().applyQuotient(variables);
+		Vertex left = arguments.get(0).getTarget().applyQuotient(variables, network);
+		Vertex right = arguments.get(1).getTarget().applyQuotient(variables, network);
 		// The relation is optional, if no relation then check any relation
 		if (arguments.size() > 2) {
-			relation = arguments.get(2).getTarget().applyQuotient(variables);
+			relation = arguments.get(2).getTarget().applyQuotient(variables, network);
 		}
 		if (relation == null) {
 			// If no relation type, then check for any relationship.
 			if (left.hasAnyRelationshipToTarget(right)) {
 				// Left has a relationship to right, return true.
-				result = this.network.createVertex(Primitive.TRUE);
+				result = network.createVertex(Primitive.TRUE);
 			} else if (left.hasRelationship(right)) {
 				// Left has a relationship of type right, return the value.
 				result = left.mostConscious(right);
@@ -2016,69 +2073,69 @@ public class BasicVertex implements Vertex, Serializable {
 				result = right.mostConsciousTargetOfType(left);
 			}
 		} else {
-			relation = relation.applyQuotient(variables);
+			relation = relation.applyQuotient(variables, network);
 			if (left.hasOrInheritsRelationship(relation, right)) {
 				// Left has the relationship, return true.
-				result = this.network.createVertex(Primitive.TRUE);
+				result = network.createVertex(Primitive.TRUE);
 			} else if (left.hasOrInheritsInverseRelationship(relation, right)) {
 				// Left has an inverse relationship to the right, return false.
-				result = this.network.createVertex(Primitive.FALSE);
+				result = network.createVertex(Primitive.FALSE);
 			} else {
 				if (relation.is(Primitive.IS)) {
 					if (left.hasAnyRelationshipToTarget(right)) {
 						// Left has a relationship to right, return true.
-						result = this.network.createVertex(Primitive.TRUE);
+						result = network.createVertex(Primitive.TRUE);
 					}
 				}
 				if (result == null && (right.getData() instanceof String)) {
 					// Check case.
-					Vertex lower = this.network.createVertex(((String)right.getData()).toLowerCase());
+					Vertex lower = network.createVertex(((String)right.getData()).toLowerCase());
 					if (left.hasOrInheritsRelationship(relation, lower)) {
 						// Left has the relationship, return true.
-						result = this.network.createVertex(Primitive.TRUE);
+						result = network.createVertex(Primitive.TRUE);
 					} else if (left.hasOrInheritsInverseRelationship(relation, lower)) {
 						// Left has an inverse relationship to the right, return false.
-						result = this.network.createVertex(Primitive.FALSE);
+						result = network.createVertex(Primitive.FALSE);
 					}
-					Vertex caps = this.network.createVertex(Utils.capitalize(((String)right.getData()).toLowerCase()));
+					Vertex caps = network.createVertex(Utils.capitalize(((String)right.getData()).toLowerCase()));
 					if (left.hasOrInheritsRelationship(relation, caps)) {
 						// Left has the relationship, return true.
-						result = this.network.createVertex(Primitive.TRUE);
+						result = network.createVertex(Primitive.TRUE);
 					} else if (left.hasOrInheritsInverseRelationship(relation, caps)) {
 						// Left has an inverse relationship to the right, return false.
-						result = this.network.createVertex(Primitive.FALSE);
+						result = network.createVertex(Primitive.FALSE);
 					}
 				}
 				if (result == null) {
 					// Check all meanings of all words.
 					Collection<Relationship> words = right.getRelationships(Primitive.WORD);
-					result = checkRelationTargetForAllWords(arguments, variables, left, right, relation, words);
+					result = checkRelationTargetForAllWords(arguments, variables, network, left, right, relation, words);
 				}
 
 				if (result == null) {					
 					// Check synonyms as well.
 					Collection<Relationship> words = right.getRelationships(Primitive.SYNONYM);
-					result = checkRelationTargetForAllWords(arguments, variables, left, right, relation, words);
+					result = checkRelationTargetForAllWords(arguments, variables, network, left, right, relation, words);
 				}
 				// Check all meanings of all words for relation.
 				if (result == null) {
 					// Check all meanings of all words.
 					Collection<Relationship> words = relation.getRelationships(Primitive.WORD);
-					result = checkRelationRelationshipForAllWords(arguments, variables, left, right, relation, words);
+					result = checkRelationRelationshipForAllWords(arguments, variables, network, left, right, relation, words);
 				}
 				if (result == null) {
 					// Check synonyms as well.
 					Collection<Relationship> words = relation.getRelationships(Primitive.SYNONYM);
-					result = checkRelationRelationshipForAllWords(arguments, variables, left, right, relation, words);
+					result = checkRelationRelationshipForAllWords(arguments, variables, network, left, right, relation, words);
 				}
 			}
 			// TODO: clean this up, and handle all other cases.
 		}
 		if (result != null) {
-			this.network.getBot().log(SELF, "Found relation", Level.FINER, left, relation, right, result);
+			network.getBot().log(SELF, "Found relation", Level.FINER, left, relation, right, result);
 		} else {						
-			result = this.network.createVertex(Primitive.UNKNOWN);
-			this.network.getBot().log(SELF, "Relation unknown", Level.FINER, left, relation, right, result);
+			result = network.createVertex(Primitive.UNKNOWN);
+			network.getBot().log(SELF, "Relation unknown", Level.FINER, left, relation, right, result);
 		}
 		return result;
 	}
@@ -2089,13 +2146,13 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Return what has a relationship to :0 by the relationships :1,
 	 * or what has any relationship to :0.
 	 */
-	public Vertex applyRELATED(List<Relationship> arguments, Map<Vertex, Vertex> variables) {
+	public Vertex applyRELATED(List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network) {
 		Vertex result = null;
 		Vertex relation = null;
-		Vertex source = arguments.get(0).getTarget().applyQuotient(variables);
+		Vertex source = arguments.get(0).getTarget().applyQuotient(variables, network);
 		// The relation is optional, if no relation then check any relation
 		if (arguments.size() > 1) {
-			relation = arguments.get(1).getTarget().applyQuotient(variables);
+			relation = arguments.get(1).getTarget().applyQuotient(variables, network);
 		}
 		List<Relationship> relationships = null;
 		if (relation == null) {
@@ -2109,10 +2166,10 @@ public class BasicVertex implements Vertex, Serializable {
 			}
 		}
 		if (result != null) {
-			this.network.getBot().log(SELF, "Found relation", Level.FINER, source, relation, result);
+			network.getBot().log(SELF, "Found relation", Level.FINER, source, relation, result);
 		} else {
-			result = this.network.createVertex(Primitive.NULL);
-			this.network.getBot().log(SELF, "Relation unknown", Level.FINER, source, relation, result);
+			result = network.createVertex(Primitive.NULL);
+			network.getBot().log(SELF, "Relation unknown", Level.FINER, source, relation, result);
 		}
 		return result;
 	}
@@ -2671,14 +2728,14 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Return the target vertex related by the type, with the high consciousness level greater than the value.
 	 */
 	public Vertex mostConscious(Vertex type, float min) {
-		return nextMostConscious(type, null, min, false);
+		return nextMostConscious(type, (Vertex)null, min, false);
 	}
 	
 	/**
 	 * Return the relationship related by the type, with the high consciousness level.
 	 */
 	public Relationship mostConsciousRelationship(Vertex type) {
-		return nextMostConsciousRelationship(type, null, 0, false);
+		return nextMostConsciousRelationship(type, (Vertex)null, 0, false);
 	}
 	
 	/**
@@ -2699,7 +2756,7 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Return the relationship related by the type, with the high consciousness level.
 	 */
 	public Relationship mostConsciousRelationship(Primitive type, float correctness) {
-		return nextMostConsciousRelationship(this.network.createVertex(type), null, correctness, false);
+		return nextMostConsciousRelationship(this.network.createVertex(type), (Vertex)null, correctness, false);
 	}
 	
 	/**
@@ -2720,7 +2777,14 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Return the target vertex related by the type, with the high consciousness level greater than the value.
 	 */
 	public Vertex mostConscious(Vertex type, float min, boolean inverse) {
-		return nextMostConscious(type, null, min, inverse);
+		return nextMostConscious(type, (Vertex)null, min, inverse);
+	}
+	
+	/**
+	 * Return the target vertex related by the type, with the high consciousness level greater than the value.
+	 */
+	public Vertex nextMostConscious(Primitive type, Set<Vertex> ignoring) {
+		return nextMostConscious(this.network.createVertex(type), ignoring, 0f, false);
 	}
 	
 	/**
@@ -2755,7 +2819,15 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Return the target vertex related by the type with the high consciousness level.
 	 */
 	public Vertex mostConscious(Vertex type) {
-		return nextMostConscious(type, null, 0, false);
+		return nextMostConscious(type, (Vertex)null, 0, false);
+	}
+	
+	/**
+	 * Return the target vertex inversely/negatively related by the type, with the high consciousness level.
+	 * The level is multiplied by the relationship correctness.
+	 */
+	public Vertex nextMostConscious(Primitive type, Vertex ignoring, float min, boolean inverse) {
+		return nextMostConscious(this.network.createVertex(type), ignoring, 0f, false);
 	}
 	
 	/**
@@ -2763,6 +2835,18 @@ public class BasicVertex implements Vertex, Serializable {
 	 * The level is multiplied by the relationship correctness.
 	 */
 	public Vertex nextMostConscious(Vertex type, Vertex ignoring, float min, boolean inverse) {
+		Relationship relationship = nextMostConsciousRelationship(type, ignoring, min, inverse);
+		if (relationship != null) {
+			return relationship.getTarget();
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the target vertex inversely/negatively related by the type, with the high consciousness level.
+	 * The level is multiplied by the relationship correctness.
+	 */
+	public Vertex nextMostConscious(Vertex type, Set<Vertex> ignoring, float min, boolean inverse) {
 		Relationship relationship = nextMostConsciousRelationship(type, ignoring, min, inverse);
 		if (relationship != null) {
 			return relationship.getTarget();
@@ -2796,6 +2880,43 @@ public class BasicVertex implements Vertex, Serializable {
 		for (Relationship relationship : relationships) {
 			if ((relationship.isInverse() && inverse) || (!relationship.isInverse() && !inverse)) {
 				if (ignoring != relationship.getTarget()) {
+					float correctness = Math.abs(relationship.getCorrectness());
+					float level = computeCorrectness(relationship);
+					if ((highest == null) || (level > highestLevel)) {
+						if ((highest == null) || (correctness >= highestCorrectness)) {
+							highest = relationship;
+							highestLevel = level;
+							highestCorrectness = correctness;
+						}
+					}
+				}
+			}
+		}
+		if (highest == null) {
+			return null;
+		}
+		if (Math.abs(highest.getCorrectness()) < min) {
+			this.network.getBot().log(this, "Relationship not sufficiently correct", Level.FINER, highest, highest.getCorrectness(), min);
+			return null;
+		}
+		return highest;
+	}
+	
+	/**
+	 * Return the target vertex inversely/negatively related by the type, with the high consciousness level.
+	 * The level is multiplied by the relationship correctness.
+	 */
+	public synchronized Relationship nextMostConsciousRelationship(Vertex type, Set<Vertex> ignoring, float min, boolean inverse) {
+		Collection<Relationship> relationships = getRelationships(type);
+		if (relationships == null) {
+			return null;
+		}
+		Relationship highest = null;
+		float highestLevel = 0;
+		float highestCorrectness = 0;
+		for (Relationship relationship : relationships) {
+			if ((relationship.isInverse() && inverse) || (!relationship.isInverse() && !inverse)) {
+				if (!ignoring.contains(relationship.getTarget())) {
 					float correctness = Math.abs(relationship.getCorrectness());
 					float level = computeCorrectness(relationship);
 					if ((highest == null) || (level > highestLevel)) {
@@ -3278,15 +3399,25 @@ public class BasicVertex implements Vertex, Serializable {
 		}
 		Map<Relationship, Relationship> relationships = getRelationships().get(relationship.getType());
 		if (relationships == null) {
+			if (this.allRelationships != null && this.allRelationships.contains(relationship)) {
+				this.network.removeRelationship(relationship);
+				this.allRelationships.remove(relationship);
+			}
 			return;
 		}
 		Relationship existing = relationships.remove(relationship);
 		if (existing == null) {
+			if (this.allRelationships != null && this.allRelationships.contains(relationship)) {
+				this.network.removeRelationship(relationship);
+				this.allRelationships.remove(relationship);
+			}
 			return;
 		}
 		this.network.removeRelationship(existing);
 		// Also remove from allRelationships
-		this.allRelationships.remove(existing);
+		if (this.allRelationships != null) {
+			this.allRelationships.remove(existing);
+		}
 		if (relationships.isEmpty()) {
 			getRelationships().remove(relationship.getType());
 			return;
@@ -3317,7 +3448,9 @@ public class BasicVertex implements Vertex, Serializable {
 		for (Relationship relationship : relationships.values()) {
 			this.network.removeRelationship(relationship);
 			// Also remove from allRelationships
-			this.allRelationships.remove(relationship);
+			if (this.allRelationships != null) {
+				this.allRelationships.remove(relationship);
+			}
 		}
 		getRelationships().remove(type);
 	}
@@ -3348,7 +3481,9 @@ public class BasicVertex implements Vertex, Serializable {
 			this.network.removeRelationship(iterator.next());
 		}
 		getRelationships().clear();
-		this.allRelationships.clear();
+		if (this.allRelationships != null) {
+			this.allRelationships.clear();
+		}
 	}
 	
 	/**
@@ -3364,7 +3499,9 @@ public class BasicVertex implements Vertex, Serializable {
 			return;
 		}
 		// Also remove from allRelationships
-		this.allRelationships.remove(existing);
+		if (this.allRelationships != null) {
+			this.allRelationships.remove(existing);
+		}
 		addRelationship(oldRelationship.getType(), newTarget, oldRelationship.getIndex());
 	}
 	
@@ -3384,7 +3521,9 @@ public class BasicVertex implements Vertex, Serializable {
 			for (Iterator<Relationship> iterator = relationships.values().iterator(); iterator.hasNext(); ) {
 				Relationship existingValue = iterator.next();
 				iterator.remove();
-				this.allRelationships.remove(existingValue);
+				if (this.allRelationships != null) {
+					this.allRelationships.remove(existingValue);
+				}
 				this.network.removeRelationship(existingValue);
 			}
 		}
@@ -3949,7 +4088,9 @@ public class BasicVertex implements Vertex, Serializable {
 				} else if (this.dataType.equals("Timestamp")) {
 					this.data = Utils.parseTimestamp(value);
 				} else if (this.dataType.equals("Image")) {
-					this.data = new ImageData((String)value);
+					this.data = new BinaryData((String)value);
+				} else if (this.dataType.equals("Binary")) {
+					this.data = new BinaryData((String)value);
 				} else if (this.dataType.equals("Text")) {
 					this.data = new TextData((String)value);
 				} else {
@@ -4001,7 +4142,9 @@ public class BasicVertex implements Vertex, Serializable {
 				} else if (type.equals("Timestamp")) {
 					this.data = Utils.parseTimestamp((String)this.data);
 				} else if (type.equals("Image")) {
-					this.data = new ImageData((String)this.data);
+					this.data = new BinaryData((String)this.data);
+				} else if (type.equals("Binary")) {
+					this.data = new BinaryData((String)this.data);
 				} else if (type.equals("Text")) {
 					this.data = new TextData((String)this.data);
 				} else {
@@ -4026,8 +4169,8 @@ public class BasicVertex implements Vertex, Serializable {
 		} else if (data instanceof Primitive) {
 			// TODO: prefix a #
 			return ((Primitive) data).getIdentity();
-		} else if (data instanceof ImageData) {
-			return String.valueOf(((ImageData)data).getId());
+		} else if (data instanceof BinaryData) {
+			return String.valueOf(((BinaryData)data).getId());
 		} else if (data instanceof TextData) {
 			return String.valueOf(((TextData)data).getId());
 		} else {
@@ -4048,8 +4191,8 @@ public class BasicVertex implements Vertex, Serializable {
 			return "Timestamp";
 		} else if (data instanceof java.sql.Date) {
 			return "Date";
-		} else if (data instanceof ImageData) {
-			return "Image";
+		} else if (data instanceof BinaryData) {
+			return "Binary";
 		} else if (data instanceof TextData) {
 			return "Text";
 		} else {

@@ -63,9 +63,6 @@ public abstract class SubconsciousThought extends BasicThought {
 					getActiveMemoryBackLog().clear();
 				}
 				getActiveMemoryBackLog().add(vertex);
-				synchronized (SubconsciousThought.this) {
-					SubconsciousThought.this.notify();
-				}
 			}
 		};
 		this.bot.memory().addListener(this.listener);
@@ -86,22 +83,7 @@ public abstract class SubconsciousThought extends BasicThought {
 			getActiveMemoryBackLog().clear();
 			return;
 		}
-		Vertex vertex = null;
-		synchronized (this) {
-			vertex = getActiveMemoryBackLog().poll();
-			if (vertex == null) {
-				try {
-					wait(1000);
-				} catch (InterruptedException exception) {}
-				if (this.isStopped || !this.isEnabled || !this.bot.mind().isConscious()) {
-					getActiveMemoryBackLog().clear();
-					return;
-				}
-			}
-		}
-		if (vertex == null) {
-			vertex = getActiveMemoryBackLog().poll();
-		}
+		Vertex vertex = getActiveMemoryBackLog().poll();
 		if (vertex != null) {
 			try {
 				Thread.sleep(this.delay);

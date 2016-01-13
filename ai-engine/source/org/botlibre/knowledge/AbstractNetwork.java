@@ -26,7 +26,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -75,6 +74,10 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		this.isShortTerm = isShortTerm;
 		this.verticiesByData = new HashMap<Object, Vertex>();
 	}
+	
+	public boolean isReadOnly() {
+		return false;
+	}
 
 	protected Map<Object, Vertex> getVerticiesByData() {
 		return verticiesByData;
@@ -82,6 +85,20 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 
 	protected void setVerticiesByData(Map<Object, Vertex> verticiesByData) {
 		this.verticiesByData = verticiesByData;
+	}
+
+	/**
+	 * Save the property setting to the current transaction.
+	 */
+	public void saveProperty(String propertyName, String value, boolean startup) {
+		this.bot.memory().setProperty(propertyName, value);
+	}
+
+	/**
+	 * Remove the property setting to the current transaction.
+	 */
+	public void removeProperty(String propertyName) {
+		this.bot.memory().removeProperty(propertyName);
 	}
 	
 	/**
@@ -107,7 +124,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		return writer.toString();
 	}
 	
-	protected abstract void addVertex(Vertex vertex);
+	public abstract void addVertex(Vertex vertex);
 	
 	protected abstract void addRelationship(Relationship relationship);
 	
@@ -117,9 +134,18 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 	 */
 	public synchronized Vertex createVertex() {
 		BasicVertex vertex = new BasicVertex();
-		vertex.setCreationDate(new Date());
-		vertex.incrementAccessCount();
+		vertex.init();
 		addVertex(vertex);
+		return vertex;
+	}
+	
+	/**
+	 * Create a temporary, non-persistent vertex.
+	 */
+	public Vertex createTemporyVertex() {
+		BasicVertex vertex = new BasicVertex();
+		vertex.setIsTemporary(true);
+		vertex.setNetwork(this);
 		return vertex;
 	}
 	
@@ -187,8 +213,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		}
 		if (vertex == null) {
 			vertex = new BasicVertex();
-			vertex.setCreationDate(new Date());
-			vertex.incrementAccessCount();
+			vertex.init();
 			vertex.setData(data);
 			addVertex(vertex);
 			if (meaning != null) {
@@ -775,7 +800,10 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		if (text.length() < MAX_TEXT) {
 			pattern = createVertex(code);
 			if (pattern.instanceOf(Primitive.PATTERN)) {
-				return pattern;
+				Collection<Relationship> words = pattern.getRelationships(Primitive.WORD);
+				if (words != null && words.size() == pattern.getWordCount()) {
+					return pattern;
+				}
 			}
 		} else {
 			pattern = createVertex();
@@ -864,6 +892,12 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 				precedence = false;
 			}
 		}
+		Collection<Relationship> words = pattern.getRelationships(Primitive.WORD);
+		if (words == null) {
+			pattern.setWordCount(0);
+		} else {
+			pattern.setWordCount(words.size());
+		}
 		return pattern;
 	}
 	
@@ -897,7 +931,8 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		}
 		TextStream formulaStream = new TextStream(code);
 		formulaStream.setPosition(8);
-		return SelfCompiler.getCompiler().parseFormula(formula, formulaStream, false, this);
+		formula = SelfCompiler.getCompiler().parseFormula(formula, formulaStream, false, this);
+		return formula;
 	}
 	
 	/**
@@ -948,7 +983,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		String text = (String)sentence.getData();
 		if (!sentence.hasRelationship(Primitive.SYNONYM)) {
 			String reduced = Utils.reduce(text);
-			if (!text.equals(reduced)) {
+			if (!text.equals(reduced) && !reduced.isEmpty()) {
 				sentence.addRelationship(Primitive.SYNONYM, createSentence(reduced, true, true, false));
 			}
 		}
@@ -1142,6 +1177,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		}
 		if (speaker == null) {
 			speaker = createNewObject(Utils.capitalize(name));
+			speaker.addRelationship(Primitive.NAME, createWord(Utils.capitalize(name)));
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			if (name == TextEntry.DEFAULT_SPEAKER) {
@@ -1177,7 +1213,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		long millis = System.currentTimeMillis();
 		Timestamp timestamp = new Timestamp(millis);
 		timestamp.setNanos((int)nanos);
-		return createVertex(timestamp);		
+		return createVertex(timestamp);
 	}
 	
 	/**

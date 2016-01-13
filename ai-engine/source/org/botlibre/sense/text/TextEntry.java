@@ -61,6 +61,9 @@ public class TextEntry extends BasicSense {
 	 * The writer is the stream, text-box or chat client to output text to.
 	 */
 	protected Writer writer;
+	
+	/** Allows contact info to be passed to sense. */
+	protected String info;
 
 	public TextEntry() {
 	}
@@ -86,6 +89,14 @@ public class TextEntry extends BasicSense {
 		}
 	}
 	
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
 	/**
 	 * Return the writer used to output text to.
 	 */
@@ -146,6 +157,10 @@ public class TextEntry extends BasicSense {
 		if (speaker == null) {
 			speaker = network.createSpeaker(DEFAULT_SPEAKER);
 			speaker.addRelationship(Primitive.ASSOCIATED, Primitive.ANONYMOUS);
+			if (this.info != null && !this.info.isEmpty()) {
+				String name = new TextStream(this.info).nextWord();
+				speaker.addRelationship(Primitive.NAME, network.createName(name));
+			}
 			setUser(speaker);
 		}
 
@@ -154,7 +169,7 @@ public class TextEntry extends BasicSense {
 		
 		input.addRelationship(Primitive.SPEAKER, speaker);
 		speaker.addRelationship(Primitive.INPUT, input);
-		if (this.emotionalState != EmotionalState.NONE) {
+		if (this.emotionalState != null && this.emotionalState != EmotionalState.NONE) {
 			this.emotionalState.apply(input);
 			if (applyEmote) {
 				this.emotionalState.apply(input.getRelationship(Primitive.INPUT));
@@ -174,6 +189,12 @@ public class TextEntry extends BasicSense {
 			setConversation(conversation);
 			conversation.addRelationship(Primitive.SPEAKER, speaker);
 			conversation.addRelationship(Primitive.SPEAKER, Primitive.SELF);
+			if (this.info != null && !this.info.isEmpty()) {
+				Vertex infoInput = createInputSentence("Info: " + this.info.trim(), network);
+				infoInput.addRelationship(Primitive.INSTANTIATION, Primitive.CHAT);
+				Language.addToConversation(infoInput, conversation);
+				System.out.println("addToConversation: " + infoInput);
+			}
 		}
 		if (!newConversation) {
 			Language.addToConversation(input, conversation);
@@ -229,6 +250,9 @@ public class TextEntry extends BasicSense {
 	public void clearConversation() {
 		this.conversationId = null;
 		this.userId = null;
+		this.action = null;
+		this.emotionalState = EmotionalState.NONE;
+		this.info = null;
 	}
 	
 	/**
@@ -523,8 +547,14 @@ public class TextEntry extends BasicSense {
 		Network network = this.bot.memory().newMemory();
 		Vertex question = null;
 		Vertex answer = null;
+		boolean first = true;
+		boolean isDefault = false;
 		while (!stream.atEnd()) {
 			String line = stream.nextLine().trim();
+			if (first && line.indexOf("<?xml") != -1) {
+				throw new SelfParseException("Chat log format must be text, not XML", stream);					
+			}
+			first = false;
 			String originalLine = line;
 			// Skip blank lines.
 			while (line.isEmpty()) {
@@ -549,15 +579,16 @@ public class TextEntry extends BasicSense {
 				command = "";
 			}
 			if (command.equalsIgnoreCase("default")) {
+				isDefault = true;
 				Vertex language = network.createVertex(Language.class);
-				Vertex sentence = network.createSentence(line);
-				sentence.setPinned(true);
-				language.addRelationship(Primitive.RESPONSE, sentence);
+				question = network.createSentence(line);
+				question.setPinned(true);
+				language.addRelationship(Primitive.RESPONSE, question);
 			} else if (command.equalsIgnoreCase("greeting")) {
 				Vertex language = network.createVertex(Language.class);
-				Vertex sentence = network.createSentence(line);
-				sentence.setPinned(true);
-				language.addRelationship(Primitive.GREETING, sentence);
+				question = network.createSentence(line);
+				question.setPinned(true);
+				language.addRelationship(Primitive.GREETING, question);
 			} else if (command.equalsIgnoreCase("script")) {
 				SelfCompiler.getCompiler().evaluateEquation(
 						line, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), false, network);
@@ -572,45 +603,156 @@ public class TextEntry extends BasicSense {
 				}
 				Language.addSentenceRequiredMeta(question, answer, line, network);
 			} else if (command.equalsIgnoreCase("emotions")) {
-				if (question == null || answer == null) {
-					throw new BotException("Missing question and response for emotions");
+				if (question == null) {
+					throw new BotException("Missing phrase for emotions");
 				}
-				Language.addSentenceEmotesMeta(question, answer, line, network);
+				if (answer == null) {
+					question.internalRemoveRelationships(Primitive.EMOTION);
+					for (String emote : Utils.getWords(line)) {
+						if (!emote.equals("none")) {
+							try {
+								EmotionalState.valueOf(emote.toUpperCase()).apply(question);
+							} catch (Exception exception) {
+								throw new BotException("Invalid emotion: " + emote);
+							}
+						}
+					}					
+				} else {
+					Language.addSentenceEmotesMeta(question, answer, line, network);
+				}
 			} else if (command.equalsIgnoreCase("actions")) {
-				if (question == null || answer == null) {
-					throw new BotException("Missing question and response for actions");
+				if (question == null) {
+					throw new BotException("Missing phrase for actions");
 				}
-				Language.addSentenceActionMeta(question, answer, line, network);
+				if (answer == null) {
+					question.internalRemoveRelationships(Primitive.ACTION);
+					for (String action : Utils.getWords(line)) {
+						if (!action.equals("none")) {
+							question.addRelationship(Primitive.ACTION, new Primitive(action));
+						}
+					}					
+				} else {
+					Language.addSentenceActionMeta(question, answer, line, network);
+				}
 			} else if (command.equalsIgnoreCase("poses")) {
-				if (question == null || answer == null) {
-					throw new BotException("Missing question and response for poses");
+				if (question == null) {
+					throw new BotException("Missing phrase for poses");
 				}
-				Language.addSentencePoseMeta(question, answer, line, network);
+				if (answer == null) {
+					question.internalRemoveRelationships(Primitive.POSE);
+					for (String pose : Utils.getWords(line)) {
+						if (!pose.equals("none")) {
+							question.addRelationship(Primitive.POSE, new Primitive(pose));
+						}
+					}					
+				} else {
+					Language.addSentencePoseMeta(question, answer, line, network);
+				}
 			} else if (command.equalsIgnoreCase("previous")) {
-				if (question == null || answer == null) {
+				if (question == null || (answer == null && !isDefault)) {
 					throw new BotException("Missing question and response for previous");
 				}
 				Vertex previous = network.createSentence(line);
 				if (pin) {
 					previous.setPinned(true);
 				}
-				Language.addSentencePreviousMeta(question, answer, previous, false, network);
+				if (isDefault) {
+					Vertex language = network.createVertex(Language.class);
+					Language.addSentencePreviousMeta(language, question, previous, false, network);
+				} else {
+					Language.addSentencePreviousMeta(question, answer, previous, false, network);
+				}
 			} else if (command.equalsIgnoreCase("require previous")) {
-				if (question == null || answer == null) {
+				if (question == null || (answer == null && !isDefault)) {
 					throw new BotException("Missing question and response for previous");
 				}
 				Vertex previous = network.createSentence(line);
 				if (pin) {
 					previous.setPinned(true);
 				}
-				Language.addSentencePreviousMeta(question, answer, previous, true, network);
-			} else if (command.equalsIgnoreCase("topic")) {
-				if (question == null || answer == null) {
-					throw new BotException("Missing question and response for topic");
+				if (isDefault) {
+					Vertex language = network.createVertex(Language.class);
+					Language.addSentencePreviousMeta(language, question, previous, true, network);
+				} else {
+					Language.addSentencePreviousMeta(question, answer, previous, true, network);
 				}
-				Language.addSentenceTopicMeta(question, answer, line, network);
+			} else if (command.equalsIgnoreCase("label")) {
+				if (question == null) {
+					throw new BotException("Missing phrase for label");
+				}
+				if (line.startsWith("#")) {
+					line = line.substring(1, line.length());
+				}
+				if (!Utils.isAlphaNumeric(line)) {
+					throw new BotException("A label must be a single alpha numeric string with no spaces (use - for a space) - " + line);
+				}
+				Vertex label = network.createVertex(new Primitive(line));
+				if (pin) {
+					label.setPinned(true);
+				}
+				label.addRelationship(Primitive.INSTANTIATION, Primitive.LABEL);
+				if (answer == null) {
+					question.setRelationship(Primitive.LABEL, label);
+					label.setRelationship(Primitive.RESPONSE, question);
+				} else {
+					answer.setRelationship(Primitive.LABEL, label);
+					label.setRelationship(Primitive.RESPONSE, answer);
+				}
+			} else if (command.equalsIgnoreCase("on repeat")) {
+				if (question == null) {
+					throw new BotException("Missing question for on repeat");
+				}
+				Vertex repeat = network.createSentence(line);
+				if (pin) {
+					repeat.setPinned(true);
+				}
+				if (answer == null) {
+					question.addRelationship(Primitive.ONREPEAT, repeat);
+				} else {
+					answer.addRelationship(Primitive.ONREPEAT, repeat);
+				}
+			} else if (command.equalsIgnoreCase("no repeat")) {
+				if (question == null) {
+					throw new BotException("Missing question for no repeat");
+				}
+				if (answer == null) {
+					question.addRelationship(Primitive.REQUIRE, Primitive.NOREPEAT);
+				} else {
+					answer.addRelationship(Primitive.REQUIRE, Primitive.NOREPEAT);
+				}
+			} else if (command.equalsIgnoreCase("topic")) {
+				if (question == null) {
+					throw new BotException("Missing phrase for topic");
+				}
+				if (answer == null) {
+					if (isDefault) {
+						Vertex language = network.createVertex(Language.class);
+						Language.addSentenceTopicMeta(language, question, line, network);
+					} else {
+						Vertex topicFragment = network.createFragment(line);
+						topicFragment.addRelationship(Primitive.INSTANTIATION, Primitive.TOPIC);
+						network.createVertex(Primitive.TOPIC).addRelationship(Primitive.INSTANCE, topicFragment);
+						topicFragment.addRelationship(Primitive.QUESTION, question);
+						question.setRelationship(Primitive.TOPIC, topicFragment);
+					}
+				} else {
+					Language.addSentenceTopicMeta(question, answer, line, network);
+				}
 			} else {
-				Vertex sentence = network.createSentence(originalLine);
+				isDefault = false;
+				Vertex sentence = null;
+				if (originalLine.startsWith("#")) {
+					originalLine = originalLine.substring(1, originalLine.length());
+					if (!Utils.isAlphaNumeric(originalLine)) {
+						throw new BotException("A label must be a single alpha numeric string with no spaces (use - for a space) - " + originalLine);
+					}
+					sentence = network.createVertex(new Primitive(originalLine));
+					if (!sentence.hasRelationship(Primitive.INSTANTIATION, Primitive.LABEL)) {
+						throw new BotException("Missing label - #" + originalLine);								
+					}
+				} else {
+					sentence = network.createSentence(originalLine);
+				}
 				if (pin) {
 					sentence.setPinned(true);
 				}
@@ -639,8 +781,13 @@ public class TextEntry extends BasicSense {
 		Network network = this.bot.memory().newMemory();
 		Vertex question = null;
 		Vertex answer = null;
+		boolean first = true;
 		while (!stream.atEnd()) {
 			String line = stream.nextLine().trim();
+			if (first && line.indexOf("<?xml") != -1) {
+				throw new SelfParseException("Chat log format must be text, not XML", stream);					
+			}
+			first = false;
 			// Skip blank lines.
 			while (line.isEmpty()) {
 				if (stream.atEnd()) {

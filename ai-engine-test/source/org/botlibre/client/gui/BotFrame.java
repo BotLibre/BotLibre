@@ -202,7 +202,7 @@ public class BotFrame extends JFrame {
 				return;
 			}
 			try {
-				setBot(Bot.createInstanceFromPool(database));
+				setBot(Bot.createInstanceFromPool(database, false));
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
@@ -308,9 +308,9 @@ public class BotFrame extends JFrame {
 			getBot().memory().deleteMemory();
 			getBot().shutdown();
 			if (getBot().memory().getMemoryName().equals("cache")) {
-				Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache");
+				Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
 			}
-			setBot(Bot.createInstance(Bot.CONFIG_FILE, getBot().memory().getMemoryName()));
+			setBot(Bot.createInstance(Bot.CONFIG_FILE, getBot().memory().getMemoryName(), false));
 		}
 	}
 	
@@ -338,7 +338,7 @@ public class BotFrame extends JFrame {
 	public BotFrame() {	
         super("Bot");
         
-        Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache");
+        Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
         
 		setBot(Bot.createInstance());
 		

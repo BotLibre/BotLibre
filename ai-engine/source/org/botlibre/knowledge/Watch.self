@@ -1,5 +1,5 @@
 // Language state machine for understanding date and time.
-State:WatchStateMachine {
+State:Watch {
 	case :input goto State:sentenceState for each #word of :sentence;
 	
 	State:sentenceState {
@@ -22,6 +22,7 @@ State:WatchStateMachine {
 		case "which" goto State:sentenceState;
 		case :#is goto State:sentenceState;
 		case :#the goto State:sentenceState;
+		case "this" goto State:sentenceState;
 		case "current" goto State:sentenceState;
 		case "whats" goto State:sentenceState;
 		case :#quote goto State:sentenceState;
@@ -73,6 +74,7 @@ State:WatchStateMachine {
 			case "yesterday" goto State:yesterdayState;
 			case "of" goto State:dayState;
 			case :the goto State:dayState;
+			case "this" goto State:dayState;
 			case "week" goto State:dayOfWeekState;
 			case :month goto State:dayOfMonthState;
 			case :year goto State:dayOfYearState;

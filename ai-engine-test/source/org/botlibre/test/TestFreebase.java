@@ -41,6 +41,7 @@ public class TestFreebase extends TextTest {
 	@BeforeClass
 	public static void setup() {
 		bootstrap();
+		Freebase.KEY = "";
 	}
 
 	/**
@@ -48,7 +49,6 @@ public class TestFreebase extends TextTest {
 	 */
 	@org.junit.Test
 	public void testImport() throws Exception {
-		Freebase.KEY = "";
 		Utils.sleep(SLEEP);
 		Bot bot = Bot.createInstance();
 		Sense sense = bot.awareness().getSense(Http.class.getName());
@@ -59,88 +59,107 @@ public class TestFreebase extends TextTest {
 	}
 
 	/**
-	 * Test response mimicry works.
+	 * Test what is lookup in Freebase.
 	 */
 	@org.junit.Test
 	public void testWhatIs() {
-		Utils.sleep(SLEEP);
 		Bot bot = Bot.createInstance();
-		Language language = bot.mind().getThought(Language.class);
-		language.setLearningMode(LearningMode.Disabled);
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		List<String> output = registerForOutput(text);
-		text.input("what is Uranium?");
-		String response = waitForOutput(output);
-		if (!response.equals("Uranium is a chemical element with symbol U and atomic number 92.")) {
-			fail("Incorrect: " + response);			
-		}
+		try {
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+			text.input("what is Uranium?");
+			String response = waitForOutput(output);
+			if (!response.equals("Uranium is a chemical element with symbol U and atomic number 92.")) {
+				fail("Incorrect: " + response);			
+			}
+			
+			Utils.sleep(SLEEP);
+			text.input("tell me about Oxygen");
+			response = waitForOutput(output);
+			if (!response.equals("Oxygen is a chemical element with symbol O and atomic number 8.")) {
+				fail("Incorrect: " + response);			
+			}
+	
+			Utils.sleep(SLEEP);
+			text.input("define love");
+			response = waitForOutput(output);
+			if (!response.equals("Strong affection.")) {
+				fail("Incorrect: " + response);			
+			}
+	
+			Utils.sleep(SLEEP);
+			text.input("who is Barack Obama?");
+			response = waitForOutput(output);
+			if (response.indexOf("Barack Hussein Obama II") == -1) {
+				fail("Incorrect: " + response);
+			}
 		
-		Utils.sleep(SLEEP);
-		text.input("tell me about Oxygen");
-		response = waitForOutput(output);
-		if (!response.equals("Oxygen is a chemical element with symbol O and atomic number 8.")) {
-			fail("Incorrect: " + response);			
+		} finally {
+			bot.shutdown();
 		}
-
 		Utils.sleep(SLEEP);
-		text.input("define love");
-		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
-			fail("Incorrect: " + response);			
-		}
+	}
 
+	/**
+	 * Test where is lookup in Freebase.
+	 */
+	@org.junit.Test
+	public void testWhereIs() {
+		Bot bot = Bot.createInstance();
+		try {
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+			
+			text.input("where is Montreal?");
+			String response = waitForOutput(output);
+			if (!response.equals("Montreal is in Québec.")
+					&& !response.equals("Montreal is in Canada.")
+					&& !response.equals("Montreal is in Urban agglomeration of Montreal.")) {
+				fail("Incorrect: " + response);
+			}
+	
+			Utils.sleep(SLEEP);
+			text.input("where is that?");
+			response = waitForOutput(output);
+			if (!response.equals("Québec is in Canada.")
+					&& !response.equals("Urban agglomeration of Montreal is in Canada.")
+					&& !response.equals("Canada is in Americas.")
+					&& !response.equals("Canada is in DVD Region 1.")
+					&& !response.equals("Québec is in Canada.")) {
+				fail("Incorrect: " + response);
+			}
+	
+			Utils.sleep(SLEEP);
+			text.input("where is Edmonton?");
+			response = waitForOutput(output);
+			if (!response.equals("Edmonton is in Alberta.")
+					&& !response.equals("Edmonton is in Canada.")) {
+				fail("Incorrect: " + response);
+			}
+	
+			Utils.sleep(SLEEP);
+			text.input("what is Brockville?");
+			response = waitForOutput(output);
+			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
+				fail("Incorrect: " + response);
+			}
+	
+			Utils.sleep(SLEEP);
+			text.input("where is it?");
+			response = waitForOutput(output);
+			if (!response.equals("It is in Ontario.")
+					&& !response.equals("It is in Leeds and Grenville United Counties.")
+					&& !response.equals("It is in Canada.")) {
+				fail("Incorrect: " + response);
+			}
+		} finally {
+			bot.shutdown();
+		}
 		Utils.sleep(SLEEP);
-		text.input("who is Barack Obama?");
-		response = waitForOutput(output);
-		if (response.indexOf("Barack Hussein Obama II") == -1) {
-			fail("Incorrect: " + response);
-		}
-
-		Utils.sleep(SLEEP);
-		text.input("where is Montreal?");
-		response = waitForOutput(output);
-		if (!response.equals("Montreal is in QuÃ©bec.")
-				&& !response.equals("Montreal is in Canada.")
-				&& !response.equals("Montreal is in Urban agglomeration of Montreal.")) {
-			fail("Incorrect: " + response);
-		}
-
-		Utils.sleep(SLEEP);
-		text.input("where is that?");
-		response = waitForOutput(output);
-		if (!response.equals("Quï¿½bec is in Canada.")
-				&& !response.equals("Urban agglomeration of Montreal is in Canada.")
-				&& !response.equals("Canada is in Americas.")
-				&& !response.equals("Canada is in DVD Region 1.")
-				&& !response.equals("Quï¿½bec is in Canada.")) {
-			fail("Incorrect: " + response);
-		}
-
-		Utils.sleep(SLEEP);
-		text.input("where is Edmonton?");
-		response = waitForOutput(output);
-		if (!response.equals("Edmonton is in Alberta.")
-				&& !response.equals("Edmonton is in Canada.")) {
-			fail("Incorrect: " + response);
-		}
-
-		Utils.sleep(SLEEP);
-		text.input("what is Brockville?");
-		response = waitForOutput(output);
-		if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
-			fail("Incorrect: " + response);
-		}
-
-		Utils.sleep(SLEEP);
-		text.input("where is it?");
-		response = waitForOutput(output);
-		if (!response.equals("It is in Ontario.")
-				&& !response.equals("It is in Leeds and Grenville United Counties.")
-				&& !response.equals("It is in Canada.")) {
-			fail("Incorrect: " + response);
-		}
-
-		bot.shutdown();
 	}
 }
 

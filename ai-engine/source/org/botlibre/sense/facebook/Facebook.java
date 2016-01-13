@@ -286,15 +286,15 @@ public class Facebook extends BasicSense {
 	 */
 	@Override
 	public void awake() {
-		Network memory = getBot().memory().newMemory();
-		Vertex facebook = memory.createVertex(getPrimitive());
-		Vertex user = facebook.getRelationship(Primitive.USER);
-		if (user != null) {
-			this.userName = (String)user.getData();
+		this.userName = this.bot.memory().getProperty("Facebook.user");
+		if (this.userName == null) {
+			this.userName = "";
 		}
-		Vertex token = facebook.getRelationship(Primitive.TOKEN);
-		if (token != null) {
-			this.token = (String)token.getData();
+		this.token = this.bot.memory().getProperty("Facebook.token");
+		if (this.token == null) {
+			this.token = "";
+		}
+		if (!this.token.isEmpty()) {
 			setIsEnabled(true);
 		}
 	}
@@ -311,39 +311,53 @@ public class Facebook extends BasicSense {
 			if (this.initProperties) {
 				return;
 			}
+			getBot().memory().loadProperties("Facebook");
 			Network memory = getBot().memory().newMemory();
 			Vertex facebook = memory.createVertex(getPrimitive());
-			Vertex tokenExpiry = facebook.getRelationship(Primitive.TOKENEXPIRY);
-			if (tokenExpiry != null) {
-				this.tokenExpiry = new Date((Long)tokenExpiry.getData());
-			}
-			Vertex property = facebook.getRelationship(Primitive.WELCOME);
+			
+			String property = this.bot.memory().getProperty("Facebook.tokenExpiry");
 			if (property != null) {
-				this.welcomeMessage = (String)property.getData();
+				this.tokenExpiry = new Date(Long.valueOf(property));
 			}
-			property = facebook.getRelationship(Primitive.NAME);
+			property = this.bot.memory().getProperty("Facebook.welcomeMessage");
 			if (property != null) {
-				this.profileName = (String)property.getData();
+				this.welcomeMessage = property;
 			}
-			property = facebook.getRelationship(Primitive.PAGE);
+			property = this.bot.memory().getProperty("Facebook.profileName");
 			if (property != null) {
-				this.page = (String)property.getData();
+				this.profileName = property;
 			}
-			property = facebook.getRelationship(Primitive.AUTOFRIEND);
+			property = this.bot.memory().getProperty("Facebook.page");
 			if (property != null) {
-				this.autoFriend = (Boolean)property.getData();
+				this.page = property;
 			}
-			property = facebook.getRelationship(Primitive.MAXFRIENDS);
+			property = this.bot.memory().getProperty("Facebook.autoFriend");
 			if (property != null) {
-				this.maxFriends = ((Number)property.getData()).intValue();
+				this.autoFriend = Boolean.valueOf(property);
 			}
-			property = facebook.getRelationship(Primitive.MAXSTATUSCHECKS);
+			property = this.bot.memory().getProperty("Facebook.maxFriends");
 			if (property != null) {
-				this.maxPost = ((Number)property.getData()).intValue();
+				this.maxFriends = Integer.valueOf(property);
 			}
-			property = facebook.getRelationship(Primitive.PROCESSSTATUS);
+			property = this.bot.memory().getProperty("Facebook.maxPost");
 			if (property != null) {
-				this.processPost = (Boolean)property.getData();
+				this.maxPost = Integer.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.processPost");
+			if (property != null) {
+				this.processPost = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.replyToMessages");
+			if (property != null) {
+				this.replyToMessages = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.autoPost");
+			if (property != null) {
+				this.autoPost = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.autoPostHours");
+			if (property != null) {
+				this.autoPostHours = Integer.valueOf(property);
 			}
 			this.statusKeywords = new ArrayList<String>();
 			List<Relationship> keywords = facebook.orderedRelationships(Primitive.STATUSKEYWORDS);
@@ -393,45 +407,171 @@ public class Facebook extends BasicSense {
 					this.rssKeywords.add(text);
 				}
 			}
-			property = facebook.getRelationship(Primitive.REPLYTOMESSAGES);
-			if (property != null) {
-				this.replyToMessages = (Boolean)property.getData();
-			}
-			property = facebook.getRelationship(Primitive.AUTOPOST);
-			if (property != null) {
-				this.autoPost = (Boolean)property.getData();
-			}
-			property = facebook.getRelationship(Primitive.AUTOPOSTHOURS);
-			if (property != null) {
-				this.autoPostHours = ((Number)property.getData()).intValue();
-			}
 			this.initProperties = true;
 		}
 	}
 
-	public void saveProperties(List<String> autoPosts) {
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
 		Network memory = getBot().memory().newMemory();
 		Vertex facebook = memory.createVertex(getPrimitive());
+		
+		// Load old properties.
+		Vertex user = facebook.getRelationship(Primitive.USER);
+		if (user != null) {
+			this.userName = (String)user.getData();
+		}
+		Vertex token = facebook.getRelationship(Primitive.TOKEN);
+		if (token != null) {
+			this.token = (String)token.getData();
+			setIsEnabled(true);
+		}		
+		Vertex tokenExpiry = facebook.getRelationship(Primitive.TOKENEXPIRY);
+		if (tokenExpiry != null) {
+			this.tokenExpiry = new Date((Long)tokenExpiry.getData());
+		}
+		Vertex property = facebook.getRelationship(Primitive.WELCOME);
+		if (property != null) {
+			this.welcomeMessage = (String)property.getData();
+		}
+		property = facebook.getRelationship(Primitive.NAME);
+		if (property != null) {
+			this.profileName = (String)property.getData();
+		}
+		property = facebook.getRelationship(Primitive.PAGE);
+		if (property != null) {
+			this.page = (String)property.getData();
+		}
+		property = facebook.getRelationship(Primitive.AUTOFRIEND);
+		if (property != null) {
+			this.autoFriend = (Boolean)property.getData();
+		}
+		property = facebook.getRelationship(Primitive.MAXFRIENDS);
+		if (property != null) {
+			this.maxFriends = ((Number)property.getData()).intValue();
+		}
+		property = facebook.getRelationship(Primitive.MAXSTATUSCHECKS);
+		if (property != null) {
+			this.maxPost = ((Number)property.getData()).intValue();
+		}
+		property = facebook.getRelationship(Primitive.PROCESSSTATUS);
+		if (property != null) {
+			this.processPost = (Boolean)property.getData();
+		}
+		this.statusKeywords = new ArrayList<String>();
+		List<Relationship> keywords = facebook.orderedRelationships(Primitive.STATUSKEYWORDS);
+		if (keywords != null) {
+			for (Relationship relationship : keywords) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.statusKeywords.add(text);
+				}
+			}
+		}
+		this.likeKeywords = new ArrayList<String>();
+		keywords = facebook.orderedRelationships(Primitive.LIKEKEYWORDS);
+		if (keywords != null) {
+			for (Relationship relationship : keywords) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.likeKeywords.add(text);
+				}
+			}
+		}
+		this.autoFriendKeywords = new ArrayList<String>();
+		List<Relationship> search = facebook.orderedRelationships(Primitive.AUTOFRIENDKEYWORDS);
+		if (search != null) {
+			for (Relationship relationship : search) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.autoFriendKeywords.add(text);
+				}
+			}
+		}
+		this.postRSS = new ArrayList<String>();
+		List<Relationship> rss = facebook.orderedRelationships(Primitive.RSS);
+		if (rss != null) {
+			for (Relationship relationship : rss) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.postRSS.add(text);
+				}
+			}
+		}
+		this.rssKeywords = new ArrayList<String>();
+		keywords = facebook.orderedRelationships(Primitive.RSSKEYWORDS);
+		if (keywords != null) {
+			for (Relationship relationship : keywords) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				this.rssKeywords.add(text);
+			}
+		}
+		property = facebook.getRelationship(Primitive.REPLYTOMESSAGES);
+		if (property != null) {
+			this.replyToMessages = (Boolean)property.getData();
+		}
+		property = facebook.getRelationship(Primitive.AUTOPOST);
+		if (property != null) {
+			this.autoPost = (Boolean)property.getData();
+		}
+		property = facebook.getRelationship(Primitive.AUTOPOSTHOURS);
+		if (property != null) {
+			this.autoPostHours = ((Number)property.getData()).intValue();
+		}
+		
+		// Remove old properties.
 		facebook.unpinChildren();
-		facebook.setRelationship(Primitive.USER, memory.createVertex(this.userName));
-		facebook.setRelationship(Primitive.TOKEN, memory.createVertex(this.token));
-		if (this.tokenExpiry != null) {
-			facebook.setRelationship(Primitive.TOKENEXPIRY, memory.createVertex(this.tokenExpiry.getTime()));
+		facebook.internalRemoveRelationships(Primitive.USER);
+		facebook.internalRemoveRelationships(Primitive.TOKEN);
+		facebook.internalRemoveRelationships(Primitive.TOKENEXPIRY);
+		facebook.internalRemoveRelationships(Primitive.PAGE);
+		facebook.internalRemoveRelationships(Primitive.NAME);
+		facebook.internalRemoveRelationships(Primitive.WELCOME);
+		facebook.internalRemoveRelationships(Primitive.AUTOFRIEND);
+		facebook.internalRemoveRelationships(Primitive.MAXFRIENDS);
+		facebook.internalRemoveRelationships(Primitive.MAXSTATUSCHECKS);
+		facebook.internalRemoveRelationships(Primitive.PROCESSSTATUS);
+		facebook.internalRemoveRelationships(Primitive.REPLYTOMESSAGES);
+		facebook.internalRemoveRelationships(Primitive.AUTOPOST);
+		facebook.internalRemoveRelationships(Primitive.AUTOPOSTHOURS);
+		
+		memory.save();
+		
+		saveProperties(null);
+	}
+
+	public void saveProperties(List<String> autoPosts) {
+		Network memory = getBot().memory().newMemory();
+		memory.saveProperty("Facebook.user", this.userName, true);
+		memory.saveProperty("Facebook.token", this.token, true);
+		
+		if (this.tokenExpiry == null) {
+			memory.removeProperty("Facebook.tokenExpiry");
+		} else {
+			memory.saveProperty("Facebook.tokenExpiry", String.valueOf(this.tokenExpiry.getTime()), false);
 		}
 
-		facebook.setRelationship(Primitive.PAGE, memory.createVertex(this.page));
-		facebook.setRelationship(Primitive.NAME, memory.createVertex(this.profileName));
-		facebook.setRelationship(Primitive.WELCOME, memory.createVertex(this.welcomeMessage));
-		facebook.setRelationship(Primitive.AUTOFRIEND, memory.createVertex(this.autoFriend));
-		facebook.setRelationship(Primitive.MAXFRIENDS, memory.createVertex(this.maxFriends));
-		facebook.setRelationship(Primitive.MAXSTATUSCHECKS, memory.createVertex(this.maxPost));
-		facebook.setRelationship(Primitive.PROCESSSTATUS, memory.createVertex(this.processPost));
+		memory.saveProperty("Facebook.page", this.page, false);
+		memory.saveProperty("Facebook.profileName", this.profileName, false);
+		memory.saveProperty("Facebook.welcomeMessage", this.welcomeMessage, false);
+		memory.saveProperty("Facebook.autoFriend", String.valueOf(this.autoFriend), false);
+		memory.saveProperty("Facebook.maxFriends", String.valueOf(this.maxFriends), false);
+		memory.saveProperty("Facebook.maxPost", String.valueOf(this.maxPost), false);
+		memory.saveProperty("Facebook.processPost", String.valueOf(this.processPost), false);
+		memory.saveProperty("Facebook.autoFriend", String.valueOf(this.autoFriend), false);
+		memory.saveProperty("Facebook.replyToMessages", String.valueOf(this.replyToMessages), false);
+		memory.saveProperty("Facebook.autoPost", String.valueOf(this.autoPost), false);
+		memory.saveProperty("Facebook.autoPostHours", String.valueOf(this.autoPostHours), false);
+
+		Vertex facebook = memory.createVertex(getPrimitive());
+		facebook.unpinChildren();
 		facebook.internalRemoveRelationships(Primitive.STATUSKEYWORDS);
 		for (String text : this.statusKeywords) {
 			Vertex keywords =  memory.createVertex(text);
 			facebook.addRelationship(Primitive.STATUSKEYWORDS, keywords);
 		}
-		facebook.setRelationship(Primitive.REPLYTOMESSAGES, memory.createVertex(this.replyToMessages));
 		facebook.internalRemoveRelationships(Primitive.LIKEKEYWORDS);
 		for (String text : this.likeKeywords) {
 			Vertex keywords =  memory.createVertex(text);
@@ -447,8 +587,6 @@ public class Facebook extends BasicSense {
 			Vertex keywords =  memory.createVertex(text);
 			facebook.addRelationship(Primitive.RSSKEYWORDS, keywords);
 		}
-		facebook.setRelationship(Primitive.AUTOPOST, memory.createVertex(this.autoPost));
-		facebook.setRelationship(Primitive.AUTOPOSTHOURS, memory.createVertex(this.autoPostHours));
 		if (autoPosts != null) {
 			Collection<Relationship> old = facebook.getRelationships(Primitive.AUTOPOSTS);
 			if (old != null) {
@@ -685,7 +823,7 @@ public class Facebook extends BasicSense {
 					    	}
 					    	if (!userId.equals(this.userName)) {
 						    	if ((System.currentTimeMillis() - statusTime) > DAY) {
-									log("Day old post comment", Level.INFO, statusId, statusTime);
+									log("Day old post comment", Level.FINE, statusId, statusTime);
 						    		more = false;
 						    		continue;
 						    	}
@@ -832,6 +970,10 @@ public class Facebook extends BasicSense {
 				int index = Utils.random().nextInt(autoposts.size());
 				Vertex post = autoposts.get(index);
 				String text = null;
+				// Check for labels and formulas
+				if (post.instanceOf(Primitive.LABEL)) {
+					post = post.mostConscious(Primitive.RESPONSE);
+				}
 				if (post.instanceOf(Primitive.FORMULA)) {
 					Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
 					SelfCompiler.addGlobalVariables(memory.createInstance(Primitive.INPUT), null, memory, variables);

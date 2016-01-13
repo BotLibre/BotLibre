@@ -62,7 +62,6 @@ import twitter4j.conf.ConfigurationBuilder;
 /**
  * Enables receiving a sending messages through Twitter.
  */
-// TODO tweet what's on her mind...
 public class Twitter extends BasicSense {
 	public static int TREND_CHECK = 1000 * 60 * 60 * 1; // 1 hour.
 	public static int MAX_LOOKUP = 100;
@@ -82,6 +81,7 @@ public class Twitter extends BasicSense {
 	protected String welcomeMessage = "";
 	protected int maxFriends = 100;
 	protected int maxFriendsPerCycle = 5;
+	protected int maxWelcomesPerCycle = 20;
 	protected int maxPage = 5;
 	protected int maxStatus = 20;
 	protected int maxFeed = 20;
@@ -89,6 +89,7 @@ public class Twitter extends BasicSense {
 	protected int maxErrors = 5;
 	protected int errors;
 	protected boolean processStatus = false;
+	protected boolean listenStatus = false;
 	protected boolean tweetChats = true;
 	protected boolean replyToMentions = true;
 	protected boolean replyToMessages = true;
@@ -121,6 +122,16 @@ public class Twitter extends BasicSense {
 		this(false);
 	}
 	
+	public boolean getListenStatus() {
+		initProperties();
+		return listenStatus;
+	}
+
+	public void setListenStatus(boolean listenStatus) {
+		initProperties();
+		this.listenStatus = listenStatus;
+	}
+
 	public int getTweets() {
 		return tweets;
 	}
@@ -294,6 +305,39 @@ public class Twitter extends BasicSense {
 	 */
 	@Override
 	public void awake() {
+		String user = this.bot.memory().getProperty("Twitter.user");
+		if (user != null) {
+			this.userName = user;
+		}
+		String token = this.bot.memory().getProperty("Twitter.token");
+		if (token != null) {
+			this.token = token;
+		}
+		String secret = this.bot.memory().getProperty("Twitter.secret");
+		if (secret != null) {
+			String data = secret;
+			// Check if encrypted from && prefix.
+			if (data.startsWith("&&")) {
+				try {
+					this.tokenSecret = Utils.decrypt(Utils.KEY, data.substring(2, data.length()));
+				} catch (Exception exception) {
+					this.tokenSecret = data;
+				}				
+			} else {
+				this.tokenSecret = data;
+			}
+			setIsEnabled(true);
+		}
+		String property = this.bot.memory().getProperty("Twitter.tweetChats");
+		if (property != null) {
+			this.tweetChats = Boolean.valueOf(property);
+		}
+	}
+
+	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
 		Network memory = getBot().memory().newMemory();
 		Vertex twitter = memory.createVertex(getPrimitive());
 		Vertex user = twitter.getRelationship(Primitive.USER);
@@ -323,6 +367,143 @@ public class Twitter extends BasicSense {
 		if (property != null) {
 			this.tweetChats = (Boolean)property.getData();
 		}
+		property = twitter.getRelationship(Primitive.WELCOME);
+		if (property != null) {
+			this.welcomeMessage = (String)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.AUTOFOLLOW);
+		if (property != null) {
+			this.autoFollow = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.AUTOFOLLOWFRIENDSFRIENDS);
+		if (property != null) {
+			this.autoFollowFriendsFriends = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.AUTOFOLLOWFRIENDSFOLLOWERS);
+		if (property != null) {
+			this.autoFollowFriendsFollowers = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.FOLLOWMESSAGES);
+		if (property != null) {
+			this.followMessages = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.MAXFRIENDS);
+		if (property != null) {
+			this.maxFriends = ((Number)property.getData()).intValue();
+		}
+		property = twitter.getRelationship(Primitive.MAXSTATUSCHECKS);
+		if (property != null) {
+			this.maxStatus = ((Number)property.getData()).intValue();
+		}
+		property = twitter.getRelationship(Primitive.PROCESSSTATUS);
+		if (property != null) {
+			this.processStatus = (Boolean)property.getData();
+		}
+		this.statusKeywords = new ArrayList<String>();
+		List<Relationship> keywords = twitter.orderedRelationships(Primitive.STATUSKEYWORDS);
+		if (keywords != null) {
+			for (Relationship relationship : keywords) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.statusKeywords.add(text);
+				}
+			}
+		}
+		this.retweet = new ArrayList<String>();
+		keywords = twitter.orderedRelationships(Primitive.RETWEET);
+		if (keywords != null) {
+			for (Relationship relationship : keywords) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.retweet.add(text);
+				}
+			}
+		}
+		this.autoFollowKeywords = new ArrayList<String>();
+		List<Relationship> search = twitter.orderedRelationships(Primitive.AUTOFOLLOWKEYWORDS);
+		if (search != null) {
+			for (Relationship relationship : search) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.autoFollowKeywords.add(text);
+				}
+			}
+		}
+		this.autoFollowSearch = new ArrayList<String>();
+		search = twitter.orderedRelationships(Primitive.AUTOFOLLOWSEARCH);
+		if (search != null) {
+			for (Relationship relationship : search) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.autoFollowSearch.add(text);
+				}
+			}
+		}
+		this.tweetSearch = new ArrayList<String>();
+		search = twitter.orderedRelationships(Primitive.TWEETSEARCH);
+		if (search != null) {
+			for (Relationship relationship : search) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.tweetSearch.add(text);
+				}
+			}
+		}
+		this.tweetRSS = new ArrayList<String>();
+		List<Relationship> rss = twitter.orderedRelationships(Primitive.TWEETRSS);
+		if (rss != null) {
+			for (Relationship relationship : rss) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					this.tweetRSS.add(text);
+				}
+			}
+		}
+		this.rssKeywords = new ArrayList<String>();
+		keywords = twitter.orderedRelationships(Primitive.RSSKEYWORDS);
+		if (keywords != null) {
+			for (Relationship relationship : keywords) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				this.rssKeywords.add(text);
+			}
+		}
+		property = twitter.getRelationship(Primitive.REPLYTOMENTIONS);
+		if (property != null) {
+			this.replyToMentions = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.REPLYTOMESSAGES);
+		if (property != null) {
+			this.replyToMessages = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.AUTOTWEET);
+		if (property != null) {
+			this.autoTweet = (Boolean)property.getData();
+		}
+		property = twitter.getRelationship(Primitive.AUTOTWEETHOURS);
+		if (property != null) {
+			this.autoTweetHours = ((Number)property.getData()).intValue();
+		}
+		
+		// Remove old properties.
+		twitter.internalRemoveRelationships(Primitive.USER);
+		twitter.internalRemoveRelationships(Primitive.TOKEN);
+		twitter.internalRemoveRelationships(Primitive.SECRET);
+		twitter.internalRemoveRelationships(Primitive.TWEETCHATS);
+		twitter.internalRemoveRelationships(Primitive.WELCOME);
+		twitter.internalRemoveRelationships(Primitive.AUTOFOLLOW);
+		twitter.internalRemoveRelationships(Primitive.AUTOFOLLOWFRIENDSFOLLOWERS);
+		twitter.internalRemoveRelationships(Primitive.FOLLOWMESSAGES);
+		twitter.internalRemoveRelationships(Primitive.MAXFRIENDS);
+		twitter.internalRemoveRelationships(Primitive.MAXSTATUSCHECKS);
+		twitter.internalRemoveRelationships(Primitive.PROCESSSTATUS);
+		twitter.internalRemoveRelationships(Primitive.REPLYTOMENTIONS);
+		twitter.internalRemoveRelationships(Primitive.REPLYTOMESSAGES);
+		twitter.internalRemoveRelationships(Primitive.AUTOTWEET);
+		twitter.internalRemoveRelationships(Primitive.AUTOTWEETHOURS);
+		
+		memory.save();
+		
+		saveProperties(null);
 	}
 
 	
@@ -337,40 +518,66 @@ public class Twitter extends BasicSense {
 			if (this.initProperties) {
 				return;
 			}
+			getBot().memory().loadProperties("Twitter");
+			String property = this.bot.memory().getProperty("Twitter.welcomeMessage");
+			if (property != null) {
+				this.welcomeMessage = property;
+			}
+			property = this.bot.memory().getProperty("Twitter.autoFollow");
+			if (property != null) {
+				this.autoFollow = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.autoFollowFriendsFriends");
+			if (property != null) {
+				this.autoFollowFriendsFriends = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.autoFollowFriendsFollowers");
+			if (property != null) {
+				this.autoFollowFriendsFollowers = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.followMessages");
+			if (property != null) {
+				this.followMessages = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.maxFriends");
+			if (property != null) {
+				this.maxFriends = Integer.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.maxStatus");
+			if (property != null) {
+				this.maxStatus = Integer.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.maxSearch");
+			if (property != null) {
+				this.maxSearch = Integer.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.processStatus");
+			if (property != null) {
+				this.processStatus = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.listenStatus");
+			if (property != null) {
+				this.listenStatus = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.replyToMentions");
+			if (property != null) {
+				this.replyToMentions = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.replyToMessages");
+			if (property != null) {
+				this.replyToMessages = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.autoTweet");
+			if (property != null) {
+				this.autoTweet = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Twitter.autoTweetHours");
+			if (property != null) {
+				this.autoTweetHours = Integer.valueOf(property);
+			}
+
 			Network memory = getBot().memory().newMemory();
 			Vertex twitter = memory.createVertex(getPrimitive());
-			Vertex property = twitter.getRelationship(Primitive.WELCOME);
-			if (property != null) {
-				this.welcomeMessage = (String)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.AUTOFOLLOW);
-			if (property != null) {
-				this.autoFollow = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.AUTOFOLLOWFRIENDSFRIENDS);
-			if (property != null) {
-				this.autoFollowFriendsFriends = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.AUTOFOLLOWFRIENDSFOLLOWERS);
-			if (property != null) {
-				this.autoFollowFriendsFollowers = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.FOLLOWMESSAGES);
-			if (property != null) {
-				this.followMessages = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.MAXFRIENDS);
-			if (property != null) {
-				this.maxFriends = ((Number)property.getData()).intValue();
-			}
-			property = twitter.getRelationship(Primitive.MAXSTATUSCHECKS);
-			if (property != null) {
-				this.maxStatus = ((Number)property.getData()).intValue();
-			}
-			property = twitter.getRelationship(Primitive.PROCESSSTATUS);
-			if (property != null) {
-				this.processStatus = (Boolean)property.getData();
-			}
 			this.statusKeywords = new ArrayList<String>();
 			List<Relationship> keywords = twitter.orderedRelationships(Primitive.STATUSKEYWORDS);
 			if (keywords != null) {
@@ -439,22 +646,7 @@ public class Twitter extends BasicSense {
 					this.rssKeywords.add(text);
 				}
 			}
-			property = twitter.getRelationship(Primitive.REPLYTOMENTIONS);
-			if (property != null) {
-				this.replyToMentions = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.REPLYTOMESSAGES);
-			if (property != null) {
-				this.replyToMessages = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.AUTOTWEET);
-			if (property != null) {
-				this.autoTweet = (Boolean)property.getData();
-			}
-			property = twitter.getRelationship(Primitive.AUTOTWEETHOURS);
-			if (property != null) {
-				this.autoTweetHours = ((Number)property.getData()).intValue();
-			}
+			
 			this.initProperties = true;
 		}
 	}
@@ -463,26 +655,32 @@ public class Twitter extends BasicSense {
 		Network memory = getBot().memory().newMemory();
 		Vertex twitter = memory.createVertex(getPrimitive());
 		twitter.unpinChildren();
-		twitter.setRelationship(Primitive.USER, memory.createVertex(this.userName));
-		twitter.setRelationship(Primitive.TOKEN, memory.createVertex(this.token));
-		twitter.setRelationship(Primitive.SECRET, memory.createVertex("&&" + Utils.encrypt(Utils.KEY, this.tokenSecret)));
 
-		twitter.setRelationship(Primitive.WELCOME, memory.createVertex(this.welcomeMessage));
-		twitter.setRelationship(Primitive.AUTOFOLLOW, memory.createVertex(this.autoFollow));
-		twitter.setRelationship(Primitive.AUTOFOLLOWFRIENDSFRIENDS, memory.createVertex(this.autoFollowFriendsFriends));
-		twitter.setRelationship(Primitive.AUTOFOLLOWFRIENDSFOLLOWERS, memory.createVertex(this.autoFollowFriendsFollowers));
-		twitter.setRelationship(Primitive.FOLLOWMESSAGES, memory.createVertex(this.followMessages));
-		twitter.setRelationship(Primitive.MAXFRIENDS, memory.createVertex(this.maxFriends));
-		twitter.setRelationship(Primitive.MAXSTATUSCHECKS, memory.createVertex(this.maxStatus));
-		twitter.setRelationship(Primitive.PROCESSSTATUS, memory.createVertex(this.processStatus));
+		memory.saveProperty("Twitter.user", this.userName, true);
+		memory.saveProperty("Twitter.token", this.token, true);
+		memory.saveProperty("Twitter.secret", "&&" + Utils.encrypt(Utils.KEY, this.tokenSecret), true);
+		memory.saveProperty("Twitter.tweetChats", String.valueOf(this.tweetChats), true);
+
+		memory.saveProperty("Twitter.welcomeMessage", this.welcomeMessage, false);
+		memory.saveProperty("Twitter.autoFollow", String.valueOf(this.autoFollow), false);
+		memory.saveProperty("Twitter.autoFollowFriendsFriends", String.valueOf(this.autoFollowFriendsFriends), false);
+		memory.saveProperty("Twitter.autoFollowFriendsFollowers", String.valueOf(this.autoFollowFriendsFollowers), false);
+		memory.saveProperty("Twitter.followMessages", String.valueOf(this.followMessages), false);
+		memory.saveProperty("Twitter.maxFriends", String.valueOf(this.maxFriends), false);
+		memory.saveProperty("Twitter.maxStatus", String.valueOf(this.maxStatus), false);
+		memory.saveProperty("Twitter.maxSearch", String.valueOf(this.maxSearch), false);
+		memory.saveProperty("Twitter.processStatus", String.valueOf(this.processStatus), false);
+		memory.saveProperty("Twitter.listenStatus", String.valueOf(this.listenStatus), false);
+		memory.saveProperty("Twitter.replyToMentions", String.valueOf(this.replyToMentions), false);
+		memory.saveProperty("Twitter.replyToMessages", String.valueOf(this.replyToMessages), false);
+		memory.saveProperty("Twitter.autoTweet", String.valueOf(this.autoTweet), false);
+		memory.saveProperty("Twitter.autoTweetHours", String.valueOf(this.autoTweetHours), false);
+		
 		twitter.internalRemoveRelationships(Primitive.STATUSKEYWORDS);
 		for (String text : this.statusKeywords) {
 			Vertex keywords =  memory.createVertex(text);
 			twitter.addRelationship(Primitive.STATUSKEYWORDS, keywords);
 		}
-		twitter.setRelationship(Primitive.TWEETCHATS, memory.createVertex(this.tweetChats));
-		twitter.setRelationship(Primitive.REPLYTOMENTIONS, memory.createVertex(this.replyToMentions));
-		twitter.setRelationship(Primitive.REPLYTOMESSAGES, memory.createVertex(this.replyToMessages));
 		twitter.internalRemoveRelationships(Primitive.RETWEET);
 		for (String text : this.retweet) {
 			Vertex keywords =  memory.createVertex(text);
@@ -513,8 +711,6 @@ public class Twitter extends BasicSense {
 			Vertex keywords =  memory.createVertex(text);
 			twitter.addRelationship(Primitive.RSSKEYWORDS, keywords);
 		}
-		twitter.setRelationship(Primitive.AUTOTWEET, memory.createVertex(this.autoTweet));
-		twitter.setRelationship(Primitive.AUTOTWEETHOURS, memory.createVertex(this.autoTweetHours));
 		if (autoTweets != null) {
 			Collection<Relationship> old = twitter.getRelationships(Primitive.AUTOTWEETS);
 			if (old != null) {
@@ -673,12 +869,17 @@ public class Twitter extends BasicSense {
 				    		}
 					    	boolean match = false;
 				    		List<String> statusWords = new TextStream(status.getText().toLowerCase()).allWords();
-					    	for (String text : getStatusKeywords()) {
-					    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-					    		if (!keywords.isEmpty() && statusWords.containsAll(keywords)) {
-					    			match = true;
-					    			break;
-					    		}
+					    	if (getListenStatus()) {
+					    		this.languageState = LanguageState.Listening;
+				    			match = true;
+					    	} else {
+						    	for (String text : getStatusKeywords()) {
+						    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+						    		if (!keywords.isEmpty() && statusWords.containsAll(keywords)) {
+						    			match = true;
+						    			break;
+						    		}
+						    	}
 					    	}
 					    	if (match) {
 					    		count++;
@@ -689,7 +890,7 @@ public class Twitter extends BasicSense {
 					    		if (!status.isRetweet() && !status.getUser().isProtected() && !status.isRetweetedByMe()) {
 									// Check retweet.
 						    		for (String keywords : getRetweet()) {
-										List<String> keyWords = new TextStream(keywords).allWords();
+										List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
 								    	if (!keyWords.isEmpty()) {
 								    		if (statusWords.containsAll(keyWords)) {
 									    		count++;
@@ -713,6 +914,11 @@ public class Twitter extends BasicSense {
 		    }
 		} catch (Exception exception) {
 			log(exception);
+		}
+		// Wait for language processing.
+		int count = 0;
+		while (count < 60 && !getBot().memory().getActiveMemory().isEmpty()) {
+			Utils.sleep(1000);
 		}
 	}
 
@@ -751,6 +957,7 @@ public class Twitter extends BasicSense {
 				if ((mentions == null) || mentions.isEmpty()) {
 					break;
 				}
+				log("Processing mentions", Level.FINE, mentions.size());
 			    for (int index = mentions.size() - 1; index >= 0; index--) {
 			    	Status tweet = mentions.get(index);
 		    		long statusTime = tweet.getCreatedAt().getTime();
@@ -783,6 +990,12 @@ public class Twitter extends BasicSense {
 		} catch (Exception exception) {
 			log(exception);
 		}
+		// Wait for language processing.
+		int count = 0;
+		while (count < 60 && !getBot().memory().getActiveMemory().isEmpty()) {
+			Utils.sleep(1000);
+		}
+		this.languageState = LanguageState.Discussion;
 	}
 
 	/**
@@ -814,6 +1027,7 @@ public class Twitter extends BasicSense {
 				QueryResult result = search.search(query);
 				List<Status> tweets = result.getTweets();
 			    if (tweets != null) {
+					log("Processing search results", Level.FINE, tweets.size(), tweetSearch);
 				    for (Status tweet : tweets) {
 				    	if (count > this.maxSearch) {
 				    		break;
@@ -891,6 +1105,11 @@ public class Twitter extends BasicSense {
 		} catch (Exception exception) {
 			log(exception);
 		}
+		// Wait for language processing.
+		int count = 0;
+		while (count < 60 && !getBot().memory().getActiveMemory().isEmpty()) {
+			Utils.sleep(1000);
+		}
 	}
 
 	/**
@@ -926,7 +1145,7 @@ public class Twitter extends BasicSense {
 				    	}
 				    	if (tweet.getId() > last) {
 							log("Autofollow search", Level.FINE, tweet.getText(), tweet.getUser().getScreenName(), followSearch);
-					    	if (checkFriendship(tweet.getUser().getId())) {
+					    	if (checkFriendship(tweet.getUser().getId(), false)) {
 								friendCount++;
 							    if (friendCount >= getMaxFriends()) {
 									log("Max friend limit", Level.FINE, getMaxFriends());
@@ -991,6 +1210,7 @@ public class Twitter extends BasicSense {
 					long max = 0;
 					int count = 0;
 					this.errors = 0;
+					log("Processing RSS feed", Level.FINE, feed.size(), rss);
 				    for (int index = feed.size() - 1; index >= 0; index--) {
 				    	Map<String, Object> entry = feed.get(index);
 				    	long time = (Long)entry.get("published");
@@ -1061,6 +1281,10 @@ public class Twitter extends BasicSense {
 				int index = Utils.random().nextInt(autotweets.size());
 				Vertex tweet = autotweets.get(index);
 				String text = null;
+				// Check for labels and formulas
+				if (tweet.instanceOf(Primitive.LABEL)) {
+					tweet = tweet.mostConscious(Primitive.RESPONSE);
+				}
 				if (tweet.instanceOf(Primitive.FORMULA)) {
 					Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
 					SelfCompiler.addGlobalVariables(memory.createInstance(Primitive.INPUT), null, memory, variables);
@@ -1137,6 +1361,30 @@ public class Twitter extends BasicSense {
 	}
 
 	/**
+	 * Return the total number of friends.
+	 */
+	public int getFriendsCount() {
+		try {
+			return getConnection().getFriendsIDs(-1).getIDs().length;
+		} catch (Exception exception) {
+			log(exception);
+			return 0;
+		}
+	}
+
+	/**
+	 * Return the total number of followers.
+	 */
+	public int getFollowersCount() {
+		try {
+			return getConnection().getFollowersIDs(-1).getIDs().length;
+		} catch (Exception exception) {
+			log(exception);
+			return 0;
+		}
+	}
+
+	/**
 	 * Return the list of friends names.
 	 */
 	public List<String> getFriends() {
@@ -1169,77 +1417,93 @@ public class Twitter extends BasicSense {
 	 * Check followers.
 	 */
 	public void checkFollowers() {
-		if (!getAutoFollow()) {
+		if (!getAutoFollow() && getWelcomeMessage().isEmpty()) {
 			return;
 		}
 		try {
 			log("Checking followers", Level.FINE);
-		    long[] followers = getConnection().getFollowersIDs(-1).getIDs(); //max 5000
+		    long[] followerIds = getConnection().getFollowersIDs(-1).getIDs(); //max 5000
 		    long[] friends = getConnection().getFriendsIDs(-1).getIDs();
 		    int friendCount = friends.length;
 		    int count = 0;
+		    boolean welcomeOnly = false;
 		    if (friendCount >= getMaxFriends()) {
-				log("Max friend limit", Level.FINE, getMaxFriends());
-		    	return;
+			    if (!getWelcomeMessage().isEmpty()) {
+			    	welcomeOnly = true;
+			    } else {
+					log("Max friend limit", Level.FINE, getMaxFriends());
+			    	return;
+			    }
 		    }
-		    for (long follower : followers) {
+		    for (int index = 0; index < followerIds.length; index++) {
 		    	boolean found = false;
+		    	long followerId = followerIds[index];
 			    for (long friend : friends) {
-			    	if (follower == friend) {
+			    	if (followerId == friend) {
 			    		found = true;
 			    		break;
 			    	}
 			    }
 		    	if (!found) {
-					log("Checking new follower", Level.FINE, follower);
-			    	boolean isNewFriend = checkFriendship(follower);
-			    	if (isNewFriend) {
-						friendCount++;
-					    if (friendCount >= getMaxFriends()) {
+					log("Checking new follower", Level.FINE, followerId);
+			    	boolean isNewFriend = checkFriendship(followerId, welcomeOnly);
+			    	if (!isNewFriend) {
+			    		// Followers are ordered, so if already followed ignore the rest.
+			    		break;
+			    	}
+					friendCount++;
+				    if (friendCount >= getMaxFriends()) {
+					    if (!getWelcomeMessage().isEmpty()) {
+					    	welcomeOnly = true;
+					    } else {
 					    	return;
 					    }
-						count++;
-					    if (count >= this.maxFriendsPerCycle) {
+				    }
+					count++;
+				    if (count >= this.maxFriendsPerCycle) {
+					    if (!getWelcomeMessage().isEmpty() && count < this.maxWelcomesPerCycle) {
+					    	welcomeOnly = true;
+					    } else {
 							log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
 					    	return;
 					    }
-						if (getAutoFollowFriendsFriends()) {
-							log("Checking friends friends", Level.FINE, follower);
-							long[] friendsFriends = getConnection().getFriendsIDs(follower, -1).getIDs();
-						    for (long friendsFriend : friendsFriends) {
-						    	if (checkFriendship(friendsFriend)) {
-									friendCount++;
-								    if (friendCount >= getMaxFriends()) {
-										log("Max friend limit", Level.FINE, getMaxFriends());
-								    	return;
-								    }
-									count++;
-								    if (count >= this.maxFriendsPerCycle) {
-										log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
-								    	return;
-								    }
-						    	}
-						    }
-						}
-						if (getAutoFollowFriendsFollowers()) {
-							log("Checking friends followers", Level.FINE, follower);
-							long[] friendsFollowers = getConnection().getFollowersIDs(follower, -1).getIDs();
-						    for (long friendsFollower : friendsFollowers) {
-						    	if (checkFriendship(friendsFollower)) {
-									friendCount++;
-								    if (friendCount >= getMaxFriends()) {
-										log("Max friend limit", Level.FINE, getMaxFriends());
-								    	return;
-								    }
-									count++;
-								    if (count >= this.maxFriendsPerCycle) {
-										log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
-								    	return;
-								    }
-						    	}
-						    }
-						}
-			    	}
+				    }
+					if (!welcomeOnly && getAutoFollowFriendsFriends()) {
+						log("Checking friends friends", Level.FINE, followerId);
+						long[] friendsFriends = getConnection().getFriendsIDs(followerId, -1).getIDs();
+					    for (long friendsFriend : friendsFriends) {
+					    	if (checkFriendship(friendsFriend, welcomeOnly)) {
+								friendCount++;
+							    if (friendCount >= getMaxFriends()) {
+									log("Max friend limit", Level.FINE, getMaxFriends());
+							    	return;
+							    }
+								count++;
+							    if (count >= this.maxFriendsPerCycle) {
+									log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
+							    	return;
+							    }
+					    	}
+					    }
+					}
+					if (!welcomeOnly && getAutoFollowFriendsFollowers()) {
+						log("Checking friends followers", Level.FINE, followerId);
+						long[] friendsFollowers = getConnection().getFollowersIDs(followerId, -1).getIDs();
+					    for (long friendsFollower : friendsFollowers) {
+					    	if (checkFriendship(friendsFollower, welcomeOnly)) {
+								friendCount++;
+							    if (friendCount >= getMaxFriends()) {
+									log("Max friend limit", Level.FINE, getMaxFriends());
+							    	return;
+							    }
+								count++;
+							    if (count >= this.maxFriendsPerCycle) {
+									log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
+							    	return;
+							    }
+					    	}
+					    }
+					}
 		    	}
 		    }
 		    checkAutoFollowSearch(friendCount);
@@ -1248,25 +1512,25 @@ public class Twitter extends BasicSense {
 		}
 	}
 	
-	public boolean checkFriendship(long friend) throws TwitterException {
+	public boolean checkFriendship(long friendId, boolean welcomeOnly) throws TwitterException {
 		long[] lookup = new long[1];
-		lookup[0] = friend;
+		lookup[0] = friendId;
 		ResponseList<User> users = getConnection().lookupUsers(lookup);
-		User user = users.get(0);
-		if (user.getScreenName().equals(getUserName())) {
+		User friend = users.get(0);
+		if (friend.getScreenName().equals(getUserName())) {
 			return false;
 		}
 		if (!getAutoFollowKeywords().isEmpty()) {
 			StringWriter writer = new StringWriter();
-			writer.write(user.getScreenName().toLowerCase());
+			writer.write(friend.getScreenName().toLowerCase());
 			writer.write(" ");
-			writer.write(user.getDescription().toLowerCase());
+			writer.write(friend.getDescription().toLowerCase());
 			writer.write(" ");
-			writer.write(user.getLocation().toLowerCase());
+			writer.write(friend.getLocation().toLowerCase());
 			writer.write(" ");
-			writer.write(user.getLang().toLowerCase());
+			writer.write(friend.getLang().toLowerCase());
 			writer.write(" ");
-			writer.write(user.getName().toLowerCase());
+			writer.write(friend.getName().toLowerCase());
 	    	boolean match = false;
 	    	for (String text : getAutoFollowKeywords()) {
 	    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
@@ -1276,25 +1540,30 @@ public class Twitter extends BasicSense {
 	    		}
 	    	}
 	    	if (!match) {
-				log("Autofollow skipping friend, does not match keywords", Level.FINE, user.getScreenName());
+				log("Autofollow skipping friend, does not match keywords", Level.FINE, friend.getScreenName());
 	    		return false;
 	    	}
 		}
 		Network memory = getBot().memory().newMemory();
-    	Vertex speaker = memory.createSpeaker(user.getScreenName());
+    	Vertex speaker = memory.createSpeaker(friend.getScreenName());
+    	speaker.setPinned(true);
     	// Only try to follow a user once.
     	if (!speaker.hasRelationship(Primitive.FOLLOWED)) {
-			log("Adding autofollow friend.", Level.INFO, user.getScreenName());
 	    	speaker.addRelationship(Primitive.FOLLOWED, memory.createTimestamp());
 	    	memory.save();
-			getConnection().createFriendship(friend);
-			Utils.sleep(1000);
+	    	if (!welcomeOnly && getAutoFollow()) {
+				log("Adding autofollow friend.", Level.INFO, friend.getScreenName());
+	    		getConnection().createFriendship(friendId);
+				Utils.sleep(1000);
+	    	}
 			if (!getWelcomeMessage().isEmpty()) {
-				sendMessage(getWelcomeMessage(), user.getScreenName());
+				log("Sending welcome message.", Level.INFO, friend.getScreenName());
+				sendMessage(getWelcomeMessage(), friend.getScreenName());
+				Utils.sleep(1000);
 			}
 			return true;
     	}
-		log("Autofollow skipping friend, already followed once", Level.FINE, user.getScreenName());
+		log("Autofollow skipping friend, already followed once", Level.FINE, friend.getScreenName());
     	return false;
 	}
 	

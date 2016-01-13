@@ -102,6 +102,81 @@ public class Email extends BasicSense {
 	}
 
 	/**
+	 * Migrate to new properties system.
+	 */
+	public void migrateProperties() {
+		Network memory = getBot().memory().newMemory();
+		Vertex sense = memory.createVertex(getPrimitive());
+		Vertex property = sense.getRelationship(Primitive.USER);
+		if (property != null) {
+			this.username = (String)property.getData();
+		}
+		property = sense.getRelationship(Primitive.PASSWORD);
+		if ((property != null) && (this.username != null)) {
+			String data = (String)property.getData();
+			// Check if encrypted from && prefix.
+			if (data.startsWith("&&")) {
+				try {
+					this.password = Utils.decrypt(Utils.KEY, data.substring(2, data.length()));
+				} catch (Exception exception) {
+					this.password = Utils.decrypt(this.username, data);
+				}
+			} else {
+				this.password = Utils.decrypt(this.username, data);					
+			}
+		}
+		property = sense.getRelationship(Primitive.EMAILADDRESS);
+		if (property != null) {
+			this.emailAddress = (String)property.getData();
+			setIsEnabled(true);
+		}
+		property = sense.getRelationship(Primitive.SSL);
+		if (property != null) {
+			this.isSSLRequired = (Boolean)property.getData();
+		}
+		property = sense.getRelationship(Primitive.SIGNATURE);
+		if (property != null) {
+			this.signature = (String)property.getData();
+		}
+		property = sense.getRelationship(Primitive.INCOMINGHOST);
+		if (property != null) {
+			this.incomingHost = (String)property.getData();
+		}
+		property = sense.getRelationship(Primitive.INCOMINGPORT);
+		if (property != null) {
+			this.incomingPort = ((Number)property.getData()).intValue();
+		}
+		property = sense.getRelationship(Primitive.OUTGOINGHOST);
+		if (property != null) {
+			this.outgoingHost = (String)property.getData();
+		}
+		property = sense.getRelationship(Primitive.OUTGOINGPORT);
+		if (property != null) {
+			this.outgoingPort = ((Number)property.getData()).intValue();
+		}
+		property = sense.getRelationship(Primitive.PROTOCOL);
+		if (property != null) {
+			this.protocol = (String)property.getData();
+		}
+		
+		// Remove old properties.
+		sense.internalRemoveRelationships(Primitive.USER);
+		sense.internalRemoveRelationships(Primitive.PASSWORD);
+		sense.internalRemoveRelationships(Primitive.EMAILADDRESS);
+		sense.internalRemoveRelationships(Primitive.SSL);
+		sense.internalRemoveRelationships(Primitive.SIGNATURE);
+		sense.internalRemoveRelationships(Primitive.INCOMINGHOST);
+		sense.internalRemoveRelationships(Primitive.INCOMINGPORT);
+		sense.internalRemoveRelationships(Primitive.OUTGOINGHOST);
+		sense.internalRemoveRelationships(Primitive.OUTGOINGPORT);
+		sense.internalRemoveRelationships(Primitive.PROTOCOL);
+		
+		memory.save();
+		
+		saveProperties();
+	}
+
+	/**
 	 * Load settings.
 	 */
 	public void initProperties() {
@@ -112,58 +187,56 @@ public class Email extends BasicSense {
 			if (this.initProperties) {
 				return;
 			}
-			Network memory = getBot().memory().newMemory();
-			Vertex sense = memory.createVertex(getPrimitive());
-			Vertex property = sense.getRelationship(Primitive.USER);
+			getBot().memory().loadProperties("Email");
+			String property = this.bot.memory().getProperty("Email.user");
 			if (property != null) {
-				this.username = (String)property.getData();
+				this.username = property;
 			}
-			property = sense.getRelationship(Primitive.PASSWORD);
+			property = this.bot.memory().getProperty("Email.password");
 			if ((property != null) && (this.username != null)) {
-				String data = (String)property.getData();
 				// Check if encrypted from && prefix.
-				if (data.startsWith("&&")) {
+				if (property.startsWith("&&")) {
 					try {
-						this.password = Utils.decrypt(Utils.KEY, data.substring(2, data.length()));
+						this.password = Utils.decrypt(Utils.KEY, property.substring(2, property.length()));
 					} catch (Exception exception) {
-						this.password = Utils.decrypt(this.username, data);
+						this.password = Utils.decrypt(this.username, property);
 					}
 				} else {
-					this.password = Utils.decrypt(this.username, data);					
+					this.password = Utils.decrypt(this.username, property);					
 				}
 			}
-			property = sense.getRelationship(Primitive.EMAILADDRESS);
+			property = this.bot.memory().getProperty("Email.emailAddress");
 			if (property != null) {
-				this.emailAddress = (String)property.getData();
+				this.emailAddress = property;
 				setIsEnabled(true);
 			}
-			property = sense.getRelationship(Primitive.SSL);
+			property = this.bot.memory().getProperty("Email.ssl");
 			if (property != null) {
-				this.isSSLRequired = (Boolean)property.getData();
+				this.isSSLRequired = Boolean.valueOf(property);
 			}
-			property = sense.getRelationship(Primitive.SIGNATURE);
+			property = this.bot.memory().getProperty("Email.signature");
 			if (property != null) {
-				this.signature = (String)property.getData();
+				this.signature = property;
 			}
-			property = sense.getRelationship(Primitive.INCOMINGHOST);
+			property = this.bot.memory().getProperty("Email.incomingHost");
 			if (property != null) {
-				this.incomingHost = (String)property.getData();
+				this.incomingHost = property;
 			}
-			property = sense.getRelationship(Primitive.INCOMINGPORT);
+			property = this.bot.memory().getProperty("Email.incomingPort");
 			if (property != null) {
-				this.incomingPort = ((Number)property.getData()).intValue();
+				this.incomingPort = Integer.valueOf(property);
 			}
-			property = sense.getRelationship(Primitive.OUTGOINGHOST);
+			property = this.bot.memory().getProperty("Email.outgoingHost");
 			if (property != null) {
-				this.outgoingHost = (String)property.getData();
+				this.outgoingHost = property;
 			}
-			property = sense.getRelationship(Primitive.OUTGOINGPORT);
+			property = this.bot.memory().getProperty("Email.outgoingPort");
 			if (property != null) {
-				this.outgoingPort = ((Number)property.getData()).intValue();
+				this.outgoingPort = Integer.valueOf(property);
 			}
-			property = sense.getRelationship(Primitive.PROTOCOL);
+			property = this.bot.memory().getProperty("Email.protocol");
 			if (property != null) {
-				this.protocol = (String)property.getData();
+				this.protocol = property;
 			}
 			this.initProperties = true;
 		}
@@ -171,19 +244,16 @@ public class Email extends BasicSense {
 
 	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
-		Vertex sense = memory.createVertex(getPrimitive());
-		sense.unpinChildren();
-		sense.setRelationship(Primitive.USER, memory.createVertex(this.username));
-		sense.setRelationship(Primitive.PASSWORD, memory.createVertex("&&" + Utils.encrypt(Utils.KEY, this.password)));
-		sense.setRelationship(Primitive.EMAILADDRESS, memory.createVertex(this.emailAddress));
-		sense.setRelationship(Primitive.SSL, memory.createVertex(this.isSSLRequired));
-		sense.setRelationship(Primitive.SIGNATURE, memory.createVertex(this.signature));
-		sense.setRelationship(Primitive.INCOMINGHOST, memory.createVertex(this.incomingHost));
-		sense.setRelationship(Primitive.INCOMINGPORT, memory.createVertex(this.incomingPort));
-		sense.setRelationship(Primitive.OUTGOINGHOST, memory.createVertex(this.outgoingHost));
-		sense.setRelationship(Primitive.OUTGOINGPORT, memory.createVertex(this.outgoingPort));
-		sense.setRelationship(Primitive.PROTOCOL, memory.createVertex(this.protocol));
-		sense.pinChildren();
+		memory.saveProperty("Email.user", this.username, false);
+		memory.saveProperty("Email.password", "&&" + Utils.encrypt(Utils.KEY, this.password), false);
+		memory.saveProperty("Email.emailAddress", this.emailAddress, false);
+		memory.saveProperty("Email.ssl", String.valueOf(this.isSSLRequired), false);
+		memory.saveProperty("Email.signature", this.signature, false);
+		memory.saveProperty("Email.incomingHost", this.incomingHost, false);
+		memory.saveProperty("Email.incomingPort", String.valueOf(this.incomingPort), false);
+		memory.saveProperty("Email.outgoingHost", this.outgoingHost, false);
+		memory.saveProperty("Email.outgoingPort", String.valueOf(this.outgoingPort), false);
+		memory.saveProperty("Email.protocol", this.protocol, false);
 		memory.save();
 	}
 	

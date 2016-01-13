@@ -27,7 +27,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.emotion.EmotionalState;
-import org.botlibre.knowledge.ImageData;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
 
 /**
@@ -216,7 +216,7 @@ public class BasicAvatar implements Avatar {
 	}
 
 	@Override
-	public ImageData getCurrentImage() {
+	public BinaryData getCurrentImage() {
 		return null;
 	}
 	

@@ -30,18 +30,18 @@ State:Topic {
 		case "did" goto State:whatDidState;
 		
 		pattern "what's the topic" template Formula:"The current topic is {get #topic from :conversation}.";
-		pattern "what's the topic" template Formula:"There is no current topic to our conversation, what would you like to talk about?";
+		pattern "what's the topic" template "There is no current topic to our conversation, what would you like to talk about?";
 		
 		pattern "what's the current topic" template Formula:"The current topic is {get #topic from :conversation}.";
-		pattern "what's the current topic" template Formula:"There is no current topic to our conversation, what would you like to talk about?";
+		pattern "what's the current topic" template "There is no current topic to our conversation, what would you like to talk about?";
 		
 		pattern "what are we talking about" template Formula:"We are talking about {get #topic from :conversation}.";
-		pattern "what are we talking about" template Formula:"There is no current topic to our conversation, what would you like to talk about?";
+		pattern "what are we talking about" template "There is no current topic to our conversation, what would you like to talk about?";
 		
 		pattern "what are you talking about" template Formula:"I am talking about {get #topic from :conversation}.";
 		
 		pattern "what were we talking about" template Formula:"I am talking about {get #topic from :conversation}.";
-		pattern "what were we talking about" template Formula:"There is no current topic to our conversation, what would you like to talk about?";
+		pattern "what were we talking about" template "There is no current topic to our conversation, what would you like to talk about?";
 	}
 	
 	State:whatDidState {		
