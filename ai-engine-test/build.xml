@@ -36,6 +36,18 @@
 			</classpath>
 		</java>
 	</target>
+    
+	<target name="initdb" description="create the bot database" >
+		<java classname="org.botlibre.knowledge.database.InitDatabase" maxmemory="512m" fork="true">
+		    <classpath>
+		        <pathelement path="${classpath}"/>
+		        <fileset dir="${lib}">
+		            <include name="**/*.jar"/>
+		            <include name="*.jar"/>
+		        </fileset>
+		    </classpath>
+		</java>
+	</target>
 	
 	<target name="dist" depends="compile"
 	        description="generate the distribution" >
