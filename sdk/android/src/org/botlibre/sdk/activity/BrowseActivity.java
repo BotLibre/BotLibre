@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpAction;
 import org.botlibre.sdk.activity.actions.HttpFetchAction;
 import org.botlibre.sdk.activity.actions.HttpGetCategoriesAction;

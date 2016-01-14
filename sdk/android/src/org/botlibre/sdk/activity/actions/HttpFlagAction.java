@@ -1,6 +1,6 @@
 package org.botlibre.sdk.activity.actions;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.MainActivity;
 import org.botlibre.sdk.config.WebMediumConfig;
 

@@ -24,24 +24,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import org.botlibre.sdk.activity.R;
 import org.botlibre.sdk.BOTlibreCredentials;
-import org.botlibre.sdk.FORUMSlibreCredentials;
-import org.botlibre.sdk.LIVECHATlibreCredentials;
-import org.botlibre.sdk.PaphusCredentials;
 import org.botlibre.sdk.SDKConnection;
 import org.botlibre.sdk.activity.actions.HttpAction;
 import org.botlibre.sdk.activity.actions.HttpConnectAction;
 import org.botlibre.sdk.activity.actions.HttpFetchAction;
 import org.botlibre.sdk.activity.actions.HttpGetImageAction;
 import org.botlibre.sdk.activity.actions.HttpGetInstancesAction;
+import org.botlibre.sdk.activity.actions.HttpGetTemplatesAction;
+import org.botlibre.sdk.activity.forum.CreateForumActivity;
 import org.botlibre.sdk.activity.forum.ForumBrowseActivity;
 import org.botlibre.sdk.activity.livechat.ChannelBrowseActivity;
+import org.botlibre.sdk.activity.livechat.CreateChannelActivity;
+import org.botlibre.sdk.config.AvatarConfig;
+import org.botlibre.sdk.config.BotModeConfig;
 import org.botlibre.sdk.config.BrowseConfig;
 import org.botlibre.sdk.config.ChannelConfig;
 import org.botlibre.sdk.config.DomainConfig;
 import org.botlibre.sdk.config.ForumConfig;
 import org.botlibre.sdk.config.ForumPostConfig;
+import org.botlibre.sdk.config.LearningConfig;
 import org.botlibre.sdk.config.InstanceConfig;
 import org.botlibre.sdk.config.UserConfig;
 import org.botlibre.sdk.config.VoiceConfig;
@@ -118,7 +120,9 @@ public class MainActivity extends Activity {
 	public static UserConfig user;
 	public static UserConfig viewUser;
 	public static String type = "Bots";
+	public static BotModeConfig botMode = new BotModeConfig();
 	public static VoiceConfig voice = new VoiceConfig();
+	public static LearningConfig learning = new LearningConfig();
 	public static String conversation;
 	public static String template = "";
 	public static Object[] templates;
@@ -132,6 +136,8 @@ public class MainActivity extends Activity {
 	public static boolean showImages = true;
 	public static List<WebMediumConfig> instances = new ArrayList<WebMediumConfig>();
 	public static List<ForumPostConfig> posts = new ArrayList<ForumPostConfig>();
+	public static List<AvatarConfig> avatars;
+	public static List<AvatarConfig> sharedAvatars;
 	public static MainActivity current;
 	public static boolean wasDelete;
 	public static String[] types = new String[]{"Bots", "Forums", "Live Chat", "Domains"};
@@ -236,6 +242,19 @@ public class MainActivity extends Activity {
 	    });
 		dialog.show();
 	}
+	
+	public static Object[] getAllTemplates(Activity activity) {
+		if (templates == null) {
+		    try {
+		    	HttpGetTemplatesAction action = new HttpGetTemplatesAction(activity);
+		    	action.postExecute(action.execute().get());
+				if (action.getException() != null) {
+					templates = new String[0];
+				}
+		    } catch (Exception ignore) {}
+		}
+		return templates;
+	}
     
 
 	@Override
@@ -259,11 +278,11 @@ public class MainActivity extends Activity {
 		}
 
 		if ((launchType == LaunchType.Bot) || (launchType == LaunchType.Channel))  {
-			setContentView(R.layout.activity_main_chat);			
+			setContentView(getResources().getIdentifier("activity_main_chat", "layout", getPackageName()));			
 		} else if (launchType == LaunchType.Forum)  {
-			setContentView(R.layout.activity_main_browse);			
+			setContentView(getResources().getIdentifier("activity_main_browse", "layout", getPackageName()));			
 		} else {
-			setContentView(R.layout.activity_main);
+			setContentView(getResources().getIdentifier("activity_main", "layout", getPackageName()));
 		}
 		
 		resetView();
@@ -271,7 +290,7 @@ public class MainActivity extends Activity {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void resetView() {
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		if (spin != null) {
 			ArrayAdapter adapter = new ArrayAdapter(this,
 	                android.R.layout.simple_spinner_dropdown_item, MainActivity.types);
@@ -281,17 +300,17 @@ public class MainActivity extends Activity {
 		}
 		if (domain != null) {
 			setTitle(domain.name);
-	        HttpGetImageAction.fetchImage(this, domain.avatar, (ImageView)findViewById(R.id.splash));			
+	        HttpGetImageAction.fetchImage(this, domain.avatar, (ImageView)findViewById(getResources().getIdentifier("splash", "id", getPackageName())));			
 		}
         if (MainActivity.user == null) {
-        	findViewById(R.id.vewUserButton).setVisibility(View.GONE);
-        	findViewById(R.id.logoutButton).setVisibility(View.GONE);
-        	findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
+        	findViewById(getResources().getIdentifier("vewUserButton", "id", getPackageName())).setVisibility(View.GONE);
+        	findViewById(getResources().getIdentifier("logoutButton", "id", getPackageName())).setVisibility(View.GONE);
+        	findViewById(getResources().getIdentifier("loginButton", "id", getPackageName())).setVisibility(View.VISIBLE);
         } else {
-        	findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
-        	findViewById(R.id.loginButton).setVisibility(View.GONE);
-        	findViewById(R.id.vewUserButton).setVisibility(View.VISIBLE);
-	        HttpGetImageAction.fetchImage(this, MainActivity.user.avatar, findViewById(R.id.vewUserButton));
+        	findViewById(getResources().getIdentifier("logoutButton", "id", getPackageName())).setVisibility(View.VISIBLE);
+        	findViewById(getResources().getIdentifier("loginButton", "id", getPackageName())).setVisibility(View.GONE);
+        	findViewById(getResources().getIdentifier("vewUserButton", "id", getPackageName())).setVisibility(View.VISIBLE);
+	        HttpGetImageAction.fetchImage(this, MainActivity.user.avatar, findViewById(getResources().getIdentifier("vewUserButton", "id", getPackageName())));
         }
 		resetMenu();
 	}
@@ -313,7 +332,7 @@ public class MainActivity extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.layout.menu_user, menu);
+        menuInflater.inflate(getResources().getIdentifier("menu_user", "layout", getPackageName()), menu);
         return true;
     }
 	
@@ -332,37 +351,34 @@ public class MainActivity extends Activity {
     	    menu.getItem(index).setEnabled(true);        	
         }
         if (MainActivity.user == null) {
-        	this.menu.findItem(R.id.menuSignOut).setEnabled(false);
-        	this.menu.findItem(R.id.menuViewUser).setEnabled(false);
-        	this.menu.findItem(R.id.menuEditUser).setEnabled(false);
+        	this.menu.findItem(getResources().getIdentifier("menuSignOut", "id", getPackageName())).setEnabled(false);
+        	this.menu.findItem(getResources().getIdentifier("menuViewUser", "id", getPackageName())).setEnabled(false);
+        	this.menu.findItem(getResources().getIdentifier("menuEditUser", "id", getPackageName())).setEnabled(false);
         } else {
-        	this.menu.findItem(R.id.menuSignIn).setEnabled(false);
-        	this.menu.findItem(R.id.menuSignUp).setEnabled(false);
+        	this.menu.findItem(getResources().getIdentifier("menuSignIn", "id", getPackageName())).setEnabled(false);
+        	this.menu.findItem(getResources().getIdentifier("menuSignUp", "id", getPackageName())).setEnabled(false);
         }
 	}
 	
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-         
-        switch (item.getItemId())
-        {        
-	    case R.id.menuSignIn:
+        if (item.getItemId() == getResources().getIdentifier("menuSignIn", "id", getPackageName())) {
 	    	login();
 	        return true;
-        case R.id.menuSignUp:
+        } else if (item.getItemId() == getResources().getIdentifier("menuSignUp", "id", getPackageName())) {
         	createUser();
             return true;
-        case R.id.menuSignOut:
+        } else if (item.getItemId() == getResources().getIdentifier("menuSignOut", "id", getPackageName())) {
         	logout();
             return true;
-        case R.id.menuEditUser:
+        } else if (item.getItemId() == getResources().getIdentifier("menuEditUser", "id", getPackageName())) {
         	editUser();
             return true;
-        case R.id.menuViewUser:
+        } else if (item.getItemId() == getResources().getIdentifier("menuViewUser", "id", getPackageName())) {
         	viewUser();
             return true;
-        default:
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
@@ -376,7 +392,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void login() {
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		if (spin != null) {
 			type = (String)spin.getSelectedItem();
 		}
@@ -386,7 +402,7 @@ public class MainActivity extends Activity {
     }
 
 	public void logout() {
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		if (spin != null) {
 			type = (String)spin.getSelectedItem();
 		}
@@ -394,6 +410,7 @@ public class MainActivity extends Activity {
 		connection.disconnect();
         user = null;
         instance = null;
+        avatars = null;
         conversation = null;
         post = null;
         posts = new ArrayList<ForumPostConfig>();
@@ -401,6 +418,7 @@ public class MainActivity extends Activity {
         domain = null;
         tags = null;
         categories= null;
+        learning = null;
         voice = null;
 
     	SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
@@ -421,7 +439,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void createUser() {
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		if (spin != null) {
 			type = (String)spin.getSelectedItem();
 		}
@@ -431,7 +449,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void editUser() {
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		if (spin != null) {
 			type = (String)spin.getSelectedItem();
 		}
@@ -446,7 +464,7 @@ public class MainActivity extends Activity {
 	
 	public void viewUser() {
 		viewUser = user;
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		if (spin != null) {
 			type = (String)spin.getSelectedItem();
 		}
@@ -455,8 +473,41 @@ public class MainActivity extends Activity {
         startActivity(intent);
 	}
 
+	public void createInstance(View view) {
+		if (user == null) {
+			AlertDialog dialog = new AlertDialog.Builder(this).create();
+			dialog.setMessage("You must sign in first");
+			dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+			      public void onClick(DialogInterface dialog, int which) {
+					login();			    	  
+			      }
+			    });
+			dialog.show();
+			return;
+		}
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
+		type = (String)spin.getSelectedItem();
+		if (type == null) {
+			type = MainActivity.defaultType;
+		}
+		if (type.equals("Bots")) {
+			MainActivity.template = "";
+	        Intent intent = new Intent(this, CreateInstanceActivity.class);
+	        startActivity(intent);
+		} else if (type.equals("Forums")) {
+	        Intent intent = new Intent(this, CreateForumActivity.class);
+	        startActivity(intent);			
+		} else if (type.equals("Live Chat")) {
+	        Intent intent = new Intent(this, CreateChannelActivity.class);
+	        startActivity(intent);			
+		} else if (type.equals("Domains")) {
+	        Intent intent = new Intent(this, CreateDomainActivity.class);
+	        startActivity(intent);			
+		}
+	}
+
 	public void browse(View view) {
-		Spinner spin = (Spinner) findViewById(R.id.typeSpin);
+		Spinner spin = (Spinner) findViewById(getResources().getIdentifier("typeSpin", "id", getPackageName()));
 		type = (String)spin.getSelectedItem();
 		if (type == null) {
 			type = MainActivity.defaultType;

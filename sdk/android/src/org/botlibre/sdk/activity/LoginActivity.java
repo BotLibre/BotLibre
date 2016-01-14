@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpConnectAction;
 import org.botlibre.sdk.config.UserConfig;
 

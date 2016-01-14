@@ -1,6 +1,6 @@
 package org.botlibre.sdk.activity;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 
 import android.content.Intent;
 import android.view.View;
@@ -9,6 +9,11 @@ import android.view.View;
  * Activity for viewing a domain details.
  */
 public class DomainActivity extends WebMediumActivity {
+
+	public void admin() {
+        Intent intent = new Intent(this, DomainAdminActivity.class);		
+        startActivity(intent);
+	}
 
 	public void resetView() {
         setContentView(R.layout.activity_domain);

@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.botlibre.sdk.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -69,15 +70,13 @@ public class ForumPostConfig extends Config {
 		writer.write(">");
 		if (this.topic != null) {
 			writer.write("<topic>");
-			writer.write(this.topic);
+			writer.write(Utils.escapeHTML(this.topic));
 			writer.write("</topic>");
 		}
 		if (this.details != null) {
 			String text = this.details;
-			text = text.replace("<", "&lt;");
-			text = text.replace(">", "&gt;");
 			writer.write("<details>");
-			writer.write(text);
+			writer.write(Utils.escapeHTML(text));
 			writer.write("</details>");
 		}
 		if (this.tags != null) {

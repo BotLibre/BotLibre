@@ -36,7 +36,7 @@ import android.widget.Toast;
 import org.botlibre.sdk.LiveChatConnection;
 import org.botlibre.sdk.LiveChatListener;
 import org.botlibre.sdk.activity.MainActivity;
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.ViewUserActivity;
 import org.botlibre.sdk.activity.actions.HttpAction;
 import org.botlibre.sdk.activity.actions.HttpCreateChannelFileAttachmentAction;
@@ -484,6 +484,9 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 		if (user.equals("Online")) {
 			HttpAction action = new HttpGetLiveChatUsersAction(this, message);
 			action.execute();
+			return;
+		}
+		if (user.equals("Media")) {
 			return;
 		}
 		

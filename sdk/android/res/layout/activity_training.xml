@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/greetingsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Greetings" />
+        
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0px"
+        android:layout_weight="1"
+	    android:orientation="horizontal" >
+	    
+    <ListView
+        android:id="@+id/greetingsList"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
+    
+    <Button
+        android:id="@+id/removeGreetingButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/remove"
+        android:onClick="removeGreeting"
+        android:text="" />
+        
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    
+    <EditText
+        android:id="@+id/greetingText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:inputType="text"
+    	android:imeOptions="actionDone"/>
+    
+    <Button
+        android:id="@+id/addGreetingButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/add"
+        android:onClick="addGreeting"
+        android:text="" />
+        
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/defaultResponseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Default Responses" />
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0px"
+      	android:layout_weight="1"
+	    android:orientation="horizontal" >
+	    
+    <ListView
+        android:id="@+id/defaultResponsesList"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
+    
+    <Button
+        android:id="@+id/removeDefaultResponseButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/remove"
+        android:onClick="removeDefaultResponse"
+        android:text="" />
+        
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    
+    <EditText
+        android:id="@+id/defaultResponseText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:inputType="text"
+    	android:imeOptions="actionDone"/>
+    
+    <Button
+        android:id="@+id/addDefaultResponseButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/add"
+        android:onClick="addDefaultResponse"
+        android:text="" />
+        
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/addResponseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Question / Response" />
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+    <TextView
+        android:id="@+id/questionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question" />
+	    
+    <EditText
+        android:id="@+id/questionText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:inputType="text"
+    	android:imeOptions="actionDone"/>
+        
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+    <TextView
+        android:id="@+id/responseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Response" />
+	    
+    <EditText
+        android:id="@+id/responseText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:inputType="text"
+    	android:imeOptions="actionDone"/>
+    
+    <Button
+        android:id="@+id/addResponseButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/add"
+        android:onClick="addResponse"
+        android:text="" />
+        
+    </LinearLayout>
+
+</LinearLayout>

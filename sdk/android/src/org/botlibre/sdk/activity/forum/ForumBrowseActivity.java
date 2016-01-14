@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.BrowseActivity;
 import org.botlibre.sdk.activity.MainActivity;
 import org.botlibre.sdk.activity.actions.HttpAction;

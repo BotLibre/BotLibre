@@ -16,7 +16,7 @@ public class HttpUpdateUserAction extends HttpUIAction {
 	@Override
 	protected String doInBackground(Void... params) {
 		try {
-			MainActivity.connection.update(this.config);
+			this.config = MainActivity.connection.update(this.config);
 		} catch (Exception exception) {
 			this.exception = exception;
 		}
@@ -29,11 +29,15 @@ public class HttpUpdateUserAction extends HttpUIAction {
 		if (this.exception != null) {
 			return;
 		}
-		
-		this.config.password = null;
-		this.config.newPassword = null;
-		
-		this.activity.finish();
+		try {
+			MainActivity.user = this.config;
+
+			this.activity.finish();
+		} catch (Exception error) {
+			this.exception = error;
+			MainActivity.error(this.exception.getMessage(), this.exception, this.activity);
+			return;			
+		}
 	}
 	
 }

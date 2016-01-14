@@ -3,7 +3,7 @@ package org.botlibre.sdk.activity.livechat;
 import android.view.View;
 import android.widget.ListView;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.ChooseBotActivity;
 import org.botlibre.sdk.activity.MainActivity;
 import org.botlibre.sdk.activity.actions.HttpAction;

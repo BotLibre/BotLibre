@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import org.botlibre.sdk.SDKConnection;
+import org.botlibre.sdk.util.Utils;
 
 /**
  * DTO for XML user creation config.
@@ -41,6 +42,16 @@ public class UserConfig extends Config {
 		if (connection.getDomain() != null) {
 			this.domain = connection.getDomain().id;
 		}
+	}
+	
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof UserConfig)) {
+			return false;
+		}
+		return this.user != null && this.user.equals(((UserConfig)object).user);
 	}
 
 	public void parseXML(Element element) {
@@ -103,7 +114,7 @@ public class UserConfig extends Config {
 		
 		if (this.bio != null) {
 			writer.write("<bio>");
-			writer.write(this.bio);
+			writer.write(Utils.escapeHTML(this.bio));
 			writer.write("</bio>");
 		}
 		writer.write("</user>");

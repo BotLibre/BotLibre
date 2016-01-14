@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpCreateUserAction;
 import org.botlibre.sdk.config.UserConfig;
 

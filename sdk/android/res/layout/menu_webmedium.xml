@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuAdmin"
+          android:title="Admin" />
+ 
+    <item android:id="@+id/menuFlag"
+          android:title="Flag" />
+     
+</menu>

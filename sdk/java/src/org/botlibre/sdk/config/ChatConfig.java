@@ -2,6 +2,8 @@ package org.botlibre.sdk.config;
 
 import java.io.StringWriter;
 
+import org.botlibre.sdk.util.Utils;
+
 /**
  * DTO for XML chat config.
  */
@@ -48,7 +50,7 @@ public class ChatConfig extends Config {
 		
 		if (this.message != null) {
 			writer.write("<message>");
-			writer.write(this.message);
+			writer.write(Utils.escapeHTML(this.message));
 			writer.write("</message>");
 		}
 		writer.write("</chat>");

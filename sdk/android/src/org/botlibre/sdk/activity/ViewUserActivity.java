@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpAction;
 import org.botlibre.sdk.activity.actions.HttpChangeUserIconAction;
 import org.botlibre.sdk.activity.actions.HttpFlagUserAction;
@@ -31,6 +31,15 @@ public class ViewUserActivity extends CreateUserActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user);
         resetView();
+	}
+	
+	@Override
+	public void onResume() {
+		if (MainActivity.user != null && MainActivity.user.equals(MainActivity.viewUser)) {
+			MainActivity.viewUser = MainActivity.user;
+		}
+		resetView();
+		super.onResume();
 	}
 	
 	public void resetView() {

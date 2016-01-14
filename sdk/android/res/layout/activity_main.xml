@@ -29,6 +29,15 @@
 		android:text="Browse"
 		android:textColor="@color/lgrey" />
  
+	<Button
+		android:id="@+id/createInstanceButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="1sp"
+		android:background="@drawable/button"
+		android:onClick="createInstance"
+		android:text="Create"
+		android:textColor="@color/lgrey" />
 			
 	<LinearLayout
 		android:layout_width="fill_parent"

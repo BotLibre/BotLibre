@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.paphus.sdk.activity"
-    android:versionCode="4"
-    android:versionName="2.3.1">
+    android:versionCode="11"
+    android:versionName="2.5.5">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="24"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,7 +11,7 @@
 
     <!-- 
     	This is the application manifest.
-    	To build your own application you need to choose you main activity and updates its label and the app version.
+    	To build your own application you need to choose your main activity and update its label and the app version.
     	** you must use your own globally unique package name above, this will require you to rename the R impports in the activities to your new package **
      -->
     <application
@@ -19,9 +19,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:allowBackup="true" >
+        
+        <meta-data android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+        
+        <activity android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        
         <activity
             android:name="com.paphus.sdk.activity.MainActivity"
-            android:label="Project Libre SDK" >
+            android:label="BOT libre!" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -108,6 +116,30 @@
                 android:value="com.paphus.sdk.activity.InstanceActivity" />
         </activity>
         <activity
+            android:name="com.paphus.sdk.activity.CreateInstanceActivity"
+            android:label="Create Bot"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.EditInstanceActivity"
+            android:label="Edit Bot"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.InstanceActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.CreateForumActivity"
+            android:label="Create Forum"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
             android:name="com.paphus.sdk.activity.forum.CreateForumPostActivity"
             android:label="New Post"
             android:windowSoftInputMode="stateHidden" >
@@ -130,6 +162,46 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.paphus.sdk.activity.ForumPostActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.EditForumActivity"
+            android:label="Edit Forum"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.CreateChannelActivity"
+            android:label="Create Channel"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.EditChannelActivity"
+            android:label="Edit Channel"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.CreateDomainActivity"
+            android:label="Create Domain"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.EditDomainActivity"
+            android:label="Edit Domain"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.DomainActivity" />
         </activity>
         <activity
             android:name="com.paphus.sdk.activity.CreateUserActivity"
@@ -204,12 +276,132 @@
                 android:value="com.paphus.sdk.activity.MainActivity" />
         </activity>
         <activity
+            android:name="com.paphus.sdk.activity.AdminActivity"
+            android:label="Admin"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.InstanceActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ForumAdminActivity"
+            android:label="Forum Admin"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.ChannelAdminActivity"
+            android:label="Channel Admin"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.DomainAdminActivity"
+            android:label="Domain Admin"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.DomainActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.AvatarActivity"
+            android:label="Avatar"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.AdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.AddAvatarActivity"
+            android:label="Add Shared Image"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.AvatarActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.VoiceActivity"
+            android:label="Voice"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.AdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.LearningActivity"
+            android:label="Learning"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.AdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.TrainingActivity"
+            android:label="Training"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.AdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.UsersActivity"
+            android:label="Users"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.AdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ForumUsersActivity"
+            android:label="Forum Users"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumAdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.ChannelUsersActivity"
+            android:label="Channel Users"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelAdminActivity" />
+        </activity>
+        <activity
             android:name="com.paphus.sdk.activity.livechat.LiveChatActivity"
             android:label="Live Chat"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.DomainUsersActivity"
+            android:label="Domain Users"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.DomainAdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.forum.ForumBotActivity"
+            android:label="Forum Bot"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.forum.ForumAdminActivity" />
+        </activity>
+        <activity
+            android:name="com.paphus.sdk.activity.livechat.ChannelBotActivity"
+            android:label="Channel Bot"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paphus.sdk.activity.channel.ChannelAdminActivity" />
         </activity>
     </application>
 

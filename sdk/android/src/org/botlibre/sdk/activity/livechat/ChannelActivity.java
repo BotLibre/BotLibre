@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.MainActivity;
 import org.botlibre.sdk.activity.WebMediumActivity;
 import org.botlibre.sdk.config.ChannelConfig;
@@ -14,6 +14,11 @@ import org.botlibre.sdk.config.ChannelConfig;
  * To launch this activity from your app you can use the HttpFetchAction passing the channel id or name as a config.
  */
 public class ChannelActivity extends WebMediumActivity {
+
+	public void admin() {
+        Intent intent = new Intent(this, ChannelAdminActivity.class);		
+        startActivity(intent);
+	}
 
 	public void resetView() {
         setContentView(R.layout.activity_channel);

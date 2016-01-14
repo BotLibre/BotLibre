@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.config.InstanceConfig;
 
 /**
@@ -31,15 +32,28 @@ public class InstanceActivity extends WebMediumActivity {
         if (instance.size != null && instance.size.length() > 0) {
 	        text.setText(instance.size + " neurons");
         } else {
-	        text.setText("");        	
+	        text.setText("");
         }
 
     	text = (TextView) findViewById(R.id.connectsLabel);
         if (instance.connects != null && instance.connects.length() > 0) {
 	        text.setText(instance.connects + " conects, " + instance.dailyConnects + " today, " + instance.weeklyConnects + " week, " + instance.monthlyConnects + " month");
         } else {
-	        text.setText("");        	
+	        text.setText("");
         }
+	}
+
+	public void admin() {
+        Intent intent = new Intent(this, AdminActivity.class);		
+        startActivity(intent);
+	}
+
+	public void fork() {
+		MainActivity.template = MainActivity.instance.name;
+        Intent intent = new Intent(this, CreateInstanceActivity.class);
+        startActivity(intent);
+        
+        finish();
 	}
 	
 	/**

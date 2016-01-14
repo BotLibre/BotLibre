@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+    
+    <View
+	  android:layout_width="wrap_content"
+	  android:layout_height="30dp">
+	</View>
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="editInstance"
+        android:text="Edit"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/iconButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="changeIcon"
+        android:text="Change Icon"
+        android:textColor="@color/lgrey" />
+    
+    <Button
+        android:id="@+id/usersButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminUsers"
+        android:text="Users"
+        android:textColor="@color/lgrey" />
+    
+    <Button
+        android:id="@+id/categoriesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminCategories"
+        android:text="Categories"
+        android:textColor="@color/lgrey" />	
+    
+    <View
+	  android:layout_width="wrap_content"
+	  android:layout_height="30dp"
+      android:layout_weight="1"/>
+        
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/delete_button"
+        android:onClick="delete"
+        android:text="Delete"
+        android:textColor="@color/lgrey" />
+        
+</LinearLayout>

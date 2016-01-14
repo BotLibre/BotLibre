@@ -45,6 +45,14 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
+                android:id="@+id/websiteLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="website"
+                android:autoLink="web"
+                android:textSize="10sp" />
+            
+            <TextView
                 android:id="@+id/licenseLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,5 +130,31 @@
 
         <requestFocus />
     </Button>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+    <Button
+        android:id="@+id/menuButton"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/menu"
+        android:onClick="menu"
+        android:text="" />
+        
+    <Button
+        android:id="@+id/adminButton"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/properties"
+        android:onClick="admin"
+        android:text=""
+        android:visibility="gone" />
+    
+    </LinearLayout>
 
 </LinearLayout>

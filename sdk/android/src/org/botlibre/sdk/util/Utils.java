@@ -90,6 +90,18 @@ public class Utils {
 		return text;
 	}
 	
+
+	/**
+	 * Replace reserved HTML character with their HTML escape codes.
+	 */
+	public static String escapeHTML(String html) {
+		return html.replace("&", "&amp;")
+	    	.replace("<", "&lt;")
+	    	.replace(">", "&gt;")
+	    	.replace("\"", "&quot;")
+	    	.replace("\"'", "&#039;");
+	}
+
 	/**
 	 * Strip the HTML tags from the text.
 	 */

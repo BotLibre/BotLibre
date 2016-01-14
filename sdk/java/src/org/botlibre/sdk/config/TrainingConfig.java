@@ -2,6 +2,8 @@ package org.botlibre.sdk.config;
 
 import java.io.StringWriter;
 
+import org.botlibre.sdk.util.Utils;
+
 
 /**
  * DTO for XML training config.
@@ -24,12 +26,12 @@ public class TrainingConfig extends Config {
 
 		if (this.question != null) {
 			writer.write("<question>");
-			writer.write(this.question);
+			writer.write(Utils.escapeHTML(this.question));
 			writer.write("</question>");
 		}
 		if (this.response != null) {
 			writer.write("<response>");
-			writer.write(this.response);
+			writer.write(Utils.escapeHTML(this.response));
 			writer.write("</response>");
 		}
 		

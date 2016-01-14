@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import org.botlibre.sdk.activity.MainActivity;
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpAction;
 import org.botlibre.sdk.activity.actions.HttpCreateForumPostAction;
 import org.botlibre.sdk.activity.actions.HttpGetTagsAction;

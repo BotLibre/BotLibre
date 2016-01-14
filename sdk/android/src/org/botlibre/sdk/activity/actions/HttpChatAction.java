@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-import org.botlibre.sdk.activity.R;
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.ChatActivity;
 import org.botlibre.sdk.activity.MainActivity;
 import org.botlibre.sdk.config.ChatConfig;

@@ -2,6 +2,7 @@ package org.botlibre.sdk.config;
 
 import java.io.StringWriter;
 
+import org.botlibre.sdk.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -98,17 +99,17 @@ public abstract class WebMediumConfig extends Config {
 		writer.write(">");
 		if (this.description != null) {
 			writer.write("<description>");
-			writer.write(this.description);
+			writer.write(Utils.escapeHTML(this.description));
 			writer.write("</description>");
 		}
 		if (this.details != null) {
 			writer.write("<details>");
-			writer.write(this.details);
+			writer.write(Utils.escapeHTML(this.details));
 			writer.write("</details>");
 		}
 		if (this.disclaimer != null) {
 			writer.write("<disclaimer>");
-			writer.write(this.disclaimer);
+			writer.write(Utils.escapeHTML(this.disclaimer));
 			writer.write("</disclaimer>");
 		}
 		if (this.categories != null) {
@@ -133,7 +134,7 @@ public abstract class WebMediumConfig extends Config {
 		}
 		if (this.flaggedReason != null) {
 			writer.write("<flaggedReason>");
-			writer.write(this.flaggedReason);
+			writer.write(Utils.escapeHTML(this.flaggedReason));
 			writer.write("</flaggedReason>");
 		}
 	}

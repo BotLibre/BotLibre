@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -14,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpFlagAction;
 import org.botlibre.sdk.activity.actions.HttpGetImageAction;
 import org.botlibre.sdk.config.WebMediumConfig;
@@ -44,6 +48,45 @@ public abstract class WebMediumActivity extends Activity {
 			finish();
 		}
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.layout.menu_webmedium, menu);
+        return true;
+    }
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+        WebMediumConfig instance = MainActivity.instance;
+        
+        boolean isAdmin = (MainActivity.user != null) && instance.isAdmin;
+        if (!isAdmin || instance.isExternal) {
+    	    menu.getItem(0).setEnabled(false);
+        }
+        if (isAdmin || instance.isFlagged) {
+    	    menu.getItem(1).setEnabled(false);
+        }
+	    return true;
+	}
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+         
+        switch (item.getItemId())
+        {        
+	    case R.id.menuAdmin:
+	    	admin();
+	        return true;        
+        case R.id.menuFlag:
+        	flag();
+            return true;  
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
 	public void resetView() {		
         WebMediumConfig instance = MainActivity.instance;
@@ -55,8 +98,19 @@ public abstract class WebMediumActivity extends Activity {
         } else {
 	        findViewById(R.id.imageView).setVisibility(View.GONE);        	
         }
+        TextView textView = (TextView) findViewById(R.id.nameLabel);
+        textView.setText(instance.name);
+        boolean isAdmin = (MainActivity.user != null) && instance.isAdmin;
+        if (isAdmin) {
+        	findViewById(R.id.adminButton).setVisibility(View.VISIBLE);
+        } else {
+        	findViewById(R.id.adminButton).setVisibility(View.GONE);
+        }
+        if (instance.isExternal) {
+        	findViewById(R.id.adminButton).setVisibility(View.GONE);
+        }
         
-        TextView textView = (TextView) findViewById(R.id.websiteLabel);
+        textView = (TextView) findViewById(R.id.websiteLabel);
         textView.setText(instance.website);
         
         WebView web = (WebView) findViewById(R.id.descriptionLabel);
@@ -139,6 +193,12 @@ public abstract class WebMediumActivity extends Activity {
 	        }
         });
 	}
+	
+	public void admin(View view) {
+		admin();
+	}
+	
+	public abstract void admin();
 
 	public void menu(View view) {
 		openOptionsMenu();

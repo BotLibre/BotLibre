@@ -160,4 +160,30 @@
         <requestFocus />
     </Button>
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+    <Button
+        android:id="@+id/menuButton"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/menu"
+        android:onClick="menu"
+        android:text="" />
+        
+    <Button
+        android:id="@+id/adminButton"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/properties"
+        android:onClick="admin"
+        android:text=""
+        android:visibility="gone" />
+    
+    </LinearLayout>
+
 </LinearLayout>

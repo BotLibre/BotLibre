@@ -38,7 +38,7 @@
                 android:id="@+id/hintText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password Hint"
+                android:hint="Password Hint (optional)"
                 android:imeOptions="actionDone"
                 android:inputType="text" />
 
@@ -46,7 +46,7 @@
                 android:id="@+id/nameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Full Name"
+                android:hint="Full Name (optional)"
                 android:imeOptions="actionDone"
                 android:inputType="text" />
 
@@ -61,7 +61,7 @@
                 android:id="@+id/emailText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="Email (recommended)"
                 android:imeOptions="actionDone"
                 android:inputType="text" />
 
@@ -69,7 +69,7 @@
                 android:id="@+id/websiteText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Website"
+                android:hint="Website (optional)"
                 android:imeOptions="actionDone"
                 android:inputType="text" />
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="top"
-                android:hint="Bio"
+                android:hint="Bio (optional)"
                 android:inputType="textMultiLine" />
 
             <LinearLayout
