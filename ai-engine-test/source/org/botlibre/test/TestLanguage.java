@@ -21,12 +21,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.sense.text.TextInput;
 import org.botlibre.thought.language.Language;
+import org.botlibre.thought.language.Language.CorrectionMode;
 import org.botlibre.thought.language.Language.LearningMode;
 import org.botlibre.util.Utils;
 import org.junit.AfterClass;
@@ -46,7 +48,7 @@ public class TestLanguage extends TextTest {
 		List<String> output = registerForOutput(text);
 		text.input("sky blue red dog barks all night the cat green grass tall like very loves");
 		waitForOutput(output);
-		Utils.sleep(10000);
+		Utils.sleep(20000);
 		
 		bot.shutdown();
 	}
@@ -425,9 +427,30 @@ public class TestLanguage extends TextTest {
 		checkResponse(response, "Yesterday was " + date + ".");
 
 		calendar = Calendar.getInstance();
+		text.input("what is the time");
+		response = waitForOutput(output);
+		assertKeyword(response, "The time is");
+
+		calendar = Calendar.getInstance();
+		text.input("what is the current time");
+		response = waitForOutput(output);
+		assertKeyword(response, "The time is");
+
+		calendar = Calendar.getInstance();
+		text.input("what is the current time in IST");
+		response = waitForOutput(output);
+		assertKeyword(response, "The time in IST is");
+		
+		calendar = Calendar.getInstance();
 		text.input("what is the hour");
 		response = waitForOutput(output);
 		checkResponse(response, "The hour is " + (calendar.get(Calendar.HOUR) == 0 ? 12 : calendar.get(Calendar.HOUR)) + " " + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + ".");
+		
+		calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("IST"));
+		text.input("what is the hour in IST");
+		response = waitForOutput(output);
+		checkResponse(response, "The hour in IST is " + (calendar.get(Calendar.HOUR) == 0 ? 12 : calendar.get(Calendar.HOUR)) + " " + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " IST.");
 
 		calendar = Calendar.getInstance();
 		text.input("what is the month");
@@ -456,7 +479,7 @@ public class TestLanguage extends TextTest {
 		} else if (last == '3') {
 			ordinal = "rd";					
 		} else {
-			ordinal = "th";					
+			ordinal = "th";
 		}
 		text.input("what is the day of the year");
 		response = waitForOutput(output);
@@ -654,6 +677,58 @@ public class TestLanguage extends TextTest {
 		bot.shutdown();
 	}
 
+
+	/**
+	 * Test topics and context.
+	 */
+	@org.junit.Test
+	public void testTopics() {
+		Bot bot = Bot.createInstance();
+		//bot.setDebugLevel(Bot.FINE);
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("What is love?");
+		String response = waitForOutput(output);
+		checkResponse(response, "Strong affection.");
+
+		text.input("What is the current topic?");
+		response = waitForOutput(output);
+		checkResponse(response, "The current topic is love.");
+
+		text.input("tell me more");
+		response = waitForOutput(output);
+		checkResponse(response, "That is all I know about love.");
+		
+		text.input("say you love me");
+		response = waitForOutput(output);
+		checkResponse(response, "I love you");
+		
+		text.input("repeat");
+		response = waitForOutput(output);
+		checkResponse(response, "I love you");
+		
+		text.input("what did you say?");
+		response = waitForOutput(output);
+		checkResponse(response, "I said \"I love you\".");
+				
+		text.input("yell you love bridges");
+		response = waitForOutput(output);
+		checkResponse(response, "I LOVE BRIDGES");
+		
+		text.input("what did I say?");
+		response = waitForOutput(output);
+		checkResponse(response, "You said \"yell you love bridges\".");
+		
+		text.input("what was the first thing you said");
+		response = waitForOutput(output);
+		checkResponse(response, "I said \"Strong affection.\".");
+		
+		bot.shutdown();
+	}
+	
 	/**
 	 * Test names.
 	 */
@@ -719,6 +794,22 @@ public class TestLanguage extends TextTest {
 		if (!response.equals("Okay, my name is Testbot.")) {
 			fail("Incorrect response: " + response);			
 		}
+		
+		bot.mind().getThought(Language.class).setCorrectionMode(CorrectionMode.Disabled);
+
+		text.input("Your name is Testbot");
+		response = waitForOutput(output);
+		if (!response.equals("Yes, my name is Testbot.")) {
+			fail("Incorrect response: " + response);			
+		}
+		
+		text.input("Your name is John");
+		response = waitForOutput(output);
+		if (!(response.equals("No, my name is Testbot.") || response.equals("No, my name is Test."))) {
+			fail("Incorrect response: " + response);			
+		}
+		
+		bot.mind().getThought(Language.class).setCorrectionMode(CorrectionMode.Everyone);
 
 		text.input("who r u");
 		response = waitForOutput(output);

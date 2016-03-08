@@ -8,16 +8,19 @@ this is a very very long sentence that is very long, yes, very long, it has one 
 how long?
 keywords: sentence
 
-Pattern:"do you like {:^color}"
+Pattern("do you like {^color}")
 Yes, it is a nice color.
 
 What are you?
-Formula:"I am a {get #instantiation from #self}."
+Template("I am a {#self.instantiation}.")
 
-script: { associate #bot to "bot" by #word; associate "bot" to #bot by #meaning; }
-script: associate #self to #bot by #instantiation
+test self
+Template("{1 + 1} {1*1} {1-1} {1 / 2} {var count = 0; count++; count++; count --; count;}")
 
-script: associate "black" to #black by #meaning
-script: associate #black to #color by #instantiation
-script: associate "red" to #red by #meaning
-script: associate #red to #color by #instantiation
+script: #bot.word = "bot"; "bot".meaning = #bot;
+script: #self.instantiation =+ #bot
+
+script: "black".meaning = #black
+script: #black.instantiation =+ #color
+script: "red".meaning = #red
+script: #red.instantiation =+ #color

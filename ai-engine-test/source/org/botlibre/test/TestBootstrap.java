@@ -52,6 +52,9 @@ public class TestBootstrap extends TextTest {
 		// 2015-11-20 - 6292, 6258
 		// 2015-11-23 - 6100, 6064
 		// state bytecode - 5135, 5244
+		// 2016-02-18 - Self4 - 4905, 4985
+		// 2016-02-19 - expression byte-code - 4804, 4814, 4832
+		// 2016-02-29 - new computer - 1969, 1976
 		
 		Bot bot = Bot.createInstance();
 		System.out.println("Memory size: " + bot.memory().getLongTermMemory().size());
@@ -60,6 +63,9 @@ public class TestBootstrap extends TextTest {
 		// 2015-11-20 - 3131
 		// 2015-11-23 - function byetcode - 3023
 		// state bytecode - 2163
+		// 2016-02-18 - Self4 - 2216, 2216
+		// 2016-02-19 - expression byte-code - 2167, 2174
+		// 2016-02-29 - new computer - 2168
 	}
 
 	@org.junit.Test
@@ -96,7 +102,7 @@ public class TestBootstrap extends TextTest {
 		
 		text.input("what is (2 * (2^(3 + 2))) / 2^2^2 * (2 - 2 + 6.6)?");
 		response = waitForOutput(output);
-		if (!response.equals("(2 Ã— (2^(3 + 2))) Ã· 2^2^2 Ã— (2 - 2 + 6.6) <br/> = (2 Ã— (2^5)) Ã· 2^2^2 Ã— (2 - 2 + 6.6) <br/> = (2 Ã— 32) Ã· 2^2^2 Ã— (2 - 2 + 6.6) <br/> = 64 Ã· 2^2^2 Ã— (2 - 2 + 6.6) <br/> = 64 Ã· 4^2 Ã— (2 - 2 + 6.6) <br/> = 64 Ã· 16 Ã— (2 - 2 + 6.6) <br/> = 4 Ã— 6.6 <br/> = 26.4")
+		if (!response.equals("(2 × (2^(3 + 2))) ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = (2 × (2^5)) ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = (2 × 32) ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = 64 ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = 64 ÷ 4^2 × (2 - 2 + 6.6) <br/> = 64 ÷ 16 × (2 - 2 + 6.6) <br/> = 4 × 6.6 <br/> = 26.4")
 				&& !response.equals("(2 * (2^(3 + 2))) / 2^2^2 * (2 - 2 + 6.6) <br/> = (2 * (2^5)) / 2^2^2 * (2 - 2 + 6.6) <br/> = (2 * 32) / 2^2^2 * (2 - 2 + 6.6) <br/> = 64 / 2^2^2 * (2 - 2 + 6.6) <br/> = 64 / 4^2 * (2 - 2 + 6.6) <br/> = 64 / 16 * (2 - 2 + 6.6) <br/> = 4 * 6.6 <br/> = 26.4")) {
 			fail("incorrect:" + response);			
 		}
@@ -125,6 +131,9 @@ public class TestBootstrap extends TextTest {
 		// ReadObjectQuery	11,653 - ReadAllQuery	849 - UpdateObjectQuery	68 - InsertObjectQuery	1,041 - DeleteObjectQuery	2
 		// 2015-11-23 - 2111, 2060
 		// 2015-11-25 - state bytecode - 1775, 1810
+		// 2016-02-18 - Self4 - 2381, 2295
+		// 2016-02-19 - expression byte-code - 2605, 2628, 2246, 2267
+		// 2016-02-29 - new computer - 889, 886
 		
 		//profiler.dumpResults();
 	}

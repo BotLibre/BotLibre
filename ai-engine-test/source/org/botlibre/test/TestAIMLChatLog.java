@@ -24,6 +24,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
+import org.botlibre.self.Self4Compiler;
+import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.Utils;
@@ -60,9 +62,12 @@ public class TestAIMLChatLog extends TestAIML {
 			file = new File(url.toURI());
 			bot.mind().getThought(Language.class).loadAIMLFileAsLog(file, "", true);
 
+			//SelfCompiler.setCompiler(new Self4Compiler());
 			url = TestAIML.class.getResource("alice.res");
 			file = new File(url.toURI());
 			bot.awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, true);
+			Utils.sleep(5000);
+			//SelfCompiler.setCompiler(new SelfCompiler());
 		} catch (Exception exception) {
 			fail(exception.toString());
 		}

@@ -29,6 +29,7 @@ import org.junit.runners.Suite;
    TestAIML2.class,
    TestAIML2ChatLog.class,
    TestAIMLDecompile.class,
+   TestAIMLForgetfullness.class,
    TestAIML20q.class,
    TestAIMLBlackJack.class,
    TestAIMLTicTacToe.class,

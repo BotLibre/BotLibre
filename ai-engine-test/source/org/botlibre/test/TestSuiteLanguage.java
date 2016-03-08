@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
    TestLanguage.class,
    TestLanguageDecompile.class,
+   TestLanguageForgetfullness.class,
    TestUnderstanding.class,
    TestResponseListImport.class,
    TestMath.class

@@ -21,18 +21,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.BeforeClass;
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
-import org.botlibre.knowledge.Bootstrap;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
 import org.botlibre.util.Utils;
+import org.junit.BeforeClass;
 
 /**
  * Test the performance of the Freebase batch import.
@@ -51,11 +50,11 @@ public class TestWikidata extends TextTest {
 		Collection<Relationship> states = new ArrayList<Relationship>(language.getRelationships(Primitive.STATE));
 		for (Relationship state : states) {
 			if (state.getTarget().getName().equals("WhatIs")) {
-				Vertex wikidata = SelfCompiler.getCompiler().parseStateMachine(Bootstrap.class.getResource("WhatIsWikidata.self"), "", false, network);
+				Vertex wikidata = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("WhatIsWikidata.self"), "", false, network);
 				language.replaceRelationship(state, wikidata);
 				network.removeRelationship(state);
 			} else if (state.getTarget().getName().equals("WhereIs")) {
-				Vertex wikidata = SelfCompiler.getCompiler().parseStateMachine(Bootstrap.class.getResource("WhereIsWikidata.self"), "", false, network);
+				Vertex wikidata = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("WhereIsWikidata.self"), "", false, network);
 				language.replaceRelationship(state, wikidata);
 				network.removeRelationship(state);
 			}
@@ -152,9 +151,39 @@ public class TestWikidata extends TextTest {
 		text.input("where is Edmonton?");
 		response = waitForOutput(output);
 		checkResponse(response, "Edmonton is in Canada.");
+		
+		// Test twice for when already known.
+		Utils.sleep(SLEEP);
+		text.input("where is Edmonton?");
+		response = waitForOutput(output);
+		checkResponse(response, "Edmonton is in Canada.");
+		
+		text.input("x");
+		response = waitForOutput(output);
+		
+		// Test lower case.
+		Utils.sleep(SLEEP);
+		text.input("where is edmonton?");
+		response = waitForOutput(output);
+		checkResponse(response, "Edmonton is in Canada.");
 
 		Utils.sleep(SLEEP);
 		text.input("what is Brockville?");
+		response = waitForOutput(output);
+		checkResponse(response, "city in Ontario, Canada");
+
+		// Test twice for when already known.
+		Utils.sleep(SLEEP);
+		text.input("what is Brockville?");
+		response = waitForOutput(output);
+		checkResponse(response, "city in Ontario, Canada");
+
+		text.input("x");
+		response = waitForOutput(output);
+		
+		// Test lower case.
+		Utils.sleep(SLEEP);
+		text.input("what is brockville?");
 		response = waitForOutput(output);
 		checkResponse(response, "city in Ontario, Canada");
 

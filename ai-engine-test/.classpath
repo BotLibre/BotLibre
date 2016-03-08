@@ -23,11 +23,11 @@
 	<classpathentry kind="lib" path="lib/mail/mailapi-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/mail/pop3-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/mail/smtp-1.5.1.jar"/>
-	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.2.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Bot Libre - AI Engine"/>
 	<classpathentry kind="lib" path="lib/oswap/encoder-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/oswap/guava.jar"/>
 	<classpathentry kind="lib" path="lib/oswap/jsr305.jar"/>
 	<classpathentry kind="lib" path="lib/oswap/owasp-java-html-sanitizer.jar"/>
+	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

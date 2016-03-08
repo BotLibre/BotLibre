@@ -55,11 +55,17 @@ public class TestALMLALICE extends TextTest {
 		System.out.println("Bootstrap time: " + (end - start));
 		// 2015-11-23 - 70658, 69952, 68645
 		// function bytecode - 69002
+		// 2016-02-18 - Self4 - 69405
+		// 2016-02-19 - expression byte-code - 64216, 63960
+		// 2016-02-29 - new computer - 38363, 39086
 		
 		Bot bot = Bot.createInstance();
 		System.out.println("Memory size: " + bot.memory().getLongTermMemory().size());
 		// 2015-11-23 - 38409
 		// function bytecode - 36905
+		// 2016-02-18 - Self4 - 38421
+		// 2016-02-19 - expression byte-code - 36918
+		// 2016-02-29 -  new computer - 36969
 	}
 
 	@org.junit.Test
@@ -122,6 +128,9 @@ public class TestALMLALICE extends TextTest {
 		System.out.println("Chat time: " + (end - start));
 		// 2015-11-18 -- 4161, 2715, 2673
 		// function bytecode - 2483
+		// 2016-02-18 - Self4 - 2659
+		// 2016-02-19 - expression byte-code - 2514, 2525, 2468
+		// 2016-02-29 - new computer - 1450, 1372
 		
 		//profiler.dumpResults();
 	}

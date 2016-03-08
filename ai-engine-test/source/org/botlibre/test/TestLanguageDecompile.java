@@ -28,6 +28,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.self.Self4Compiler;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.self.SelfDecompiler;
 import org.botlibre.sense.text.TextEntry;
@@ -52,7 +53,7 @@ public class TestLanguageDecompile extends TestLanguage {
 			String code = SelfDecompiler.getDecompiler().decompileStateMachine(state.getTarget(), network);
 			SelfCompiler compiler = SelfCompiler.getCompiler();
 			if ("Self".equals(state.getTarget().getName())) {
-				compiler = new SelfCompiler();
+				compiler = new Self4Compiler();
 			}
 			Vertex newState = compiler.parseStateMachine(code, false, network);
 			language.replaceRelationship(state, newState);

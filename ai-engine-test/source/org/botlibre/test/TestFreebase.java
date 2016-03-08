@@ -116,7 +116,7 @@ public class TestFreebase extends TextTest {
 			
 			text.input("where is Montreal?");
 			String response = waitForOutput(output);
-			if (!response.equals("Montreal is in QuÃ©bec.")
+			if (!response.equals("Montreal is in Québec.")
 					&& !response.equals("Montreal is in Canada.")
 					&& !response.equals("Montreal is in Urban agglomeration of Montreal.")) {
 				fail("Incorrect: " + response);
@@ -125,11 +125,12 @@ public class TestFreebase extends TextTest {
 			Utils.sleep(SLEEP);
 			text.input("where is that?");
 			response = waitForOutput(output);
-			if (!response.equals("QuÃ©bec is in Canada.")
+			if (!response.equals("Québec is in Canada.")
 					&& !response.equals("Urban agglomeration of Montreal is in Canada.")
+					&& !response.equals("Urban agglomeration of Montreal is in Québec.")
 					&& !response.equals("Canada is in Americas.")
 					&& !response.equals("Canada is in DVD Region 1.")
-					&& !response.equals("QuÃ©bec is in Canada.")) {
+					&& !response.equals("Québec is in Canada.")) {
 				fail("Incorrect: " + response);
 			}
 	
@@ -141,8 +142,48 @@ public class TestFreebase extends TextTest {
 				fail("Incorrect: " + response);
 			}
 	
+			// Test twice for when already known.
+			Utils.sleep(SLEEP);
+			text.input("where is Edmonton?");
+			response = waitForOutput(output);
+			if (!response.equals("Edmonton is in Alberta.")
+					&& !response.equals("Edmonton is in Canada.")) {
+				fail("Incorrect: " + response);
+			}
+			
+			text.input("x");
+			response = waitForOutput(output);
+
+			// Test lower case.
+			Utils.sleep(SLEEP);
+			text.input("where is edmonton?");
+			response = waitForOutput(output);
+			if (!response.equals("edmonton is in Alberta.")
+					&& !response.equals("Edmonton is in Canada.")) {
+				fail("Incorrect: " + response);
+			}
+			
 			Utils.sleep(SLEEP);
 			text.input("what is Brockville?");
+			response = waitForOutput(output);
+			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
+				fail("Incorrect: " + response);
+			}
+
+			// Test twice for when already known.
+			Utils.sleep(SLEEP);
+			text.input("what is Brockville?");
+			response = waitForOutput(output);
+			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
+				fail("Incorrect: " + response);
+			}
+			
+			text.input("x");
+			response = waitForOutput(output);
+
+			// Test lower case.
+			Utils.sleep(SLEEP);
+			text.input("what is brockville?");
 			response = waitForOutput(output);
 			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
 				fail("Incorrect: " + response);

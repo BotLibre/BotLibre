@@ -92,7 +92,7 @@ public class TextPanel extends ChildPanel
 				if ((text.length() > 3) && text.substring(0, 2).equals("&&")) {
 					// Allow Self script execution.
 					Network memory = getBot().memory().newMemory();
-					Vertex result = SelfCompiler.getCompiler().evaluateEquation(
+					Vertex result = SelfCompiler.getCompiler().evaluateExpression(
 							text.substring(2, text.length()), sense.getUser(memory), memory.createVertex(Primitive.SELF), false, memory);
 					memory.save();
 					appendText("Script: " + text.substring(2, text.length()) + "\n");

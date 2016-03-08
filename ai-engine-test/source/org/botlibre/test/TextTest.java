@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
 import org.botlibre.knowledge.database.DatabaseMemory;
 import org.botlibre.sense.text.TextEntry;
+
+import junit.framework.Assert;
 
 /**
  * Test text processing.
@@ -86,7 +86,7 @@ public abstract class TextTest {
 	 */
 	public static void bootstrap() {
 		reset();
-		new Bootstrap().bootstrapSystem(bot, true);
+		new Bootstrap().bootstrapMemory(bot.memory(), true, false);
 	}
 	
 	/**

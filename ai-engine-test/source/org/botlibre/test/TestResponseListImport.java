@@ -173,7 +173,25 @@ public class TestResponseListImport extends TextTest {
 	}
 
 	/**
-	 * Test response matching works.
+	 * Test Self operators.
+	 */
+	@org.junit.Test
+	public void testSelf() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("test self");
+		String response = waitForOutput(output);
+		checkResponse(response, "2 1 0 0.5 1");
+		
+		bot.shutdown();
+	}
+
+	/**
+	 * Test the scripts were executed.
 	 */
 	@org.junit.Test
 	public void testScript() {

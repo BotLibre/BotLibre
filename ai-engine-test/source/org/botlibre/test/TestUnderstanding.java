@@ -61,7 +61,7 @@ public class TestUnderstanding extends TextTest {
 		List<String> output = registerForOutput(text);
 		text.input("sky blue red dog cat green grass tall like very big tall fat small human nice");
 		waitForOutput(output);
-		Utils.sleep(10000);
+		Utils.sleep(25000);
 		
 		bot.shutdown();
 	}
@@ -382,6 +382,11 @@ public class TestUnderstanding extends TextTest {
 			assertKnown(response);
 			assertKeyword(response, "you are you");
 			
+			text.input("I am not you");
+			response = waitForOutput(output);
+			assertKnown(response);
+			assertKeyword(response, "you are not me");
+			
 			text.input("am I me?");
 			response = waitForOutput(output);
 			assertTrue(response);
@@ -390,7 +395,7 @@ public class TestUnderstanding extends TextTest {
 			text.input("am I me or you?");
 			response = waitForOutput(output);
 			assertKeyword(response, "you are you");
-			assertKeyword(response, "you are not me");
+			assertKeyword(response, "not me");
 		} finally {
 			bot.shutdown();
 		}

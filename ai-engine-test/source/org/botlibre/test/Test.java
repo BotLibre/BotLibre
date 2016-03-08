@@ -23,6 +23,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,6 +37,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.knowledge.BasicNetwork;
 import org.botlibre.knowledge.serialized.SerializedMemory;
 import org.botlibre.knowledge.xml.NetworkXMLParser;
+import org.botlibre.sense.http.Http;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
@@ -51,29 +54,6 @@ public class Test {
 		long start = System.currentTimeMillis();
 		try {
 			test();
-			//testJDBC();
-			//testEscapeHTML();
-			//testFBDate();
-			//System.out.println(java.text.NumberFormat.getInstance().parse("1000,200,300,400,500,600,700,800,900e27"));
-			//System.out.println(new java.sql.Date(System.currentTimeMillis() - (Utils.DAY * 30)));
-			//testStrip();
-			//testQuotes();
-			//testReduce();
-			//testAIML();
-			//testEncrypt();
-			//testParseDate();
-			//testStream();
-			//listAllVoices();
-			//testVoice();
-			//testVoiceRec();
-			//testNetworkXMLParser();
-			//testSerializedMemory();
-			//testTextEntry();
-			//testXML();
-			//testBot();
-			//testSentence();
-			//testTweet();
-			//testLinkHTML();
 		} catch (Throwable error) {
 			error.printStackTrace();
 		}
@@ -81,7 +61,12 @@ public class Test {
 	}
 	
 	public static void test() {
-		System.out.println((System.nanoTime() % 1000000) * 1000);
+		System.out.println(new SimpleDateFormat("HH:mm:SS zzz").format(new Date()));
+	}
+	
+	public static void testRSS() throws Exception {
+		Bot bot = Bot.createInstance();
+		bot.awareness().getSense(Http.class).parseRSSFeed(new URL("http://canadiens.nhl.tv/team/servlets/rss/whatshot"), System.currentTimeMillis());
 	}
 	
 	public static void testJDBC() throws Exception {

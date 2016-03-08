@@ -104,17 +104,13 @@ public class TestAIML2 extends TextTest {
 		text.input("what is the date");
 		String response = waitForOutput(output);
 		String today = Utils.printDate(new Date(), "EEEE MMMM d y");
-		if (!response.equals("The date is " + today)) {
-			fail("Incorrect response: " + response);
-		}
+		checkResponse(response, "The date is " + today);
 		
 		text.input("what is the time");
 		SimpleDateFormat format = new SimpleDateFormat("hh 'o''clock' a, zzzz");
 		String time = format.format(new Date());
 		response = waitForOutput(output);
-		if (!response.equals("The time is " + time)) {
-			fail("Incorrect response: " + response);
-		}
+		checkResponse(response, "The time is " + time);
 		
 		text.input("how many days until Christmas?");
 		response = waitForOutput(output);
@@ -122,54 +118,42 @@ public class TestAIML2 extends TextTest {
 		christmas.set(Calendar.MONTH, 11);
 		christmas.set(Calendar.DAY_OF_MONTH, 25);
 		Calendar date = Calendar.getInstance();
-		int days = christmas.get(Calendar.DAY_OF_YEAR) - date.get(Calendar.DAY_OF_YEAR) - 1;
-		if (!response.equals("" + days + " days until Christmas.")) {
-			fail("Incorrect response: " + response);
-		}
+		int days = christmas.get(Calendar.DAY_OF_YEAR) - date.get(Calendar.DAY_OF_YEAR);
+		checkResponse(response, "" + days + " days until Christmas.");
 		
 		text.input("how many months until Christmas?");
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
 		int months = christmas.get(Calendar.MONTH) - date.get(Calendar.MONTH);
-		if (!response.equals("" + months + " months until Christmas.")) {
-			fail("Incorrect response: " + response);
-		}
+		checkResponse(response, "" + months + " months until Christmas.");
 		
 		text.input("how many weeks until Christmas?");
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
-		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR) - 1;
-		if (!response.equals("" + weeks + " weeks until Christmas.")) {
-			fail("Incorrect response: " + response);
-		}
+		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR);
+		checkResponse(response, "" + weeks + " weeks until Christmas.");
 		
 		text.input("how many hours until Christmas?");
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
 		int hours = (christmas.get(Calendar.DAY_OF_YEAR) * 24)
-				- ((date.get(Calendar.DAY_OF_YEAR) * 24) + date.get(Calendar.HOUR_OF_DAY)) - 24;
-		if (!response.equals("" + hours + " hours until Christmas.")) {
-			fail("Incorrect response: " + response);
-		}
+				- ((date.get(Calendar.DAY_OF_YEAR) * 24) + date.get(Calendar.HOUR_OF_DAY));
+		checkResponse(response, "" + hours + " hours until Christmas.");
 		
 		text.input("how many minutes until Christmas?");
 		date = Calendar.getInstance();
 		response = waitForOutput(output);
 		
 		long minutes = (christmas.get(Calendar.DAY_OF_YEAR) * 24L * 60L)
-				- (((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE)) - (24 * 60);
-		if (!response.equals("" + minutes + " minutes until Christmas.")) {
-			fail("Incorrect response: " + response + " - should be " + minutes);
-		}
+				- (((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE));
+		checkResponse(response, "" + minutes + " minutes until Christmas.");
 		
 		text.input("how many seconds until Christmas?");
 		date = Calendar.getInstance();
 		response = waitForOutput(output);
 		long seconds = (christmas.get(Calendar.DAY_OF_YEAR) * 24L * 60L * 60L)
-				- ((((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE)) * 60L) - (24 * 60 * 60);
-		if (!response.equals("" + seconds + " seconds until Christmas.")) {
-			fail("Incorrect response: " + response + " - should be " + seconds);
-		}
+				- ((((date.get(Calendar.DAY_OF_YEAR) * 24L) + date.get(Calendar.HOUR_OF_DAY)) * 60L + date.get(Calendar.MINUTE)) * 60L);
+		checkResponse(response, "" + seconds + " seconds until Christmas.");
 		
 		bot.shutdown();
 	}

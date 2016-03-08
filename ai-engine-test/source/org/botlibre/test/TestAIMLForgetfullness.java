@@ -17,17 +17,10 @@
  ******************************************************************************/
 package org.botlibre.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
-import org.botlibre.api.knowledge.Relationship;
-import org.botlibre.api.knowledge.Vertex;
-import org.botlibre.knowledge.Primitive;
-import org.botlibre.self.SelfCompiler;
-import org.botlibre.self.SelfDecompiler;
-import org.botlibre.thought.language.Language;
+import org.botlibre.thought.forgetfulness.Forgetfulness;
+import org.botlibre.util.Utils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -35,22 +28,24 @@ import org.junit.BeforeClass;
  * Test the state decompiler.
  */
 
-public class TestAIMLDecompile extends TestAIML2 {
+public class TestAIMLForgetfullness extends TestAIML2 {
 
 	@BeforeClass
 	public static void setup() {
 		TestAIML2.setup();
+
+		Utils.sleep(500);
 		
 		Bot bot = Bot.createInstance();
-		
+
 		Network network = bot.memory().newMemory();
-		Vertex language = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
-		Collection<Relationship> states = new ArrayList<Relationship>(language.getRelationships(Primitive.STATE));
-		for (Relationship state : states) {
-			String code = SelfDecompiler.getDecompiler().decompileStateMachine(state.getTarget(), network);
-			Vertex newState = SelfCompiler.getCompiler().parseStateMachine(code, false, network);
-			language.replaceRelationship(state, newState);
-			network.removeRelationship(state);
+		Forgetfulness forgetfulness = bot.mind().getThought(Forgetfulness.class);
+		try {
+			forgetfulness.setMaxRelationships(50);
+			forgetfulness.setMaxSize(1000);
+			forgetfulness.forget(network, true, 100);
+		} catch (Exception exception) {
+			bot.log(bot, exception);
 		}
 		network.save();
 		
