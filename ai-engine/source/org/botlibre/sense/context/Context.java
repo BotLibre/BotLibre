@@ -61,9 +61,18 @@ public class Context extends BasicSense {
 	}
 
 	/**
+	 * Self API
 	 * Return the top of the context stack.
 	 */
-	public Vertex top(Vertex vertex) {
+	public Vertex top(Vertex source) {
+		return top(source.getNetwork());
+	}
+
+	/**
+	 * Self API
+	 * Return the top of the context stack.
+	 */
+	public Vertex top(Vertex source, Vertex vertex) {
 		if (!vertex.hasData() || !(vertex.getData() instanceof Number)) {
 			return null;
 		}
@@ -75,6 +84,14 @@ public class Context extends BasicSense {
 	}
 
 	/**
+	 * Self API
+	 * Clear the current context.
+	 */
+	public void clear(Vertex source) {
+		clear();
+	}
+
+	/**
 	 * Clear the current context.
 	 */
 	public void clear() {
@@ -82,9 +99,10 @@ public class Context extends BasicSense {
 	}
 
 	/**
+	 * Self API
 	 * Return the first element on the stack matching the variable.
 	 */
-	public Vertex search(Vertex variable) {
+	public Vertex search(Vertex source, Vertex variable) {
 		for (int index = this.contextStack.size() - 1; index >= 0; index--) {
 			Vertex context = variable.getNetwork().findById(this.contextStack.get(index));
 			if ((context != null) && (!context.hasRelationship(Primitive.VARIABLE)) && (variable.matches(context, new HashMap<Vertex, Vertex>()) == Boolean.TRUE)) {
@@ -93,6 +111,14 @@ public class Context extends BasicSense {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Self API
+	 * Add the vertex to the context.
+	 */
+	public void push(Vertex source, Vertex vertex) {
+		push(vertex);
 	}
 
 	/**

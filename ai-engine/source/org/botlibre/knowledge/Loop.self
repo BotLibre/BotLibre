@@ -1,27 +1,38 @@
-// Detect loops in the conversation.
-State:Loop {
-	case :input goto State:Loop;
+/**
+ * Detect loops in the conversation.
+ * Loop state will ignore the input and always evaluate the checkLoop function that checks if the conversation is in a loop.
+ * If no loop is detected, null is returned to continue processing the next state.
+ */
+state Loop {
+	// Consume the input so the answer is always evaluated.
+	case input goto Loop;
 	
-	Quotient:Equation:checkLoop;
+	// Always invoke the function to check for loops.
+	answer checkLoop();
 	
-	Equation:checkLoop {
-		assign :last to (get #input from (get #input from :conversation at last 3));
-		if not (:sentence, :last)
-			then return #null;
-		assign :targetLast to (get #input from (get #input from :conversation at last 2));
-		assign :targetBeforeLast to (get #input from (get #input from :conversation at last 4));
-		if (:targetBeforeLast, #null)
-			then return #null;
-		if not (:targetLast, :targetBeforeLast)
-			then do(
-					assign :beforeLast to (get #input from (get #input from :conversation at last 5));
-					if not (:sentence, :beforeLast)
-						then return #null;
-					assign :targetBeforeThat to (get #input from (get #input from :conversation at last 6));
-					if not (:targetLast, :targetBeforeThat)
-						then return #null;
-				);
-		random("We seem to be in a loop, perhaps try saying something new.", "We seem to be repeating the same phrases, perhaps try saying something different.");
+	function checkLoop() {
+		var last = (conversation.getLast(#input, 3)).input;
+		// Check if current input equals the last user input.
+		if (sentence != last) {
+			return null;
+		}
+		var targetLast = (conversation.getLast(#input, 2)).input;
+		var targetBeforeLast = (conversation.getLast(#input, 4)).input;
+		if (targetBeforeLast == null) {
+			return null;
+		}
+		// Check if bot's last input equals the previous input.
+		if (targetLast != targetBeforeLast) {
+			// Check for double repeats.
+			var beforeLast = (conversation.getLast(#input, 5)).input;
+			if (sentence != beforeLast) {
+				return null;
+			}
+			var targetBeforeThat = (conversation.getLast(#input, 6)).input;
+			if (targetLast != targetBeforeThat) {
+				return null;
+			}
+		}
+		random ("We seem to be in a loop, perhaps try saying something new.", "We seem to be repeating the same phrases, perhaps try saying something different.");
 	}
 }
-

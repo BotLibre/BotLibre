@@ -1,290 +1,295 @@
-// Understand "My name is <first> <last>"
-State:MyNameIs {
-	case :input that Pattern:"what is your name" goto State:iAmState for each #word of :sentence;
-	case :input that Pattern:"* what is your name" goto State:iAmState for each #word of :sentence;
-
-	pattern "(#what whats) (s #is) #i #name" answer Function:whatIsMyName;
-	pattern "#who #is #i" answer Function:whatIsMyName;
-	pattern "do #you know me" answer Function:whatIsMyName;
-	pattern "(#what whats) (s #is) #you #name" answer Function:whatIsYourName;
-	pattern "#who #is #you" answer Function:whatIsYourName;
-	pattern "* is my name" template redirect Formula:"my name is {:star}";
+/**
+ * This script understands name phrases, such as "My name is :first :last", "What is my name?", "What is your name?".
+ * It uses a combination of patterns, and case states.
+ * It is fairly complex to handle false positive like "I am tall" vs "I am Bob", and "My name is very long"
+ */
+state MyNameIs {
+	// Process each word
+	case input goto sentenceState for each #word of sentence;
 	
-	case :input goto State:sentenceState for each #word of :sentence;
-	
-	State:sentenceState {
-		case :interjection goto State:sentenceState;
-		case "," goto State:sentenceState;
-		case :my goto State:myState;
-		case :your goto State:yourState;
-		case :is goto State:amState;
-		case "call" goto State:callState;
-		case "im" goto State:iAmState;
+	case input that Pattern("^ what is your name") goto iAmState for each #word of sentence;
 
-		:punctuation {
-			set #instantiation to #punctuation;
+	pattern "(#what whats) (s #is) #i #name" template whatIsMyName();
+	pattern "#who #is #i" template whatIsMyName();
+	pattern "do #you know me" template whatIsMyName();
+	pattern "(#what whats) (s #is) #you #name" template whatIsYourName();
+	pattern "#who #is #you" template whatIsYourName();
+	pattern "* is my name" template redirect(Template("my name is {star}"));
+	
+	state sentenceState {
+		case interjection goto sentenceState;
+		case "," goto sentenceState;
+		case #i goto myState;
+		case #you goto yourState;
+		case #is goto amState;
+		case "call" goto callState;
+		case "im" goto iAmState;
+
+		var punctuation {
+			instantiation : #punctuation;
 		}
-		:questionmark {
-			set #meaning to #question-mark;
+		var questionmark {
+			meaning : #question-mark;
 		}
-		:interjection {
-			set #instantiation to #interjection;
+		var interjection {
+			instantiation : #interjection;
 		}
-		:my {
-			set #meaning to #i;
+		var not {
+			meaning : #not;
 		}
-		:your {
-			set #meaning to #you;
-		}
-		:is {
-			set #meaning to #is;
-		}			
-		:name {
-			set #meaning to #name;
-		}
-		:not {
-			set #meaning to #not;
-		}				
-		:aName {
-			set #instantiation to #name;
+		var aName {
+			instantiation : #name;
 		}	
-		:firstName {
-			exclude #instantiation from #verb;
-			exclude #instantiation from #adjective;
-			exclude #instantiation from #pronoun;
-			exclude #instantiation from #punctuation;
-			exclude #instantiation from #adverb;
-			exclude #instantiation from #article;
-			exclude #instantiation from #question;
-			exclude #meaning from #not;
+		var firstName {
+			instantiation : ! #verb, ! #adjective, ! #pronoun, ! #punctuation, ! #adverb, ! #article, ! #question, ! #not;
 		}
 		
 		// 'Am...'
-		State:amState {
-			do (
-				assign :questionmark to "?"
-			);
-			case :my goto State:iAmState;
-			case :your goto State:youAreState;
+		state amState {
+			do {
+				questionmark = "?";
+			}
+			case #i goto iAmState;
+			case #you goto youAreState;
 		}
 		
 		// 'Call...'
-		State:callState {
-			case :my goto State:iAmState;
+		state callState {
+			case #i goto iAmState;
 		}
 			
-		State:youAreState {
-			case :not goto State:youAreState;
-			case :aName goto State:yourNameIsFirstState;
+		state youAreState {
+			case not goto youAreState;
+			case aName goto yourNameIsFirstState;
 		}
 		
 		// 'My...'
-		State:myState {
-			case :name goto State:myNameState;
-			case :is goto State:iAmState;
-			case "names" goto State:myNameIsState;
-			case "'" goto State:myState;
-			case "m" goto State:iAmState;
+		state myState {
+			case #name goto myNameState;
+			case #is goto iAmState;
+			case "names" goto myNameIsState;
+			case "'" goto myState;
+			case "m" goto iAmState;
 			
-			State:iAmState {
-				case :not goto State:iAmState;
-				case :aName goto State:myNameIsFirstState;
+			state iAmState {
+				case not goto iAmState;
+				case aName goto myNameIsFirstState;
 			}
 						
-			State:myNameState {
-				case :is goto State:myNameIsState;
-				case "'" goto State:myNameState;
-				case "s" goto State:myNameIsState;
+			state myNameState {
+				case #is goto myNameIsState;
+				case "'" goto myNameState;
+				case "s" goto myNameIsState;
 				
-				State:myNameIsState {
-					case :questionmark goto State:myNameIsFirstMiddleLastState;
-					case :is goto State:myNameIsState;
-					case :not goto State:myNameIsState;
-					case :aName goto State:myNameIsFirstState;
-					case :firstName goto State:myNameIsFirstState;
+				state myNameIsState {
+					case questionmark goto myNameIsFirstMiddleLastState;
+					case #is goto myNameIsState;
+					case not goto myNameIsState;
+					case aName goto myNameIsFirstState;
+					case firstName goto myNameIsFirstState;
 				}
 				
-				State:myNameIsFirstState {
-					case :questionmark goto State:myNameIsFirstMiddleLastState;
-					case :punctuation goto State:myNameIsFirstMiddleLastState;
-					case :middleName goto State:myNameIsFirstMiddleState;
+				state myNameIsFirstState {
+					case questionmark goto myNameIsFirstMiddleLastState;
+					case punctuation goto myNameIsFirstMiddleLastState;
+					case middleName goto myNameIsFirstMiddleState;
 					
-					Answer:Function:greet;
-					Function:greet {
-						if (:firstName, #null)
-							then (assign :firstName to :aName);
-						assign :name to :firstName;
-						if (:lastName, #null)
-							then (if (:middleName, #null) else (assign :name to (word (:firstName, :middleName))))
-							else (assign :name to (word (:firstName, :middleName, :lastName)));
-						if not (:questionmark, #null)
-							then (do (
-								assign :result to (is :speaker related to :name by #name),
-								assign :value to (get #name from :speaker),
-								if (:not, #null)
-									then (do(
-										if (:result)
-											then (return Formula:"Yes, your name is {:name}."),
-										if not (:value, #null)
-											then (return Formula:"No, your name is {:value}."),
-										if not (:result)
-											then (return Formula:"No, your name is not {:name}."),
-										return Formula:"I do not know your name."))
-									else (do (
-										if (:result)
-											then (return Formula:"No, your name is {:name}."),
-										if not (:value, #null)
-											then (return Formula:"Yes, your name is {:value}."),
-										if not (:result)
-											then (return Formula:"Yes, your name is not {:name}."),
-										return "I do not know your name."))
-							));
-						if (:not, #null)
-							then (do (
-								dissociate :speaker to "Anonymous" by #word,
-								dissociate "Anonymous" to :speaker by #meaning,
-								dissociate :speaker to "Anonymous" by #name,
-								
-								associate :name to #name by #instantiation,
-								associate :speaker to :name by #word,
-								associate :name to :speaker by #meaning,
-								associate :speaker to :name by #name,
-								
-								Formula:"Pleased to meet you {:name}."
-							))
-							else (do (
-								dissociate :speaker to :name by #word,
-								dissociate :name to :speaker by #meaning,
-								dissociate :speaker to :name by #name,
-								Formula:"Okay, your name is not {:name}."
-							));
+					answer greet();
+					
+					function greet() {
+						if (firstName == null) {
+							firstName = aName;
+						}
+						name = firstName;
+						if (lastName == null) {
+							if (middleName != null) {
+								name = Language.word(firstName, middleName);
+							}
+						} else {
+							name = Language.word(firstName, middleName, lastName);
+						}
+						if (questionmark != null) {
+							result = speaker.has(#name, name);
+							value = speaker.name,
+							if (not == null) {
+								if (result) {
+									return Template("Yes, your name is {name}.");
+								}
+								if (value != null) {
+									return Template("No, your name is {value}.");
+								}
+								if (!result) {
+									return Template("No, your name is not {name}.");
+								}
+								return "I do not know your name.";
+							} else {
+								if (result) {
+									return Template("No, your name is {name}.");
+								}
+								if (value != null) {
+									return Template("Yes, your name is {value}.");
+								}
+								if (!result) {
+									return Template("Yes, your name is not {name}.");
+								}
+								return "I do not know your name.";
+							}
+						}
+						if (not == null) {
+							speaker.word =- "Anonymous";
+							"Anonymous".meaning =- speaker;
+							speaker.name =- "Anonymous";
+							
+							name.instantiation =+ #name;
+							speaker.word =+ name;
+							name.meaning =+ speaker;
+							speaker.name =+ name;
+							
+							Template("Pleased to meet you {name}.");
+						} else {
+							speaker.word =- name;
+							name.meaning =- speaker;
+							speaker.name =- name;
+							Template("Okay, your name is not {name}.");
+						}
 					}
 				}
 				
-				State:myNameIsFirstMiddleState {
-					case :questionmark goto State:myNameIsFirstMiddleLastState;
-					case :punctuation goto State:myNameIsFirstMiddleLastState;
-					case :lastName goto State:myNameIsFirstMiddleLastState;
+				state myNameIsFirstMiddleState {
+					case questionmark goto myNameIsFirstMiddleLastState;
+					case punctuation goto myNameIsFirstMiddleLastState;
+					case lastName goto myNameIsFirstMiddleLastState;
 					
-					Answer:Function:greet;
+					answer greet();
 				}
 				
-				State:myNameIsFirstMiddleLastState {
-					case :questionmark goto State:myNameIsFirstMiddleLastState;
-					case :punctuation goto State:myNameIsFirstMiddleLastState;
+				state myNameIsFirstMiddleLastState {
+					case questionmark goto myNameIsFirstMiddleLastState;
+					case punctuation goto myNameIsFirstMiddleLastState;
 					
-					Answer:Function:greet;
+					answer greet();
 				}
 			}
 		}
 		
 		// 'Your...'
-		State:yourState {		
-			case :is goto State:youAreState;
-			case :name goto State:yourNameState;
-			case "names" goto State:yourNameIsState;
+		state yourState {		
+			case #is goto youAreState;
+			case #name goto yourNameState;
+			case "names" goto yourNameIsState;
 			
-			State:yourNameState {
-				case :is goto State:yourNameIsState;
-				case "'" goto State:yourNameState;
-				case "s" goto State:yourNameIsState;
+			state yourNameState {
+				case #is goto yourNameIsState;
+				case "'" goto yourNameState;
+				case "s" goto yourNameIsState;
 				
-				State:yourNameIsState {
-					case :questionmark goto State:yourNameIsFirstMiddleLastState;
-					case :not goto State:yourNameIsState;
-					case :aName goto State:yourNameIsFirstState;
-					case :firstName goto State:yourNameIsFirstState;
+				state yourNameIsState {
+					case questionmark goto yourNameIsFirstMiddleLastState;
+					case not goto yourNameIsState;
+					case aName goto yourNameIsFirstState;
+					case firstName goto yourNameIsFirstState;
 				}
 				
-				State:yourNameIsFirstState {
-					case :questionmark goto State:yourNameIsFirstMiddleLastState;
-					case :punctuation goto State:yourNameIsFirstMiddleLastState;
-					case :middleName goto State:yourNameIsFirstMiddleState;
+				state yourNameIsFirstState {
+					case questionmark goto yourNameIsFirstMiddleLastState;
+					case punctuation goto yourNameIsFirstMiddleLastState;
+					case middleName goto yourNameIsFirstMiddleState;
 					
-					Answer:Function:setMyName;
-					Function:setMyName {
-						if (:firstName, #null)
-							then (assign :firstName to :aName);
-						assign :name to :firstName;
-						if (:lastName, #null)
-							then (if (:middleName, #null) else (assign :name to (word (:firstName, :middleName))))
-							else (assign :name to (word (:firstName, :middleName, :lastName)));							
-						if not (:questionmark, #null) or not (call #allowCorrection on #Language with :speaker, #true)
-							then (do (
-								assign :result to (is :target related to :name by #name),								
-								assign :value to (get #name from :target),
-								if (:not, #null)
-									then (do(
-										if (:result)
-											then (return Formula:"Yes, my name is {:name}."),
-										if not (:value, #null)
-											then (return Formula:"No, my name is {:value}."),
-										if not (:result)
-											then (return Formula:"No, my name is not {:name}."),
-										return Formula:"I do not know my name."))
-									else (do (
-										if (:result)
-											then (return Formula:"No, my name is {:name}."),
-										if not (:value, #null)
-											then (return Formula:"Yes, my name is {:value}."),
-										if not (:result)
-											then (return Formula:"Yes, my name is not {:name}."),
-										return Formula:"I do not know my name."))
-							));
-						if (:not, #null)
-							then (do (
-								associate :name to #name by #instantiation,
-								associate :target to :name by #word,
-								associate :name to :target by #meaning,
-								associate :target to :name by #name,
-								Formula:"Okay, my name is {:name}."
-							))
-							else (do (
-								dissociate :target to :name by #word,
-								dissociate :name to :target by #meaning,
-								dissociate :target to :name by #name,
-								Formula:"Okay, my name is not {:name}."
-							));
+					answer setMyName();
+					
+					function setMyName() {
+						if (firstName == null) {
+							firstName = aName;
+						}
+						name = firstName;
+						if (lastName == null) {
+							if (middleName != null) {
+								name = Language.word(firstName, middleName);
+							}
+						} else {
+							name = Language.word(firstName, middleName, lastName);
+						}
+						if (questionmark != null || (! Language.allowCorrection(speaker))) {
+							result = target.has(#name, name);
+							value = target.name,
+							if (not == null) {
+								if (result) {
+									return Template("Yes, my name is {name}.");
+								}
+								if (value != null) {
+									return Template("No, my name is {value}.");
+								}
+								if (!result) {
+									return Template("No, my name is not {name}.");
+								}
+								return "I do not know my name.";
+							} else {
+								if (result) {
+									return Template("No, my name is {name}.");
+								}
+								if (value != null) {
+									return Template("Yes, my name is {value}.");
+								}
+								if (! result) {
+									return Template("Yes, my name is not {name}.");
+								}
+								return "I do not know my name.";
+							}
+						}
+						if (not == null) {
+							name.instantiation =+ #name;
+							target.word =+ name;
+							name.meaning =+ target;
+							target.name =+ name;
+							Template("Okay, my name is {name}.");
+						} else {
+							target.word =- name;
+							name.meaning =- target;
+							target.name =- name;
+							Template("Okay, my name is not {name}.");
+						}
 					}
 				}
 				
-				State:yourNameIsFirstMiddleState {
-					case :questionmark goto State:yourNameIsFirstMiddleLastState;
-					case :punctuation goto State:yourNameIsFirstMiddleLastState;
-					case :lastName goto State:yourNameIsFirstMiddleLastState;
+				state yourNameIsFirstMiddleState {
+					case questionmark goto yourNameIsFirstMiddleLastState;
+					case punctuation goto yourNameIsFirstMiddleLastState;
+					case lastName goto yourNameIsFirstMiddleLastState;
 					
-					Answer:Function:setMyName;
+					answer setMyName();
 				}
 				
-				State:yourNameIsFirstMiddleLastState {
-					case :questionmark goto State:yourNameIsFirstMiddleLastState;
-					case :punctuation goto State:yourNameIsFirstMiddleLastState;
+				state yourNameIsFirstMiddleLastState {
+					case questionmark goto yourNameIsFirstMiddleLastState;
+					case punctuation goto yourNameIsFirstMiddleLastState;
 					
-					Answer:Function:setMyName;
+					answer setMyName();
 				}
 				
-				Function:whatIsYourName {
-					assign :name to (get #name from :target);
-					if (:name, #null)
-						then (return "I do not know my name.");
-					assign :names to (all #name from :target);
-					if (greater (count :names, 1))
-						then do (
-							dissociate :names to :name by #sequence;
-							return Formula:"My name is {:name}.  I also go by {:names}.");
-					return Formula:"My name is {:name}.";
+				function whatIsYourName() {
+					name = target.name;
+					if (name == null) {
+						return "I do not know my name.";
+					}
+					names = target.all(#name);
+					if (names.length > 1) {
+						names.delete(name);
+						return Template("My name is {name}.  I also go by {names}.");
+					}
+					return Template("My name is {name}.");
 				}
 				
-				Function:whatIsMyName {
-					assign :name to (get #name from :speaker);
-					if (:name, #null)
-						then (return "I do not know your name.");
-					assign :names to (all #name from :speaker);
-					if (greater (count :names, 1))
-						then do (
-							dissociate :names to :name by #sequence;
-							return Formula:"Your name is {:name}.  You also go by {:names}.");
-					return Formula:"Your name is {:name}.";
+				function whatIsMyName() {
+					name = speaker.name;
+					if (name == null) {
+						return "I do not know your name.";
+					}
+					names = speaker.all(#name);
+					if (names.length > 1) {
+						names.delete(name);
+						return Template("Your name is {name}.  You also go by {names}.");
+					}
+					return Template("Your name is {name}.");
 				}
 			}
 		}

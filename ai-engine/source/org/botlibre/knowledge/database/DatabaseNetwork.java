@@ -47,7 +47,7 @@ import org.eclipse.persistence.jpa.JpaEntityManager;
 import org.eclipse.persistence.sessions.UnitOfWork;
 
 /**
- * Network using JPA to access a Derby database.
+ * Network using JPA to access a relational database.
  */
 
 public class DatabaseNetwork extends AbstractNetwork {

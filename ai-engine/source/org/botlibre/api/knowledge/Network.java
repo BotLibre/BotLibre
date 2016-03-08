@@ -26,6 +26,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.self.SelfCompiler;
 
 /**
  * An interconnected set of vertices,
@@ -289,12 +290,22 @@ public interface Network {
 	/**
 	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
 	 */
+	Vertex createPattern(String text, SelfCompiler compiler);
+	
+	/**
+	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
+	 */
 	Vertex createPattern(String text);
 	
 	/**
 	 * Compile the forumla response.
 	 */
 	Vertex createFormula(String text);
+	
+	/**
+	 * Compile the template response.
+	 */
+	Vertex createTemplate(String text);
 
 	/**
 	 * Tokenize the sentence into its words and create a vertex representation.

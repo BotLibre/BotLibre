@@ -202,7 +202,7 @@ public class Email extends BasicSense {
 						this.password = Utils.decrypt(this.username, property);
 					}
 				} else {
-					this.password = Utils.decrypt(this.username, property);					
+					this.password = Utils.decrypt(this.username, property);
 				}
 			}
 			property = this.bot.memory().getProperty("Email.emailAddress");

@@ -185,15 +185,19 @@ public class Comprehension extends SubconsciousThought {
 		if (isStopped()) {
 			return false;
 		}
+		Vertex sourceCode = stateMachine.getRelationship(Primitive.SOURCECODE);
+		if (sourceCode != null) {
+			sourceCode.setPinned(false);
+		}
 		stateMachine.internalRemoveRelationships(Primitive.SOURCECODE);
 		
 		return true;
 	}
 	
 	/**
-	 * Check if the response can be defined as a formula based on the question, context.
+	 * Check if the response can be defined as a template based on the question, context.
 	 */
-	public Relationship checkFormula(Vertex input, Network network) {
+	public Relationship checkTemplate(Vertex input, Network network) {
 		if (!isEnabled()) {
 			return null;
 		}
@@ -251,17 +255,17 @@ public class Comprehension extends SubconsciousThought {
 		Vertex inputVariable = network.createVertex(Primitive.INPUT_VARIABLE);
 		Bootstrap.checkInputVariable(inputVariable, network);
 		variables.put(questionInput, inputVariable);
-		Vertex newQuotient = createFormula(questionInput, input, variables, network);
+		Vertex newQuotient = createTemplate(questionInput, input, variables, network);
 		Relationship relationship = null;
 		if (newQuotient != null) {
-			// Check if any existing formulas match the new one.
+			// Check if any existing templates match the new one.
 			relationship = question.getRelationship(Primitive.RESPONSE, newQuotient);
 			if (relationship != null) {
-				log("Existing response formula", Level.FINER, question, relationship.getTarget());
+				log("Existing response template", Level.FINER, question, relationship.getTarget());
 				// Increase correctness.
 				question.addRelationship(Primitive.RESPONSE, relationship.getTarget());
 			} else {
-				log("Adding response formula", Bot.FINE, question, newQuotient);
+				log("Adding response template", Bot.FINE, question, newQuotient);
 				relationship = question.addRelationship(Primitive.RESPONSE, newQuotient);
 				question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
 			}
@@ -440,7 +444,7 @@ public class Comprehension extends SubconsciousThought {
 			Vertex previousQuestion = previousQuestionInput.getRelationship(Primitive.INPUT);
 			if (previousQuestion != null) {
 				Vertex meta = network.createMeta(relationship);
-				Vertex newQuotient = createFormula(questionInput, previousQuestionInput, variables, network);
+				Vertex newQuotient = createTemplate(questionInput, previousQuestionInput, variables, network);
 				if (newQuotient == null) {
 					newQuotient = previousQuestion;
 				}
@@ -477,14 +481,14 @@ public class Comprehension extends SubconsciousThought {
 		if (isStopped()) {
 			return false;
 		}
-		Vertex newQuotient = createFormula(questionInput, responseInput, variables, network);
+		Vertex newQuotient = createTemplate(questionInput, responseInput, variables, network);
 		if (newQuotient == null) {
 			newQuotient = sentence;
 		} else {
-			// Check if any existing formulas match the new one (by name).
+			// Check if any existing templates match the new one (by name).
 			Relationship quotient = currentState.getRelationship(Primitive.QUOTIENT, newQuotient);
 			if (quotient != null) {
-				log("Existing quotient formula", Level.FINER, currentState, quotient.getTarget());
+				log("Existing quotient template", Level.FINER, currentState, quotient.getTarget());
 				// Increase correctness.
 				Relationship relationship = currentState.addRelationship(Primitive.QUOTIENT, quotient.getTarget());
 				addSentencePreviousMeta(relationship, questionInput, previousQuestionInput, variables, network);
@@ -523,16 +527,16 @@ public class Comprehension extends SubconsciousThought {
 	}
 
 	/**
-	 * Attempt to create a formula response from the question and response.
+	 * Attempt to create a template response from the question and response.
 	 */
-	public Vertex createFormula(Vertex questionInput, Vertex responseInput, Map<Vertex, Vertex> variables, Network network) {
+	public Vertex createTemplate(Vertex questionInput, Vertex responseInput, Map<Vertex, Vertex> variables, Network network) {
 		Vertex response = responseInput.getRelationship(Primitive.INPUT);
 		if (response == null || (!response.instanceOf(Primitive.SENTENCE)) || !response.hasRelationship(Primitive.WORD)) {
 			return null;
 		}
-		log("Checking formula", Level.FINER, questionInput, responseInput);
-		boolean isFormula = false;
-		List<Vertex> formulaWords = new ArrayList<Vertex>();
+		log("Checking template", Level.FINER, questionInput, responseInput);
+		boolean isTemplate = false;
+		List<Vertex> templateWords = new ArrayList<Vertex>();
 		Vertex inputVariable = variables.get(questionInput);
 		Vertex speaker = questionInput.getRelationship(Primitive.SPEAKER);
 		if (speaker != null) {
@@ -556,6 +560,9 @@ public class Comprehension extends SubconsciousThought {
 		}
 		// Index any word variables meanings so they are processed.		
 		for (Map.Entry<Vertex, Vertex> entry : new HashMap<Vertex, Vertex>(variables).entrySet()) {
+			if (!(entry.getKey() instanceof Vertex)) {
+				continue;
+			}
 			Vertex word = entry.getKey();
 			Vertex variable = entry.getValue();
 			if (word.instanceOf(Primitive.WORD) && variable.instanceOf(Primitive.VARIABLE)) {
@@ -570,14 +577,17 @@ public class Comprehension extends SubconsciousThought {
 			// Check if any variables match the word.
 			Vertex variable = variables.get(word);
 			if (variable != null) {
-				log("Formula defined", Level.FINER, questionInput, word, variable);
-				isFormula = true;
-				formulaWords.add(variable);
+				log("Template defined", Level.FINER, questionInput, word, variable);
+				isTemplate = true;
+				templateWords.add(variable);
 			} else {
 				// Next check if any variable value has a relationship based on any other variable value.
 				// TODO variables should be ordered, and only use each once.
 				boolean match = false;
 				for (Map.Entry<Vertex, Vertex> entry : variables.entrySet()) {
+					if (!(entry.getKey() instanceof Vertex)) {
+						continue;
+					}
 					Vertex value = entry.getKey();
 					variable = entry.getValue();
 					if (!value.instanceOf(Primitive.VARIABLE) && !value.instanceOf(Primitive.WORD) && !value.instanceOf(Primitive.SENTENCE)) {
@@ -586,15 +596,18 @@ public class Comprehension extends SubconsciousThought {
 						if (words != null) {
 							for (Relationship valueWord : words) {
 								if (word == valueWord) {
-									log("Formula defined", Level.FINER, questionInput, word, variable);
+									log("Template defined", Level.FINER, questionInput, word, variable);
 									match = true;
-									isFormula = true;
-									formulaWords.add(variable);
+									isTemplate = true;
+									templateWords.add(variable);
 									break;
 								}
 							}
 						}
 						for (Map.Entry<Vertex, Vertex> typeEntry : variables.entrySet()) {
+							if (!(typeEntry.getKey() instanceof Vertex)) {
+								continue;
+							}
 							Vertex associateType = typeEntry.getKey();
 							if (associateType != value
 									&& !associateType.instanceOf(Primitive.WORD)
@@ -608,14 +621,14 @@ public class Comprehension extends SubconsciousThought {
 											if (words != null) {
 												for (Relationship valueWord : words) {
 													if (word == valueWord) {
-														Vertex equation = network.createInstance(Primitive.EQUATION);
-														equation.addRelationship(Primitive.OPERATOR, Primitive.GET);
-														equation.addRelationship(Primitive.ARGUMENT, typeEntry.getValue());
-														equation.addRelationship(Primitive.ARGUMENT, variable);
+														Vertex expression = network.createInstance(Primitive.EXPRESSION);
+														expression.addRelationship(Primitive.OPERATOR, Primitive.GET);
+														expression.addRelationship(Primitive.ARGUMENT, variable);
+														expression.addRelationship(Primitive.ARGUMENT, typeEntry.getValue());
 														match = true;
-														log("Formula defined", Level.FINER, questionInput, word, equation);
-														isFormula = true;
-														formulaWords.add(equation);
+														log("Template defined", Level.FINER, questionInput, word, expression);
+														isTemplate = true;
+														templateWords.add(expression);
 														break;
 													}
 												}
@@ -637,6 +650,9 @@ public class Comprehension extends SubconsciousThought {
 					// Next check if any variables has any relationships to the word.
 					// TODO variables should be ordered, and only use each once.
 					for (Map.Entry<Vertex, Vertex> entry : variables.entrySet()) {
+						if (!(entry.getKey() instanceof Vertex)) {
+							continue;
+						}
 						Vertex value = entry.getKey();
 						variable = entry.getValue();
 						// Don't check words, only meanings.
@@ -649,14 +665,14 @@ public class Comprehension extends SubconsciousThought {
 									if (words != null) {
 										for (Relationship valueWord : words) {
 											if (word == valueWord.getTarget()) {
-												Vertex equation = network.createInstance(Primitive.EQUATION);
-												equation.addRelationship(Primitive.OPERATOR, Primitive.GET);
-												equation.addRelationship(Primitive.ARGUMENT, relation.getType());
-												equation.addRelationship(Primitive.ARGUMENT, variable);
+												Vertex expression = network.createInstance(Primitive.EXPRESSION);
+												expression.addRelationship(Primitive.OPERATOR, Primitive.GET);
+												expression.addRelationship(Primitive.ARGUMENT, variable);
+												expression.addRelationship(Primitive.ARGUMENT, relation.getType());
 												match = true;
-												log("Formula defined", Level.FINER, questionInput, word, equation);
-												isFormula = true;
-												formulaWords.add(equation);
+												log("Template defined", Level.FINER, questionInput, word, expression);
+												isTemplate = true;
+												templateWords.add(expression);
 												break;
 											}
 										}
@@ -670,23 +686,23 @@ public class Comprehension extends SubconsciousThought {
 					}
 				}
 				if (!match) {
-					formulaWords.add(word);
+					templateWords.add(word);
 				}
 			}
 		}
-		if (isFormula) {
-			Vertex formula = network.createInstance(Primitive.FORMULA);
-			formula.addRelationship(Primitive.INSTANTIATION, Primitive.SENTENCE);
-			formula.addRelationship(Primitive.SENTENCE, response);
+		if (isTemplate) {
+			Vertex template = network.createInstance(Primitive.FORMULA);
+			template.addRelationship(Primitive.INSTANTIATION, Primitive.SENTENCE);
+			template.addRelationship(Primitive.SENTENCE, response);
 			int index = 0;
-			for (Vertex word : formulaWords) {
-				formula.addRelationship(Primitive.WORD, word, index);
+			for (Vertex word : templateWords) {
+				template.addRelationship(Primitive.WORD, word, index);
 				index++;
 			}
-			formula = SelfDecompiler.getDecompiler().createUniqueFormula(formula, network);
-			return formula;
+			template = SelfDecompiler.getDecompiler().createUniqueTemplate(template, network);
+			return template;
 		}
-		log("Not a formula", Level.FINER, questionInput, responseInput);
+		log("Not a template", Level.FINER, questionInput, responseInput);
 		return null;
 	}
 	

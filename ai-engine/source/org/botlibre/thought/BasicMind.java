@@ -423,6 +423,7 @@ public class BasicMind implements Mind {
 		this.thoughts.put(thought.getName(), thought);
 		// Also index simple name.
 		this.thoughtsBySimpleName.put(thought.getClass().getSimpleName(), thought);
+		this.thoughtsBySimpleName.put(thought.getClass().getSimpleName().toLowerCase(), thought);
 	}
 
 	@Override
@@ -430,6 +431,7 @@ public class BasicMind implements Mind {
 		this.thoughts.remove(thought.getName());
 		// Also index simple name.
 		this.thoughtsBySimpleName.remove(thought.getClass().getSimpleName());
+		this.thoughtsBySimpleName.remove(thought.getClass().getSimpleName().toLowerCase());
 	}
 	
 	/**

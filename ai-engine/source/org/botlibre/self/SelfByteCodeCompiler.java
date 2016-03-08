@@ -248,7 +248,7 @@ public class SelfByteCodeCompiler extends SelfCompiler {
 				}
 				if (token.equals(PATTERN)) {
 					ensureNext('"', stream);
-					dataStream.writeLong(network.createPattern(stream.nextQuotesExcludeDoubleQuote()).getId());;
+					dataStream.writeLong(network.createPattern(stream.nextQuotesExcludeDoubleQuote(), this).getId());
 					return;
 				}
 				Long id = null;
@@ -439,25 +439,6 @@ public class SelfByteCodeCompiler extends SelfCompiler {
 		}
 		dataStream.writeLong(0l);
 		return count;
-	}
-	
-	/**
-	 * Parse the equation element from a formula, pattern, or state.
-	 */
-	public Vertex parseEquationElement(TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
-		try {
-			Vertex equation = network.createInstance(Primitive.EQUATION);
-			BinaryData byteCode = new BinaryData();
-			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-			DataOutputStream dataStream = new DataOutputStream(byteStream);
-			parseOperatorByteCode(dataStream, stream, elements, debug, network);
-			byteCode.setBytes(byteStream.toByteArray());
-			equation.setData(byteCode);
-			network.addVertex(equation);
-			return equation;
-		} catch (IOException exception) {
-			throw new SelfParseException("IO Error", stream, exception);
-		}
 	}
 
 	/**
@@ -921,7 +902,7 @@ public class SelfByteCodeCompiler extends SelfCompiler {
 		Vertex pattern = null;
 		if (stream.peek() == '"') {
 			stream.skip();
-			pattern = network.createPattern(stream.nextQuotesExcludeDoubleQuote());
+			pattern = network.createPattern(stream.nextQuotesExcludeDoubleQuote(), this);
 			dataStream.writeLong(pattern.getId());
 		} else {
 			parseElementByteCode(stream, dataStream, elements, debug, network);
@@ -938,7 +919,7 @@ public class SelfByteCodeCompiler extends SelfCompiler {
 			stream.skipWhitespace();
 			if (stream.peek() == '"') {
 				stream.skip();
-				that = network.createPattern(stream.nextQuotesExcludeDoubleQuote());
+				that = network.createPattern(stream.nextQuotesExcludeDoubleQuote(), this);
 				dataStream.writeLong(that.getId());
 			} else {
 				parseElementByteCode(stream, dataStream, elements, debug, network);

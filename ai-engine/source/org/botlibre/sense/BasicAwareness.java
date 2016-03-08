@@ -150,12 +150,14 @@ public class BasicAwareness implements Awareness {
 		getSenses().put(sense.getName(), sense);
 		// Also index simple name.
 		this.sensesByShortName.put(sense.getClass().getSimpleName(), sense);
+		this.sensesByShortName.put(sense.getClass().getSimpleName().toLowerCase(), sense);
 	}
 	
 	public void removeSense(Sense sense) {
 		getSenses().remove(sense.getName());
 		// Also index simple name.
 		this.sensesByShortName.remove(sense.getClass().getSimpleName());
+		this.sensesByShortName.remove(sense.getClass().getSimpleName().toLowerCase());
 	}
 	
 	public Map<String, Tool> getTools() {
@@ -180,12 +182,14 @@ public class BasicAwareness implements Awareness {
 		getTools().put(tool.getName(), tool);
 		// Also index simple name.
 		this.toolsByShortName.put(tool.getClass().getSimpleName(), tool);
+		this.toolsByShortName.put(tool.getClass().getSimpleName().toLowerCase(), tool);
 	}
 	
 	public void removeTool(Tool tool) {
 		getTools().remove(tool.getName());
 		// Also index simple name.
 		this.toolsByShortName.remove(tool.getClass().getSimpleName());
+		this.toolsByShortName.remove(tool.getClass().getSimpleName().toLowerCase());
 	}
 	
 	public String toString() {

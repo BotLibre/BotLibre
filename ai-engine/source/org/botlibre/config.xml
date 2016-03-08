@@ -102,7 +102,13 @@
 				<implementation-class>org.botlibre.tool.Calculator</implementation-class>
 			</tool>
 			<tool>
+				<implementation-class>org.botlibre.tool.Math</implementation-class>
+			</tool>
+			<tool>
 				<implementation-class>org.botlibre.tool.Watch</implementation-class>
+			</tool>
+			<tool>
+				<implementation-class>org.botlibre.tool.Date</implementation-class>
 			</tool>
 			<tool>
 				<implementation-class>org.botlibre.tool.Utils</implementation-class>

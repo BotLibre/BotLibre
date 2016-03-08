@@ -37,7 +37,9 @@ import org.botlibre.aiml.AIMLParser;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.self.SelfByteCodeCompiler;
 import org.botlibre.self.SelfCompiler;
+import org.botlibre.self.SelfParseException;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.TextStream;
@@ -317,11 +319,6 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 			word.addRelationship(Primitive.MEANING, vertex);
 			vertex.addRelationship(Primitive.WORD, word);
 			
-			text = Utils.printTime(time, "h:mm:ss a z");
-			word = createWord(text);
-			word.addRelationship(Primitive.MEANING, vertex);
-			vertex.addRelationship(Primitive.WORD, word);
-			
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(time);
 			int hour = calendar.get(Calendar.HOUR);
@@ -335,9 +332,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 				vertex.addRelationship(Primitive.AM_PM, Primitive.PM);
 			} else {
 				vertex.addRelationship(Primitive.AM_PM, Primitive.AM);				
-			}
-			vertex.addRelationship(Primitive.TIMEZONE, createVertex(calendar.getTimeZone().getDisplayName()));
-			
+			}			
 		}
 		if (data instanceof java.sql.Date) {
 			java.sql.Date date = (java.sql.Date)data;
@@ -792,10 +787,22 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
 	 */
 	public Vertex createPattern(String text) {
+		return createPattern(text, SelfCompiler.getCompiler());
+	}
+	
+	/**
+	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
+	 */
+	public Vertex createPattern(String text, SelfCompiler compiler) {
 		if (text.indexOf('"') != -1) {
 			text = text.replace("\"", "\"\"");
 		}
-		String code = "Pattern:\"" + text + "\"";
+		String code = null;
+		if (compiler.getVersion() <= 2) {
+			code = "Pattern:\"" + text + "\"";
+		} else {
+			code = "Pattern(\"" + text + "\")";
+		}
 		Vertex pattern  = null;
 		if (text.length() < MAX_TEXT) {
 			pattern = createVertex(code);
@@ -831,7 +838,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 						element = createWord(word);
 						element.addRelationship(Primitive.PATTERN, pattern);
 						if (list != null) {
-							list.addRelationship(Primitive.SEQUENCE, element, listindex);
+							list.addRelationship(Primitive.ELEMENT, element, listindex);
 							listindex++;
 						} else {
 							pattern.addRelationship(Primitive.WORD, element, index);
@@ -858,7 +865,7 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 						element = createVertex(Primitive.POUNDWILDCARD);
 					}
 				} else if (word.equals("[") || word.equals("(")) {
-					element = createInstance(Primitive.LIST);
+					element = createInstance(Primitive.ARRAY);
 					if (word.equals("[")) {
 						element.addRelationship(Primitive.TYPE, Primitive.REQUIRED);
 					}
@@ -869,17 +876,17 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 					continue;
 				} else if (word.equals("{")) {
 					if (elements == null) {
-						elements = SelfCompiler.getCompiler().buildElementsMap(this);
+						elements = compiler.buildElementsMap(this);
 					}
-					element = SelfCompiler.getCompiler().parseElement(stream, elements, false, this);
+					element = compiler.parseElement(stream, elements, false, this);
 					stream.skipWhitespace();
-					SelfCompiler.getCompiler().ensureNext('}', stream);
+					compiler.ensureNext('}', stream);
 				} else {
 					element = createWord(word);
 					element.addRelationship(Primitive.PATTERN, pattern);
 				}
 				if (list != null && element != list) {
-					list.addRelationship(Primitive.SEQUENCE, element, listindex);
+					list.addRelationship(Primitive.ELEMENT, element, listindex);
 					listindex++;
 				} else {
 					Relationship relationship = pattern.addRelationship(Primitive.WORD, element, index);
@@ -918,6 +925,24 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 	}
 	
 	/**
+	 * Compile the template response.
+	 */
+	public Vertex createTemplate(String code) {
+		Vertex formula = null;
+		if (code.length() < MAX_TEXT) {
+			formula = createVertex(code);
+			if (formula.instanceOf(Primitive.FORMULA)) {
+				return formula;
+			}
+			formula.addRelationship(Primitive.INSTANTIATION, Primitive.FORMULA);
+		}
+		TextStream stream = new TextStream(code);
+		stream.setPosition(9);
+		formula = SelfCompiler.getCompiler().parseTemplate(formula, stream, false, this);
+		return formula;
+	}
+	
+	/**
 	 * Compile the forumla response.
 	 */
 	public Vertex createFormula(String code) {
@@ -929,9 +954,9 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 			}
 			formula.addRelationship(Primitive.INSTANTIATION, Primitive.FORMULA);
 		}
-		TextStream formulaStream = new TextStream(code);
-		formulaStream.setPosition(8);
-		formula = SelfCompiler.getCompiler().parseFormula(formula, formulaStream, false, this);
+		TextStream stream = new TextStream(code);
+		stream.setPosition(8);
+		formula = new SelfByteCodeCompiler().parseFormula(formula, stream, false, this);
 		return formula;
 	}
 	
@@ -943,11 +968,25 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		if (text.length() > MAX_TEXT) {
 			return createParagraph(text);
 		}
-		if ((text.length() >= 10) && ("pPfF<".indexOf(text.charAt(0)) != -1)) {
-			if (text.substring(0, 8).equalsIgnoreCase("PATTERN:")) {
-				return createPattern(text.substring(9, text.length() - 1));
-			} else if (text.substring(0, 8).equalsIgnoreCase("FORMULA:")) {
+		if ((text.length() >= 10) && ("pPfFtT<".indexOf(text.charAt(0)) != -1)) {
+			String header = text.substring(0, 8);
+			if (header.equalsIgnoreCase("PATTERN(")) {
+				if (text.charAt(8) != '"') {
+					throw new SelfParseException("Pattern must start with '\"' character - " + text);
+				}
+				if (text.charAt(text.length() - 1) != ')') {
+					throw new SelfParseException("Pattern must end with ')' character - " + text);
+				}
+				if (text.charAt(text.length() - 2) != '"') {
+					throw new SelfParseException("Pattern must end with '\")' characters - " + text);
+				}
+				return createPattern(text.substring(9, text.length() - 2));
+			} else if (header.equalsIgnoreCase("PATTERN:")) {
+				return createPattern(text.substring(9, text.length() - 1), new SelfByteCodeCompiler());
+			} else if (header.equalsIgnoreCase("FORMULA:")) {
 				return createFormula(text);
+			} else if (header.equalsIgnoreCase("TEMPLATE") && text.charAt(8) == '(') {
+				return createTemplate(text);
 			} else if (text.substring(0, 10).equalsIgnoreCase("<template>")) {				
 				Vertex formula = AIMLParser.parser().parseAIMLTemplate(text, this);
 				if (formula != null) {
@@ -963,9 +1002,11 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 			sentence.setName(text);
 		} else {
 			sentence = createVertex(text);
-			Collection<Relationship> words = sentence.getRelationships(Primitive.WORD);
-			if (words != null && words.size() == sentence.getWordCount()) {
-				return sentence;
+			if (sentence.instanceOf(Primitive.SENTENCE)) {
+				Collection<Relationship> words = sentence.getRelationships(Primitive.WORD);
+				if (words != null && words.size() == sentence.getWordCount()) {
+					return sentence;
+				}
 			}
 		}
 		sentence.addRelationship(Primitive.INSTANTIATION, Primitive.SENTENCE);

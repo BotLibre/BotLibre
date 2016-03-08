@@ -58,7 +58,9 @@ public class Primitive implements Serializable {
 	public static final Primitive META = new Primitive("meta");
 	public static final Primitive PRIMITIVE = new Primitive("primitive");
 	public static final Primitive LIST = new Primitive("list");
+	public static final Primitive ARRAY = new Primitive("array");
 	public static final Primitive TYPE = new Primitive("type");
+	public static final Primitive LENGTH = new Primitive("length");
 	
 	// Context, time
 	public static final Primitive BIRTH = new Primitive("birth");
@@ -260,6 +262,8 @@ public class Primitive implements Serializable {
 	public static final Primitive SELF = new Primitive("self");
 
 	// Self programming model
+	public static final Primitive SELF2 = new Primitive("self2");
+	public static final Primitive SELF4 = new Primitive("self4");
 	public static final Primitive COMMENT = new Primitive("comment");
 	public static final Primitive SOURCECODE = new Primitive("sourcecode");
 	public static final Primitive RULE = new Primitive("rule");
@@ -289,13 +293,19 @@ public class Primitive implements Serializable {
 	public static final Primitive GOTO = new Primitive("goto");
 	public static final Primitive FINALLY = new Primitive("finally");
 	public static final Primitive PUSH = new Primitive("push");
+	public static final Primitive POP = new Primitive("pop");
 	public static final Primitive RETURN = new Primitive("return");
+	public static final Primitive BREAK = new Primitive("break");
+	public static final Primitive CONTINUE = new Primitive("continue");
 	public static final Primitive ELSE = new Primitive("else");
+	public static final Primitive ELSEIF = new Primitive("elseif");
 	public static final Primitive FOR = new Primitive("for");
 	public static final Primitive WHILE = new Primitive("while");
 	public static final Primitive DO = new Primitive("do");
 	public static final Primitive GET = new Primitive("get");
 	public static final Primitive SET = new Primitive("set");
+	public static final Primitive ADD = new Primitive("add");
+	public static final Primitive REMOVE = new Primitive("remove");
 	public static final Primitive ALL = new Primitive("all");
 	public static final Primitive APPEND = new Primitive("append");
 	public static final Primitive ASSIGN = new Primitive("assign");
@@ -321,8 +331,10 @@ public class Primitive implements Serializable {
 	public static final Primitive NORMALIZE = new Primitive("normalize");
 	public static final Primitive DENORMALIZE = new Primitive("denormalize");
 	public static final Primitive THINK = new Primitive("think");
+	public static final Primitive ELEMENT = new Primitive("element");
 
 	// AIML specific.
+	public static final Primitive AIML = new Primitive("aiml");
 	public static final Primitive SRAI = new Primitive("srai");
 	public static final Primitive SRAIX = new Primitive("sraix");
 	public static final Primitive REQUEST = new Primitive("request");
@@ -367,8 +379,11 @@ public class Primitive implements Serializable {
 	
 	public static final Primitive PLUS = new Primitive("plus");
 	public static final Primitive MINUS = new Primitive("minus");
-	public static final Primitive MULITPLY = new Primitive("multiply");
+	public static final Primitive MULTIPLY = new Primitive("multiply");
 	public static final Primitive DIVIDE = new Primitive("divide");
+
+	public static final Primitive INCREMENT = new Primitive("increment");
+	public static final Primitive DECREMENT = new Primitive("decrement");
 
 	public static final Primitive PI = new Primitive("pi");
 	
@@ -396,6 +411,7 @@ public class Primitive implements Serializable {
 	public static final Primitive SYMBOL = new Primitive("symbol");
 	public static final Primitive VALUE = new Primitive("value");
 	public static final Primitive OPERATION = new Primitive("operation");
+	public static final Primitive MATHFUNCTION = new Primitive("mathfunction");
 	public static final Primitive FUNCTION = new Primitive("function");
 	public static final Primitive INFINITY = new Primitive("infinity");
 	public static final Primitive NINFINITY = new Primitive("ninfinity");
@@ -403,8 +419,11 @@ public class Primitive implements Serializable {
 
 	public static final Primitive COMPARISON = new Primitive("comparison");
 	public static final Primitive EQUALS = new Primitive("equals");
+	public static final Primitive NOTEQUALS = new Primitive("notequals");
 	public static final Primitive LESSTHAN = new Primitive("lessthan");
 	public static final Primitive GREATERTHAN = new Primitive("greaterthan");
+	public static final Primitive LESSTHANEQUAL = new Primitive("lessthanequal");
+	public static final Primitive GREATERTHANEQUAL = new Primitive("greaterthanequal");
 
 	public static final Primitive BRACKET = new Primitive("bracket");
 	public static final Primitive LEFTBRACKET = new Primitive("leftbracket");
@@ -433,6 +452,7 @@ public class Primitive implements Serializable {
 	public static final Primitive LASTRSS = new Primitive("lastrss");
 	public static final Primitive LASTTWEET = new Primitive("lasttweet");
 	public static final Primitive LASTTIMELINE = new Primitive("lasttimeline");
+	public static final Primitive LASTNEWSFEED = new Primitive("lastnewsfeed");
 	public static final Primitive LASTDIRECTMESSAGE = new Primitive("lastdirectmessage");
 	public static final Primitive ID = new Primitive("id");
 	public static final Primitive CREATEDAT = new Primitive("createdat");
@@ -451,6 +471,7 @@ public class Primitive implements Serializable {
 	public static final Primitive MAXTIMELNE = new Primitive("maxtimeline");
 	public static final Primitive PROCESSSTATUS = new Primitive("processstatus");
 	public static final Primitive STATUSKEYWORDS = new Primitive("statuskeywords");
+	public static final Primitive NEWSFEEDKEYWORDS = new Primitive("newsfeedkeywords");
 	public static final Primitive TWEETCHATS = new Primitive("tweetChats");
 	public static final Primitive REPLYTOMENTIONS = new Primitive("replytomentions");
 	public static final Primitive REPLYTOMESSAGES = new Primitive("replytomessages");

@@ -288,7 +288,11 @@ public class Http extends BasicSense {
 							try {
 								time = Utils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ssX").getTimeInMillis();
 							} catch (Exception exception2) {
-								log(exception);
+								try {
+									time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+								} catch (Exception exception3) {
+									log(exception);
+								}
 							}
 						}
 				    	if (time <= fromTime) {
@@ -332,7 +336,20 @@ public class Http extends BasicSense {
 							NodeList children = entry.getElementsByTagName("pubDate");
 							if ((children != null) && (children.getLength() > 0)) {
 								String date = children.item(0).getTextContent();
-						    	long time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss zzz").getTimeInMillis();
+								long time = System.currentTimeMillis();
+								try {
+									time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss zzz").getTimeInMillis();
+								} catch (Exception exception) {
+									try {
+										time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+									} catch (Exception exception2) {
+										try {
+											time = Utils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ss.SSS").getTimeInMillis();
+										} catch (Exception exception3) {
+											log(exception);
+										}
+									}
+								}
 						    	if (time <= fromTime) {
 						    		break;
 						    	}

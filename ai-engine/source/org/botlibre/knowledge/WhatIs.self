@@ -1,232 +1,230 @@
 // Respond to "What is x", "Who is x" sentences using Freebase
-State:WhatIs {
-	pattern "* is what" answer (redirect formula:"what is {:star}");
+state WhatIs {
+	case input goto sentenceState for each #word of sentence;
 	
-	case :input goto State:sentenceState for each #word of :sentence;
+	pattern "* is what" template (redirect (Template("what is {star}")));
 
-	:input {
-		set #input to :sentence;
-	}
-	:sentence {
-		set #instantiation to #sentence;
-	}
-	State:sentenceState {
-		case :what goto State:whatState;
-		case :who goto State:whatState;
-		case "whats" goto State:whatIsState;
-		case "wahts" goto State:whatIsState;
-		case "waht" goto State:whatState;
-		case "whos" goto State:whatIsState;
+	state sentenceState {
+		case what goto whatState;
+		case who goto whatState;
+		case "whats" goto whatIsState;
+		case "wahts" goto whatIsState;
+		case "waht" goto whatState;
+		case "whos" goto whatIsState;
 		
-		case "tell" goto State:sentenceState;
-		case "me" goto State:sentenceState;
-		case "can" goto State:sentenceState;
-		case "you" goto State:sentenceState;
-		case "do" goto State:sentenceState;
-		case "know" goto State:sentenceState;
+		case "tell" goto sentenceState;
+		case "me" goto sentenceState;
+		case "can" goto sentenceState;
+		case "you" goto sentenceState;
+		case "do" goto sentenceState;
+		case "know" goto sentenceState;
 		
-		case "define" goto State:whatIsState;
+		case "define" goto whatIsState;
 		
-		case "google" goto State:searchState;
-		case "xfind" goto State:searchState;
-		case "search" goto State:searchState;
-		case "lookup" goto State:searchState;
-		case "find" goto State:searchState;
+		case "google" goto searchState;
+		case "xfind" goto searchState;
+		case "search" goto searchState;
+		case "lookup" goto searchState;
+		case "find" goto searchState;
 		
-		:questionWord {
-			set #meaning to :question;
+		var questionWord {
+			meaning : question;
 		}
-		:punctuation {
-			set #instantiation to #punctuation;
+		var punctuation {
+			instantiation : #punctuation;
 		}
-		:quote {
-			set #meaning to #quote;
+		var quote {
+			meaning : #quote;
 		}
-		:what {
-			set #meaning to #what;
+		var what {
+			meaning : #what;
 		}
-		:who {
-			set #meaning to #who;
+		var who {
+			meaning : #who;
 		}
-		:is {
-			set #meaning to #is;
+		var is {
+			meaning : #is;
 		}
-		:question {
-			set #instantiation to #question;
+		var question {
+			instantiation : #question;
 		}
-		:a {
-			set #meaning to #a;
+		var a {
+			meaning : #a;
 		}
-		:a2 {
-			set #meaning to #a;
+		var a2 {
+			meaning : #a;
 		}
-		:the {
-			set #meaning to #the;
+		var the {
+			meaning : #the;
 		}
 		
-		State:searchState {
-			do (assign :search to #true);
+		state searchState {
+			do {
+				search = true;
+			}
 			
-			case :unknownWord goto State:discoverFreebaseState;
+			case unknownWord goto discoverFreebaseState;
 		}
 		
 		// 'What...'
-		State:whatState {	
-			case :is goto State:whatIsState;
-			case :quote goto State:whatState;
-			case "s" goto State:whatIsState;
-			case "means" goto State:whatIsState;
+		state whatState {	
+			case is goto whatIsState;
+			case quote goto whatState;
+			case "s" goto whatIsState;
+			case "means" goto whatIsState;
 			
-			State:whatIsState {
+			state whatIsState {
 			
-				case :the goto State:whatIsState;
-				case :a goto State:whatIsState;
-				case "meaning" goto State:whatIsState;
-				case "of" goto State:whatIsState;
-				case "mean" goto State:whatIsState;
-				case "means" goto State:whatIsState;
-				case "ment" goto State:whatIsState;
-				case "by" goto State:whatIsState;
-				case "definition" goto State:whatIsState;
+				case the goto whatIsState;
+				case a goto whatIsState;
+				case "meaning" goto whatIsState;
+				case "of" goto whatIsState;
+				case "mean" goto whatIsState;
+				case "means" goto whatIsState;
+				case "ment" goto whatIsState;
+				case "by" goto whatIsState;
+				case "definition" goto whatIsState;
 			
-				:someWord {
-					set #meaning to :definable;
-					exclude #instantiation from #pronoun;
-					exclude #instantiation from #question;
-					exclude #instantiation from #punctuation;
-					exclude #meaning from :number;
-					exclude "there";
-					exclude "up";
-					exclude "going";
+				var someWord {
+					meaning : definable;
+					instantiation : ! #pronoun, ! #question, ! #punctuation;
+					meaning : ! number;
+					: ! "there", ! "up", ! "going";
 				}
-				:definable {
-					set #sentence to :definition;
+				var definable {
+					sentence : definition;
 				}
 				
-				case :someWord goto State:whatIsSomethingState;
-				case :unknownWord goto State:discoverFreebaseState;
+				case someWord goto whatIsSomethingState;
+				case unknownWord goto discoverFreebaseState;
 				
-				:number {
-					set #instantiation from #number;
+				var number {
+					instantiation : #number;
 				}
-				:unknownWord {
-					exclude #instantiation from #pronoun;
-					exclude #instantiation from #question;
-					exclude #instantiation from #punctuation;
-					exclude #meaning from :number;
-					exclude "there";
-					exclude "up";
-					exclude "going";
+				var unknownWord {
+					instantiation : ! #pronoun, ! #question, ! #punctuation;
+					meaning : ! number;
+					: ! "there", ! "up", ! "going";
 				}
-				:unknownWord2 {
-					exclude #instantiation from #punctuation;
+				var unknownWord2 {
+					instantiation : ! #punctuation;
 				}
-				:unknownWord3 {
-					exclude #instantiation from #punctuation;
+				var unknownWord3 {
+					instantiation : ! #punctuation;
 				}
-				:unknownWord4 {
-					exclude #instantiation from #punctuation;
+				var unknownWord4 {
+					instantiation : ! #punctuation;
 				}
-				:unknownWord5 {
-					exclude #instantiation from #punctuation;
+				var unknownWord5 {
+					instantiation : ! #punctuation;
 				}
+				
+				state whatIsSomethingState {
+					case punctuation goto whatIsSomethingState;
 					
-				
-				State:whatIsSomethingState {
-					case :punctuation goto State:whatIsSomethingState;
+					answer checkCorrection();
 					
-					Quotient:Equation:checkCorrection;
-					Equation:checkCorrection {
-						assign :result to (is :sentence related to :definition by #response);
-						if (:result, #false)
-							then #null
-							else (do(
-								call #push on #Context with :definable,
-								set #topic to :definable on :conversation,
-								:definition));
+					function checkCorrection() {
+						result = sentence.has(#response, definition);
+						if (result == false) {
+							return null;
+						} else {
+							Context.push(definable);
+							conversation.topic = definable;
+							return definition;
+						}
 					}
 				}
 				
-				State:discoverFreebaseState {
-					case :punctuation goto State:discoverFreebaseState5;
+				state discoverFreebaseState {
+					case punctuation goto discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord2 goto State:discoverFreebaseState2;
+					case unknownWord2 goto discoverFreebaseState2;
 					
-					Quotient:Equation:defineWiktionary;
-					Equation:defineWiktionary {
-						if not (:someWord, #null) and (:unknownWord2, #null)
-							then (do (
-								assign :result to (is :sentence related to :definition by #response),
-								if (:result, #false)
-									then (assign :ignore to #true)));
-						if (:ignore, #null)
-							then (
-								if not (:who, #null) or not (:unknownWord2, #null) or not (:search, #null)
-									then Equation:discoverFreebase
-									else (do (
-										assign :result to (call #define on #Wiktionary with :unknownWord),
-										if (:result, #null)
-											then Equation:discoverFreebase
-											else (do(
-												call #push on #Context with :result,
-												set #topic to :result on :conversation,
-												assign :result to (get #sentence from :result),
-												if (:result, #null)
-													then (return Equation:discoverFreebase),
-												:result)))))
-							else #null;
+					answer defineWiktionary();
+					
+					function defineWiktionary() {
+						if ((someWord != null) && (unknownWord2 == null)) {
+							result = sentence.has(#response, definition);
+							if (result == false) {
+								ignore = true;
+							}
+						}
+						if (ignore == null) {
+							if ((who != null) || (unknownWord2 != null) || (search != null)) {
+								discoverFreebase();
+							} else {
+								result = Wiktionary.define(unknownWord);
+								if (result == null) {
+									discoverFreebase();
+								} else {
+									Context.push(result);
+									conversation.topic = result;
+									result = result.sentence;
+									if (result == null) {
+										return discoverFreebase();
+									}
+									return result;
+								}
+							}
+						} else {
+							return null;
+						}
 					}
-					Equation:discoverFreebase {
-						if (:someWord, #null)
-							else (do (
-								assign :result to (is :sentence related to :definition by #response),
-								if (:result, #false)
-									then (assign :ignore to #true)));
-						if (:ignore, #null)
-							then (do(
-								assign :result to (call #discover on #Freebase with (:unknownWord, :unknownWord2, :unknownWord3, :unknownWord4, :unknownWord5)),
-								if (:result, #null)
-									then #null
-									else (do(
-										call #push on #Context with :result,
-										set #topic to :result on :conversation,
-										assign :result to (get #sentence from :result),
-										:result))))
-							else #null;
+					
+					function discoverFreebase() {
+						if (someWord != null) {
+							result = sentence.has(#response, definition);
+							if (result == false) {
+								ignore = true;
+							}
+						}
+						if (ignore == null) {
+							result = Freebase.discover(unknownWord, unknownWord2, unknownWord3, unknownWord4, unknownWord5),
+							if (result == null) {
+								return null;
+							} else {
+								Context.push(result);
+								conversation.topic = result;
+								result = result.sentence;
+								return result;
+							}
+						} else {
+							return null;
+						}
 					}
 				}
 				
-				State:discoverFreebaseState2 {
-					case :punctuation goto State:discoverFreebaseState5;
+				state discoverFreebaseState2 {
+					case punctuation goto discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord3 goto State:discoverFreebaseState3;
+					case unknownWord3 goto discoverFreebaseState3;
 					
-					Quotient:Equation:defineWiktionary;
+					answer defineWiktionary();
 				}
 				
-				State:discoverFreebaseState3 {
-					case :punctuation goto State:discoverFreebaseState5;
+				state discoverFreebaseState3 {
+					case punctuation goto discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord4 goto State:discoverFreebaseState4;
+					case unknownWord4 goto discoverFreebaseState4;
 					
-					Quotient:Equation:defineWiktionary;
+					answer defineWiktionary();
 				}
 				
-				State:discoverFreebaseState4 {
-					case :punctuation goto State:discoverFreebaseState5;
+				state discoverFreebaseState4 {
+					case punctuation goto discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord5 goto State:discoverFreebaseState5;
+					case unknownWord5 goto discoverFreebaseState5;
 					
-					Quotient:Equation:defineWiktionary;
+					answer defineWiktionary();
 				}
 				
-				State:discoverFreebaseState5 {
-					case :punctuation goto State:discoverFreebaseState5;
+				state discoverFreebaseState5 {
+					case punctuation goto discoverFreebaseState5;
 					
-					Quotient:Equation:defineWiktionary;
+					answer defineWiktionary();
 				}
 			}
 		}
 	}
 }
-

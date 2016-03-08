@@ -64,11 +64,14 @@ public class SelfExecutionException extends BotException {
 	public String getMessage() {
 		StringWriter writer = new StringWriter();
 		writer.write(super.getMessage());
-		writer.write("\n");
-		writer.write("Line: \"" + String.valueOf(this.line) + "\"");
-		writer.write("\n");
-		writer.write("Line number: " + String.valueOf(this.lineNumber));
-		writer.write("\n");
+		if (this.line != null) {
+			writer.write("\n");
+			writer.write("Line: \"" + String.valueOf(this.line) + "\"");
+		}
+		if (this.lineNumber != null) {
+			writer.write("\n");
+			writer.write("Line number: " + String.valueOf(this.lineNumber));
+		}
 		writer.flush();
 		return writer.toString();
 	}

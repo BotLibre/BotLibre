@@ -68,7 +68,7 @@ import org.eclipse.persistence.sessions.server.ConnectionPolicy;
 import org.eclipse.persistence.sessions.server.ServerSession;
 
 /**
- * Uses JPA to store the memory to a Derby database.
+ * Uses JPA to store the memory to a PostgresQL database.
  */
 
 public class DatabaseMemory extends BasicMemory {
@@ -369,12 +369,15 @@ public class DatabaseMemory extends BasicMemory {
 				}
 				this.database = database;
 			}
+			if (RECREATE_DATABASE) {
+				recreateDatabase = true;
+			}
 			//properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
 			//properties.put(PersistenceUnitProperties.JDBC_PASSWORD, DATABASE_PASSWORD);
 			properties.put(PersistenceUnitProperties.CACHE_SIZE_DEFAULT, CACHE_SIZE);
 			properties.put(PersistenceUnitProperties.CACHE_STATEMENTS, "true");
 			properties.put(PersistenceUnitProperties.BATCH_WRITING, "JDBC");
-			if (recreateDatabase || RECREATE_DATABASE) {
+			if (recreateDatabase) {
 				properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
 			}
 			properties.put(PersistenceUnitProperties.SESSION_CUSTOMIZER, MemorySessionCustomizer.class.getName());

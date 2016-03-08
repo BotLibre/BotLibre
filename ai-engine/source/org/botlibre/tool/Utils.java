@@ -21,8 +21,8 @@ import java.io.StringWriter;
 import java.math.BigInteger;
 
 import org.botlibre.Bot;
-import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.knowledge.Primitive;
 import org.botlibre.sense.BasicTool;
 import org.botlibre.util.TextStream;
 
@@ -35,43 +35,45 @@ public class Utils extends BasicTool {
 	public Utils() {
 	}
 
-	public Vertex id(Network network) {
-		return network.createVertex(getBot().memory().getMemoryName());
+	public Vertex id(Vertex source) {
+		return source.getNetwork().createVertex(getBot().memory().getMemoryName());
 	}
 
-	public Vertex size(Network network) {
-		return network.createVertex(BigInteger.valueOf(getBot().memory().getLongTermMemory().size()));
+	public Vertex size(Vertex source) {
+		return source.getNetwork().createVertex(BigInteger.valueOf(getBot().memory().getLongTermMemory().size()));
 	}
 
-	public Vertex version(Network network) {
-		return network.createVertex(Bot.VERSION);
+	public Vertex version(Vertex source) {
+		return source.getNetwork().createVertex(Bot.VERSION);
 	}
 
-	public Vertex program(Network network) {
-		return network.createVertex(Bot.PROGRAM + " - " + Bot.VERSION);
+	public Vertex program(Vertex source) {
+		return source.getNetwork().createVertex(Bot.PROGRAM + " - " + Bot.VERSION);
 	}
 
-	public Vertex uppercase(Vertex text) {
+	public Vertex uppercase(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(text.printString().toUpperCase());
 	}
 
-	public Vertex lowercase(Vertex text) {
+	public Vertex lowercase(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(text.printString().toLowerCase());
 	}
 
-	public Vertex sentence(Vertex text) {
-		return text.getNetwork().createVertex(org.botlibre.util.Utils.capitalize(text.printString()));
+	public Vertex sentence(Vertex source, Vertex text) {
+		Vertex fragment = text.getNetwork().createFragment(org.botlibre.util.Utils.capitalize(text.printString()));
+		fragment.addRelationship(Primitive.TYPE, Primitive.CASESENSITVE);
+		return fragment;
 	}
 
-	public Vertex explode(Vertex text) {
+	public Vertex explode(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(explode(text.printString()));
 	}
 
-	public Vertex normalize(Vertex text) {
+	public Vertex normalize(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(normalize(text.printString()));
 	}
 
-	public Vertex denormalize(Vertex text) {
+	public Vertex denormalize(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(denormalize(text.printString()));
 	}
 
@@ -168,8 +170,10 @@ public class Utils extends BasicTool {
 		return writer.toString();
 	}
 
-	public Vertex formal(Vertex fragment) {
-		return fragment.getNetwork().createVertex(formal(fragment.printString()));
+	public Vertex formal(Vertex source, Vertex text) {
+		Vertex fragment = text.getNetwork().createFragment(formal(text.printString()));
+		fragment.addRelationship(Primitive.TYPE, Primitive.CASESENSITVE);
+		return fragment;
 	}
 
 	public static String gender(String text) {
@@ -204,7 +208,7 @@ public class Utils extends BasicTool {
 		return writer.toString();
 	}
 
-	public Vertex gender(Vertex fragment) {
+	public Vertex gender(Vertex source, Vertex fragment) {
 		return fragment.getNetwork().createVertex(gender(fragment.printString()));
 	}
 
@@ -244,7 +248,7 @@ public class Utils extends BasicTool {
 		return writer.toString();
 	}
 
-	public Vertex person(Vertex fragment) {
+	public Vertex person(Vertex source, Vertex fragment) {
 		return fragment.getNetwork().createVertex(person(fragment.printString()));
 	}
 
@@ -284,7 +288,7 @@ public class Utils extends BasicTool {
 		return writer.toString();
 	}
 
-	public Vertex person2(Vertex fragment) {
+	public Vertex person2(Vertex source, Vertex fragment) {
 		return fragment.getNetwork().createVertex(person2(fragment.printString()));
 	}
 	

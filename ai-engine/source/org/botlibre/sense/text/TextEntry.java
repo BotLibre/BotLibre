@@ -193,7 +193,6 @@ public class TextEntry extends BasicSense {
 				Vertex infoInput = createInputSentence("Info: " + this.info.trim(), network);
 				infoInput.addRelationship(Primitive.INSTANTIATION, Primitive.CHAT);
 				Language.addToConversation(infoInput, conversation);
-				System.out.println("addToConversation: " + infoInput);
 			}
 		}
 		if (!newConversation) {
@@ -443,7 +442,7 @@ public class TextEntry extends BasicSense {
 							input.setPinned(true);
 							language.addRelationship(Primitive.GREETING, input);
 						} else if (speakerName.equalsIgnoreCase("script")) {
-							input = SelfCompiler.getCompiler().evaluateEquation(
+							input = SelfCompiler.getCompiler().evaluateExpression(
 									message, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), false, network);
 						} else {
 							if (comprehension) {
@@ -590,7 +589,7 @@ public class TextEntry extends BasicSense {
 				question.setPinned(true);
 				language.addRelationship(Primitive.GREETING, question);
 			} else if (command.equalsIgnoreCase("script")) {
-				SelfCompiler.getCompiler().evaluateEquation(
+				SelfCompiler.getCompiler().evaluateExpression(
 						line, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), false, network);
 			} else if (command.equalsIgnoreCase("keywords")) {
 				if (question == null || answer == null) {

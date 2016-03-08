@@ -74,13 +74,18 @@ public class SelfParseException extends BotException {
 	public String getMessage() {
 		StringWriter writer = new StringWriter();
 		writer.write(super.getMessage());
-		writer.write("\n");
-		writer.write("Line: \"" + this.line + "\"");
-		writer.write("\n");
-		writer.write("Line number: " + this.lineNumber);
-		writer.write("\n");
-		writer.write("Line column: " + this.columnNumber);
-		writer.write("\n");
+		if (this.line != null) {
+			writer.write("\n");
+			writer.write("Line: \"" + this.line + "\"");
+		}
+		if (this.lineNumber > 0) {
+			writer.write("\n");
+			writer.write("Line number: " + this.lineNumber);
+		}
+		if (this.columnNumber > 0) {
+			writer.write("\n");
+			writer.write("Line column: " + this.columnNumber);
+		}
 		writer.flush();
 		return writer.toString();
 	}

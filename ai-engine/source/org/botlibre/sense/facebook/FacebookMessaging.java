@@ -61,13 +61,16 @@ public class FacebookMessaging extends Facebook {
 	 */
 	public void checkDirectMessages() {
 		if (!getReplyToMessages()) {
-			return;
+			// Always check as gated by Facebook sense.
+			//log("Reply to messages disabled", Level.INFO);
+			//return;
 		}
 		try {
 			if (getConnection() == null) {
 				connect();
 			}
 			if (!isPage()) {
+				log("Only pages can check messages", Level.WARNING);
 				return;
 			}
 			RawAPIResponse res = getConnection().callGetAPI("/" + getConnection().getPage().getId() + "/conversations");
@@ -85,26 +88,38 @@ public class FacebookMessaging extends Facebook {
 			    for (int index = 0; index < conversations.length(); index++) {
 			    	JSONObject conversation = conversations.getJSONObject(index);
 			    	String conversationId = conversation.getString("id");
-			    	JSONArray messages = conversation.getJSONObject("messages").getJSONArray("data");
-				    for (int i = 0; i < messages.length(); i++) {
-				    	JSONObject message = messages.getJSONObject(i);
-					    Date createdTime = Utils.parseDate(message.getString("created_time"), "yyyy-MM-dd'T'HH:mm:ssX").getTime();
-				    	if ((System.currentTimeMillis() - createdTime.getTime()) > DAY) {
-				    		continue;
-				    	}
-				    	if (createdTime.getTime() > lastMessage) {
-						    String fromUser = message.getJSONObject("from").getString("name");
-						    String fromUserId = message.getJSONObject("from").getString("id");
-						    if (!fromUserId.equals(this.userName)) {
-								String text = message.getString("message").trim();
-								log("Processing message", Level.INFO, text, fromUser, createdTime);
-								this.postsProcessed++;
-								inputSentence(text, fromUser, this.userName, conversationId, memory);
-						    	if (createdTime.getTime() > max) {
-						    		max = createdTime.getTime();
-						    	}
-						    }
-				    	}
+					log("Processing conversation", Level.FINE, conversationId);
+					res = getConnection().callGetAPI("/" + conversationId + "/messages?fields=id,created_time,from,message");
+					result = res.asJSONObject();
+					JSONArray messages = result.getJSONArray("data");
+				    if (messages != null && messages.length() > 0) {
+					    for (int i = 0; i < messages.length(); i++) {
+					    	JSONObject message = messages.getJSONObject(i);
+						    Date createdTime = Utils.parseDate(message.getString("created_time"), "yyyy-MM-dd'T'HH:mm:ssX").getTime();
+					    	if ((System.currentTimeMillis() - createdTime.getTime()) > DAY) {
+								log("Day old message", Level.FINE, createdTime, conversationId);
+					    		continue;
+					    	}
+					    	if (createdTime.getTime() > lastMessage) {
+							    String fromUser = message.getJSONObject("from").getString("name");
+							    String fromUserId = message.getJSONObject("from").getString("id");
+							    if (!fromUserId.equals(this.userName)) {
+									String text = message.getString("message").trim();
+									log("Processing message", Level.INFO, text, fromUser, createdTime, conversationId);
+									this.messagesProcessed++;
+									inputSentence(text, fromUser, this.userName, conversationId, memory);
+							    	if (createdTime.getTime() > max) {
+							    		max = createdTime.getTime();
+							    	}
+							    } else {
+									log("Ignoring own message", Level.FINE, createdTime, conversationId);
+							    }
+					    	} else {
+								log("Old message", Level.FINE, createdTime, conversationId);
+					    	}
+					    }
+				    } else {
+						log("No messages", Level.FINE, conversationId);
 				    }
 			    }
 			    if (max != 0) {
@@ -143,6 +158,8 @@ public class FacebookMessaging extends Facebook {
 			    	facebook.setRelationship(Primitive.LASTDIRECTMESSAGE, memory.createVertex(max));
 			    	memory.save();
 			    }*/
+		    } else {
+				log("No conversations", Level.FINE);
 		    }
 		} catch (Exception exception) {
 			log(exception);
@@ -163,7 +180,7 @@ public class FacebookMessaging extends Facebook {
 			    String fromUser = message.getFrom().getName();
 				String text = message.getMessage().trim();
 				log("Processing message.", Level.INFO, text, fromUser);
-				this.postsProcessed++;
+				this.messagesProcessed++;
 				inputSentence(text, fromUser, this.userName, message.getId(), network);
 			}
 		} catch (Exception exception) {
@@ -195,7 +212,8 @@ public class FacebookMessaging extends Facebook {
 		input.addRelationship(Primitive.TARGET, self);
 		user.addRelationship(Primitive.INPUT, input);
 		
-		Vertex conversation = network.createInstance(Primitive.CONVERSATION);
+		Vertex conversation = network.createVertex(id);
+		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
 		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
 		conversation.addRelationship(Primitive.ID, network.createVertex(id));
 		conversation.addRelationship(Primitive.SPEAKER, user);

@@ -668,6 +668,16 @@ public interface Vertex {
 	void internalRemoveRelationship(Relationship relationship);
 	
 	/**
+	 * Remove the relation.
+	 */
+	void internalRemoveRelationship(Primitive type,  Primitive target);
+	
+	/**
+	 * Remove the relation.
+	 */
+	void internalRemoveRelationship(Vertex type,  Vertex target);
+	
+	/**
 	 * Remove the relationships of the type.
 	 */
 	void internalRemoveRelationships(Primitive type);
@@ -750,9 +760,9 @@ public interface Vertex {
 	boolean isVariable();
 
 	/**
-	 * Return if the vertex is a list.
+	 * Return if the vertex is an array.
 	 */
-	boolean isList();
+	boolean isArray();
 	
 	/**
 	 * Return if the vertex is an equation.

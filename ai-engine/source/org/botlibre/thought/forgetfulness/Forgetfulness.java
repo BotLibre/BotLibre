@@ -48,6 +48,7 @@ public class Forgetfulness extends BasicThought {
 	public static long EXPIRY = 7;
 	public static int MAX_SIZE = 100000;
 	public static int MAX_RELATIONSHIPS = 150;
+	public static long TIME_TO_LIVE = (10 * Utils.MINUTE);
 	
 	/** Min number of days to keep conversation and context data for. */
 	public long expiry = EXPIRY;
@@ -101,9 +102,13 @@ public class Forgetfulness extends BasicThought {
 			log(failure);
 		}
 	}
+	
+	public int forget(ForgetType type, int numberToDelete, Network memory) throws Exception {
+		return forget(type, numberToDelete, TIME_TO_LIVE, memory);
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public int forget(ForgetType type, int numberToDelete, Network memory) throws Exception {
+	public int forget(ForgetType type, int numberToDelete, long timeToLive, Network memory) throws Exception {
 		if (!this.bot.mind().isConscious()) {
 			return 0;
 		}
@@ -155,6 +160,27 @@ public class Forgetfulness extends BasicThought {
 							+ "order by v.creationDate", parameters, PAGE, 0);
 				log("Old conversation query time", Level.INFO, System.currentTimeMillis() - batchStart);
 				log("Removing old conversation vertices", Level.WARNING, unreferenced.size());
+				// Check if still too many conversations and delete more.
+				if (unreferenced.isEmpty()) {
+					parameters = new HashMap();
+					parameters.put("type", instantiation);
+					parameters.put("context", context);
+					parameters.put("conversation", conversation);
+					parameters.put("input", input);
+					unreferenced = memory.findAllQuery(
+							"Select v FROM Vertex v join v.allRelationships r where r.type = :type and (r.target = :context or r.target = :conversation or r.target = :input) "
+								+ "order by v.creationDate", parameters, PAGE, 0);
+					log("Old conversation query time", Level.INFO, System.currentTimeMillis() - batchStart);
+					if (unreferenced.size() < PAGE) {
+						unreferenced = new ArrayList<>();
+					} else {
+						// Keep a minimum of a 1/2 page.
+						for (int index = 0; index < (PAGE / 2); index++) {
+							unreferenced.remove(unreferenced.size() - 1);
+						}
+					}
+					log("Removing old conversation vertices", Level.WARNING, unreferenced.size());
+				}
 			} else if (type == ForgetType.LeastReferenced) {
 				log("Searching for vertices with fewest references", Level.INFO, numberToDelete);
 				//List<Object[]> byReferences  = memory.findAllQuery("Select count(v2) c, v from Vertex v, Vertex v2 join v2.allRelationships r2 "
@@ -213,7 +239,10 @@ public class Forgetfulness extends BasicThought {
 			found = unreferenced.size() > 0;
 			int failures = 0;
 			for (Vertex vertex : unreferenced) {
-				if ((System.currentTimeMillis() - vertex.getCreationDate().getTime()) < (10 * Utils.MINUTE)) {
+				if (vertex == null) {
+					continue;
+				}
+				if (vertex.getCreationDate() != null && ((System.currentTimeMillis() - vertex.getCreationDate().getTime()) < timeToLive)) {
 					log("Ignoring new vertex", Level.FINER, vertex, numberToDelete);
 					numberToDelete--;
 					failures++;
@@ -300,8 +329,12 @@ public class Forgetfulness extends BasicThought {
 	public void forget(Network memory) throws Exception {
 		forget(memory, true);
 	}
-	
+
 	public void forget(Network memory, boolean force) throws Exception {
+		forget(memory, force, TIME_TO_LIVE);
+	}
+	
+	public void forget(Network memory, boolean force, long timeToLive) throws Exception {
 		if (this.isStopped) {
 			return;
 		}
@@ -319,31 +352,31 @@ public class Forgetfulness extends BasicThought {
 		if (count > max) {
 			int numberToDelete = count - this.maxSize + (this.maxSize / 20);
 			log("Max number of vertices exceeded (max, current, deletions)", Level.WARNING, this.maxSize, count, numberToDelete);
-			numberToDelete = forget(ForgetType.Unreferenced, numberToDelete, memory);
+			numberToDelete = forget(ForgetType.Unreferenced, numberToDelete, timeToLive, memory);
 			if (numberToDelete == 0) {
 				return;
 			}
-			numberToDelete = forget(ForgetType.UnreferencedData, numberToDelete, memory);
+			numberToDelete = forget(ForgetType.UnreferencedData, numberToDelete, timeToLive, memory);
 			if (numberToDelete == 0) {
 				return;
 			}
-			numberToDelete = forget(ForgetType.OldConversations, numberToDelete, memory);
+			numberToDelete = forget(ForgetType.OldConversations, numberToDelete, timeToLive, memory);
 			if (numberToDelete == 0) {
 				return;
 			}
 			// May have more unreferenced data.
-			numberToDelete = forget(ForgetType.Unreferenced, numberToDelete, memory);
+			numberToDelete = forget(ForgetType.Unreferenced, numberToDelete, timeToLive, memory);
 			if (numberToDelete == 0) {
 				return;
 			}
-			numberToDelete = forget(ForgetType.UnreferencedData, numberToDelete, memory);
+			numberToDelete = forget(ForgetType.UnreferencedData, numberToDelete, timeToLive, memory);
 			if (numberToDelete == 0) {
 				return;
 			}
 			// Record potential destructive forget.
 			memory.createVertex(getPrimitive()).setRelationship(Primitive.LAST, memory.createTimestamp());
 			memory.save();
-			numberToDelete = forget(ForgetType.LeastReferenced, numberToDelete, memory);
+			numberToDelete = forget(ForgetType.LeastReferenced, numberToDelete, timeToLive, memory);
 			memory.clear();
 			this.bot.memory().freeMemory();
 		}

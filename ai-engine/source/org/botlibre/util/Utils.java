@@ -538,23 +538,36 @@ public class Utils {
 	/**
 	 * Parse the date of the form, "yyyy-MM-dd".
 	 */
-	public static java.sql.Date parseDate(String value) throws ParseException {
+	public static java.sql.Date parseDate(String value) {
 		return Helper.dateFromString(value);
 	}
 
 	/**
 	 * Parse the time of the form, "HH:mm:ss.N".
 	 */
-	public static Time parseTime(String value) throws ParseException {
+	public static Time parseTime(String value) {
 		return Helper.timeFromString(value);
 	}
 
 	/**
 	 * Parse the date of the form, "yyyy-MM-dd HH:mm:ss.N".
 	 */
-	public static Timestamp parseTimestamp(String value) throws ParseException {
+	public static Timestamp parseTimestamp(String value) {
 		return Helper.timestampFromString(value);
 	}
+
+    public static String buildZeroPrefixAndTruncTrailZeros(int number, int totalDigits) {
+        String zeros = "000000000";
+        String numbString = Integer.toString(number);
+        numbString = zeros.substring(0, (totalDigits - numbString.length())) + numbString;
+        char[] numbChar = new char[numbString.length()];
+        numbString.getChars(0, numbString.length(), numbChar, 0);
+        int truncIndex = totalDigits - 1;
+        while (numbChar[truncIndex] == '0') {
+            truncIndex--;
+        }
+        return new String(numbChar, 0, truncIndex + 1);
+    }
 	
 	/**
 	 * Parse the date of the format.

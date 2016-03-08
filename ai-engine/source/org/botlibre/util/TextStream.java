@@ -413,12 +413,72 @@ public class TextStream {
 		return quotes;
 	}
 	
+	public String nextStringQuotes() {
+		if (atEnd()) {
+			return "";
+		}
+		int start = this.index;
+		skipStringQuotes();
+		int end = this.index - 1;
+		if (atEnd() && current() != '\'') {
+			end = this.index;
+		}
+		String quotes = this.text.substring(start, end);
+		return quotes;
+	}
+	
+	public String nextStringDoubleQuotes() {
+		if (atEnd()) {
+			return "";
+		}
+		int start = this.index;
+		skipStringDoubleQuotes();
+		int end = this.index - 1;
+		if (atEnd() && current() != '"') {
+			end = this.index;
+		}
+		String quotes = this.text.substring(start, end);
+		return quotes;
+	}
+	
 	public String nextQuotesExcludeDoubleQuote() {
 		String quotes = nextQuotes();
 		if (quotes.contains("\"\"")) {
 			quotes = quotes.replace("\"\"", "\"");
 		}
 		return quotes;
+	}
+	
+	public void skipStringQuotes() {
+		if (atEnd()) {
+			return;
+		}
+		char next = next();
+		while (!atEnd() && (next != '\'')) {
+			if ((next == '\\')) {
+				skip();
+			}
+			if (next == '{') {
+				skipStringBrackets();
+			}
+			next = next();
+		}
+	}
+	
+	public void skipStringDoubleQuotes() {
+		if (atEnd()) {
+			return;
+		}
+		char next = next();
+		while (!atEnd() && (next != '"')) {
+			if ((next == '\\')) {
+				skip();
+			}
+			if (next == '{') {
+				skipStringDoubleQuoteBrackets();
+			}
+			next = next();
+		}
 	}
 	
 	public void skipQuotes() {
@@ -447,6 +507,35 @@ public class TextStream {
 		while (!atEnd() && (next != '}')) {
 			if (next == '"') {
 				skipQuotes();
+			}
+			next = next();
+		}
+	}
+	
+	public void skipStringBrackets() {
+		if (atEnd()) {
+			return;
+		}
+		char next = next();
+		while (!atEnd() && (next != '}')) {
+			if (next == '\'') {
+				skipStringQuotes();
+			}
+			next = next();
+		}
+	}
+	
+	public void skipStringDoubleQuoteBrackets() {
+		if (atEnd()) {
+			return;
+		}
+		char next = next();
+		while (!atEnd() && (next != '}')) {
+			if (next == '"') {
+				skipStringDoubleQuotes();
+			}
+			if (next == '{') {
+				skipStringDoubleQuoteBrackets();
 			}
 			next = next();
 		}

@@ -63,7 +63,7 @@ import org.w3c.dom.NodeList;
 
 public class Bot {	
 	public static String PROGRAM = "Bot";
-	public static String VERSION = "3.0 - 2015-10-05";
+	public static String VERSION = "4.0.2 - 2016-02-29";
 	
 	public static final Level FINE = Level.FINE;
 	public static final Level WARNING = Level.WARNING;

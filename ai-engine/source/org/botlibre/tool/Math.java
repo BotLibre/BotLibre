@@ -28,9 +28,11 @@ import org.botlibre.sense.BasicTool;
  * Does math.
  */
 
-public class Calculator extends BasicTool {
+public class Math extends BasicTool {
+	
+	public static Math instance = new Math();
 
-	public Calculator() {
+	public Math() {
 	}
 	
 	public Vertex plus(Vertex source, Vertex left, Vertex right) {

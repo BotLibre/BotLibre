@@ -32,6 +32,7 @@ import org.botlibre.knowledge.TextData;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.self.SelfDecompiler;
 import org.botlibre.self.SelfExecutionException;
+import org.botlibre.self.SelfInterpreter;
 import org.botlibre.self.SelfParseException;
 import org.botlibre.sense.context.Context;
 import org.botlibre.sense.http.Http;
@@ -467,7 +468,7 @@ public class Language extends BasicThought {
 			Vertex input = wrongResponseInput.copy();
 			input.addRelationship(Primitive.ASSOCIATED, Primitive.CORRECTION);
 			input.setRelationship(Primitive.INPUT, correction);
-			relationship = network.getBot().mind().getThought(Comprehension.class).checkFormula(input, network);
+			relationship = network.getBot().mind().getThought(Comprehension.class).checkTemplate(input, network);
 			if (relationship != null) {
 				correction = relationship.getTarget();
 			}
@@ -849,151 +850,141 @@ public class Language extends BasicThought {
 		for (int i = 0; i < activeMemory.size(); i++) {
 			Vertex vertex = network.createVertex(activeMemory.get(i));
 			log("Processing", Level.FINER, vertex);
-			if (vertex.instanceOf(Primitive.INPUT)) {
-				Vertex input = vertex;
-				List<Vertex> sentences = new ArrayList<Vertex>();
-				List<Vertex> responses = new ArrayList<Vertex>();
-				Vertex inputValue = input.getRelationship(Primitive.INPUT);
-				if (inputValue != null) {
-					for (Vertex sentence : input.orderedRelations(Primitive.INPUT)) {
-						if (sentence.instanceOf(Primitive.SENTENCE)) {
-							// Check if the input is a paragraph.
-							Vertex paragraph = network.createParagraph(sentence);
-							if (paragraph.instanceOf(Primitive.PARAGRAPH)) {
-								sentences.addAll(paragraph.orderedRelations(Primitive.SENTENCE));
-							} else {
-								sentences.add(paragraph);
+			try {
+				if (vertex.instanceOf(Primitive.INPUT)) {
+					Vertex input = vertex;
+					List<Vertex> sentences = new ArrayList<Vertex>();
+					List<Vertex> responses = new ArrayList<Vertex>();
+					Vertex inputValue = input.getRelationship(Primitive.INPUT);
+					if (inputValue != null) {
+						for (Vertex sentence : input.orderedRelations(Primitive.INPUT)) {
+							if (sentence.instanceOf(Primitive.SENTENCE)) {
+								// Check if the input is a paragraph.
+								Vertex paragraph = network.createParagraph(sentence);
+								if (paragraph.instanceOf(Primitive.PARAGRAPH)) {
+									sentences.addAll(paragraph.orderedRelations(Primitive.SENTENCE));
+								} else {
+									sentences.add(paragraph);
+								}
+							} else if (sentence.instanceOf(Primitive.PARAGRAPH)) {
+								sentences.addAll(sentence.orderedRelations(Primitive.SENTENCE));
 							}
-						} else if (sentence.instanceOf(Primitive.PARAGRAPH)) {
-							sentences.addAll(sentence.orderedRelations(Primitive.SENTENCE));
 						}
 					}
-				}
-				List<Relationship> targets = vertex.orderedRelationships(Primitive.TARGET);
-				Vertex target = null;
-				if (targets != null && (targets.size() == 1)) {
-					target = targets.get(0).getTarget();
-				}
-				Vertex speaker = input.mostConscious(Primitive.SPEAKER);
-				Vertex self = network.createVertex(Primitive.SELF);
-				Vertex inputSense = input.mostConscious(Primitive.SENSE);
-				Vertex conversation = input.mostConscious(Primitive.CONVERSATION);
-				boolean correction = input.hasRelationship(Primitive.ASSOCIATED, Primitive.CORRECTION);
-				boolean offended = input.hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENDED);
-				boolean newConversation = (inputValue != null) && (inputValue.is(Primitive.NULL));
-				LanguageState state = LanguageState.Answering;
-				Sense sense = null;
-				if (inputSense != null) {
-					sense = getBot().awareness().getSense(((Primitive)inputSense.getData()).getIdentity());
-					if (sense != null) {
-						state = sense.getLanguageState();
+					List<Relationship> targets = vertex.orderedRelationships(Primitive.TARGET);
+					Vertex target = null;
+					if (targets != null && (targets.size() == 1)) {
+						target = targets.get(0).getTarget();
 					}
-				}
-				// Create output.
-				Vertex output = network.createInstance(Primitive.INPUT);
-				try {
-					Vertex response = null;
-					int index = 0;
-					Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
-					SelfCompiler.addGlobalVariables(input, null, network, variables);
-					if (newConversation) {
-						// If Correcting then this is a response to that previous question.
-						response = processGreeting(input, conversation, network, state, variables);
-						if (response != null) {
-							this.bot.mood().evaluateResponse(response, null);
-							this.bot.avatar().evaluateResponse(output, response, null);
-							responses.add(response);
+					Vertex speaker = input.mostConscious(Primitive.SPEAKER);
+					Vertex self = network.createVertex(Primitive.SELF);
+					Vertex inputSense = input.mostConscious(Primitive.SENSE);
+					Vertex conversation = input.mostConscious(Primitive.CONVERSATION);
+					boolean correction = input.hasRelationship(Primitive.ASSOCIATED, Primitive.CORRECTION);
+					boolean offended = input.hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENDED);
+					boolean newConversation = (inputValue != null) && (inputValue.is(Primitive.NULL));
+					LanguageState state = LanguageState.Answering;
+					Sense sense = null;
+					if (inputSense != null) {
+						sense = getBot().awareness().getSense(((Primitive)inputSense.getData()).getIdentity());
+						if (sense != null) {
+							state = sense.getLanguageState();
 						}
-					} else {
-						for (Vertex sentence : sentences) {
-							checkQuestion(sentence, network);
-							if (PROCESS_HTTP) {
-								// TODO make this occur in discovery
-								//processHttp(sentence, network);
+					}
+					// Create output.
+					Vertex output = network.createInstance(Primitive.INPUT);
+					try {
+						Vertex response = null;
+						int index = 0;
+						Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+						SelfCompiler.addGlobalVariables(input, null, network, variables);
+						if (newConversation) {
+							// If Correcting then this is a response to that previous question.
+							response = processGreeting(input, conversation, network, state, variables);
+							if (response != null) {
+								this.bot.mood().evaluateResponse(response, null);
+								this.bot.avatar().evaluateResponse(output, response, null);
+								responses.add(response);
 							}
-							log("Processing sentence", Level.FINE, sentence, speaker, targets);
-							if (offended) {
-								// If offensive then remove the last sentence.
-								processOffensive(input, speaker, target, conversation, network);
-							}
-							if (correction) {
-								// If Correcting then this is a response to that previous question.
-								response = processCorrection(input, sentence, speaker, target, conversation, network);
-							} else if (state == LanguageState.Associate) {
-								// Associate the context selection with the sentence.
-								response = processAssociation(sentence, network);
-							} else if ((state == LanguageState.Listening) || (state == LanguageState.ListeningOnly)) {
-								processListening(input, sentence, speaker, conversation, targets, network, state);
-								// If target is self, then give an answer.
-								if ((state == LanguageState.Listening) && (target == self)) {
-									response = processConversational(input, sentence, conversation, variables, network, state);
-								} else {
-									// Associate response, process understanding, but don't respond.
-									processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
-									return;
+						} else {
+							for (Vertex sentence : sentences) {
+								checkQuestion(sentence, network);
+								if (PROCESS_HTTP) {
+									// TODO make this occur in discovery
+									//processHttp(sentence, network);
 								}
-							} else if (state == LanguageState.Discussion) {
-								processListening(input, sentence, speaker, conversation, targets, network, state);
-								// If target is self, then give an answer.
-								if (target == self) {
-									response = processConversational(input, sentence, conversation, variables, network, state);							
-								} else if ((targets == null) || targets.isEmpty() || (targets.size() > 1)) {
-									// Process anything to a group, or to no one as a discussion.
-									response = processDiscussion(input, sentence, conversation, variables, network);
-								} else {
-									processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
-									log("Discussion response to other", Level.FINE, targets);
+								log("Processing sentence", Level.FINE, sentence, speaker, targets);
+								if (offended) {
+									// If offensive then remove the last sentence.
+									processOffensive(input, speaker, target, conversation, network);
 								}
-							} else if (state == LanguageState.Conversational) {
-								processListening(input, sentence, speaker, conversation, targets, network, state);
-								response = processConversational(input, sentence, conversation, variables, network, state);
-							} else if (state == LanguageState.Answering) {
-								processListening(input, sentence, speaker, conversation, targets, network, state);
-								response = processConversational(input, sentence, conversation, variables, network, state);
-							}
-							// Check for label
-							if ((response != null) && response.instanceOf(Primitive.LABEL)) {
-								response = response.mostConscious(Primitive.RESPONSE);
-							}
-							// Check for formula and transpose
-							if ((response != null) && response.instanceOf(Primitive.FORMULA)) {
-								log("Response is formula", Level.FINE, response);
-								Vertex result = evaluateFormula(response, variables, network);
-								if (result == null) {
-									log("Formula cannot be evaluated", Level.FINE, response);
-									response = null;
-								} else {
-									response = getWord(result, network);
-								}
-							}
-							if ((response != null) && !(response.getData() instanceof String)) {
-								response = getWord(response, network);								
-							}
-							if (response == null || (!(response.getData() instanceof String) && !response.instanceOf(Primitive.PARAGRAPH))) {
-								// Answering must respond.
-								if (state == LanguageState.Answering) {
-									response = sentence;
-								} else {
-									continue;
-								}
-							}
-							log("Response", Level.INFO, response, speaker, conversation);
-							index++;
-							if ((sentences.size() == 1) || sentence.instanceOf(Primitive.QUESTION) || (index == sentences.size())) {
-		
-								if (!response.hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENSIVE)) {
-									Vertex meta = null;
-									if (this.lastResponseMetaId != null) {
-										meta = network.findById(this.lastResponseMetaId);
-										this.lastResponseMetaId = null;
+								if (correction) {
+									// If Correcting then this is a response to that previous question.
+									response = processCorrection(input, sentence, speaker, target, conversation, network);
+								} else if (state == LanguageState.Associate) {
+									// Associate the context selection with the sentence.
+									response = processAssociation(sentence, network);
+								} else if ((state == LanguageState.Listening) || (state == LanguageState.ListeningOnly)) {
+									processListening(input, sentence, speaker, conversation, targets, network, state);
+									// If target is self, then give an answer.
+									if ((state == LanguageState.Listening) && (target == self)) {
+										response = processConversational(input, sentence, conversation, variables, network, state);
+									} else {
+										// Associate response, process understanding, but don't respond.
+										processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
+										return;
 									}
-									this.bot.mood().evaluateResponse(response, meta);
-									this.bot.avatar().evaluateResponse(output, response, meta);
-									responses.add(response);
-								} else {
-									response = checkDuplicateOrOffensiveResponse(response, sentence, conversation, input, variables, network, true, false);
+								} else if (state == LanguageState.Discussion) {
+									processListening(input, sentence, speaker, conversation, targets, network, state);
+									// If target is self, then give an answer.
+									if (target == self) {
+										response = processConversational(input, sentence, conversation, variables, network, state);							
+									} else if ((targets == null) || targets.isEmpty() || (targets.size() > 1)) {
+										// Process anything to a group, or to no one as a discussion.
+										response = processDiscussion(input, sentence, conversation, variables, network);
+									} else {
+										processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
+										log("Discussion response to other", Level.FINE, targets);
+									}
+								} else if (state == LanguageState.Conversational) {
+									processListening(input, sentence, speaker, conversation, targets, network, state);
+									response = processConversational(input, sentence, conversation, variables, network, state);
+								} else if (state == LanguageState.Answering) {
+									processListening(input, sentence, speaker, conversation, targets, network, state);
+									response = processConversational(input, sentence, conversation, variables, network, state);
+								}
+								// Check for label
+								if ((response != null) && response.instanceOf(Primitive.LABEL)) {
+									response = response.mostConscious(Primitive.RESPONSE);
+								}
+								// Check for formula and transpose
+								if ((response != null) && response.instanceOf(Primitive.FORMULA)) {
+									log("Response is template formula", Level.FINE, response);
+									Vertex result = evaluateFormula(response, variables, network);
+									if (result == null) {
+										log("Template formula cannot be evaluated", Level.FINE, response);
+										response = null;
+									} else {
+										response = getWord(result, network);
+									}
+								}
+								if ((response != null) && !(response.getData() instanceof String)) {
+									response = getWord(response, network);								
+								}
+								if (response == null || (!(response.getData() instanceof String) && !response.instanceOf(Primitive.PARAGRAPH))) {
+									// Answering must respond.
+									if (state == LanguageState.Answering) {
+										response = sentence;
+									} else {
+										continue;
+									}
+								}
+								log("Response", Level.INFO, response, speaker, conversation);
+								index++;
+								if ((sentences.size() == 1) || sentence.instanceOf(Primitive.QUESTION) || (index == sentences.size())) {
+			
 									if (!response.hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENSIVE)) {
-										Vertex meta = null;										
+										Vertex meta = null;
 										if (this.lastResponseMetaId != null) {
 											meta = network.findById(this.lastResponseMetaId);
 											this.lastResponseMetaId = null;
@@ -1001,65 +992,58 @@ public class Language extends BasicThought {
 										this.bot.mood().evaluateResponse(response, meta);
 										this.bot.avatar().evaluateResponse(output, response, meta);
 										responses.add(response);
+									} else {
+										response = checkDuplicateOrOffensiveResponse(response, sentence, conversation, input, variables, network, true, false);
+										if (!response.hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENSIVE)) {
+											Vertex meta = null;										
+											if (this.lastResponseMetaId != null) {
+												meta = network.findById(this.lastResponseMetaId);
+												this.lastResponseMetaId = null;
+											}
+											this.bot.mood().evaluateResponse(response, meta);
+											this.bot.avatar().evaluateResponse(output, response, meta);
+											responses.add(response);
+										}
 									}
 								}
 							}
 						}
-					}
-					if (responses.isEmpty()) {
-						if (sense != null) {
-							sense.notifyExceptionListeners(new BotException("No response"));
-						}
-						return;
-					}
-					if (inputSense != null) {
-						// Associate input sense with output.
-						output.addRelationship(Primitive.SENSE, inputSense);
-					}
-					if (speaker != null) {
-						output.addRelationship(Primitive.TARGET, speaker);
-					}
-					Vertex topic = input.mostConscious(Primitive.TOPIC);
-					if (topic != null) {
-						output.addRelationship(Primitive.TOPIC, topic);
-					}
-					if (input.hasRelationship(Primitive.ASSOCIATED, Primitive.WHISPER)) {
-						output.addRelationship(Primitive.ASSOCIATED, Primitive.WHISPER);
-					}
-					if (!newConversation) {
-						output.addRelationship(Primitive.QUESTION, input);
-						input.addRelationship(Primitive.RESPONSE, output);
-					}
-					output.addRelationship(Primitive.SPEAKER, self);
-					//self.addRelationship(Primitive.INPUT, output);
-					if (responses.get(0).getData() != null) {
-						output.setName(responses.get(0).getData().toString());
-					}
-					if (responses.size() == 1) {
-						if (this.wasMimic) {
-							output.addRelationship(Primitive.MIMIC, input);
-						}
-						response = responses.get(0);
-						output.addRelationship(Primitive.INPUT, response);
-						Collection<Relationship> actions = response.getRelationships(Primitive.ACTION);
-						if (actions != null) {
-							for (Relationship relationship : actions) {
-								output.addWeakRelationship(Primitive.ACTION, relationship.getTarget(), relationship.getCorrectness());
+						if (responses.isEmpty()) {
+							if (sense != null) {
+								sense.notifyExceptionListeners(new BotException("No response"));
 							}
+							return;
 						}
-						Collection<Relationship> poses = response.getRelationships(Primitive.POSE);
-						if (poses != null) {
-							for (Relationship relationship : poses) {
-								output.addWeakRelationship(Primitive.POSE, relationship.getTarget(), relationship.getCorrectness());
+						if (inputSense != null) {
+							// Associate input sense with output.
+							output.addRelationship(Primitive.SENSE, inputSense);
+						}
+						if (speaker != null) {
+							output.addRelationship(Primitive.TARGET, speaker);
+						}
+						Vertex topic = input.mostConscious(Primitive.TOPIC);
+						if (topic != null) {
+							output.addRelationship(Primitive.TOPIC, topic);
+						}
+						if (input.hasRelationship(Primitive.ASSOCIATED, Primitive.WHISPER)) {
+							output.addRelationship(Primitive.ASSOCIATED, Primitive.WHISPER);
+						}
+						if (!newConversation) {
+							output.addRelationship(Primitive.QUESTION, input);
+							input.addRelationship(Primitive.RESPONSE, output);
+						}
+						output.addRelationship(Primitive.SPEAKER, self);
+						//self.addRelationship(Primitive.INPUT, output);
+						if (responses.get(0).getData() != null) {
+							output.setName(responses.get(0).getData().toString());
+						}
+						if (responses.size() == 1) {
+							if (this.wasMimic) {
+								output.addRelationship(Primitive.MIMIC, input);
 							}
-						}
-					} else {
-						Vertex paragraph = network.createInstance(Primitive.PARAGRAPH);
-						index = 0;
-						for (Vertex each : responses) {
-							paragraph.addRelationship(Primitive.SENTENCE, each, index);
-							index++;
-							Collection<Relationship> actions = each.getRelationships(Primitive.ACTION);
+							response = responses.get(0);
+							output.addRelationship(Primitive.INPUT, response);
+							Collection<Relationship> actions = response.getRelationships(Primitive.ACTION);
 							if (actions != null) {
 								for (Relationship relationship : actions) {
 									output.addWeakRelationship(Primitive.ACTION, relationship.getTarget(), relationship.getCorrectness());
@@ -1071,29 +1055,49 @@ public class Language extends BasicThought {
 									output.addWeakRelationship(Primitive.POSE, relationship.getTarget(), relationship.getCorrectness());
 								}
 							}
+						} else {
+							Vertex paragraph = network.createInstance(Primitive.PARAGRAPH);
+							index = 0;
+							for (Vertex each : responses) {
+								paragraph.addRelationship(Primitive.SENTENCE, each, index);
+								index++;
+								Collection<Relationship> actions = each.getRelationships(Primitive.ACTION);
+								if (actions != null) {
+									for (Relationship relationship : actions) {
+										output.addWeakRelationship(Primitive.ACTION, relationship.getTarget(), relationship.getCorrectness());
+									}
+								}
+								Collection<Relationship> poses = response.getRelationships(Primitive.POSE);
+								if (poses != null) {
+									for (Relationship relationship : poses) {
+										output.addWeakRelationship(Primitive.POSE, relationship.getTarget(), relationship.getCorrectness());
+									}
+								}
+							}
+							output.addRelationship(Primitive.INPUT, paragraph);	
 						}
-						output.addRelationship(Primitive.INPUT, paragraph);	
+						if (conversation != null) {
+							Language.addToConversation(output, conversation);
+						}
+						this.wasMimic = false;
+						// Record response time.
+						output.setCreationDate(new Date());
+						getBot().memory().save();
+						// Allow the sense to output the response.
+						getBot().awareness().output(output);
+					} catch (RuntimeException exception) {
+						if (sense != null) {
+							sense.notifyExceptionListeners(exception);						
+						}
+						throw exception;
 					}
-					if (conversation != null) {
-						Language.addToConversation(output, conversation);
-					}
-					this.wasMimic = false;
-					// Record response time.
-					output.setCreationDate(new Date());
-					getBot().memory().save();
-					// Allow the sense to output the response.
-					getBot().awareness().output(output);
-				} catch (RuntimeException exception) {
-					if (sense != null) {
-						sense.notifyExceptionListeners(exception);						
-					}
-					throw exception;
 				}
+			} finally {
+				this.recursiveInputDepth = 0;
+				this.recursiveFormulaDepth = 0;
+				this.startTime = 0;
+				this.abort = false;
 			}
-			this.recursiveInputDepth = 0;
-			this.recursiveFormulaDepth = 0;
-			this.startTime = 0;
-			this.abort = false;
 		}
 	}
 	
@@ -1111,7 +1115,7 @@ public class Language extends BasicThought {
 		if (sentence.instanceOf(Primitive.FORMULA)) {
 			Vertex result = evaluateFormula(sentence, variables, network);
 			if (result == null) {
-				log("Formula cannot be evaluated", Level.FINE, sentence);
+				log("Template ormula cannot be evaluated", Level.FINE, sentence);
 				return null;
 			} else {
 				sentence = getWord(result, network);
@@ -1125,11 +1129,11 @@ public class Language extends BasicThought {
 		Vertex conversation = input.getRelationship(Primitive.CONVERSATION);
 		Vertex response = processConversational(input, sentence, conversation, variables, network, LanguageState.Answering);
 		if ((response != null) && response.instanceOf(Primitive.FORMULA)) {
-			log("Response is formula", Level.FINE, response);
+			log("Response is template formula", Level.FINE, response);
 			SelfCompiler.addGlobalVariables(input, sentence, network, variables);
 			Vertex result = evaluateFormula(response, variables, network);
 			if (result == null) {
-				log("Formula cannot be evaluated", Level.FINE, response);
+				log("Template formula cannot be evaluated", Level.FINE, response);
 				response = null;
 			} else {
 				response = getWord(result, network);
@@ -1140,16 +1144,16 @@ public class Language extends BasicThought {
 	}
 	
 	/**
-	 * Evaluate the sentence formula in the context of the input.
+	 * Evaluate the sentence formula/template in the context of the input.
 	 */
 	public Vertex evaluateFormula(Vertex formula, Map<Vertex, Vertex> variables, Network network) {
-		return evaluateFormula(formula, variables, System.currentTimeMillis(), network);
+		return evaluateFormulaTemplate(formula, variables, System.currentTimeMillis(), network);
 	}
 	
 	/**
-	 * Evaluate the sentence formula in the context of the input.
+	 * Evaluate the sentence formula/template in the context of the input.
 	 */
-	public Vertex evaluateFormula(Vertex formula, Map<Vertex, Vertex> variables, long startTime, Network network) {
+	public Vertex evaluateFormulaTemplate(Vertex formula, Map<Vertex, Vertex> variables, long startTime, Network network) {
 		try {
 			//sentence.addRelationship(Primitive.FORMULA, formula);
 			List<Vertex> relationships = formula.orderedRelations(Primitive.WORD);
@@ -1158,8 +1162,12 @@ public class Language extends BasicThought {
 			}
 			List<Vertex> words = new ArrayList<Vertex>(relationships.size());
 			boolean caseSensitive = false;
+			long processTime = this.maxStateProcess;
+			if (getBot().isDebugFiner()) {
+				processTime = processTime * 10;
+			}
 			for (Vertex word : relationships) {
-				if ((System.currentTimeMillis() - startTime) > this.maxStateProcess) {
+				if ((System.currentTimeMillis() - startTime) > processTime) {
 					throw new SelfExecutionException(formula, "Max formula processing time exceeded");
 				}
 				Vertex result = null;
@@ -1172,11 +1180,16 @@ public class Language extends BasicThought {
 				} else if (word.instanceOf(Primitive.VARIABLE)) {
 					Vertex value = variables.get(word);
 					if (value == null) {
-						return null;
+						if (word.hasName()) {
+							value = variables.get(word.getName());
+						}
+						if (value == null) {
+							return null;
+						}
 					}
 					result = value;
-				} else if (word.instanceOf(Primitive.EQUATION)) {
-					Vertex quotient = word.applyQuotient(variables, network);
+				} else if (word.instanceOf(Primitive.EXPRESSION) || word.instanceOf(Primitive.EQUATION)) {
+					Vertex quotient = SelfInterpreter.getInterpreter().evaluateExpression(word, variables, network, startTime, processTime, 0);
 					variables.remove(network.createVertex(Primitive.RETURN));
 					if (quotient == null) {
 						return null;
@@ -1184,9 +1197,9 @@ public class Language extends BasicThought {
 					while (quotient.instanceOf(Primitive.FORMULA)) {
 						this.recursiveFormulaDepth++;
 						if (this.recursiveFormulaDepth > MAX_DEPTH) {
-							throw new SelfExecutionException(word, "Max recursive formula execution");
+							throw new SelfExecutionException(word, "Max recursive template formula execution");
 						}
-						quotient = evaluateFormula(quotient, variables, startTime, network);
+						quotient = evaluateFormulaTemplate(quotient, variables, startTime, network);
 						this.recursiveFormulaDepth--;
 						if (quotient == null) {
 							return null;
@@ -1252,7 +1265,7 @@ public class Language extends BasicThought {
 			}
 			Vertex previous = network.createVertex(Primitive.NULL);
 			for (int index = 0; index < words.size(); index++) {
-				if ((System.currentTimeMillis() - startTime) > this.maxStateProcess) {
+				if ((System.currentTimeMillis() - startTime) > processTime) {
 					throw new SelfExecutionException(formula, "Max formula processing time exceeded");
 				}
 				Vertex word = words.get(index);
@@ -1361,7 +1374,7 @@ public class Language extends BasicThought {
 			boolean required = true;
 			if (element != null) {
 				boolean found = false;
-				if (element == word) {
+				if (element == word || element.equals(word)) {
 					found = true;
 				}
 				if (!found && (element.is(Primitive.WILDCARD) || element.is(Primitive.UNDERSCORE) || element.is(Primitive.HATWILDCARD) || element.is(Primitive.POUNDWILDCARD))) {
@@ -1379,8 +1392,8 @@ public class Language extends BasicThought {
 					element = elements.get(elementIndex);
 				}
 				if (!found) {
-					if (element.instanceOf(Primitive.EQUATION)) {
-						element = element.applyQuotient(variables, network);
+					if (element.instanceOf(Primitive.EXPRESSION) || element.instanceOf(Primitive.EQUATION)) {
+						element = SelfInterpreter.getInterpreter().evaluateExpression(element, variables, network, System.currentTimeMillis(), MAX_RESPONSE_PROCESS, 0);
 					}
 					if (element.instanceOf(Primitive.VARIABLE)) {
 						found = element.matches(word, variables) == Boolean.TRUE;
@@ -1391,7 +1404,7 @@ public class Language extends BasicThought {
 						wasWildcard = false;
 					}
 				}
-				if (!found && (element == word)) {
+				if (!found && (element == word || element.equals(word))) {
 					found = true;
 				}
 				if (!found && element.getData() instanceof String && word.getData() instanceof String) {
@@ -1399,7 +1412,24 @@ public class Language extends BasicThought {
 						found = true;
 					}
 				} else if (!found) {
-					if (element.instanceOf(Primitive.LIST)) {
+					if (element.instanceOf(Primitive.ARRAY)) {
+						required = (element.hasRelationship(Primitive.TYPE, Primitive.REQUIRED));
+						Collection<Relationship> values = element.getRelationships(Primitive.ELEMENT);
+						if (values != null) {
+							for (Relationship value : values) {
+								if (value.getTarget().getData() instanceof String && word.getData() instanceof String) {
+									if (((String)value.getTarget().getData()).equalsIgnoreCase((String)word.getData())) {
+										found = true;
+									}
+								} else if (value.getTarget().hasRelationship(Primitive.WORD, word)) {
+									found = true;
+								}
+								if (found) {
+									break;
+								}
+							}
+						}
+					} else if (element.instanceOf(Primitive.LIST)) {
 						required = (element.hasRelationship(Primitive.TYPE, Primitive.REQUIRED));
 						Collection<Relationship> values = element.getRelationships(Primitive.SEQUENCE);
 						if (values != null) {
@@ -1479,25 +1509,28 @@ public class Language extends BasicThought {
 			}
 			return false;
 		}
+		while (elementIndex < elements.size()) {
+			Vertex element = elements.get(elementIndex);
+			if (element.instanceOf(Primitive.ARRAY) && !element.hasRelationship(Primitive.TYPE, Primitive.REQUIRED)) {
+				elementIndex++;
+			} else if (element.is(Primitive.HATWILDCARD) || element.is(Primitive.POUNDWILDCARD)) {
+				elementIndex++;
+				if (currentStar != null) {
+					star.add(currentStar);
+					currentStar = null;
+				} else {
+					star.add(new ArrayList<Vertex>());					
+				}
+			} else {
+				break;
+			}
+		}
 		if (elementIndex >= elements.size()) {
 			if (currentStar != null) {
 				star.add(currentStar);
 			}
 			recordStar(star, variable, variables, network);
 			return true;
-		}
-		// Support many of none wildcards.
-		if (elementIndex == (elements.size() - 1)) {
-			Vertex element = elements.get(elementIndex);
-			if (element.is(Primitive.HATWILDCARD) || element.is(Primitive.POUNDWILDCARD)) {
-				if (currentStar != null) {
-					star.add(currentStar);
-				} else {
-					star.add(new ArrayList<Vertex>());					
-				}
-				recordStar(star, variable, variables, network);
-				return true;
-			}
 		}
 		if (hadMatchAfterWildcard) {
 			return evaluatePattern(pattern, sentence, variable, variables, network, elements, words, wildcardSkip + 1);
@@ -2143,10 +2176,10 @@ public class Language extends BasicThought {
 			greeting = greeting.mostConscious(Primitive.RESPONSE);
 		}
 		if ((greeting != null) && greeting.instanceOf(Primitive.FORMULA)) {
-			log("Greeting is formula", Level.FINE, greeting);
+			log("Greeting is template formula", Level.FINE, greeting);
 			Vertex result = evaluateFormula(greeting, variables, network);
 			if (result == null) {
-				log("Formula cannot be evaluated", Level.FINE, greeting);
+				log("Template formula cannot be evaluated", Level.FINE, greeting);
 				greeting = null;
 				// Find non formula.
 				for (Relationship relationship : greetings) {
@@ -2583,10 +2616,10 @@ public class Language extends BasicThought {
 			response = response.mostConscious(Primitive.RESPONSE);
 		}
 		if ((response != null) && response.instanceOf(Primitive.FORMULA)) {
-			log("Default response is formula", Level.FINE, response);
+			log("Default response is template formula", Level.FINE, response);
 			Vertex result = evaluateFormula(response, variables, network);
 			if (result == null) {
-				log("Formula cannot be evaluated", Level.FINE, response);
+				log("Template formula cannot be evaluated", Level.FINE, response);
 			}
 			return result;
 		}
@@ -2667,18 +2700,17 @@ public class Language extends BasicThought {
 	/**
 	 * Self API for checking is a user is trusted and should allow correction.
 	 */
-	public Vertex allowCorrection(Vertex vertex) {
-		log("allowCorrection", Level.FINE, vertex);
-		if (shouldCorrect(null, vertex)) {
-			return vertex.getNetwork().createVertex(Primitive.TRUE);
+	public Vertex allowCorrection(Vertex source, Vertex user) {
+		if (shouldCorrect(null, user)) {
+			return source.getNetwork().createVertex(Primitive.TRUE);
 		}
-		return vertex.getNetwork().createVertex(Primitive.FALSE);
+		return source.getNetwork().createVertex(Primitive.FALSE);
 	}
 
 	/**
 	 * Self API for synthesizing a new response from a phrase.
 	 */
-	public Vertex synthesize(Vertex phrase) {
+	public Vertex synthesize(Vertex source, Vertex phrase) {
 		log("synthesize", Level.FINE, phrase);
 		return synthesizeResponse(null, phrase, null, false, null, phrase.getNetwork());
 	}
@@ -2686,15 +2718,15 @@ public class Language extends BasicThought {
 	/**
 	 * Self API for synthesizing a new response.
 	 */
-	public Vertex synthesize(Network network) {
+	public Vertex synthesize(Vertex source) {
 		log("synthesize", Level.FINE);
-		return synthesizeResponse(null, null, null, false, null, network);
+		return synthesizeResponse(null, null, null, false, null, source.getNetwork());
 	}
 
 	/**
 	 * Self API for synthesizing a new response from a phrase.
 	 */
-	public Vertex randomSynthesize(Vertex phrase) {
+	public Vertex randomSynthesize(Vertex source, Vertex phrase) {
 		log("random synthesize", Level.FINE, phrase);
 		return synthesizeResponse(null, phrase, null, true, null, phrase.getNetwork());
 	}
@@ -2702,9 +2734,175 @@ public class Language extends BasicThought {
 	/**
 	 * Self API for synthesizing a new response.
 	 */
-	public Vertex randomSynthesize(Network network) {
+	public Vertex randomSynthesize(Vertex source) {
 		log("random synthesize", Level.FINE);
-		return synthesizeResponse(null, null, null, true, null, network);
+		return synthesizeResponse(null, null, null, true, null, source.getNetwork());
+	}
+
+	/**
+	 * Self API to create a compound word.
+	 * Language.word("very", "nice")
+	 * Create a compound word from the arguments.
+	 */
+	public Vertex word(Vertex source, Vertex[] arguments) {
+		Network network = source.getNetwork();
+		Vertex nil = network.createVertex(Primitive.NULL);
+		if (arguments.length == 0) {
+			return nil;
+		}
+		StringWriter writer = new StringWriter();
+		List<Vertex> words = new ArrayList<Vertex>();
+		for (Vertex argument : arguments) {
+			if (argument.instanceOf(Primitive.ARRAY)) {
+				List<Vertex> elements = argument.orderedRelations(Primitive.ELEMENT);
+				if (elements != null) {
+					words.addAll(elements);
+				}
+			} else if (argument.instanceOf(Primitive.LIST)) {
+				List<Vertex> elements = argument.orderedRelations(Primitive.SEQUENCE);
+				if (elements != null) {
+					words.addAll(elements);
+				}
+			} else {
+				words.add(argument);
+			}
+		}
+		Vertex previousWord = nil;
+		for (int index = 0; index < words.size(); index++) {
+			Vertex word = words.get(index);
+			Vertex nextWord = nil;
+			if (words.size() > (index + 1)) {
+				nextWord = words.get(index + 1);
+			}
+			word = Language.getWordFollowing(word, previousWord, nextWord, network);
+			writer.write(String.valueOf(word.getData()));
+			if ((index + 1) < words.size()) {
+				writer.write(" ");
+			}
+			previousWord = word;
+		}
+		return network.createWord(writer.toString());
+	}
+
+	/**
+	 * Self API to create a sentence.
+	 * Language.sentence("hello", "world")
+	 * Create a sentence from the arguments.
+	 */
+	public Vertex sentence(Vertex source, Vertex[] arguments) {
+		Network network = source.getNetwork();
+		Vertex result = null;
+		Vertex nil = network.createVertex(Primitive.NULL);
+		if (arguments.length == 0) {
+			result = nil;
+		} else if (arguments.length == 1) {
+			result = arguments[0];
+			if (!(result.getData() instanceof String)) {
+				StringWriter writer = new StringWriter();
+				Vertex text = Language.getWordFollowing(result, nil, nil, network);
+				writer.write(text.getDataValue());
+				result = network.createSentence(writer.toString());
+			} else {
+				result = network.createSentence((String)result.getData());				
+			}
+		} else {
+			StringWriter writer = new StringWriter();
+			List<Vertex> words = new ArrayList<Vertex>();
+			for (Vertex argument : arguments) {
+				words.add(argument);
+			}
+			Vertex previousWord = nil;
+			for (int index = 0; index < words.size(); index++) {
+				Vertex word = words.get(index);
+				Vertex nextWord = nil;
+				if (words.size() > (index + 1)) {
+					nextWord = words.get(index + 1);
+				}
+				word = Language.getWordFollowing(word, previousWord, nextWord, network);
+				writer.write(String.valueOf(word.getData()));
+				if ((index + 1) < words.size()) {
+					writer.write(" ");
+				}
+				previousWord = word;
+			}
+			result = network.createSentence(writer.toString());
+		}
+		return result;
+	}
+	
+	/**
+	 * Self API to access last input of a speaker.
+	 * Language.getLastInput(speaker)
+	 * Get the last input from the conversation for the speaker.
+	 */
+	public Vertex getLastInput(Vertex source, Vertex conversation, Vertex speaker) {
+		return getLastInput(source, conversation, speaker, null, null);
+	}
+	
+	/**
+	 * Self API to access last input of a speaker.
+	 * Language.getLastInput(speaker, 1)
+	 * Get the last input from the conversation for the speaker.
+	 */
+	public Vertex getLastInput(Vertex source, Vertex conversation, Vertex speaker, Vertex index) {
+		return getLastInput(source, conversation, speaker, index, null);
+	}
+	
+	/**
+	 * Self API to access last input of a speaker.
+	 * Language.getLastInput(speaker, 1, 2)
+	 * Get the last input from the conversation for the speaker.
+	 */
+	public Vertex getLastInput(Vertex source, Vertex conversation, Vertex speaker, Vertex index, Vertex part) {
+		Network network = source.getNetwork();
+		int partValue = 1;
+		if (part != null) {
+			try {
+				partValue = Integer.valueOf(String.valueOf(part.getData()));
+			} catch (Exception exception) {
+				// Ignore, use 1;
+			}
+		}
+		Vertex input = network.createVertex(Primitive.INPUT_VARIABLE);
+		if (conversation == null) {
+			return network.createVertex(Primitive.NULL);
+		}
+		int count = 0;
+		int value = 1;
+		if (index != null) {
+			try {
+				value = Integer.valueOf(String.valueOf(index.getData()));
+			} catch (Exception exception) {
+				// Ignore, use 1;
+			}
+		}
+		List<Vertex> inputs = conversation.orderedRelations(Primitive.INPUT);
+		int element = inputs.size() - 1;
+		while (count < value && element >= 0) {
+			input = inputs.get(element);
+			if (input.hasRelationship(Primitive.SPEAKER, speaker)) {
+				count++;
+				if (count == value) {
+					Vertex sentence = input.getRelationship(Primitive.INPUT);
+					if (part == null) {
+						return sentence;
+					}
+					if (!sentence.instanceOf(Primitive.PARAGRAPH)) {
+						if (partValue == 1) {
+							return sentence;
+						}
+						return network.createVertex(Primitive.NULL);
+					}
+					List<Vertex> sentences = sentence.orderedRelations(Primitive.SENTENCE);
+					if (partValue > sentences.size()) {
+						return network.createVertex(Primitive.NULL);
+					}
+					return sentences.get(partValue - 1);
+				}
+			}
+			element--;
+		}
+		return network.createVertex(Primitive.NULL);
 	}
 	
 	/**
@@ -2746,7 +2944,7 @@ public class Language extends BasicThought {
 					input.addWeakRelationship(Primitive.QUESTION, lastInput, value);
 					Relationship relationship = null;
 					if (index == 0) {
-						relationship = getBot().mind().getThought(Comprehension.class).checkFormula(input, network);
+						relationship = getBot().mind().getThought(Comprehension.class).checkTemplate(input, network);
 						if (relationship == null) {
 							relationship = lastSentence.addWeakRelationship(Primitive.RESPONSE, sentence, value);
 							network.checkReduction(lastSentence);
@@ -3461,6 +3659,9 @@ public class Language extends BasicThought {
 			this.startTime = System.currentTimeMillis();
 		}
 		long processTime = this.maxStateProcess;
+		if (getBot().isDebugFiner()) {
+			processTime = processTime * 10;
+		}
 		Vertex state = null;
 		try {
 			while (index <= inputs.size()) {
@@ -3473,7 +3674,7 @@ public class Language extends BasicThought {
 					if (this.abort) {
 						return null;
 					}
-					if ((System.currentTimeMillis() - startTime) > processTime) {
+					if ((System.currentTimeMillis() - this.startTime) > processTime) {
 						log("State processing time limit reached", Level.WARNING, processTime, root, state);
 						this.abort = true;
 						return null;
@@ -3512,13 +3713,18 @@ public class Language extends BasicThought {
 							if (this.abort) {
 								return null;
 							}
-							if ((System.currentTimeMillis() - startTime) > processTime) {
+							if ((System.currentTimeMillis() - this.startTime) > processTime) {
 								log("State processing time limit reached", Level.WARNING, processTime, root, state);
 								this.abort = true;
 								return null;
 							}
 							Vertex equation = equationRelationship.getTarget();
 							if (equation.instanceOf(Primitive.CASE) || equation.hasRelationship(Primitive.PATTERN)) {
+
+								List<Relationship> fors = equation.orderedRelationships(Primitive.FOR);
+								if (fors != null) {
+									fors = null;
+								}
 								Vertex pattern = equation.getRelationship(Primitive.PATTERN);
 								Vertex caseVariable = null;
 								Boolean match = false;
@@ -3533,12 +3739,17 @@ public class Language extends BasicThought {
 									}
 								} else {
 									caseVariable = equation.getRelationship(Primitive.CASE);
-									if (caseVariable != null && caseVariable.instanceOf(Primitive.EQUATION)) {
-										caseVariable = caseVariable.applyQuotient(localVariables, network);
+									if (caseVariable != null && (!caseVariable.isVariable())) {
+										if ((caseVariable.instanceOf(Primitive.EXPRESSION) || caseVariable.instanceOf(Primitive.EQUATION))) {
+											caseVariable = SelfInterpreter.getInterpreter().evaluateExpression(caseVariable, localVariables, network, this.startTime, processTime, 0);
+										} else if (caseVariable.instanceOf(Primitive.FUNCTION)) {
+											caseVariable = SelfInterpreter.getInterpreter().evaluateFunction(caseVariable, localVariables, network, this.startTime, processTime, 0);
+										}
 									}
 									if (caseVariable != null) {
 										anyOrNone = (caseVariable.getName() != null && (caseVariable.getName().equals("poundstar") || caseVariable.getName().equals("hatstar")))
-												|| (caseVariable.instanceOf(Primitive.LIST) && !caseVariable.hasRelationship(Primitive.TYPE, Primitive.REQUIRED));
+												|| ((caseVariable.instanceOf(Primitive.ARRAY) || caseVariable.instanceOf(Primitive.LIST))
+															&& !caseVariable.hasRelationship(Primitive.TYPE, Primitive.REQUIRED));
 									}
 									if (index >= inputs.size()) {
 										if (anyOrNone) {
@@ -3553,6 +3764,12 @@ public class Language extends BasicThought {
 										log("CASE", Level.FINER, caseVariable, currentInput);
 										if (caseVariable != null) {
 											match = caseVariable.matches(currentInput, localVariables);
+											if (match != Boolean.TRUE && caseVariable.isPrimitive() && currentInput != null && currentInput.instanceOf(Primitive.WORD)) {
+												// Also allow primitive to match words meaning.
+												if (currentInput.hasRelationship(Primitive.MEANING, caseVariable)) {
+													match = true;
+												}
+											}
 											if (currentInput == input) {
 												Vertex sentenceVariable = caseVariable.getRelationship(Primitive.INPUT);
 												if (sentenceVariable != null) {
@@ -3618,8 +3835,9 @@ public class Language extends BasicThought {
 									// Check next state/word recursively.
 									Vertex template = equation.getRelationship(Primitive.TEMPLATE);
 									if (template != null) {
-										if (template.instanceOf(Primitive.EQUATION)) {
-											response = evaluateQuotientResponse(template, state, localVariables, network);
+										if (template.instanceOf(Primitive.EQUATION) || template.instanceOf(Primitive.EXPRESSION)
+													|| template.instanceOf(Primitive.FUNCTION)) {
+											response = evaluateAnswerResponse(template, state, localVariables, network);
 											if (response != null) {
 												return response;
 											}
@@ -3631,15 +3849,16 @@ public class Language extends BasicThought {
 												template = template.mostConscious(Primitive.RESPONSE);
 											}
 											if (template.instanceOf(Primitive.FORMULA)) {
-												log("Template is formula", Level.FINE, template);
+												log("Template is template formula", Level.FINE, template);
 												response = evaluateFormula(template, localVariables, network);
 												if (response == null) {
-													log("Formula cannot be evaluated", Level.FINE, template);
+													log("Template formula cannot be evaluated", Level.FINE, template);
 												} else {
 													return response;
 												}
-											} else if (template.instanceOf(Primitive.EQUATION)) {
-												response = evaluateQuotientResponse(template, state, localVariables, network);
+											} else if (template.instanceOf(Primitive.EQUATION) || template.instanceOf(Primitive.EXPRESSION)
+													|| template.instanceOf(Primitive.FUNCTION)) {
+												response = evaluateAnswerResponse(template, state, localVariables, network);
 												if (response != null) {
 													return response;
 												}
@@ -3666,7 +3885,8 @@ public class Language extends BasicThought {
 											Vertex variable = arguments.get(1).getTarget();
 											Vertex value = arguments.get(0).getTarget();
 											newInputs = new ArrayList<Vertex>();
-											List<Relationship> relationships = variable.applyQuotient(localVariables, network).orderedRelationships(value);
+											Vertex variableValue = SelfInterpreter.getInterpreter().evaluateExpression(variable, localVariables, network, this.startTime, processTime, 0);
+											List<Relationship> relationships = variableValue.orderedRelationships(value);
 											if (relationships != null) {
 												for (Relationship result : relationships) {
 													newInputs.add(result.getTarget());
@@ -3694,7 +3914,7 @@ public class Language extends BasicThought {
 								}
 							} else if (equation.instanceOf(Primitive.DO)) {
 								log("DO", Level.FINER, state, currentInput);
-								equation.getRelationship(Primitive.DO).applyQuotient(localVariables, network);
+								SelfInterpreter.getInterpreter().evaluateExpression(equation.getRelationship(Primitive.DO), localVariables, network, this.startTime, processTime, 0);
 								localVariables.remove(network.createVertex(Primitive.RETURN));
 							} else if (equation.instanceOf(Primitive.GOTO)) {
 								// May require terminal state.
@@ -3707,7 +3927,7 @@ public class Language extends BasicThought {
 									} else {
 										List<Vertex> newInputs = new ArrayList<Vertex>();
 										for (Vertex argument : arguments) {
-											newInputs.add(argument.applyQuotient(localVariables, network));
+											newInputs.add(SelfInterpreter.getInterpreter().evaluateExpression(argument, localVariables, network, this.startTime, processTime, 0));
 										}
 										response = checkState(newRoot, input, sentence, gotoStates, 0, recurse, newInputs, localVariables, stateStack, correctnessRequired, network);
 									}
@@ -3716,7 +3936,8 @@ public class Language extends BasicThought {
 									}
 								}
 							} else if (equation.instanceOf(Primitive.PUSH)) {
-								Vertex argument = equation.getRelationship(Primitive.ARGUMENT).applyQuotient(localVariables, network);
+								Vertex argument = equation.getRelationship(Primitive.ARGUMENT);
+								argument = SelfInterpreter.getInterpreter().evaluateExpression(argument, localVariables, network, this.startTime, processTime, 0);
 								log("PUSH", Level.FINER, state, argument);
 								inputs.add(index, argument);								
 							} else if (equation.instanceOf(Primitive.RETURN)) {
@@ -3778,7 +3999,7 @@ public class Language extends BasicThought {
 					
 					// Check if the entire sentence was matched.
 					if ((index >= inputs.size())) {
-						Vertex[] pair = bestQuotient(correctnessRequired, decompiled, localVariables, input, sentence, network);
+						Vertex[] pair = bestAnswer(correctnessRequired, decompiled, localVariables, input, sentence, network);
 						if (pair != null) {
 							response = pair[1];
 							log("ANSWER", Level.FINER, state, response);
@@ -3810,7 +4031,7 @@ public class Language extends BasicThought {
 	/**
 	 * Return the best response to the question, taking into account the input history.
 	 */
-	public Vertex[] bestQuotient(float percentage, Vertex state, Map<Vertex, Vertex> localVariables, Vertex input, Vertex sentence, Network network) {
+	public Vertex[] bestAnswer(float percentage, Vertex state, Map<Vertex, Vertex> localVariables, Vertex input, Vertex sentence, Network network) {
 		// Check if any response has the same previous question.
 		Vertex previousQuestionInput = input.getRelationship(Primitive.QUESTION);
 		Vertex previousQuestion = null;
@@ -3828,7 +4049,7 @@ public class Language extends BasicThought {
 							if (meta != null) {
 								if (hasPrevious(meta, previousQuestion, state, localVariables, network)) {
 									if ((bestWithPrevious == null) || (quotient.getCorrectness() > bestWithPrevious.getCorrectness())) {
-										Vertex response = evaluateQuotientResponse(quotient.getTarget(), state, localVariables, network);
+										Vertex response = evaluateAnswerResponse(quotient.getTarget(), state, localVariables, network);
 										if ((response == null) || sentence.hasInverseRelationship(Primitive.RESPONSE, response)
 													|| sentence.hasAnyAssociatedInverseRelationship(Primitive.SYNONYM, response, Primitive.RESPONSE)) {
 											continue;
@@ -3843,7 +4064,7 @@ public class Language extends BasicThought {
 								}
 							}
 							if ((bestWithPrevious == null) && ((best == null) || (quotient.getCorrectness() > best.getCorrectness()))) {
-								Vertex response = evaluateQuotientResponse(quotient.getTarget(), state, localVariables, network);
+								Vertex response = evaluateAnswerResponse(quotient.getTarget(), state, localVariables, network);
 								if ((response == null) || sentence.hasInverseRelationship(Primitive.RESPONSE, response)
 											|| sentence.hasAnyAssociatedInverseRelationship(Primitive.SYNONYM, response, Primitive.RESPONSE)) {
 									continue;
@@ -3874,11 +4095,11 @@ public class Language extends BasicThought {
 		if (quotient == null) {
 			return null;
 		}
-		Vertex response = evaluateQuotientResponse(quotient, state, localVariables, network);
+		Vertex response = evaluateAnswerResponse(quotient, state, localVariables, network);
 		if ((response == null) || sentence.hasInverseRelationship(Primitive.RESPONSE, response)
 				|| sentence.hasAnyAssociatedInverseRelationship(Primitive.SYNONYM, response, Primitive.RESPONSE)) {
 			quotient = state.nextMostConscious(Primitive.QUOTIENT, quotient, percentage);
-			response = evaluateQuotientResponse(quotient, state, localVariables, network);
+			response = evaluateAnswerResponse(quotient, state, localVariables, network);
 			if ((response == null) || sentence.hasInverseRelationship(Primitive.RESPONSE, response)
 						|| sentence.hasAnyAssociatedInverseRelationship(Primitive.SYNONYM, response, Primitive.RESPONSE)) {
 				return null;
@@ -3903,10 +4124,10 @@ public class Language extends BasicThought {
 		}
 		for (Relationship previous : relationship) {
 			if (previous.getTarget().instanceOf(Primitive.FORMULA)) {
-				log("Previous is formula", Level.FINE, previous.getTarget());
+				log("Previous is template formula", Level.FINE, previous.getTarget());
 				Vertex result = evaluateFormula(previous.getTarget(), localVariables, network);
 				if (result == null) {
-					log("Formula cannot be evaluated", Level.FINE, previous.getTarget());					
+					log("Template formula cannot be evaluated", Level.FINE, previous.getTarget());					
 				} else if (result.equals(sentence)) {
 					return true;
 				}
@@ -3918,22 +4139,26 @@ public class Language extends BasicThought {
 	/**
 	 * Evaluate the quotient and possible formula response.
 	 */
-	public Vertex evaluateQuotientResponse(Vertex quotient, Vertex state, Map<Vertex, Vertex> localVariables, Network network) {		
+	public Vertex evaluateAnswerResponse(Vertex answer, Vertex state, Map<Vertex, Vertex> localVariables, Network network) {		
 		Vertex response = null;
-		if (quotient != null) {
-			log("Applying quotient", Level.FINE, quotient, state);			
-			response = quotient.applyQuotient(localVariables, network);
+		if (answer != null) {
+			long processTime = this.maxStateProcess;
+			if (getBot().isDebugFiner()) {
+				processTime = processTime * 10;
+			}
+			log("Evaluating answer", Level.FINE, answer, state);			
+			response = SelfInterpreter.getInterpreter().evaluateExpression(answer, localVariables, network, this.startTime, processTime, 0);
 			localVariables.remove(network.createVertex(Primitive.RETURN));
-			log("Quotient result", Level.FINE, response);
+			log("Answer result", Level.FINE, response);
 			// Check for formula and transpose
 			if ((response != null) && response.instanceOf(Primitive.LABEL)) {
 				response = response.mostConscious(Primitive.RESPONSE);
 			}
 			if ((response != null) && response.instanceOf(Primitive.FORMULA)) {
-				log("Quotient is formula", Level.FINE, response);
+				log("Answer is template formula", Level.FINE, response);
 				response = evaluateFormula(response, localVariables, network);
 				if (response == null) {
-					log("Formula cannot be evaluated", Level.FINE, response);
+					log("Template formula cannot be evaluated", Level.FINE, response);
 				}
 			} else if ((response != null) && !response.hasData() && !response.instanceOf(Primitive.PARAGRAPH)) {
 				response = createSentenceText(response, network);
@@ -4085,7 +4310,31 @@ public class Language extends BasicThought {
 		if (vertex.instanceOf(Primitive.PARAGRAPH)) {
 			return vertex;
 		}
-		if (vertex.instanceOf(Primitive.LIST)) {
+		if (vertex.instanceOf(Primitive.ARRAY)) {
+			if (!vertex.hasData()) {
+				// Print the list.
+				Collection<Relationship> values = vertex.orderedRelationships(Primitive.ELEMENT);
+				if (values != null) {
+					StringWriter writer = new StringWriter();
+					int index = 0;
+					for (Relationship value : values) {
+						if (!value.isInverse()) {
+							if (index != 0) {
+								writer.write(", ");
+								if (index == (values.size() - 1)) {
+									writer.write("and ");
+								}
+							}
+							writer.write(getWordFollowing(value.getTarget(), previousWord, nextWord, network).getDataValue());
+							index++;
+						}
+					}
+					return network.createFragment(writer.toString());
+				} else {
+					return network.createWord("empty");					
+				}
+			}
+		} else if (vertex.instanceOf(Primitive.LIST)) {
 			if (!vertex.hasData()) {
 				// Print the list.
 				Collection<Relationship> values = vertex.orderedRelationships(Primitive.SEQUENCE);
@@ -4374,11 +4623,16 @@ public class Language extends BasicThought {
 		} 
 		if (stateMachine == null) {
 			stateMachine = network.createInstance(Primitive.STATE);
+			stateMachine.addRelationship(Primitive.LANGUAGE, network.createVertex(Primitive.AIML));
 			stateMachine.setName(name);
 			language.addRelationship(Primitive.STATE, stateMachine);
 			TextData data = new TextData();
 			data.setText(text);
 			stateMachine.addRelationship(Primitive.SOURCECODE, network.createVertex(data));
+			Vertex sourceCode = stateMachine.getRelationship(Primitive.SOURCECODE);
+			if (sourceCode != null) {
+				sourceCode.setPinned(true);
+			}
 		}
 		stateMachine = AIMLParser.parser().parseAIML(text, true, createStates, false, indexStatic, stateMachine, network);
 		SelfCompiler.getCompiler().pin(stateMachine);

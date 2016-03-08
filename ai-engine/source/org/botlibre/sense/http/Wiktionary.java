@@ -489,10 +489,11 @@ public class Wiktionary extends Http implements DiscoverySense {
 	}
 
 	/**
+	 * Self API
 	 * Lookup the meaning of the word.
 	 * Called from Self.
 	 */
-	public Vertex define(Vertex word) {
+	public Vertex define(Vertex source, Vertex word) {
 		String text = word.getDataValue();
 		if (text != null) {
 			Vertex lastChecked = word.getRelationship(getPrimitive());

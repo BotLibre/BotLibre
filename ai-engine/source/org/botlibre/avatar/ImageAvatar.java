@@ -63,7 +63,6 @@ public class ImageAvatar extends BasicAvatar {
 		if (images != null) {
 			image = Utils.random(images).getTarget();
 		} else {
-			getBot().log(this, "Missing image for emotion", Bot.FINE, state);
 			images = avatar.getRelationships(EmotionalState.NONE.primitive());
 			if (images != null) {
 				image = Utils.random(images).getTarget();

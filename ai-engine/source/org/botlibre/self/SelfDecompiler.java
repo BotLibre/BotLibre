@@ -52,7 +52,7 @@ public class SelfDecompiler {
 
 	public static SelfDecompiler getDecompiler() {
 		if (decompiler == null) {
-			decompiler = new SelfDecompiler();
+			decompiler = new Self4Decompiler();
 		}
 		return decompiler;
 	}
@@ -78,9 +78,8 @@ public class SelfDecompiler {
 	 */
 	public void printStateMachine(Vertex state, Writer writer, Network network, long start, long timeout) {
 		try {
-			Set<Vertex> writtenElements = new HashSet<Vertex>();
 			Set<Vertex> elements = new HashSet<Vertex>();
-			writtenElements.add(state);
+			elements.add(state);
 			printState(state, writer, "", elements, network, start, timeout);
 			writer.write("\r\n");
 		} catch (IOException error) {
@@ -353,10 +352,39 @@ public class SelfDecompiler {
 	/**
 	 * Print the formula to create a unique instance of it.
 	 */
+	public Vertex createUniqueTemplate(Vertex formula, Network network) {
+		try {
+			StringWriter writer = new StringWriter();
+			printTemplate(formula, writer, "", new ArrayList<Vertex>(), new ArrayList<Vertex>(), new HashSet<Vertex>(), network);
+			String source = writer.toString();
+			if (source.length() > AbstractNetwork.MAX_TEXT) {
+				return formula;
+			}
+			// Maintain identity on formulas through printing them.
+			Vertex existingFormula = network.createVertex(source);
+			if (!existingFormula.instanceOf(Primitive.FORMULA)) {
+				for (Iterator<Relationship> iterator = formula.orderedAllRelationships(); iterator.hasNext(); ) {
+					Relationship relationship = iterator.next();
+					existingFormula.addRelationship(relationship.getType(), relationship.getTarget(), relationship.getIndex());
+				}
+			}
+			return existingFormula;
+		} catch (IOException ignore) {
+			throw new BotException(ignore);
+		}
+	}
+
+	public void printTemplate(Vertex formula, Writer writer, String indent, List<Vertex> expressions, List<Vertex> variables, Set<Vertex> elements, Network network) throws IOException {
+		printFormula(formula, writer, indent, expressions, variables, elements, network);
+	}
+	
+	/**
+	 * Print the formula to create a unique instance of it.
+	 */
 	public Vertex createUniqueFormula(Vertex formula, Network network) {
 		try {
 			StringWriter writer = new StringWriter();
-			SelfDecompiler.getDecompiler().printFormula(formula, writer, "", new ArrayList<Vertex>(), new ArrayList<Vertex>(), new HashSet<Vertex>(), network);
+			printFormula(formula, writer, "", new ArrayList<Vertex>(), new ArrayList<Vertex>(), new HashSet<Vertex>(), network);
 			String source = writer.toString();
 			if (source.length() > AbstractNetwork.MAX_TEXT) {
 				return formula;
@@ -527,6 +555,20 @@ public class SelfDecompiler {
 	}
 	
 	/**
+	 * Check if the function is bytecode and decompile.
+	 */
+	public Vertex decompileFunction(Vertex equation, Network network) {
+		return decompileEquation(equation, network);
+	}
+	
+	/**
+	 * Check if the expression is bytecode and decompile.
+	 */
+	public Vertex decompileExpression(Vertex equation, Network network) {
+		return decompileEquation(equation, network);
+	}
+	
+	/**
 	 * Check if the equation is bytecode and decompile.
 	 */
 	public Vertex decompileEquation(Vertex equation, Network network) {
@@ -594,6 +636,20 @@ public class SelfDecompiler {
 		for (Vertex element : equations) {
 			printEquation(element, writer, indent, elements, network);
 		}
+	}
+	
+	/**
+	 * Parse the expression from bytecode.
+	 */
+	public Vertex parseExpressionByteCode(Vertex equation, BinaryData data, Network network) throws IOException {
+		return parseEquationByteCode(equation, data, network);
+	}
+	
+	/**
+	 * Parse the function from bytecode.
+	 */
+	public Vertex parseFunctionByteCode(Vertex equation, BinaryData data, Network network) throws IOException {
+		return parseEquationByteCode(equation, data, network);
 	}
 	
 	/**

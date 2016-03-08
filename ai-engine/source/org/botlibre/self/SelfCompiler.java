@@ -50,7 +50,7 @@ public class SelfCompiler {
 	public static int MAX_FILE_SIZE = 10000000; // 10meg
 	public static int MAX_LOAD_SIZE = 20000;
 	
-	public static final String PRIMITIVE_TOKENS =" \t\n\r\f,:;!()?[]{}+=^&*\"`~|/\\<>";
+	public static final String PRIMITIVE_TOKENS =" \t\n\r\f,:;!()?[]{}+=^&*\"`~|/\\<>.";
 	
 	public static final String IF = "if";
 	public static final String WHILE = "while";
@@ -200,12 +200,17 @@ public class SelfCompiler {
 		PINNED.add(Primitive.GOTO);
 		PINNED.add(Primitive.QUOTIENT);
 		PINNED.add(Primitive.ARGUMENT);
+		PINNED.add(Primitive.INDEX);
+		PINNED.add(Primitive.THIS);
+		PINNED.add(Primitive.FUNCTION);
+		PINNED.add(Primitive.OPERATOR);
 		PINNED.add(Primitive.CONDITION);
 		PINNED.add(Primitive.TEMPLATE);
 		PINNED.add(Primitive.PATTERN);
 		PINNED.add(Primitive.THAT);
 		PINNED.add(Primitive.THEN);
 		PINNED.add(Primitive.ELSE);
+		PINNED.add(Primitive.ELSEIF);
 		PINNED.add(Primitive.AS);
 		PINNED.add(Primitive.TOPIC);
 		PINNED.add(Primitive.CASE);
@@ -218,9 +223,12 @@ public class SelfCompiler {
 		PINNED.add(Primitive.APIKEY);
 		PINNED.add(Primitive.HINT);
 		PINNED.add(Primitive.DEFAULT);
+		PINNED.add(Primitive.ELEMENT);
 	}
-	
-	protected static SelfCompiler compiler = new SelfByteCodeCompiler();
+
+	protected static SelfCompiler compiler = new Self4ByteCodeCompiler();
+	//protected static SelfCompiler compiler = new Self4Compiler();
+	//protected static SelfCompiler compiler = new SelfByteCodeCompiler();
 	//protected static SelfCompiler compiler = new SelfCompiler();
 
 	public static SelfCompiler getCompiler() {
@@ -231,29 +239,41 @@ public class SelfCompiler {
 		SelfCompiler.compiler = compiler;
 	}
 	
-	public static void addGlobalVariables(Vertex input, Vertex sentence, Network network, Map<Vertex, Vertex> variables) {		
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void addGlobalVariables(Vertex input, Vertex sentence, Network network, Map<Vertex, Vertex> variables) {
+		Map namedVariable = variables;
 		Vertex globals = network.createVertex(Primitive.INPUT_VARIABLE);
 		variables.put(globals, input);
+		namedVariable.put("input", input);
 		Vertex relation = input.getRelationship(Primitive.SPEAKER);
 		if (relation != null) {
 			variables.put(globals.getRelationship(Primitive.SPEAKER), relation);
+			namedVariable.put("speaker", input);
 		}
 		relation = input.getRelationship(Primitive.TARGET);
 		if (relation != null) {
 			variables.put(globals.getRelationship(Primitive.TARGET), relation);
+			namedVariable.put("target", input);
 		}
 		if (sentence != null) {
 			variables.put(globals.getRelationship(Primitive.INPUT), sentence);
+			namedVariable.put("sentence", sentence);
 		} else {
 			relation = input.getRelationship(Primitive.INPUT);
 			if (relation != null) {
 				variables.put(globals.getRelationship(Primitive.INPUT), relation);
+				namedVariable.put("sentence", relation);
 			}
 		}
 		relation = input.getRelationship(Primitive.CONVERSATION);
 		if (relation != null) {
 			variables.put(globals.getRelationship(Primitive.CONVERSATION), relation);
+			namedVariable.put("conversation", relation);
 		}
+	}
+	
+	public int getVersion() {
+		return 2;
 	}
 	
 	/**
@@ -273,6 +293,10 @@ public class SelfCompiler {
 			TextData text = new TextData();
 			text.setText(code);
 			state.addRelationship(Primitive.SOURCECODE, network.createVertex(text));
+			Vertex sourceCode = state.getRelationship(Primitive.SOURCECODE);
+			if (sourceCode != null) {
+				sourceCode.setPinned(true);
+			}
 			network.getBot().log(this, "Compiled new state machine", Level.INFO, state);
 			return state;
 		} catch (SelfParseException exception) {
@@ -286,8 +310,15 @@ public class SelfCompiler {
 	/**
 	 * Parse and evaluate the code.
 	 */
+	public Vertex evaluateExpression(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
+		return evaluateEquation(code, speaker, target, debug, network);
+	}
+	
+	/**
+	 * Parse and evaluate the code.
+	 */
 	public Vertex evaluateEquation(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
-		Vertex equation = SelfCompiler.getCompiler().parseEquationForEvaluation(code, speaker, target, debug, network);
+		Vertex equation = parseEquationForEvaluation(code, speaker, target, debug, network);
 		Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
 		return equation.applyQuotient(variables, network);
 	}
@@ -398,11 +429,25 @@ public class SelfCompiler {
 					pin(relationship.getTarget(), relations, groupId, processed);
 				}
 			}
+		} else if (element.instanceOf(Primitive.PATTERN)) {
+			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
+			if (relationships != null) {
+				for (Relationship relationship : relationships) {
+					relationship.setPinned(true);
+					pin(relationship.getTarget(), relations, groupId, processed);
+				}
+			}
 		} else {
 			Vertex equation = element;
 			// Check for byte-code.
 			if (element.instanceOf(Primitive.EQUATION)) {
 				equation = SelfDecompiler.getDecompiler().decompileEquation(element, element.getNetwork());
+			}
+			if (element.instanceOf(Primitive.EXPRESSION)) {
+				equation = SelfDecompiler.getDecompiler().decompileExpression(element, element.getNetwork());
+			}
+			if (element.instanceOf(Primitive.FUNCTION)) {
+				equation = SelfDecompiler.getDecompiler().decompileFunction(element, element.getNetwork());
 			}
 			if (element.instanceOf(Primitive.STATE)) {
 				equation = SelfDecompiler.getDecompiler().decompileState(element, element.getNetwork());
@@ -468,6 +513,8 @@ public class SelfCompiler {
 		if (!element.hasData() || element.instanceOf(Primitive.PATTERN)
 					|| element.instanceOf(Primitive.FORMULA)
 					|| element.instanceOf(Primitive.EQUATION)
+					|| element.instanceOf(Primitive.EXPRESSION)
+					|| element.instanceOf(Primitive.FUNCTION)
 					|| element.instanceOf(Primitive.STATE)) {
 			element.setPinned(false);
 		}
@@ -482,7 +529,8 @@ public class SelfCompiler {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
 			if (relationships != null) {
 				for (Relationship relationship : relationships) {
-					if (relationship.getTarget().instanceOf(Primitive.EQUATION)) {
+					if (relationship.getTarget().instanceOf(Primitive.EQUATION)
+								|| relationship.getTarget().instanceOf(Primitive.EXPRESSION)) {
 						unpin(relationship.getTarget(), relations, processed);
 					}
 				}
@@ -492,6 +540,12 @@ public class SelfCompiler {
 			// Check for byte-code.
 			if (element.instanceOf(Primitive.EQUATION)) {
 				equation = SelfDecompiler.getDecompiler().decompileEquation(element, element.getNetwork());
+			}
+			if (element.instanceOf(Primitive.EXPRESSION)) {
+				equation = SelfDecompiler.getDecompiler().decompileExpression(element, element.getNetwork());
+			}
+			if (element.instanceOf(Primitive.FUNCTION)) {
+				equation = SelfDecompiler.getDecompiler().decompileFunction(element, element.getNetwork());
 			}
 			if (element.instanceOf(Primitive.STATE)) {
 				equation = SelfDecompiler.getDecompiler().decompileState(element, element.getNetwork());
@@ -508,7 +562,8 @@ public class SelfCompiler {
 				}
 			}
 		}
-		if (element.instanceOf(Primitive.STATE) || (element.instanceOf(Primitive.EQUATION) && (element.getName() != null))) {
+		if (element.instanceOf(Primitive.STATE) || element.instanceOf(Primitive.FUNCTION)
+					|| (element.instanceOf(Primitive.EQUATION) && (element.getName() != null))) {
 			element.internalRemoveAllRelationships();
 		}
 	}
@@ -545,9 +600,8 @@ public class SelfCompiler {
 				vertex = parseEquation(stream, elements, debug, network);
 			} else if (element.equals(DO)) {
 				vertex = network.createInstance(Primitive.DO);
-				Vertex equation = network.createInstance(Primitive.EQUATION);
+				Vertex equation = parseOperator(stream, elements, debug, network);
 				vertex.addRelationship(Primitive.DO, equation, Integer.MAX_VALUE);
-				parseOperator(equation, stream, elements, debug, network);
 				state.addRelationship(Primitive.DO, vertex, Integer.MAX_VALUE);
 				ensureNext(';', stream);
 			} else if (element.equals(GOTO)) {
@@ -634,16 +688,6 @@ public class SelfCompiler {
 		}
 		ensureNext(';', stream);
 	}
-	
-	/**
-	 * Parse the equation element from a formula, pattern, or state.
-	 */
-	public Vertex parseEquationElement(TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
-		Vertex equation = network.createInstance(Primitive.EQUATION);
-		//equation.setName(token); - cannot set name as named functions can return
-		parseOperator(equation, stream, elements, debug, network);
-		return equation;		
-	}
 
 	/**
 	 * Parse the reference to either a state, variable, equation, or raw data.
@@ -672,7 +716,7 @@ public class SelfCompiler {
 				token = EQUATION;
 			}
 			if (OPERATORS.contains(token)) {
-				Vertex equation = parseEquationElement(stream, elements, debug, network);
+				Vertex equation = parseOperator(stream, elements, debug, network);
 				if (debug) {
 					for (String comment : comments) {
 						equation.addRelationship(Primitive.COMMENT, network.createVertex(comment));
@@ -697,7 +741,7 @@ public class SelfCompiler {
 				}
 				if (token.equals(PATTERN)) {
 					ensureNext('"', stream);
-					return network.createPattern(stream.nextQuotesExcludeDoubleQuote());
+					return network.createPattern(stream.nextQuotesExcludeDoubleQuote(), this);
 				}
 				Long id = null;
 				// Check for id or name.
@@ -1022,7 +1066,14 @@ public class SelfCompiler {
 	}
 
 	/**
-	 * Parse the equation.
+	 * Parse the formula.
+	 */
+	public Vertex parseTemplate(Vertex formula, TextStream stream, boolean debug, Network network) {
+		return parseFormula(formula, stream, debug, network);
+	}
+
+	/**
+	 * Parse the formula.
 	 */
 	public Vertex parseFormula(Vertex formula, TextStream stream, boolean debug, Network network) {
 		Map<String, Map<String, Vertex>> elements = buildElementsMap(network);
@@ -1051,7 +1102,14 @@ public class SelfCompiler {
 	}
 	
 	/**
-	 * Parse the equation.
+	 * Parse the formula.
+	 */
+	public Vertex parseTemplate(Vertex formula, TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
+		return parseFormula(formula, stream, elements, debug, network);
+	}
+	
+	/**
+	 * Parse the formula.
 	 */
 	public Vertex parseFormula(Vertex formula, TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {		
 		String name = "Formula:";
@@ -1114,7 +1172,8 @@ public class SelfCompiler {
 	/**
 	 * Parse the operator.
 	 */
-	public Vertex parseOperator(Vertex equation, TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
+	public Vertex parseOperator(TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
+		Vertex equation = network.createInstance(Primitive.EQUATION);
 		String next = stream.nextWord();
 		next = next.toLowerCase();
 		if (!OPERATORS.contains(next)) {
@@ -1538,7 +1597,7 @@ public class SelfCompiler {
 		Vertex pattern = null;
 		if (stream.peek() == '"') {
 			stream.skip();
-			pattern = network.createPattern(stream.nextQuotesExcludeDoubleQuote());
+			pattern = network.createPattern(stream.nextQuotesExcludeDoubleQuote(), this);
 		} else {
 			pattern = parseElement(stream, elements, debug, network);
 		}
@@ -1554,7 +1613,7 @@ public class SelfCompiler {
 			stream.skipWhitespace();
 			if (stream.peek() == '"') {
 				stream.skip();
-				that = network.createPattern(stream.nextQuotesExcludeDoubleQuote());
+				that = network.createPattern(stream.nextQuotesExcludeDoubleQuote(), this);
 			} else {
 				that = parseElement(stream, elements, debug, network);
 			}

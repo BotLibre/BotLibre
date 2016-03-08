@@ -197,7 +197,8 @@ public class RemoteService extends BasicSense {
 	public String requestWiktionary(String message, String botid, String server, String apikey, int limit, String hint, Network network) throws Exception {
 		try {
 			log("WIKTIONARY", Level.INFO, message);
-			Vertex result = getBot().awareness().getSense(Wiktionary.class).define(network.createWord(message));
+			Vertex word = network.createWord(message);
+			Vertex result = getBot().awareness().getSense(Wiktionary.class).define(word, word);
 			if (result != null) {
 				Vertex description = result.getRelationship(Primitive.SENTENCE);
 				if (description != null) {

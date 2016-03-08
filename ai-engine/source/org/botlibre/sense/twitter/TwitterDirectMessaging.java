@@ -58,7 +58,8 @@ public class TwitterDirectMessaging extends Twitter {
 	 */
 	public void checkDirectMessages() {
 		if (!getReplyToMessages()) {
-			return;
+			// Always check, as gated by Twitter sense.
+			//return;
 		}
 		try {
 			if (getConnection() == null) {

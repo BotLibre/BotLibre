@@ -23,7 +23,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.sense.BasicTool;
@@ -37,35 +36,35 @@ public class Watch extends BasicTool {
 	public Watch() {
 	}
 
-	public Vertex time(Network network) {
+	public Vertex time(Vertex source) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear(Calendar.YEAR);
 		calendar.clear(Calendar.MONTH);
 		calendar.clear(Calendar.DATE);
 		calendar.clear(Calendar.MILLISECOND);
-		return network.createVertex(new Time(calendar.getTimeInMillis()));
+		return source.getNetwork().createVertex(new Time(calendar.getTimeInMillis()));
 	}
 
-	public Vertex date(Network network) {
+	public Vertex date(Vertex source) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear(Calendar.HOUR);
 		calendar.clear(Calendar.MINUTE);
 		calendar.clear(Calendar.SECOND);
 		calendar.clear(Calendar.MILLISECOND);
-		return network.createVertex(new java.sql.Date(calendar.getTimeInMillis()));
+		return source.getNetwork().createVertex(new java.sql.Date(calendar.getTimeInMillis()));
 	}
 
-	public Vertex interval(Vertex style, Vertex from, Vertex to) throws Exception {
+	public Vertex interval(Vertex source, Vertex style, Vertex from, Vertex to) throws Exception {
 		SimpleDateFormat formater = new SimpleDateFormat();
-		return interval(style, from, to, formater);
+		return interval(source, style, from, to, formater);
 	}
 
-	public Vertex interval(Vertex style, Vertex from, Vertex to, Vertex format) throws Exception {
+	public Vertex interval(Vertex source, Vertex style, Vertex from, Vertex to, Vertex format) throws Exception {
 		SimpleDateFormat formater = new SimpleDateFormat(format.getDataValue());
-		return interval(style, from, to, formater);
+		return interval(source, style, from, to, formater);
 	}
 
-	public Vertex interval(Vertex style, Vertex from, Vertex to, SimpleDateFormat formater) throws Exception {
+	public Vertex interval(Vertex source, Vertex style, Vertex from, Vertex to, SimpleDateFormat formater) throws Exception {
 		Calendar fromDate = Calendar.getInstance();
 		fromDate.setTime(formater.parse(from.getDataValue()));
 		Calendar toDate = Calendar.getInstance();
@@ -94,7 +93,7 @@ public class Watch extends BasicTool {
 		return style.getNetwork().createVertex(value);
 	}
 
-	public Vertex add(Vertex time, Vertex date, Vertex part) throws Exception {
+	public Vertex add(Vertex source, Vertex time, Vertex date, Vertex part) throws Exception {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime((Date)date.getData());
 		if (part.is(Primitive.DAY)) {
@@ -109,14 +108,14 @@ public class Watch extends BasicTool {
 		return time.getNetwork().createVertex(new java.sql.Date(calendar.getTimeInMillis()));
 	}
 
-	public Vertex dateWithFormat(Vertex vertex) {
+	public Vertex dateWithFormat(Vertex source, Vertex vertex) {
 		String text = vertex.getDataValue();
 		SimpleDateFormat format = new SimpleDateFormat(text);
 		text = format.format(new Date());
 		return vertex.getNetwork().createVertex(text);
 	}
 	
-	public Vertex date(Vertex vertex) {
+	public Vertex date(Vertex source, Vertex vertex) {
 		Calendar date = Calendar.getInstance();
 		String text = vertex.getDataValue();
 		if (text.contains("%a")) {

@@ -1,5 +1,5 @@
-// Respond to "What is x", "Who is x" sentences using Wikidata
-State:WhatIsWikiData {
+// Respond to "What is x", "Who is x" sentences using Freebase
+State:WhatIs {
 	pattern "* is what" answer (redirect formula:"what is {:star}");
 	
 	case :input goto State:sentenceState for each #word of :sentence;
@@ -67,7 +67,7 @@ State:WhatIsWikiData {
 		State:searchState {
 			do (assign :search to #true);
 			
-			case :unknownWord goto State:discoverWikidataState;
+			case :unknownWord goto State:discoverFreebaseState;
 		}
 		
 		// 'What...'
@@ -104,7 +104,7 @@ State:WhatIsWikiData {
 				}
 				
 				case :someWord goto State:whatIsSomethingState;
-				case :unknownWord goto State:discoverWikidataState;
+				case :unknownWord goto State:discoverFreebaseState;
 				
 				:number {
 					set #instantiation from #number;
@@ -147,10 +147,10 @@ State:WhatIsWikiData {
 					}
 				}
 				
-				State:discoverWikidataState {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord2 goto State:discoverWikidataState2;
+					case :unknownWord2 goto State:discoverFreebaseState2;
 					
 					Quotient:Equation:defineWiktionary;
 					Equation:defineWiktionary {
@@ -162,68 +162,66 @@ State:WhatIsWikiData {
 						if (:ignore, #null)
 							then (
 								if not (:who, #null) or not (:unknownWord2, #null) or not (:search, #null)
-									then Equation:discoverWikidata
+									then Equation:discoverFreebase
 									else (do (
-										assign :resultobject to (call #define on #Wiktionary with :unknownWord),
-										if (:resultobject, #null)
-											then Equation:discoverWikidata
+										assign :result to (call #define on #Wiktionary with :unknownWord),
+										if (:result, #null)
+											then Equation:discoverFreebase
 											else (do(
 												call #push on #Context with :result,
-												set #topic to :resultobject on :conversation,
-												assign :result to (get #sentence from :resultobject),
+												set #topic to :result on :conversation,
+												assign :result to (get #sentence from :result),
 												if (:result, #null)
-													then (return Equation:discoverWikidata),
+													then (return Equation:discoverFreebase),
 												:result)))))
 							else #null;
 					}
-					Equation:discoverWikidata {
+					Equation:discoverFreebase {
 						if (:someWord, #null)
 							else (do (
-								assign :resultobject to (is :sentence related to :definition by #response),
-								if (:resultobject, #false)
+								assign :result to (is :sentence related to :definition by #response),
+								if (:result, #false)
 									then (assign :ignore to #true)));
 						if (:ignore, #null)
 							then (do(
-								assign :resultobject to (call #discover on #Wikidata with (:unknownWord, :unknownWord2, :unknownWord3, :unknownWord4, :unknownWord5)),
-								if (:resultobject, #null)
+								assign :result to (call #discover on #Freebase with (:unknownWord, :unknownWord2, :unknownWord3, :unknownWord4, :unknownWord5)),
+								if (:result, #null)
 									then #null
 									else (do(
-										call #push on #Context with :resultobject,
-										set #topic to :resultobject on :conversation,
-										assign :result to (get #sentence from :resultobject),
-										if (:result, #null)
-											then #null,
+										call #push on #Context with :result,
+										set #topic to :result on :conversation,
+										assign :result to (get #sentence from :result),
 										:result))))
 							else #null;
 					}
 				}
 				
-				State:discoverWikidataState2 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState2 {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord3 goto State:discoverWikidataState3;
+					case :unknownWord3 goto State:discoverFreebaseState3;
 					
 					Quotient:Equation:defineWiktionary;
 				}
 				
-				State:discoverWikidataState3 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState3 {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord4 goto State:discoverWikidataState4;
+					case :unknownWord4 goto State:discoverFreebaseState4;
 					
 					Quotient:Equation:defineWiktionary;
 				}
 				
-				State:discoverWikidataState4 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState4 {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord5 goto State:discoverWikidataState5;
+					case :unknownWord5 goto State:discoverFreebaseState5;
 					
 					Quotient:Equation:defineWiktionary;
 				}
 				
-				State:discoverWikidataState5 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState5 {
+					case :punctuation goto State:discoverFreebaseState5;
 					
 					Quotient:Equation:defineWiktionary;
 				}

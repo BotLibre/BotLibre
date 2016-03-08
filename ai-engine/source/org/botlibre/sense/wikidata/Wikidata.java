@@ -697,96 +697,96 @@ public class Wikidata extends Http { //implements DiscoverySense {
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word including the filter.
-	 * Called from Self.
 	 */
-	public Vertex search(Vertex filter, Vertex vertex) {
-		return search(filter, vertex, null, null, null, null);
+	public Vertex search(Vertex source, Vertex filter, Vertex vertex) {
+		return search(source, filter, vertex, null, null, null, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word including the filter.
-	 * Called from Self.
 	 */
-	public Vertex search(Vertex filter, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
+	public Vertex search(Vertex source, Vertex filter, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
 		return discover(true, true, (String)filter.getData(), vertex, vertex2, vertex3, vertex4, vertex5);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word including the filter.
-	 * Called from Self.
 	 */
-	public Vertex define(Vertex vertex) {
-		return define(vertex, null);
+	public Vertex define(Vertex source, Vertex vertex) {
+		return define(source, vertex, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word only.
-	 * Called from Self.
 	 */
-	public Vertex define(Vertex vertex, Vertex vertex2) {
-		return define(vertex, vertex2, null, null, null);
+	public Vertex define(Vertex source, Vertex vertex, Vertex vertex2) {
+		return define(source, vertex, vertex2, null, null, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word only.
-	 * Called from Self.
 	 */
-	public Vertex define(Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
+	public Vertex define(Vertex source, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
 		return discover(false, false, null, vertex, vertex2, vertex3, vertex4, vertex5);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word including all details.
-	 * Called from Self.
 	 */
-	public Vertex details(Vertex vertex) {
-		return details(vertex, null);
+	public Vertex details(Vertex source, Vertex vertex) {
+		return details(source, vertex, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word including all details.
-	 * Called from Self.
 	 */
-	public Vertex details(Vertex vertex, Vertex vertex2) {
-		return define(vertex, vertex2, null, null, null);
+	public Vertex details(Vertex source, Vertex vertex, Vertex vertex2) {
+		return define(source, vertex, vertex2, null, null, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word including all details.
-	 * Called from Self.
 	 */
-	public Vertex details(Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
+	public Vertex details(Vertex source, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
 		return discover(true, false, null, vertex, vertex2, vertex3, vertex4, vertex5);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word.
-	 * Called from Self.
 	 */
-	public Vertex discover(Vertex vertex) {
-		return discover(vertex, null);
+	public Vertex discover(Vertex source, Vertex vertex) {
+		return discover(source, vertex, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word.
-	 * Called from Self.
 	 */
-	public Vertex discover(Vertex vertex, Vertex vertex2) {
-		return discover(vertex, vertex2, null, null, null);
+	public Vertex discover(Vertex source, Vertex vertex, Vertex vertex2) {
+		return discover(source, vertex, vertex2, null, null, null);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word.
-	 * Called from Self.
 	 */
-	public Vertex discover(Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
+	public Vertex discover(Vertex source, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
 		return discover(true, true, null, vertex, vertex2, vertex3, vertex4, vertex5);
 	}
 	
 	/**
+	 * Self API
 	 * Discover the meaning of the word.
-	 * Called from Self.
 	 */
 	public Vertex discover(boolean details, boolean fork, String filter, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
 		String keywords = vertex.getDataValue();

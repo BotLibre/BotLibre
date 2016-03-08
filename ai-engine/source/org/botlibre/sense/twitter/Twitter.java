@@ -746,10 +746,7 @@ public class Twitter extends BasicSense {
 		User user = twitter.verifyCredentials();
 		if (!this.userName.equals(user.getScreenName())) {
 			this.userName = user.getScreenName();
-			Network memory = getBot().memory().newMemory();
-			Vertex vertex = memory.createVertex(getPrimitive());
-			vertex.setRelationship(Primitive.USER, memory.createVertex(this.userName));
-			memory.save();
+			saveProperties(null);
 		}
 		//AccessToken accessToken = new AccessToken(getToken(), getTokenSecret());
 		//twitter4j.Twitter twitter = new TwitterFactory().getInstance(accessToken);
@@ -886,13 +883,15 @@ public class Twitter extends BasicSense {
 							    input(status);
 							    Utils.sleep(500);
 					    	} else {
-								log("Skipping status, missing keywords.", Level.FINE, status.getText());
+								log("Skipping status, missing keywords", Level.FINE, status.getText());
 					    		if (!status.isRetweet() && !status.getUser().isProtected() && !status.isRetweetedByMe()) {
+					    			boolean retweeted = false;
 									// Check retweet.
 						    		for (String keywords : getRetweet()) {
 										List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
 								    	if (!keyWords.isEmpty()) {
 								    		if (statusWords.containsAll(keyWords)) {
+								    			retweeted = true;
 									    		count++;
 								    			retweet(status);
 											    Utils.sleep(500);
@@ -900,6 +899,17 @@ public class Twitter extends BasicSense {
 								    		}
 								    	}
 						    		}
+						    		if (!retweeted) {
+										log("Skipping rewteet, missing keywords", Level.FINE, status.getText());						    			
+						    		}
+					    		} else if (!getRetweet().isEmpty()) {
+					    			if (status.isRetweet()) {
+										log("Skipping rewteet", Level.FINE, status.getText());
+					    			} else if (status.getUser().isProtected()) {
+										log("Skipping protected user", Level.FINE, status.getText());
+					    			} else if (status.isRetweetedByMe()) {
+										log("Skipping already retweeted", Level.FINE, status.getText());
+					    			}
 					    		}
 					    	}
 				    	} else {
@@ -1292,7 +1302,7 @@ public class Twitter extends BasicSense {
 					if (result != null) {
 						text = getBot().mind().getThought(Language.class).getWord(result, memory).getDataValue();
 					} else {
-						log("Invalid autotweet formula", Level.WARNING, tweet);
+						log("Invalid autotweet template formula", Level.WARNING, tweet);
 						text = null;
 					}
 				} else {
@@ -1561,6 +1571,9 @@ public class Twitter extends BasicSense {
 				sendMessage(getWelcomeMessage(), friend.getScreenName());
 				Utils.sleep(1000);
 			}
+			if (welcomeOnly) {
+				return false;
+			}
 			return true;
     	}
 		log("Autofollow skipping friend, already followed once", Level.FINE, friend.getScreenName());
@@ -1651,9 +1664,9 @@ public class Twitter extends BasicSense {
 		if (text.length() > 140) {
 			int index =  text.indexOf("http://");
 			if (index == -1) {
-				text = text.substring(0, 140);
+				text = text.substring(0, 1000);
 			} else if (index > 120) {
-				text = text.substring(0, 120) + " " + text.substring(index, text.length());
+				text = text.substring(0, 1000) + " " + text.substring(index, text.length());
 			}
 		}
 		log("Sending message:", Level.INFO, text, replyUser);
@@ -1673,7 +1686,7 @@ public class Twitter extends BasicSense {
 			tweet = tweet.getRetweetedStatus();
 		}
 		if (tweet.getUser().isProtected()) {
-			log("Cannot retweet protected user:", Level.INFO, tweet.getText(), tweet.getUser().getScreenName());
+			log("Cannot retweet protected user", Level.INFO, tweet.getUser().getScreenName(), tweet.getText());
 			return;
 		}
 		this.retweets++;
@@ -2032,13 +2045,13 @@ public class Twitter extends BasicSense {
 	}
 
 	// Self API
-	public void tweet(Vertex sentence) {
+	public void tweet(Vertex source, Vertex sentence) {
 		if (sentence.instanceOf(Primitive.FORMULA)) {
 			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
 			SelfCompiler.addGlobalVariables(sentence.getNetwork().createInstance(Primitive.INPUT), null, sentence.getNetwork(), variables);
 			sentence = getBot().mind().getThought(Language.class).evaluateFormula(sentence, variables, sentence.getNetwork());
 			if (sentence == null) {
-				log("Invalid formula", Level.WARNING, sentence);
+				log("Invalid template formula", Level.WARNING, sentence);
 				return;
 			}
 		}

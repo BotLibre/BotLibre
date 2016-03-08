@@ -1,6 +1,6 @@
-// Respond to "What is x", "Who is x" sentences using Wikidata
-State:WhereIsWikiData {
-	pattern "* is where" template formula:"{srai formula:"where is {:star}"}";
+// Respond to "What is x", "Who is x" sentences using Freebase
+State:WhereIs {
+	pattern "* is where" template redirect formula:"where is {:star}";
 	
 	case :input goto State:sentenceState for each #word of :sentence;
 
@@ -31,23 +31,23 @@ State:WhereIsWikiData {
 		}
 		
 		State:whatState {
-			pattern "what is the location of *" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what country is * in" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what continent is * in" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what state is * in" template formula:"{srai formula:"where is {:star}"}";
-			pattern "what province is * in" template formula:"{srai formula:"where is {:star}"}";
+			pattern "what is the location of *" template redirect formula:"where is {:star}";
+			pattern "what country is * in" template redirect formula:"where is {:star}";
+			pattern "what continent is * in" template redirect formula:"where is {:star}";
+			pattern "what state is * in" template redirect formula:"where is {:star}";
+			pattern "what province is * in" template redirect formula:"where is {:star}";
 		}
 		
 		State:canState {
-			pattern "can you tell me where * is" template formula:"{srai formula:"where is {:star}"}";
+			pattern "can you tell me where * is" template redirect formula:"where is {:star}";
 		}
 		
 		State:doState {
-			pattern "do you know where * is" template formula:"{srai formula:"where is {:star}"}";
+			pattern "do you know where * is" template redirect formula:"where is {:star}";
 		}
 		
 		State:tellState {
-			pattern "tell me where * is" template formula:"{srai formula:"where is {:star}"}";
+			pattern "tell me where * is" template redirect formula:"where is {:star}";
 		}
 		
 		// 'Where...'
@@ -65,7 +65,7 @@ State:WhereIsWikiData {
 				case :#it goto State:whereIsItState;
 				case :#this goto State:whereIsThatState;
 				case :somePlace goto State:whereIsSomePlaceState;
-				case :unknownPlace goto State:discoverWikidataState;
+				case :unknownPlace goto State:discoverFreebaseState;
 							
 				:somePlace {
 					set #meaning to :contained;
@@ -78,7 +78,7 @@ State:WhereIsWikiData {
 					exclude "going";
 				}
 				:contained {
-					set #country to :container;
+					set #containedby to :container;
 				}
 				
 				:number {
@@ -117,8 +117,8 @@ State:WhereIsWikiData {
 						assign :location to (get #containedby from :result);
 						if (:location, #null)
 							then (do (
-								assign :result to (call #search on #Wikidata with ("country", get #word from :result));
-								assign :location to (get #country from :result);
+								assign :result to (call #search on #Freebase with ("/location/location/containedby", get #word from :result));
+								assign :location to (get #containedby from :result);
 								if (:location, #null)
 									then return #null;							
 							));
@@ -137,11 +137,11 @@ State:WhereIsWikiData {
 						assign :result to (call #top on #Context with 2);
 						if (:result, #null)
 							then return #null;
-						assign :location to (get #country from :result);
+						assign :location to (get #containedby from :result);
 						if (:location, #null)
 							then (do (
-								assign :result to (call #search on #Wikidata with ("country", get #word from :result));
-								assign :location to (get #country from :result);
+								assign :result to (call #search on #Freebase with ("/location/location/containedby", get #word from :result));
+								assign :location to (get #containedby from :result);
 								if (:location, #null)
 									then return #null;							
 							));
@@ -175,18 +175,18 @@ State:WhereIsWikiData {
 					}
 				}
 				
-				State:discoverWikidataState {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord2 goto State:discoverWikidataState2;
+					case :unknownWord2 goto State:discoverFreebaseState2;
 					
-					Quotient:Equation:discoverWikidata;
-					Equation:discoverWikidata {
-						assign :result to (call #search on #Wikidata with ("country", :unknownPlace, :unknownWord2, :unknownWord3, :unknownWord4, :unknownWord5));
+					Quotient:Equation:discoverFreebase;
+					Equation:discoverFreebase {
+						assign :result to (call #search on #Freebase with ("/location/location/containedby", :unknownPlace, :unknownWord2, :unknownWord3, :unknownWord4, :unknownWord5));
 						if (:result, #null)
 							then return #null;
 						set #topic to :result on :conversation;
-						assign :location to (get #country from :result);
+						assign :location to (get #containedby from :result);
 						if (:location, #null)
 							then return #null;
 						call #push on #Context with :location;
@@ -207,34 +207,34 @@ State:WhereIsWikiData {
 					}
 				}
 				
-				State:discoverWikidataState2 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState2 {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord3 goto State:discoverWikidataState3;
+					case :unknownWord3 goto State:discoverFreebaseState3;
 					
-					Quotient:Equation:discoverWikidata;
+					Quotient:Equation:discoverFreebase;
 				}
 				
-				State:discoverWikidataState3 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState3 {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord4 goto State:discoverWikidataState4;
+					case :unknownWord4 goto State:discoverFreebaseState4;
 					
-					Quotient:Equation:discoverWikidata;
+					Quotient:Equation:discoverFreebase;
 				}
 				
-				State:discoverWikidataState4 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState4 {
+					case :punctuation goto State:discoverFreebaseState5;
 					case "'" return;
-					case :unknownWord5 goto State:discoverWikidataState5;
+					case :unknownWord5 goto State:discoverFreebaseState5;
 					
-					Quotient:Equation:discoverWikidata;
+					Quotient:Equation:discoverFreebase;
 				}
 				
-				State:discoverWikidataState5 {
-					case :punctuation goto State:discoverWikidataState5;
+				State:discoverFreebaseState5 {
+					case :punctuation goto State:discoverFreebaseState5;
 					
-					Quotient:Equation:discoverWikidata;
+					Quotient:Equation:discoverFreebase;
 				}
 			}
 		}
