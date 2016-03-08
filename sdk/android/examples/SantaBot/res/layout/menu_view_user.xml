@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuChangeIcon"
+          android:title="Change Icon" />
+    
+    <item android:id="@+id/menuEditUser"
+          android:title="Edit User" />
+    
+    <item android:id="@+id/menuFlag"
+          android:title="Flag User" />    
+     
+</menu>

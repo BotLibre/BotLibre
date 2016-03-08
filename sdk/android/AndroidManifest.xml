@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.paphus.sdk.activity"
-    android:versionCode="11"
-    android:versionName="2.5.5">
+    package="org.botlibre.sdk"
+    android:versionCode="13"
+    android:versionName="4.0.0">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="24"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -12,7 +12,8 @@
     <!-- 
     	This is the application manifest.
     	To build your own application you need to choose your main activity and update its label and the app version.
-    	** you must use your own globally unique package name above, this will require you to rename the R impports in the activities to your new package **
+    	** you must use your own globally unique package name above, this will require you to rename the R imports in the activities to your new package **
+    	** if using Eclipse, to rename package do NOT just change it, right click on project "Android Tools / Rename Application Package" **
      -->
     <application
         android:icon="@drawable/ic_launcher"
@@ -20,388 +21,389 @@
         android:theme="@style/AppTheme"
         android:allowBackup="true" >
         
-        <meta-data android:name="com.google.android.gms.version"
-        android:value="@integer/google_play_services_version" />
+        <!-- meta-data android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" /-->
         
-        <activity android:name="com.google.android.gms.ads.AdActivity"
+        <!--activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent" /-->
         
         <activity
-            android:name="com.paphus.sdk.activity.MainActivity"
+            android:name="org.botlibre.sdk.activity.MainActivity"
             android:label="BOT libre!" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.BrowseActivity"
+            android:name="org.botlibre.sdk.activity.BrowseActivity"
             android:label="Browse Bots"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ForumBrowseActivity"
+            android:name="org.botlibre.sdk.activity.forum.ForumBrowseActivity"
             android:label="Browse Forums"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.BrowsePostsActivity"
+            android:name="org.botlibre.sdk.activity.forum.BrowsePostsActivity"
             android:label="Browse Posts"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.ChannelBrowseActivity"
+            android:name="org.botlibre.sdk.activity.livechat.ChannelBrowseActivity"
             android:label="Browse Channels"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.ChooseBotActivity"
+            android:name="org.botlibre.sdk.activity.ChooseBotActivity"
             android:label="Choose Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.BrowseActivity" />
+                android:value="org.botlibre.sdk.activity.BrowseActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ChooseForumActivity"
+            android:name="org.botlibre.sdk.activity.forum.ChooseForumActivity"
             android:label="Choose Forum"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumBrowseActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumBrowseActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ChoosePostActivity"
+            android:name="org.botlibre.sdk.activity.forum.ChoosePostActivity"
             android:label="View Posts"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.BrowsePostsActivity" />
+                android:value="org.botlibre.sdk.activity.forum.BrowsePostsActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.ChooseChannelActivity"
+            android:name="org.botlibre.sdk.activity.livechat.ChooseChannelActivity"
             android:label="Choose Channel"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelBrowseActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelBrowseActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.ChooseDomainActivity"
+            android:name="org.botlibre.sdk.activity.ChooseDomainActivity"
             android:label="Choose Domain"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.ChatActivity"
+            android:name="org.botlibre.sdk.activity.ChatActivity"
             android:label="Chat"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.InstanceActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.CreateInstanceActivity"
+            android:name="org.botlibre.sdk.activity.CreateInstanceActivity"
             android:label="Create Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.EditInstanceActivity"
+            android:name="org.botlibre.sdk.activity.EditInstanceActivity"
             android:label="Edit Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.InstanceActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.CreateForumActivity"
+            android:name="org.botlibre.sdk.activity.forum.CreateForumActivity"
             android:label="Create Forum"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.CreateForumPostActivity"
+            android:name="org.botlibre.sdk.activity.forum.CreateForumPostActivity"
             android:label="New Post"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.ForumActivity" />
+                android:value="org.botlibre.sdk.activity.ForumActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.CreateReplyActivity"
+            android:name="org.botlibre.sdk.activity.forum.CreateReplyActivity"
             android:label="Reply"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.ForumPostActivity" />
+                android:value="org.botlibre.sdk.activity.ForumPostActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.EditForumPostActivity"
+            android:name="org.botlibre.sdk.activity.forum.EditForumPostActivity"
             android:label="Edit Post"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.ForumPostActivity" />
+                android:value="org.botlibre.sdk.activity.ForumPostActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.EditForumActivity"
+            android:name="org.botlibre.sdk.activity.forum.EditForumActivity"
             android:label="Edit Forum"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.CreateChannelActivity"
+            android:name="org.botlibre.sdk.activity.livechat.CreateChannelActivity"
             android:label="Create Channel"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.EditChannelActivity"
+            android:name="org.botlibre.sdk.activity.livechat.EditChannelActivity"
             android:label="Edit Channel"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.CreateDomainActivity"
+            android:name="org.botlibre.sdk.activity.CreateDomainActivity"
             android:label="Create Domain"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.EditDomainActivity"
+            android:name="org.botlibre.sdk.activity.EditDomainActivity"
             android:label="Edit Domain"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.DomainActivity" />
+                android:value="org.botlibre.sdk.activity.DomainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.CreateUserActivity"
+            android:name="org.botlibre.sdk.activity.CreateUserActivity"
             android:label="Sign Up"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.LoginActivity"
+            android:name="org.botlibre.sdk.activity.LoginActivity"
             android:label="Sign In"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.EditUserActivity"
+            android:name="org.botlibre.sdk.activity.EditUserActivity"
             android:label="Edit User"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.InstanceActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.ViewUserActivity"
+            android:name="org.botlibre.sdk.activity.ViewUserActivity"
             android:label="View User"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.InstanceActivity"
+            android:name="org.botlibre.sdk.activity.InstanceActivity"
             android:label="View Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.BrowseActivity" />
+                android:value="org.botlibre.sdk.activity.BrowseActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ForumActivity"
+            android:name="org.botlibre.sdk.activity.forum.ForumActivity"
             android:label="Forum"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumBrowseActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumBrowseActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ForumPostActivity"
+            android:name="org.botlibre.sdk.activity.forum.ForumPostActivity"
             android:label="View Post"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.BrowsePostActivity" />
+                android:value="org.botlibre.sdk.activity.forum.BrowsePostActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.ChannelActivity"
+            android:name="org.botlibre.sdk.activity.livechat.ChannelActivity"
             android:label="Channel"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelBrowseActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelBrowseActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.DomainActivity"
+            android:name="org.botlibre.sdk.activity.DomainActivity"
             android:label="Domain"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.MainActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.AdminActivity"
+            android:name="org.botlibre.sdk.activity.AdminActivity"
             android:label="Admin"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.InstanceActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ForumAdminActivity"
+            android:name="org.botlibre.sdk.activity.forum.ForumAdminActivity"
             android:label="Forum Admin"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.ChannelAdminActivity"
+            android:name="org.botlibre.sdk.activity.livechat.ChannelAdminActivity"
             android:label="Channel Admin"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.DomainAdminActivity"
+            android:name="org.botlibre.sdk.activity.DomainAdminActivity"
             android:label="Domain Admin"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.DomainActivity" />
+                android:value="org.botlibre.sdk.activity.DomainActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.AvatarActivity"
+            android:name="org.botlibre.sdk.activity.AvatarActivity"
             android:label="Avatar"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.AdminActivity" />
+                android:value="org.botlibre.sdk.activity.AdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.AddAvatarActivity"
+            android:name="org.botlibre.sdk.activity.AddAvatarActivity"
             android:label="Add Shared Image"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.AvatarActivity" />
+                android:value="org.botlibre.sdk.activity.AvatarActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.VoiceActivity"
+            android:name="org.botlibre.sdk.activity.VoiceActivity"
             android:label="Voice"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.AdminActivity" />
+                android:value="org.botlibre.sdk.activity.AdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.LearningActivity"
+            android:name="org.botlibre.sdk.activity.LearningActivity"
             android:label="Learning"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.AdminActivity" />
+                android:value="org.botlibre.sdk.activity.AdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.TrainingActivity"
+            android:name="org.botlibre.sdk.activity.TrainingActivity"
             android:label="Training"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.AdminActivity" />
+                android:value="org.botlibre.sdk.activity.AdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.UsersActivity"
+            android:name="org.botlibre.sdk.activity.UsersActivity"
             android:label="Users"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.AdminActivity" />
+                android:value="org.botlibre.sdk.activity.AdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ForumUsersActivity"
+            android:name="org.botlibre.sdk.activity.forum.ForumUsersActivity"
             android:label="Forum Users"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumAdminActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumAdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.ChannelUsersActivity"
+            android:name="org.botlibre.sdk.activity.livechat.ChannelUsersActivity"
             android:label="Channel Users"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelAdminActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelAdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.LiveChatActivity"
+            android:name="org.botlibre.sdk.activity.livechat.LiveChatActivity"
             android:label="Live Chat"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.DomainUsersActivity"
+            android:name="org.botlibre.sdk.activity.DomainUsersActivity"
             android:label="Domain Users"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.DomainAdminActivity" />
+                android:value="org.botlibre.sdk.activity.DomainAdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.forum.ForumBotActivity"
+            android:name="org.botlibre.sdk.activity.forum.ForumBotActivity"
             android:label="Forum Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.forum.ForumAdminActivity" />
+                android:value="org.botlibre.sdk.activity.forum.ForumAdminActivity" />
         </activity>
         <activity
-            android:name="com.paphus.sdk.activity.livechat.ChannelBotActivity"
+            android:name="org.botlibre.sdk.activity.livechat.ChannelBotActivity"
             android:label="Channel Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.paphus.sdk.activity.channel.ChannelAdminActivity" />
+                android:value="org.botlibre.sdk.activity.channel.ChannelAdminActivity" />
         </activity>
     </application>
 

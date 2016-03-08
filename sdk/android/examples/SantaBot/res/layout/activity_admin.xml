@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+        
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+    	
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="editInstance"
+        android:text="Edit"
+        android:textColor="@color/lgrey" />
+    
+    <Button
+        android:id="@+id/iconButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="changeIcon"
+        android:text="Change Icon"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/usersButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminUsers"
+        android:text="Users"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/avatarButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminAvatars"
+        android:text="Avatars"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/voiceButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminVoice"
+        android:text="Voice"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/learningButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminLearning"
+        android:text="Learning"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/trainingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminTraining"
+        android:text="Training"
+        android:textColor="@color/lgrey" />
+    
+    <View
+	  android:layout_width="wrap_content"
+	  android:layout_height="0dp"
+      android:layout_weight="1"/>
+        
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/delete_button"
+        android:onClick="delete"
+        android:text="Delete"
+        android:textColor="@color/lgrey" />
+    
+    </LinearLayout>
+    
+    </ScrollView>
+        
+</LinearLayout>

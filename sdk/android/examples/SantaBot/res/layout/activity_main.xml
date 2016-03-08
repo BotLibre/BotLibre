@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#FFFFFF"
+	android:orientation="vertical" >
+
+	<ImageView
+		android:id="@+id/splash"
+		android:layout_width="fill_parent"
+		android:layout_height="0px"
+		android:layout_weight="1"
+		android:adjustViewBounds="true"
+		android:src="@drawable/logo" />
+		
+	<Spinner
+		android:id="@+id/typeSpin"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<Button
+		android:id="@+id/browseButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="1sp"
+		android:background="@drawable/button"
+		android:onClick="browse"
+		android:text="Browse"
+		android:textColor="@color/lgrey" />
+ 
+	<Button
+		android:id="@+id/createInstanceButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="1sp"
+		android:background="@drawable/button"
+		android:onClick="createInstance"
+		android:text="Create"
+		android:textColor="@color/lgrey" />
+			
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="1sp"
+		android:background="@color/lgrey"
+		android:orientation="horizontal" />
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+	
+		<Button
+			android:id="@+id/menuButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/menu"
+			android:onClick="menu"
+			android:text="" />
+	
+		<Button
+			android:id="@+id/loginButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/login"
+			android:onClick="login"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/vewUserButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:onClick="viewUser"
+			android:text="" />
+	
+		<Button
+			android:id="@+id/logoutButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/logout"
+			android:onClick="logout"
+			android:text="" />
+	
+	</LinearLayout>
+
+</LinearLayout>

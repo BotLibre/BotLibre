@@ -36,8 +36,8 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
 import org.botlibre.sdk.R;
 import org.botlibre.sdk.activity.actions.HttpAction;
 import org.botlibre.sdk.activity.actions.HttpChatAction;
@@ -78,12 +78,12 @@ public class ChatActivity extends Activity implements TextToSpeech.OnInitListene
 		setContentView(R.layout.activity_chat);
 
 		if (MainActivity.instance.showAds) {
-	        AdView mAdView = (AdView) findViewById(R.id.adView);
-	        AdRequest adRequest = new AdRequest.Builder().build();
-	        mAdView.loadAd(adRequest);
+	        //AdView mAdView = (AdView) findViewById(R.id.adView);
+	        //AdRequest adRequest = new AdRequest.Builder().build();
+	        //mAdView.loadAd(adRequest);
 		} else {
-	        AdView mAdView = (AdView) findViewById(R.id.adView);
-    		mAdView.setVisibility(View.GONE);
+	        //AdView mAdView = (AdView) findViewById(R.id.adView);
+    		//mAdView.setVisibility(View.GONE);
 		}
 
 		setTitle(MainActivity.instance.name);
