@@ -281,6 +281,25 @@ public class BasicMood implements Mood {
 			}
 		}
 	}
+
+	/**
+	 * Self API to set mood.
+	 */
+	public Vertex setEmotion(Vertex source, Vertex emotionVertex, Vertex valueVertex) {
+		Emotion emotion = getEmotion(emotionVertex.getDataValue());
+		if (emotion == null) {
+			log("Invalid emotion", Level.FINE, emotion);
+		}
+		if (valueVertex.getData() instanceof Number) {
+			float value = ((Number)valueVertex.getData()).floatValue();
+			if (value > 1 || value < -1) {
+				log("Invalid emotion value (must be between -1 and 1)", Level.FINE, value);
+			} else {
+				emotion.setState(emotion.getState() + value);
+			}
+		}
+		return source;
+	}
 	
 	/**
 	 * Evaluate the output with emotional expression.

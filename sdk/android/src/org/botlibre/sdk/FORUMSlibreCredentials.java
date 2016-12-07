@@ -27,7 +27,7 @@ public class FORUMSlibreCredentials extends Credentials {
 	//public static String DOMAIN = "192.168.0.15:9080";
 	public static String APP = "";
 	//public static String APP = "/forumslibre";
-	public static String PATH = "/rest/forumslibre";
+	public static String PATH = "/rest/api";
 
 	public FORUMSlibreCredentials(String applicationId) {
 		this.host = DOMAIN;

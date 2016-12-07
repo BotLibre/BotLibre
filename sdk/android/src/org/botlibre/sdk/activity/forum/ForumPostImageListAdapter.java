@@ -1,6 +1,31 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity.forum;
 
 import java.util.List;
+
+import org.botlibre.sdk.activity.MainActivity;
+import org.botlibre.sdk.activity.actions.HttpGetImageAction;
+import org.botlibre.sdk.config.ForumPostConfig;
+import org.botlibre.sdk.util.Utils;
+
+import org.botlibre.sdk.R;
 
 import android.app.Activity;
 import android.text.Html;
@@ -10,11 +35,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.botlibre.sdk.R;
-import org.botlibre.sdk.activity.MainActivity;
-import org.botlibre.sdk.activity.actions.HttpGetImageAction;
-import org.botlibre.sdk.config.ForumPostConfig;
 
 public class ForumPostImageListAdapter extends ArrayAdapter<ForumPostConfig> {
 	 
@@ -29,7 +49,6 @@ public class ForumPostImageListAdapter extends ArrayAdapter<ForumPostConfig> {
         ImageView imageView;
         TextView creatorView;
         TextView topicView;
-        TextView creationDateView;
         TextView summaryView;
     }
  
@@ -43,7 +62,6 @@ public class ForumPostImageListAdapter extends ArrayAdapter<ForumPostConfig> {
             holder = new PostImageListViewHolder();
             holder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
             holder.creatorView = (TextView)convertView.findViewById(R.id.creatorView);
-            holder.creationDateView = (TextView)convertView.findViewById(R.id.creationDateView);
             holder.topicView = (TextView) convertView.findViewById(R.id.topicView);
             holder.summaryView = (TextView)convertView.findViewById(R.id.summaryView);
             convertView.setTag(holder);
@@ -51,9 +69,8 @@ public class ForumPostImageListAdapter extends ArrayAdapter<ForumPostConfig> {
             holder = (PostImageListViewHolder) convertView.getTag();
         }
 
-        holder.topicView.setText(config.topic);
-        holder.creatorView.setText(config.creator);
-        holder.creationDateView.setText(config.creationDate);
+        holder.topicView.setText(Utils.stripTags(config.topic));
+        holder.creatorView.setText("by " + config.creator + " posted " + config.displayCreationDate());
         if (config.summary != null) {
         	holder.summaryView.setText(Html.fromHtml(config.summary));
         } else {

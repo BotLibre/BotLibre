@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.paphus.botlibre.client.android.santabot"
-    android:versionCode="4"
-    android:versionName="4.0.0">
+    android:versionCode="5"
+    android:versionName="5.0.0">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="24"/>
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="24"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>    
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -37,68 +37,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.BrowseActivity"
-            android:label="Browse Bots"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.ChooseBotActivity"
-            android:label="Choose Bot"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.BrowseActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.ChooseDomainActivity"
-            android:label="Choose Domain"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.MainActivity" />
-        </activity>
-        <activity
             android:name="org.botlibre.sdk.activity.ChatActivity"
             android:label="Chat"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.CreateInstanceActivity"
-            android:label="Create Bot"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.EditInstanceActivity"
-            android:label="Edit Bot"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.CreateDomainActivity"
-            android:label="Create Domain"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.EditDomainActivity"
-            android:label="Edit Domain"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.DomainActivity" />
+                android:value="org.botlibre.sdk.activity.BotActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.CreateUserActivity"
@@ -122,7 +68,7 @@
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.ViewUserActivity"
@@ -133,7 +79,7 @@
                 android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.InstanceActivity"
+            android:name="org.botlibre.sdk.activity.BotActivity"
             android:label="View Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -141,84 +87,12 @@
                 android:value="org.botlibre.sdk.activity.BrowseActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.DomainActivity"
-            android:label="Domain"
+            android:name="org.botlibre.sdk.activity.ImageActivity"
+            android:label="Image"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.botlibre.sdk.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.AdminActivity"
-            android:label="Admin"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.DomainAdminActivity"
-            android:label="Domain Admin"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.DomainActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.AvatarActivity"
-            android:label="Avatar"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AdminActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.AddAvatarActivity"
-            android:label="Add Shared Image"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AvatarActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.VoiceActivity"
-            android:label="Voice"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AdminActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.LearningActivity"
-            android:label="Learning"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AdminActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.TrainingActivity"
-            android:label="Training"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AdminActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.UsersActivity"
-            android:label="Users"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AdminActivity" />
-        </activity>
-        <activity
-            android:name="org.botlibre.sdk.activity.DomainUsersActivity"
-            android:label="Domain Users"
-            android:windowSoftInputMode="stateHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.DomainAdminActivity" />
         </activity>
     </application>
 

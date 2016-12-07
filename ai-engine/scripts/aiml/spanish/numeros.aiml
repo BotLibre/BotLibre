@@ -1,0 +1,1103 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <!-- NÚMEROS: Números gestionados por el bot -->
+  <aiml version="1.0"> 
+
+<!-- Free software Copyright © ALICE A.I. Foundation. --> 
+<!-- This program is open source code released under --> 
+<!-- the terms of the GNU General Public License --> 
+<!-- as published by the Free Software Foundation. --> 
+<!-- Complies with AIML 1.01 Tag Set Specification --> 
+<!-- as adopted by the ALICE A.I. Foundation. --> 
+<!-- Numeros.aiml: Numbers known to the bot --> 
+<!-- Created by Adam Codony aka XGargoyle, October 24th, 2005 --> 
+<!-- Revision Numeros-0.02 --> 
+<!-- Last Modified March 15th, 2006 -->
+
+<!-- Software Libre Copyright © ALICE A.I. Foundation. --> 
+<!-- Este programa es de código abierto y publicado bajo --> 
+<!-- los términos de la licencia "GNU General Public License" --> 
+<!-- tal como establece la Free Software Foundation. --> 
+<!-- Cumple con la especificación de AIML 1.01 --> 
+<!-- adoptada por la ALICE A.I. Foundation. --> 
+<!-- Numeros.aiml: Números gestionados por el bot --> 
+<!-- Creado por Adam Codony aka XGargoyle, Octubre 24, 2005 --> 
+<!-- Versión Numeros-0.02 --> 
+<!-- Última Modificación Marzo 15, 2006 -->
+
+
+    <category> 
+      <pattern>0</pattern>
+      <template> 
+        <random> 
+          <li>Cero.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>1</pattern>
+      <template> 
+        <random> 
+          <li>Uno.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>2</pattern>
+      <template> 
+        <random> 
+          <li>Dos.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>3</pattern>
+      <template> 
+        <random> 
+          <li>Tres.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>4</pattern>
+      <template> 
+        <random> 
+          <li>Cuatro.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>5</pattern>
+      <template> 
+        <random> 
+          <li>Cinco.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>6</pattern>
+      <template> 
+        <random> 
+          <li>Seis.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>7</pattern>
+      <template> 
+        <random> 
+          <li>Siete.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>8</pattern>
+      <template> 
+        <random> 
+          <li>Ocho.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>9</pattern>
+      <template> 
+        <random> 
+          <li>Nueve.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>10</pattern>
+      <template> 
+        <random> 
+          <li>Diez.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>11</pattern>
+      <template> 
+        <random> 
+          <li>Once.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>12</pattern>
+      <template> 
+        <random> 
+          <li>Doce.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>13</pattern>
+      <template> 
+        <random> 
+          <li>Trece.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>14</pattern>
+      <template> 
+        <random> 
+          <li>Catorce.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>15</pattern>
+      <template> 
+        <random> 
+          <li>Quince.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>16</pattern>
+      <template> 
+        <random> 
+          <li>Dieciseis.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>17</pattern>
+      <template> 
+        <random> 
+          <li>Diecisiete.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>18</pattern>
+      <template> 
+        <random> 
+          <li>Dieciocho.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>19</pattern>
+      <template> 
+        <random> 
+          <li>Diecinueve.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>20</pattern>
+      <template> 
+        <random> 
+          <li>Veinte.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>21</pattern>
+      <template> 
+        <random> 
+          <li>Veintiuno.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>22</pattern>
+      <template> 
+        <random> 
+          <li>Veintidos.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>23</pattern>
+      <template> 
+        <random> 
+          <li>Veintitres.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>24</pattern>
+      <template> 
+        <random> 
+          <li>Veinticuatro.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>25</pattern>
+      <template> 
+        <random> 
+          <li>Veinticinco.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>26</pattern>
+      <template> 
+        <random> 
+          <li>Veintiseis.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>27</pattern>
+      <template> 
+        <random> 
+          <li>Veintisiete.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>28</pattern>
+      <template> 
+        <random> 
+          <li>Veintiocho.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>29</pattern>
+      <template> 
+        <random> 
+          <li>Veintinueve.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>30</pattern>
+      <template> 
+        <random> 
+          <li>Treinta.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>31</pattern>
+      <template> 
+        <random> 
+          <li>Treintayuno.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>32</pattern>
+      <template> 
+        <random> 
+          <li>Treintaydos.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>33</pattern>
+      <template> 
+        <random> 
+          <li>Treintaytres.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>34</pattern>
+      <template> 
+        <random> 
+          <li>Treintaycuatro.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>35</pattern>
+      <template> 
+        <random> 
+          <li>Treintaycinco.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>36</pattern>
+      <template> 
+        <random> 
+          <li>Treintayseis.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>37</pattern>
+      <template> 
+        <random> 
+          <li>Treintaysiete.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>38</pattern>
+      <template> 
+        <random> 
+          <li>Treintayocho.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>39</pattern>
+      <template> 
+        <random> 
+          <li>Treintaynueve.</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>40</pattern>
+      <template> 
+        <random> 
+          <li>Cuareinta.</li>
+        </random>
+      </template>
+    </category>
+	<!--                     Reducciones                -->
+	<category> 
+      <pattern>0 *</pattern>
+      <template> 
+        <srai>0</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 0</pattern>
+      <template> 
+        <srai>0</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 0 *</pattern>
+      <template> 
+        <srai>0</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>1 *</pattern>
+      <template> 
+        <srai>1</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 1</pattern>
+      <template> 
+        <srai>1</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 1 *</pattern>
+      <template> 
+        <srai>1</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>2 *</pattern>
+      <template> 
+        <srai>2</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 2</pattern>
+      <template> 
+        <srai>2</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 2 *</pattern>
+      <template> 
+        <srai>2</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>3 *</pattern>
+      <template> 
+        <srai>3</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 3</pattern>
+      <template> 
+        <srai>3</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 3 *</pattern>
+      <template> 
+        <srai>3</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>4 *</pattern>
+      <template> 
+        <srai>4</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 4</pattern>
+      <template> 
+        <srai>4</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 4 *</pattern>
+      <template> 
+        <srai>4</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>5 *</pattern>
+      <template> 
+        <srai>5</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 5</pattern>
+      <template> 
+        <srai>5</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 5 *</pattern>
+      <template> 
+        <srai>5</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>6 *</pattern>
+      <template> 
+        <srai>6</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 6</pattern>
+      <template> 
+        <srai>6</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 6 *</pattern>
+      <template> 
+        <srai>6</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>7 *</pattern>
+      <template> 
+        <srai>7</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 7</pattern>
+      <template> 
+        <srai>7</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 7 *</pattern>
+      <template> 
+        <srai>7</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>8 *</pattern>
+      <template> 
+        <srai>8</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 8</pattern>
+      <template> 
+        <srai>8</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 8 *</pattern>
+      <template> 
+        <srai>8</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>9 *</pattern>
+      <template> 
+        <srai>9</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 9</pattern>
+      <template> 
+        <srai>9</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 9 *</pattern>
+      <template> 
+        <srai>9</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>10 *</pattern>
+      <template> 
+        <srai>10</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 10</pattern>
+      <template> 
+        <srai>10</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 10 *</pattern>
+      <template> 
+        <srai>10</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>11 *</pattern>
+      <template> 
+        <srai>11</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 11</pattern>
+      <template> 
+        <srai>11</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 11 *</pattern>
+      <template> 
+        <srai>11</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>12 *</pattern>
+      <template> 
+        <srai>12</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 12</pattern>
+      <template> 
+        <srai>12</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 12 *</pattern>
+      <template> 
+        <srai>12</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>13 *</pattern>
+      <template> 
+        <srai>13</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 13</pattern>
+      <template> 
+        <srai>13</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 13 *</pattern>
+      <template> 
+        <srai>13</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>14 *</pattern>
+      <template> 
+        <srai>14</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 14</pattern>
+      <template> 
+        <srai>14</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 14 *</pattern>
+      <template> 
+        <srai>14</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>15 *</pattern>
+      <template> 
+        <srai>15</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 15</pattern>
+      <template> 
+        <srai>15</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 15 *</pattern>
+      <template> 
+        <srai>15</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>16 *</pattern>
+      <template> 
+        <srai>16</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 16</pattern>
+      <template> 
+        <srai>16</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 16 *</pattern>
+      <template> 
+        <srai>16</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>17 *</pattern>
+      <template> 
+        <srai>17</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 17</pattern>
+      <template> 
+        <srai>17</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 17 *</pattern>
+      <template> 
+        <srai>17</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>18 *</pattern>
+      <template> 
+        <srai>18</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 18</pattern>
+      <template> 
+        <srai>18</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 18 *</pattern>
+      <template> 
+        <srai>18</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>19 *</pattern>
+      <template> 
+        <srai>19</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 19</pattern>
+      <template> 
+        <srai>19</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 19 *</pattern>
+      <template> 
+        <srai>19</srai>
+      </template>
+    </category>
+	
+	<category> 
+      <pattern>20 *</pattern>
+      <template> 
+        <srai>20</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 20</pattern>
+      <template> 
+        <srai>20</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 20 *</pattern>
+      <template> 
+        <srai>20</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>21 *</pattern>
+      <template> 
+        <srai>21</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 21</pattern>
+      <template> 
+        <srai>21</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 21 *</pattern>
+      <template> 
+        <srai>21</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>22 *</pattern>
+      <template> 
+        <srai>22</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 22</pattern>
+      <template> 
+        <srai>22</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 22 *</pattern>
+      <template> 
+        <srai>22</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>23 *</pattern>
+      <template> 
+        <srai>23</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 23</pattern>
+      <template> 
+        <srai>23</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 23 *</pattern>
+      <template> 
+        <srai>23</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>24 *</pattern>
+      <template> 
+        <srai>24</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 24</pattern>
+      <template> 
+        <srai>24</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 24 *</pattern>
+      <template> 
+        <srai>24</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>25 *</pattern>
+      <template> 
+        <srai>25</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 25</pattern>
+      <template> 
+        <srai>25</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 25 *</pattern>
+      <template> 
+        <srai>25</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>26 *</pattern>
+      <template> 
+        <srai>26</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 26</pattern>
+      <template> 
+        <srai>26</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 26 *</pattern>
+      <template> 
+        <srai>26</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>27 *</pattern>
+      <template> 
+        <srai>27</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 27</pattern>
+      <template> 
+        <srai>27</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 27 *</pattern>
+      <template> 
+        <srai>27</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>28 *</pattern>
+      <template> 
+        <srai>28</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 28</pattern>
+      <template> 
+        <srai>28</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 28 *</pattern>
+      <template> 
+        <srai>28</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>29 *</pattern>
+      <template> 
+        <srai>29</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 29</pattern>
+      <template> 
+        <srai>29</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 29 *</pattern>
+      <template> 
+        <srai>29</srai>
+      </template>
+    </category>
+	
+	<category> 
+      <pattern>30 *</pattern>
+      <template> 
+        <srai>30</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 30</pattern>
+      <template> 
+        <srai>30</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 30 *</pattern>
+      <template> 
+        <srai>30</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>31 *</pattern>
+      <template> 
+        <srai>31</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 31</pattern>
+      <template> 
+        <srai>31</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 31 *</pattern>
+      <template> 
+        <srai>31</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>32 *</pattern>
+      <template> 
+        <srai>32</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 32</pattern>
+      <template> 
+        <srai>32</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 32 *</pattern>
+      <template> 
+        <srai>2</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>33 *</pattern>
+      <template> 
+        <srai>33</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 33</pattern>
+      <template> 
+        <srai>33</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 33 *</pattern>
+      <template> 
+        <srai>33</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>34 *</pattern>
+      <template> 
+        <srai>34</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 34</pattern>
+      <template> 
+        <srai>34</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 34 *</pattern>
+      <template> 
+        <srai>34</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>35 *</pattern>
+      <template> 
+        <srai>35</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 35</pattern>
+      <template> 
+        <srai>35</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 35 *</pattern>
+      <template> 
+        <srai>35</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>36 *</pattern>
+      <template> 
+        <srai>36</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 36</pattern>
+      <template> 
+        <srai>36</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 36 *</pattern>
+      <template> 
+        <srai>36</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>37 *</pattern>
+      <template> 
+        <srai>37</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 37</pattern>
+      <template> 
+        <srai>37</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 37 *</pattern>
+      <template> 
+        <srai>37</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>38 *</pattern>
+      <template> 
+        <srai>38</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 38</pattern>
+      <template> 
+        <srai>38</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 38 *</pattern>
+      <template> 
+        <srai>38</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>39 *</pattern>
+      <template> 
+        <srai>39</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 39</pattern>
+      <template> 
+        <srai>39</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 39 *</pattern>
+      <template> 
+        <srai>39</srai>
+      </template>
+    </category>
+	
+	<category> 
+      <pattern>40 *</pattern>
+      <template> 
+        <srai>40</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* 40</pattern>
+      <template> 
+        <srai>40</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>_ 40 *</pattern>
+      <template> 
+        <srai>40</srai>
+      </template>
+    </category>
+
+	
+	
+	
+	
+  </aiml>

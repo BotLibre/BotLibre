@@ -20,6 +20,7 @@ package org.botlibre.self;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -346,7 +347,14 @@ public class SelfByteCodeCompiler extends SelfCompiler {
 					return;
 				} else if (Character.isDigit(next) || next == '-' || next == '+') {
 					String data = stream.nextWord();
-					dataStream.writeLong(network.createVertex(new BigInteger(data)).getId());
+					Vertex element = null;
+					int index = data.indexOf('.');
+					if (index != -1) {
+						element = network.createVertex(new BigDecimal(data));
+					} else {
+						element = network.createVertex(new BigInteger(data));
+					}
+					dataStream.writeLong(element.getId());
 					return;
 				} else {
 					String dataType = stream.upTo('(', false, true);

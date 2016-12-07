@@ -20,6 +20,7 @@ package org.botlibre.api.avatar;
 import java.util.Map;
 
 import org.botlibre.Bot;
+import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
@@ -35,6 +36,8 @@ public interface Avatar {
 	void awake();
 	
 	void pool();
+	
+	void reset();
 
 	BinaryData getCurrentImage();
 	
@@ -47,6 +50,10 @@ public interface Avatar {
 	String getAction();
 
 	void setAction(String action);
+	
+	String getCommand();
+
+	void setCommand(String command);
 
 	String getPose();
 
@@ -64,7 +71,7 @@ public interface Avatar {
 	/**
 	 * Evaluate the input response for actions and poses.
 	 */
-	void evaluateResponse(Vertex output, Vertex response, Vertex meta);
+	void evaluateResponse(Vertex output, Vertex response, Vertex meta, Map<Vertex, Vertex> variables, Network network);
 
 	/**
 	 * Initialize any configuration properties.

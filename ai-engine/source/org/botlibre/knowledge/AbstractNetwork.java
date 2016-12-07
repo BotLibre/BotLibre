@@ -761,10 +761,17 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 				paragraph.addRelationship(Primitive.INSTANTIATION, Primitive.PARAGRAPH);
 			}
 			paragraph.addRelationship(Primitive.SENTENCE, sentence, index);
-			sentence.addRelationship(Primitive.PARAGRAPH, paragraph);
-			if (previous != null) {
-				sentence.addRelationship(Primitive.PREVIOUS, previous);
-				previous.addRelationship(Primitive.NEXT, sentence);
+			boolean learnGrammar = true;
+			Language language = getBot().mind().getThought(Language.class);
+			if (language != null) {
+				learnGrammar = language.getLearnGrammar();
+			}
+			if (learnGrammar) {
+				sentence.addRelationship(Primitive.PARAGRAPH, paragraph);
+				if (previous != null) {
+					sentence.addRelationship(Primitive.PREVIOUS, previous);
+					previous.addRelationship(Primitive.NEXT, sentence);
+				}
 			}
 			previous = sentence;
 			current = next;			
@@ -857,9 +864,9 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 					element = createVertex(Primitive.UNDERSCORE);
 				} else if (word.equals("^")) {
 					element = createVertex(Primitive.HATWILDCARD);
-				} else if (word.equals("#")) {
-					if (!stream.atEnd() && Character.isLetter(stream.peek())) {
-						String name = stream.nextWord();
+				} else if (word.startsWith("#")) {
+					if (word.length() > 1) {
+						String name = word.substring(1, word.length());
 						element = createVertex(new Primitive(name));
 					} else {
 						element = createVertex(Primitive.POUNDWILDCARD);
@@ -1025,7 +1032,9 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		if (!sentence.hasRelationship(Primitive.SYNONYM)) {
 			String reduced = Utils.reduce(text);
 			if (!text.equals(reduced) && !reduced.isEmpty()) {
-				sentence.addRelationship(Primitive.SYNONYM, createSentence(reduced, true, true, false));
+				Vertex synonym = createSentence(reduced, true, true, false);
+				synonym.addRelationship(Primitive.TYPE, Primitive.SYNONYM);
+				sentence.addRelationship(Primitive.SYNONYM, synonym);
 			}
 		}
 	}

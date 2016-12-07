@@ -31,6 +31,7 @@ import facebook4j.Message;
 import facebook4j.RawAPIResponse;
 import facebook4j.internal.org.json.JSONArray;
 import facebook4j.internal.org.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * Enables receiving a sending messages through Facebook.
@@ -52,6 +53,7 @@ public class FacebookMessaging extends Facebook {
 	@Override
 	public void checkProfile() {
 		log("Checking messages.", Level.FINE);
+		initProperties();
 		checkDirectMessages();
 		log("Done checking messages.", Level.FINE);
 	}
@@ -61,9 +63,7 @@ public class FacebookMessaging extends Facebook {
 	 */
 	public void checkDirectMessages() {
 		if (!getReplyToMessages()) {
-			// Always check as gated by Facebook sense.
-			//log("Reply to messages disabled", Level.INFO);
-			//return;
+			return;
 		}
 		try {
 			if (getConnection() == null) {
@@ -105,7 +105,7 @@ public class FacebookMessaging extends Facebook {
 							    String fromUserId = message.getJSONObject("from").getString("id");
 							    if (!fromUserId.equals(this.userName)) {
 									String text = message.getString("message").trim();
-									log("Processing message", Level.INFO, text, fromUser, createdTime, conversationId);
+									log("Processing message", Level.INFO, fromUser, createdTime, conversationId, text);
 									this.messagesProcessed++;
 									inputSentence(text, fromUser, this.userName, conversationId, memory);
 							    	if (createdTime.getTime() > max) {
@@ -123,7 +123,12 @@ public class FacebookMessaging extends Facebook {
 				    }
 			    }
 			    if (max != 0) {
-			    	facebook.setRelationship(Primitive.LASTDIRECTMESSAGE, memory.createVertex(max));
+					if (vertex != null) {
+						vertex.setPinned(false);
+					}
+			    	Vertex maxVertex = memory.createVertex(max);
+			    	maxVertex.setPinned(true);
+			    	facebook.setRelationship(Primitive.LASTDIRECTMESSAGE, maxVertex);
 			    	memory.save();
 			    }
 			/*
@@ -223,6 +228,61 @@ public class FacebookMessaging extends Facebook {
 		network.save();
 		getBot().memory().addActiveMemory(input);
 	}
+	
+	/**
+	 * Process the text sentence.
+	 */
+	public void inputFacebookMessengerMessage(String text, String targetUserName, String senderId, Network network) {
+		String senderName = null;
+		try {
+			if (getConnection() == null) {
+				connect();
+			}
+			String url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getFacebookMessengerAccessToken();
+			String json = Utils.httpGET(url);
+			net.sf.json.JSONObject user = (net.sf.json.JSONObject)JSONSerializer.toJSON(json);
+			if (user != null) {
+				Object firstName = user.get("first_name");
+				Object lastName = user.get("last_name");
+				if (firstName instanceof String) {
+					senderName = (String)firstName;
+				}
+				if (lastName instanceof String) {
+					if (senderName == null) {
+						senderName = "";
+					}
+					senderName = senderName + " " + (String)lastName;
+				}
+			}
+		} catch (Exception exception) {
+			String url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getFacebookMessengerAccessToken();
+			log(url, Level.INFO);
+			url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getToken();
+			log(url, Level.INFO);
+			log(exception);
+		}
+		if (senderName == null || senderName.isEmpty()) {
+			senderName = senderId;
+		}
+		Vertex input = createInput(text.trim(), network);
+		Vertex user = network.createSpeaker(senderName);
+		Vertex self = network.createVertex(Primitive.SELF);
+		input.addRelationship(Primitive.SPEAKER, user);		
+		input.addRelationship(Primitive.TARGET, self);
+		user.addRelationship(Primitive.INPUT, input);
+		
+		Vertex conversation = network.createVertex(senderId);
+		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
+		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
+		conversation.addRelationship(Primitive.TYPE, Primitive.FACEBOOKMESSENGER);
+		conversation.addRelationship(Primitive.ID, network.createVertex(senderId));
+		conversation.addRelationship(Primitive.SPEAKER, user);
+		conversation.addRelationship(Primitive.SPEAKER, self);
+		Language.addToConversation(input, conversation);
+		
+		network.save();
+		getBot().memory().addActiveMemory(input);
+	}
 
 	/**
 	 * Output the status or direct message reply.
@@ -243,7 +303,17 @@ public class FacebookMessaging extends Facebook {
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		Vertex id = conversation.getRelationship(Primitive.ID);
 		String conversationId = id.printString();
-		sendMessage(text, replyTo, conversationId);
+		
+		Vertex command = output.mostConscious(Primitive.COMMAND);
+		
+		if (conversation.hasRelationship(Primitive.TYPE, Primitive.FACEBOOKMESSENGER)) {
+			if(command==null || command.toString().length() == 0)
+				sendFacebookMessengerMessage(text, replyTo, conversationId);
+			else 
+				sendFacebookMessengerButtonMessage(text, command.toString(), replyTo, conversationId);
+		} else {
+			sendMessage(text, replyTo, conversationId);
+		}
 	}
 	
 	/*

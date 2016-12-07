@@ -6,6 +6,36 @@
 	android:background="#FFFFFF"
     android:orientation="vertical" >
 
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content"
+            android:textSize="18sp"
+	        android:layout_margin="8sp"
+			android:text="@string/signIn"/>
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
     <EditText
         android:id="@+id/userText"
         android:layout_width="match_parent"
@@ -31,14 +61,7 @@
     	android:textColor="@color/lgrey"
     	android:layout_margin="1dp"
         android:onClick="connect"
-        android:text="Sign In" />
-    
-    <TextView
-        android:id="@+id/filler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-      	android:layout_weight="1"
-        android:text=""/>
+        android:text="@string/signIn" />
     
     <Button
         android:id="@+id/signUpButton"
@@ -48,6 +71,6 @@
     	android:textColor="@color/lgrey"
     	android:layout_margin="1dp"
         android:onClick="signUp"
-        android:text="Sign Up" />
+        android:text="@string/signUp" />
 
 </LinearLayout>

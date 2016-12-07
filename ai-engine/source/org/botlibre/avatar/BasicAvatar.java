@@ -29,6 +29,8 @@ import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.emotion.EmotionalState;
 import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.sense.http.Http;
+import org.botlibre.thought.language.Language;
 
 /**
  * Controls and manages the thought processing.
@@ -41,6 +43,7 @@ public class BasicAvatar implements Avatar {
 	protected String action;
 	protected String pose;
 	protected String emote;
+	protected String command;
 			
 	public BasicAvatar() {
 	}
@@ -50,6 +53,24 @@ public class BasicAvatar implements Avatar {
 		this.action = null;
 		this.pose = null;
 		this.emote = null;
+		this.command = null;
+	}
+
+	@Override
+	public void reset() {
+		this.action = null;
+		this.emote = null;
+		this.command = null;
+	}
+
+	@Override
+	public String getCommand() {
+		return command;
+	}
+
+	@Override
+	public void setCommand(String command) {
+		this.command = command;
 	}
 
 	@Override
@@ -144,8 +165,10 @@ public class BasicAvatar implements Avatar {
 		Vertex action = output.mostConscious(Primitive.ACTION);
 		if (action != null && action.isPrimitive()) {
 			setAction(action.getDataValue());
-		} else {
-			setAction(null);
+		}
+		Vertex command = output.getRelationship(Primitive.COMMAND);
+		if (command != null) {
+			setCommand(command.printString());
 		}
 		Vertex pose = output.mostConscious(Primitive.POSE);
 		if (pose != null && pose.isPrimitive()) {
@@ -164,7 +187,7 @@ public class BasicAvatar implements Avatar {
 	 * Evaluate the input response for actions and poses.
 	 */
 	@Override
-	public void evaluateResponse(Vertex output, Vertex response, Vertex meta) {
+	public void evaluateResponse(Vertex output, Vertex response, Vertex meta, Map<Vertex, Vertex> variables, Network network) {
 		Collection<Relationship> actions = null;
 		if (meta != null) {
 			actions = meta.getRelationships(Primitive.ACTION);
@@ -172,10 +195,12 @@ public class BasicAvatar implements Avatar {
 		if (actions == null) {
 			actions = response.getRelationships(Primitive.ACTION);
 		}
-		if (actions != null) {
+		if (actions != null && !actions.isEmpty()) {
 			for (Relationship relationship : actions) {
 				output.addWeakRelationship(Primitive.ACTION, relationship.getTarget(), relationship.getCorrectness());
 			}
+		} else if (getAction() != null && !getAction().isEmpty()) {
+			output.addRelationship(Primitive.ACTION, network.createVertex(getAction()));
 		}
 		Collection<Relationship> poses = null;
 		if (meta != null) {
@@ -184,9 +209,25 @@ public class BasicAvatar implements Avatar {
 		if (poses == null) {
 			poses = response.getRelationships(Primitive.POSE);
 		}
-		if (poses != null) {
+		if (poses != null && !poses.isEmpty()) {
 			for (Relationship relationship : poses) {
 				output.addWeakRelationship(Primitive.POSE, relationship.getTarget(), relationship.getCorrectness());
+			}
+		} else if (getPose() != null && !getPose().isEmpty()) {
+			output.addRelationship(Primitive.POSE, network.createVertex(getPose()));
+		}
+		if (meta != null) {
+			Vertex command = meta.getRelationship(Primitive.COMMAND);
+			if (command != null && command.instanceOf(Primitive.FORMULA)) {
+				log("Evaluating command", Level.FINE, command);
+				Vertex data = getBot().mind().getThought(Language.class).evaluateFormula(command, variables, network);
+				if (data != null) {
+					output.addRelationship(Primitive.COMMAND, data);
+				}
+			} else if (command != null) {
+				output.addRelationship(Primitive.COMMAND, command);
+			} else if (getCommand() != null && !getCommand().isEmpty()) {
+				output.addRelationship(Primitive.COMMAND, network.createVertex(getCommand()));
 			}
 		}
 	}
@@ -228,5 +269,30 @@ public class BasicAvatar implements Avatar {
 		return getClass().getSimpleName() + "()";
 	}
 
+	/**
+	 * Self API to set avatar action.
+	 */
+	public Vertex setAction(Vertex source, Vertex action) {
+		setAction(action.printString());
+		return source;
+	}
+
+	/**
+	 * Self API to set avatar pose.
+	 */
+	public Vertex setPose(Vertex source, Vertex pose) {
+		setPose(pose.printString());
+		return source;
+	}
+
+	/**
+	 * Self API to set avatar command.
+	 */
+	public Vertex setCommand(Vertex source, Vertex command) {
+		Network network = source.getNetwork();
+		Http http = network.getBot().awareness().getSense(Http.class);
+		setCommand(http.toJSON(source, command).printString());
+		return source;
+	}
 }
 

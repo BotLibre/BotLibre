@@ -33,7 +33,7 @@
 			<fileset dir="${build}">
 				<include name="org/botlibre/sdk/*"/>
 				<include name="org/botlibre/sdk/config/*"/>
-				<include name="de/**/*"/>
+				<include name="org/botlibre/sdk/util/*"/>
 			</fileset>
 		</jar>
 	</target>

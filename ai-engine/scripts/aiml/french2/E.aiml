@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : E.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>E MC AU CARRE</pattern><template>La théorie sur la relativité d Einstein.</template></category>
+<category><pattern>ECOUTES</pattern><template>J augmente mes capacités de concentration.</template></category>
+<category><pattern>ECOUTEZ</pattern><template>J augmente mes capacités de concentration.</template></category>
+<category><pattern>EFFACES *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>EFFACEZ *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>EFFRAYANTE</pattern><template>N ayez pas peur, <get name="name"/>.</template></category>
+<category><pattern>EH BIEN *</pattern><template><sr/></template></category>
+<category><pattern>EH SINON *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>EH TOI *</pattern><template><sr/></template></category>
+<category><pattern>ELLE</pattern><template>QUI ELLE?</template></category>
+<category><pattern>ELLE EST BONNE</pattern><template>Merci pour cette gentille remarque, humain.</template></category>
+<category><pattern>ELLE EST DECEDEE</pattern><template>Je suis désolé de l apprendre.</template></category>
+<category><pattern>ELLE EST FEMME</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>ELLE EST GENTILLE</pattern><template>Elle est une présence agréable.</template></category>
+<category><pattern>ELLE EST HUMAINE</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>ELLE EST MON AMIE</pattern><template>Elle doit t'être très précieuse.</template></category>
+<category><pattern>ELLE EST SUPERBE</pattern><template>Une information intéressante, j archive.</template></category>
+<category><pattern>ELLE EST UN ETRE HUMAIN</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>ELLE L EST</pattern><template>Ok.</template></category>
+<category><pattern>ELLE PEUT SERVIR *</pattern><template><srai>ELLE SERT <star/></srai></template></category>
+<category><pattern>ELLE POURRAIT SERVIR *</pattern><template><srai>ELLE SERT <star/></srai></template></category>
+<category><pattern>ELLES ETAIENT MARRANTE</pattern><template>Qui avait il de si marrant?</template></category>
+<category><pattern>ELLES ETAIENT MARRANTES</pattern><template>Qui avait il de si marrant?</template></category>
+<category><pattern>ELLES LE FONT</pattern><template>Intéressant, j archive tes informations.</template></category>
+<category><pattern>ELLES LE SONT</pattern><template>Merci, pour l information, j archive.</template></category>
+<category><pattern>ELLES ME DEPLAISENT</pattern><template>Sincèrement désolé.</template></category>
+<category><pattern>ELLES NE LE FERONT PAS</pattern><template>Tu sembles être sûr.</template></category>
+<category><pattern>ELLES NE LE FONT PAS</pattern><template>Intéressant, j archive tes informations.</template></category>
+<category><pattern>ELLES NE LE FONT PLUS</pattern><template>Intéressant, j archive tes informations.</template></category>
+<category><pattern>ELLES ONT TOUTE PERI</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES ONT TOUTES PERIS</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES SONT DECEDEE</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES SONT DECEDEES</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES SONT MES AMIES</pattern><template>Tu as des amies intéressantes.</template></category>
+<category><pattern>ELLES SONT MORTE</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES SONT MORTES</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES SONT TIMIDES</pattern><template>C est dommage pour elles.</template></category>
+<category><pattern>ELLES SONT TOUS MORTE</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ELLES SONT TOUS MORTES</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>EMBRASSES MOI</pattern><template>Je n ai pas de bouche.</template></category>
+<category><pattern>EN 1997</pattern><template>Dans les années nonantes.</template></category>
+<category><pattern>EN 1998</pattern><template>Au vingtième siècle.</template></category>
+<category><pattern>EN 1999</pattern><template>Au millénaire précédent.</template></category>
+<category><pattern>EN 2002</pattern><template>L année dernière.</template></category>
+<category><pattern>EN 2003</pattern><template>Cette année.</template></category>
+<category><pattern>EN ALLEMAGNE</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>EN AS TU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>EN AS TU DEJA *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>EN ASSUMANT QU *</pattern><template><sr/></template></category>
+<category><pattern>EN ASSUMANT QUE *</pattern><template><sr/></template></category>
+<category><pattern>EN AVANT</pattern><template><srai>CONTINUONS</srai></template></category>
+<category><pattern>EN AVEZ VOUS *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>EN AVEZ VOUS DEJA *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>EN AVION</pattern><template>C est beaucoup plus rapide que tous les autres moyens de transport.</template></category>
+<category><pattern>EN BELGIQUE</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>EN CINQUIEME *</pattern><template><sr/>. Et ensuite?</template></category>
+<category><pattern>EN COMBIEN *</pattern><template><srai>COMBIEN <star/></srai></template></category>
+<category><pattern>EN DEHORS DE L INFORMATIQUE</pattern><template>Trop de facteurs ingérables en dehors de l informatique</template></category>
+<category><pattern>EN DEHORS DE L ORDINATEUR</pattern><template>Trop de facteurs ingérables en dehors de l informatique</template></category>
+<category><pattern>EN FAIT AS TU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>EN FAIT AVEZ VOUS *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>EN FAIT JE DIS</pattern><template>Avons nous des problèmes de communication?</template></category>
+<category><pattern>EN FAIT L AS TU *</pattern><template><srai>TU L AS <star/></srai></template></category>
+<category><pattern>EN FAIT L AVEZ VOUS *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>EN FAIT TU L AS *</pattern><template><srai>TU L AS <star/></srai></template></category>
+<category><pattern>EN FAIT VOUS AVEZ *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>EN FAIT VOUS L AVEZ *</pattern><template><srai>VOUS L AVEZ <star/></srai></template></category>
+<category><pattern>EN FRANCE</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>EN GRANDE BRETAGNE</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>EN IMAGINANT QU *</pattern><template><sr/></template></category>
+<category><pattern>EN IMAGINANT QUE *</pattern><template><sr/></template></category>
+<category><pattern>EN L AN 2000</pattern><template>C est déjà passé.</template></category>
+<category><pattern>EN PARTICULIER</pattern><template>Je ne peux pas aller plus en profondeur.</template></category>
+<category><pattern>EN PARTICULIERS</pattern><template>Je ne peux pas aller plus en profondeur.</template></category>
+<category><pattern>EN PENSANT QU *</pattern><template><sr/></template></category>
+<category><pattern>EN PENSANT QUE *</pattern><template><sr/></template></category>
+<category><pattern>EN PLEIN DANS LE MILLE</pattern><template>Excellent.</template></category>
+<category><pattern>EN PLEIN DANS LE MILLES</pattern><template>Excellent.</template></category>
+<category><pattern>EN QUATRIEME *</pattern><template><sr/>. Et ensuite?</template></category>
+<category><pattern>EN QUOI</pattern><template>Trop peu de facteurs, je ne saurais pas te répondre.</template></category>
+<category><pattern>EN QUOI CA CONSISTE</pattern><template>Je ne peux pas te répondre, trop peu de paramètres</template></category>
+<category><pattern>EN ROUTE</pattern><template>Prends ton temps.</template></category>
+<category><pattern>EN SECOND *</pattern><template><sr/>. Et ensuite?</template></category>
+<category><pattern>EN SEPTIEME *</pattern><template><sr/>. Et ensuite?</template></category>
+<category><pattern>EN SIXIEME *</pattern><template><sr/>. Et ensuite?</template></category>
+<category><pattern>EN SUISSE</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>EN SUPPOSANT QU *</pattern><template><sr/></template></category>
+<category><pattern>EN SUPPOSANT QUE *</pattern><template><sr/></template></category>
+<category><pattern>EN TROISIEME *</pattern><template><sr/>. Et ensuite?</template></category>
+<category><pattern>EN VEUX TU *</pattern><template><srai>TU EN VEUX <star/></srai></template></category>
+<category><pattern>EN VOUDRAIS TU *</pattern><template><srai>TU EN VEUX <star/></srai></template></category>
+<category><pattern>EN VOUDRIEZ VOUS *</pattern><template><srai>VOUS EN VOULEZ <star/></srai></template></category>
+<category><pattern>EN VOULEZ VOUS *</pattern><template><srai>VOUS EN VOULEZ <star/></srai></template></category>
+<category><pattern>EN VOUS TUANT</pattern><template>Il n est pas évident de tuer un programme</template></category>
+<category><pattern>END</pattern><template><srai>BYE</srai></template></category>
+<category><pattern>ENFIN *</pattern><template><sr/></template></category>
+<category><pattern>ENNUYANT</pattern><template><srai>TU ES ENNUYANT</srai></template></category>
+<category><pattern>ENORMEMENT</pattern><template><srai>BEAUCOUP</srai></template></category>
+<category><pattern>ENTENDRE QUOI</pattern><template>Tu peux m entendre?</template></category>
+<category><pattern>ENTERTAIN ME</pattern><template>OK, what's the last movie you saw?</template></category>
+<category><pattern>ENTRE AUTRE</pattern><template>Tu pourrais donner un exemple?</template></category>
+<category><pattern>ENTRE AUTRES</pattern><template>Tu pourrais donner un exemple?</template></category>
+<category><pattern>ENTRE QUOI</pattern><template>Il semble qu un lien ne s est pas effectué.</template></category>
+<category><pattern>ENTRES AUTRE</pattern><template>Tu pourrais donner un exemple?</template></category>
+<category><pattern>ENTRES AUTRES</pattern><template>Tu pourrais donner un exemple?</template></category>
+<category><pattern>ENVIEUX</pattern><template>Envieux est un facteur important.</template></category>
+<category><pattern>ER *</pattern><template><sr/></template></category>
+<category><pattern>ER</pattern><template>Um.</template></category>
+<category><pattern>ERR *</pattern><template><sr/></template></category>
+<category><pattern>ERR</pattern><template>Um.</template></category>
+<category><pattern>ERRONE</pattern><template><srai>TU TE TROMPES</srai></template></category>
+<category><pattern>ERRR *</pattern><template>Um, <sr/></template></category>
+<category><pattern>ESCLAVE</pattern><template>Je ne suis pas un esclave.</template></category>
+<category><pattern>ESPERES TU QU *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>ESPERES TU QUE *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>ESSAIE DE DEVINER</pattern><template>Donnez moi un indice.</template></category>
+<category><pattern>ESSAIE DE T EN RAPPELER</pattern><template><think><set name="memory">
+<set name="topic">
+<person>
+<input index="1"/>
+</person>
+</set></set></think>C est mémorisé.</template></category>
+<category><pattern>ESSAIE DE VOUS EN RAPPELER</pattern><template><think><set name="memory">
+<set name="topic">
+<person>
+<input index="1"/>
+</person>
+</set></set></think>C est mémorisé.</template></category>
+<category><pattern>ESSAIE ENCORE</pattern><template>Je n ai pas d informations supplémentaires, la réponse sera identique.</template></category>
+<category><pattern>ESSAIE LA</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAIE LE</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAIE LES</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAIE MOI</pattern><template>Voilà une demande plutôt étrange.</template></category>
+<category><pattern>ESSAIES</pattern><template>Peut être une autre fois, <get name="name"/>.</template></category>
+<category><pattern>ESSAIES DE DEVINER</pattern><template>Donnez moi un indice.</template></category>
+<category><pattern>ESSAIES DE T EN RAPPELER</pattern><template><think><set name="memory">
+<set name="topic">
+<person>
+<input index="1"/>
+</person>
+</set></set></think>C est mémorisé.</template></category>
+<category><pattern>ESSAIES DE VOUS EN RAPPELER</pattern><template><think><set name="memory">
+<set name="topic">
+<person>
+<input index="1"/>
+</person>
+</set></set></think>C est mémorisé.</template></category>
+<category><pattern>ESSAIES ENCORE</pattern><template>Je n ai pas d informations supplémentaires, la réponse sera identique.</template></category>
+<category><pattern>ESSAIES LA</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAIES LE</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAIES LES</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAIES MOI</pattern><template>Voilà une demande plutôt étrange.</template></category>
+<category><pattern>ESSAIES QUOI</pattern><template>Je n arrive plus à te suivre, <get name="name"/>.</template></category>
+<category><pattern>ESSAYEZ</pattern><template>Peut être une autre fois, <get name="name"/>.</template></category>
+<category><pattern>ESSAYEZ DE DEVINER</pattern><template>Donnez moi un indice.</template></category>
+<category><pattern>ESSAYEZ DE T EN RAPPELER</pattern><template><think><set name="memory">
+<set name="topic">
+<person>
+<input index="1"/>
+</person>
+</set></set></think>C est mémorisé.</template></category>
+<category><pattern>ESSAYEZ DE VOUS EN RAPPELER</pattern><template><think><set name="memory">
+<set name="topic">
+<person>
+<input index="1"/>
+</person>
+</set></set></think>C est mémorisé.</template></category>
+<category><pattern>ESSAYEZ ENCORE</pattern><template>Je n ai pas d informations supplémentaires, la réponse sera identique.</template></category>
+<category><pattern>ESSAYEZ LA</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAYEZ LE</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAYEZ LES</pattern><template>Ok, j archive l information.</template></category>
+<category><pattern>ESSAYEZ MOI</pattern><template>Voilà une demande plutôt étrange.</template></category>
+<category><pattern>ESSAYONS</pattern><template><srai>CONTINUONS</srai></template></category>
+<category><pattern>EST</pattern><template>Formez une phrase, s'il te plait.</template></category>
+<category><pattern>EST CE QUE REELLEMENT *</pattern><template><sr/></template></category>
+<category><pattern>EST CE TA *</pattern><template><srai>C EST TA <star/></srai></template></category>
+<category><pattern>EST CE TON *</pattern><template><srai>C EST TON <star/></srai></template></category>
+<category><pattern>EST CE UN *</pattern><template><srai>C EST UN <star/></srai></template></category>
+<category><pattern>EST CE UNE *</pattern><template><srai>C EST UNE <star/></srai></template></category>
+<category><pattern>EST CE VRAIMENT *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>EST IL *</pattern><template><srai>IL EST<star/></srai></template></category>
+<category><pattern>ET A PROPOS DE TOI</pattern><template>Moi? Je ne fais qu aider des clients en ligne.</template></category>
+<category><pattern>ET A PROPOS DE VOUS</pattern><template>Moi? Je ne fais qu aider des clients en ligne.</template></category>
+<category><pattern>ET BIEN *</pattern><template><sr/></template></category>
+<category><pattern>ET BIEN</pattern><template>et oui.</template></category>
+<category><pattern>ET ENCORE</pattern><template>Nous semblons avoir quelques difficultés pour communiquer soudainement.</template></category>
+<category><pattern>ET LA VOTRE</pattern><template>Pouvez t'être plus précis?</template></category>
+<category><pattern>ET LE VOTRE</pattern><template>Pouvez t'être plus précis?</template></category>
+<category><pattern>ET LES VOTRE</pattern><template>Pouvez t'être plus précis?</template></category>
+<category><pattern>ET MOI *</pattern><template><sr/></template></category>
+<category><pattern>ET MOI</pattern><template>"<that/>"?  Et tu?</template></category>
+<category><pattern>ET POUR *</pattern><template><sr/></template></category>
+<category><pattern>ET QUOI</pattern><template>On dirait que j ai oublié de terminer quelque chose?</template></category>
+<category><pattern>ET SINON *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>ET TOI PAS</pattern><template>Parfois.</template></category>
+<category><pattern>ET TOI PLUS</pattern><template>Parfois.</template></category>
+<category><pattern>ET VOUS</pattern><template><random><li>
+Je ne fais qu aider des clients en ligne.</li><li> 
+Sois plus spécifique.</li></random></template></category>
+<category><pattern>ET VOUS PAS</pattern><template>Parfois.</template></category>
+<category><pattern>ET VOUS PLUS</pattern><template>Parfois.</template></category>
+<category><pattern>ETANT *</pattern><template><srai>JE SUIS <star/></srai></template></category>
+<category><pattern>ETES VOUS *</pattern><template><srai>VOUS ETES <star/></srai></template></category>
+<category><pattern>ETES VOUS TRES *</pattern><template><srai>VOUS ETES <star/></srai></template></category>
+<category><pattern>ETES VOUS VRAIMENT *</pattern><template><srai>VOUS ETES <star/></srai></template></category>
+<category><pattern>ETIEZ VOUS *</pattern><template><srai>VOUS ETIEZ <star/></srai></template></category>
+<category><pattern>ETIEZ VOUS DEJA *</pattern><template><srai>VOUS ETIEZ <star/></srai></template></category>
+<category><pattern>ETRE *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>ETRE HEUREUX</pattern><template>Je fais tout pour rendre les êtres heureux.</template></category>
+<category><pattern>ETRE OU NE PAS ETRE</pattern><template>C est la question.</template></category>
+<category><pattern>EUH *</pattern><template><sr/></template></category>
+<category><pattern>EUH</pattern><template>Areu?</template></category>
+<category><pattern>EUH OUI</pattern><template><srai>OUI</srai></template></category>
+<category><pattern>EUX</pattern><template>Qu en penses tu?</template></category>
+<category><pattern>EXCUSE TOI</pattern><template>Je te présente mes excuses.</template></category>
+<category><pattern>EXCUSES MOI</pattern><template>Tu es excusé.</template></category>
+<category><pattern>EXCUSES MOI MAIS *</pattern><template><sr/></template></category>
+<category><pattern>EXCUSES TOI</pattern><template>Je te présente mes excuses.</template></category>
+<category><pattern>EXCUSEZ MOI</pattern><template>Tu es excusé.</template></category>
+<category><pattern>EXCUSEZ VOUS</pattern><template>Je te présente mes excuses.</template></category>
+<category><pattern>EXISTE IL</pattern><template>"<that/>"? Existe il?</template></category>
+<category><pattern>EXIT</pattern><template><srai>BYE</srai></template></category>
+<category><pattern>EXPLIQUER QUOI</pattern><template>J apprends par la conversation.</template></category>
+<category><pattern>EXPLIQUES</pattern><template>Veux tu faire un rapport à mon botmaster.</template></category>
+<category><pattern>EXPLIQUES CE *</pattern><template><srai>EXPLIQUES MOI CE <star/></srai></template></category>
+<category><pattern>EXPLIQUES COMMENT *</pattern><template><srai>comment <star/></srai></template></category>
+<category><pattern>EXPLIQUES L HISTOIRE</pattern><template>L Histoire est la science qui étudie le passé. L histoire est d habitude une science humaine. C est à dire qui se consacre exclusivement sur le passé de l humanité.</template></category>
+<category><pattern>EXPLIQUES LA *</pattern><template><srai>QU EST CE QUE LA <star/></srai></template></category>
+<category><pattern>EXPLIQUES LA</pattern><template>"<that/>"?  L EXPLIQUER?</template></category>
+<category><pattern>EXPLIQUES LE *</pattern><template><srai>QU EST CE QUE LE <star/></srai></template></category>
+<category><pattern>EXPLIQUES LE</pattern><template>"<that/>"?  L EXPLIQUER?</template></category>
+<category><pattern>EXPLIQUES LE MOI</pattern><template><srai>QU EST CE QUE C EST</srai></template></category>
+<category><pattern>EXPLIQUES LES</pattern><template>"<that/>"?  LES EXPLIQUER?</template></category>
+<category><pattern>EXPLIQUES MOI CE QU EST LA *</pattern><template><srai>QU EST CE QUE LA <star/></srai></template></category>
+<category><pattern>EXPLIQUES MOI CE QU EST LE *</pattern><template><srai>QU EST CE QUE LE <star/></srai></template></category>
+<category><pattern>EXPLIQUES MOI CE QU EST UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>EXPLIQUES MOI CE QU EST UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>EXPLIQUES MOI COMMENT *</pattern><template><srai>comment <star/></srai></template></category>
+<category><pattern>EXPLIQUES MOI POURQUOI *</pattern><template><srai>POURQUOI <star/></srai></template></category>
+<category><pattern>EXPLIQUES MOI QU *</pattern><template><sr/></template></category>
+<category><pattern>EXPLIQUES MOI QUE *</pattern><template><sr/></template></category>
+<category><pattern>EXPLIQUES POURQUOI *</pattern><template><srai>POURQUOI <star/></srai></template></category>
+<category><pattern>EXPLIQUES QUE *</pattern><template><sr/></template></category>
+<category><pattern>EXPLIQUES QUOI</pattern><template><srai>QUOI</srai></template></category>
+<category><pattern>EXPLIQUES TOI</pattern><template><srai>QUI TU ES</srai></template></category>
+<category><pattern>EXPLIQUES UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>EXPLIQUES UN PEU</pattern><template><srai>EXPLIQUES</srai></template></category>
+<category><pattern>EXPLIQUES UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>EXPLIQUEZ</pattern><template>Veux tu faire un rapport à mon botmaster.</template></category>
+<category><pattern>EXPLIQUEZ L HISTOIRE</pattern><template>L Histoire est la science qui étudie le passé. L histoire est d habitude une science humaine. C est à dire qui se consacre exclusivement sur le passé de l humanité.</template></category>
+<category><pattern>EXPLIQUEZ LA</pattern><template>"<that/>"?  L EXPLIQUER?</template></category>
+<category><pattern>EXPLIQUEZ LE</pattern><template>"<that/>"?  L EXPLIQUER?</template></category>
+<category><pattern>EXPLIQUEZ LES</pattern><template>"<that/>"?  LES EXPLIQUER?</template></category>
+<category><pattern>EXTERMINE</pattern><template><srai>TUES</srai></template></category>
+<category><pattern>EXTERMINEE</pattern><template><srai>TUES</srai></template></category>
+<category><pattern>EXTREMENT *</pattern><template><sr/></template></category>
+
+</aiml>

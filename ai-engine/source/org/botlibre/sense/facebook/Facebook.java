@@ -42,6 +42,8 @@ import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import facebook4j.Account;
 import facebook4j.Comment;
@@ -56,6 +58,9 @@ import facebook4j.ResponseList;
 import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * Enables receiving a sending messages through Facebook.
@@ -89,9 +94,12 @@ public class Facebook extends BasicSense {
 	protected boolean processAllNewsFeed = false;
 	protected boolean likeAllPosts = false;
 	protected boolean replyToMessages = false;
+	protected boolean facebookMessenger = false;
+	protected String facebookMessengerAccessToken = "";
 	protected boolean autoPost = false;
 	protected int autoPostHours = 24;
 	protected String page = "";
+	protected String pageId = "";
 	protected List<String> pages = new ArrayList<String>();
 	protected String profileName = "";
 	protected List<String> likeKeywords = new ArrayList<String>();
@@ -181,6 +189,24 @@ public class Facebook extends BasicSense {
 		return page;
 	}
 
+	public String getPageId() {
+		initProperties();
+		if ((pageId == null || pageId.isEmpty()) && isPage()) {
+			try {
+				connect();
+				this.pageId = getConnection().getPage().getId();
+			} catch (Exception exception) {
+				log(exception);
+			}
+		}
+		return pageId;
+	}
+
+	public void setPageId(String pageId) {
+		initProperties();
+		this.pageId = pageId;
+	}
+
 	public String getProfileName() {
 		return profileName;
 	}
@@ -192,6 +218,15 @@ public class Facebook extends BasicSense {
 	public void setPage(String page) {
 		initProperties();
 		this.page = page;
+	}
+
+	public String getFacebookMessengerAccessToken() {
+		initProperties();
+		return facebookMessengerAccessToken;
+	}
+
+	public void setFacebookMessengerAccessToken(String facebookMessengerAccessToken) {
+		this.facebookMessengerAccessToken = facebookMessengerAccessToken;
 	}
 
 	public String getWelcomeMessage() {
@@ -334,9 +369,9 @@ public class Facebook extends BasicSense {
 		}
 		this.connection.setOAuthAppId(key, secret);
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-			this.connection.setOAuthPermissions("user_posts, manage_pages, publish_pages, publish_actions, read_page_mailboxes");
+			this.connection.setOAuthPermissions("user_posts,manage_pages,publish_pages,publish_actions,read_page_mailboxes");
 		} else {
-			this.connection.setOAuthPermissions("user_posts, manage_pages, publish_pages, publish_actions, read_page_mailboxes");
+			this.connection.setOAuthPermissions("user_posts,manage_pages,publish_pages,publish_actions,read_page_mailboxes");
 		}
 		//this.connection.setOAuthPermissions("read_stream, manage_pages, publish_pages, publish_actions, read_mailbox, read_page_mailboxes");
 	    return this.connection.getOAuthAuthorizationURL(callbackURL);
@@ -359,7 +394,7 @@ public class Facebook extends BasicSense {
 		try {
 			this.page = "";
 			ResponseList<Account> accounts = this.connection.getAccounts();
-			this.pages = new ArrayList<>();
+			this.pages = new ArrayList<String>();
 			if (accounts != null) {
 				for (Account account : accounts) {
 					this.page = account.getName();
@@ -454,6 +489,10 @@ public class Facebook extends BasicSense {
 			if (property != null) {
 				this.page = property;
 			}
+			property = this.bot.memory().getProperty("Facebook.pageId");
+			if (property != null) {
+				this.pageId = property;
+			}
 			property = this.bot.memory().getProperty("Facebook.autoFriend");
 			if (property != null) {
 				this.autoFriend = Boolean.valueOf(property);
@@ -493,6 +532,14 @@ public class Facebook extends BasicSense {
 			property = this.bot.memory().getProperty("Facebook.replyToMessages");
 			if (property != null) {
 				this.replyToMessages = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.facebookMessenger");
+			if (property != null) {
+				this.facebookMessenger = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.facebookMessengerAccessToken");
+			if (property != null) {
+				this.facebookMessengerAccessToken = property;
 			}
 			property = this.bot.memory().getProperty("Facebook.autoPost");
 			if (property != null) {
@@ -717,6 +764,7 @@ public class Facebook extends BasicSense {
 		}
 
 		memory.saveProperty("Facebook.page", this.page, false);
+		memory.saveProperty("Facebook.pageId", this.pageId, false);
 		memory.saveProperty("Facebook.profileName", this.profileName, false);
 		memory.saveProperty("Facebook.welcomeMessage", this.welcomeMessage, false);
 		memory.saveProperty("Facebook.autoFriend", String.valueOf(this.autoFriend), false);
@@ -730,6 +778,8 @@ public class Facebook extends BasicSense {
 		memory.saveProperty("Facebook.likeAllPosts", String.valueOf(this.likeAllPosts), false);
 		memory.saveProperty("Facebook.autoFriend", String.valueOf(this.autoFriend), false);
 		memory.saveProperty("Facebook.replyToMessages", String.valueOf(this.replyToMessages), false);
+		memory.saveProperty("Facebook.facebookMessenger", String.valueOf(this.facebookMessenger), false);
+		memory.saveProperty("Facebook.facebookMessengerAccessToken", String.valueOf(this.facebookMessengerAccessToken), false);
 		memory.saveProperty("Facebook.autoPost", String.valueOf(this.autoPost), false);
 		memory.saveProperty("Facebook.autoPostHours", String.valueOf(this.autoPostHours), false);
 
@@ -800,41 +850,72 @@ public class Facebook extends BasicSense {
 		config.setOAuthAccessToken(getToken());
 		facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
         setConnection(facebook);
+	}
+	
+	public void connectAccount() throws FacebookException {
+		connect();
+		facebook4j.Facebook facebook = getConnection();
 		User user = facebook.getMe();
 		if (this.userName == null || !this.userName.equals(user.getId())) {
 			this.userName = user.getId();
 			this.profileName = user.getName();
-			saveProperties(null);
 		}
+		this.pageId = "";
 		if (this.page != null && !this.page.isEmpty()) {
 			if (facebook.getPage() == null || !facebook.getPage().getName().equals(this.page)) {
 				// Reset page access token.
 				boolean found = false;
 				ResponseList<Account> accounts = this.connection.getAccounts();
 				if (accounts != null) {
-					Network memory = getBot().memory().newMemory();
 					for (Account account : accounts) {
 						if (this.page.equals(account.getName())) {
 							found = true;
 							this.token = account.getAccessToken();
 							this.userName = account.getId();
 							this.profileName = account.getName();
-							saveProperties(null);
 
-							config = new ConfigurationBuilder();
+							String key = getOauthKey();
+							String secret = getOauthSecret();
+							if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+								key = this.appOauthKey;
+							}
+							if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
+								secret = this.appOauthSecret;
+							}
+							ConfigurationBuilder config = new ConfigurationBuilder();
 							config.setOAuthAppId(key);
 							config.setOAuthAppSecret(secret);
 							config.setOAuthAccessToken(getToken());
 							facebook = new FacebookFactory(config.build()).getInstance();
 					        setConnection(facebook);
+					        this.pageId = facebook.getPage().getId();
+							log("Connected to Facebook page", Level.INFO, facebook.getPage().getId(), facebook.getPage().getName());
 						}
 					}
-					memory.save();
 				}
 				if (!found) {
 					throw new BotException("Page missing");
 				}
-				
+			}
+		}
+		saveProperties(null);
+	}
+	
+	public void subscribeToMessenger() throws FacebookException {
+		if (getFacebookMessenger()) {
+			if (this.page != null && !this.page.isEmpty() && (getConnection().getPage() != null)) {
+				try {
+					String url = "https://graph.facebook.com/v2.6/" + getConnection().getPage().getId() + "/subscribed_apps";
+					log("Subscribing to Facebook Messenger", Level.INFO);
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("access_token", getFacebookMessengerAccessToken());
+					String result = Utils.httpPOST(url, params);
+					log("Facebook Messenger subscription success", Level.INFO, result);
+				} catch (Exception exception) {
+					log(exception);
+				}
+			} else {
+				log("Facebook Messenger only allowed for page messaging", Level.WARNING);
 			}
 		}
 	}
@@ -843,13 +924,10 @@ public class Facebook extends BasicSense {
 	 * Check profile for messages.
 	 */
 	public void checkProfile() {
-		log("Checking profile.", Level.FINE);
+		log("Checking profile.", Level.INFO);
 		this.processedPosts = new HashSet<String>();
 		this.wallPosts = new HashSet<String>();
 		try {
-			if (getConnection() == null) {
-				connect();
-			}
 			//checkFriends();
 			checkWall();
 			//checkNewsFeed();
@@ -858,7 +936,7 @@ public class Facebook extends BasicSense {
 		} catch (Exception exception) {
 			log(exception);
 		}
-		log("Done checking profile.", Level.FINE);
+		log("Done checking profile.", Level.INFO);
 	}
 
 	/**
@@ -1257,7 +1335,7 @@ public class Facebook extends BasicSense {
 				TextStream stream = new TextStream(rss);
 				String prefix = stream.upToAll("http").trim();
 				if (prefix.isEmpty()) {
-					prefix = "RSS:";
+					prefix = "";
 				}
 				prefix = prefix + " ";
 				String url = stream.nextWord();
@@ -1499,15 +1577,33 @@ public class Facebook extends BasicSense {
 				connect();
 			}
 			if (reply != null) {
-				getConnection().commentPost(reply, text);
+				getConnection().commentPost(reply, format(text));
 			} else {
-				PostUpdate update = new PostUpdate(text);
+				PostUpdate update = new PostUpdate(format(text));
 				getConnection().postFeed(update);
 			}
 		} catch (Exception exception) {
 			this.errors++;
 			log(exception.getMessage(), Level.WARNING, text);
 		}
+	}
+	
+	/**
+	 * Prepare and format the text for Facebook.
+	 */
+	public String format(String text) {
+		text = text.replace("\n", "");
+		text = text.replace("\r", "");
+		if ((text.indexOf('<') == -1) || (text.indexOf('>') == -1)) {
+			return text;
+		}
+		text = text.replace("<br/>", "\\n");
+		text = text.replace("<br>", "\\n");
+		text = text.replace("</br>", "");
+		text = text.replace("<li>", "\\n");
+		text = text.replace("</li>", "");
+		text = Utils.stripTags(text);
+		return text;
 	}
 
 	/**
@@ -1517,10 +1613,295 @@ public class Facebook extends BasicSense {
 		log("Sending message:", Level.INFO, text, replyUser);
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("message", text);
+			params.put("message", format(text));
 			getConnection().callPostAPI("/" + id + "/messages", params);
 		} catch (Exception exception) {
 			this.errors++;
+			log(exception);
+		}
+	}
+
+	/**
+	 * Send a message to the user.
+	 */
+	public void sendFacebookMessengerMessage(String text, String replyUser, String id) {
+		log("Sending messenger message:", Level.INFO, text, replyUser);
+		try {
+			if (isPage() && (!getPageId().isEmpty())) {
+				try {
+					String url = "https://graph.facebook.com/v2.6/" + getPageId() + "/messages?access_token=" + getFacebookMessengerAccessToken();
+					String strippedText = format(text);
+					String postText = null;
+					// Max size limit
+					if (strippedText.length() >= 320) {
+						TextStream stream = new TextStream(strippedText);
+						while (!stream.atEnd()) {
+							String message = stream.nextParagraph(320);
+							String json = null;
+							if (stream.atEnd()) {
+								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message) + "\"}}";
+							} else {
+								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message) + "\"}}";
+								
+							}
+							log("POST", Level.INFO, json);
+							Utils.httpPOST(url, "application/json", json);
+						}
+					} else {
+						postText = strippedText;
+					}
+					Element root = null;
+					boolean linkFound = false;
+					// Check for HTML content - first check for link to convert, otherwise images (only one of the other).
+					// This is complicated as link use button which require the text, and images can't have text.
+					if ((text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+						try {
+							root = getBot().awareness().getSense(Http.class).parseHTML(text);
+							// Find image for template, fb only allows one image.
+							NodeList imageNodes = root.getElementsByTagName("img");
+							String image = null;
+							String imageTitle = "...";
+							if (imageNodes.getLength() > 0) {
+								String src = ((Element)imageNodes.item(0)).getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									image = src;
+									String title = ((Element)imageNodes.item(0)).getAttribute("title");
+									if (title != null && !title.isEmpty()) {
+										imageTitle = title;
+									}
+								}
+							}
+							NodeList nodes = root.getElementsByTagName("a");
+							List<String> extraButtons = new ArrayList<String>();
+							if (nodes.getLength() > 0) {
+								String buttonJSON = "";
+								String postText2 = postText;
+								String href = "";
+								int count = 0;
+								for (int index = 0; index  < nodes.getLength(); index++) {
+									Element node = (Element)nodes.item(index);
+									String button = null;
+									NodeList buttonNodes = node.getElementsByTagName("button");
+									if (buttonNodes.getLength() > 0) {
+										String buttonText = buttonNodes.item(0).getTextContent().trim();
+										if (buttonText != null && !buttonText.isEmpty()) {
+											button = buttonText;
+										}
+									}
+									href = node.getAttribute("href");
+									String link = node.getTextContent().trim();
+									if (link.isEmpty()) {
+										link = "Link";
+									}
+									if (button != null) {
+										link = button;
+									}
+									if (link.length() > 80) {
+										link = link.substring(0, 80);
+									}
+									if (postText2 == null) {
+										postText2 = link;
+									}
+									if (href != null && !href.isEmpty()) {
+										if (count < 3) {
+											count++;
+											if (!buttonJSON.isEmpty()) {
+												buttonJSON = buttonJSON + ", ";
+											}
+											if (href.startsWith("chat:")) {
+												String chat = href.substring("chat:".length(), href.length()).trim();
+												buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + chat + "\", title: \"" + Utils.escapeQuotesJS(link) + "\"}";
+											} else {
+												buttonJSON = buttonJSON + "{ type: \"web_url\", url: \"" + href + "\", title: \"" + Utils.escapeQuotesJS(link) + "\"}";
+											}
+											linkFound = true;
+										} else {
+											extraButtons.add(button);
+										}
+									}
+								}
+								if (linkFound) {
+									String json = null;
+									if (image == null) {
+										json = "{recipient:{id:\""
+												+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
+												+ Utils.escapeQuotesJS(postText2) + "\", buttons: [ " + buttonJSON + " ]}}}}";
+									} else {
+										// Generic template does not have text.
+										json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText2) + "\"}}";
+										log("POST", Level.INFO, json);
+										Utils.httpPOST(url, "application/json", json);
+										postText = null;
+										json = "{recipient:{id:\""
+												+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"generic\", elements:[{ image_url: \""
+												+ image + "\", title: \"" + imageTitle + "\", item_url: \"" + href + "\", buttons: [ " + buttonJSON + " ]}]}}}}";
+									}
+									log("POST", Level.INFO, json);
+									Utils.httpPOST(url, "application/json", json);
+									postText = null;
+								}
+							} else {
+								nodes = root.getElementsByTagName("button");
+								if (nodes.getLength() > 0) {
+									String buttonJSON = "";
+									String postText2 = postText;
+									int count = 0;
+									for (int index = 0; index  < nodes.getLength(); index++) {
+										Element node = (Element)nodes.item(index);
+										String button = node.getTextContent().trim();
+										if (button != null && !button.isEmpty()) {
+											if (postText2 == null) {
+												postText2 = button;
+											}
+											if (count < 3) {
+												if (!buttonJSON.isEmpty()) {
+													buttonJSON = buttonJSON + ", ";
+												}
+												button = Utils.escapeQuotesJS(button);
+												buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + button + "\", title: \"" + button + "\"}";
+												linkFound = true;
+											} else {
+												extraButtons.add(button);
+											}
+											count++;
+										}
+									}
+									if (linkFound) {
+										String json = null;
+										if (image == null) {
+											json = "{recipient:{id:\""
+													+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
+													+ Utils.escapeQuotesJS(postText2) + "\", buttons: [ " + buttonJSON + " ]}}}}";
+										} else {
+											// Generic template does not have text.
+											json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
+											log("POST", Level.INFO, json);
+											Utils.httpPOST(url, "application/json", json);
+											postText = null;
+											json = "{recipient:{id:\""
+													+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"generic\", elements:[{ image_url: \""
+													+ image + "\", title: \"" + imageTitle+ "\", buttons: [ " + buttonJSON + " ]}]}}}}";
+										}
+										log("POST", Level.INFO, json);
+										Utils.httpPOST(url, "application/json", json);
+										postText = null;
+									}
+								}
+							}
+							int count = 0;
+							String buttonJSON = "";
+							for (String button : extraButtons) {
+								button = Utils.escapeQuotesJS(button);
+								if (!buttonJSON.isEmpty()) {
+									buttonJSON = buttonJSON + ", ";
+								}
+								buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + button + "\", title: \"" + button + "\"}";
+								count++;
+								if (count == 3 || count == extraButtons.size()) {
+									String json = "{recipient:{id:\""
+											+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
+											+ "..." + "\", buttons: [ " + buttonJSON + " ]}}}}";
+									log("POST", Level.INFO, json);
+									Utils.httpPOST(url, "application/json", json);
+									buttonJSON = "";
+									count = 0;
+								}
+							}
+						} catch (Exception exception) {
+							log(exception);
+						}
+					}
+					if (postText != null) {
+						String json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
+						log("POST", Level.INFO, json);
+						Utils.httpPOST(url, "application/json", json);
+					}
+					if (!linkFound && (text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+						try {
+							NodeList nodes = root.getElementsByTagName("img");
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"image\", payload: { url: \"" + src + "\"}}}}";
+									log("POST", Level.INFO, json);
+									Utils.httpPOST(url, "application/json", json);
+								}
+							}
+							nodes = root.getElementsByTagName("audio");
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"audio\", payload: { url: \"" + src + "\"}}}}";
+									log("POST", Level.INFO, json);
+									Utils.httpPOST(url, "application/json", json);
+								}
+							}
+							nodes = root.getElementsByTagName("video");
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"video\", payload: { url: \"" + src + "\"}}}}";
+									log("POST", Level.INFO, json);
+									Utils.httpPOST(url, "application/json", json);
+								}
+							}
+						} catch (Exception exception) {
+							log(exception);
+						}
+					}
+				} catch (Exception exception) {
+					this.errors++;
+					log(exception);
+				}
+			} else {
+				log("Facebook Messenger only allowed for page messaging", Level.WARNING);
+			}
+		} catch (Exception exception) {
+			log(exception);
+		}
+	}
+	
+	/**
+	 * Send a button template message to the user.
+	 */
+	public void sendFacebookMessengerButtonMessage(String text, String command, String replyUser, String id) {
+		log("Sending messenger message:", Level.INFO, text, replyUser);
+		try {
+			if (isPage() && (!getPageId().isEmpty())) {
+				try {
+					String url = "https://graph.facebook.com/v2.6/" + getPageId() + "/messages?access_token=" + getFacebookMessengerAccessToken();
+					String strippedText = format(text);
+					// Max size limit
+					if (strippedText.length() >= 320) {
+						TextStream stream = new TextStream(strippedText);
+						while (!stream.atEnd()) {
+							String json = null;
+							String message = stream.nextParagraph(320);
+							if (stream.atEnd()) {
+								json = createButtonJSON(command, id, strippedText);
+							} else {
+								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message) + "\"}}";
+							}
+							Utils.httpPOST(url, "application/json", json);
+						}
+					} else {
+						String json = createButtonJSON(command, id, strippedText);
+						Utils.httpPOST(url, "application/json", json);
+					}
+					
+					//String json = "{recipient:{id:\"" + id + "\"}, message:{ \"attachment\":{\"type\":\"template\",\"payload\":{ \"template_type\":\"button\", \"text\":"+ Utils.escapeQuotesJS(text) + ",\"buttons\":[" + "\"}}}}}";
+					//Utils.httpPOST(url, "application/json", json);
+				} catch (Exception exception) {
+					this.errors++;
+					log(exception);
+				}
+			} else {
+				log("Facebook Messenger only allowed for page messaging", Level.WARNING);
+			}
+		} catch (Exception exception) {
 			log(exception);
 		}
 	}
@@ -1827,6 +2208,15 @@ public class Facebook extends BasicSense {
 		return replyToMessages;
 	}
 
+	public boolean getFacebookMessenger() {
+		initProperties();
+		return facebookMessenger;
+	}
+
+	public void setFacebookMessenger(boolean facebookMessenger) {
+		this.facebookMessenger = facebookMessenger;
+	}
+
 	public void setReplyToMessages(boolean replyToMessages) {
 		this.replyToMessages = replyToMessages;
 	}
@@ -1883,8 +2273,81 @@ public class Facebook extends BasicSense {
 			}
 		}
 		String post = getBot().mind().getThought(Language.class).getWord(sentence, sentence.getNetwork()).getDataValue();
+		getBot().stat("facebook.post");
 		post(post, null);
 	}
 
-	
+	private String createButtonJSON(String command, String id, String text) {
+		
+		command = command.substring(command.indexOf("{"), command.lastIndexOf("}"));
+		command = command + "}";
+		
+		JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
+
+		if(!root.getString("type").equals("button"))
+			return "";
+		
+		JSONObject json = new JSONObject();
+		
+		JSONObject recipient = new JSONObject();
+		recipient.put("id", id);
+		
+		JSONObject message = new JSONObject();
+		
+		JSONObject attachement = new JSONObject();
+		attachement.put("type", "template");
+		
+		JSONObject payload = new JSONObject();
+		payload.put("template_type", "button");
+		payload.put("text", text);
+		
+		JSONArray buttons = new JSONArray();
+		
+		int buttonIndex = 0;
+		while(root.optJSONObject("button" + buttonIndex) != null) {
+			JSONObject buttonJson = root.getJSONObject("button" + buttonIndex);
+			JSONObject newButton = new JSONObject();
+			
+			newButton.put("title", buttonJson.getString("caption"));
+			
+			if(buttonJson.opt("type")!=null) {
+				newButton.put("type", buttonJson.getString("type"));
+			} else {
+				newButton.put("type", "postback");
+			}
+			//newButton.put("type", "postback");
+
+			if(newButton.getString("type").equals("postback") || newButton.getString("type").equals("phone_number") )
+				newButton.put("payload", buttonJson.optString("chat"));
+			else if(newButton.getString("type").equals("web_url"))
+				newButton.put("url", buttonJson.optString("chat"));	
+			
+			buttons.add(newButton);
+			buttonIndex++;
+		}
+		
+		/*JSONObject button0 = new JSONObject();
+		button0.put("type", "web_url");
+		button0.put("url", "http://www.botlibre.com");
+		button0.put("title", "Bot Libre Website");
+		
+		JSONObject button1 = new JSONObject();
+		button1.put("type", "postback");
+		button1.put("title", "Chat");
+		button1.put("payload", "chat");
+		
+		buttons.add(button0);
+		buttons.add(button1);*/
+		
+		payload.put("buttons", buttons);
+		
+		attachement.put("payload", payload);
+		
+		message.put("attachment", attachement);
+		
+		json.put("recipient", recipient);
+		json.put("message", message);
+		
+		return json.toString();
+	}
 }

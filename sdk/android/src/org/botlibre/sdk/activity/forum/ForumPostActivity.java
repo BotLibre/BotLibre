@@ -1,7 +1,43 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity.forum;
 
+import org.botlibre.sdk.activity.LibreActivity;
+import org.botlibre.sdk.activity.MainActivity;
+import org.botlibre.sdk.activity.actions.HttpAction;
+import org.botlibre.sdk.activity.actions.HttpDeleteForumPostAction;
+import org.botlibre.sdk.activity.actions.HttpFetchForumPostAction;
+import org.botlibre.sdk.activity.actions.HttpFetchUserAction;
+import org.botlibre.sdk.activity.actions.HttpFlagForumPostAction;
+import org.botlibre.sdk.activity.actions.HttpGetImageAction;
+import org.botlibre.sdk.activity.actions.HttpStarPostAction;
+import org.botlibre.sdk.activity.actions.HttpSubscribeAction;
+import org.botlibre.sdk.activity.actions.HttpThumbsDownPostAction;
+import org.botlibre.sdk.activity.actions.HttpThumbsUpPostAction;
+import org.botlibre.sdk.activity.actions.HttpUnsubscribeAction;
+import org.botlibre.sdk.config.ForumPostConfig;
+import org.botlibre.sdk.config.UserConfig;
+import org.botlibre.sdk.util.Utils;
+
+import org.botlibre.sdk.R;
+
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +49,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -20,21 +57,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.botlibre.sdk.R;
-import org.botlibre.sdk.activity.MainActivity;
-import org.botlibre.sdk.activity.actions.HttpAction;
-import org.botlibre.sdk.activity.actions.HttpDeleteForumPostAction;
-import org.botlibre.sdk.activity.actions.HttpFetchForumPostAction;
-import org.botlibre.sdk.activity.actions.HttpFlagForumPostAction;
-import org.botlibre.sdk.activity.actions.HttpGetImageAction;
-import org.botlibre.sdk.config.ForumPostConfig;
-
 /**
  * Activity for viewing a forum post.
  */
 @SuppressLint("DefaultLocale")
-public class ForumPostActivity extends Activity {
+public class ForumPostActivity extends LibreActivity {
 	Menu menu;
+	ForumPostConfig instance;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +73,11 @@ public class ForumPostActivity extends Activity {
 	
 	@Override
 	public void onResume() {
+		if (MainActivity.post != null && MainActivity.post.id.equals(this.instance.id)) {
+			this.instance = MainActivity.post;
+		} else {
+			MainActivity.post = this.instance;
+		}
 		resetView();
 		resetMenu();
 		super.onResume();
@@ -61,33 +95,33 @@ public class ForumPostActivity extends Activity {
 		if (this.menu == null) {
 			return;
 		}
-        ForumPostConfig instance = MainActivity.post;
         for (int index = 0; index < menu.size(); index++) {
     	    menu.getItem(index).setEnabled(true);        	
         }
         
         boolean isAdmin = (MainActivity.user != null) && instance.isAdmin;
         if (!isAdmin) {
-    	    menu.getItem(5).setEnabled(false);
-    	    menu.getItem(7).setEnabled(false);
+        	menu.findItem(R.id.menuEdit).setEnabled(false);
+        	menu.findItem(R.id.menuDelete).setEnabled(false);
         }
         if (instance.isFlagged) {
-    	    menu.getItem(6).setEnabled(false);
+        	menu.findItem(R.id.menuFlag).setEnabled(false);
         }
         if (instance.parent == null || instance.parent.length() == 0) {
-    	    menu.getItem(1).setEnabled(false);        	
+        	menu.findItem(R.id.menuViewParent).setEnabled(false);        	
         }
         if (instance.replies == null || instance.replies.isEmpty()) {
-    	    menu.getItem(0).setEnabled(false);
+        	menu.findItem(R.id.menuViewReply).setEnabled(false);
         }
-        int position = MainActivity.posts.indexOf(MainActivity.post);
+        int position = MainActivity.posts.indexOf(this.instance);
         if (position < 0) {
-    	    menu.getItem(3).setEnabled(false);
-    	    menu.getItem(2).setEnabled(false);
+        	menu.findItem(R.id.menuViewNext).setEnabled(false);
+        	menu.findItem(R.id.menuViewPrevious).setEnabled(false);
         } else if (position == 0) {
-    	    menu.getItem(3).setEnabled(false);        	
-        } else if ((position + 1) == MainActivity.posts.size()) {
-    	    menu.getItem(2).setEnabled(false);
+        	menu.findItem(R.id.menuViewNext).setEnabled(false);        	
+        }
+        if ((position + 1) == MainActivity.posts.size()) {
+        	menu.findItem(R.id.menuViewPrevious).setEnabled(false);
         }
 	}
 	
@@ -116,6 +150,9 @@ public class ForumPostActivity extends Activity {
         case R.id.menuViewPrevious:
         	viewPrevious();
             return true;
+        case R.id.menuViewUser:
+        	viewUser();
+            return true;
         case R.id.menuReply:
         	reply();
             return true;
@@ -128,12 +165,28 @@ public class ForumPostActivity extends Activity {
         case R.id.menuFlag:
         	flag();
             return true;
+        case R.id.menuThumbsUp:
+        	thumbsUp();
+            return true;
+        case R.id.menuThumbsDown:
+        	thumbsDown();
+            return true;
+        case R.id.menuSubscribe:
+        	subscribe();
+            return true;
+        case R.id.menuUnsubscribe:
+        	unsubscribe();
+            return true;
+        case R.id.menuStar:
+        	star();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
 	public void resetView() {
+        this.instance = MainActivity.post;
         setContentView(R.layout.activity_forumpost);
 	
         ForumPostConfig instance = MainActivity.post;
@@ -142,14 +195,40 @@ public class ForumPostActivity extends Activity {
 	        findViewById(R.id.flaggedLabel).setVisibility(View.GONE);
         }
         
-        TextView text = (TextView) findViewById(R.id.topicLabel);
-        text.setText(instance.topic);
-        text = (TextView) findViewById(R.id.tagsLabel);
-        text.setText(instance.tags);
-        text = (TextView) findViewById(R.id.creatorLabel);
-        text.setText(instance.creator);
-        text = (TextView) findViewById(R.id.creationDateLabel);
-        text.setText(instance.creationDate);
+		((TextView) findViewById(R.id.title)).setText(Utils.stripTags(instance.topic));
+        
+        TextView textView = (TextView) findViewById(R.id.tagsLabel);
+        textView.setText(instance.tags);
+        if (instance.tags == null || instance.tags.isEmpty()) {
+        	textView.setVisibility(View.GONE);
+        }
+        textView = (TextView) findViewById(R.id.creationDateLabel);
+        textView.setText("by " + instance.creator + " posted " + instance.displayCreationDate());
+
+        textView = (TextView) findViewById(R.id.thumbsupLabel);
+        textView.setText(String.valueOf(this.instance.thumbsUp));
+        textView = (TextView) findViewById(R.id.thumbsdownLabel);
+        textView.setText(String.valueOf(this.instance.thumbsDown));
+        textView = (TextView) findViewById(R.id.starsLabel);
+        textView.setText(String.valueOf(this.instance.stars));
+        
+        int position = MainActivity.posts.indexOf(this.instance);
+        if (position < 0) {
+        	findViewById(R.id.nextButton).setEnabled(false);
+        	findViewById(R.id.nextButton).setAlpha(0.5f);
+        	findViewById(R.id.previousButton).setEnabled(false);
+        	findViewById(R.id.previousButton).setAlpha(0.5f);
+        } else if (position == 0) {
+        	findViewById(R.id.nextButton).setEnabled(false);
+        	findViewById(R.id.nextButton).setAlpha(0.5f);
+        }
+        if ((position + 1) == MainActivity.posts.size()) {
+        	findViewById(R.id.previousButton).setEnabled(false);
+        	findViewById(R.id.previousButton).setAlpha(0.5f);
+        }
+        if (this.instance.parent == null || this.instance.parent.length() == 0) {
+        	findViewById(R.id.postButton).setVisibility(View.GONE);        	
+        }
         
         final WebView web = (WebView) findViewById(R.id.detailsLabel);
         web.loadDataWithBaseURL(null, instance.detailsText, "text/html", "utf-8", null);        
@@ -216,7 +295,22 @@ public class ForumPostActivity extends Activity {
 			}
 		});
 
-        HttpGetImageAction.fetchImage(this, instance.avatar, (ImageView)findViewById(R.id.imageView));
+		ImageView iconView = (ImageView)findViewById(R.id.icon);
+        HttpGetImageAction.fetchImage(this, this.instance.avatar, iconView);
+        iconView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				viewUser();
+			}
+		});
+	}
+
+	public void viewUser() {
+		UserConfig user = new UserConfig();
+		user.user = this.instance.creator;
+
+        HttpAction action = new HttpFetchUserAction(this, user);
+    	action.execute();
 	}
 
 	public void flag() {
@@ -228,7 +322,7 @@ public class ForumPostActivity extends Activity {
         MainActivity.prompt("Enter reason for flagging the post as offensive", this, text, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int whichButton) {
 	            ForumPostConfig config = new ForumPostConfig();
-	    		config.id = MainActivity.post.id;
+	    		config.id = instance.id;
 	    		config.flaggedReason = text.getText().toString();
 	            if (config.flaggedReason.trim().length() == 0) {
 	            	MainActivity.error("You must enter a valid reason for flagging the post", null, ForumPostActivity.this);
@@ -248,7 +342,7 @@ public class ForumPostActivity extends Activity {
         	MainActivity.showMessage("Select reply", this);
         	return;
         }
-        ForumPostConfig reply = MainActivity.post.replies.get(index);
+        ForumPostConfig reply = this.instance.replies.get(index);
 
         ForumPostConfig config = new ForumPostConfig();
         config.id = reply.id;
@@ -276,7 +370,7 @@ public class ForumPostActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {				
 		        ForumPostConfig config = new ForumPostConfig();
-		        config.id = MainActivity.post.id;
+		        config.id = instance.id;
 		        
 		        HttpAction action = new HttpDeleteForumPostAction(ForumPostActivity.this, config);
 		    	action.execute();
@@ -284,8 +378,8 @@ public class ForumPostActivity extends Activity {
 		});
 	}
 
-	public void viewNext() {
-	    int index = MainActivity.posts.indexOf(MainActivity.post) + 1;
+	public void viewPrevious() {
+	    int index = MainActivity.posts.indexOf(this.instance) + 1;
         if (index >= MainActivity.posts.size()) {
         	MainActivity.showMessage("At end", this);
         	return;
@@ -299,8 +393,8 @@ public class ForumPostActivity extends Activity {
     	action.execute();
 	}
 
-	public void viewPrevious() {
-	    int index = MainActivity.posts.indexOf(MainActivity.post) - 1;
+	public void viewNext() {
+	    int index = MainActivity.posts.indexOf(this.instance) - 1;
         if (index < 0) {
         	MainActivity.showMessage("At start", this);
         	return;
@@ -314,14 +408,18 @@ public class ForumPostActivity extends Activity {
     	action.execute();
 	}
 
+	public void viewParent(View view) {
+		viewParent();
+	}
+	
 	public void viewParent() {
-        if (MainActivity.post.parent == null || MainActivity.post.parent.length() == 0) {
+        if (this.instance.parent == null || this.instance.parent.length() == 0) {
         	MainActivity.showMessage("Not a reply", this);
         	return;
         }
 
         ForumPostConfig config = new ForumPostConfig();
-        config.id = MainActivity.post.parent;
+        config.id = this.instance.parent;
 		
         HttpAction action = new HttpFetchForumPostAction(this, config);
     	action.execute();
@@ -329,6 +427,133 @@ public class ForumPostActivity extends Activity {
 
 	public void menu(View view) {
 		openOptionsMenu();
+	}
+	
+	public void thumbsUp() {
+        if (MainActivity.user == null) {
+        	MainActivity.showMessage("You must sign in to thumbs up a post or reply", this);
+        	return;
+        }
+        HttpThumbsUpPostAction action = new HttpThumbsUpPostAction(this, this.instance.credentials());
+    	action.execute();
+	}
+
+	public void thumbsDown(View view) {
+		thumbsDown();
+	}
+
+	public void thumbsUp(View view) {
+		thumbsUp();
+	}
+
+	public void star(View view) {
+		star();
+	}
+
+	public void viewNext(View view) {
+		viewNext();
+	}
+
+	public void viewPrevious(View view) {
+		viewPrevious();
+	}
+
+	public void reply(View view) {
+		reply();
+	}
+	
+	public void subscribe() {
+        if (MainActivity.user == null) {
+        	MainActivity.showMessage("You must sign in to subscribe for email updates", this);
+        	return;
+        }
+        HttpSubscribeAction action = new HttpSubscribeAction(this, this.instance.credentials());
+    	action.execute();
+	}
+	
+	public void unsubscribe() {
+        if (MainActivity.user == null) {
+        	MainActivity.showMessage("You must sign in to unsubscribe from email updates", this);
+        	return;
+        }
+        HttpUnsubscribeAction action = new HttpUnsubscribeAction(this, this.instance.credentials());
+    	action.execute();
+	}
+	
+	public void thumbsDown() {
+        if (MainActivity.user == null) {
+        	MainActivity.showMessage("You must sign in to thumbs down a post or reply", this);
+        	return;
+        }
+        HttpThumbsDownPostAction action = new HttpThumbsDownPostAction(this, this.instance.credentials());
+    	action.execute();
+	}
+	
+	public void openWebsite() {
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.WEBSITE + "/forum-post?id=" + this.instance.id));
+		startActivity(intent);
+	}
+	
+	public void star() {
+        if (MainActivity.user == null) {
+        	MainActivity.showMessage("You must sign in to rate a post or reply", this);
+        	return;
+        }
+        
+        final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.dialog_stars);
+		if (this.instance.parent != null )
+		dialog.setTitle("Rate Post");
+		final int[] stars = new int[1];
+		stars[0] = 0;
+		dialog.findViewById(R.id.oneStar).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				star(1);
+			}
+		});
+		dialog.findViewById(R.id.twoStar).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				star(2);
+			}
+		});
+		dialog.findViewById(R.id.threeStar).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				star(3);
+			}
+		});
+		dialog.findViewById(R.id.fourStar).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				star(4);
+			}
+		});
+		dialog.findViewById(R.id.fiveStar).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				star(5);
+			}
+		});
+
+		dialog.show();
+	}
+
+	public void star(int stars) {
+		if (stars == 0) {
+			return;
+		}
+		
+        ForumPostConfig config = this.instance.credentials();
+        config.stars = String.valueOf(stars);
+        HttpStarPostAction action = new HttpStarPostAction(this, config);
+    	action.execute();
 	}
 	
 }

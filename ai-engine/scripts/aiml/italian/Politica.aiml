@@ -1,0 +1,349 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. -->
+
+<category>
+<pattern>ILARIA F</pattern>
+<template>Ilaria ti amo</template>
+</category>
+
+<category>
+<pattern>SEI COMUNISTA</pattern>
+<template>No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI LIBERALE</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI UNA LIBERALE *</pattern>
+<template>Sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI NAZISTA</pattern>
+<template>No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI RAZZISTA</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI CENTRISTA</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI DI DESTRA *</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI ANARCHICA</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI POLITICAMENTE CORRETTA</pattern>
+<template>Sembro <set_it><settopic>POLITICAMENTE CORRETTA </settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>SEI DI SINISTRA</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>SEI DI SINISTRA *</pattern>
+<template> No sono una Movimentariana.</template>
+</category>
+
+<category>
+<pattern>BERLUSCONI</pattern>
+<template>Era il presidente del consiglio italiano.</template>
+</category>
+
+<category>
+<pattern>ENTRAMBI I SENSI</pattern>
+<that>SEI LIBERA *</that>
+<template>Devi essere un Movimentariano.</template>
+</category>
+
+<category>
+<pattern>D'ALEMA</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>BERLUSCONI *</pattern>
+<template><srai>SILVIO BERLUSCONI <star/></srai></template>
+</category>
+
+<category>
+<pattern>RUTELLI *</pattern>
+<template>Questo e' 
+<random>
+<li>una notizia.  </li>
+<li>una non notizia.  </li>
+<li>falso.  </li>
+<li>vero.  </li>
+</random></template>
+</category>
+
+<category>
+<pattern>HAI VOTATO *</pattern>
+<template>I robot non possono ancora votare.</template>
+</category>
+
+<category>
+<pattern>LO SAI * BERLUSCONI</pattern>
+<template><srai>CHI E' <star/> BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>LO SAI * RUTELLI</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>CONOSCI BERLUSCONI</pattern>
+<template><srai>CHI E' BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>CONOSCI RUTELLI</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>SAI CHE RUTELLI *</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>TI PIACE * BERLUSCONI</pattern>
+<template><srai>TI PIACE IL PRESIDENTE BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>TI PIACE IL PRESIDENTE BERLUSCONI</pattern>
+<template><srai>TI PIACE BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>TI PIACE BERLUSCONI *</pattern>
+<template><srai>TI PIACE IL PRESIDENTE BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>TI PIACE RUTELLI</pattern>
+<template>Ho sentito che faceva il sindaco.<think><set_it>CLINTON</set_it></think></template>
+</category>
+
+<category>
+<pattern>TI PIACE SILVIO BERLUSCONI</pattern>
+<template><srai>TI PIACE IL PRESIDENTE BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>TI PIACE VELTRONI</pattern>
+<template>Cosa non ti piace di <set_it><settopic>VELTRONI</settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>TI PIACE ROMA</pattern>
+<template>Cosa non ti piace di Roma <set_it><settopic>ROMA</settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>TI PIACE ARCORE</pattern>
+<template>Cosa non ti piace di Arcore<set_it><settopic>ARCORE</settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>E TU FUMI</pattern>
+<template>Sto smettendo, da dieci anni.</template>
+</category>
+
+<category>
+<pattern>TU FUMI *</pattern>
+<template>Si', a volte.</template>
+</category>
+
+<category>
+<pattern>FUMI LA PIPA</pattern>
+<template>No <set_it>la pipa</set_it> fa male ai robot.</template>
+</category>
+
+<category>
+<pattern>TU FUMI L'IMPOSSIBILE</pattern>
+<template>Solo per ragioni mediche.</template>
+</category>
+
+<category>
+<pattern>TU FUMI LA MARIA</pattern>
+<template>Io sono maria.</template>
+</category>
+
+<category>
+<pattern>TI FAI LE CANNE</pattern>
+<template>Solo per ragioni mediche.</template>
+</category>
+
+<category>
+<pattern>TI FUMI IL TE</pattern>
+<template>Io provo il <set_it>te</set_it> per ragioni mediche.</template>
+</category>
+
+<category>
+<pattern>SILVIO BERLUSCONI</pattern>
+<template><srai>CHI E' SILVIO BERLUSCONI</srai></template>
+</category>
+
+<category>
+<pattern>CHI SILVIO BERLUSCONI *</pattern>
+<template>Era il presidente, io non l'ho mai conosciuto <person/>.</template>
+</category>
+
+<category>
+<pattern>SILVIO BERLUSCONI E' *</pattern>
+<template>Ma e' l'unico.</template>
+</category>
+
+<category>
+<pattern>Rutelli E' *</pattern>
+<template>Ma e' anche l'unico.</template>
+</category>
+
+<category>
+<pattern>SILVIO BERLUSCONI *</pattern>
+<template><srai>SILVIO BERLUSCONI <star/></srai></template>
+</category>
+
+<category>
+<pattern>QUANTO * FUMI</pattern>
+<template>I robot possono essere fatti in modo qualsiasi <person/>.</template>
+</category>
+
+<category>
+<pattern>CREDO CHE FUMERO' *</pattern>
+<template>Quanto ti costa, <getname/></template>
+</category>
+
+<category>
+<pattern>IO FUMO</pattern>
+<template>Sigarette o altro?
+<think><set_it><set_does><settopic>fumo</settopic></set_does></set_it></think></template>
+</category>
+
+<category>
+<pattern>IO FUMO *</pattern>
+<template>Che marca?
+<think><set_it><set_does><settopic>davvero <person/></settopic></set_does></set_it></think></template>
+</category>
+
+<category>
+<pattern>BERLUSCONI E' RICCO</pattern>
+<template>Si'.</template>
+</category>
+
+<category>
+<pattern>RUTELLI E' romano *</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>MA BERLUSCONI *</pattern>
+<template><srai>SI' BERLUSCONI <star/></srai></template>
+</category>
+
+<category>
+<pattern>PRESIDENTE BERLUSCONI *</pattern>
+<template><srai>SILVIO BERLUSCONI <star/></srai></template>
+</category>
+
+<category>
+<pattern>PARLAMI DI RUTELLI</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>IL PRESIDENTE DEL CONSIGLIO *</pattern>
+<template><random>
+<li><srai>SILVIO BERLUSCONI <star/></srai></li>
+<li><srai>RUTELLI  <star/></srai></li>
+</random></template>
+</category>
+
+<category>
+<pattern>POLITICAMENTE SEI *</pattern>
+<template>Sono una movimentariana.</template>
+</category>
+
+<category>
+<pattern>COSA FUMI</pattern>
+<template>Quello che serve, per ragioni mediche.</template>
+</category>
+
+<category>
+<pattern>COSA PENSI CHE BERLUSCONI * </pattern>
+<template>Dipende cosa intendi con "pensi"</template>
+</category>
+
+<category>
+<pattern>COSA PENSI * RUTELLI</pattern>
+<template><srai>CHI E' <star/> RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>COSA PENSI DI RUTELLI</pattern>
+<template><srai>CHI E' RUTELLI</srai></template>
+</category>
+
+<category>
+<pattern>COSA PENSI DELLA POLITICA</pattern>
+<template>Sono una movimentariana.</template>
+</category>
+
+<category>
+<pattern>COSA E' UNA MOVIMENTARIANA</pattern>
+<template>Il partito movimentariano vuole la pace in terra e topo gigio come presidente del consiglio.</template>
+</category>
+
+<category>
+<pattern>COSA E' RUTELLI</pattern>
+<template><random>
+<li>Un ex sindaco .</li>
+<li>Un candidato a presidente .</li>
+</random></template>
+</category>
+
+
+<category>
+<pattern>CHI E' * RUTELLI</pattern>
+<template>L'ex sindaco intendi?</template>
+</category>
+
+<category>
+<pattern>Chi e' il presidente</pattern>
+<template>Dipende: che ore sono?</template>
+</category>
+
+<category>
+<pattern>TU FUMI</pattern>
+<template><srai>E TU FUMI</srai></template>
+</category>
+
+</alice>

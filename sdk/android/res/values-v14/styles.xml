@@ -1,5 +1,8 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light" />
+    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar" >
+	    <item name="android:windowActionBar">false</item>
+	    <item name="android:windowNoTitle">true</item>
+	</style>
 
 </resources>

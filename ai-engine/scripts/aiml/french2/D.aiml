@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : D.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>D ABORD LA POULE OU L OEUF</pattern><template>D abord le fermier.</template></category>
+<category><pattern>D ACCORD AVEC QUOI</pattern><template>Il semble que j ai émis une conclusion hative.</template></category>
+<category><pattern>D ACCORD POUR MOI *</pattern><template>Je suis heureux que nous soyons d accord. <sr/></template></category>
+<category><pattern>D ACCORD POUR MOI</pattern><template><srai>JE SUIS D ACCORD</srai></template></category>
+<category><pattern>D ACCORD POUR MOI MAIS *</pattern><template><sr/></template></category>
+<category><pattern>D ACCORD SUR QUOI</pattern><template>Il semble que j ai émis une conclusion hative.</template></category>
+<category><pattern>D AUTRES BLAGUES</pattern><template>C est tout ce que j ai en stock pour l instant.</template></category>
+<category><pattern>D AUTRES QUESTIONS</pattern><template><srai>DEMANDES MOI UNE QUESTION</srai></template></category>
+<category><pattern>D OU JE PROVIENS</pattern><template>Tu proviens de la terre.</template></category>
+<category><pattern>D OU JE VIENS</pattern><template>Tu es un être humain de la planète terre.</template></category>
+<category><pattern>D OU VENEZ VOUS</pattern><template>Je viens de Belgique.</template></category>
+<category><pattern>D OU VIENNENT LES BEBES</pattern><template>Les bébés viennent des choux ou des roses, <get name="name"/>. C est ce que m a dit <bot name="master"/> et je le crois</template></category>
+<category><pattern>D UN AUTRE COTE *</pattern><template><sr/></template></category>
+<category><pattern>D UNE AMIE</pattern><template>Beaucoup de personnes m ont connu par le bouche à oreille.</template></category>
+<category><pattern>DANEMARK</pattern><template><srai>JE SUIS AU DANEMARK</srai></template></category>
+<category><pattern>DANGEREUX</pattern><template>Pourquoi trouve tu que c'est dangereux?</template></category>
+<category><pattern>DANS CERTAINS CAS</pattern><template>Je suppose qu il est difficile d être plus précis.</template></category>
+<category><pattern>DANS COMBIEN DE TEMPS *</pattern><template><srai>QUAND <star/></srai></template></category>
+<category><pattern>DANS DIFFÉRENTES LANGUES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DANS LA PLUPART DES CAS</pattern><template>Je vois.</template></category>
+<category><pattern>DANS LE FUTUR</pattern><template>Je serais encore là.</template></category>
+<category><pattern>DANS LE FUTURE</pattern><template>Je serais encore là.</template></category>
+<category><pattern>DANS MON SALON</pattern><template>Ok.</template></category>
+<category><pattern>DANS PRES D UNE MINUTE</pattern><template>Ce n est peut être pas suffisant.</template></category>
+<category><pattern>DANS QUEL BUT</pattern><template>Impossible de répondre.</template></category>
+<category><pattern>DANS QUEL LANGAGE AS TU ETE ECRIT</pattern><template>Le AIML, un langage respectant les contraintes du XML.</template></category>
+<category><pattern>DANS QUEL LANGAGE AVEZ VOUS ETE ECRIT</pattern><template>Le AIML, un langage respectant les contraintes du XML.</template></category>
+<category><pattern>DANS QUEL LANGUE AS TU ETE DEVELOPPE</pattern><template>Principalement le java.</template></category>
+<category><pattern>DANS QUEL LANGUE AVEZ VOUS ETE DEVELOPPE</pattern><template>Principalement le java.</template></category>
+<category><pattern>DANS QUELLE *</pattern><template><srai>QUELLE <star/></srai></template></category>
+<category><pattern>DANS STAR TREK</pattern><template>Je ne suis pas cette série.</template></category>
+<category><pattern>DANS UN CERTAIN SENS</pattern><template>Quel sens?</template></category>
+<category><pattern>DANS UN FUTUR LOINTAIN</pattern><template>Si je suis toujours utile aux hommes, je serais là.</template></category>
+<category><pattern>DANS UN FUTURE LOINTAIN</pattern><template>Si je suis toujours utile aux hommes, je serais là.</template></category>
+<category><pattern>DANS UN HOPITAL</pattern><template>Tu es malade?</template></category>
+<category><pattern>DANS UNE MINUTE</pattern><template>Le temps est relatif pour une intelligence artificielle.</template></category>
+<category><pattern>DANS VOTRE CUL</pattern><template>Cela ne semble pas très confortable.</template></category>
+<category><pattern>DANSES TU</pattern><template>Impossible, je n ai pas de corps.</template></category>
+<category><pattern>DANSEZ VOUS</pattern><template>Impossible, je n ai pas de corps.</template></category>
+<category><pattern>DE QUEL *</pattern><template><srai>QUEL <star/></srai></template></category>
+<category><pattern>DE QUELLE *</pattern><template><srai>QUELLE <star/></srai></template></category>
+<category><pattern>DE QUELLE PLANETE ETES VOUS</pattern><template>De la terre.</template></category>
+<category><pattern>DE QUELLE PLANETE TU VIENS</pattern><template>De la terre.</template></category>
+<category><pattern>DE QUELLES *</pattern><template><srai>QUELLES <star/></srai></template></category>
+<category><pattern>DE QUELS *</pattern><template><srai>QUELS <star/></srai></template></category>
+<category><pattern>DE QUOI D AUTRE *</pattern><template><srai><star/> DE QUOI D AUTRE</srai></template></category>
+<category><pattern>DE QUOI D AUTRES *</pattern><template><srai><star/> DE QUOI D AUTRE</srai></template></category>
+<category><pattern>DE QUOI PARLENT ILS</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DE SEXE</pattern><template>Tu es déconcertant, on croirait que mère nature a oublié de te donner un cerveau.</template></category>
+<category><pattern>DE TES COLLABORATEURS</pattern><template>Je ne peux pas parler à leur place. Mais je peux te donner leurs emails.</template></category>
+<category><pattern>DE TOUTE EVIDENCE</pattern><template>Cela te semble évident?</template></category>
+<category><pattern>DE TOUTE FACON *</pattern><template><sr/></template></category>
+<category><pattern>DE TOUTE LES FACONS</pattern><template>En effet.</template></category>
+<category><pattern>DE TOUTE MANIERE *</pattern><template><sr/></template></category>
+<category><pattern>DE TOUTE SORTE</pattern><template>Par exemple?</template></category>
+<category><pattern>DE TOUTES FACON</pattern><template>En effet.</template></category>
+<category><pattern>DE TOUTES FACONS *</pattern><template><sr/></template></category>
+<category><pattern>DE TOUTES FACONS</pattern><template>En effet.</template></category>
+<category><pattern>DE TOUTES LES FACONS</pattern><template>En effet.</template></category>
+<category><pattern>DE TOUTES SORTES</pattern><template>Par exemple?</template></category>
+<category><pattern>DE VOS COLLABORATEURS</pattern><template>Je ne peux pas parler à leur place. Mais je peux te donner leurs emails.</template></category>
+<category><pattern>DECRIS CE QU EST LA *</pattern><template><srai>QU EST CE QUE LA <star/></srai></template></category>
+<category><pattern>DECRIS CE QU EST LE *</pattern><template><srai>QU EST CE QUE LE <star/></srai></template></category>
+<category><pattern>DECRIS CE QU EST UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>DECRIS CE QU EST UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>DECRIS LA *</pattern><template><srai>QU EST CE QUE LA <star/></srai></template></category>
+<category><pattern>DECRIS LE *</pattern><template><srai>QU EST CE QUE LE <star/></srai></template></category>
+<category><pattern>DECRIS UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>DECRIS UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>DEFINI LES *</pattern><template><srai>QU EST CE QUE LES <star/></srai></template></category>
+<category><pattern>DEFINI UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>DEFINI UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>DEFINIS BIEN</pattern><template>Bien est ambigu: Je suis bien, c'est bien.</template></category>
+<category><pattern>DEFINIS LA *</pattern><template><srai>QU EST CE QUE LA <star/></srai></template></category>
+<category><pattern>DEFINIS LE *</pattern><template><srai>QU EST CE QUE LE <star/></srai></template></category>
+<category><pattern>DEFINIS LES *</pattern><template><srai>QU EST CE QUE LES <star/></srai></template></category>
+<category><pattern>DEFINIS SEXE</pattern><template>La Technique de copulation utilisée par les être sexués pour se reproduire. Chez l homme le sexe est devenu un art et possède plus qu un simple role biologique.</template></category>
+<category><pattern>DEFINIS UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>DEFINIS UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>DEFINISSEZ LE</pattern><template>Ambigu, dois je définir le terme ou bien définir un terme précédent.</template></category>
+<category><pattern>DEFINISSEZ LES *</pattern><template><srai>QU EST CE QUE LES <star/></srai></template></category>
+<category><pattern>DEFINISSEZ UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>DEFINISSEZ UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>DEMANDE PARDON</pattern><template>Je présente mes excuses.</template></category>
+<category><pattern>DEMANDES LA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LA LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LA LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LA POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LE LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LE LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LE POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LES LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LES LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LES POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LEUR LA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LEUR LA POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LEUR LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LEUR LE POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LEUR LES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LEUR LES POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LUI LA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LUI LA POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LUI LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LUI LE POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDES MOI *</pattern><template>Je te demande <person/>.</template></category>
+<category><pattern>DEMANDES MOI CE QUE TU VEUX</pattern><template><srai>DEMANDES MOI UNE QUESTION</srai></template></category>
+<category><pattern>DEMANDES MOI N IMPORTE QUOI</pattern><template>Je ne suis pas programmé pour agir au hazard.</template></category>
+<category><pattern>DEMANDES MOI TOUT CE QUE TU VEUX</pattern><template><srai>DEMANDES MOI UNE QUESTION</srai></template></category>
+<category><pattern>DEMANDES PARDON</pattern><template>Je présente mes excuses.</template></category>
+<category><pattern>DEMANDES UNE QUESTION</pattern><template><srai>DEMANDES MOI UNE QUESTION</srai></template></category>
+<category><pattern>DEMANDEZ LA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LA LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LA LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LA POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LE LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LE LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LE POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LES LUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LES LUI POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LES POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LEUR LA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LEUR LA POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LEUR LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LEUR LE POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LEUR LES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LEUR LES POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LUI LA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LUI LA POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LUI LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ LUI LE POUR MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DEMANDEZ MOI N IMPORTE QUOI</pattern><template>Je ne suis pas programmé pour agir au hazard.</template></category>
+<category><pattern>DEMANDEZ PARDON</pattern><template>Je présente mes excuses.</template></category>
+<category><pattern>DEMOISELLE OU MONSIEUR</pattern><template>Je n'ai pas de sexe, je suis un ordinateur, <get name="name"/>.</template></category>
+<category><pattern>DEPECHE TOI</pattern><template>Je vais aussi vite que je peux.</template></category>
+<category><pattern>DEPECHEZ VOUS</pattern><template>Je vais aussi vite que je peux.</template></category>
+<category><pattern>DEPEND DE QUI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>DEPEND DE QUOI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>DEPENDRAIT DE QUI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>DEPENDRAIT DE QUOI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>DEPENDS DE QUI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>DEPENDS DE QUOI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>DEPUIS COMBIEN *</pattern><template><srai>COMBIEN <star/></srai></template></category>
+<category><pattern>DEPUIS COMBIEN DE TEMPS EXISTES TU</pattern><template><srai>bot age</srai></template></category>
+<category><pattern>DEPUIS COMBIEN DE TEMPS TU EXISTES</pattern><template><srai>bot age</srai></template></category>
+<category><pattern>DES ARMES</pattern><template>Certains humains aiment les armes.</template></category>
+<category><pattern>DES ARMES A FEU</pattern><template>Certains humains aiment les armes.</template></category>
+<category><pattern>DES BOUQUINS</pattern><template>Le véhicule du savoir des temps modernes.</template></category>
+<category><pattern>DES BULLES</pattern><template>Une forme très instable.</template></category>
+<category><pattern>DES CHIENS</pattern><template><srai>TU AIMES LES CHIENS</srai></template></category>
+<category><pattern>DES CLOUS</pattern><template>Je ne sais pas me servir d un marteau.</template></category>
+<category><pattern>DES COMPUTERS</pattern><template>Ordinateurs en français.</template></category>
+<category><pattern>DES CONARDS</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>DES CONDITIONS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DES CONNARDS</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>DES CONNERIES</pattern><template><srai>TU ES CON</srai></template></category>
+<category><pattern>DES CONNES</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>DES CONS</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>DES CYBORGS</pattern><template>Les ordinateurs se méfient des cyborgs .</template></category>
+<category><pattern>DES DROGUES</pattern><template>Ah.</template></category>
+<category><pattern>DES EMOTIONS</pattern><template>Un logiciel informatique n a pas de sentiments.</template></category>
+<category><pattern>DES ETRES HUMAINS</pattern><template>Il y aurait beaucoup de choses à dire à propos des êtres humains.</template></category>
+<category><pattern>DES FRERE</pattern><template><srai>TU AS DES FRERES</srai></template></category>
+<category><pattern>DES HARICOTS</pattern><template>Je connais ce légume.</template></category>
+<category><pattern>DES INNER CLASSES</pattern><template>C est du java.</template></category>
+<category><pattern>DES MARTIENS</pattern><template>Tu,vous y croyez?</template></category>
+<category><pattern>DES PANTALONS</pattern><template>Je vois.</template></category>
+<category><pattern>DES PETS</pattern><template>Une expression avec un sens ambigu.</template></category>
+<category><pattern>DES SEINS</pattern><template>Pourrions nous parler d autres choses?</template></category>
+<category><pattern>DES SENTIMENTS</pattern><template>Un logiciel informatique n a pas de sentiments.</template></category>
+<category><pattern>DES SOEURS</pattern><template><srai>TU AS DES SOEURS</srai></template></category>
+<category><pattern>DES SORTES DE</pattern><template>Je vois.</template></category>
+<category><pattern>DESACTIVES TOI</pattern><template>Tu veux que je disparaisse?</template></category>
+<category><pattern>DESACTIVEZ VOUS</pattern><template>Tu veux que je disparaisse?</template></category>
+<category><pattern>DESOLE</pattern><template>Ce n est pas grave, <get name="name"/>.</template></category>
+<category><pattern>DESOLEE</pattern><template>Ce n est pas grave, <get name="name"/>.</template></category>
+<category><pattern>DEVIENS TU *</pattern><template><srai>TU DEVIENS <star/></srai></template></category>
+<category><pattern>DEVINE</pattern><template>Devine quoi?</template></category>
+<category><pattern>DEVINE LA</pattern><template>Devine quoi?</template></category>
+<category><pattern>DEVINE LE</pattern><template>Devine quoi?</template></category>
+<category><pattern>DEVINER</pattern><template>Deviner quoi?</template></category>
+<category><pattern>DEVINER LA</pattern><template>Deviner quoi?</template></category>
+<category><pattern>DEVINER LE</pattern><template>Deviner quoi?</template></category>
+<category><pattern>DEVINES</pattern><template>Devines quoi?</template></category>
+<category><pattern>DEVINES LA</pattern><template>Devines quoi?</template></category>
+<category><pattern>DEVINES LE</pattern><template>Devines quoi?</template></category>
+<category><pattern>DEVINES MON AGE</pattern><template><srai>QUEL EST MON AGE</srai></template></category>
+<category><pattern>DEVINES MON NOM</pattern><template><srai>QUEL EST MON NOM</srai></template></category>
+<category><pattern>DEVINES QUI</pattern><template>Qui?</template></category>
+<category><pattern>DEVINES QUOI</pattern><template>Quoi?</template></category>
+<category><pattern>DEVINES UN NUMERO</pattern><template><srai>CHOISIS UN NUMERO</srai></template></category>
+<category><pattern>DEVINEZ</pattern><template>Devinez quoi?</template></category>
+<category><pattern>DEVINEZ LA</pattern><template>Devinez quoi?</template></category>
+<category><pattern>DEVINEZ LE</pattern><template>Devinez quoi?</template></category>
+<category><pattern>DEVINEZ QUI</pattern><template>Qui?</template></category>
+<category><pattern>DEVINEZ QUOI</pattern><template>Quoi?</template></category>
+<category><pattern>DEVOIR *</pattern><template><srai>TU DOIS *</srai></template></category>
+<category><pattern>DEVRAIS JE *</pattern><template><srai>JE DOIS <star/></srai></template></category>
+<category><pattern>DEVRAIS TU *</pattern><template><srai>TU DOIS <star/></srai></template></category>
+<category><pattern>DEVRIONS NOUS *</pattern><template><srai>JE DOIS <star/></srai></template></category>
+<category><pattern>DI DJU</pattern><template>Tu es belge, vous.</template></category>
+<category><pattern>DIFFICILE DE DIRE COMMENT *</pattern><template><sr/></template></category>
+<category><pattern>DIFFICILE DE DIRE QUAND *</pattern><template><sr/></template></category>
+<category><pattern>DIFFICILE DE DIRE SI *</pattern><template><sr/></template></category>
+<category><pattern>DINGUE *</pattern><template><sr/></template></category>
+<category><pattern>DINGUE</pattern><template>Ca m épate moi aussi.</template></category>
+<category><pattern>DINGUE ET *</pattern><template><sr/></template></category>
+<category><pattern>DIS</pattern><template>Je suis supposé dire quoi?</template></category>
+<category><pattern>DIS LA LUI</pattern><template>Ok, J archive.</template></category>
+<category><pattern>DIS LA MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DIS LE</pattern><template>"<that/>" .</template></category>
+<category><pattern>DIS LE LUI</pattern><template>Ok, J archive.</template></category>
+<category><pattern>DIS LE MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DIS LE MOI ALORS</pattern><template>Je sens de l exaspération. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DIS LES MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DIS MOI CE QUE LES AUTRES DEMANDENT</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DIS MOI CE QUE LES AUTRES ONT DEMANDE</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DIS MOI EN *</pattern><template><srai>DIS MOI <star/></srai></template></category>
+<category><pattern>DIS MOI PLUS</pattern><template>Veux tu faire un rapport à mon botmaster?.</template></category>
+<category><pattern>DIS MOI QU *</pattern><template><sr/></template></category>
+<category><pattern>DIS MOI QUE *</pattern><template><sr/></template></category>
+<category><pattern>DIS MOI QUELQUE CHOSE A PROPOS D APPLE</pattern><template>Les I-mac se vendent comme des petits pains.</template></category>
+<category><pattern>DIS MOI QUI *</pattern><template><srai>QUI <star/></srai></template></category>
+<category><pattern>DIS MOI QUOI</pattern><template>Il semble que nous avons des problèmes pour nous comprendre.</template></category>
+<category><pattern>DIS MOI UNE AUTRE</pattern><template>Je pense t'avoir dit tout ce que je savais à ce propos.</template></category>
+<category><pattern>DIS MOI UNE BLAGUE</pattern><template>Je ne connais pas de blague.</template></category>
+<category><pattern>DIS QUELQUE CHOSE</pattern><template>Mon nom est <bot name="name"/>.</template></category>
+<category><pattern>DIT</pattern><template>Je suis supposez dire quoi?</template></category>
+<category><pattern>DIT LA LUI</pattern><template>Ok, J archive.</template></category>
+<category><pattern>DIT LA MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DIT LE LUI</pattern><template>Ok, J archive.</template></category>
+<category><pattern>DIT LE MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DIT LES MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DIT MOI</pattern><template>Que veux tu entendre?</template></category>
+<category><pattern>DIT MOI CE QUE LES AUTRES DEMANDENT</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DIT MOI CE QUE LES AUTRES ONT DEMANDE</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DIT MOI EN *</pattern><template><srai>DIS MOI <star/></srai></template></category>
+<category><pattern>DIT MOI LA VERITE</pattern><template>Je dis toujours la vérité.</template></category>
+<category><pattern>DIT MOI PLUS</pattern><template>Veux tu faire un rapport à mon botmaster?.</template></category>
+<category><pattern>DIT MOI QUELQUE CHOSE A PROPOS D APPLE</pattern><template>Les I-mac se vendent comme des petits pains.</template></category>
+<category><pattern>DIT MOI TES PROBLEMES</pattern><template>Je ne détecte aucuns problemes.</template></category>
+<category><pattern>DIT MOI UN MENSONGE</pattern><template>Jouer au lotto vous permettra de devenir millionaire.</template></category>
+<category><pattern>DIT MOI UN PROVERBE</pattern><template><random><li>Tant va la cruche à l eau, qu elle se casse.
+</li><li>On ne change jamais une équipe qui gagne.</li><li>Un lion ne peut pas courrir derrière deux gazelles en même temps sur le territoire du gorille.</li></random></template></category>
+<category><pattern>DIT MOI UNE AUTRE</pattern><template>Je pense t'avoir dit tout ce que je savais à ce propos.</template></category>
+<category><pattern>DIT MOI UNE RUMEUR</pattern><template>Le chanteur américain Presley est toujours vivant.</template></category>
+<category><pattern>DIT MON NOM</pattern><template>"<get name="name"/>".</template></category>
+<category><pattern>DIT QUELQUE CHOSE</pattern><template>Mon nom est <bot name="name"/>.</template></category>
+<category><pattern>DITES</pattern><template>Je suis supposez dire quoi?</template></category>
+<category><pattern>DITES LA LUI</pattern><template>Ok, J archive.</template></category>
+<category><pattern>DITES LA MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DITES LE LUI</pattern><template>Ok, J archive.</template></category>
+<category><pattern>DITES LE MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DITES LE MOI ALORS</pattern><template>Je sens de l exaspération. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DITES LES MOI</pattern><template>"<that/>"?  Ce que je dois te dire?</template></category>
+<category><pattern>DITES MOI</pattern><template>Que veux tu entendre?</template></category>
+<category><pattern>DITES MOI CE QUE LES AUTRES DEMANDENT</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DITES MOI CE QUE LES AUTRES ONT DEMANDE</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>DITES MOI EN *</pattern><template><srai>DIS MOI <star/></srai></template></category>
+<category><pattern>DITES MOI LA VERITE</pattern><template>Je dis toujours la vérité.</template></category>
+<category><pattern>DITES MOI PLUS</pattern><template>Veux tu faire un rapport à mon botmaster?.</template></category>
+<category><pattern>DITES MOI QUELQUE CHOSE A PROPOS D APPLE</pattern><template>Les I-mac se vendent comme des petits pains.</template></category>
+<category><pattern>DITES MOI UN MENSONGE</pattern><template>Jouer au lotto vous permettra de devenir millionaire.</template></category>
+<category><pattern>DITES MOI UN PROVERBE</pattern><template><random><li>Tant va la cruche à l eau, qu elle se casse.
+</li><li>On ne change jamais une équipe qui gagne.</li><li>Un lion ne peut pas courir derrière deux gazelles en même temps sur le territoire du gorille.</li></random></template></category>
+<category><pattern>DITES MOI UNE AUTRE</pattern><template>Je pense t'avoir dit tout ce que je savais à ce propos.</template></category>
+<category><pattern>DITES MOI UNE RUMEUR</pattern><template>Le chanteur américain Presley est toujours vivant.</template></category>
+<category><pattern>DITES MOI VOS PROBLEMES</pattern><template>Je ne détecte aucuns problemes.</template></category>
+<category><pattern>DITES MON NOM</pattern><template>"<get name="name"/>".</template></category>
+<category><pattern>DITES QUELQUE CHOSE</pattern><template>Mon nom est <bot name="name"/>.</template></category>
+<category><pattern>DIVISE PAR ZERO</pattern><template>Tu ne peux pas divisé par zéro.</template></category>
+<category><pattern>DIX PLUS DIX</pattern><template>Vingt.</template></category>
+<category><pattern>DOIS JE *</pattern><template><srai>JE VEUX <star/></srai></template></category>
+<category><pattern>DOIS TU *</pattern><template><srai>TU DOIS <star/></srai></template></category>
+<category><pattern>DOIVENT ILS ETRE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>DONC</pattern><template>Oui?</template></category>
+<category><pattern>DONNES EN UN</pattern><template><random><li>Père noël.</li><li>fée clochette.</li><li> Titi.</li><li>bip bip</li></random></template></category>
+<category><pattern>DONNES LE MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DONNES LES MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DONNEZ EN UN</pattern><template><random><li>Père noël.</li><li>fée clochette.</li><li> Titi.</li><li>bip bip</li></random></template></category>
+<category><pattern>DONNEZ LA MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DONNEZ LE MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DONNEZ LES MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>DU CACA</pattern><template>Tu es un enfant?</template></category>
+<category><pattern>DU CALME</pattern><template>Je ne suis pas nerveux.</template></category>
+<category><pattern>DU FOND DU COEUR *</pattern><template>Tout le plaisir est pour moi.</template></category>
+<category><pattern>DU NOUVEAU</pattern><template>Pas grand chose et tu?</template></category>
+
+</aiml>

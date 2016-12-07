@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -53,6 +54,24 @@ import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.botlibre.BotException;
 import org.eclipse.persistence.internal.helper.Helper;
 import org.owasp.encoder.Encode;
 import org.owasp.html.HtmlPolicyBuilder;
@@ -61,16 +80,16 @@ import org.owasp.html.Sanitizers;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-import org.botlibre.BotException;
 
 /**
  * Helper utility class.
  */
 public class Utils {
+	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
 	public static long MINUTE = 60 * 1000;
 	public static long HOUR = 60 * 60 * 1000;
 	public static long DAY = 24 * 60 * 60 * 1000;
-	public static int URL_TIMEOUT = 5000;
+	public static int URL_TIMEOUT = 20000;
 	public static String KEY = "changethis";
 	
 	public static Map<String, String> profanityMap = new HashMap<String, String>();
@@ -79,6 +98,8 @@ public class Utils {
 	
 	public static DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
 	public static PolicyFactory sanitizer;
+
+	public static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	
 	static {
 		profanityMap.put("fuck", "frig");
@@ -126,6 +147,7 @@ public class Utils {
 		profanityMap.put("damnit", "darnit");
 		profanityMap.put("nigga", "african");
 		profanityMap.put("nigger", "african");
+		profanityMap.put("niggers", "africans");
 		profanityMap.put("cum", "come");
 		profanityMap.put("horny", "happy");
 		profanityMap.put("masterbate", "play");
@@ -150,16 +172,35 @@ public class Utils {
 	
 	public static PolicyFactory sanitizer() {
 		if (sanitizer == null) {
-			sanitizer = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.BLOCKS).and(Sanitizers.IMAGES).and(Sanitizers.STYLES);
+			sanitizer = Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.IMAGES).and(Sanitizers.STYLES);
 			PolicyFactory html = new HtmlPolicyBuilder()
-				.allowElements("table", "tr", "td", "thead", "tbody", "th", "font")
+				.allowElements("table", "tr", "td", "thead", "tbody", "th", "font", "button", "input", "select", "option")
 				.allowAttributes("color").globally()
 				.allowAttributes("bgcolor").globally()
 				.allowAttributes("align").globally()
+				.allowAttributes("target").globally()
+				.allowAttributes("value").globally()
+				.allowAttributes("name").globally()
+				.allowUrlProtocols("http", "https", "mailto", "chat").allowElements("a")
+			    .allowAttributes("href").onElements("a").requireRelNofollowOnLinks()
 				.toFactory();
 			sanitizer = sanitizer.and(html);
 		}
 		return sanitizer;
+	}
+	
+	public static String sanitize(String html) {
+		String result = sanitizer().sanitize(html);
+		if (result.contains("&")) {
+			// The sanitizer is too aggressive and escaping some chars.
+			//result = result.replace("&#34;", "\"");
+			result = result.replace("&#96;", "`");
+			//result = result.replace("&#39;", "'");
+			result = result.replace("&#64;", "@");
+			result = result.replace("&#61;", "=");
+			result = result.replace("&amp;", "&");
+		}
+		return result;
 	}
 	
 	public static boolean checkMaxMemory() {
@@ -328,6 +369,129 @@ public class Utils {
 		return html;*/
 		return Encode.forHtml(html);
 	}
+
+	public static String httpGET(String url) throws Exception {
+		HttpGet request = new HttpGet(url);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpResponse response = client.execute(request, new BasicHttpContext());
+		return fetchResponse(response);
+	}
+
+	public static String httpDELETE(String url) throws Exception {
+		HttpDelete request = new HttpDelete(url);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpResponse response = client.execute(request, new BasicHttpContext());
+		return fetchResponse(response);
+	}
+	
+	public static String httpAuthGET(String url, String user, String password) throws Exception {		
+		HttpGet request = new HttpGet(url);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+                new AuthScope(AuthScope.ANY),
+                new UsernamePasswordCredentials(user, password));
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpAuthPOST(String url, String user, String password, String type, String data) throws Exception {
+        HttpPost request = new HttpPost(url);
+        StringEntity params = new StringEntity(data, "utf-8");
+        request.addHeader("content-type", type);
+        request.setEntity(params);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+                new AuthScope(AuthScope.ANY),
+                new UsernamePasswordCredentials(user, password));
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpPOST(String url, String type, String data) throws Exception {
+        HttpPost request = new HttpPost(url);
+        StringEntity params = new StringEntity(data, "utf-8");
+        request.addHeader("content-type", type);
+        request.setEntity(params);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpPUT(String url, String type, String data) throws Exception {
+		HttpPut request = new HttpPut(url);
+        StringEntity params = new StringEntity(data, "utf-8");
+        request.addHeader("content-type", type);
+        request.setEntity(params);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpAuthPOST(String url, String user, String password, Map<String, String> formParams) throws Exception {		
+        HttpPost request = new HttpPost(url);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		for (Map.Entry<String, String> entry : formParams.entrySet()) {
+			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+		}
+		request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+                new AuthScope(AuthScope.ANY),
+                new UsernamePasswordCredentials(user, password));
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpPOST(String url, Map<String, String> formParams) throws Exception {		
+        HttpPost request = new HttpPost(url);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		for (Map.Entry<String, String> entry : formParams.entrySet()) {
+			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+		}
+		request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String fetchResponse(HttpResponse response) throws Exception {
+        HttpEntity entity = response.getEntity();
+        String result = "";
+		if (entity != null) {
+			InputStream stream = entity.getContent();
+			result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
+		}
+		if ((response.getStatusLine().getStatusCode() != 200) && (response.getStatusLine().getStatusCode() != 302) && (response.getStatusLine().getStatusCode() != 204)) {
+			throw new RuntimeException(""
+			   + response.getStatusLine().getStatusCode()
+			   + " : " + result);
+		}
+		return result;
+	}
 	
 	/**
 	 * Escape quotes using \".
@@ -340,6 +504,20 @@ public class Utils {
 			return text;
 		}
 		text = text.replace("\"", "&quot;");
+		return text;
+	}
+	
+	/**
+	 * Escape quotes using \".
+	 */
+	public static String escapeQuotesJS(String text) {
+		if (text == null) {
+			return "";
+		}
+		if (text.indexOf('"') == -1) {
+			return text;
+		}
+		text = text.replace("\"", "\\\"");
 		return text;
 	}
 	
@@ -438,6 +616,12 @@ public class Utils {
 		}
 		if (!url.startsWith("http")) {
 			url = "http://" + url;
+		}
+		if (url.indexOf("&#61;") != -1) {
+			url = url.replace("&#61;", "=");
+		}
+		if (url.indexOf("&amp;") != -1) {
+			url = url.replace("&amp;", "&");
 		}
 		return url;
 	}
@@ -682,14 +866,23 @@ public class Utils {
 		if (encoding.trim().isEmpty()) {
 			encoding = "UTF-8";
 		}
+
+	    // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
+	    String UTF8_BOM = "\uFEFF";
+	    
 		StringWriter writer = new StringWriter();
 		InputStreamReader reader = null;
 		try {
 			reader = new InputStreamReader(stream, encoding);
 			int size = 0;
 			int next = reader.read();
+			boolean first = true;
 			while (next >= 0) {
-				writer.write(next);
+				if (first && next == UTF8_BOM.charAt(0)) {
+					// skip
+				} else {
+					writer.write(next);
+				}
 				next = reader.read();
 				if (size > maxSize) {
 					throw new BotException("File size limit exceeded: " + size + " > " + maxSize + " token: " + next);
@@ -697,7 +890,7 @@ public class Utils {
 				size++;
 			}
 		} catch (IOException exception) {
-			throw new BotException("IO Error", exception);
+			throw new BotException("IO Error: " + exception.getMessage(), exception);
 		} finally {
 			if (reader != null) {
 				try {
@@ -946,12 +1139,17 @@ public class Utils {
 	
 	public static InputStream openStream(URL url, int timeout) throws IOException {
 	    URLConnection connection = url.openConnection();
+	    connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 	    connection.setConnectTimeout(timeout);
 	    connection.setReadTimeout(timeout);
 	    return connection.getInputStream();
 	}
 	
 	public static byte[] createThumb(byte[] image, int size) {
+		return createThumb(image, size, false);
+	}
+	
+	public static byte[] createThumb(byte[] image, int size, boolean stretch) {
 		try {
 			BufferedImage source = ImageIO.read(new ByteArrayInputStream(image));
 			if (source == null) {
@@ -960,15 +1158,20 @@ public class Utils {
 			float height = source.getHeight();
 			float width = source.getWidth();
 			float max = size;
-			if (height <= size && width <= size) {
-				return image;
-			}
-			if (height > width) {
-				width = max * (width / height);
+			if (stretch) {
 				height = size;
+				width = size;
 			} else {
-				height = max * (height / width);
-				width = max;
+				if (height <= size && width <= size) {
+					return image;
+				}
+				if (height > width) {
+					width = max * (width / height);
+					height = size;
+				} else {
+					height = max * (height / width);
+					width = max;
+				}
 			}
 			Image scaled = source.getScaledInstance((int)width, (int)height, BufferedImage.SCALE_SMOOTH);
 			BufferedImage thumb = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_RGB);
@@ -995,6 +1198,301 @@ public class Utils {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 			return null;
+		}
+	}
+	
+	/**
+	 * Format the text that may be HTML, or may be text, or markup, or a mix.
+	 */
+	public static String formatHTMLOutput(String text) {
+		if (text == null) {
+			return "";
+		}
+		int index = text.indexOf('<');
+		int index2 = text.indexOf('>');
+		boolean isHTML = (index != -1) && (index2 > index);
+		boolean isMixed = isHTML && text.contains("[code]");
+		if (isHTML && !isMixed) {
+			return text;
+		}
+		if (!isMixed && ((index != -1) || (index2 != -1))) {
+			text = text.replace("<", "&lt;");
+			text = text.replace(">", "&gt;");
+		}
+		TextStream stream = new TextStream(text.trim());
+		StringWriter writer = new StringWriter();
+		boolean bullet = false;
+		boolean nbullet = false;
+		while (!stream.atEnd()) {
+			String line = stream.nextLine();
+			if (!isMixed && (line.contains("http://") || line.contains("https://"))) {
+				line = Utils.linkHTML(line);
+			}
+			TextStream lineStream = new TextStream(line);
+			boolean firstWord = true;
+			boolean span = false;
+			boolean cr = true;
+			while (!lineStream.atEnd()) {
+				while (!isMixed && firstWord && lineStream.peek() == ' ') {
+					lineStream.next();
+					writer.write("&nbsp;");
+				}
+				String whitespace = lineStream.nextWhitespace();
+				writer.write(whitespace);
+				if (lineStream.atEnd()) {
+					break;
+				}
+				String word = lineStream.nextWord();
+				if (!isMixed && nbullet && firstWord && !word.equals("#")) {
+					writer.write("</ol>\n");
+					nbullet = false;
+				} else if (!isMixed && bullet && firstWord && !word.equals("*")) {
+					writer.write("</ul>\n");
+					bullet = false;
+				}
+				if (firstWord && word.equals("[")) {
+					String peek = lineStream.peekWord();
+					if ("code".equals(peek)) {
+						lineStream.nextWord();
+						String next = lineStream.nextWord();
+						String lang = "javascript";
+						int lines = 20;
+						if ("lang".equals(next)) {
+							lineStream.skip();
+							lang = lineStream.nextWord();
+							if ("\"".equals(lang)) {
+								lang = lineStream.nextWord();
+								lineStream.skip();
+							}
+							next = lineStream.nextWord();
+						}
+						if ("lines".equals(next)) {
+							lineStream.skip();
+							String value = lineStream.nextWord();
+							if ("\"".equals(value)) {
+								value = lineStream.nextWord();
+								lineStream.skip();
+							}
+							lineStream.skip();
+							try {
+								lines = Integer.valueOf(value);
+							} catch (NumberFormatException ignore) {}
+						}
+						String id = "code" + stream.getPosition();
+						writer.write("<div style=\"width:100%;height:" + lines * 14 + "px;max-width:none\" id=\"" + id + "\">");
+						String code = lineStream.upToAll("[code]");
+						if (code.indexOf('<') != -1) {
+							code = code.replace("<", "&lt;");
+						}
+						if (code.indexOf('>') != -1) {
+							code = code.replace(">", "&gt;");
+						}
+						writer.write(code);
+						while (lineStream.atEnd() && !stream.atEnd()) {
+							line = stream.nextLine();
+							lineStream = new TextStream(line);
+							while (lineStream.peek() == ':') {
+								lineStream.next();
+								writer.write("&nbsp;&nbsp;&nbsp;&nbsp;");								
+							}
+							code = lineStream.upToAll("[code]");
+							if (code.indexOf('<') != -1) {
+								code = code.replace("<", "&lt;");
+							}
+							if (code.indexOf('>') != -1) {
+								code = code.replace(">", "&gt;");
+							}
+							writer.write(code);
+						}
+						lineStream.skip("[code]".length());
+						writer.write("</div>\n");
+
+						writer.write("<script>\n");
+						writer.write("var " + id + " = ace.edit('" + id + "');\n");
+						writer.write(id + ".getSession().setMode('ace/mode/" + lang + "');\n");
+						writer.write(id + ".setReadOnly(true);\n");
+						writer.write("</script>\n");
+					} else {
+						writer.write(word);
+					}
+				} else if (!isMixed && firstWord && word.equals("=")) {
+					int count = 2;
+					String token = word;
+					while (!lineStream.atEnd() && lineStream.peek() == '=') {
+						lineStream.skip();
+						count++;
+						token = token + "=";
+					}
+					String header = lineStream.upToAll(token);
+					if (lineStream.atEnd()) {
+						writer.write(token);
+						writer.write(header);
+					} else {
+						lineStream.skip(token.length());
+						writer.write("<h");
+						writer.write(String.valueOf(count));
+						writer.write(">");
+						writer.write(header);
+						writer.write("</h");
+						writer.write(String.valueOf(count));
+						writer.write(">");
+						cr = false;
+					}
+				} else if (!isMixed && firstWord && word.equals(":")) {
+					span = true;
+					int indent = 1;
+					while (!lineStream.atEnd() && lineStream.peek() == ':') {
+						lineStream.skip();				
+						indent++;
+					}
+					writer.write("<span style=\"display:inline-block;text-indent:");
+					writer.write(String.valueOf(indent * 20));
+					writer.write("px;\">");	
+				} else if (!isMixed && firstWord && word.equals("*")) {
+					if (!bullet) {
+						writer.write("<ul>");
+						bullet = true;
+					}
+					writer.write("<li>");
+					cr = false;
+				} else if (!isMixed && firstWord && word.equals("#")) {
+					if (!nbullet) {
+						writer.write("<ol>");
+						nbullet = true;
+					}
+					writer.write("<li>");
+					cr = false;
+				} else {
+					writer.write(word);
+				}
+				firstWord = false;
+			}
+			if (!isMixed && span) {
+				writer.write("</span>");
+			}
+			if (!isMixed && cr) { 
+				writer.write("<br/>\n");
+			}
+		}
+		if (!isMixed && bullet) {
+			writer.write("</ul>");
+		}
+		if (!isMixed && nbullet) {
+			writer.write("</ol>");
+		}
+		return writer.toString();
+	}
+	
+	public static String displayTime(Date date) {
+		if (date == null) {
+			return "";
+		}
+		StringWriter writer = new StringWriter();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		writer.write(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+		writer.write(":");
+		if (calendar.get(Calendar.MINUTE) < 10) {
+			writer.write("0");
+		}
+		writer.write(String.valueOf(calendar.get(Calendar.MINUTE)));
+		writer.write(":");
+		if (calendar.get(Calendar.SECOND) < 10) {
+			writer.write("0");
+		}
+		writer.write(String.valueOf(calendar.get(Calendar.SECOND)));
+		
+		return writer.toString();
+	}
+	
+	public static String displayTimestamp(Date date) {
+		if (date == null) {
+			return "";
+		}
+		StringWriter writer = new StringWriter();
+		Calendar today = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+			writer.write("Today");
+		} else if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& calendar.get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) - 1)) {
+			writer.write("Yesterday");
+		} else {
+			writer.write(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US));
+			writer.write(" ");
+			writer.write(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+			if (calendar.get(Calendar.YEAR) != today.get(Calendar.YEAR)) {
+				writer.write(" ");
+				writer.write(String.valueOf(calendar.get(Calendar.YEAR)));
+			}
+		}
+		writer.write(", ");
+		writer.write(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+		writer.write(":");
+		if (calendar.get(Calendar.MINUTE) < 10) {
+			writer.write("0");
+		}
+		writer.write(String.valueOf(calendar.get(Calendar.MINUTE)));
+		
+		return writer.toString();
+	}
+	
+	public static String displayDate(Date date) {
+		if (date == null) {
+			return "";
+		}
+		StringWriter writer = new StringWriter();
+		Calendar today = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+			writer.write("Today");
+		} else if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& calendar.get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) - 1)) {
+			writer.write("Yesterday");
+		} else {
+			writer.write(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US));
+			writer.write(" ");
+			writer.write(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+			if (calendar.get(Calendar.YEAR) != today.get(Calendar.YEAR)) {
+				writer.write(" ");
+				writer.write(String.valueOf(calendar.get(Calendar.YEAR)));
+			}
+		}
+		
+		return writer.toString();
+	}
+	
+	/**
+	 * Process the binary file and return the bytes, or an error if the file size exceed the max size.
+	 */
+	public static byte[] loadBinaryFile(InputStream stream, boolean close, int max) {
+		try {
+			ByteArrayOutputStream writer = new ByteArrayOutputStream();
+			int next = stream.read();
+			int size = 0;
+			while (next != -1) {
+				writer.write(next);
+				if (size > max) {
+					throw new BotException("File size limit exceeded: " + max);
+				}
+				next = stream.read();
+				size++;
+			}
+			return writer.toByteArray();
+		} catch (BotException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new BotException(exception);
+		} finally {
+			if (close && stream != null) {
+				try {
+					stream.close();
+				} catch (IOException ignore) {}
+			}
 		}
 	}
 }

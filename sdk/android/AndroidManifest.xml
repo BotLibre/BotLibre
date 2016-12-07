@@ -1,15 +1,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.botlibre.sdk"
-    android:versionCode="13"
-    android:versionName="4.0.0">
+    android:versionCode="18"
+    android:versionName="5.0.2">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="24"/>
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="24"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>    
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <!-- uses-permission android:name="com.android.vending.BILLING" /-->
 
-    <!-- 
+    
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    
+    <!-- Below permissions are needed for Personal Assistant app/commands -->
+    <uses-feature android:name="android.permission.CAMERA" android:required="false" />
+    <uses-feature android:name="android.permission.CALL_PHONE" android:required="false" />
+    <uses-feature android:name="android.permission.SEND_SMS" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+
+    <!--
     	This is the application manifest.
     	To build your own application you need to choose your main activity and update its label and the app version.
     	** you must use your own globally unique package name above, this will require you to rename the R imports in the activities to your new package **
@@ -22,20 +34,44 @@
         android:allowBackup="true" >
         
         <!-- meta-data android:name="com.google.android.gms.version"
-        android:value="@integer/google_play_services_version" /-->
+        android:value="@integer/google_play_services_version" />
         
-        <!--activity android:name="com.google.android.gms.ads.AdActivity"
+        <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" /-->
         
         <activity
             android:name="org.botlibre.sdk.activity.MainActivity"
-            android:label="BOT libre!" >
+            android:label="Bot Libre SDK" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.war.StartWarActivity"
+            android:label="Start War"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.war.WarActivity"
+            android:label="Start War"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.StartWarActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.BrowseCategoriesActivity"
+            android:label="Browse Categories"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.BrowseActivity"
@@ -46,7 +82,31 @@
                 android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.forum.ForumBrowseActivity"
+            android:name="org.botlibre.sdk.activity.script.BrowseScriptActivity"
+            android:label="Browse Scripts"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.BrowseActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.BrowseBotScriptActivity"
+            android:label="Browse Bot Scripts"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.BrowseActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.BotScriptsActivity"
+            android:label="Bot Scripts"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.forum.BrowseForumActivity"
             android:label="Browse Forums"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -54,15 +114,23 @@
                 android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.forum.BrowsePostsActivity"
-            android:label="Browse Posts"
+            android:name="org.botlibre.sdk.activity.avatar.BrowseAvatarActivity"
+            android:label="Browse Avatars"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.forum.SearchPostsActivity"
+            android:label="Search Posts"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.livechat.ChannelBrowseActivity"
+            android:name="org.botlibre.sdk.activity.livechat.BrowseChannelActivity"
             android:label="Browse Channels"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -70,40 +138,64 @@
                 android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.ChooseBotActivity"
-            android:label="Choose Bot"
+            android:name="org.botlibre.sdk.activity.script.ScriptSearchActivity"
+            android:label="Search Scripts"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.BrowseActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.forum.ChooseForumActivity"
-            android:label="Choose Forum"
+            android:name="org.botlibre.sdk.activity.BotSearchActivity"
+            android:label="Search Bots"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.forum.ForumBrowseActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.forum.ChoosePostActivity"
-            android:label="View Posts"
+            android:name="org.botlibre.sdk.activity.forum.ForumSearchActivity"
+            android:label="Search Forums"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.forum.BrowsePostsActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.livechat.ChooseChannelActivity"
-            android:label="Choose Channel"
+            android:name="org.botlibre.sdk.activity.avatar.AvatarSearchActivity"
+            android:label="Search Avatars"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.channel.ChannelBrowseActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.ChooseDomainActivity"
-            android:label="Choose Domain"
+            android:name="org.botlibre.sdk.activity.forum.BrowsePostActivity"
+            android:label="Browse Posts"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.livechat.ChannelSearchActivity"
+            android:label="Search Channels"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.DomainSearchActivity"
+            android:label="Search Domains"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.BrowseDomainActivity"
+            android:label="Browse Domains"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -112,13 +204,15 @@
         <activity
             android:name="org.botlibre.sdk.activity.ChatActivity"
             android:label="Chat"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.BotActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.CreateInstanceActivity"
+            android:name="org.botlibre.sdk.activity.CreateBotActivity"
             android:label="Create Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -126,12 +220,36 @@
                 android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.EditInstanceActivity"
+            android:name="org.botlibre.sdk.activity.EditBotActivity"
             android:label="Edit Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.BotActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.EditScriptActivity"
+            android:label="Edit Script"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.script.ScriptActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.CreateAvatarActivity"
+            android:label="Create Avatar"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.CreateScriptActivity"
+            android:label="Create Script"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.forum.CreateForumActivity"
@@ -168,6 +286,38 @@
         <activity
             android:name="org.botlibre.sdk.activity.forum.EditForumActivity"
             android:label="Edit Forum"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.ScriptEditorActivity"
+            android:label="Edit Script Source"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.script.ScriptActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.BotScriptEditorActivity"
+            android:label="Edit Bot Script Source"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.ScriptSourceActivity"
+            android:label="Script Source"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.script.ScriptActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.EditAvatarActivity"
+            android:label="Edit Avatar"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -227,7 +377,7 @@
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.ViewUserActivity"
@@ -238,12 +388,28 @@
                 android:value="org.botlibre.sdk.activity.MainActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.InstanceActivity"
+            android:name="org.botlibre.sdk.activity.BotActivity"
             android:label="View Bot"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.botlibre.sdk.activity.BrowseActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.ScriptActivity"
+            android:label="Script"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.script.BrowseScriptActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.AvatarActivity"
+            android:label="Avatar"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.forum.AvatarBrowseActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.forum.ForumActivity"
@@ -283,7 +449,7 @@
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.InstanceActivity" />
+                android:value="org.botlibre.sdk.activity.BotActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.forum.ForumAdminActivity"
@@ -292,6 +458,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.botlibre.sdk.activity.forum.ForumActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.ScriptAdminActivity"
+            android:label="Script Admin"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.script.ScriptActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.AvatarAdminActivity"
+            android:label="Avatar Admin"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.forum.AvatarActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.livechat.ChannelAdminActivity"
@@ -315,19 +497,51 @@
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AdminActivity" />
+                android:value="org.botlibre.sdk.activity.avatar.BrowseAvatarActivity" />
         </activity>
         <activity
-            android:name="org.botlibre.sdk.activity.AddAvatarActivity"
-            android:label="Add Shared Image"
+            android:name="org.botlibre.sdk.activity.avatar.AvatarTestActivity"
+            android:label="Avatar Test"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.botlibre.sdk.activity.AvatarActivity" />
+                android:value="org.botlibre.sdk.activity.avatar.AvatarActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.AvatarEditorActivity"
+            android:label="Avatar Editor"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.avatar.AvatarAdminActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.AvatarMediaActivity"
+            android:label="Avatar Media"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.avatar.AvatarEditorActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.VoiceActivity"
             android:label="Voice"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.AdminActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.ChangeVoiceActivity"
+            android:label="Change Language"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.ChatActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.BotAvatarActivity"
+            android:label="Avatar"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -364,6 +578,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.botlibre.sdk.activity.forum.ForumAdminActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.script.ScriptUsersActivity"
+            android:label="Script Users"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.script.ScriptAdminActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.avatar.AvatarUsersActivity"
+            android:label="Avatar Users"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.forum.AvatarAdminActivity" />
         </activity>
         <activity
             android:name="org.botlibre.sdk.activity.livechat.ChannelUsersActivity"
@@ -404,6 +634,30 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.botlibre.sdk.activity.channel.ChannelAdminActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.ImageActivity"
+            android:label="Image"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.HelpActivity"
+            android:label="Help"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.botlibre.sdk.activity.ResponseActivity"
+            android:label="Response"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.botlibre.sdk.activity.TrainingActivity" />
         </activity>
     </application>
 

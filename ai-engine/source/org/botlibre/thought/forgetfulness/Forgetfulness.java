@@ -172,7 +172,7 @@ public class Forgetfulness extends BasicThought {
 								+ "order by v.creationDate", parameters, PAGE, 0);
 					log("Old conversation query time", Level.INFO, System.currentTimeMillis() - batchStart);
 					if (unreferenced.size() < PAGE) {
-						unreferenced = new ArrayList<>();
+						unreferenced = new ArrayList<Vertex>();
 					} else {
 						// Keep a minimum of a 1/2 page.
 						for (int index = 0; index < (PAGE / 2); index++) {

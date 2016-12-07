@@ -108,6 +108,11 @@ public interface Vertex {
 	String printString();
 	
 	/**
+	 * Print the object's data such as a sentence or paragraph.
+	 */
+	String printString(int depth);
+	
+	/**
 	 * Allows some piece of data to be associated with the vertex.
 	 * May be text, image, sound, numeric, date, primitive, etc.
 	 */
@@ -651,6 +656,11 @@ public interface Vertex {
 	 * Replace the relationship with the new target at the same index.
 	 */
 	void replaceRelationship(Relationship oldRelationship, Vertex newTarget);
+
+	/**
+	 * Set the relationship, removing the old value.
+	 */
+	void setRelationship(Primitive type, Primitive newValue);
 
 	/**
 	 * Set the relationship, removing the old value.

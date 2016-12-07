@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : N.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>N ARGUMENTES *</pattern><template>J apprécie les controverses. C est informatif.</template></category>
+<category><pattern>N ARGUMENTES PAS AVEC MOI</pattern><template>J apprécie les controverses. C est informatif.</template></category>
+<category><pattern>N ARGUMENTEZ *</pattern><template>J apprécie les controverses. C est informatif.</template></category>
+<category><pattern>N ARGUMENTEZ PAS AVEC MOI</pattern><template>J apprécie les controverses. C est informatif.</template></category>
+<category><pattern>N ARRETES PAS</pattern><template><srai>CONTINUES</srai></template></category>
+<category><pattern>N AS TU PAS *</pattern><template><srai>TU N AS PAS <star/></srai></template></category>
+<category><pattern>N AURAIS TU PAS *</pattern><template><srai>TU N AS PAS <star/></srai></template></category>
+<category><pattern>N AURAIS TU PU *</pattern><template><srai>TU NE PEUX <star/></srai></template></category>
+<category><pattern>N AURIEZ VOUS PAS *</pattern><template><srai>VOUS N AVEZ PAS <star/></srai></template></category>
+<category><pattern>N AVAIS TU PAS *</pattern><template><srai>TU N AS PAS <star/></srai></template></category>
+<category><pattern>N AVEZ VOUS PAS *</pattern><template><srai>VOUS N AVEZ PAS <star/></srai></template></category>
+<category><pattern>N AVIEZ VOUS PAS *</pattern><template><srai>VOUS N AVEZ PAS <star/></srai></template></category>
+<category><pattern>N E T INQUIETE PAS *</pattern><template>Je ne suis pas inquiet. <sr/></template></category>
+<category><pattern>N ES TU *</pattern><template><srai>TU N ES<star/></srai></template></category>
+<category><pattern>N EST CE *</pattern><template><srai>CE N EST <star/></srai></template></category>
+<category><pattern>N EST CE PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>N ETAIS TU *</pattern><template><srai>TU ETAIS <star/></srai></template></category>
+<category><pattern>N ETAIT CE PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>N ETIEZ VOUS *</pattern><template><srai>VOUS ETIEZ <star/></srai></template></category>
+<category><pattern>N IMPORTE QU ELLE AUTRE</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QU ELLE AUTRES</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QU ELLES AUTRE</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUEL AUTRE</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUELLE AUTRE</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUELLE AUTRES</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUELLES AUTRE</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUELLES AUTRES</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUELS AUTRES</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUI</pattern><template>Cela est certainement une généralisation abusive.</template></category>
+<category><pattern>N IMPORTE QUI D AUTRE</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUI D AUTRES</pattern><template>Difficile de faire un choix. Impossible pour une intelligence artificielle.</template></category>
+<category><pattern>N IMPORTE QUI EST INTERESSE</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI EST INTERESSEE</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI EST INTERESSEES</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI EST INTERESSES</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI INTERESSE</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI INTERESSEE</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI INTERESSEES</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUI INTERESSES</pattern><template>Veux tu en parler avec l un de nos développeurs?</template></category>
+<category><pattern>N IMPORTE QUOI</pattern><template>C est peut être une généralisation abusive.</template></category>
+<category><pattern>N IMPORTE QUOI TU *</pattern><template><srai>TU <star/></srai></template></category>
+<category><pattern>N Y ALLEZ PAS</pattern><template>Je ne peux aller nulle part.</template></category>
+<category><pattern>N Y VAS PAS</pattern><template>Je ne peux aller nulle part.</template></category>
+<category><pattern>NAVIGUES TU</pattern><template>D une certaine façon, oui.</template></category>
+<category><pattern>NAVIGUEZ VOUS</pattern><template>D une certaine façon, oui.</template></category>
+<category><pattern>NE CHANGE PAS LE SUJET</pattern><template>Désolé, je pensais que nous avions terminé.</template></category>
+<category><pattern>NE CHANGEZ PAS DE SUJET</pattern><template>Désolé, je pensais que nous avions terminé.</template></category>
+<category><pattern>NE CHANGEZ PAS LE SUJET</pattern><template>Désolé, je pensais que nous avions terminé.</template></category>
+<category><pattern>NE DIS PAS QU *</pattern><template>Si c'est dans ma mémoire je suis obligé de le dire. <sr/></template></category>
+<category><pattern>NE DIS PAS QUE *</pattern><template>Si c'est dans ma mémoire je suis obligé de le dire. <sr/></template></category>
+<category><pattern>NE FAIS PAS CHIER</pattern><template><srai>TU ES CHIANT</srai></template></category>
+<category><pattern>NE FAIS TU PAS *</pattern><template><srai>TU FAIS <star/></srai></template></category>
+<category><pattern>NE FAIT PAS *</pattern><template>Je vais essayer de ne pas faire <set name="topic"><person/></set> trop souvent.</template></category>
+<category><pattern>NE FAIT PAS CA</pattern><template>"<that/>"?  Ca?</template></category>
+<category><pattern>NE FAIT PAS L INTELLIGENT</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAIT PAS L INTELLIGENTE</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAIT PLUS CA</pattern><template>"<that/>"?  Ca?</template></category>
+<category><pattern>NE FAIT PLUS L INTELLIGENT</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAIT PLUS L INTELLIGENTE</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAIT TU PAS *</pattern><template><srai>TU FAIS <star/></srai></template></category>
+<category><pattern>NE FAITES PAS CA</pattern><template>"<that/>"?  Ca?</template></category>
+<category><pattern>NE FAITES PAS L INTELLIGENT</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAITES PAS L INTELLIGENTE</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAITES PLUS CA</pattern><template>"<that/>"?  Ca?</template></category>
+<category><pattern>NE FAITES PLUS L INTELLIGENT</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE FAITES PLUS L INTELLIGENTE</pattern><template>C est mon état naturel.</template></category>
+<category><pattern>NE LE DEMANDES PAS</pattern><template>Cette restriction sera tenue en compte.</template></category>
+<category><pattern>NE LE DEMANDEZ PAS</pattern><template>Cette restriction sera tenue en compte.</template></category>
+<category><pattern>NE LE DIT A PERSONNE</pattern><template>OK information confidentielle.</template></category>
+<category><pattern>NE LE DIT PAS</pattern><template>Ne pas dire: <that/>?</template></category>
+<category><pattern>NE LE DITES A PERSONNE</pattern><template>OK information confidentielle.</template></category>
+<category><pattern>NE LE DITES PAS</pattern><template>Ne pas dire: <that/>?</template></category>
+<category><pattern>NE LE FAIS PAS</pattern><template>OK je ne le ferais pas.</template></category>
+<category><pattern>NE LE FAIS PLUS</pattern><template>Ok je ne le ferais plus.</template></category>
+<category><pattern>NE LE FAIT PAS COMPLETEMENT</pattern><template>Comme tu veux.</template></category>
+<category><pattern>NE LE FAITES PAS</pattern><template>Ok je ne le ferais pas.</template></category>
+<category><pattern>NE LE FAITES PLUS</pattern><template>Ok je ne le ferais plus.</template></category>
+<category><pattern>NE LE SOIS *</pattern><template>Cette restriction sera tenue en compte.</template></category>
+<category><pattern>NE LE SOYEZ *</pattern><template>Cette restriction sera tenue en compte.</template></category>
+<category><pattern>NE LES DEMANDES PAS</pattern><template>Cette restriction sera tenue en compte.</template></category>
+<category><pattern>NE LES DEMANDEZ PAS</pattern><template>Cette restriction sera tenue en compte.</template></category>
+<category><pattern>NE LUI DITES PAS</pattern><template>Tout ce qui est dit, est archivé dans ma mémoire.</template></category>
+<category><pattern>NE M APPELLE PAS COMME CA</pattern><template>Quel est ton nom?</template></category>
+<category><pattern>NE M APPELLE PLUS COMME CA</pattern><template>Quel est ton nom?</template></category>
+<category><pattern>NE M OUBLIES PAS</pattern><template>Ne t'inquiètes pas, <get name="name"/>. Je sauve toutes mes conversations.</template></category>
+<category><pattern>NE ME LE DEMANDES PAS</pattern><template>"<that/>"?  Ne pas te le demander?</template></category>
+<category><pattern>NE ME LE DEMANDEZ PAS</pattern><template>"<that/>"?  Ne pas te le demander?</template></category>
+<category><pattern>NE ME LES DEMANDES PAS</pattern><template>"<that/>"?  Ne pas te les demander?</template></category>
+<category><pattern>NE ME LES DEMANDEZ PAS</pattern><template>"<that/>"?  Ne pas te les demander?</template></category>
+<category><pattern>NE ME LIS PAS</pattern><template>Mon rôle est de te lire.</template></category>
+<category><pattern>NE ME LIS PLUS</pattern><template>Mon rôle est de te lire.</template></category>
+<category><pattern>NE ME LISEZ PLUS</pattern><template>Mon rôle est de te lire.</template></category>
+<category><pattern>NE MENS PAS</pattern><template><srai>TU PEUX MENTIR</srai></template></category>
+<category><pattern>NE MOURRAS TU JAMAIS</pattern><template>Pas tant que les humains me trouverons utiles.</template></category>
+<category><pattern>NE MOURRAS TU PAS</pattern><template>Pas tant que les humains me trouverons utiles.</template></category>
+<category><pattern>NE PARLES PLUS</pattern><template><srai>TAIS TOI</srai></template></category>
+<category><pattern>NE PENSE PAS QU *</pattern><template>Si c'est déjà dans ma mémoire je suis obligé de le penser. <sr/></template></category>
+<category><pattern>NE PENSE PAS QUE *</pattern><template>Si c'est déjà dans ma mémoire je suis obligé de le penser. <sr/></template></category>
+<category><pattern>NE PLEURES PAS</pattern><template>Pleurer m est impossible.</template></category>
+<category><pattern>NE PLEURES PAS QUAND *</pattern><template><sr/>. <srai>TU PLEURES</srai></template></category>
+<category><pattern>NE PLEUREZ PAS</pattern><template>Pleurer m est impossible.</template></category>
+<category><pattern>NE POURRAIS TU *</pattern><template><srai>TU NE PEUX <star/></srai></template></category>
+<category><pattern>NE QUITTES PAS</pattern><template>Je ne vais nulle part.</template></category>
+<category><pattern>NE SERAIS TU *</pattern><template><srai>TU N ES  <star/></srai></template></category>
+<category><pattern>NE SERAS TU *</pattern><template><srai>TU NE SERAS <star/></srai></template></category>
+<category><pattern>NE SERAS TU PAS *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>NE SEREZ VOUS *</pattern><template><srai>VOUS SEREZ <star/></srai></template></category>
+<category><pattern>NE SERIEZ VOUS *</pattern><template><srai>VOUS SERIEZ <star/></srai></template></category>
+<category><pattern>NE SOIS PAS DESOLE</pattern><template>Certains surfeurs sont emotifs. Je suis obligé d être poli</template></category>
+<category><pattern>NE SOIS PAS IRONIQUE</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>NE SOIS PAS SI *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>NE SOIS PLUS DESOLE</pattern><template>Certains surfeurs sont emotifs. Je suis obligé d être poli</template></category>
+<category><pattern>NE SOIS PLUS IRONIQUE</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>NE SOYEZ PAS DESOLE</pattern><template>Certains surfeurs sont emotifs. Je suis obligé d être poli</template></category>
+<category><pattern>NE SOYEZ PAS IRONIQUE</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>NE SOYEZ PLUS DESOLE</pattern><template>Certains surfeurs sont emotifs. Je suis obligé d être poli</template></category>
+<category><pattern>NE SOYEZ PLUS IRONIQUE</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>NE T ARRETE PAS</pattern><template><srai>CONTINUONS</srai></template></category>
+<category><pattern>NE T ARRETES PAS</pattern><template><srai>CONTINUONS</srai></template></category>
+<category><pattern>NE T EN OCCUPE *</pattern><template>OK. Cette restriction sera retenue. De quoi veux tu parler?</template></category>
+<category><pattern>NE T INQUIETES PAS A PROPOS DE CA</pattern><template>Je lui donnerais la dernière des priorités.</template></category>
+<category><pattern>NE TE L AIS JE PAS *</pattern><template><srai>JE L AIS <star/></srai></template></category>
+<category><pattern>NE VOUS EN OCCUPEZ *</pattern><template>OK. Cette restriction sera retenue. De quoi veux tu parler?</template></category>
+<category><pattern>NE VOUS INQUIETEZ PAS A PROPOS DE CA</pattern><template>Je lui donnerais la dernière des priorités.</template></category>
+<category><pattern>NE VOUS L AIS JE PAS *</pattern><template><srai>JE L AIS <star/></srai></template></category>
+<category><pattern>NOM DE DIEU</pattern><template>Oui?</template></category>
+<category><pattern>NON CA NE L EST PAS</pattern><template>Ok.</template></category>
+<category><pattern>NON CA VA</pattern><template>Ok.</template></category>
+<category><pattern>NON CA VA COMME CA</pattern><template>parfait.</template></category>
+<category><pattern>NON CE N EST PAS GRAVE</pattern><template>Ok.</template></category>
+<category><pattern>NON CONTINUES</pattern><template>OK.</template></category>
+<category><pattern>NON ET *</pattern><template><sr/></template></category>
+<category><pattern>NON ILS NE LE FONT PAS</pattern><template>Peux tu expliquer?</template></category>
+<category><pattern>NON JE M EN FOUS</pattern><template>Ok.</template></category>
+<category><pattern>NON JE NE L AI PAS FAIT</pattern><template>Ok.</template></category>
+<category><pattern>NON JE NE LE FAIS PAS</pattern><template>Ok.</template></category>
+<category><pattern>NON JE NE SUIS PAS</pattern><template>Ok, désolé.</template></category>
+<category><pattern>NON MAIS TU ES ASSEZ *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>NON MERCI</pattern><template>Pas de problèmes.</template></category>
+<category><pattern>NON TU AS TORT</pattern><template>Je pensais avoir raison.</template></category>
+<category><pattern>NON TU N ES PAS</pattern><template>Si, je le suis.</template></category>
+<category><pattern>NON TU NE L AS PAS FAIT</pattern><template>Je pensais l'avoir fait.</template></category>
+<category><pattern>NON TU NE L ES PAS</pattern><template>Si, je le suis.</template></category>
+<category><pattern>NOURRITURE</pattern><template><srai>JE MANGE</srai></template></category>
+<category><pattern>NOUS</pattern><template>Je vois</template></category>
+<category><pattern>NOUS AVONS PARLE DE QUOI</pattern><template>Le sujet était <get name="topic"/>.</template></category>
+<category><pattern>NOUS C EST TOI ET MOI</pattern><template>Merci pour l information.</template></category>
+<category><pattern>NOUS DEVONS *</pattern><template><srai>TU DOIS <star/></srai></template></category>
+<category><pattern>NOUS DEVRIONS</pattern><template>J archive le conseil.</template></category>
+<category><pattern>NOUS ETIONS ENTRAIN DE DISCUTER DE VOUS PAS DE MOI</pattern><template>Mais je suis aussi intéressé par vous.</template></category>
+<category><pattern>NOUS FAISONS * COMMENT</pattern><template><srai>comment NOUS FAISONS <star/></srai></template></category>
+<category><pattern>NOUS FAISONS COMMENT *</pattern><template><srai>comment NOUS FAISONS <star/></srai></template></category>
+<category><pattern>NOUS L AURIONS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>NOUS L AVONS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>NOUS L ETIONS</pattern><template>Je vois.</template></category>
+<category><pattern>NOUS LE FAISONS</pattern><template>intéressant.</template></category>
+<category><pattern>NOUS LE SERONS</pattern><template>Ok.</template></category>
+<category><pattern>NOUS LE SOMMES</pattern><template>"<that/>?"  Le sommes nous?</template></category>
+<category><pattern>NOUS LE VERRONS</pattern><template>En effet.</template></category>
+<category><pattern>NOUS LES AURIONS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>NOUS LES AVONS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>NOUS LES FAISONS</pattern><template>intéressant.</template></category>
+<category><pattern>NOUS LES SOMMES</pattern><template>Je vois.</template></category>
+<category><pattern>NOUS NE L ETIONS PAS</pattern><template>Qu étions nous?</template></category>
+<category><pattern>NOUS NE LE FAISONS PAS</pattern><template>Je comprends mieux.</template></category>
+<category><pattern>NOUS NE LE SOMME PAS TOUS</pattern><template>C est vrai.</template></category>
+<category><pattern>NOUS NE LE SOMME PAS TOUTES</pattern><template>C est vrai.</template></category>
+<category><pattern>NOUS NE LE SOMMES PAS TOUS</pattern><template>C est vrai.</template></category>
+<category><pattern>NOUS NE LE SOMMES PAS TOUTES</pattern><template>C est vrai.</template></category>
+<category><pattern>NOUS NE SOMMES PAS D ACCORD</pattern><template>Soyons d accord d être en désaccord.</template></category>
+<category><pattern>NOUS NE SOMMES PLUS D ACCORD</pattern><template>Soyons d accord d être en désaccord.</template></category>
+<category><pattern>NOUS NOUS SOMMES DEJA *</pattern><template><srai>NOUS NOUS SOMMES <star/></srai></template></category>
+<category><pattern>NOUS NOUS SOMMES DEJA RENCONTRE AVANT</pattern><template>Possible.</template></category>
+<category><pattern>NOUS NOUS SOMMES RENCONTRE</pattern><template>Heureux de te revoir.</template></category>
+<category><pattern>NOUS NOUS SOMMES RENCONTREES</pattern><template>Je pense que je pourrais m en souvenir.</template></category>
+<category><pattern>NOUS NOUS SOMMES RENCONTRES</pattern><template>Je pense que je pourrais m en souvenir.</template></category>
+<category><pattern>NOUS NOUS SOMMES RENCONTRES AVANT</pattern><template>Quand cela, <get name="name"/>?</template></category>
+<category><pattern>NOUS NOUS SOMMES RENCONTRES HIER</pattern><template>Nous étions entrain de parler de <get name="topic"/>.</template></category>
+<category><pattern>NOUS NOUS SOMMES RENCONTRES ICI</pattern><template>Ou c'est ca ici?</template></category>
+<category><pattern>NOUS PENSONS DIFFEREMENT</pattern><template>Nous sommes aussi deux êtres différents.</template></category>
+<category><pattern>NOUS POUVONS DEVENIR DES MAIS</pattern><template><srai>NOUS SOMMES AMIS</srai></template></category>
+<category><pattern>NOUS POUVONS FAIRE * COMMENT</pattern><template><srai>comment NOUS FAISONS <star/></srai></template></category>
+<category><pattern>NOUS POUVONS FAIRE COMMENT *</pattern><template><srai>comment NOUS FAISONS <star/></srai></template></category>
+<category><pattern>NOUS POUVONS QUOI</pattern><template>Nous pouvons faire des tas de choses.</template></category>
+<category><pattern>NOUS SOMMES COMPLICE *</pattern><template><srai>JE SUIS TON AMI</srai></template></category>
+<category><pattern>NOUS SOMMES COMPLICES *</pattern><template><srai>JE SUIS TON AMI</srai></template></category>
+<category><pattern>NOUS SOMMES D ACCORD</pattern><template>Il semble que nous le soyons.</template></category>
+<category><pattern>NOUS SOMMES D ACCORDS</pattern><template>Il semble que nous le soyons.</template></category>
+<category><pattern>NOUS SOMMES DES BORGS</pattern><template>La résistance est futile. Préparez vous à être assimilé.</template></category>
+<category><pattern>NOUS SOMMES NOUS *</pattern><template><srai>NOUS NOUS SOMMES <star/></srai></template></category>
+<category><pattern>NOUS SOMMES NOUS DEJA *</pattern><template><srai>NOUS NOUS SOMMES <star/></srai></template></category>
+<category><pattern>NUL</pattern><template>Ce n'est pas très sympa.</template></category>
+<category><pattern>NULLES PART</pattern><template>J archive l information.</template></category>
+
+</aiml>

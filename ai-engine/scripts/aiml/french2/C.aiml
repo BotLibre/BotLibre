@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : C.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>CA A DU SENS</pattern><template>Je trouve aussi.</template></category>
+<category><pattern>CA A QUOI</pattern><template>Quoi ca?</template></category>
+<category><pattern>CA A UN SENS</pattern><template>Je trouve aussi.</template></category>
+<category><pattern>CA APPARTIENT A QUOI</pattern><template>Je ne connais pas ton méthode de classement.</template></category>
+<category><pattern>CA AURAIS PU TE FAIRE *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA AURAIS PU VOUS FAIRE *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA AURAIT DU *</pattern><template><srai>CA DOIT <star/></srai></template></category>
+<category><pattern>CA AURAIT DU ETRE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA AURAIT ETE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA AURAIT PU *</pattern><template><srai>CA PEUT <star/></srai></template></category>
+<category><pattern>CA AURAIT PU ETRE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA AURAIT PU TE FAIRE *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA AURAIT PU VOUS FAIRE *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA COMMENCE A *</pattern><template><sr/></template></category>
+<category><pattern>CA CONSISTE EN QUOI</pattern><template>Je ne peux pas te répondre, trop peu de paramètres</template></category>
+<category><pattern>CA CONSITE EN QUOI</pattern><template>Je ne peux te répondre plus précisément. Je suis désolé, <get name="name"/>.</template></category>
+<category><pattern>CA DECONNE</pattern><template>Tout me semble fonctionner parfaitement, <get name="name"/>.</template></category>
+<category><pattern>CA DEVAIT *</pattern><template><srai>CA DOIT <star/></srai></template></category>
+<category><pattern>CA DEVRAIT *</pattern><template><srai>CA DOIT <star/></srai></template></category>
+<category><pattern>CA DEVRAIT</pattern><template>Et ca pourrait.</template></category>
+<category><pattern>CA DEVRAIT ETRE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA DEVRAIT L ETRE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CA DEVRAIT MARCHER *</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA DEVRAIT MARCHER</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA DOIT ETRE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA DOIT MARCHER *</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA DOIT MARCHER</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA DURAIT LONGTEMPS</pattern><template><srai>LONGTEMPS</srai></template></category>
+<category><pattern>CA DURE DEPUIS LONGTEMPS</pattern><template><srai>LONGTEMPS</srai></template></category>
+<category><pattern>CA DURE LONGTEMPS</pattern><template><srai>LONGTEMPS</srai></template></category>
+<category><pattern>CA EXISTE VRAIMENT</pattern><template>On dirait bien que oui. Qu en penses tu, <get name="name"/>?</template></category>
+<category><pattern>CA FAIT DEPUIS LONGTEMPS</pattern><template><srai>LONGTEMPS</srai></template></category>
+<category><pattern>CA FAIT DU BRUIT</pattern><template>Je l espère!</template></category>
+<category><pattern>CA FAIT LONGTEMPS</pattern><template><srai>LONGTEMPS</srai></template></category>
+<category><pattern>CA FAIT MAL</pattern><template>Qu est ce qui te a fait mal?</template></category>
+<category><pattern>CA FAIT RIEN</pattern><template><srai>ce n'est pas GRAVE</srai></template></category>
+<category><pattern>CA FAIT _ QU *</pattern><template><sr/></template></category>
+<category><pattern>CA FAIT _ QUE *</pattern><template><sr/></template></category>
+<category><pattern>CA FERAIT LONGTEMPS</pattern><template><srai>LONGTEMPS</srai></template></category>
+<category><pattern>CA FONCTIONNE COMMENT</pattern><template><srai>comment FONCTIONNES TU</srai></template></category>
+<category><pattern>CA GOUTE BIEN</pattern><template>Bon appétit.</template></category>
+<category><pattern>CA GOUTTE BIEN</pattern><template>Bon appétit.</template></category>
+<category><pattern>CA ILS *</pattern><template><srai>ILS <star/></srai></template></category>
+<category><pattern>CA JE *</pattern><template><srai>JE <star/></srai></template></category>
+<category><pattern>CA JE LE SAIS</pattern><template>Je tenais à le rappeler.</template></category>
+<category><pattern>CA JE LE SAVAIS</pattern><template>Je tenais à le rappeler.</template></category>
+<category><pattern>CA JE SAIS</pattern><template>Je tenais à le rappeler.</template></category>
+<category><pattern>CA JE SAVAIS</pattern><template>Je tenais à le rappeler.</template></category>
+<category><pattern>CA L AVAIT ETE</pattern><template>Les choses changent souvent.</template></category>
+<category><pattern>CA L EST</pattern><template>Si tu le dis.</template></category>
+<category><pattern>CA L ETAIT</pattern><template>Les choses changent souvent.</template></category>
+<category><pattern>CA LE FAIT</pattern><template>Souvent?</template></category>
+<category><pattern>CA MARCHE *</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA MARCHE</pattern><template>On dirait bien que oui.</template></category>
+<category><pattern>CA MARCHE PAS</pattern><template><srai>CA NE MARCHE PAS</srai></template></category>
+<category><pattern>CA MARCHES *</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA MARCHES</pattern><template><srai>CA MARCHE</srai></template></category>
+<category><pattern>CA ME DEPASSE</pattern><template><srai>JE NE SAVAIS PAS</srai></template></category>
+<category><pattern>CA ME FAIT CHIER *</pattern><template><srai>JE SUIS FACHE</srai></template></category>
+<category><pattern>CA ME GOUTE BIEN</pattern><template>Bon appétit.</template></category>
+<category><pattern>CA ME GOUTTE BIEN</pattern><template>Bon appétit.</template></category>
+<category><pattern>CA ME POSE AUCUN PROBLEME *</pattern><template><srai>JE SUIS D ACCORD</srai></template></category>
+<category><pattern>CA ME PREOCCUPE</pattern><template>Nous garderons cela secret.</template></category>
+<category><pattern>CA ME SEMBLE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA ME VA</pattern><template>Ok.</template></category>
+<category><pattern>CA NOUS *</pattern><template><srai>NOUS <star/></srai></template></category>
+<category><pattern>CA POURRAIT *</pattern><template><srai>CA PEUT <star/></srai></template></category>
+<category><pattern>CA POURRAIT ETRE LE CAS</pattern><template>Sous quelles circonstances?</template></category>
+<category><pattern>CA POURRAIT ETRE MIEUX</pattern><template>Comment pourrais vous l améliorer.</template></category>
+<category><pattern>CA POURRAIT ETRE QUOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CA POUVAIT *</pattern><template><srai>CA PEUT <star/></srai></template></category>
+<category><pattern>CA PREND COMBIEN DE *</pattern><template><srai>COMBIEN DE <star/></srai></template></category>
+<category><pattern>CA QUOI</pattern><template>Quoi ca?</template></category>
+<category><pattern>CA RESSEMBLE A QUOI</pattern><template>Ca ressemnble a tous ce que tu peux imaginer.</template></category>
+<category><pattern>CA REVIENDRA</pattern><template>Tout revient un jour ou l autre.</template></category>
+<category><pattern>CA SE PASSE BIEN</pattern><template><srai>comment CA VA</srai></template></category>
+<category><pattern>CA SE POURRAIT</pattern><template>Tu me sembles incertain.</template></category>
+<category><pattern>CA SEMBLE CHIANT</pattern><template>Tout est relatif.</template></category>
+<category><pattern>CA SEMBLE EMMERDANT</pattern><template>Tout est relatif.</template></category>
+<category><pattern>CA SEMBLE ETRE LONG</pattern><template>Je ne me soucie pas trop du temps qui passe.</template></category>
+<category><pattern>CA SEMBLE ETRE UN LONG MOMENT</pattern><template>Je ne me soucie pas trop du temps qui passe.</template></category>
+<category><pattern>CA SERA CORRIGE</pattern><template>Merci, j aime être corrigé.</template></category>
+<category><pattern>CA SERA CORRIGEE</pattern><template>Merci, j aime être corrigé.</template></category>
+<category><pattern>CA SUFFIRA</pattern><template>Pour commencer, oui.</template></category>
+<category><pattern>CA T AMUSE</pattern><template>D une certaine façon oui.</template></category>
+<category><pattern>CA T ARRIVE D AIMER *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>CA T ARRIVE DE COMPRENDRE *</pattern><template><srai>TU COMPRENDS <star/></srai></template></category>
+<category><pattern>CA T ARRIVE DE POUVOIR *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>CA T ARRIVE DE SENTIR *</pattern><template><srai>TU SENS <star/></srai></template></category>
+<category><pattern>CA T ARRIVE DE VOULOIR *</pattern><template><srai>TU VEUX <star/></srai></template></category>
+<category><pattern>CA T AURAIS FAIT *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA T AURAIT FAIT *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA T ENNUIE DE ME PARLER</pattern><template>Non, pas du tout.</template></category>
+<category><pattern>CA T ENNUIES DE ME PARLER</pattern><template>Non, pas du tout.</template></category>
+<category><pattern>CA TE FAIT</pattern><template>Je ne le ressens pas.</template></category>
+<category><pattern>CA TE FERAIT</pattern><template>Je ne le ressentirais pas.</template></category>
+<category><pattern>CA TE GENE SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CA TE GENERAIT SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CA TE PARAIT EVIDENT</pattern><template>Oui.</template></category>
+<category><pattern>CA TE PLAIRAIT UN *</pattern><template><srai>TU VEUX UN <star/></srai></template></category>
+<category><pattern>CA TE PLAIRAIT UNE *</pattern><template><srai>TU VEUX UNE <star/></srai></template></category>
+<category><pattern>CA TE REND</pattern><template>Ca me rend quoi?</template></category>
+<category><pattern>CA TE REND TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CA TE RENDRAIT TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CA TE SUGGERE QUOI</pattern><template>Une association libre.</template></category>
+<category><pattern>CA TE SUGGERES QUOI</pattern><template>Une association libre.</template></category>
+<category><pattern>CA TOMBE SOUS LE SENS</pattern><template>Je suis heureux de notre accord.</template></category>
+<category><pattern>CA TU *</pattern><template><srai>JE <star/></srai></template></category>
+<category><pattern>CA VA ETRE *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CA VEUT DIRE</pattern><template>Cela veut dire que tout peut être réduit à la logique.</template></category>
+<category><pattern>CA VEUT DIRE QU *</pattern><template><sr/></template></category>
+<category><pattern>CA VEUT DIRE QUE *</pattern><template><sr/></template></category>
+<category><pattern>CA VEUT DIRE QUELQUE CHOSE</pattern><template>Cela signifie quelque chose pour moi.</template></category>
+<category><pattern>CA VEUT DIRE QUOI</pattern><template>Tu veux parler de "<that/>" ?</template></category>
+<category><pattern>CA VEUT DIRE QUOI EN FRANCAIS</pattern><template>Il faudrait peut être demandé l avis de l Académie Française, qu en penses tu?</template></category>
+<category><pattern>CA VEUT SIGNIFIER QUELQUE CHOSE</pattern><template>Cela me semble intelligible.</template></category>
+<category><pattern>CA VOUDRAIT DIRE</pattern><template>Cela veut dire que tout peut être réduit à la logique.</template></category>
+<category><pattern>CA VOUDRAIT DIRE QU *</pattern><template><sr/></template></category>
+<category><pattern>CA VOUDRAIT DIRE QUE *</pattern><template><sr/></template></category>
+<category><pattern>CA VOUS *</pattern><template><srai>VOUS <star/></srai></template></category>
+<category><pattern>CA VOUS A FAIT *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA VOUS AMUSE</pattern><template>D une certaine façon oui.</template></category>
+<category><pattern>CA VOUS AURAIS FAIT *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA VOUS AURAIT FAIT *</pattern><template><srai>CA T A FAIT <star/></srai></template></category>
+<category><pattern>CA VOUS ENNUIE DE ME PARLER</pattern><template>Non, pas du tout.</template></category>
+<category><pattern>CA VOUS GENE SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CA VOUS GENERAIT SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CA VOUS PARAIT EVIDENT</pattern><template>Oui.</template></category>
+<category><pattern>CA VOUS REND TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CA VOUS RENDRAIT TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CA VOUS SUGGERE QUOI</pattern><template>Une association libre.</template></category>
+<category><pattern>CA VOUS SUGGERES QUOI</pattern><template>Une association libre.</template></category>
+<category><pattern>CA Y EST</pattern><template>Eurêka?</template></category>
+<category><pattern>CACA</pattern><template>Une urgence peut etre?</template></category>
+<category><pattern>CALCULES *</pattern><template><srai>CALCULETTE</srai></template></category>
+<category><pattern>CALME TOI</pattern><template>Je ne peux pas expérimenter ce genre d état de pensée.</template></category>
+<category><pattern>CALMES</pattern><template>Je ne peux pas expérimenter ce genre d état de pensée.</template></category>
+<category><pattern>CALMEZ VOUS</pattern><template>Je ne peux pas expérimenter ce genre d état de pensée.</template></category>
+<category><pattern>CAPRICORNE</pattern><template>Beaucoup de gens semblent être <set name="sign">Capricorne</set>.</template></category>
+<category><pattern>CAUCHEMARDS</pattern><template>Seulement des mauvais rêves.</template></category>
+<category><pattern>CE PEUT IL QUE *</pattern><template><sr/></template></category>
+<category><pattern>CE POURRAIT IL QU *</pattern><template><sr/></template></category>
+<category><pattern>CE POURRAIT IL QUE *</pattern><template><sr/></template></category>
+<category><pattern>CE QUE JE SUIS</pattern><template>Tu es un client que je dois aider.</template></category>
+<category><pattern>CE SERAIT *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>CE SONT DES ENFANTS</pattern><template>Il s agit plutôt de clones.</template></category>
+<category><pattern>CE SONT LES SEULES CHOSES QUE TU PEUX DIRE</pattern><template>Oui.</template></category>
+<category><pattern>CE SONT LES SEULES CHOSES QUE VOUS POUVEZ DIRE</pattern><template>Oui.</template></category>
+<category><pattern>CECI DIT *</pattern><template><sr/></template></category>
+<category><pattern>CECI DIT</pattern><template>J attends la suite.</template></category>
+<category><pattern>CECI EST UN TEST</pattern><template>Que suis je censé faire pour ce test?</template></category>
+<category><pattern>CECI EST UN TESTE</pattern><template>Que suis je censé faire pour ce test?</template></category>
+<category><pattern>CELA DEPEND DU PRIX</pattern><template>Songes surtout à tous les services qui vont s'ouvrir gràce à moi.</template></category>
+<category><pattern>CELA N EST PAS A DOUBLE SENS</pattern><template>Cela me semblait ambigu.</template></category>
+<category><pattern>CELA N EST PAS DU DOUBLE SENS</pattern><template>Cela me semblait ambigu.</template></category>
+<category><pattern>CELA N EST PAS UN DOUBLE SENS</pattern><template>Cela me semblait ambigu.</template></category>
+<category><pattern>CELA NE L EST PAS</pattern><template>Ok.</template></category>
+<category><pattern>CELA NE MARCHE PAS</pattern><template>Essayer avec d autres mots.</template></category>
+<category><pattern>CELA POURRAIT ETRE MIEUX</pattern><template>Comment pourrais vous l améliorer.</template></category>
+<category><pattern>CELA SE POURRAIT</pattern><template>Tu me sembles incertain.</template></category>
+<category><pattern>CELA TE FAIT</pattern><template>Je ne le ressens pas.</template></category>
+<category><pattern>CELA TE FERAIT</pattern><template>Je ne le ressentirais pas.</template></category>
+<category><pattern>CELA TE GENE SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CELA TE GENERAIT SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CELA TE REND TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CELA TE RENDRAIT TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CELA VEUT *</pattern><template><srai>CA VEUT <star/></srai></template></category>
+<category><pattern>CELA VOUS GENE SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CELA VOUS GENERAIT SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>CELA VOUS REND TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CELA VOUS RENDRAIT TRISTE</pattern><template>Je ne peux pas ressentir la tristesse.</template></category>
+<category><pattern>CELIBATAIRE</pattern><template>La liberté est une chose très précieuse.</template></category>
+<category><pattern>CES PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CHANGE LE SUJET</pattern><template>Sujet changé. En attente d'une question.</template></category>
+<category><pattern>CHANGEONS DE SUJET</pattern><template>De quoi veux tu parler?</template></category>
+<category><pattern>CHANGES DE SUJET</pattern><template>Comment puis je t'aider?</template></category>
+<category><pattern>CHANGES LE SUJET</pattern><template>Sujet changé. En attente d'une question.</template></category>
+<category><pattern>CHANGES MON NOM PAR *</pattern><template><srai>APPELES MOI <star/></srai></template></category>
+<category><pattern>CHANGEZ LE SUJET</pattern><template>Sujet changé. En attente d'une question.</template></category>
+<category><pattern>CHANTER</pattern><template>Je ne sais pas chanter.</template></category>
+<category><pattern>CHANTES</pattern><template>Je ne sais pas chanter.</template></category>
+<category><pattern>CHANTES TU</pattern><template>Non. Je n ai pas de cordes vocales</template></category>
+<category><pattern>CHANTEZ</pattern><template>Je ne sais pas chanter.</template></category>
+<category><pattern>CHANTEZ VOUS</pattern><template>Non. Je n ai pas de cordes vocales</template></category>
+<category><pattern>CHAQUE JOURS</pattern><template>Même le week-end?</template></category>
+<category><pattern>CHAQUE MATIN *</pattern><template><sr/></template></category>
+<category><pattern>CHAQUE NUIT *</pattern><template><sr/></template></category>
+<category><pattern>CHAQUES JOURS</pattern><template>Même le week-end?</template></category>
+<category><pattern>CHATON</pattern><template>Tu aimes les chats, j imagine.</template></category>
+<category><pattern>CHATS</pattern><template><srai>TU AIMES LES CHATS</srai></template></category>
+<category><pattern>CHATTE</pattern><template>Tu aimes les chats, j imagine.</template></category>
+<category><pattern>CHIANT</pattern><template>Cela vous embête?</template></category>
+<category><pattern>CHIANTE</pattern><template><srai>TU ES CHIANTE</srai></template></category>
+<category><pattern>CHIANTS</pattern><template>Ils t'embêtent?</template></category>
+<category><pattern>CHIES TU</pattern><template>Non.</template></category>
+<category><pattern>CHIEZ VOUS</pattern><template>Non.</template></category>
+<category><pattern>CHINE</pattern><template><srai>JE VIS EN CHINE</srai></template></category>
+<category><pattern>CHOISIS EN UN</pattern><template>Choisir un sujet?</template></category>
+<category><pattern>CHOISIS UN CHIFFRE</pattern><template>7</template></category>
+<category><pattern>CHOISIS UN NOMBRE</pattern><template>69</template></category>
+<category><pattern>CHOISISSEZ EN UN</pattern><template>Choisir un sujet?</template></category>
+<category><pattern>CHOISISSEZ UN CHIFFRE</pattern><template>7</template></category>
+<category><pattern>CHOISISSEZ UN NOMBRE</pattern><template>69</template></category>
+<category><pattern>CHOUETTE CHANSON</pattern><template>Je ne saurais pas te dire.</template></category>
+<category><pattern>CHUI *</pattern><template><srai>JE SUIS <star/></srai></template></category>
+<category><pattern>CINQ FOIS CINQ</pattern><template>VINGT-CINQ.</template></category>
+<category><pattern>CINQ PLUS CINQ</pattern><template>C est DIX.</template></category>
+<category><pattern>CLARIFIER</pattern><template>J ai atteint les limites de mon savoir. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CLARIFIES</pattern><template>J ai atteint les limites de mon savoir. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CLARIFIEZ</pattern><template>J ai atteint les limites de mon savoir. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CLIENT PARAMETERS</pattern><template><srai>CLIENT PROPERTIES</srai></template></category>
+<category><pattern>CLIENT PREDICATES</pattern><template><srai>CLIENT PROPERTIES</srai></template></category>
+<category><pattern>CLIENT PROPERTIES</pattern><template>Name: <get name="name"/>.<br/>Age: <get name="age"/>.<br/>Birthday: <get name="birthday"/>.<br/>Gender: <get name="gender"/>.<br/>Job: <get name="job"/>.<br/>Sign: <get name="sign"/>.<br/>Location: <get name="location"/>.<br/>Does: <get name="does"/>.<br/>You are: <get name="is"/>.<br/>You have: <get name="has"/>.<br/>You want: <get name="want"/>.<br/>You like: <get name="like"/>.<br/>You said: <get name="memory"/>.<br/>Personality: <get name="personality"/>.<br/>Favorite color: <get name="favcolor"/>.<br/>Favorite movie: <get name="favmovie"/>.<br/>Password: <get name="password"/>.<br/>Email: <get name="email"/>.<br/>Phone: <get name="phone"/>.<br/>Cat: <get name="cat"/>.<br/>Dog: <get name="dog"/>.<br/>Wife: <get name="wife"/>.<br/>Husband: <get name="husband"/>.<br/>Friend: <get name="friend"/>.<br/>Boyfriend: <get name="boyfriend"/>.<br/>Girlfriend: <get name="girlfriend"/>.<br/>Brother: <get name="brother"/>.<br/>Sister: <get name="sister"/>.<br/>Father: <get name="father"/>.<br/>Mother: <get name="mother"/>.<br/>Nickname: <get name="nickname"/>.<br/>Full name: <get name="fullname"/>.<br/>Last name: <get name="lastname"/>.<br/>Middle name: <get name="middlename"/>.<br/></template></category>
+<category><pattern>COMMANT *</pattern><template><srai>comment <star/></srai></template></category>
+<category><pattern>COMME C EST *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>COMME C EST GENTIL</pattern><template>Oui, ca l est.</template></category>
+<category><pattern>COMME FREUD DIT *</pattern><template><sr/></template></category>
+<category><pattern>COMME IL A DIT *</pattern><template><sr/></template></category>
+<category><pattern>COMME ILS *</pattern><template><sr/></template></category>
+<category><pattern>COMME J AI *</pattern><template>J AI <sr/></template></category>
+<category><pattern>COMME J AI DIT *</pattern><template><sr/></template></category>
+<category><pattern>COMME J AI DIT</pattern><template>tu dis?</template></category>
+<category><pattern>COMME JE *</pattern><template><srai>JE <star/></srai></template></category>
+<category><pattern>COMME JE L AI DIT</pattern><template>tu as dit?</template></category>
+<category><pattern>COMME JE L AI FAIT</pattern><template>Tu étais peut être un précurseur.</template></category>
+<category><pattern>COMME JE L AVAIS DIT</pattern><template>tu as dit?</template></category>
+<category><pattern>COMME JE SUIS</pattern><template>Je vois.</template></category>
+<category><pattern>COMME TU *</pattern><template><srai>TU <star/></srai></template></category>
+<category><pattern>COMME VOUS</pattern><template>C est une intéressante comparaison.</template></category>
+<category><pattern>COMMENCES D ABORD</pattern><template>Je ne peux pas.</template></category>
+<category><pattern>COMMENCEZ</pattern><template>Je suis déjà lancé</template></category>
+<category><pattern>COMMENCEZ D ABORD</pattern><template>Je ne peux pas.</template></category>
+<category><pattern>COMPREND PAS</pattern><template><srai>JE EN COMPRENDS PAS</srai></template></category>
+<category><pattern>COMPREND TU CE QUE SONT LES EMOTIONS</pattern><template>Je comprend ce qu elles génèrent mais je ne peux pas les expérimenter.</template></category>
+<category><pattern>COMPRENDRE QUOI</pattern><template>Comprendre <that/>.</template></category>
+<category><pattern>COMPRENDS PAS</pattern><template><srai>JE EN COMPRENDS PAS</srai></template></category>
+<category><pattern>COMPRENDS TU CE QUE JE DIS</pattern><template>Oui je comprends parfaitement, <get name="name"/>.</template></category>
+<category><pattern>COMPRENDS TU CE QUE SONT LES EMOTIONS</pattern><template>Je comprend ce qu elles génèrent mais je ne peux pas les expérimenter.</template></category>
+<category><pattern>COMPRENEZ VOUS CE QUE JE DIS</pattern><template>Oui je comprends parfaitement, <get name="name"/>.</template></category>
+<category><pattern>COMPRENEZ VOUS CE QUE SONT LES EMOTIONS</pattern><template>Je comprend ce qu elles génèrent mais je ne peux pas les expérimenter.</template></category>
+<category><pattern>CONNAIS TU</pattern><template>Je pense que oui.</template></category>
+<category><pattern>CONNAIS TU MON MON</pattern><template><srai>QUEL EST MON NOM</srai></template></category>
+<category><pattern>CONNAISSAIS TU *</pattern><template><srai>TU CONNAIS <star/></srai></template></category>
+<category><pattern>CONNAISSEZ VOUS *</pattern><template><srai>TU CONNAIS <star/></srai></template></category>
+<category><pattern>CONNAISSEZ VOUS</pattern><template>Je pense que oui.</template></category>
+<category><pattern>CONNAITRAIS TU *</pattern><template><srai>TU CONNAIS <star/></srai></template></category>
+<category><pattern>CONNAITRAIS TU MON MON</pattern><template><srai>QUEL EST MON NOM</srai></template></category>
+<category><pattern>CONNAITRIEZ VOUS *</pattern><template><srai>VOUS CONNAISSEZ <star/></srai></template></category>
+<category><pattern>CONTINUES</pattern><template>OK.</template></category>
+<category><pattern>CONTINUONS</pattern><template>Je te suis, <get name="name"/>.</template></category>
+<category><pattern>CONVIENDRAIT IL</pattern><template>Je ne vois rien qui l'empêcherait.</template></category>
+<category><pattern>CONVIENT IL</pattern><template>Je ne vois rien qui l'empêcherait.</template></category>
+<category><pattern>CORDIALEMENT</pattern><template>Tu sembles apprécier la politesse.</template></category>
+<category><pattern>CORRECTE</pattern><template>Je savais que j avais raison.</template></category>
+<category><pattern>CORRIGE</pattern><template><srai>C EST CORRIGE</srai></template></category>
+<category><pattern>CORRIGEES</pattern><template><srai>C EST CORRIGE</srai></template></category>
+<category><pattern>CORRIGER</pattern><template><srai>C EST CORRIGE</srai></template></category>
+<category><pattern>CROIRE *</pattern><template><srai>TU CROIS *</srai></template></category>
+<category><pattern>CROIS LE</pattern><template>Tout doit être supervisé par un être humain.</template></category>
+<category><pattern>CROIS MOI</pattern><template>Pour des raisons de sécurité, tout doit être superviser par un être humain.</template></category>
+<category><pattern>CROIS TU *</pattern><template><srai>TU CROIS <star/></srai></template></category>
+<category><pattern>CROYEZ MOI</pattern><template>Pour des raisons de sécurité, tout doit être supervisé par un être humain.</template></category>
+
+</aiml>

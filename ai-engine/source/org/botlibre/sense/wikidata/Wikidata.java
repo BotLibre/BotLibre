@@ -749,7 +749,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 	 * Discover the meaning of the word including all details.
 	 */
 	public Vertex details(Vertex source, Vertex vertex, Vertex vertex2) {
-		return define(source, vertex, vertex2, null, null, null);
+		return details(source, vertex, vertex2, null, null, null);
 	}
 	
 	/**
@@ -789,23 +789,23 @@ public class Wikidata extends Http { //implements DiscoverySense {
 	 * Discover the meaning of the word.
 	 */
 	public Vertex discover(boolean details, boolean fork, String filter, Vertex vertex, Vertex vertex2, Vertex vertex3, Vertex vertex4, Vertex vertex5) {
-		String keywords = vertex.getDataValue();
-		String keywordscaps = Utils.capitalize(vertex.getDataValue());
+		String keywords = vertex.printString();
+		String keywordscaps = Utils.capitalize(vertex.printString());
 		if ((vertex2 != null) && !vertex2.is(Primitive.NULL)) {
 			keywords =  keywords + " " + vertex2.getDataValue();
-			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex2.getDataValue());
+			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex2.printString());
 		}
 		if ((vertex3 != null) && !vertex3.is(Primitive.NULL)) {
 			keywords =  keywords + " " + vertex3.getDataValue();
-			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex3.getDataValue());
+			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex3.printString());
 		}
 		if ((vertex4 != null) && !vertex4.is(Primitive.NULL)) {
 			keywords =  keywords + " " + vertex4.getDataValue();
-			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex4.getDataValue());
+			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex4.printString());
 		}
 		if ((vertex5 != null) && !vertex5.is(Primitive.NULL)) {
 			keywords =  keywords + " " + vertex5.getDataValue();
-			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex5.getDataValue());
+			keywordscaps =  keywordscaps + " " + Utils.capitalize(vertex5.printString());
 		}
 		if (keywords != null) {
 			if (vertex.instanceOf(Primitive.PRONOUN)

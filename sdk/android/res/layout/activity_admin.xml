@@ -7,6 +7,44 @@
 	android:background="#FFFFFF"
     android:orientation="vertical" >
     
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content"
+            android:textSize="18sp"
+	        android:layout_margin="8sp"
+			android:text="Admin Console"/>
+		
+		<Button
+			android:id="@+id/helpButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/help"
+			android:onClick="help"
+			android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
@@ -55,8 +93,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
         android:background="@drawable/button"
-        android:onClick="adminAvatars"
-        android:text="Avatars"
+        android:onClick="adminAvatar"
+        android:text="Avatar"
         android:textColor="@color/lgrey" />
 	
     <Button
@@ -70,6 +108,26 @@
         android:textColor="@color/lgrey" />
 	
     <Button
+        android:id="@+id/trainingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminTraining"
+        android:text="Training/Chat Logs"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/scriptsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminScripts"
+        android:text="Scripts"
+        android:textColor="@color/lgrey" />
+   
+    <Button
         android:id="@+id/learningButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,13 +138,73 @@
         android:textColor="@color/lgrey" />
 	
     <Button
-        android:id="@+id/trainingButton"
+        android:id="@+id/twitterButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
         android:background="@drawable/button"
-        android:onClick="adminTraining"
-        android:text="Training"
+        android:onClick="adminTwitter"
+        android:text="Twitter"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/facebookButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminFacebook"
+        android:text="Facebook"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/telegramButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminTelegram"
+        android:text="Telegram"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/slackButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminSlack"
+        android:text="Slack"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/emailButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminEmail"
+        android:text="Email"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/smsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminSMS"
+        android:text="SMS"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/ircButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="adminIRC"
+        android:text="IRC"
         android:textColor="@color/lgrey" />
     
     <View

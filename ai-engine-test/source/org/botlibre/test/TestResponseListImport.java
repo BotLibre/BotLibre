@@ -173,6 +173,56 @@ public class TestResponseListImport extends TextTest {
 	}
 
 	/**
+	 * Test previous.
+	 */
+	@org.junit.Test
+	public void testPrevious() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("yes");
+		String response = waitForOutput(output);
+		checkResponse(response, "no");
+
+		text.input("yes");
+		response = waitForOutput(output);
+		checkResponse(response, "no");
+		
+		text.input("hi");
+		response = waitForOutput(output);
+		checkResponse(response, "do you like me?");
+
+		text.input("yes");
+		response = waitForOutput(output);
+		checkResponse(response, "what do you like about me?");
+		
+		text.input("hey");
+		response = waitForOutput(output);
+		checkResponse(response, "are you ok?");
+
+		text.input("yes");
+		response = waitForOutput(output);
+		checkResponse(response, "are you sure?");
+		
+		text.input("no");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
+		
+		text.input("hi");
+		response = waitForOutput(output);
+		checkResponse(response, "do you like me?");
+		
+		text.input("no");
+		response = waitForOutput(output);
+		checkResponse(response, "why not?");
+		
+		bot.shutdown();
+	}
+
+	/**
 	 * Test Self operators.
 	 */
 	@org.junit.Test
@@ -212,6 +262,67 @@ public class TestResponseListImport extends TextTest {
 		if (!response.equals("I am a bot.")) {
 			fail("did not match: " + response);			
 		}
+		
+		bot.shutdown();
+	}
+
+	/**
+	 * Test commands.
+	 */
+	@org.junit.Test
+	public void testCommand() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("email mom");
+		String response = waitForOutput(output);
+		checkResponse(response, "sending email");
+		
+		bot.shutdown();
+	}
+
+	/**
+	 * Test conditions and think elements.
+	 */
+	@org.junit.Test
+	public void testConditions() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		bot.setDebugLevel(Level.FINE);
+		
+		text.input("am I your friend");
+		String response = waitForOutput(output);
+		checkResponse(response, "no");
+		
+		text.input("am I your friend");
+		response = waitForOutput(output);
+		checkResponse(response, "no");
+		
+		text.input("am I your friend");
+		response = waitForOutput(output);
+		checkResponse(response, "no");
+		
+		text.input("you are my friend");
+		response = waitForOutput(output);
+		checkResponse(response, "ok, were friends");
+		
+		text.input("am I your friend");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
+		
+		text.input("am I your friend");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
+		
+		text.input("am I your friend");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
 		
 		bot.shutdown();
 	}

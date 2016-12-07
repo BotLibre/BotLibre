@@ -24,10 +24,10 @@ package org.botlibre.sdk;
  */
 public class BOTlibreCredentials extends Credentials {
 	public static String DOMAIN = "www.botlibre.com";
-	//public static String DOMAIN = "192.168.0.11:9080";
+	//public static String DOMAIN = "192.168.0.21:9080";
 	public static String APP = "";
 	//public static String APP = "/botlibre";
-	public static String PATH = "/rest/botlibre";
+	public static String PATH = "/rest/api";
 
 	public BOTlibreCredentials(String applicationId) {
 		this.host = DOMAIN;

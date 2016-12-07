@@ -19,7 +19,9 @@ package org.botlibre.sense.email;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -36,6 +38,7 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
@@ -45,6 +48,7 @@ import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.TextStream;
@@ -60,7 +64,7 @@ import com.sun.mail.pop3.POP3SSLStore;
 
 public class Email extends BasicSense {
 	public static int SLEEP = 1000 * 60 * 10; // 10 minutes.
-	public static String SIGNATURE = "\n\n----------\nThis is an automated message from an emailbot hosted on BOT libre, http://www.botlibre.com\n";
+	public static String SIGNATURE = "\n\n----------\nThis is an automated message\n";
 	
 	/** Signature to apply to emails. */
 	protected String signature = SIGNATURE;
@@ -333,7 +337,7 @@ public class Email extends BasicSense {
 	 */
 	public void checkEmail() {
 		try {
-			log("Checking email.", Level.FINER);
+			log("Checking email.", Level.INFO);
 	        Store store = connectStore();		
 		    Folder inbox = store.getFolder("INBOX");
 		    if (inbox == null) {
@@ -362,6 +366,10 @@ public class Email extends BasicSense {
 			    	} else {
 			    		recievedTime = messages[index].getReceivedDate().getTime();
 			    	}
+			    	if ((System.currentTimeMillis() - recievedTime) > DAY) {
+						log("Day old email", Level.INFO, messages[index].getSubject());
+			    		continue;
+			    	}
 			    	if (recievedTime > lastMessage) {
 			    		count++;
 			    		if (count > this.maxEmails) {
@@ -380,7 +388,7 @@ public class Email extends BasicSense {
 			    	memory.save();
 			    }
 		    }
-			log("Done checking email.", Level.FINER);
+			log("Done checking email.", Level.INFO);
 		    inbox.close(false);
 		    store.close();
 		} catch (MessagingException exception) {
@@ -428,13 +436,13 @@ public class Email extends BasicSense {
 		    
             Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 		    //Message[] messages = inbox.getMessages(1, Math.min(inbox.getMessageCount(), 50));
-		    for (int index = 0; index < messages.length; index++) {
+		    for (int index = 0; index < 10 && index < messages.length; index++) {
 		      emails.add(0, messages[index].getReceivedDate() + " - " + String.valueOf(getFrom(messages[index])) + ": " + messages[index].getSubject());
 		    }
 		    inbox.close(false);
 		    store.close();
 		} catch (MessagingException exception) {
-			log(new BotException("Failed to access email.", exception));
+			log(new BotException("Failed to access email: " + exception.getMessage(), exception));
 		} finally {
 			try {
 				if (inbox != null) {
@@ -481,8 +489,7 @@ public class Email extends BasicSense {
 		    }
 		    store.close();
 		} catch (MessagingException exception) {
-			exception.printStackTrace();
-			log(new BotException("Failed to access sent - " + exception.toString(), exception));
+			log(new BotException("Failed to access sent - " + exception.getMessage(), exception));
 		}
 		return emails;
 	}
@@ -517,11 +524,36 @@ public class Email extends BasicSense {
 		return session;
 	}
 
+	// Self API
+	public void email(Vertex source, Vertex replyTo, Vertex subject, Vertex message) {
+		Network network = source.getNetwork();
+		if (subject.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(network.createInstance(Primitive.INPUT), null, network, variables);
+			subject = getBot().mind().getThought(Language.class).evaluateFormula(subject, variables, network);
+			if (subject == null) {
+				log("Invalid template formula", Level.WARNING, subject);
+				return;
+			}
+		}
+		if (message.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(network.createInstance(Primitive.INPUT), null, network, variables);
+			message = getBot().mind().getThought(Language.class).evaluateFormula(message, variables, network);
+			if (message == null) {
+				log("Invalid template formula", Level.WARNING, message);
+				return;
+			}
+		}
+		getBot().stat("email");
+		sendEmail(message.printString(), subject.printString(), replyTo.printString());
+	}
+
 	/**
 	 * Send the email reply.
 	 */
 	public void sendEmail(String text, String subject, String replyTo) {
-		log("Sending email:", Level.INFO, text, replyTo);
+		log("Sending email:", Level.INFO, replyTo, subject, text);
 		initProperties();
 		try {
 			//Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
@@ -536,18 +568,26 @@ public class Email extends BasicSense {
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.socketFactory.fallback", "false");
 			props.setProperty("mail.smtp.quitwait", "false");*/
-
+			
 			MimeMessage message = new MimeMessage(session);
 		    message.setFrom(new InternetAddress(getEmailAddress()));
 		    message.addRecipient(Message.RecipientType.TO, new InternetAddress(replyTo));
 		    message.setSubject(subject);
-		    message.setText(text);
+		    if (Utils.containsHTML(text)) {
+			    MimeMultipart content = new MimeMultipart();
+			    MimeBodyPart htmlPart = new MimeBodyPart();	
+			    htmlPart.setContent(text, "text/html");
+			    content.addBodyPart(htmlPart);
+			    message.setContent(content);
+		    } else {
+		    	message.setText(text);
+		    }
 
 		    // Send message
 		    this.emails++;
 		    Transport.send(message);
 		} catch (MessagingException exception) {
-			log(new BotException("Failed to send email.", exception));
+			log(new BotException("Failed to send email: " + exception.getMessage(), exception));
 		}
 	}
 

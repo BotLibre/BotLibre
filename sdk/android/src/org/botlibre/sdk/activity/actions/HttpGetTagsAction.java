@@ -1,3 +1,21 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity.actions;
 
 import android.app.Activity;
@@ -30,6 +48,10 @@ public class HttpGetTagsAction extends HttpAction {
 			this.tags = MainActivity.forumPostTags;
 		} else if (this.config.type.equals("Channel") && MainActivity.channelTags != null) {
 			this.tags = MainActivity.channelTags;
+		} else if (this.config.type.equals("Avatar") && MainActivity.avatarTags != null) {
+			this.tags = MainActivity.avatarTags;
+		} else if (this.config.type.equals("Script") && MainActivity.scriptTags != null) {
+			this.tags = MainActivity.scriptTags;
 		} else if (this.config.type.equals("Domain")) {
 			this.tags = new Object[0];
 		} else {
@@ -56,6 +78,10 @@ public class HttpGetTagsAction extends HttpAction {
 			MainActivity.forumPostTags = this.tags;
 		} else if (this.config.type.equals("Channel")) {
 			MainActivity.channelTags = this.tags;
+		} else if (this.config.type.equals("Avatar")) {
+			MainActivity.avatarTags = this.tags;
+		} else if (this.config.type.equals("Script")) {
+			MainActivity.scriptTags = this.tags;
 		}
 		
         final AutoCompleteTextView tagsText = (AutoCompleteTextView)this.activity.findViewById(R.id.tagsText);

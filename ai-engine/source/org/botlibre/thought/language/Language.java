@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class Language extends BasicThought {
 	public static float CONVERSATION_MATCH_PERCENTAGE = 0.5f;
 	public static float DISCUSSION_MATCH_PERCENTAGE = 0.9f;
 	public static int COVERSATIONAL_RESPONSE_DELAY = 1000;
+	public static int MAX_PROCCESS_TIME = 100000;
 	public static int MAX_STATE_PROCESS = 10000;
 	public static int MAX_RESPONSE_PROCESS = 2000;
 	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
@@ -59,6 +61,7 @@ public class Language extends BasicThought {
 	protected boolean checkExactMatchFirst = true;
 	protected boolean fixFormulaCase = true;
 	protected boolean learnGrammar = true;
+	protected boolean splitParagraphs = true;
 	protected boolean synthesizeResponse = false;
 	protected float conversationMatchPercentage = CONVERSATION_MATCH_PERCENTAGE;
 	protected float discussionMatchPercentage = DISCUSSION_MATCH_PERCENTAGE;
@@ -420,6 +423,120 @@ public class Language extends BasicThought {
 	}
 	
 	/**
+	 * Add the new response.
+	 */
+	public static void addResponse(Vertex question, Vertex answer, Network network) {
+		addResponse(question, answer, null, null, null, 0.5f, network);
+	}
+	
+	/**
+	 * Add the new response.
+	 */
+	public static void addResponse(Vertex question, Vertex answer, String topic, String keywords, String required, Network network) {
+		addResponse(question, answer, topic, keywords, required, 0.5f, network);
+	}
+	
+	/**
+	 * Add the new response.
+	 */
+	public static void addResponse(Vertex question, Vertex answer, String topic, String keywords, String required, float correctness, Network network) {
+		question.addWeakRelationship(Primitive.RESPONSE, answer, correctness);
+		question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
+		network.checkReduction(question);
+		question.weakAssociateAll(Primitive.SYNONYM, answer, Primitive.RESPONSE, correctness);
+		if (topic != null && !topic.isEmpty()) {
+			Language.addSentenceTopicMeta(question, answer, topic, network);
+		}
+		if (keywords != null && !keywords.isEmpty()) {
+			Language.addSentenceKeyWordsMeta(question, answer, keywords, network);
+		}
+		if (required != null && !required.isEmpty()) {
+			Language.addSentenceRequiredMeta(question, answer, required, network);
+		}
+	}
+	
+	/**
+	 * Add the command as the command for a response match to the question meta.
+	 */
+	public static void addSentenceCommandMeta(Vertex question, Vertex answer, String command, Network network) {
+		if (command == null || command.trim().isEmpty()) {
+			clearSentenceMeta(question, answer, Primitive.COMMAND, network);
+		} else {
+			Vertex expression = network.createTemplate("Template(\"{Http.toJSON(" + command + ")}\")");
+			Relationship relationship = question.getRelationship(Primitive.RESPONSE, answer);
+			if (relationship != null) {
+				Vertex meta = network.createMeta(relationship);
+				meta.setRelationship(Primitive.COMMAND, expression);
+			}
+			network.checkReduction(question);
+			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+			if (synonyms != null) {
+				for (Relationship synonym : synonyms) {
+					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+					if (relationship != null) {
+						Vertex meta = network.createMeta(relationship);
+						meta.setRelationship(Primitive.COMMAND, expression);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Add the script as the think for a response match to the question meta.
+	 */
+	public static void addSentenceThinkMeta(Vertex question, Vertex answer, String think, Network network) {
+		if (think == null || think.trim().isEmpty()) {
+			clearSentenceMeta(question, answer, Primitive.THINK, network);
+		} else {
+			Vertex expression = network.createTemplate("Template(\"{think {" + think + "}}\")");
+			Relationship relationship = question.getRelationship(Primitive.RESPONSE, answer);
+			if (relationship != null) {
+				Vertex meta = network.createMeta(relationship);
+				meta.setRelationship(Primitive.THINK, expression);
+			}
+			network.checkReduction(question);
+			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+			if (synonyms != null) {
+				for (Relationship synonym : synonyms) {
+					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+					if (relationship != null) {
+						Vertex meta = network.createMeta(relationship);
+						meta.setRelationship(Primitive.THINK, expression);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Add the script as the condition for a response match to the question meta.
+	 */
+	public static void addSentenceConditionMeta(Vertex question, Vertex answer, String condition, Network network) {
+		if (condition == null || condition.trim().isEmpty()) {
+			clearSentenceMeta(question, answer, Primitive.CONDITION, network);
+		} else {
+			Vertex expression = network.createTemplate("Template(\"{if (true == (" + condition + ")) { \"true\" } else { \"false\" }}\")");
+			Relationship relationship = question.getRelationship(Primitive.RESPONSE, answer);
+			if (relationship != null) {
+				Vertex meta = network.createMeta(relationship);
+				meta.setRelationship(Primitive.CONDITION, expression);
+			}
+			network.checkReduction(question);
+			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+			if (synonyms != null) {
+				for (Relationship synonym : synonyms) {
+					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+					if (relationship != null) {
+						Vertex meta = network.createMeta(relationship);
+						meta.setRelationship(Primitive.CONDITION, expression);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Clear any relations in the meta of the type.
 	 */
 	public static void clearSentenceMeta(Vertex question, Vertex answer, Primitive type, Network network) {
@@ -552,6 +669,10 @@ public class Language extends BasicThought {
 		property = this.bot.memory().getProperty("Language.learnGrammar");
 		if (property != null) {
 			setLearnGrammar(Boolean.valueOf(property));
+		}
+		property = this.bot.memory().getProperty("Language.splitParagraphs");
+		if (property != null) {
+			setSplitParagraphs(Boolean.valueOf(property));
 		}
 		property = this.bot.memory().getProperty("Language.synthesizeResponse");
 		if (property != null) {
@@ -765,6 +886,7 @@ public class Language extends BasicThought {
 		memory.saveProperty("Language.enableResponseMatch", String.valueOf(getEnableResponseMatch()), true);
 		memory.saveProperty("Language.checkExactMatchFirst", String.valueOf(getCheckExactMatchFirst()), true);
 		memory.saveProperty("Language.learnGrammar", String.valueOf(getLearnGrammar()), true);
+		memory.saveProperty("Language.splitParagraphs", String.valueOf(getSplitParagraphs()), true);
 		memory.saveProperty("Language.synthesizeResponse", String.valueOf(getSynthesizeResponse()), true);
 		memory.saveProperty("Language.fixFormulaCase", String.valueOf(getFixFormulaCase()), true);
 		
@@ -838,6 +960,14 @@ public class Language extends BasicThought {
 		this.allowLearning = allowLearning;
 	}
 
+	public boolean getSplitParagraphs() {
+		return splitParagraphs;
+	}
+
+	public void setSplitParagraphs(boolean splitParagraphs) {
+		this.splitParagraphs = splitParagraphs;
+	}
+
 	/**
 	 * Analyse the active memory for language.
 	 */
@@ -859,12 +989,16 @@ public class Language extends BasicThought {
 					if (inputValue != null) {
 						for (Vertex sentence : input.orderedRelations(Primitive.INPUT)) {
 							if (sentence.instanceOf(Primitive.SENTENCE)) {
-								// Check if the input is a paragraph.
-								Vertex paragraph = network.createParagraph(sentence);
-								if (paragraph.instanceOf(Primitive.PARAGRAPH)) {
-									sentences.addAll(paragraph.orderedRelations(Primitive.SENTENCE));
+								if (getSplitParagraphs()) {
+									// Check if the input is a paragraph.
+									Vertex paragraph = network.createParagraph(sentence);
+									if (paragraph.instanceOf(Primitive.PARAGRAPH)) {
+										sentences.addAll(paragraph.orderedRelations(Primitive.SENTENCE));
+									} else {
+										sentences.add(paragraph);
+									}
 								} else {
-									sentences.add(paragraph);
+									sentences.add(sentence);
 								}
 							} else if (sentence.instanceOf(Primitive.PARAGRAPH)) {
 								sentences.addAll(sentence.orderedRelations(Primitive.SENTENCE));
@@ -898,12 +1032,13 @@ public class Language extends BasicThought {
 						int index = 0;
 						Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
 						SelfCompiler.addGlobalVariables(input, null, network, variables);
+						getBot().avatar().reset();
 						if (newConversation) {
 							// If Correcting then this is a response to that previous question.
 							response = processGreeting(input, conversation, network, state, variables);
 							if (response != null) {
 								this.bot.mood().evaluateResponse(response, null);
-								this.bot.avatar().evaluateResponse(output, response, null);
+								this.bot.avatar().evaluateResponse(output, response, null, variables, network);
 								responses.add(response);
 							}
 						} else {
@@ -990,7 +1125,7 @@ public class Language extends BasicThought {
 											this.lastResponseMetaId = null;
 										}
 										this.bot.mood().evaluateResponse(response, meta);
-										this.bot.avatar().evaluateResponse(output, response, meta);
+										this.bot.avatar().evaluateResponse(output, response, meta, variables, network);
 										responses.add(response);
 									} else {
 										response = checkDuplicateOrOffensiveResponse(response, sentence, conversation, input, variables, network, true, false);
@@ -1001,7 +1136,7 @@ public class Language extends BasicThought {
 												this.lastResponseMetaId = null;
 											}
 											this.bot.mood().evaluateResponse(response, meta);
-											this.bot.avatar().evaluateResponse(output, response, meta);
+											this.bot.avatar().evaluateResponse(output, response, meta, variables, network);
 											responses.add(response);
 										}
 									}
@@ -1043,36 +1178,12 @@ public class Language extends BasicThought {
 							}
 							response = responses.get(0);
 							output.addRelationship(Primitive.INPUT, response);
-							Collection<Relationship> actions = response.getRelationships(Primitive.ACTION);
-							if (actions != null) {
-								for (Relationship relationship : actions) {
-									output.addWeakRelationship(Primitive.ACTION, relationship.getTarget(), relationship.getCorrectness());
-								}
-							}
-							Collection<Relationship> poses = response.getRelationships(Primitive.POSE);
-							if (poses != null) {
-								for (Relationship relationship : poses) {
-									output.addWeakRelationship(Primitive.POSE, relationship.getTarget(), relationship.getCorrectness());
-								}
-							}
 						} else {
 							Vertex paragraph = network.createInstance(Primitive.PARAGRAPH);
 							index = 0;
 							for (Vertex each : responses) {
 								paragraph.addRelationship(Primitive.SENTENCE, each, index);
 								index++;
-								Collection<Relationship> actions = each.getRelationships(Primitive.ACTION);
-								if (actions != null) {
-									for (Relationship relationship : actions) {
-										output.addWeakRelationship(Primitive.ACTION, relationship.getTarget(), relationship.getCorrectness());
-									}
-								}
-								Collection<Relationship> poses = response.getRelationships(Primitive.POSE);
-								if (poses != null) {
-									for (Relationship relationship : poses) {
-										output.addWeakRelationship(Primitive.POSE, relationship.getTarget(), relationship.getCorrectness());
-									}
-								}
 							}
 							output.addRelationship(Primitive.INPUT, paragraph);	
 						}
@@ -1106,8 +1217,11 @@ public class Language extends BasicThought {
 	 */
 	public Vertex input(Vertex input, Vertex sentence, Map<Vertex, Vertex> variables, Network network) {
 		log("REDIRECT", Level.FINE, sentence, this.recursiveInputDepth);
-		if (this.recursiveInputDepth > MAX_DEPTH) {
-			log("Input", Level.WARNING, "Max recursive depth exceeded", this.recursiveInputDepth, sentence);
+		if (this.recursiveInputDepth >= MAX_DEPTH) {
+			if (this.recursiveInputDepth == MAX_DEPTH) {
+				this.recursiveInputDepth++;
+				log("Input", Level.WARNING, "Max recursive depth exceeded", this.recursiveInputDepth, sentence);
+			}
 			return null;
 		}
 		this.recursiveInputDepth++;
@@ -1115,7 +1229,7 @@ public class Language extends BasicThought {
 		if (sentence.instanceOf(Primitive.FORMULA)) {
 			Vertex result = evaluateFormula(sentence, variables, network);
 			if (result == null) {
-				log("Template ormula cannot be evaluated", Level.FINE, sentence);
+				log("Template formula cannot be evaluated", Level.FINE, sentence);
 				return null;
 			} else {
 				sentence = getWord(result, network);
@@ -1162,7 +1276,7 @@ public class Language extends BasicThought {
 			}
 			List<Vertex> words = new ArrayList<Vertex>(relationships.size());
 			boolean caseSensitive = false;
-			long processTime = this.maxStateProcess;
+			long processTime = Math.min(this.maxStateProcess, MAX_PROCCESS_TIME);
 			if (getBot().isDebugFiner()) {
 				processTime = processTime * 10;
 			}
@@ -1389,29 +1503,15 @@ public class Language extends BasicThought {
 						currentStar.add(word);
 						continue;
 					}
-					element = elements.get(elementIndex);
+					if (elementIndex < elements.size()) {
+						element = elements.get(elementIndex);
+					}
+					while (((elementIndex + 1) < elements.size()) && element.is(Primitive.HATWILDCARD) || element.is(Primitive.POUNDWILDCARD)) {
+						elementIndex++;
+						element = elements.get(elementIndex);
+					}
 				}
 				if (!found) {
-					if (element.instanceOf(Primitive.EXPRESSION) || element.instanceOf(Primitive.EQUATION)) {
-						element = SelfInterpreter.getInterpreter().evaluateExpression(element, variables, network, System.currentTimeMillis(), MAX_RESPONSE_PROCESS, 0);
-					}
-					if (element.instanceOf(Primitive.VARIABLE)) {
-						found = element.matches(word, variables) == Boolean.TRUE;
-						currentStar = new ArrayList<Vertex>();
-						currentStar.add(word);
-						star.add(currentStar);
-						currentStar = null;
-						wasWildcard = false;
-					}
-				}
-				if (!found && (element == word || element.equals(word))) {
-					found = true;
-				}
-				if (!found && element.getData() instanceof String && word.getData() instanceof String) {
-					if (((String)element.getData()).equalsIgnoreCase((String)word.getData())) {
-						found = true;
-					}
-				} else if (!found) {
 					if (element.instanceOf(Primitive.ARRAY)) {
 						required = (element.hasRelationship(Primitive.TYPE, Primitive.REQUIRED));
 						Collection<Relationship> values = element.getRelationships(Primitive.ELEMENT);
@@ -1446,11 +1546,34 @@ public class Language extends BasicThought {
 								}
 							}
 						}
-					} else {
-						// Element is an object, check all words for match.
-						if (element.hasRelationship(Primitive.WORD, word)) {
-							found = true;
-						}
+					}
+				}
+				if (!found) {
+					if (element.instanceOf(Primitive.EXPRESSION) || element.instanceOf(Primitive.EQUATION)) {
+						element = SelfInterpreter.getInterpreter().evaluateExpression(element, variables, network, System.currentTimeMillis(), MAX_RESPONSE_PROCESS, 0);
+					}
+					if (element.instanceOf(Primitive.VARIABLE)
+							&& !(element.is(Primitive.WILDCARD) || element.is(Primitive.UNDERSCORE)
+									|| element.is(Primitive.HATWILDCARD) || element.is(Primitive.POUNDWILDCARD))) {
+						found = element.matches(word, variables) == Boolean.TRUE;
+						currentStar = new ArrayList<Vertex>();
+						currentStar.add(word);
+						star.add(currentStar);
+						currentStar = null;
+						wasWildcard = false;
+					}
+				}
+				if (!found && (element == word || element.equals(word))) {
+					found = true;
+				}
+				if (!found && element.getData() instanceof String && word.getData() instanceof String) {
+					if (((String)element.getData()).equalsIgnoreCase((String)word.getData())) {
+						found = true;
+					}
+				} else if (!found) {
+					// Element is an object, check all words for match.
+					if (element.hasRelationship(Primitive.WORD, word)) {
+						found = true;
 					}
 				}
 				if (found) {
@@ -1493,6 +1616,11 @@ public class Language extends BasicThought {
 				continue;  // Only ignore real punctuation.
 			}
 			if (wasWildcard) {
+				if (!required) {
+					elementIndex++;
+					index--;
+					continue;
+				}
 				currentStar.add(word);
 				continue;
 			}
@@ -1766,11 +1894,11 @@ public class Language extends BasicThought {
 		Relationship relationship = null;
 		if (response == null) {
 			// Check if the sentence has a known response.
-			relationship = bestResponse(this.discussionMatchPercentage, input, sentence, null, null, network);
+			relationship = bestResponse(this.discussionMatchPercentage, input, sentence, null, null, variables, network);
 			if (relationship != null) {
 				response = relationship.getTarget();
 			}
-			if (response == null && !this.checkExactMatchFirst) {
+			if (response == null && this.checkExactMatchFirst) {
 				// Try to understand first.
 				response = processUnderstanding(input, sentence, this.discussionMatchPercentage, variables, network);
 				checkUnderstanding = false;
@@ -1802,13 +1930,13 @@ public class Language extends BasicThought {
 					} else {
 						log("No known response, checking similar questions", Level.FINE, sentence);
 						// Try to find a good match.
-						relationship = findResponseMatch(sentence, null, input, network, this.discussionMatchPercentage);
+						relationship = findResponseMatch(sentence, null, input, variables, network, this.discussionMatchPercentage);
 						if (relationship != null) {
 							response = relationship.getTarget();
 							log("Discussion similar question match", Level.FINE, response);
 						} else {
 							// Find the best match for logging.
-							relationship = findResponseMatch(sentence, null, input, network, 0);
+							relationship = findResponseMatch(sentence, null, input, variables, network, 0);
 							if (relationship != null) {
 								log("Discussion question match response was not valid", Level.FINE, relationship, this.discussionMatchPercentage);
 								response = null;
@@ -1854,6 +1982,11 @@ public class Language extends BasicThought {
 				if (topic != null && !topic.instanceOf(Primitive.PATTERN)) {
 					log("Conversation topic", Level.FINE, topic);
 					conversation.setRelationship(Primitive.TOPIC, topic);
+				}
+				Vertex think = relationship.getMeta().getRelationship(Primitive.THINK);
+				if (think != null && !think.instanceOf(Primitive.FORMULA)) {
+					log("Conversation think", Level.FINE, think);
+					evaluateFormula(think, variables, network);
 				}
 			}
 			response = newResponse;
@@ -1925,7 +2058,7 @@ public class Language extends BasicThought {
 			}
 			if (newResponse == null) {
 				// Try to find another response.
-				Relationship nextBest = bestResponse(this.conversationMatchPercentage, input, sentence, null, response, network);
+				Relationship nextBest = bestResponse(this.conversationMatchPercentage, input, sentence, null, response, variables, network);
 				if (nextBest != null) {
 					newResponse = nextBest.getTarget();
 				}
@@ -1936,7 +2069,7 @@ public class Language extends BasicThought {
 						newResponse = relationship.getTarget();
 					} else {
 						// Try to find a good match.
-						relationship = findResponseMatch(sentence, response, input, network, this.conversationMatchPercentage);
+						relationship = findResponseMatch(sentence, response, input, variables, network, this.conversationMatchPercentage);
 						if (relationship != null) {
 							newResponse = relationship.getTarget();
 						}
@@ -1969,17 +2102,17 @@ public class Language extends BasicThought {
 	/**
 	 * Return the best response to the question, taking into account the input history.
 	 */
-	public Relationship bestResponse(float percentage, Vertex input, Vertex sentence, Vertex question, Vertex previousResponse, Network network) {
-		return bestResponse(percentage, input, sentence, question, previousResponse, true, true, null, null, null, network);
+	public Relationship bestResponse(float percentage, Vertex input, Vertex sentence, Vertex question, Vertex previousResponse, Map<Vertex, Vertex> variables, Network network) {
+		return bestResponse(percentage, input, sentence, question, previousResponse, true, true, null, null, null, variables, network);
 	}
 	
 	/**
 	 * Return the best response to the question, taking into account the input history.
 	 */
 	public Relationship bestResponse(float percentage, Vertex input, Vertex sentence, Vertex question, Vertex previousResponse, boolean cascade,
-				boolean init, Vertex previousQuestion, Set<String> questionWords, Vertex currentTopic, Network network) {
+				boolean init, Vertex previousQuestion, Set<String> questionWords, Vertex currentTopic, Map<Vertex, Vertex> variables, Network network) {
 		Collection<Relationship> responses = sentence.getRelationships(Primitive.RESPONSE);
-		Relationship best = null;		
+		Relationship bestResponse = null;
 		if (responses != null) {
 			if (init) {
 				Vertex previousQuestionInput = input.getRelationship(Primitive.QUESTION);
@@ -2000,9 +2133,11 @@ public class Language extends BasicThought {
 					}
 				}
 			}
-			Relationship bestWithTopic = null;
-			Relationship bestWithPrevious = null;
-			Relationship bestWithTopicPrevious = null;
+			List<Relationship> best = new ArrayList<Relationship>();
+			List<Relationship> bestWithCondition = new ArrayList<Relationship>();
+			List<Relationship> bestWithTopic = new ArrayList<Relationship>();
+			List<Relationship> bestWithPrevious = new ArrayList<Relationship>();
+			List<Relationship> bestWithTopicPrevious = new ArrayList<Relationship>();
 			for (Relationship response : responses) {
 				if ((response.getCorrectness() >= percentage) && (response.getTarget() != previousResponse)) {
 					if (response.getTarget().hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENSIVE)) {
@@ -2014,7 +2149,7 @@ public class Language extends BasicThought {
 							continue;
 						}
 						Vertex topic = meta.getRelationship(Primitive.TOPIC);
-						if (bestWithTopic != null && topic == null) {
+						if (!bestWithTopic.isEmpty() && topic == null) {
 							continue;
 						}
 						Collection<Relationship> required = meta.getRelationships(Primitive.REQUIRED);
@@ -2063,12 +2198,20 @@ public class Language extends BasicThought {
 								if (!match && requireTopic) {
 									continue;
 								}
-								if (match && (bestWithTopic == null || (response.getCorrectness() > bestWithTopic.getCorrectness()))) {
+								if (match && (bestWithTopic.isEmpty() || (response.getCorrectness() >= bestWithTopic.get(0).getCorrectness()))) {
 									if (previousQuestion != null) {
-										if (meta.hasRelationship(Primitive.PREVIOUS, previousQuestion)) {
-											bestWithTopicPrevious = response;
+										Vertex label = previousQuestion.getRelationship(Primitive.LABEL);
+										if (meta.hasRelationship(Primitive.PREVIOUS, previousQuestion)
+													|| (label != null && meta.hasRelationship(Primitive.PREVIOUS, label))) {
+											if (checkCondition(response, variables, network) != Boolean.FALSE) {
+												if (!bestWithTopicPrevious.isEmpty() && (response.getCorrectness() > bestWithTopicPrevious.get(0).getCorrectness())) {
+													bestWithTopicPrevious.clear();
+												}
+												bestWithTopicPrevious.add(response);
+											}
 										} else {
-											if (meta.hasInverseRelationship(Primitive.PREVIOUS, previousQuestion)) {
+											if (meta.hasInverseRelationship(Primitive.PREVIOUS, previousQuestion)
+													|| (label != null && meta.hasInverseRelationship(Primitive.PREVIOUS, label))) {
 												continue;
 											}
 											Collection<Relationship> previous = meta.getRelationships(Primitive.PREVIOUS);
@@ -2076,7 +2219,12 @@ public class Language extends BasicThought {
 												for (Relationship relationship : previous) {
 													match = evaluatePattern(relationship.getTarget(), previousQuestion, Primitive.THATWILDCARD, new HashMap<Vertex, Vertex>(), network);
 													if (match) {
-														bestWithTopicPrevious = response;
+														if (checkCondition(response, variables, network) != Boolean.FALSE) {
+															if (!bestWithTopicPrevious.isEmpty() && (response.getCorrectness() > bestWithTopicPrevious.get(0).getCorrectness())) {
+																bestWithTopicPrevious.clear();
+															}
+															bestWithTopicPrevious.add(response);
+														}
 													}
 												}
 											}
@@ -2085,16 +2233,29 @@ public class Language extends BasicThought {
 									if (meta.hasRelationship(Primitive.REQUIRE, Primitive.PREVIOUS)) {
 										continue;
 									}
-									bestWithTopic = response;
+									if (checkCondition(response, variables, network) != Boolean.FALSE) {
+										if (!bestWithTopic.isEmpty() && (response.getCorrectness() > bestWithTopic.get(0).getCorrectness())) {
+											bestWithTopic.clear();
+										}
+										bestWithTopic.add(response);
+									}
 								}
 							}
 						}
-						if ((bestWithTopic == null) && (previousQuestion != null) && ((bestWithPrevious == null) || (response.getCorrectness() > bestWithPrevious.getCorrectness()))) {
+						if ((bestWithTopic.isEmpty()) && (previousQuestion != null) && ((bestWithPrevious.isEmpty()) || (response.getCorrectness() >= bestWithPrevious.get(0).getCorrectness()))) {
 							boolean match = false;
-							if (meta.hasRelationship(Primitive.PREVIOUS, previousQuestion)) {
-								bestWithPrevious = response;
+							Vertex label = previousQuestion.getRelationship(Primitive.LABEL);
+							if (meta.hasRelationship(Primitive.PREVIOUS, previousQuestion)
+										|| (label != null && meta.hasRelationship(Primitive.PREVIOUS, label))) {
+								if (checkCondition(response, variables, network) != Boolean.FALSE) {
+									if (!bestWithPrevious.isEmpty() && (response.getCorrectness() > bestWithPrevious.get(0).getCorrectness())) {
+										bestWithPrevious.clear();
+									}
+									bestWithPrevious.add(response);
+								}
 							} else {
-								if (meta.hasInverseRelationship(Primitive.PREVIOUS, previousQuestion)) {
+								if (meta.hasInverseRelationship(Primitive.PREVIOUS, previousQuestion)
+											|| (label != null && meta.hasInverseRelationship(Primitive.PREVIOUS, label))) {
 									continue;
 								}
 								Collection<Relationship> previous = meta.getRelationships(Primitive.PREVIOUS);
@@ -2102,45 +2263,55 @@ public class Language extends BasicThought {
 									for (Relationship relationship : previous) {
 										match = evaluatePattern(relationship.getTarget(), previousQuestion, Primitive.THATWILDCARD, new HashMap<Vertex, Vertex>(), network);
 										if (match) {
-											bestWithPrevious = response;
-											break;
+											if (checkCondition(response, variables, network) != Boolean.FALSE) {
+												if (!bestWithPrevious.isEmpty() && (response.getCorrectness() > bestWithPrevious.get(0).getCorrectness())) {
+													bestWithPrevious.clear();
+												}
+												bestWithPrevious.add(response);
+												break;
+											}
 										}
 									}
 								}
-								if (!match && meta.hasRelationship(Primitive.REQUIRE, Primitive.PREVIOUS)) {
-									continue;
-								}
 							}
 						}
+						if (meta.hasRelationship(Primitive.REQUIRE, Primitive.PREVIOUS)) {
+							continue;
+						}
 					}
-					if ((best == null) || (response.getCorrectness() > best.getCorrectness())) {
-						best = response;
+					if ((best.isEmpty()) || (response.getCorrectness() >= best.get(0).getCorrectness())) {
+						Boolean condition = checkCondition(response, variables, network);
+						if (condition != Boolean.FALSE) {
+							if (condition == Boolean.TRUE) {
+								if (!bestWithCondition.isEmpty() && (response.getCorrectness() > bestWithCondition.get(0).getCorrectness())) {
+									bestWithCondition.clear();
+								}
+								bestWithCondition.add(response);
+							}
+							if (!best.isEmpty() && (response.getCorrectness() > best.get(0).getCorrectness())) {
+								best.clear();
+							}
+							best.add(response);
+						}
 					}
 				}
 			}
-			if (bestWithTopicPrevious != null) {
-				if (bestWithTopicPrevious.hasMeta()) {
-					this.lastResponseMetaId = bestWithTopicPrevious.getMeta().getId();
-				}
-				return bestWithTopicPrevious;
+			if (!bestWithTopicPrevious.isEmpty()) {
+				bestResponse = Utils.random(bestWithTopicPrevious);
+			} else if (!bestWithTopic.isEmpty()) {
+				bestResponse = Utils.random(bestWithTopic);
+			} else if (!bestWithPrevious.isEmpty()) {
+				bestResponse = Utils.random(bestWithPrevious);
+			} else if (!bestWithCondition.isEmpty()) {
+				bestResponse = Utils.random(bestWithCondition);
+			} else if (!best.isEmpty()) {
+				bestResponse = Utils.random(best);
 			}
-			if (bestWithTopic != null) {
-				if (bestWithTopic.hasMeta()) {
-					this.lastResponseMetaId = bestWithTopic.getMeta().getId();
+			if (bestResponse != null) {
+				if (bestResponse.hasMeta()) {
+					this.lastResponseMetaId = bestResponse.getMeta().getId();
 				}
-				return bestWithTopic;
-			}
-			if (bestWithPrevious != null) {
-				if (bestWithPrevious.hasMeta()) {
-					this.lastResponseMetaId = bestWithPrevious.getMeta().getId();
-				}
-				return bestWithPrevious;
-			}
-			if (best != null) {
-				if (best.hasMeta()) {
-					this.lastResponseMetaId = best.getMeta().getId();
-				}
-				return best;
+				return bestResponse;
 			}
 		}
 		if (cascade) {
@@ -2148,15 +2319,15 @@ public class Language extends BasicThought {
 			Collection<Relationship> meanings = sentence.getRelationships(Primitive.SYNONYM);
 			if (meanings != null) {
 				for (Relationship meaning : meanings) {
-					best = bestResponse(percentage, input, meaning.getTarget(), question, previousResponse, false,
-							init, previousQuestion, questionWords, currentTopic, network);
-					if (best != null) {
-						return best;
+					bestResponse = bestResponse(percentage, input, meaning.getTarget(), question, previousResponse, false,
+							init, previousQuestion, questionWords, currentTopic, variables, network);
+					if (bestResponse != null) {
+						return bestResponse;
 					}
 				}
 			}
 		}
-		return best;
+		return bestResponse;
 	}
 	
 	/**
@@ -2211,7 +2382,7 @@ public class Language extends BasicThought {
 		Relationship relationship = null;
 		if (response == null) {			
 			// Check if the sentence has a known response.
-			relationship = bestResponse(0.1f, input, sentence, null, null, network);
+			relationship = bestResponse(0.1f, input, sentence, null, null, variables, network);
 			if (relationship != null) {
 				response = relationship.getTarget();
 			}
@@ -2234,7 +2405,7 @@ public class Language extends BasicThought {
 			} else {
 				log("No known response, checking similar questions", Level.FINE, sentence);
 				// Try to find a good match.
-				relationship = findResponseMatch(sentence, null, input, network, this.conversationMatchPercentage);
+				relationship = findResponseMatch(sentence, null, input, variables, network, this.conversationMatchPercentage);
 				if (relationship != null) {
 					response = relationship.getTarget();
 					log("Conversation similar question match response", Level.FINE, response);
@@ -2266,6 +2437,11 @@ public class Language extends BasicThought {
 				if (topic != null && !topic.instanceOf(Primitive.PATTERN)) {
 					log("Conversation topic", Level.FINE, topic);
 					conversation.setRelationship(Primitive.TOPIC, topic);
+				}
+				Vertex think = relationship.getMeta().getRelationship(Primitive.THINK);
+				if (think != null && think.instanceOf(Primitive.FORMULA)) {
+					log("Conversation think", Level.FINE, think);
+					evaluateFormula(think, variables, network);
 				}
 			}
 			response = newResponse;
@@ -2472,10 +2648,29 @@ public class Language extends BasicThought {
 	}
 	
 	/**
+	 * Check if the response has a condition, and if it evaluates to true.
+	 */
+	public Boolean checkCondition(Relationship relationship, Map<Vertex, Vertex> variables, Network network) {
+		if (!relationship.hasMeta()) {
+			return null;
+		}
+		Vertex condition = relationship.getMeta().getRelationship(Primitive.CONDITION);
+		if (condition == null || !condition.instanceOf(Primitive.FORMULA)) {
+			return null;
+		}
+		Vertex result = evaluateFormula(condition, variables, network);
+		if (result != null && result.printString().toLowerCase().equals("true")) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+	
+	/**
 	 * Return a random default response for the topic or context.
 	 */
 	public Vertex getDefaultResponse(List<Relationship> defaultResponses, Vertex input, Vertex sentence, Vertex conversation, Map<Vertex, Vertex> variables, Network network) {
 		Vertex response = null;
+		Relationship relationship = null;
 		variables.put(network.createVertex(Primitive.WILDCARD), sentence);
 		Vertex previousQuestionInput = input.getRelationship(Primitive.QUESTION);
 		Vertex previousQuestion = null;
@@ -2488,6 +2683,8 @@ public class Language extends BasicThought {
 			if (topic != null) {
 				Vertex topicMatch = null;
 				Vertex previousMatch = null;
+				Relationship topicMatchRelationship = null;
+				Relationship previousMatchRelationship = null;
 				for (Relationship defaultResponse : defaultResponses) {
 					if (defaultResponse.hasMeta()) {
 						Vertex defaultTopic = defaultResponse.getMeta().getRelationship(Primitive.TOPIC);
@@ -2500,6 +2697,12 @@ public class Language extends BasicThought {
 								if (defaultResponse.getMeta().hasRelationship(Primitive.PREVIOUS)) {
 									boolean previousMatches = defaultResponse.getMeta().hasRelationship(Primitive.PREVIOUS, previousQuestion);
 									if (!previousMatches) {
+										Vertex label = previousQuestion.getRelationship(Primitive.LABEL);
+										if (label != null && defaultResponse.getMeta().hasRelationship(Primitive.PREVIOUS, label)) {
+											previousMatches = true;
+										}
+									}
+									if (!previousMatches) {
 										// Check for patterns.
 										Collection<Relationship> previousResponses = defaultResponse.getMeta().getRelationships(Primitive.PREVIOUS);
 										if (previousResponses != null) {
@@ -2508,6 +2711,7 @@ public class Language extends BasicThought {
 													previousMatches = evaluatePattern(previousResponse.getTarget(), previousQuestion, Primitive.PREVIOUS, new HashMap<Vertex, Vertex>(), network);
 													if (previousMatches) {
 														previousMatch = defaultResponse.getTarget();
+														previousMatchRelationship = defaultResponse;
 														log("Conversation topic and previous default response", Level.FINE, defaultTopic, previousMatch);
 														previousMatch = checkDefaultResponseFormula(previousMatch, input, network, variables);
 														if (previousMatch != null) {
@@ -2520,6 +2724,7 @@ public class Language extends BasicThought {
 									}
 								} else if (topicMatch == null) {
 									topicMatch = defaultResponse.getTarget();
+									topicMatchRelationship = defaultResponse;
 									log("Conversation topic default response", Level.FINE, defaultTopic, topicMatch);
 									topicMatch = checkDefaultResponseFormula(topicMatch, input, network, variables);
 								}
@@ -2529,8 +2734,10 @@ public class Language extends BasicThought {
 				}
 				if (previousMatch != null) {
 					response = previousMatch;
+					relationship = previousMatchRelationship;
 				} else if (topicMatch != null) {
 					response = topicMatch;
+					relationship = topicMatchRelationship;
 				}
 			}
 		}
@@ -2538,7 +2745,7 @@ public class Language extends BasicThought {
 			// Check previous.
 			if (previousQuestion != null) {
 				for (Relationship defaultResponse : defaultResponses) {
-					if (defaultResponse.hasMeta()) {
+					if (defaultResponse.hasMeta() && defaultResponse.getMeta().hasRelationship(Primitive.PREVIOUS) && !defaultResponse.getMeta().hasRelationship(Primitive.TOPIC)) {
 						boolean match = defaultResponse.getMeta().hasRelationship(Primitive.PREVIOUS, previousQuestion);
 						if (!match) {
 							// Check for patterns.
@@ -2556,12 +2763,27 @@ public class Language extends BasicThought {
 						}
 						if (match) {
 							response = defaultResponse.getTarget();
+							relationship = defaultResponse;
 							log("Conversation previous default response", Level.FINE, previousQuestion, response);
 							response = checkDefaultResponseFormula(response, input, network, variables);
 							if (response != null) {
 								break;
 							}
 						}
+					}
+				}
+			}
+		}
+		if (response == null) {
+			// Check conditions.
+			for (Relationship defaultResponse : defaultResponses) {
+				if (checkCondition(defaultResponse, variables, network) == Boolean.TRUE) {
+					response = defaultResponse.getTarget();
+					relationship = defaultResponse;
+					log("Conversation condition default response", Level.FINE, response);
+					response = checkDefaultResponseFormula(response, input, network, variables);
+					if (response != null) {
+						break;
 					}
 				}
 			}
@@ -2583,7 +2805,8 @@ public class Language extends BasicThought {
 				}
 			}
 			if (!candidates.isEmpty()) {
-				response = Utils.random(candidates).getTarget();
+				relationship = Utils.random(candidates);
+				response = relationship.getTarget();
 				log("Conversation default response", Level.FINE, sentence, response);
 				response = checkDefaultResponseFormula(response, input, network, variables);
 			}
@@ -2592,20 +2815,35 @@ public class Language extends BasicThought {
 				for (Relationship defaultResponse : candidates) {
 					if (!defaultResponse.getTarget().instanceOf(Primitive.FORMULA)) {
 						response = defaultResponse.getTarget();
+						relationship = defaultResponse;
 					}
 				}
 				if (response == null && !candidates.isEmpty()) {
 					// Try once more.
-					response = Utils.random(candidates).getTarget();
+					relationship = Utils.random(candidates);
+					response = relationship.getTarget();
 					response = checkDefaultResponseFormula(response, input, network, variables);
 				}
 				if (response == null) {
 					// Mimic.
 					log("Conversation mimic, failed to find default response", Level.FINE, sentence);
-					response = sentence;									
+					response = sentence;
+					relationship = null;
 				}
 			} else {
 				response = getWord(response, network);
+			}
+		}
+		if (relationship != null && relationship.hasMeta()) {
+			Vertex topic = relationship.getMeta().getRelationship(Primitive.TOPIC);
+			if (topic != null && !topic.instanceOf(Primitive.PATTERN)) {
+				log("Conversation topic", Level.FINE, topic);
+				conversation.setRelationship(Primitive.TOPIC, topic);
+			}
+			Vertex think = relationship.getMeta().getRelationship(Primitive.THINK);
+			if (think != null && !think.instanceOf(Primitive.FORMULA)) {
+				log("Conversation think", Level.FINE, think);
+				evaluateFormula(think, variables, network);
 			}
 		}
 		return response;
@@ -2708,6 +2946,24 @@ public class Language extends BasicThought {
 	}
 
 	/**
+	 * Self API for learning a new response.
+	 */
+	public Vertex learn(Vertex source, Vertex question, Vertex response) {
+		log("learn", Level.FINE, question, response);
+		addResponse(question, response, source.getNetwork());
+		return source;
+	}
+
+	/**
+	 * Self API for learning a new response.
+	 */
+	public Vertex learn(Vertex source, Vertex question, Vertex response, Vertex topic) {
+		log("learn", Level.FINE, question, response);
+		addResponse(question, response, topic.printString(), null, null, source.getNetwork());
+		return source;
+	}
+
+	/**
 	 * Self API for synthesizing a new response from a phrase.
 	 */
 	public Vertex synthesize(Vertex source, Vertex phrase) {
@@ -2737,6 +2993,63 @@ public class Language extends BasicThought {
 	public Vertex randomSynthesize(Vertex source) {
 		log("random synthesize", Level.FINE);
 		return synthesizeResponse(null, null, null, true, null, source.getNetwork());
+	}
+
+	/**
+	 * Self API to print the details of an object.
+	 */
+	public Vertex details(Vertex source, Vertex object) {
+		Network network = source.getNetwork();
+		Vertex paragraph = network.createInstance(Primitive.PARAGRAPH);
+		Vertex text = network.createInstance(Primitive.FRAGMENT);
+		Vertex cr = network.createVertex("\n");
+		Vertex bold = network.createVertex("<b>");
+		Vertex boldEnd = network.createVertex("</b>");
+		Vertex ul = network.createVertex("<ul>");
+		Vertex ulEnd = network.createVertex("</ul>");
+		Vertex li = network.createVertex("<li>");
+		Vertex liEnd = network.createVertex("</li>");
+		Vertex dash = network.createVertex("-");
+		int index = 0;
+		int paraIndex = 0;
+		text.addRelationship(Primitive.WORD, bold, index++);
+		text.addRelationship(Primitive.WORD, getWord(object, network), index++);
+		text.addRelationship(Primitive.WORD, boldEnd, index++);
+		text.addRelationship(Primitive.WORD, cr, index++);
+		paragraph.addRelationship(Primitive.SENTENCE, text, paraIndex++);
+		text = network.createInstance(Primitive.FRAGMENT);
+		index = 0;
+		text.addRelationship(Primitive.WORD, ul, index++);
+		text.addRelationship(Primitive.WORD, cr, index++);
+		paragraph.addRelationship(Primitive.SENTENCE, text, paraIndex++);
+		for (Iterator<Relationship> iterator = object.orderedAllRelationships(); iterator.hasNext(); ) {
+			if (paraIndex > 100) {
+				break;
+			}
+			Relationship relationship = iterator.next();
+			if (relationship.isInverse()) {
+				continue;
+			}
+			Vertex type = getWord(relationship.getType(), network);
+			Vertex value = getWord(relationship.getTarget(), network);
+			if (!(value.getData() instanceof String) || ((String)value.getData()).isEmpty()) {
+				//continue;
+			}
+			text = network.createInstance(Primitive.FRAGMENT);
+			index = 0;
+			text.addRelationship(Primitive.WORD, li, index++);
+			text.addRelationship(Primitive.WORD, type, index++);
+			text.addRelationship(Primitive.WORD, dash, index++);
+			text.addRelationship(Primitive.WORD, value, index++);
+			text.addRelationship(Primitive.WORD, liEnd, index++);
+			text.addRelationship(Primitive.WORD, cr, index++);
+			paragraph.addRelationship(Primitive.SENTENCE, text, paraIndex++);
+		}
+		text = network.createInstance(Primitive.FRAGMENT);
+		index = 0;
+		text.addRelationship(Primitive.WORD, ulEnd, index++);
+		paragraph.addRelationship(Primitive.SENTENCE, text, paraIndex++);
+		return paragraph;
 	}
 
 	/**
@@ -2782,6 +3095,17 @@ public class Language extends BasicThought {
 			previousWord = word;
 		}
 		return network.createWord(writer.toString());
+	}
+
+	/**
+	 * Self API to define a word.
+	 * Language.define("hello", #hello)
+	 */
+	public Vertex define(Vertex source, Vertex word, Vertex meaning) {
+		word.addRelationship(Primitive.MEANING, meaning);
+		meaning.addRelationship(Primitive.WORD, word);
+		source.getNetwork().associateCaseInsensitivity((String)word.getData(), meaning);
+		return word;
 	}
 
 	/**
@@ -3236,7 +3560,7 @@ public class Language extends BasicThought {
 	 * and pick other sentence with the most words in common.
 	 */
 	@SuppressWarnings("unchecked")
-	public Relationship findResponseMatch(Vertex sentence, Vertex previousResponse, Vertex input, Network network, float percentage) {
+	public Relationship findResponseMatch(Vertex sentence, Vertex previousResponse, Vertex input, Map<Vertex, Vertex> variables, Network network, float percentage) {
 		if (!this.enableResponseMatch) {
 			return null;
 		}
@@ -3248,7 +3572,7 @@ public class Language extends BasicThought {
 		log("Searching for similar questions", Level.FINE);
 		Map<Vertex, Integer> matches = new HashMap<Vertex, Integer>();
 		Map<Vertex, Set<Vertex>> processed = new HashMap<Vertex, Set<Vertex>>();
-		long processTime = this.maxResponseMatchProcess;
+		long processTime = Math.min(MAX_PROCCESS_TIME, this.maxResponseMatchProcess);
 		if (getBot().isDebugFine()) {
 			log("Increasing processing time to allow debugging", Level.INFO, getBot().getDebugLevel());
 			processTime = processTime * 20;
@@ -3309,11 +3633,11 @@ public class Language extends BasicThought {
 			}
 			if (bestEntry != null) {
 				checkBetterMatch(bestEntry, keyWordsMatches, best, tooBig, tooSmall, wordCount,
-						percentage, input, bestEntry.getKey(), sentence, previousResponse, true, false, previousQuestion, questionWords, currentTopic, network);
+						percentage, input, bestEntry.getKey(), sentence, previousResponse, true, false, previousQuestion, questionWords, currentTopic, variables, network);
 			}
 			if (best[0] == null && secondBestEntry != null) {
 				checkBetterMatch(secondBestEntry, keyWordsMatches, best, tooBig, tooSmall, wordCount,
-						percentage, input, secondBestEntry.getKey(), sentence, previousResponse, true, false, previousQuestion, questionWords, currentTopic, network);
+						percentage, input, secondBestEntry.getKey(), sentence, previousResponse, true, false, previousQuestion, questionWords, currentTopic, variables, network);
 			}
 			int count = 0;
 			for (Map.Entry<Vertex, Integer> entry : matches.entrySet()) {
@@ -3324,7 +3648,7 @@ public class Language extends BasicThought {
 				}
 				count++;
 				checkBetterMatch(entry, keyWordsMatches, best, tooBig, tooSmall, wordCount,
-						percentage, input, entry.getKey(), sentence, previousResponse, true, false, previousQuestion, questionWords, currentTopic, network);
+						percentage, input, entry.getKey(), sentence, previousResponse, true, false, previousQuestion, questionWords, currentTopic, variables, network);
 			}
 		}
 		bestMatch = (Map.Entry<Vertex, Integer>) best[0];
@@ -3362,7 +3686,7 @@ public class Language extends BasicThought {
 	@SuppressWarnings("unchecked")
 	public void checkBetterMatch(Map.Entry<Vertex, Integer> entry, Map<Vertex, Integer> keyWordsMatches, Object[] best, int tooBig, int tooSmall, int wordCount,
 				float percentage, Vertex input, Vertex sentence, Vertex question, Vertex previousResponse, boolean cascade,
-				boolean init, Vertex previousQuestion, Set<String> questionWords, Vertex currentTopic, Network network) {
+				boolean init, Vertex previousQuestion, Set<String> questionWords, Vertex currentTopic, Map<Vertex, Vertex> variables, Network network) {
 		Map.Entry<Vertex, Integer> bestMatch = (Map.Entry<Vertex, Integer>) best[0];
 		int bestAbs = (Integer) best[1];
 		if (bestMatch != null && (entry.getValue() < bestMatch.getValue())) {
@@ -3384,7 +3708,7 @@ public class Language extends BasicThought {
 			if (bestMatch == null || (entry.getValue() > bestMatch.getValue()) || (entryAbs < bestAbs)) {
 				Relationship response = null;
 				response = bestResponse(percentage, input, entry.getKey(), sentence, previousResponse,
-						false, false, previousQuestion, questionWords, currentTopic, network);
+						false, false, previousQuestion, questionWords, currentTopic, variables, network);
 				if (response != null) {
 					log("Better question match (value, question)", Level.FINE, entry.getValue(), entry.getKey());
 					best[0] = entry;
@@ -3405,7 +3729,7 @@ public class Language extends BasicThought {
 		}
 		long startTime = System.currentTimeMillis();
 		Map<Vertex, Integer> matches = new HashMap<Vertex, Integer>();
-		long processTime = this.maxResponseMatchProcess;
+		long processTime = Math.min(MAX_PROCCESS_TIME, this.maxResponseMatchProcess);
 		// Record all of the matches.
 		List<Vertex> deferred = new ArrayList<Vertex>();
 		for (Relationship wordRelation : wordRelations) {
@@ -3478,7 +3802,7 @@ public class Language extends BasicThought {
 						continue;
 					}
 					bestResponse = bestResponse(percentage, input, entry.getKey(), sentence, previousResponse,
-							false, false, previousQuestion, questionWords, currentTopic, network);
+							false, false, previousQuestion, questionWords, currentTopic, variables, network);
 					if (bestResponse != null) {
 						bestMatch = entry;
 						bestHasUnderscore = entry.getKey().hasRelationship(Primitive.WORD, Primitive.UNDERSCORE)
@@ -3494,7 +3818,7 @@ public class Language extends BasicThought {
 							continue;
 						}
 						Relationship response = bestResponse(percentage, input, entry.getKey(), sentence, previousResponse,
-								false, false, previousQuestion, questionWords, currentTopic, network);
+								false, false, previousQuestion, questionWords, currentTopic, variables, network);
 						if (response != null) {
 							bestResponse = response;
 							if (bestResponse != null) {
@@ -3658,7 +3982,7 @@ public class Language extends BasicThought {
 		if (this.startTime == 0) {
 			this.startTime = System.currentTimeMillis();
 		}
-		long processTime = this.maxStateProcess;
+		long processTime = Math.min(this.maxStateProcess, MAX_PROCCESS_TIME);
 		if (getBot().isDebugFiner()) {
 			processTime = processTime * 10;
 		}
@@ -4059,7 +4383,10 @@ public class Language extends BasicThought {
 										}
 									}
 								}
-								if (meta.hasInverseRelationship(Primitive.PREVIOUS, previousQuestion) || meta.hasRelationship(Primitive.REQUIRE, Primitive.PREVIOUS)) {
+								Vertex label = previousQuestion.getRelationship(Primitive.LABEL);
+								if (meta.hasInverseRelationship(Primitive.PREVIOUS, previousQuestion)
+											|| (label != null && meta.hasInverseRelationship(Primitive.PREVIOUS, label))
+											|| meta.hasRelationship(Primitive.REQUIRE, Primitive.PREVIOUS)) {
 									continue;
 								}
 							}
@@ -4122,6 +4449,10 @@ public class Language extends BasicThought {
 		if (meta.hasRelationship(Primitive.PREVIOUS, sentence)) {
 			return true;
 		}
+		Vertex label = sentence.getRelationship(Primitive.LABEL);
+		if (label != null && meta.hasRelationship(Primitive.PREVIOUS, label)) {
+			return true;
+		}
 		for (Relationship previous : relationship) {
 			if (previous.getTarget().instanceOf(Primitive.FORMULA)) {
 				log("Previous is template formula", Level.FINE, previous.getTarget());
@@ -4142,7 +4473,7 @@ public class Language extends BasicThought {
 	public Vertex evaluateAnswerResponse(Vertex answer, Vertex state, Map<Vertex, Vertex> localVariables, Network network) {		
 		Vertex response = null;
 		if (answer != null) {
-			long processTime = this.maxStateProcess;
+			long processTime = Math.min(this.maxStateProcess, MAX_PROCCESS_TIME);
 			if (getBot().isDebugFiner()) {
 				processTime = processTime * 10;
 			}
@@ -4160,7 +4491,8 @@ public class Language extends BasicThought {
 				if (response == null) {
 					log("Template formula cannot be evaluated", Level.FINE, response);
 				}
-			} else if ((response != null) && !response.hasData() && !response.instanceOf(Primitive.PARAGRAPH)) {
+			} else if ((response != null) && !response.hasData() && (response.instanceOf(Primitive.SENTENCE) || response.instanceOf(Primitive.FRAGMENT))
+						&& !response.instanceOf(Primitive.PARAGRAPH)) {
 				response = createSentenceText(response, network);
 			}
 			if ((response != null) && response.is(Primitive.NULL)) {
@@ -4254,12 +4586,8 @@ public class Language extends BasicThought {
 		if (vertex.instanceOf(Primitive.PARAGRAPH)) {
 			return vertex;
 		}
-		Vertex word = vertex.mostConscious(Primitive.SENTENCE);
-		if (word == null) {
-			Vertex previous = network.createVertex(Primitive.NULL);
-			word = getWordFollowing(vertex, previous, previous, network);
-		}
-		return word;
+		Vertex previous = network.createVertex(Primitive.NULL);
+		return getWordFollowing(vertex, previous, previous, network);
 	}
 	
 	/**
@@ -4413,6 +4741,10 @@ public class Language extends BasicThought {
 		}
 		if (word == null) {
 			if (!vertex.hasData()) {
+				word = vertex.mostConscious(Primitive.SENTENCE);
+				if (word != null) {
+					return word;
+				}
 				// If no word, call it what it is.
 				Collection<Relationship> classifications = vertex.getRelationships(Primitive.INSTANTIATION);
 				if (classifications != null) {
@@ -4624,6 +4956,7 @@ public class Language extends BasicThought {
 		if (stateMachine == null) {
 			stateMachine = network.createInstance(Primitive.STATE);
 			stateMachine.addRelationship(Primitive.LANGUAGE, network.createVertex(Primitive.AIML));
+			stateMachine.addRelationship(Primitive.LANGUAGE, network.createVertex(Primitive.SELF4));
 			stateMachine.setName(name);
 			language.addRelationship(Primitive.STATE, stateMachine);
 			TextData data = new TextData();

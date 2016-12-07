@@ -1,0 +1,49 @@
+[
+	    { #data : #color, instantiation : #thing, word : "color" },
+	    { #data : "color", meaning : #color },
+	    
+	    { #data : #blue, instantiation : #color, instantiation : #adjective, word : "blue" },
+	    { #data : "blue", meaning : #blue },
+	    
+	    { #data : #green, instantiation : #color, instantiation : #adjective, word : "green" },
+	    { #data : "green", meaning : #green },
+	    
+	    { #data : #red, instantiation : #color, instantiation : #adjective, word : "red" },
+	    { #data : "red", meaning : #red },
+	    
+	    { #data : #purple, instantiation : #color, instantiation : #adjective, word : "purple" },
+	    { #data : "purple", meaning : #purple },
+	    
+	    { #data : #pink, instantiation : #color, instantiation : #adjective, word : "pink" },
+	    { #data : "pink", meaning : #pink },
+	    
+	    { #data : #brown, instantiation : #color, instantiation : #adjective, word : "brown" },
+	    { #data : "brown", meaning : #brown },
+	    
+	    { #data : #cyan, instantiation : #color, instantiation : #adjective, word : "cyan" },
+	    { #data : "cyan", meaning : #cyan },
+	    
+	    { #data : #indigo, instantiation : #color, instantiation : #adjective, word : "indigo" },
+	    { #data : "indigo", meaning : #indigo },
+	    
+	    { #data : #violete, instantiation : #color, instantiation : #adjective, word : "violete" },
+	    { #data : "violete", meaning : #violete },
+	    
+	    { #data : #magenta , instantiation : #color, instantiation : #adjective, word : "magenta" },
+	    { #data : "magenta", meaning : #magenta },
+	    
+	    { #data : #yellow, instantiation : #color, instantiation : #adjective, word : "yellow" },
+	    { #data : "yellow", meaning : #yellow },
+	    
+	    { #data : #orange, instantiation : #color, instantiation : #adjective, word : "orange" },
+	    { #data : "orange", meaning : #orange },
+	    
+	    { #data : #white, instantiation : #color, instantiation : #adjective, word : "white" },
+	    { #data : "white", meaning : #white },
+	    
+	    { #data : #black, instantiation : #color, instantiation : #adjective, word : "black" },
+	    { #data : "black", meaning : #black },
+	    
+	    { #data : #gray, instantiation : #color, instantiation : #adjective, word : "grey", word : "gray" },
+	    { #data : "gray", meaning : #gray }
+]

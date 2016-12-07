@@ -8,16 +8,52 @@
 	android:gravity="fill_vertical"
 	android:orientation="vertical" >
 	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content"
+            android:textSize="18sp"
+	        android:layout_margin="8sp"
+			android:text=""/>
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
 	<!-- com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
-    </com.google.android.gms.ads.AdView -->
+		android:id="@+id/adView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		ads:adSize="SMART_BANNER"
+		ads:adUnitId="@string/banner_ad_unit_id">
+	</com.google.android.gms.ads.AdView-->
+	    
+	<TextView
+		android:id="@+id/yandex"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textSize="14sp"
+		android:layout_margin="8sp"
+		android:visibility="gone"
+		android:text="Powered by Yandex.Translate"/>
     
 	<LinearLayout
 		android:id="@+id/avatarLayout"
@@ -71,13 +107,29 @@
 		android:layout_weight="1"
 		android:orientation="horizontal" >
 		
-		<ImageView
-			android:id="@+id/responseImageView"
-			android:layout_width="40sp"
-			android:layout_height="40sp"
-			android:adjustViewBounds="true"
-			android:contentDescription="bot"
-			android:src="@drawable/bot" />
+		<LinearLayout
+			android:id="@+id/responseImageLayout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:orientation="vertical" >
+		
+			<ImageView
+				android:id="@+id/responseImageView"
+				android:layout_width="40sp"
+				android:layout_height="40sp"
+				android:adjustViewBounds="true"
+				android:contentDescription="bot"
+				android:src="@drawable/bot" />
+			
+			<TextView
+			    android:id="@+id/statusText"
+				android:layout_width="40sp"
+		        android:layout_height="wrap_content"
+	            android:textSize="10sp"
+				android:text=""
+	    		android:layout_margin="2sp"/>
+			
+		</LinearLayout>
 				
 		<ScrollView
 				android:id="@+id/responseScroll"
@@ -137,6 +189,15 @@
 			android:layout_margin="4dp"
 			android:background="@drawable/menu"
 			android:onClick="menu"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/langButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/language"
+			android:onClick="changeLanguage"
 			android:text="" />
 		
 		<Button

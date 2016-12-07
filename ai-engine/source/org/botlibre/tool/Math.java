@@ -65,6 +65,14 @@ public class Math extends BasicTool {
 			if ((rightNumber != null) && (leftNumber != null)) {
 				result = leftNumber.add(rightNumber);
 			}
+		} else if ((left.getData() instanceof Number) && (right.getData() instanceof Number)) {
+			if ((left.getData() instanceof Double) || (right.getData() instanceof Double)) {
+				result = ((Number)left.getData()).doubleValue() + ((Number)right.getData()).doubleValue();
+			} else if ((left.getData() instanceof Long) || (right.getData() instanceof Long)) {
+				result = ((Number)left.getData()).longValue() + ((Number)right.getData()).longValue();
+			} else {
+				result = ((Number)left.getData()).intValue() + ((Number)right.getData()).intValue();
+			}
 		}
 		if (left.is(Primitive.UNDEFINED)) {
 			return left;
@@ -102,6 +110,14 @@ public class Math extends BasicTool {
 			}
 			if ((rightNumber != null) && (leftNumber != null)) {
 				result = leftNumber.subtract(rightNumber);
+			}
+		} else if ((left.getData() instanceof Number) && (right.getData() instanceof Number)) {
+			if ((left.getData() instanceof Double) || (right.getData() instanceof Double)) {
+				result = ((Number)left.getData()).doubleValue() +- ((Number)right.getData()).doubleValue();
+			} else if ((left.getData() instanceof Long) || (right.getData() instanceof Long)) {
+				result = ((Number)left.getData()).longValue() - ((Number)right.getData()).longValue();
+			} else {
+				result = ((Number)left.getData()).intValue() - ((Number)right.getData()).intValue();
 			}
 		}
 		if (left.is(Primitive.UNDEFINED)) {
@@ -144,6 +160,14 @@ public class Math extends BasicTool {
 			if ((rightNumber != null) && (leftNumber != null)) {
 				result = leftNumber.multiply(rightNumber);
 			}
+		} else if ((left.getData() instanceof Number) && (right.getData() instanceof Number)) {
+			if ((left.getData() instanceof Double) || (right.getData() instanceof Double)) {
+				result = ((Number)left.getData()).doubleValue() * ((Number)right.getData()).doubleValue();
+			} else if ((left.getData() instanceof Long) || (right.getData() instanceof Long)) {
+				result = ((Number)left.getData()).longValue() * ((Number)right.getData()).longValue();
+			} else {
+				result = ((Number)left.getData()).intValue() * ((Number)right.getData()).intValue();
+			}
 		}
 		if (left.is(Primitive.UNDEFINED)) {
 			return left;
@@ -182,6 +206,64 @@ public class Math extends BasicTool {
 				return left.getNetwork().createVertex(Primitive.INFINITY);
 			}
 		}
+		if (result == null && (left.getData() instanceof Number) && (right.getData() instanceof Number)) {
+			if ((left.getData() instanceof BigInteger) || (left.getData() instanceof BigDecimal)
+						|| (right.getData() instanceof BigInteger) || (right.getData() instanceof BigDecimal)) {
+				BigDecimal leftNumber = null;
+				BigDecimal rightNumber = null;
+				if (left.getData() instanceof BigInteger) {
+					leftNumber = new BigDecimal((BigInteger)left.getData());
+				} else if (left.getData() instanceof BigDecimal) {
+					leftNumber = (BigDecimal)left.getData();
+				} else {
+					leftNumber = new BigDecimal(((Number)left.getData()).doubleValue());
+				}
+				if (right.getData() instanceof BigInteger) {
+					rightNumber = new BigDecimal((BigInteger)right.getData());
+				} else if (right.getData() instanceof BigDecimal) {
+					rightNumber = (BigDecimal)right.getData();
+				} else {
+					rightNumber = new BigDecimal(((Number)right.getData()).doubleValue());
+				}
+				if ((rightNumber != null) && (leftNumber != null)) {
+					if (rightNumber.signum() == 0) {
+						if (leftNumber.signum() == 0) {
+							return left.getNetwork().createVertex(Primitive.UNDEFINED);
+						} else if (leftNumber.signum() < 0) {
+							return left.getNetwork().createVertex(Primitive.NINFINITY);
+						}
+						return left.getNetwork().createVertex(Primitive.INFINITY);
+					}
+					try {
+						result = leftNumber.divide(rightNumber);
+					} catch (Exception failed) {
+						try {
+							result = leftNumber.divide(rightNumber, 10, BigDecimal.ROUND_UP);
+						} catch (Exception failedAgain) {
+							return left.getNetwork().createVertex(Primitive.INFINITY);
+						}
+					}
+				}
+			} else if ((left.getData() instanceof Number) && (right.getData() instanceof Number)) {
+				if (((Number)right.getData()).doubleValue() == 0) {
+					double leftValue = ((Number)left.getData()).doubleValue();
+					if (leftValue == 0) {
+						return left.getNetwork().createVertex(Primitive.UNDEFINED);
+					}
+					if (leftValue < 0) {
+						return left.getNetwork().createVertex(Primitive.NINFINITY);
+					}
+					return left.getNetwork().createVertex(Primitive.INFINITY);
+				}
+				if ((left.getData() instanceof Double) || (right.getData() instanceof Double)) {
+					result = ((Number)left.getData()).doubleValue() / ((Number)right.getData()).doubleValue();
+				} else if ((left.getData() instanceof Long) || (right.getData() instanceof Long)) {
+					result = ((Number)left.getData()).longValue() / ((Number)right.getData()).longValue();
+				} else {
+					result = ((Number)left.getData()).intValue() / ((Number)right.getData()).intValue();
+				}
+			}
+		}
 		if (left.is(Primitive.UNDEFINED)) {
 			return left;
 		}
@@ -193,39 +275,6 @@ public class Math extends BasicTool {
 		}
 		if (right.is(Primitive.INFINITY) || right.is(Primitive.NINFINITY)) {
 			return left.getNetwork().createVertex(BigInteger.valueOf(0));
-		}
-		if (result == null) {
-			BigDecimal leftNumber = null;
-			BigDecimal rightNumber = null;
-			if (left.getData() instanceof BigInteger) {
-				leftNumber = new BigDecimal((BigInteger)left.getData());
-			} else if (left.getData() instanceof BigDecimal) {
-				leftNumber = (BigDecimal)left.getData();				
-			}
-			if (right.getData() instanceof BigInteger) {
-				rightNumber = new BigDecimal((BigInteger)right.getData());
-			} else if (right.getData() instanceof BigDecimal) {
-				rightNumber = (BigDecimal)right.getData();
-			}
-			if ((rightNumber != null) && (leftNumber != null)) {
-				if (rightNumber.signum() == 0) {
-					if (leftNumber.signum() == 0) {
-						return left.getNetwork().createVertex(Primitive.UNDEFINED);
-					} else if (leftNumber.signum() < 0) {
-						return left.getNetwork().createVertex(Primitive.NINFINITY);
-					}
-					return left.getNetwork().createVertex(Primitive.INFINITY);
-				}
-				try {
-					result = leftNumber.divide(rightNumber);
-				} catch (Exception failed) {
-					try {
-						result = leftNumber.divide(rightNumber, 10, BigDecimal.ROUND_UP);
-					} catch (Exception failedAgain) {
-						return left.getNetwork().createVertex(Primitive.INFINITY);
-					}
-				}
-			}
 		}
 		return left.getNetwork().createVertex(checkInteger(result));
 	}
@@ -341,6 +390,18 @@ public class Math extends BasicTool {
 			return left.getNetwork().createVertex(Primitive.INFINITY);
 		}
 		return left.getNetwork().createVertex(Primitive.NULL);
+	}
+	
+	public Vertex random(Vertex source, Vertex max) {
+		if ((max.getData() instanceof Number)) {
+			int value = (((Number)max.getData()).intValue());
+			return source.getNetwork().createVertex(org.botlibre.util.Utils.random(value));
+		}
+		return source.getNetwork().createVertex(0);
+	}
+	
+	public Vertex random(Vertex source) {
+		return source.getNetwork().createVertex(org.botlibre.util.Utils.random().nextDouble());
 	}
 	
 	public Vertex floor(Vertex source, Vertex left) {

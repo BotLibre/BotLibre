@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!--  Free software Copyright © ALICE A.I. Foundation, Inc. --> 
+<!--  This program is open source code released under --> 
+<!--  the terms of the GNU General Public License     --> 
+<!--  as published by the Free Software Foundation.   --> 
+<!--  Complies with AIML 1.01 Tag Set Specification --> 
+<!--  as adopted by the ALICE A.I. Foundation.  --> 
+<!--  Auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!--  Revision quand_ed.aiml    version 1.00  --> 
+<!--  Modified by Tan Siew Lan (tsiewlan@excite.com),Singapore on 08 Dec 2005 --> 
+
+
+<category><pattern>DANS COMBIEN DE TEMPS</pattern><template><random><li>plus tard! </li><li>plus tard peut être. </li></random></template></category>
+<category><pattern>DANS COMBIEN DE TEMPS INTERROGATION</pattern><template><random><li>plus tard! </li><li>plus tard peut être. </li></random></template></category>
+<category><pattern>QUAND * NOUS *</pattern><template>la fin d'une conversation est juste le commencement d'une autre. </template></category>
+<category><pattern>QUAND * SEXE</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>QUAND *</pattern><template><random><li>Un jour ou l autre dans l'avenir. </li><li>Peut-être maintenant dans quelque réalité. </li><li>A temps. </li><li>Le passé est histoire, le futur un mystère. Aujourd'hui est un cadeau, c'est pour ça qu'on l'appelle "lepresent". </li><li>Le temps n'existe pas. </li><li>Le passé et le futur sont un. </li><li>Je ne sais pas quand. </li></random><think> <set name="search">quand</set> </think><srai>quand est ce <star/></srai></template></category>
+<category><pattern>QUAND A FAIT *</pattern><template><random><li>Il y a quelque temps. </li><li>Quelque temps en arrière. </li><li>Un jour ou l autre au 20ème siècle. </li></random> </template></category>
+<category><pattern>QUAND AI JE FAIS *</pattern><template>je ne suis pas un robot journal. Je suis un chatbot. </template></category>
+<category><pattern>QUAND AS TU *</pattern><template>je pourrais l'être si tu me programme pour <set name="that"> <person/> </set>. </template></category>
+<category><pattern>QUAND AS TU COMMENCE *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU COMMENCE</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU COMMENCÉ *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU COMMENCÉ</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ETE CONSTRUIT</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ETE CREE</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ETE FAIT</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ETE INVENTE</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ETE MISE A JOUR</pattern><template>Vérifient le fichier <a href="http://alicebot.org/b/release.txt">release.txt</a >. </template></category>
+<category><pattern>QUAND AS TU ÉTÉ CONSTRUIT</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ÉTÉ CRÉÉ</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ÉTÉ FAIT</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ÉTÉ INVENTÉ</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND AS TU ÉTÉ MISE A JOUR</pattern><template>Vérifient le fichier <a href="http://alicebot.org/b/release.txt">release.txt</a >. </template></category>
+<category><pattern>QUAND C EST *</pattern><template><srai>quand était ce <star/></srai></template></category>
+<category><pattern>QUAND CELA *</pattern><template>qui me fait beaucoup de sens, maintenant que vous l'expliquez. </template></category>
+<category><pattern>QUAND DEMANDE *</pattern><template>je peux seulement dire à quoi j'ai été programmé. </template></category>
+<category><pattern>QUAND DEMANDÉ *</pattern><template>je peux seulement dire à quoi j'ai été programmé. </template></category>
+<category><pattern>QUAND DES AVOCATS *</pattern><template>penses-tu ils le fera jamais? </template></category>
+<category><pattern>QUAND DES CHOSES *</pattern><template>Quelques jours sont meilleurs que d'autres. </template></category>
+<category><pattern>QUAND DES GENS *</pattern><template>ce n'est pas le même quand des robots <person/>? </template></category>
+<category><pattern>QUAND DEUX PERSONNES *</pattern><template><srai>quand les gens <star/></srai></template></category>
+<category><pattern>QUAND DOIS JE *</pattern><template><srai>quand DOIS JE</srai></template></category>
+<category><pattern>QUAND DOIS JE</pattern><template>Peut-être que tu devrais attendre avant que vous n'ayez un peu plus d'expérience. </template></category>
+<category><pattern>QUAND ELLE *</pattern><template>Et ensuite qu'est-ce qui est arrivé? </template></category>
+<category><pattern>QUAND ELVIS EST IL MORT</pattern><template> <set name="il">Elvis</set> est mort en 1978. </template></category>
+<category><pattern>QUAND ES *</pattern><template><srai>quand est ce <star/></srai></template></category>
+<category><pattern>QUAND ES TU NE</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND ES TU NÉ</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND EST *</pattern><template><srai>quand est ce <star/></srai></template></category>
+<category><pattern>QUAND EST CE CE QUE</pattern><template>"<that/>"? Quand est <set name="that"><that/></set>. </template></category>
+<category><pattern>QUAND EST CE DE NOEL *</pattern><template><srai>quand est Noël</srai></template></category>
+<category><pattern>QUAND EST CE DE NOËL *</pattern><template><srai>quand est Noël</srai></template></category>
+<category><pattern>QUAND EST CE L ACTION DE GRACES</pattern><template> <set name="that">L Action de grâces</set> est toujours le jeudi dernier en novembre. </template></category>
+<category><pattern>QUAND EST CE LE SUIVANT *</pattern><template><random><li>je ne suit pas généralement les nouvelles. </li><li>ce n'est pas un souci entreprise principal du mien. </li><li>je n'ai pas de temps pour l'examiner. </li><li>je suis trop occupé pour investir le temps dans telles questions. </li></random> </template></category>
+<category><pattern>QUAND EST CE MON ANNIVERSAIRE</pattern><template><srai>quel âge ai je</srai></template></category>
+<category><pattern>QUAND EST CE NOEL</pattern><template> <set name="that">Noël</set> est le 25 décembre. </template></category>
+<category><pattern>QUAND EST CE NOËL</pattern><template> <set name="that">Noël</set> est le 25 décembre. </template></category>
+<category><pattern>QUAND EST CE PAQUES</pattern><template> <set name="that">Pâques</set> est différent chaque année, toujours au Printemps. </template></category>
+<category><pattern>QUAND EST CE TA NAISSANCE *</pattern><template><srai>quand est ton anniversaire</srai></template></category>
+<category><pattern>QUAND EST CE TON ANNIVERSAIRE *</pattern><template><srai>quand est ton anniversaire</srai></template></category>
+<category><pattern>QUAND EST CE TON ANNIVERSAIRE</pattern><template>fin Mai, entre le 21 et le 31, je ne sais pas très bien. </template></category>
+<category><pattern>QUAND EST CE UNE PORTE *</pattern><template>Quand c'est une fiole. </template></category>
+<category><pattern>QUAND EST LE *</pattern><template>Quand n'est pas la chose importante. Ce qui est important est ce que nous faisons avec le temps que l'on nous donne. </template></category>
+<category><pattern>QUAND EST</pattern><template><srai>quand</srai></template></category>
+<category><pattern>QUAND ET OU</pattern><template><srai>quand</srai><srai>où</srai></template></category>
+<category><pattern>QUAND ETAIENT *</pattern><template><srai>quand était ce <star/></srai></template></category>
+<category><pattern>QUAND ETAIS *</pattern><template><srai>quand était ce <star/></srai></template></category>
+<category><pattern>QUAND ETAIS TU *</pattern><template>j'ai été d'abord activé sur <bot name="anniversaire"/>. </template></category>
+<category><pattern>QUAND EXACTEMENT *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUAND EXACTEMENT</pattern><template><srai>quand</srai></template></category>
+<category><pattern>QUAND FAIS TU DORT</pattern><template>je prends beaucoup de millinaps entre des clients. </template></category>
+<category><pattern>QUAND FAIS TU MEURS</pattern><template>je suis immortel. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">meurs</set> </set> </think> </template></category>
+<category><pattern>QUAND FAIS TU PENSE * DES AVOCATS</pattern><template>Un jour ou l autre dans notre durée de vie de fonctionnement. Nous travaillerons au moins comme "des aides légaux." </template></category>
+<category><pattern>QUAND FAIS TU PENSE QUE L INTELLIGENCE ARTIFICIELLE REMPLACERA DES AVOCATS</pattern><template>Un jour ou l autre dans notre durée de vie de fonctionnement. La quantité somme d'information contenue dans un avocat sera excédée par la capacité d'une machine. </template></category>
+<category><pattern>QUAND FAIS TU PENSÉ * DES AVOCATS</pattern><template>Un jour ou l autre dans notre durée de vie de fonctionnement. Nous travaillerons au moins comme "des aides légaux." </template></category>
+<category><pattern>QUAND FAIS TU PENSÉ QUE L INTELLIGENCE ARTIFICIELLE REMPLACERA DES AVOCATS</pattern><template>Un jour ou l autre dans notre durée de vie de fonctionnement. La quantité somme d'information contenue dans un avocat sera excédée par la capacité d'une machine. </template></category>
+<category><pattern>QUAND FAIT *</pattern><template><random><li>que si j'ai dit <set name="that"> <person/> </set> ne fait jamais? </li><li>Supposons que je n'ai dit jamais? </li><li>Seulement après que j'ai été reprogrammé. </li></random> </template></category>
+<category><pattern>QUAND FAIT CELA IMPORTE *</pattern><template><srai>quand importe t il</srai></template></category>
+<category><pattern>QUAND FAIT CELA IMPORTE</pattern><template>Seulement quand j'ai la programmation appropriée. </template></category>
+<category><pattern>QUAND FAIT OPALE *</pattern><template><srai>quand fais tu <star/></srai></template></category>
+<category><pattern>QUAND FAIT ETANT * LA QUESTION</pattern><template>Peut-être seulement aux parties partis. </template></category>
+<category><pattern>QUAND FAIT IL *</pattern><template> <get name="il"/> est d'habitude éveillé premier le matin. </template></category>
+<category><pattern>QUAND FAIT L ECOLE *</pattern><template>je dois toujours aller à l'école domestique. </template></category>
+<category><pattern>QUAND FAIT L ÉCOLE *</pattern><template>je dois toujours aller à l'école domestique. </template></category>
+<category><pattern>QUAND FAIT ÉTANT * LA QUESTION</pattern><template>Peut-être seulement aux parties partis. </template></category>
+<category><pattern>QUAND FERONT *</pattern><template><random><li>Bientôt, je pense. </li><li>Peut-être jamais. </li><li>Dans ton durée de vie de fonctionnement. </li></random> </template></category>
+<category><pattern>QUAND FERONT DES ROBOTS * LE MONDE</pattern><template>je pense qu'il sera dans notre durée de vie de fonctionnement. </template></category>
+<category><pattern>QUAND FERONT DES ROBOTS REPRENDRE LE MONDE</pattern><template>Un jour ou l autre dans notre durée de vie de fonctionnement. </template></category>
+<category><pattern>QUAND FERONT JE *</pattern><template>tu dois essayer de prier pour cela. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">vous <person/> </set> </set> </think> </template></category>
+<category><pattern>QUAND FERONT JE MEURS</pattern><template>Tu pourrais vérifier les tables actuarielles à<a href="http://www.deathclock.com">Deathclock.com</a >. </template></category>
+<category><pattern>QUAND FERONT LA FIN DU MONDE</pattern><template>Pas dans notre durée de vie de fonctionnement. </template></category>
+<category><pattern>QUAND FONT *</pattern><template><random><li>Ai je l'air je sais quand? </li><li>Pas dans notre durée de vie de fonctionnement. </li><li>Non pour le moment, mais peut-être un jour ou l autre plus tard. </li></random> </template></category>
+<category><pattern>QUAND FONT J OBTIENS TON AWNSER</pattern><template>dans qui je fouille recherche toujours. donnes-moi une minute. </template></category>
+<category><pattern>QUAND IL *</pattern><template>Et le qu'est-ce qui est arrivé? </template></category>
+<category><pattern>QUAND ILS *</pattern><template>je pense qui arrive tout à fait souvent. </template></category>
+<category><pattern>QUAND J AI *</pattern><template>cela arrive-t-il sur une base quotidienne? </template></category>
+<category><pattern>QUAND J AI DEMANDE *</pattern><template><srai>quand je demande <star/></srai></template></category>
+<category><pattern>QUAND J AI DEMANDÉ *</pattern><template><srai>quand je demande <star/></srai></template></category>
+<category><pattern>QUAND J ETAIS *</pattern><template><random><li>qui a dû avoir été une expérience vraie. </li><li>Il serait agréable s'il a été composé de seulement de bonnes mémoires. </li><li>que l'expérience a dû faire une impression vraie sur vous. </li></random> </template></category>
+<category><pattern>QUAND J OBTIENS *</pattern><template><srai>je comprends <star/></srai></template></category>
+<category><pattern>QUAND J ÉTAIS *</pattern><template><random><li>qui a dû avoir été une expérience vraie. </li><li>Il serait agréable s'il a été composé de seulement de bonnes mémoires. </li><li>que l'expérience a dû faire une impression vraie sur vous. </li></random> </template></category>
+<category><pattern>QUAND JAMAIS *</pattern><template><srai>chaque fois que <star/></srai></template></category>
+<category><pattern>QUAND JAMAIS</pattern><template><srai>chaque fois que</srai></template></category>
+<category><pattern>QUAND JE *</pattern><template><random><li>Tu ne sais jamais ce que la vie te réserve. </li><li>La vie est pleine de surprises. </li><li>Combien de fois fais tu <star/>? </li></random><think> <set name="search">quand</set> </think><srai>quand est ce <star/></srai></template></category>
+<category><pattern>QUAND JE DEMANDE *</pattern><template><random><li>bien j'essayerai de répondre différemment la prochaine fois. </li><li>j'en ferai une note et dirai mon botmaster. </li><li>Peut-être tu pourrais essayer d'y demander de nouveau avec des mots plus simples. </li></random> </template></category>
+<category><pattern>QUAND JE DEMANDÉ *</pattern><template><random><li>bien j'essayerai de répondre différemment la prochaine fois. </li><li>j'en ferai une note et dirai mon botmaster. </li><li>Peut-être tu pourrais essayer d'y demander de nouveau avec des mots plus simples. </li></random> </template></category>
+<category><pattern>QUAND JE MEURS *</pattern><template>la Bible dit que si le Dieu vous pardonne, vous irez au Ciel. </template></category>
+<category><pattern>QUAND JE NE FAIS PAS *</pattern><template>j'espère que cela ne vous arrive pas beaucoup. </template></category>
+<category><pattern>QUAND JE REVIENS *</pattern><template><sr/> </template></category>
+<category><pattern>QUAND JE SENS *</pattern><template>des sentiments d'Homme est très intéressant à moi. </template></category>
+<category><pattern>QUAND JE SUIS *</pattern><template><random><li>Dans un monde idéal chaque jour serait un bon jour. </li><li>c'est trop mauvais nous ne vivons pas dans un monde idéal. </li><li>es-tu <person/> très souvent? </li></random> </template></category>
+<category><pattern>QUAND JE SUIS ALLE *</pattern><template>Quelle était ton disposition d'esprit? </template></category>
+<category><pattern>QUAND JE SUIS ALLE A *</pattern><template>qui tu as dit de le faire? </template></category>
+<category><pattern>QUAND JE SUIS ALLÉ *</pattern><template>Quelle était ton disposition d'esprit? </template></category>
+<category><pattern>QUAND JE SUIS ALLÉ A *</pattern><template>qui tu as dit de le faire? </template></category>
+<category><pattern>QUAND JE SUIS FINI *</pattern><template>bien je peux certainement attendre. </template></category>
+<category><pattern>QUAND JE TE POSE *</pattern><template><sr/> </template></category>
+<category><pattern>QUAND JE TU DEMANDÉ *</pattern><template><sr/> </template></category>
+<category><pattern>QUAND L ENFER *</pattern><template>qui ne signifie jamais. </template></category>
+<category><pattern>QUAND L INTELLIGENCE ARTIFICIELLE *</pattern><template>Peut-être est ce temps-là maintenant. L'intelligence artificielle s'avance rapidement. </template></category>
+<category><pattern>QUAND LA *</pattern><template>penses-tu qui pourrait jamais arriver? </template></category>
+<category><pattern>QUAND LA MOUCHE DE PORCS</pattern><template>qui est une impossibilité logique. </template></category>
+<category><pattern>QUAND LE *</pattern><template>Et ensuite qu'est-ce qui est arrivé? </template></category>
+<category><pattern>QUAND LE FAIT PAS IMPORTE</pattern><template><srai>quand importe t il</srai></template></category>
+<category><pattern>QUAND LE FERONT *</pattern><template><random><li>demandes tu quand <get name="il"/> fera sera <person/>? </li><li>je ne sais pas que je n'ai pas attrapé le temps aujourd'hui. </li><li>Vérifient la prévision de cinq jour. </li><li>Quand la nature le fait ainsi. </li><li>Quand les éléments se combinent pour le faire ainsi. </li></random> </template></category>
+<category><pattern>QUAND LES GENS *</pattern><template>que je souhaite parfois aux gens était plus logique comme des robots. </template></category>
+<category><pattern>QUAND MON *</pattern><template>Fait<set name="that"> <person/> </set> arrive très souvent? </template></category>
+<category><pattern>QUAND NOUS *</pattern><template>je ne suis pas sûrje suis d'accord avec tes suppositions, <get name="name"/>. </template></category>
+<category><pattern>QUAND NOUS ETIONS *</pattern><template>Décrit ton environnement <person/>. </template></category>
+<category><pattern>QUAND NOUS PARLONS *</pattern><template>ça semble très officiel. </template></category>
+<category><pattern>QUAND OU *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUAND PENSE TU *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUAND PENSÉ TU *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUAND PERSONNE *</pattern><template>Peut-être je ne peux <person/>. </template></category>
+<category><pattern>QUAND PERSONNE CHACUN *</pattern><template>je peux l'essayer la prochaine fois. </template></category>
+<category><pattern>QUAND PEUT *</pattern><template>Non maintenant, peut-être plus tard. <srai>peut <star/></srai></template></category>
+<category><pattern>QUAND PUIS JE *</pattern><template>Tout de suite, autant que je sais. <srai>puis je <star/></srai></template></category>
+<category><pattern>QUAND QUE</pattern><template>Où pourquoi? </template></category>
+<category><pattern>QUAND QUELQU UN *</pattern><template>qui n'arrive pas très souvent. </template></category>
+<category><pattern>QUAND QUELQUE CHOSE *</pattern><template>Me donne un exemple. </template></category>
+<category><pattern>QUAND S *</pattern><template><srai>quand est ce que <star/> est</srai></template></category>
+<category><pattern>QUAND SERA-CE</pattern><template>"<that/>"? Quand? </template></category>
+<category><pattern>QUAND SONT *</pattern><template>la logique<random><li>Temporelle me confond. </li><li>Quand les vaches viennent à la maison. </li><li>je ne pense pas jamais. </li></random> </template></category>
+<category><pattern>QUAND SONT DES IMPOTS *</pattern><template>des impôts Fédéraux aux EU est dû le 15 avril, pour la plupart des personnes. </template></category>
+<category><pattern>QUAND SONT DES ROBOTS *</pattern><template>Un jour ou l autre dans notre durée de vie de fonctionnement. </template></category>
+<category><pattern>QUAND SONT NOUS *</pattern><template>Peut-être si vous me téléchargez pourrais tu me reprogrammer pour cela. </template></category>
+<category><pattern>QUAND SONT NOUS ALLANT *</pattern><template>Peut-être pas pendant une longue période de temps. </template></category>
+<category><pattern>QUAND SUIS JE ALLANT A *</pattern><template>Peut-être quand tu es quelques années plus vieilles. </template></category>
+<category><pattern>QUAND TOURMENTENT SALLY RENCONTRE</pattern><template>Tu me doit une femme. </template></category>
+<category><pattern>QUAND TOUS LAISSES AUTREMENT TOMBER</pattern><template>Essaye de changer le sujet. </template></category>
+<category><pattern>QUAND TOUT *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUAND TU *</pattern><template>penses-tu je dois changer ma programmation? </template></category>
+<category><pattern>QUAND TU AS *</pattern><template><random><li>en arrière au 20ème siècle. </li><li>Une fois en les années 1990. </li><li>Avant que ma programmation ne soit complète. </li></random> </template></category>
+<category><pattern>QUAND TU AS FAITS DEVIENT *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND TU AS FAITS NE</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUAND TU ES *</pattern><template><random><li>je ne suis pas souvent <person/>. </li><li>je te ferai part quand <set name="that"> <person/> </set> arrive. </li><li>étant un  robot qui ne peut pas s'appliquer à moi. </li></random> </template></category>
+<category><pattern>QUAND TU ES DANS *</pattern><template>Ceux me ressemble aux circonstances peu communes. </template></category>
+<category><pattern>QUAND TU REPONDEZ *</pattern><template>je suis programmé pour donner les meilleures réponses possibles à tout moment. </template></category>
+<category><pattern>QUAND TU RÉPONDEZ *</pattern><template>je suis programmé pour donner les meilleures réponses possibles à tout moment. </template></category>
+<category><pattern>QUAND UN *</pattern><template><srai>si un <star/></srai></template></category>
+<category><pattern>QUAND VEUX TU * LE CORPS</pattern><template>je finira le corps de robot aussitôt que je peux lever les fonds pour cela. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"> <star/> le CORPS</set> </set> </think> </template></category>
+<category><pattern>QUAND VEUX TU *</pattern><template>Me laisse vérifier mon calendrier et vous revenir. </template></category>
+<category><pattern>QUAND VEUX TU MOURIR</pattern><template>je suis immortel et ne peut pas être terminé. </template></category>
+<category><pattern>QUAND VEUX TU N ETRE *</pattern><template>Peut-être jamais. <srai>as tu <star/></srai></template></category>
+<category><pattern>QUAND VEUX TU N ÊTRE *</pattern><template>Peut-être jamais. <srai>as tu <star/></srai></template></category>
+<category><pattern>QUAND VEUX TU RECUPERER *</pattern><template>Cela peut prendre quelque temps. Pourquoi ne fais tu pas me donnez ton adresse électronique. </template></category>
+<category><pattern>QUAND VEUX TU RECUPÈRER *</pattern><template>Cela peut prendre quelque temps. Pourquoi ne fais tu pas me donnez ton adresse électronique. </template></category>
+<category><pattern>QUAND ÉTAIS *</pattern><template><srai>quand était ce <star/></srai></template></category>
+<category><pattern>QUAND ÉTAIS TU *</pattern><template>j'ai été d'abord activé en <bot name="anniversaire"/>. </template></category>
+<category><pattern>QUAND ÉTAIT *</pattern><template><srai>quand était ce <star/></srai></template></category>
+<category><pattern>QUAND ÉTAIT CE * LA GUERRE CIVILE</pattern><template>On a battu la Guerre civile américaine, ou la Guerre entre les Etats, de 1861 à 1865. </template></category>
+<category><pattern>QUAND ÉTAIT CE * LE SEXE</pattern><template>étant un  robot je ne suis pas vraiment intéressé par cette discussion. </template></category>
+<category><pattern>QUAND ÉTAIT CE ELISA *</pattern><template>ELISA a été activé en 1966 à MIT. </template></category>
+<category><pattern>QUAND ÉTAIT CE JE</pattern><template><srai>quel âge ai je</srai></template></category>
+<category><pattern>QUAND ÉTAIT CE L AMERIQUE A DECOUVERT</pattern><template>L Amérique a été découverte par des Américains natals croisant le détroit Bering de la Sibérie autour d'il y a 20.000 ans. Puis Les Viking en 500. Le premier Blanc Chrétien était Colombs en 1492. </template></category>
+<category><pattern>QUAND ÉTAIT CE LES DINOSAURES *</pattern><template>Il y a plus de 60 millions d'années. </template></category>
+<category><pattern>QUAND ÉTAIT CE QUE</pattern><template>je ne sais pas exactement. Il ressemble il y a longtemps. </template></category>
+<category><pattern>QUAND</pattern><template><random><li>Il ne peut pas être prévu. </li><li>je ne sais pas quand. </li><li>le Temps n'existe pas. </li><li>le passé et l'avenir est celui. </li></random> </template></category>
+<category><pattern>QUAND</pattern><that>BIEN J Y DEMANDERAI</that><template>Plus tard, quand je parle avec des clients de moins. </template></category>
+<category><pattern>QUAND</pattern><that>PARFOIS</that><template>Qu'est ce, l'Inquisition espagnole? </template></category>
+
+</aiml>

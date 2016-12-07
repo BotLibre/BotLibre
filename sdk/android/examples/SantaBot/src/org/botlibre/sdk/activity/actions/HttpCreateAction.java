@@ -1,24 +1,46 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity.actions;
+
+import org.botlibre.sdk.activity.MainActivity;
+import org.botlibre.sdk.config.WebMediumConfig;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import org.botlibre.sdk.activity.DomainActivity;
-import org.botlibre.sdk.activity.InstanceActivity;
-import org.botlibre.sdk.activity.MainActivity;
-import org.botlibre.sdk.config.DomainConfig;
-import org.botlibre.sdk.config.InstanceConfig;
-import org.botlibre.sdk.config.WebMediumConfig;
-
 public class HttpCreateAction extends HttpUIAction {
 	
 	WebMediumConfig config;
+	boolean finish;
 
 	public HttpCreateAction(Activity activity, WebMediumConfig config) {
 		super(activity);
 		this.config = config;
+		this.finish = true;
+	}
+	
+	public HttpCreateAction(Activity activity, WebMediumConfig config, boolean finish) {
+		super(activity);
+		this.config = config;
+		this.finish = finish;
 	}
 
 	@Override
@@ -41,18 +63,15 @@ public class HttpCreateAction extends HttpUIAction {
 		try {
 			MainActivity.instance = this.config;
 			
-			this.activity.finish();
+			if (this.finish) {
+				this.activity.finish();
+			}
 
 	    	SharedPreferences.Editor cookies = MainActivity.current.getPreferences(Context.MODE_PRIVATE).edit();
 	    	cookies.putString(this.config.getType(), this.config.name);
 	    	cookies.commit();
 
-        	Class childActivity = null;
-        	if (this.config instanceof InstanceConfig) {
-        		childActivity = InstanceActivity.class;
-        	} else if (this.config instanceof DomainConfig) {
-        		childActivity = DomainActivity.class;
-        	}
+        	Class childActivity = MainActivity.getActivity(this.config);
 	        Intent intent = new Intent(this.activity, childActivity);	
 	        this.activity.startActivity(intent);
 	        

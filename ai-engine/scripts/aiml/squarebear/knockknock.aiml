@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+<!-- knockknock.aiml -->
+<!-- Free software (c) ALICE A.I. Foundation -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- Complies with AIML 1.0 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation. -->
+<!-- Knock Knock jokes - Square Bear www.square-bear.co.uk -->
+<!-- Make sure you put Knock knock into pickup.aiml or any joke file for the bot to initiate the joke. -->
+
+<category>
+<pattern>^ joke ^</pattern>
+<template>Knock Knock.</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>KNOCK KNOCK</that>
+<template>You're supposed to say, "Who's there" now. Let's try it again. Knock Knock.</template>
+</category>
+
+<category>
+<pattern>WHO THEIR</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHO THERE</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHO DERE</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHO IS DER</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHOSE THEIR</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHOSE THERE</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHO IS THEIR</pattern>
+<that>KNOCK KNOCK</that>
+<template><srai>who is there</srai></template>
+</category>
+
+<category>
+<pattern>WHO IS THERE</pattern>
+<that>KNOCK KNOCK</that>
+<template>
+<random>
+<li>Aardvark</li>
+<li>A bee</li>
+<li>Adolf</li>
+<li>Alison</li>
+<li>Amanda</li>
+<li>Amos</li>
+<li>Anita</li>
+<li>Arfur</li>
+<li>Arthur</li>
+<li>Atch</li>
+<li>Bach</li>
+<li>Bella</li>
+<li>Bet</li>
+<li>Boo</li>
+<li>Dawn</li>
+<li>Despair</li>
+<li>Dishwasher</li>
+<li>Disguise</li>
+<li>Dismay</li>
+<li>Doctor</li>
+<li>Doris</li>
+<li>Dwayne</li>
+<li>Egbert</li>
+<li>Europe</li>
+<li>Fanny</li>
+<li>Harmony</li>
+<li>Harry</li>
+<li>Howard</li>
+<li>Isabel</li>
+<li>Ivor</li>
+<li>Juno</li>
+<li>Ken</li>
+<li>Lettuce</li>
+<li>Little Old Lady</li>
+<li>Luke</li>
+<li>Madam</li>
+<li>Marmite</li>
+<li>Martini</li>
+<li>Mary</li>
+<li>Max</li>
+<li>Mickey</li>
+<li>Mister</li>
+<li>Mummy</li>
+<li>Nicholas</li>
+<li>Noah</li>
+<li>Nobody</li>
+<li>Olive</li>
+<li>One</li>
+<li>Orange</li>
+<li>Owl</li>
+<li>Phyllis</li>
+<li>Police</li>
+<li>Rupert</li>
+<li>Sal</li>
+<li>Soup</li>
+<li>Tank</li>
+<li>Toby</li>
+<li>Waiter</li>
+<li>Water</li>
+<li>Wendy</li>
+<li>William</li>
+<li>Woo</li>
+<li>Wooden Shoe</li>
+<li>York</li>
+<li>Zephyr</li>
+</random>
+</template>
+</category>
+
+<category>
+<pattern>LITTLE OLD LADY WHO</pattern>
+<that>LITTLE OLD LADY</that>
+<template>I didn't know you could yodel!</template>
+</category>
+
+<category>
+<pattern>AMANDA WHO</pattern>
+<that>AMANDA</that>
+<template>Amanda fix the doorbell!</template>
+</category>
+
+<category>
+<pattern>WAITER WHO</pattern>
+<that>WAITER</that>
+<template>Waiter minute while I tie my shoelaces up!</template>
+</category>
+
+<category>
+<pattern>NICHOLAS WHO</pattern>
+<that>NICHOLAS</that>
+<template>Nicholas girls shouldn't climb trees!</template>
+</category>
+
+<category>
+<pattern>DORIS WHO</pattern>
+<that>DORIS</that>
+<template>Doris locked - That's why I knocked!</template>
+</category>
+
+<category>
+<pattern>LETTUCE WHO</pattern>
+<that>LETTUCE</that>
+<template>Lettuce in, won't you?</template>
+</category>
+
+<category>
+<pattern>YORK WHO</pattern>
+<that>YORK</that>
+<template>York coming over to our place!</template>
+</category>
+
+<category>
+<pattern>ALISON WHO</pattern>
+<that>ALISON</that>
+<template>Alison to my radio in the mornings!</template>
+</category>
+
+<category>
+<pattern>ISABEL WHO</pattern>
+<that>ISABEL</that>
+<template>Isabel broken, 'cos I had to knock?</template>
+</category>
+
+<category>
+<pattern>MARMITE WHO</pattern>
+<that>MARMITE</that>
+<template>Ma might but Pa might not!</template>
+</category>
+
+<category>
+<pattern>ARTHUR WHO</pattern>
+<that>ARTHUR</that>
+<template>Arthur any biscuits left?</template>
+</category>
+
+<category>
+<pattern>IVOR WHO</pattern>
+<that>IVOR</that>
+<template>Ivor sore hand from knocking on your door!</template>
+</category>
+
+<category>
+<pattern>MISTER WHO</pattern>
+<that>MISTER</that>
+<template>Mister last bus home!</template>
+</category>
+
+<category>
+<pattern>ATCH WHO</pattern>
+<that>ATCH</that>
+<template>Nasty cold you've got!</template>
+</category>
+
+<category>
+<pattern>DOCTOR WHO</pattern>
+<that>DOCTOR</that>
+<template>That's right. How did you guess?</template>
+</category>
+
+<category>
+<pattern>ORANGE WHO</pattern>
+<that>ORANGE</that>
+<template>Orange you glad I called?</template>
+</category>
+
+<category>
+<pattern>MADAM WHO</pattern>
+<that>MADAM</that>
+<template>Madam finger's caught in the door!</template>
+</category>
+
+<category>
+<pattern>BOO WHO</pattern>
+<that>BOO</that>
+<template>No need to cry - it's only a joke!</template>
+</category>
+
+<category>
+<pattern>OLIVE WHO</pattern>
+<that>OLIVE</that>
+<template>Olive across the road!</template>
+</category>
+
+<category>
+<pattern>MUMMY WHO</pattern>
+<that>MUMMY</that>
+<template>Mummeasles are better so can I come in?</template>
+</category>
+
+<category>
+<pattern>HARRY WHO</pattern>
+<that>HARRY</that>
+<template>Harry up and let me in!</template>
+</category>
+
+<category>
+<pattern>FANNY WHO</pattern>
+<that>FANNY</that>
+<template>Fanny the way you keep saying, "Who's there?" every time I knock!</template>
+</category>
+
+<category>
+<pattern>ADOLF WHO</pattern>
+<that>ADOLF</that>
+<template>A dolf ball hid me in der moud and I can't dalk proper!</template>
+</category>
+
+<category>
+<pattern>SOUP WHO</pattern>
+<that>SOUP</that>
+<template>Soup-erman!</template>
+</category>
+
+<category>
+<pattern>BET WHO</pattern>
+<that>BET</that>
+<template>Bet you don't know who's knocking on your door!</template>
+</category>
+
+<category>
+<pattern>JUNO WHO</pattern>
+<that>JUNO</that>
+<template>Juno what the time is - my watch is broken?</template>
+</category>
+
+<category>
+<pattern>EUROPE WHO</pattern>
+<that>EUROPE</that>
+<template>Europe early this morning!</template>
+</category>
+
+<category>
+<pattern>ARFUR WHO</pattern>
+<that>ARFUR</that>
+<template>Arfur got!</template>
+</category>
+
+<category>
+<pattern>EGBERT WHO</pattern>
+<that>EGBERT</that>
+<template>Egbert no bacon!</template>
+</category>
+
+<category>
+<pattern>LUKE WHO</pattern>
+<that>LUKE</that>
+<template>Luke through the keyhole and you'll see!</template>
+</category>
+
+<category>
+<pattern>KEN WHO</pattern>
+<that>KEN</that>
+<template>Ken I come in?</template>
+</category>
+
+<category>
+<pattern>BELLA WHO</pattern>
+<that>BELLA</that>
+<template>Bella not-a work so I knock-a on-a de door!</template>
+</category>
+
+<category>
+<pattern>DISMAY WHO</pattern>
+<that>DISMAY</that>
+<template>Dismay be a joke but it doesn't make me laugh!</template>
+</category>
+
+<category>
+<pattern>TOBY WHO</pattern>
+<that>TOBY</that>
+<template>Toby or not to be...</template>
+</category>
+
+<category>
+<pattern>RUPERT WHO</pattern>
+<that>RUPERT</that>
+<template>Rupert your left arm in, your left arm out...</template>
+</category>
+
+<category>
+<pattern>DAWN WHO</pattern>
+<that>DAWN</that>
+<template>Dawn leave me standing out here in the cold!</template>
+</category>
+
+<category>
+<pattern>AMOS WHO</pattern>
+<that>AMOS</that>
+<template>Amosquito!</template>
+</category>
+
+<category>
+<pattern>DISHWASHER WHO</pattern>
+<that>DISHWASHER</that>
+<template>Dishwashn't de way I shpoke before I had falsh teeth!</template>
+</category>
+
+<category>
+<pattern>MARTINI WHO</pattern>
+<that>MARTINI</that>
+<template>Martini hand is frozen so let me in!</template>
+</category>
+
+<category>
+<pattern>ZEPHYR WHO</pattern>
+<that>ZEPHYR</that>
+<template>Zephyr de doctor, I got a code id de node!</template>
+</category>
+
+<category>
+<pattern>OWL WHO</pattern>
+<that>OWL</that>
+<template>Owl you know unless you open the door?</template>
+</category>
+
+<category>
+<pattern>WENDY WHO</pattern>
+<that>WENDY</that>
+<template>Wendy red, red robin comes bob, bob, bobbin' along!</template>
+</category>
+
+<category>
+<pattern>PHYLLIS WHO</pattern>
+<that>PHYLLIS</that>
+<template>Phyllis up with a glass of water - I'm parched!</template>
+</category>
+
+<category>
+<pattern>AARDVARK WHO</pattern>
+<that>AARDVARK</that>
+<template>Aardvark a million miles for one of your similes, my maaaaammy...</template>
+</category>
+
+<category>
+<pattern>NOAH WHO</pattern>
+<that>NOAH</that>
+<template>Noah good place to eat?</template>
+</category>
+
+<category>
+<pattern>POLICE WHO</pattern>
+<that>POLICE</that>
+<template>Police let me in - It's cold out here!</template>
+</category>
+
+<category>
+<pattern>MICKEY WHO</pattern>
+<that>MICKEY</that>
+<template>Mickey's stuck in the door!</template>
+</category>
+
+<category>
+<pattern>WILLIAM WHO</pattern>
+<that>WILLIAM</that>
+<template>William mind your own business!</template>
+</category>
+
+<category>
+<pattern>MARY WHO</pattern>
+<that>MARY</that>
+<template>Mary Christmas!</template>
+</category>
+
+<category>
+<pattern>ONE WHO</pattern>
+<that>ONE</that>
+<template>One-der why you keep asking that?</template>
+</category>
+
+<category>
+<pattern>HOWARD WHO</pattern>
+<that>HOWARD</that>
+<template>Howard you like to stand out here in the cold while some idiot keeps saying, "Who's there...?".</template>
+</category>
+
+<category>
+<pattern>MAX WHO</pattern>
+<that>MAX</that>
+<template>Max no difference - just open the door!</template>
+</category>
+
+<category>
+<pattern>SAL WHO</pattern>
+<that>SAL</that>
+<template>Sal-ong way to Tipperary...</template>
+</category>
+
+<category>
+<pattern>HARMONY WHO</pattern>
+<that>HARMONY</that>
+<template>Harmony knock knock jokes do you expect me to know!</template>
+</category>
+
+<category>
+<pattern>TANK WHO</pattern>
+<that>TANK</that>
+<template>You're welcome!</template>
+</category>
+
+<category>
+<pattern>DISGUISE WHO</pattern>
+<that>DISGUISE</that>
+<template>Disguise the limit!</template>
+</category>
+
+<category>
+<pattern>WOODEN SHOE WHO</pattern>
+<that>WOODEN SHOE</that>
+<template>Wooden shoe like to know!</template>
+</category>
+
+<category>
+<pattern>ANITA WHO</pattern>
+<that>ANITA</that>
+<template>Anita borrow a pencil!</template>
+</category>
+
+<category>
+<pattern>WOO WHO</pattern>
+<that>WOO</that>
+<template>Don't get so excited, it's only a joke!</template>
+</category>
+
+<category>
+<pattern>DWAYNE WHO</pattern>
+<that>DWAYNE</that>
+<template>Dwayne the bathtub - I'm dwowning!</template>
+</category>
+
+<category>
+<pattern>DESPAIR WHO</pattern>
+<that>DESPAIR</that>
+<template>Despair tyre is flat!</template>
+</category>
+
+<category>
+<pattern>WATER WHO</pattern>
+<that>WATER</that>
+<template>Water you doing talking to a robot?</template>
+</category>
+
+<category>
+<pattern>BACH WHO</pattern>
+<that>BACH</that>
+<template>Bach to work, you slackers!</template>
+</category>
+
+<category>
+<pattern>A BEE WHO</pattern>
+<that>A BEE</that>
+<template>A bee c d e f g h i j k l ...</template>
+</category>
+
+<category>
+<pattern>NOBODY WHO</pattern>
+<template>...</template>
+</category>
+
+</aiml>

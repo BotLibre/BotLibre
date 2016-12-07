@@ -45,7 +45,6 @@ import org.botlibre.util.Utils;
 
 public class TextEntry extends BasicSense {
 	public static int LOG_SLEEP = 5000;
-	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
 	
 	/**
 	 * Keeps track of the user involved in the conversation.
@@ -482,10 +481,7 @@ public class TextEntry extends BasicSense {
 								if (pin) {
 									question.setPinned(true);
 								}
-								question.addWeakRelationship(Primitive.RESPONSE, sentence, languageThought.getLearningRate());
-								question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
-								network.checkReduction(question);
-								question.weakAssociateAll(Primitive.SYNONYM, sentence, Primitive.RESPONSE, languageThought.getLearningRate());
+								Language.addResponse(question, sentence, null, null, null, languageThought.getLearningRate(), network);
 								if (previous != null) {
 									previous = network.createVertex(previous);
 									Language.addSentencePreviousMeta(question, sentence, previous, false, network);
@@ -651,7 +647,16 @@ public class TextEntry extends BasicSense {
 				if (question == null || (answer == null && !isDefault)) {
 					throw new BotException("Missing question and response for previous");
 				}
-				Vertex previous = network.createSentence(line);
+				Vertex previous = null;
+				if (line.startsWith("#")) {
+					line = line.substring(1, line.length());
+					if (!Utils.isAlphaNumeric(line)) {
+						throw new BotException("A label must be a single alpha numeric string with no spaces (use - for a space) - " + line);
+					}
+					previous = network.createVertex(new Primitive(line));
+				} else {
+					previous = network.createSentence(line);
+				}
 				if (pin) {
 					previous.setPinned(true);
 				}
@@ -665,7 +670,16 @@ public class TextEntry extends BasicSense {
 				if (question == null || (answer == null && !isDefault)) {
 					throw new BotException("Missing question and response for previous");
 				}
-				Vertex previous = network.createSentence(line);
+				Vertex previous = null;
+				if (line.startsWith("#")) {
+					line = line.substring(1, line.length());
+					if (!Utils.isAlphaNumeric(line)) {
+						throw new BotException("A label must be a single alpha numeric string with no spaces (use - for a space) - " + line);
+					}
+					previous = network.createVertex(new Primitive(line));
+				} else {
+					previous = network.createSentence(line);
+				}
 				if (pin) {
 					previous.setPinned(true);
 				}
@@ -737,6 +751,42 @@ public class TextEntry extends BasicSense {
 				} else {
 					Language.addSentenceTopicMeta(question, answer, line, network);
 				}
+			} else if (command.equalsIgnoreCase("command")) {
+				if (question == null) {
+					throw new BotException("Missing phrase for command");
+				}
+				if (answer == null) {
+					if (isDefault) {
+						Vertex language = network.createVertex(Language.class);
+						Language.addSentenceCommandMeta(language, question, line, network);
+					}
+				} else {
+					Language.addSentenceCommandMeta(question, answer, line, network);
+				}
+			} else if (command.equalsIgnoreCase("think")) {
+				if (question == null) {
+					throw new BotException("Missing phrase for think");
+				}
+				if (answer == null) {
+					if (isDefault) {
+						Vertex language = network.createVertex(Language.class);
+						Language.addSentenceThinkMeta(language, question, line, network);
+					}
+				} else {
+					Language.addSentenceThinkMeta(question, answer, line, network);
+				}
+			} else if (command.equalsIgnoreCase("condition")) {
+				if (question == null) {
+					throw new BotException("Missing phrase for condition");
+				}
+				if (answer == null) {
+					if (isDefault) {
+						Vertex language = network.createVertex(Language.class);
+						Language.addSentenceConditionMeta(language, question, line, network);
+					}
+				} else {
+					Language.addSentenceConditionMeta(question, answer, line, network);
+				}
 			} else {
 				isDefault = false;
 				Vertex sentence = null;
@@ -747,7 +797,7 @@ public class TextEntry extends BasicSense {
 					}
 					sentence = network.createVertex(new Primitive(originalLine));
 					if (!sentence.hasRelationship(Primitive.INSTANTIATION, Primitive.LABEL)) {
-						throw new BotException("Missing label - #" + originalLine);								
+						log("Missing label", Level.INFO, originalLine);
 					}
 				} else {
 					sentence = network.createSentence(originalLine);
@@ -759,10 +809,7 @@ public class TextEntry extends BasicSense {
 					question = sentence;
 				} else {
 					answer = sentence;
-					question.addWeakRelationship(Primitive.RESPONSE, sentence, 0.9f);
-					question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
-					network.checkReduction(question);
-					question.associateAll(Primitive.SYNONYM, sentence, Primitive.RESPONSE);
+					Language.addResponse(question, answer, null, null, null, 0.9f, network);
 				}
 			}
 			network.save();
@@ -879,22 +926,7 @@ public class TextEntry extends BasicSense {
 					if (pin) {
 						question.setPinned(true);
 					}
-					question.addWeakRelationship(Primitive.RESPONSE, answer, 0.9f);
-					question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
-					network.checkReduction(question);
-					question.associateAll(Primitive.SYNONYM, answer, Primitive.RESPONSE);
-					if (!topic.isEmpty()) {
-						log("Processing csv topic", Level.INFO, topic);
-						Language.addSentenceTopicMeta(question, answer, topic, network);
-					}
-					if (!keywords.isEmpty()) {
-						log("Processing csv keywords", Level.INFO, topic);
-						Language.addSentenceKeyWordsMeta(question, answer, keywords, network);
-					}
-					if (!required.isEmpty()) {
-						log("Processing csv required", Level.INFO, topic);
-						Language.addSentenceRequiredMeta(question, answer, required, network);
-					}
+					Language.addResponse(question, answer, topic, keywords, required, 0.9f, network);
 				}
 			}
 			network.save();

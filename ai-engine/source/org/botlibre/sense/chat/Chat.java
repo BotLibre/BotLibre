@@ -161,36 +161,17 @@ public class Chat extends BasicSense {
 			return;
 		}
 		text = trimSpecialChars(text);
-		TextStream stream = new TextStream(text);
 		List<String> targetUsers = new ArrayList<String>();
-		String firstWord = stream.nextWord();
-		if (firstWord == null) {
-			// Ignore empty chat.
-			return;
-		}
-		String firstWordLower = firstWord.toLowerCase();
-		// Check if a directed question and trim nick.
-		// Try to avoid matching users with common word names like 'hi', 'lol'
-		if (getUsers().contains(firstWord) || getUserNicks().containsKey(firstWordLower)) {
-			if (getUsers().contains(firstWord)) {
-				targetUsers.add(firstWord);
-			} else {
-				targetUsers.add(getUserNicks().get(firstWordLower));
+		if (!message.isGreet()) {
+			TextStream stream = new TextStream(text);
+			String firstWord = stream.nextWord();
+			if (firstWord == null) {
+				// Ignore empty chat.
+				return;
 			}
-			if (!stream.atEnd()) {
-				stream.next();
-			}
-			stream.skipWhitespace();
-			if (!stream.atEnd()) {
-				text = stream.upToEnd();
-			}
-		}
-		// Allow for compound names.
-		if (targetUsers.isEmpty() && (text.indexOf(':') != -1)) {
-			stream.reset();
-			firstWord = stream.upTo(':');
-			firstWordLower = firstWord.toLowerCase();
-			stream.skip();
+			String firstWordLower = firstWord.toLowerCase();
+			// Check if a directed question and trim nick.
+			// Try to avoid matching users with common word names like 'hi', 'lol'
 			if (getUsers().contains(firstWord) || getUserNicks().containsKey(firstWordLower)) {
 				if (getUsers().contains(firstWord)) {
 					targetUsers.add(firstWord);
@@ -204,47 +185,68 @@ public class Chat extends BasicSense {
 				if (!stream.atEnd()) {
 					text = stream.upToEnd();
 				}
-			}			
-		}
-		if (targetUsers.isEmpty()) {
-			for (String possibleUser : this.lastUsers) {
-				if ((possibleUser.length() > 2) && text.indexOf(possibleUser) != -1) {
-					targetUsers.add(possibleUser);
-					if (text.indexOf(possibleUser) == 0 && (text.length() > (possibleUser.length() + 1))) {
-						text = text.substring(possibleUser.length() + 1, text.length());
-					}
-				}
-				String trimmedPossibleUser = trimUserName(possibleUser);
-				if ((trimmedPossibleUser.length() > 2) && text.indexOf(trimmedPossibleUser) != -1) {
-					targetUsers.add(possibleUser);
-					if (text.indexOf(trimmedPossibleUser) == 0 && (text.length() > (trimmedPossibleUser.length() + 1))) {
-						text = text.substring(trimmedPossibleUser.length() + 1, text.length());
-					}
-				}
 			}
-			// Check self.
-			if (text.indexOf(getNick()) != -1) {
-				targetUsers.add(getNick());
-				if (text.indexOf(getNick()) == 0 && (text.length() > (getNick().length() + 1))) {
-					text = text.substring(getNick().length() + 1, text.length());
-				}
-			}
-			String trimmedNick = trimUserName(getNick());
-			if (text.indexOf(trimmedNick) != -1) {
-				targetUsers.add(getNick());
-				if (text.indexOf(trimmedNick) == 0 && (text.length() > (trimmedNick.length() + 1))) {
-					text = text.substring(trimmedNick.length() + 1, text.length());
-				}
+			// Allow for compound names.
+			if (targetUsers.isEmpty() && (text.indexOf(':') != -1)) {
+				stream.reset();
+				firstWord = stream.upTo(':');
+				firstWordLower = firstWord.toLowerCase();
+				stream.skip();
+				if (getUsers().contains(firstWord) || getUserNicks().containsKey(firstWordLower)) {
+					if (getUsers().contains(firstWord)) {
+						targetUsers.add(firstWord);
+					} else {
+						targetUsers.add(getUserNicks().get(firstWordLower));
+					}
+					if (!stream.atEnd()) {
+						stream.next();
+					}
+					stream.skipWhitespace();
+					if (!stream.atEnd()) {
+						text = stream.upToEnd();
+					}
+				}			
 			}
 			if (targetUsers.isEmpty()) {
-				targetUsers.addAll(this.lastUsers);
-			}
-			if (getUsers().size() == 2) {
-				targetUsers.clear();
-				targetUsers.add(getNick());
+				for (String possibleUser : this.lastUsers) {
+					if ((possibleUser.length() > 2) && text.indexOf(possibleUser) != -1) {
+						targetUsers.add(possibleUser);
+						if (text.indexOf(possibleUser) == 0 && (text.length() > (possibleUser.length() + 1))) {
+							text = text.substring(possibleUser.length() + 1, text.length());
+						}
+					}
+					String trimmedPossibleUser = trimUserName(possibleUser);
+					if ((trimmedPossibleUser.length() > 2) && text.indexOf(trimmedPossibleUser) != -1) {
+						targetUsers.add(possibleUser);
+						if (text.indexOf(trimmedPossibleUser) == 0 && (text.length() > (trimmedPossibleUser.length() + 1))) {
+							text = text.substring(trimmedPossibleUser.length() + 1, text.length());
+						}
+					}
+				}
+				// Check self.
+				if (text.indexOf(getNick()) != -1) {
+					targetUsers.add(getNick());
+					if (text.indexOf(getNick()) == 0 && (text.length() > (getNick().length() + 1))) {
+						text = text.substring(getNick().length() + 1, text.length());
+					}
+				}
+				String trimmedNick = trimUserName(getNick());
+				if (text.indexOf(trimmedNick) != -1) {
+					targetUsers.add(getNick());
+					if (text.indexOf(trimmedNick) == 0 && (text.length() > (trimmedNick.length() + 1))) {
+						text = text.substring(trimmedNick.length() + 1, text.length());
+					}
+				}
+				if (targetUsers.isEmpty()) {
+					targetUsers.addAll(this.lastUsers);
+				}
+				if (getUsers().size() == 2) {
+					targetUsers.clear();
+					targetUsers.add(getNick());
+				}
 			}
 		}
-		inputSentence(text.trim(), user, targetUsers, message.isWhisper(), network);
+		inputSentence(text.trim(), user, targetUsers, message.isGreet(), message.isWhisper(), network);
 		addLastUser(user);
 	}
 
@@ -276,8 +278,13 @@ public class Chat extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, List<String> targetUserNames, boolean isWhisper, Network network) {		
+	public void inputSentence(String text, String userName, List<String> targetUserNames, boolean isGreet, boolean isWhisper, Network network) {		
 		Vertex input = createInputSentence(text.trim(), network);
+		if (isGreet) {
+			// Null input is used to get greeting.
+			input.setRelationship(Primitive.INPUT, Primitive.NULL);
+			input.setRelationship(Primitive.TARGET, Primitive.SELF);
+		}
 		input.addRelationship(Primitive.INSTANTIATION, Primitive.CHAT);
 		if (isWhisper) {
 			input.addRelationship(Primitive.ASSOCIATED, Primitive.WHISPER);
@@ -313,7 +320,7 @@ public class Chat extends BasicSense {
 				input.addRelationship(Primitive.TARGET, targetUser);
 			}
 		}
-		user.addRelationship(Primitive.INPUT, input);
+		//user.addRelationship(Primitive.INPUT, input);
 		// Process conversation.
 		Vertex conversation = getConversation(network);
 		if (conversation == null) {

@@ -1,42 +1,83 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
+import org.botlibre.sdk.activity.actions.HttpGetImageAction;
+import org.botlibre.sdk.activity.actions.HttpGetVideoAction;
+import org.botlibre.sdk.activity.actions.HttpSaveVoiceAction;
+import org.botlibre.sdk.activity.actions.HttpSpeechAction;
+import org.botlibre.sdk.config.Speech;
+import org.botlibre.sdk.config.VoiceConfig;
+
+import org.botlibre.sdk.R;
+
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import org.botlibre.sdk.R;
-import org.botlibre.sdk.activity.actions.HttpSaveVoiceAction;
-import org.botlibre.sdk.config.VoiceConfig;
 
 /**
  * Activity for administering a bot's voice.
  */
-public class VoiceActivity extends Activity implements TextToSpeech.OnInitListener {
+public class VoiceActivity extends LibreActivity implements TextToSpeech.OnInitListener {
     protected static final int RESULT_SPEECH = 1;
     
     private TextToSpeech tts;
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice);
         
-        setTitle("Voice: " + MainActivity.instance.name);
+        HttpGetImageAction.fetchImage(this, MainActivity.instance.avatar, findViewById(R.id.icon));
         
         this.tts = new TextToSpeech(this, this);
         
         if (MainActivity.voice == null) {
         	MainActivity.voice = new VoiceConfig();
         }
+
+		Spinner voiceSpin = (Spinner) findViewById(R.id.voiceSpin);
+		ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item, MainActivity.voiceNames);
+		voiceSpin.setAdapter(adapter);
+		int index = Arrays.asList(MainActivity.voices).indexOf(MainActivity.voice.voice);
+		if (index != -1) {
+			voiceSpin.setSelection(index);
+		}
+
+		CheckBox checkBox = (CheckBox) findViewById(R.id.deviceVoiceCheckBox);
+		checkBox.setChecked(MainActivity.voice.nativeVoice);
 		EditText text = (EditText) findViewById(R.id.pitchText);
 		text.setText(MainActivity.voice.pitch);
 		text = (EditText) findViewById(R.id.speechRateText);
@@ -56,21 +97,25 @@ public class VoiceActivity extends Activity implements TextToSpeech.OnInitListen
 	@SuppressWarnings({ "rawtypes", "unchecked" })
     public void onInit(int status) { 
         if (status == TextToSpeech.SUCCESS) {
-            List<Locale> locales = new ArrayList<Locale>();
-            locales.add(Locale.US);
-            locales.add(Locale.UK);
-            locales.add(Locale.FRENCH);
-            locales.add(Locale.GERMAN);
-            locales.add(new Locale("ES"));
-            locales.add(Locale.ITALIAN);
-            locales.add(Locale.CHINESE);
-            locales.add(Locale.JAPANESE);
-            locales.add(Locale.KOREAN);
+            List<String> locales = new ArrayList<String>();
+            if (MainActivity.voice.language != null) {
+            	locales.add(MainActivity.voice.language);
+            }
+            locales.add(Locale.US.toString());
+            locales.add(Locale.UK.toString());
+            locales.add(Locale.FRENCH.toString());
+            locales.add(Locale.GERMAN.toString());
+            locales.add("ES");
+            locales.add("PT");
+            locales.add(Locale.ITALIAN.toString());
+            locales.add(Locale.CHINESE.toString());
+            locales.add(Locale.JAPANESE.toString());
+            locales.add(Locale.KOREAN.toString());
             for (Locale locale : Locale.getAvailableLocales()) {
             	try {
 	            	int code = this.tts.isLanguageAvailable(locale);
 	                if (code != TextToSpeech.LANG_NOT_SUPPORTED) {
-	                	locales.add(locale);
+	                	locales.add(locale.toString());
 	                }
             	} catch (Exception ignore) {}
             }
@@ -78,7 +123,9 @@ public class VoiceActivity extends Activity implements TextToSpeech.OnInitListen
     		ArrayAdapter adapter = new ArrayAdapter(this,
                     android.R.layout.simple_spinner_dropdown_item, locales.toArray());
     		spin.setAdapter(adapter);
-    		spin.setSelection(locales.indexOf(MainActivity.voice.language));
+            if (MainActivity.voice.language != null) {
+            	spin.setSelection(locales.indexOf(MainActivity.voice.language));
+            }
     		
             int result = this.tts.setLanguage(Locale.US); 
             if (result == TextToSpeech.LANG_MISSING_DATA
@@ -94,47 +141,102 @@ public class VoiceActivity extends Activity implements TextToSpeech.OnInitListen
 	public void save(View view) {
 		VoiceConfig config = new VoiceConfig();
         config.instance = MainActivity.instance.id;
-        
-        Spinner spin = (Spinner) findViewById(R.id.languageSpin);
+
+        Spinner spin = (Spinner) findViewById(R.id.voiceSpin);
+		config.voice = MainActivity.voices[Arrays.asList(MainActivity.voiceNames).indexOf(spin.getSelectedItem().toString())];
+        spin = (Spinner) findViewById(R.id.languageSpin);
         config.language = spin.getSelectedItem().toString();
 		EditText text = (EditText) findViewById(R.id.pitchText);
 		config.pitch = text.getText().toString();
 		text = (EditText) findViewById(R.id.speechRateText);
-		config.speechRate = text.getText().toString();
+		config.speechRate = text.getText().toString();		
+		CheckBox checkbox = (CheckBox) findViewById(R.id.deviceVoiceCheckBox);
+		config.nativeVoice = checkbox.isChecked();
+		MainActivity.deviceVoice = config.nativeVoice;
         
         HttpSaveVoiceAction action = new HttpSaveVoiceAction(this, config);
 		action.execute();
 	}
  
     public void test(View view) {
-        Spinner spin = (Spinner) findViewById(R.id.languageSpin);
 
-        int result = this.tts.setLanguage((Locale)spin.getSelectedItem());
-        if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
-            MainActivity.error("This Language is not supported", null, this);
-        }
-		EditText text = (EditText) findViewById(R.id.pitchText);
-		String value = text.getText().toString();
-		float pitch = 1;
-		if (value.trim().length() > 0) {
-			try {
-				pitch = Float.valueOf(value);
-			} catch (Exception exception) {}
-		}
-		this.tts.setPitch(pitch);
-		text = (EditText) findViewById(R.id.speechRateText);
-		value = text.getText().toString();
-		float speechRate = 1;
-		if (value.trim().length() > 0) {
-			try {
-				speechRate = Float.valueOf(value);
-			} catch (Exception exception) {}
-		}
-		tts.setSpeechRate(speechRate);
-
-		text = (EditText) findViewById(R.id.testText);
+    	EditText text = (EditText) findViewById(R.id.testText);
 		String test = text.getText().toString();
+
+		CheckBox deviceVoiceCheckBox = (CheckBox) findViewById(R.id.deviceVoiceCheckBox);
+		if (deviceVoiceCheckBox.isChecked()) {
+	        Spinner spin = (Spinner) findViewById(R.id.languageSpin);
+
+	        int result = this.tts.setLanguage(new Locale((String)spin.getSelectedItem()));
+	        if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
+	            MainActivity.error("This Language is not supported", null, this);
+	        }
+			text = (EditText) findViewById(R.id.pitchText);
+			String value = text.getText().toString();
+			float pitch = 1;
+			if (value.trim().length() > 0) {
+				try {
+					pitch = Float.valueOf(value);
+				} catch (Exception exception) {}
+			}
+			this.tts.setPitch(pitch);
+			text = (EditText) findViewById(R.id.speechRateText);
+			value = text.getText().toString();
+			float speechRate = 1;
+			if (value.trim().length() > 0) {
+				try {
+					speechRate = Float.valueOf(value);
+				} catch (Exception exception) {}
+			}
+			tts.setSpeechRate(speechRate);
 		
-		this.tts.speak(test, TextToSpeech.QUEUE_FLUSH, null);
+			this.tts.speak(test, TextToSpeech.QUEUE_FLUSH, null);
+		} else {
+	        Spinner spin = (Spinner) findViewById(R.id.voiceSpin);
+			Speech config = new Speech();
+			config.voice = MainActivity.voices[Arrays.asList(MainActivity.voiceNames).indexOf(spin.getSelectedItem().toString())];
+			config.text = test;
+			
+			HttpSpeechAction action = new HttpSpeechAction(VoiceActivity.this, config);
+			action.execute();
+		}
     }
+	
+	public MediaPlayer playAudio(String audio, boolean loop, boolean cache, boolean start) {
+		try {
+			Uri audioUri = null;
+			if (cache) {
+				audioUri = HttpGetVideoAction.fetchVideo(this, audio);
+			}
+			if (audioUri == null) {
+				audioUri = Uri.parse(MainActivity.connection.fetchImage(audio).toURI().toString());
+			}
+			final MediaPlayer audioPlayer = new MediaPlayer();
+			audioPlayer.setDataSource(getApplicationContext(), audioUri);
+			audioPlayer.setOnErrorListener(new OnErrorListener() {
+				@Override
+				public boolean onError(MediaPlayer mp, int what, int extra) {
+					Log.wtf("Audio error", "what:" + what + " extra:" + extra);
+					audioPlayer.stop();
+					audioPlayer.release();
+					return true;
+				}
+			});
+			audioPlayer.setOnCompletionListener(new OnCompletionListener() {
+				@Override
+				public void onCompletion(MediaPlayer mp) {
+					audioPlayer.release();
+				}
+			});
+			audioPlayer.prepare();
+			audioPlayer.setLooping(loop);
+			if (start) {
+				audioPlayer.start();
+			}
+			return audioPlayer;
+		} catch (Exception exception) {
+			Log.wtf(exception.toString(), exception);
+			return null;
+		}
+	}
 }

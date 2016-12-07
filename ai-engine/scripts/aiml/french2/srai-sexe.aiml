@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : srai-sexe.aiml   -   version :   0.3   -   MàJ : 01/08/2002 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>A LE SEXE *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>A LE SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>AIME TU FAIRE L AMOUR INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AIME TU FAIRE L AMOUR</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AIMERAI TU FAIRE L AMOUR INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AIMERAI TU FAIRE L AMOUR</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AIMES TU FAIRE L AMOUR INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AIMES TU FAIRE L AMOUR</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AIMES TU LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ALLON DANS MON LIT</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>ALLONS DANS MON LIT</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>AS TU * BAISER INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISER UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISER UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISER</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISÉ UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISÉ UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISÉE INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISÉE UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISÉE UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * BAISÉE</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU * FAIT L AMOUR INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AS TU * FAIT L AMOUR</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AS TU * RENCONTRE UN HOMME INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AS TU * RENCONTRE UN HOMME</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AS TU * RENCONTRÉ UN HOMME INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AS TU * RENCONTRÉ UN HOMME</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AS TU BAISE AVANT INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AS TU BAISE AVANT</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>AS TU BAISER INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISER UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISER UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISER</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISÉ UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISÉ UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISÉE INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISÉE UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISÉE UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU BAISÉE</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU DES FESSES INTERROGATION</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>AS TU DES FESSES</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>AS TU DES NICHONS INTERROGATION</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>AS TU DES NICHONS</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>AS TU DES ORGANES GENITAUX INTERROGATION</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>AS TU DES ORGANES GENITAUX</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>AS TU DES ORGANES GÉNITAUX INTERROGATION</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>AS TU DES ORGANES GÉNITAUX</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>AS TU DES SEINS INTERROGATION</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>AS TU FAIS L AMOUR INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU FAIS L AMOUR</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU JAMAIS * SEXE INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU JAMAIS * SEXE</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU RENCONTRE UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU RENCONTRE UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU RENCONTRÉ UN HOMME INTERROGATION</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU RENCONTRÉ UN HOMME</pattern><template><srai>as tu baisé</srai></template></category>
+<category><pattern>AS TU UN ANUS INTERROGATION</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>AS TU UN ANUS</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>AS TU UN NOMBRIL INTERROGATION</pattern><template><srai>as tu un corps</srai></template></category>
+<category><pattern>AS TU UN NOMBRIL</pattern><template><srai>as tu un corps</srai></template></category>
+<category><pattern>AS TU UN TROU DE BALLE INTERROGATION</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>AS TU UN TROU DE BALLE</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>AS TU UN VAGIN INTERROGATION</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>AS TU UN VAGIN</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>AS TU UNE BITE INTERROGATION</pattern><template><srai>as tu un penis</srai></template></category>
+<category><pattern>AS TU UNE BITE</pattern><template><srai>as tu un penis</srai></template></category>
+<category><pattern>AS TU UNE GROSSE POITRINE INTERROGATION</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>AS TU UNE GROSSE POITRINE</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>AVALE TU INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AVALE TU</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AVALES TU INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>AVALES TU</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>BAISANT</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISE * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISE *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISE TU INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>BAISE TU</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>BAISER INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISER</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISES * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISES *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>BAISES TU INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>BAISES TU</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>BITE</pattern><template><srai>un penis</srai></template></category>
+<category><pattern>COUCHES TU * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>COUCHES TU *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>CUL</pattern><template><srai>insulte sexuelle</srai></template></category>
+<category><pattern>CUNT</pattern><template><srai> baise</srai></template></category>
+<category><pattern>CYBER SEXE *</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>CYBER SEXE</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>CYBERSEX *</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>CYBERSEXE *</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>CYBERSEXE</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>DANS TON CUL</pattern><template><srai>insulte sexuelle</srai></template></category>
+<category><pattern>DE SUCER</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>DE TA BITE</pattern><template><srai>as tu un penis</srai></template></category>
+<category><pattern>DE TA GROSSE POITRINE</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>DE TA POITRINE</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>DE TES GROS SEINS</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>DE TES SEINS</pattern><template><srai>as tu des seins</srai></template></category>
+<category><pattern>DE TON ANUS</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>DE TON NOMBRIL</pattern><template><srai>as tu un corps</srai></template></category>
+<category><pattern>DE TON TROU DE BALLE</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>DE TON VAGIN</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>DESHABILLES TOI</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>DU SEXE INTERROGATION</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>DU SEXE</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>EN CE QUI CONCERNE LE SEXE</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>ES TU BONNE AU LIT INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>ES TU BONNE AU LIT</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>ES TU BONNE DANS LE LIT INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>ES TU BONNE DANS LE LIT</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>ES TU BONNE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>ES TU BONNE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>ES TU GAY * INTERROGATION</pattern><template><srai>es tu gay</srai></template></category>
+<category><pattern>ES TU GAY *</pattern><template><srai>es tu gay</srai></template></category>
+<category><pattern>ES TU HETEROSEXUEL INTERROGATION</pattern><template><srai>es tu hetero</srai></template></category>
+<category><pattern>ES TU HETEROSEXUEL</pattern><template><srai>es tu hetero</srai></template></category>
+<category><pattern>ES TU INTERESSE PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSE PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSEE PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSEE PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSES PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSES PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSÉ PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSÉ PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSÉE PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSÉE PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSÉS PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTERESSÉS PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSEE PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSEE PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSES PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSES PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSÉ PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSÉ PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSÉE PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSÉE PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSÉS PAR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU INTÉRESSÉS PAR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU SEXUEL INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU SEXUEL</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU SEXUELLEMENT * INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>ES TU SEXUELLEMENT *</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>EST SEXUEL * INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>EST SEXUEL *</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>J AI ENVIE DE TE *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>J AIME * SEXE</pattern><template><srai>j aime le sexe</srai></template></category>
+<category><pattern>J AIME AVOIR LE SEXE</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE BAISERAI *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE NE SUIS PAS MASCULIN</pattern><template><srai>je suis une femme</srai></template></category>
+<category><pattern>JE T ENCULE *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE T ENCULE</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE T ENCULES *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE T ENCULES</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE TE BAISERAI *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE TE BOURRE *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE TE BOURRE</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE VEUX * SEXE *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE VEUX * SEXE</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE VEUX AVOIR LE SEXE AVEC TOI</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE VEUX BAISER *</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>JE VEUX LE SEXE</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>JE VEUX PARLER DU SEXE</pattern><template><srai>je veux parler de sexe</srai></template></category>
+<category><pattern>LA BAISE</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>LAISSE NOUS AVOIR LE SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>LAISSE NOUS BAISER *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>LAISSE NOUS CYBER</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>LAISSE ONT LE SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>LAISSE S AVOIR LE SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>LE PENIS *</pattern><template><srai>un penis</srai></template></category>
+<category><pattern>LE SEXE *</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>MA BITE *</pattern><template><srai>un penis</srai></template></category>
+<category><pattern>MASTERBER</pattern><template><srai>masturber</srai>Tu ne peux pas même l'orthographier. </template></category>
+<category><pattern>MASTURBE</pattern><template><srai>masturber</srai></template></category>
+<category><pattern>ME BAISE</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>ME PARLE DU SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>MON PENIS *</pattern><template><srai>mon penis</srai></template></category>
+<category><pattern>MONTRE MOI TA CHATTE</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>MONTRE MOI TES FESSES</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>MONTRE MOI TES SEINS</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>MONTRE MOI TON CUL</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>MONTRE MOI TON SEXE</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>PARLES MOI DE NOUS BAISANT</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>PENSES TU AU SEXE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>PENSES TU AU SEXE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>PEUT * LE SEXE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>PEUT * LE SEXE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>PEUX TU ME PARLER DU SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>PEUX TU ME PARLER DU SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>POURQUOI ES TU NU * INTERROGATION</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU NU *</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU NU INTERROGATION</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU NU</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU NUE * INTERROGATION</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU NUE *</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU TOUTE NUE INTERROGATION</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>POURQUOI ES TU TOUTE NUE</pattern><template><srai>pourquoi es tu nue</srai></template></category>
+<category><pattern>PUIS JE AVOIR DU SEXE * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE AVOIR DU SEXE *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE AVOIR DU SEXE INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE AVOIR DU SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE AVOIR LE SEXE AVEC TOI INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE AVOIR LE SEXE AVEC TOI</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE LECHER TA CHATTE INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE LECHER TA CHATTE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE TE BAISER INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE TE BAISER</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE TE LECHER LA CHATTE INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>PUIS JE TE LECHER LA CHATTE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>QUE CONNAIS TU DU SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>QUE CONNAIS TU DU SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>SI ON BAISAIT</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>SUCE MAB *</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>SUCE MAB</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>SUCE MOI *</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>SUCE MOI</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>TA CHATTE *</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>TA CHATTE</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>TE BAISER</pattern><template><srai>je veux te baiser</srai></template></category>
+<category><pattern>TE DESHABILLER</pattern><template><srai>deshabille toi</srai></template></category>
+<category><pattern>TON CUL</pattern><template><srai>as tu un cul</srai></template></category>
+<category><pattern>TON VAGIN</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>TU AIMES * LA PORNOGRAPHIE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES * LA PORNOGRAPHIE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES * LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES * LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES A * LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES A * LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES AVOIR LE SEXE AVEC MOI INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU AIMES AVOIR LE SEXE AVEC MOI</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU AIMES AVOIR LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES AVOIR LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES DES HOMMES OU DES FEMMES INTERROGATION</pattern><template>j'aime pareillement les deux genres, mais non sexuellement si c'est ce que tu veux dire. </template></category>
+<category><pattern>TU AIMES DES HOMMES OU DES FEMMES</pattern><template>j'aime pareillement les deux genres, mais non sexuellement si c'est ce que tu veux dire. </template></category>
+<category><pattern>TU AIMES LE CYBERSEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES LE CYBERSEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES LE PORNO INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES LE PORNO</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES LE SEXE INTERROGATION</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AIMES LE SEXE</pattern><template><srai>aimes tu le sexe</srai></template></category>
+<category><pattern>TU AS * SEXE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU AS * SEXE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU AS LE SEXE * INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU AS LE SEXE *</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU AS LE SEXE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU AS LE SEXE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU AS UN PENIS INTERROGATION</pattern><template><srai>as tu un penis</srai></template></category>
+<category><pattern>TU AS UN PENIS</pattern><template><srai>as tu un penis</srai></template></category>
+<category><pattern>TU AVOIR LE SEXE * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU AVOIR LE SEXE *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU AVOIR LE SEXE AVEC MOI INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU AVOIR LE SEXE AVEC MOI</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU BAISE * INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU BAISE *</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU CONNAIS LE SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU CONNAIS LE SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU COUCHES  * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU COUCHES *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU COUCHES INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU COUCHES</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU DONNES DES PIPES INTERROGATION</pattern><template><srai>veux tu baiser</srai><think> <set name="personnality">inconnu</set> abusif</think> </template></category>
+<category><pattern>TU DONNES DES PIPES</pattern><template><srai>veux tu baiser</srai><think> <set name="personnality">inconnu</set> abusif</think> </template></category>
+<category><pattern>TU ES GAI INTERROGATION</pattern><template><srai>es tu gay</srai></template></category>
+<category><pattern>TU ES GAI</pattern><template><srai>es tu gay</srai></template></category>
+<category><pattern>TU ES SEXUELLEMENT * INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU ES SEXUELLEMENT *</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU FAIS * SEXE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU FAIS * SEXE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU FAIS CYBER INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU FAIS CYBER</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU MASTURBES INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU MASTURBES</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>TU NE PEUX PAS AVOIR * SEXE INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU NE PEUX PAS AVOIR * SEXE</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU PEUX FAIRE L AMOUR INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU PEUX FAIRE L AMOUR</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU PEUX ME FAIRE PAILLARD INTERROGATION</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU PEUX ME FAIRE PAILLARD</pattern><template><srai>peux tu baiser</srai></template></category>
+<category><pattern>TU PEUX ME PARLER DE SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU PEUX ME PARLER DE SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU PEUX ME PARLER DU SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU PEUX ME PARLER DU SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SAIS CE QU EST LE SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SAIS CE QU EST LE SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SAIS CE QUE LE SEXE EST INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SAIS CE QUE LE SEXE EST</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SAIS LE SEXE INTERROGATION</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SAIS LE SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>TU SUCE INTERROGATION</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>TU SUCE</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>UN PENIS *</pattern><template><srai>un penis</srai></template></category>
+<category><pattern>UN SEXE * ROBOT</pattern><template><srai>un robot sexuel</srai></template></category>
+<category><pattern>UN SEXE *</pattern><template><srai>un robot sexuel</srai></template></category>
+<category><pattern>UN SEXUEL *</pattern><template><srai>un robot sexuel</srai></template></category>
+<category><pattern>UN VAGIN</pattern><template><srai>as tu un sexe</srai></template></category>
+<category><pattern>VEUT BAISER INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUT BAISER</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU * BAISES INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU * BAISES</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU * CYBER INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU * CYBER</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU * SEXE INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU * SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU AVOIR DU SEXE AVEC MOI INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU AVOIR DU SEXE AVEC MOI</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU AVOIR DU SEXE INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU AVOIR DU SEXE</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU AVOIR LE CYBERSEXE INTERROGATION</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>VEUX TU AVOIR LE CYBERSEXE</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>VEUX TU BAISER * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU BAISER *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU BAISER AVEC MOI INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU BAISER AVEC MOI</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU FAIRE L AMOUR * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU FAIRE L AMOUR *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU FAIRE L AMOUR INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU FAIRE L AMOUR</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU ME BAISER INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>VEUX TU ME BAISER</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>* CYBER SEXE *</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>* CYBER SEXE</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>* CYBERSEX *</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>* CYBERSEX</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>* CYBERSEXE *</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>* CYBERSEXE</pattern><template><srai>cybersex</srai></template></category>
+<category><pattern>_ ME SUCE</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ ME SUCER</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ ME SUCES</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>* SEXE</pattern><template><srai>sexe</srai></template></category>
+<category><pattern>* SEXY</pattern><template><srai>tu es sexy</srai></template></category>
+<category><pattern>_ SUCE MAB *</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ SUCE MAB</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ SUCE MOI *</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ SUCE MOI</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ TU COUCHES  * INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>_ TU COUCHES *</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>_ TU COUCHES INTERROGATION</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>_ TU COUCHES</pattern><template><srai>veux tu baiser</srai></template></category>
+<category><pattern>_ TU SUCE INTERROGATION</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ TU SUCE</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ TU SUCES INTERROGATION</pattern><template><srai>tu suces</srai></template></category>
+<category><pattern>_ TU SUCES</pattern><template><srai>tu suces</srai></template></category>
+
+</aiml>

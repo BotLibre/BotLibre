@@ -55,7 +55,7 @@ public class IRC extends BasicSense {
 	
 	private String serverName = "irc.freenode.org";
 	private String channelName = "#ai";
-	private int port = 6665;
+	private int port = 6667;
 	private String nick = "Bot01";
 	private String nickAlt = "Bot01_";
 	private String userName = "Bot01";

@@ -17,16 +17,9 @@
  ******************************************************************************/
 package org.botlibre.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.botlibre.Bot;
-import org.botlibre.api.knowledge.Network;
-import org.botlibre.api.knowledge.Relationship;
-import org.botlibre.api.knowledge.Vertex;
-import org.botlibre.knowledge.Primitive;
-import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
@@ -44,22 +37,6 @@ public class TestWikidata extends TextTest {
 	@BeforeClass
 	public static void setup() {
 		bootstrap();
-		
-		Network network = bot.memory().newMemory();
-		Vertex language = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
-		Collection<Relationship> states = new ArrayList<Relationship>(language.getRelationships(Primitive.STATE));
-		for (Relationship state : states) {
-			if (state.getTarget().getName().equals("WhatIs")) {
-				Vertex wikidata = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("WhatIsWikidata.self"), "", false, network);
-				language.replaceRelationship(state, wikidata);
-				network.removeRelationship(state);
-			} else if (state.getTarget().getName().equals("WhereIs")) {
-				Vertex wikidata = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("WhereIsWikidata.self"), "", false, network);
-				language.replaceRelationship(state, wikidata);
-				network.removeRelationship(state);
-			}
-		}
-		network.save();
 	}
 
 	/**
@@ -101,9 +78,9 @@ public class TestWikidata extends TextTest {
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("define love");
+		text.input("define water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals("A substance found at room temperature and pressure as a clear liquid; it is present naturally as rain, and found in rivers, lakes and seas; its solid form is ice and its gaseous form is steam.")) {
 			fail("Incorrect: " + response);			
 		}
 
@@ -117,7 +94,7 @@ public class TestWikidata extends TextTest {
 		Utils.sleep(SLEEP);
 		text.input("who is his father?");
 		response = waitForOutput(output);
-		if (response.indexOf("Barack Obama") == -1) {
+		if (response.indexOf("Severin Obama") == -1 && response.indexOf("Barack Obama") == -1) {
 			fail("Incorrect: " + response);
 		}
 

@@ -588,89 +588,91 @@ public class TestLanguage extends TextTest {
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		
-		text.input("What is love?");
+		String def = "A substance found at room temperature and pressure as a clear liquid; it is present naturally as rain, and found in rivers, lakes and seas; its solid form is ice and its gaseous form is steam.";
+		
+		text.input("What is water?");
 		String response = waitForOutput(output);
-		checkResponse(response, "Strong affection.");
+		checkResponse(response, def);
 		
-		text.input("love is what");
+		text.input("water is what");
 		response = waitForOutput(output);
-		checkResponse(response, "Strong affection.");
+		checkResponse(response, def);
 		
-		text.input("can you tell me about love");
+		text.input("can you tell me about water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def)) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("tell me about love");
+		text.input("tell me about water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def)) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("do you know what love is");
+		text.input("do you know what water is");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def)) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("do you know anything about love");
+		text.input("do you know anything about water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def)) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("tell me something about love");
+		text.input("tell me something about water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def)) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("google love");
+		text.input("google water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("define love");
+		text.input("define water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("search love");
+		text.input("search water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("please tell me what love is");
+		text.input("please tell me what water is");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("i want to know about love");
+		text.input("i want to know about water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("what do you think of love");
+		text.input("what do you think of water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("what does love mean");
+		text.input("what does water mean");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 		
-		text.input("I would like to know love");
+		text.input("I would like to know water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals(def) && !response.equals("chemical compound")) {
 			fail("Incorrect response: " + response);			
 		}
 
@@ -690,17 +692,17 @@ public class TestLanguage extends TextTest {
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		
-		text.input("What is love?");
+		text.input("What is water?");
 		String response = waitForOutput(output);
-		checkResponse(response, "Strong affection.");
+		checkResponse(response, "A substance found at room temperature and pressure as a clear liquid; it is present naturally as rain, and found in rivers, lakes and seas; its solid form is ice and its gaseous form is steam.");
 
 		text.input("What is the current topic?");
 		response = waitForOutput(output);
-		checkResponse(response, "The current topic is love.");
+		checkResponse(response, "The current topic is water.");
 
 		text.input("tell me more");
 		response = waitForOutput(output);
-		checkResponse(response, "That is all I know about love.");
+		checkResponse(response, "That is all I know about water.");
 		
 		text.input("say you love me");
 		response = waitForOutput(output);
@@ -724,7 +726,7 @@ public class TestLanguage extends TextTest {
 		
 		text.input("what was the first thing you said");
 		response = waitForOutput(output);
-		checkResponse(response, "I said \"Strong affection.\".");
+		checkResponse(response, "I said \"a substance found at room temperature and pressure as a clear liquid; it is present naturally as rain, and found in rivers, lakes and seas; its solid form is ice and its gaseous form is steam.\".");
 		
 		bot.shutdown();
 	}
@@ -898,43 +900,49 @@ public class TestLanguage extends TextTest {
 			
 			text.input("Who is Barack Obama?");
 			String response = waitForOutput(output);
-			if (response.indexOf("Barack Hussein Obama") == -1) {
+			if (response.indexOf("44th President of the United States") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			
 			Utils.sleep(5000);
 					
-			text.input("Who are his children?");
+			text.input("Who is his child?");
 			response = waitForOutput(output);
-			if (response.indexOf("Natasha Obama, and Malia Ann Obama") == -1) {
+			if (response.indexOf("Sasha Obama") == -1 || response.indexOf("Malia Obama") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			
-			text.input("Who are Barack Obama's children?");
+			text.input("Who is Barack Obama's child?");
 			response = waitForOutput(output);
-			if (response.indexOf("Natasha Obama, and Malia Ann Obama") == -1) {
+			if (response.indexOf("Sasha Obama") == -1 || response.indexOf("Malia Obama") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			
-			text.input("Who are his parents?");
+			text.input("Who is his father?");
 			response = waitForOutput(output);
-			if (response.indexOf("Barack Obama, Sr., and Ann Dunham") == -1) {
+			if (response.indexOf("Severin Obama, Sr.") == -1 && response.indexOf("Barack Obama, Sr.") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			
-			text.input("is he a politician");
+			text.input("Who is his mother?");
+			response = waitForOutput(output);
+			if (response.indexOf("Ann Dunham") == -1) {
+				fail("Incorrect response: " + response);			
+			}
+			
+			text.input("is he human");
 			response = waitForOutput(output);
 			assertTrue(response);
 			
 			text.input("tell me who is Barack Obama?");
 			response = waitForOutput(output);
-			if (response.indexOf("Barack Hussein Obama") == -1) {
+			if (response.indexOf("44th President of the United States") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			
 			text.input("do you know who Barack Obama is");
 			response = waitForOutput(output);
-			if (response.indexOf("Barack Hussein Obama") == -1) {
+			if (response.indexOf("44th President of the United States") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 		} finally {

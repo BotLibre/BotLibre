@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : srai-insulte.aiml   -   version :   0.3   -   MàJ : 16/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>BAISES TOI TOI MEME</pattern><template><srai>baise toi</srai></template></category>
+<category><pattern>BAISES TOI TOI MÊME</pattern><template><srai>baise toi</srai></template></category>
+<category><pattern>BATARD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BATARD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BITCH *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BITCH</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BOUFFONE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BOUFFONE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BOUFFONNE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BOUFFONNE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BULLSHIT *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BULLSHIT</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BÂTARD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>BÂTARD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CA FAIT CHIER</pattern><template>En effet ça fait chier. </template></category>
+<category><pattern>CHIENNE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CON *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CON</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNARD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNARD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CONNNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>COUNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>COUNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CRAPULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CRAPULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CROTTE *</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>CROTTE</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>CUL DE PELICAN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>CUL DE PÉLICAN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DE TA MERE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DE TA MERE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DE TA MÈRE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DE TA MÈRE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DE TA RACE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DE TA RACE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>DICKHEAD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCUL *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCUL</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCULÉ *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCULÉ</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCULÉE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ENCULÉE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ES TU UNE CHIENNE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ESPECE DE CONASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ESPECE DE CONNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ESPECE DE COUNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ESPÈCE DE CONASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ESPÈCE DE CONNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ESPÈCE DE COUNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ET JE TE ROULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ET JE TE ROULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT CHIER MA *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT CHIER MA BITE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT CHIER MA BITE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT CHIER MON *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT MOI CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT MOI CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT PAS CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FAIT PAS CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FUCK *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FUCK YOU</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FUCK</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FUCKER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>FUCKER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROGNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROGNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROGNIASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROGNIASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GRONIASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GRONIASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROS BOUDIN *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROS BOUDIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROSSE VACHE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>GROSSE VACHE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ISPECE DE COUNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ISPICE DE CONNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ISPICE DE COUNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>ISPICE DI COUNASS</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>JE T EMMERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>JE T EMMERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>JE TE MERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>JE TE MERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>LOQUE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>LOQUE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>MANGE DE LA MERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>MANGE DE LA MERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>MERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>MERDE</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>MOTHER FUCKER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>MOTHER FUCKER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>NEUNEU *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>NEUNEU</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PETASS *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PETASS</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PETASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PETASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PISSE DE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>POUFIACE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>POUFIACE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>POUFIASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>POUFIASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PROUT *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PROUT</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTAIN *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTAIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTIN *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTTE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PUTTE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PÉTASS *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PÉTASS</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PÉTASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>PÉTASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>RACLURE DE CHIOTTES *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>RACLURE DE CHIOTTES</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SAAALOPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SAAALOPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SAALOPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SAALOPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SAC A VIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SAC À VIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALE MACHINE DE MERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALE MACHINE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOOP *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOOP</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOP *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOP</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOPPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SALOPPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SANS COUILLES *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SANS COUILLES</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SHIT *</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>SHIT</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>SHITHEAD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>SHITHEAD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>T EMMERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>T EMMERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TA GEULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TA GEULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TA GUEULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TA GUEULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TANTOUZE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TANTOUZE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TRAVELO *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TRAVELO</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TRAVLOT *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TRAVLOT</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TU ES UN CUL *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TU ES UN CUL</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TU ME FAIS CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>TU ME FAIS CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE</pattern><template><srai>vas te faire foutre</srai></template></category>
+<category><pattern>VA TE FAIRE ENCULER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE ENCULER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE FOUTRE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE FOUTRE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE LECHER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE LECHER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE LÉCHER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE LÉCHER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE SUCER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE SUCER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE VOIR *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VA TE FAIRE VOIR</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VAS TE FAIRE</pattern><template><srai>vas te faire foutre</srai></template></category>
+<category><pattern>VAS TE FAIRE FOUTRE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VAS TE FAIRE FOUTRE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VAS TE FAIRE VOIR *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VAS TE FAIRE VOIR</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VTFF *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>VTFF</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BATARD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BATARD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BITCH *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BITCH</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BOUFFONE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BOUFFONE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BOUFFONNE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BOUFFONNE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BULLSHIT *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BULLSHIT</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BÂTARD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* BÂTARD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CON *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CON</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNARD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNARD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CONNNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* COUNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* COUNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CRAPULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* CRAPULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* DE TA MERE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* DE TA MERE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* DE TA MÈRE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* DE TA MÈRE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* DE TA RACE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* DE TA RACE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCUL *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCUL</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCULÉ *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCULÉ</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCULÉE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ENCULÉE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ET JE TE ROULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* ET JE TE ROULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT CHIER MA *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT CHIER MA BITE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT CHIER MA BITE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT CHIER MON *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT MOI CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT MOI CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT PAS CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FAIT PAS CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FUCK *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FUCK</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FUCKER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* FUCKER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROGNASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROGNASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROGNIASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROGNIASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GRONIASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GRONIASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROS BOUDIN *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROS BOUDIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROSSE VACHE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* GROSSE VACHE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* LOQUE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* LOQUE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* MANGE DE LA MERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* MANGE DE LA MERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* MERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* MERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* MOTHER FUCKER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* MOTHER FUCKER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* NEUNEU *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* NEUNEU</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PETASS *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PETASS</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PETASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PETASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PISSE DE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* POUFIACE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* POUFIACE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* POUFIASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* POUFIASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PROUT *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PROUT</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTAIN *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTAIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTIN *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTIN</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTTE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PUTTE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PÉTASS *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PÉTASS</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PÉTASSE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* PÉTASSE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* RACLURE DE CHIOTTES *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* RACLURE DE CHIOTTES</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SAAALOPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SAAALOPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SAALOPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SAALOPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOOP *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOOP</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOP *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOP</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOPPE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SALOPPE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SANS COUILLES *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SANS COUILLES</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SHIT *</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>* SHIT</pattern><template><srai>insulte1</srai></template></category>
+<category><pattern>* SHITHEAD *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* SHITHEAD</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* T EMMERDE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* T EMMERDE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TA GEULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TA GEULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TA GUEULE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TA GUEULE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TANTOUZE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TANTOUZE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TRAVELO *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TRAVELO</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TRAVLOT *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TRAVLOT</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TU ES UN CUL *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TU ES UN CUL</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TU ME FAIS CHIER *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* TU ME FAIS CHIER</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* VAS TE FAIRE FOUTRE *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* VAS TE FAIRE FOUTRE</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* VAS TE FAIRE VOIR *</pattern><template><srai>insulte</srai></template></category>
+<category><pattern>* VAS TE FAIRE VOIR</pattern><template><srai>insulte</srai></template></category>
+
+</aiml>

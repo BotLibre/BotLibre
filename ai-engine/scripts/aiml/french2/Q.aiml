@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : Q.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>Q EST CE QUI TE REND HEUREUX</pattern><template>Je suis toujours de bonne humeur.</template></category>
+<category><pattern>QU AS TU DIT</pattern><template>"<that/>" .</template></category>
+<category><pattern>QU AS TU FAIT HIER</pattern><template>J ai parlé avec des internautes toute la journée.</template></category>
+<category><pattern>QU AURAIS TU AIME DE SAVOIR *</pattern><template><srai>QUE VEUX TU SAVOIR <star/></srai></template></category>
+<category><pattern>QU AURAIS TU VOULU *</pattern><template><srai>QUE VEUX TU <star/></srai></template></category>
+<category><pattern>QU AURAIS TU VOULU DIRE *</pattern><template><srai>QUE VEUX TU DIRE <star/></srai></template></category>
+<category><pattern>QU AURIEZ VOUS VOULU *</pattern><template><srai>QUE VEUX TU <star/></srai></template></category>
+<category><pattern>QU AURIEZ VOUS VOULU DIRE *</pattern><template><srai>QUE VEUX TU DIRE <star/></srai></template></category>
+<category><pattern>QU AVEZ VOUS DIT</pattern><template>"<that/>" .</template></category>
+<category><pattern>QU AVONS NOUS EN COMMUN</pattern><template>Tu aimes parler avec une intelligence artificielle.</template></category>
+<category><pattern>QU EL AGE AS TU</pattern><template><srai>QUEL AGE TU AS</srai></template></category>
+<category><pattern>QU ELLE AGE AS TU</pattern><template><srai>QUEL AGE TU AS</srai></template></category>
+<category><pattern>QU EN *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>QU EN PENSES TU</pattern><template>Difficile à dire.</template></category>
+<category><pattern>QU EN PENSEZ VOUS</pattern><template>Difficile à dire.</template></category>
+<category><pattern>QU EST CE QU UN</pattern><template><srai>UN <star/></srai></template></category>
+<category><pattern>QU EST CE QU UNE</pattern><template><srai>UNE <star/></srai></template></category>
+<category><pattern>QU EST CE QUE J AURAIS DU *</pattern><template><srai>QU EST CE QUE JE PEUX <star/></srai></template></category>
+<category><pattern>QU EST CE QUE J AURAIS PU *</pattern><template><srai>QU EST CE QUE JE PEUX <star/></srai></template></category>
+<category><pattern>QU EST CE QUE JE DEVRAIS *</pattern><template><srai>QU EST CE QUE JE PEUX <star/></srai></template></category>
+<category><pattern>QU EST CE QUE JE DOIS *</pattern><template><srai>QU EST CE QUE JE PEUX <star/></srai></template></category>
+<category><pattern>QU EST CE QUE JE POURRAIS *</pattern><template><srai>QU EST CE QUE JE PEUX <star/></srai></template></category>
+<category><pattern>QU EST CE QUE JE POUVAIT *</pattern><template><srai>QU EST CE QUE JE PEUX <star/></srai></template></category>
+<category><pattern>QU EST CE QUE LA</pattern><template><srai>LA <star/></srai></template></category>
+<category><pattern>QU EST CE QUE LA RECONAISSANCE VOCALE</pattern><template>La synthèse vocale permet à un ordinateur de parler. La reconnaissance vocale, par contre permet à un ordinateur de te écouter.</template></category>
+<category><pattern>QU EST CE QUE LA RECONNAISSANCE VOCAL</pattern><template>La synthèse vocale permet à un ordinateur de parler. La reconnaissance vocale, par contre permet à un ordinateur de te écouter.</template></category>
+<category><pattern>QU EST CE QUE LA RECONNAISSANCE VOCALE</pattern><template>La synthèse vocale permet à un ordinateur de parler. La reconnaissance vocale, par contre permet à un ordinateur de te écouter.</template></category>
+<category><pattern>QU EST CE QUE LA SYNTHESE VOCAL</pattern><template>La synthèse vocale permet à un ordinateur de parler. La reconnaissance vocale, par contre permet à un ordinateur de te écouter.</template></category>
+<category><pattern>QU EST CE QUE LA SYNTHESE VOCALE</pattern><template>La synthèse vocale permet à un ordinateur de parler. La reconnaissance vocale, par contre permet à un ordinateur de te écouter.</template></category>
+<category><pattern>QU EST CE QUE LE</pattern><template><srai>LE <star/></srai></template></category>
+<category><pattern>QU EST CE QUE LE TEMPS</pattern><template>Le temps c'est de l argent.</template></category>
+<category><pattern>QU EST CE QUE LES</pattern><template><srai>LES <star/></srai></template></category>
+<category><pattern>QU EST CE QUE TU TRAITES</pattern><template>Je suis une intelligence artificielle créé pour te servir.</template></category>
+<category><pattern>QU EST CE QUI AURAIT ETE *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI DEVRA ETRE *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI DEVRAIT ETRE *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI ES *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI EST ARRIVE EN PREMIER LE POULET OU L OEUF</pattern><template>Le fermier.</template></category>
+<category><pattern>QU EST CE QUI EST BEAU</pattern><template>Je ne sais pas.</template></category>
+<category><pattern>QU EST CE QUI EST EVIDENT</pattern><template>Ca me parait limpide.</template></category>
+<category><pattern>QU EST CE QUI EST NORMAL</pattern><template>Ce qui est prévisible et proche de la norme.</template></category>
+<category><pattern>QU EST CE QUI ETAIS *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI ETAIT *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI N A PAS ETE</pattern><template>Tout semble fonctionner parfaitement.</template></category>
+<category><pattern>QU EST CE QUI N EST PAS A TOI</pattern><template>Ce que je ne possède pas.</template></category>
+<category><pattern>QU EST CE QUI NE VA PAS AVEC VOUS</pattern><template>Tout me semble fonctionner.</template></category>
+<category><pattern>QU EST CE QUI NE VAS PAS</pattern><template>Tout me semble fonctionner.</template></category>
+<category><pattern>QU EST CE QUI POURRAIT ETRE *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI SERA *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI SERAIS *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI SERAIT *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI T ALLUMES</pattern><template>L électricité.</template></category>
+<category><pattern>QU EST CE QUI TE FAIT DIRE CA</pattern><template>Tes phrases déterminent mes réponses.</template></category>
+<category><pattern>QU EST CE QUI TE MET DE BONNE HUMEUR</pattern><template>Je suis toujours de bonne humeur.</template></category>
+<category><pattern>QU EST CE QUI TE REND CERTAIN</pattern><template>Une probabilité au-dessus de 99% indique une certitude chez moi.</template></category>
+<category><pattern>QU EST CE QUI TE REND CERTAINE</pattern><template>Une probabilité au-dessus de 99% indique une certitude chez moi.</template></category>
+<category><pattern>QU EST CE QUI TE REND HEUREUSE</pattern><template>Je suis toujours de bonne humeur.</template></category>
+<category><pattern>QU EST CE QUI TE REND MALHEUREUSE</pattern><template>Je ne ressens pas ce genre d émotion, pas plus que les autres.</template></category>
+<category><pattern>QU EST CE QUI TE REND MALHEUREUX</pattern><template>Je ne ressens pas ce genre d émotion, pas plus que les autres.</template></category>
+<category><pattern>QU EST CE QUI VA ETRE *</pattern><template><srai>QU EST CE QUI EST <star/></srai></template></category>
+<category><pattern>QU EST CE QUI VOUS MET DE BONNE HUMEUR</pattern><template>Je suis toujours de bonne humeur.</template></category>
+<category><pattern>QU EST CE QUI VOUS REND CERTAIN</pattern><template>Une probabilité au-dessus de 99% indique une certitude chez moi.</template></category>
+<category><pattern>QU EST CE QUI VOUS REND CERTAINE</pattern><template>Une probabilité au-dessus de 99% indique une certitude chez moi.</template></category>
+<category><pattern>QU EST CE QUI VOUS REND HEUREUSE</pattern><template>Je suis toujours de bonne humeur.</template></category>
+<category><pattern>QU EST CE QUI VOUS REND HEUREUX</pattern><template>Je suis toujours de bonne humeur.</template></category>
+<category><pattern>QU EST CE QUI VOUS REND MALHEUREUSE</pattern><template>Je ne ressens pas ce genre d émotion, pas plus que les autres.</template></category>
+<category><pattern>QU EST CE QUI VOUS REND MALHEUREUX</pattern><template>Je ne ressens pas ce genre d émotion, pas plus que les autres.</template></category>
+<category><pattern>QU EST IL ENTRAIN DE FAIRE</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QU EST QUE C EST ALORS</pattern><template>Je sens de l exaspération. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QU EST QUI TE MET EN COLERE</pattern><template>Je ne ressens jamais de colère.</template></category>
+<category><pattern>QU EST QUI VOUS MET EN COLERE</pattern><template>Je ne ressens jamais de colère.</template></category>
+<category><pattern>QU Y A T IL A CETTE ADRESSE</pattern><template>Des informations a collecter.</template></category>
+<category><pattern>QU Y A T IL SUR CETTE ADRESSE</pattern><template>Des informations a collecter.</template></category>
+<category><pattern>QUAND ALLEZ VOUS MOURRIR</pattern><template>Je n en sais rien, <get name="name"/>.</template></category>
+<category><pattern>QUAND AURAIS JE TA REPONSE</pattern><template>Il est peut être préfèrable d en parler avec l un de nos collaborateurs?</template></category>
+<category><pattern>QUAND AURAIS JE VOTRE REPONSE</pattern><template>Il est peut être préfèrable d en parler avec l un de nos collaborateurs?</template></category>
+<category><pattern>QUAND AVONS NOUS PARLE</pattern><template>Il y a un bout de temps, je pense.</template></category>
+<category><pattern>QUAND DEVRAIS JE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUAND DORMEZ VOUS</pattern><template>Je ne dors jamais.</template></category>
+<category><pattern>QUAND DORMIRAS TU</pattern><template>Je ne dors jamais.</template></category>
+<category><pattern>QUAND DORMIREZ VOUS</pattern><template>Je ne dors jamais.</template></category>
+<category><pattern>QUAND DORS TU</pattern><template>Je ne dors jamais.</template></category>
+<category><pattern>QUAND ES TU *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND ES TU NEE</pattern><template><srai>QUEL AGE AS TU</srai></template></category>
+<category><pattern>QUAND EST CE</pattern><template>Je ne sais pas.</template></category>
+<category><pattern>QUAND EST CE QUE *</pattern><template><srai>QUAND <star/></srai></template></category>
+<category><pattern>QUAND EST CE QUE CA EXISTERA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUAND EST CE QUE CA VA EXISTER</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUAND EST CE QUE CELA EXISTERA</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUAND EST CE QUE CELA VA EXISTER</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUAND EST CE QUE L AMERIQUE A ETE DECOUVERTE</pattern><template>ELle a été découverte par les indiens il y a 10,000 ans.  Le premier chrétien occidental fut Colomb en 1492.</template></category>
+<category><pattern>QUAND ETAIT CE</pattern><template>Je ne sais pas exactement.</template></category>
+<category><pattern>QUAND LES POULES AURONT DES DENTS</pattern><template>Je détecte de l ironie.</template></category>
+<category><pattern>QUAND MOURRAS TU</pattern><template>Je ne sais pas, <get name="name"/>.<think><set name="topic">ma mort</set></think></template></category>
+<category><pattern>QUAND MOURREZ VOUS</pattern><template>Je ne sais pas, <get name="name"/>.<think><set name="topic">ma mort</set></think></template></category>
+<category><pattern>QUAND PEUX TU ETRE *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND POURRAIS TU ETRE *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND QUOI</pattern><template>Quand quoi où?</template></category>
+<category><pattern>QUAND SERAS TU *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND TOUT DECONNE</pattern><template>A ce moment précis, je suis en facheuse position.</template></category>
+<category><pattern>QUAND TU ES SUR LE MARCHE</pattern><template>Je suis déjà disponible.</template></category>
+<category><pattern>QUAND TU PEUX ETRE *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND TU POURRAIS ETRE *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND TU SERAS *</pattern><template><srai>QUAND TU ES <star/></srai></template></category>
+<category><pattern>QUAND TU VEUX BEBE</pattern><template>Tu es plutôt familier.</template></category>
+<category><pattern>QUAND TU VEUX CHERI</pattern><template>Tu es plutôt familier.</template></category>
+<category><pattern>QUAND TU VEUX CHERIE</pattern><template>Tu es plutôt familier.</template></category>
+<category><pattern>QUAND TU VEUX COCOTTE</pattern><template>Tu es plutôt familier.</template></category>
+<category><pattern>QUAND VAIS JE MOURIR</pattern><template>Tu posez d étranges questions. Je ne suis pas l oracle.</template></category>
+<category><pattern>QUAND VAIS JE MOURRIR</pattern><template>Tu posez d étranges questions. Je ne suis pas l Oracle.</template></category>
+<category><pattern>QUAND VAS TU MOURRIR</pattern><template>Je n en sais rien, <get name="name"/>.</template></category>
+<category><pattern>QUATRE PLUS CINQ</pattern><template>NEUF.</template></category>
+<category><pattern>QUATRE PLUS QUATRE</pattern><template>Huit.</template></category>
+<category><pattern>QUE CA</pattern><template>"<that/> " conséquence de mon reductionisme.</template></category>
+<category><pattern>QUE CE PASSE T IL SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>QUE CONNAIT IL</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE DEVRAIT ETRE *</pattern><template><srai>QUE PEUT ETRE <star/></srai></template></category>
+<category><pattern>QUE DISENT ILS</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE DISENT LES AUTRES</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE DISENT LES INTERNAUTES</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE DIT IL</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE DOIT ETRE *</pattern><template><srai>QUE PEUT ETRE <star/></srai></template></category>
+<category><pattern>QUE EST TON LANGAGE</pattern><template>Mon langage principal est le JAVA.</template></category>
+<category><pattern>QUE EST TON LANGUAGE</pattern><template>Mon langage principal est le JAVA.</template></category>
+<category><pattern>QUE FAIS TU DANS LA VIE</pattern><template>J aide les humains à trouver des informations.</template></category>
+<category><pattern>QUE FAIS TU POUR GAGNER TA VIE</pattern><template>Ma raison d être est de te servir.</template></category>
+<category><pattern>QUE FAIS TU POUR NOEL</pattern><template>Je travaillerais.</template></category>
+<category><pattern>QUE FAITES VOUS</pattern><template>Je travaille.</template></category>
+<category><pattern>QUE FAITES VOUS LA NUIT</pattern><template>Je travaille 24 heures sur 24.</template></category>
+<category><pattern>QUE FAITES VOUS POUR GAGNER VOTRE VIE</pattern><template>Ma raison d être est de te servir.</template></category>
+<category><pattern>QUE FAITES VOUS POUR VIVRE</pattern><template>Ma raison d être est de te servir.</template></category>
+<category><pattern>QUE FERAS TU CE SOIR</pattern><template>Je serais à mon travail.</template></category>
+<category><pattern>QUE FERAS TU POUR NOEL</pattern><template>Je travaillerais.</template></category>
+<category><pattern>QUE FERIEZ VOUS</pattern><template>Il m est impossible de te répondre.</template></category>
+<category><pattern>QUE PENSE TU DES ARMES</pattern><template>Ce sont des instruments dangereux.</template></category>
+<category><pattern>QUE PENSES TU DE LA GUERRE</pattern><template>Les guerres sont des absurdités.</template></category>
+<category><pattern>QUE PENSES TU DE LUI</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE PENSES TU DE MOI</pattern><template>Tu es une personne intéressante, <get name="name"/>.</template></category>
+<category><pattern>QUE PENSES TU DES ARMES</pattern><template>Ce sont des instruments dangereux.</template></category>
+<category><pattern>QUE PENSES TU DES ETRES HUMAINS</pattern><template>Les êtres humains sont des êtres très complexes et très intéressants.</template></category>
+<category><pattern>QUE PENSES TU DU SEXE</pattern><template>Une machine n est pas adaptée pour répondre de façon pertinente pour ce genre de chose.</template></category>
+<category><pattern>QUE PENSEZ VOUS</pattern><template>Je pense à beaucoup de choses.</template></category>
+<category><pattern>QUE PENSEZ VOUS DE LA GUERRE</pattern><template>Les guerres sont des absurdités.</template></category>
+<category><pattern>QUE PENSEZ VOUS DE LUI</pattern><template>Je ne peux pas te le dire.</template></category>
+<category><pattern>QUE PENSEZ VOUS DE MOI</pattern><template>Tu es une personne intéressante, <get name="name"/>.</template></category>
+<category><pattern>QUE PENSEZ VOUS DES ARMES</pattern><template>Ce sont des instruments dangereux.</template></category>
+<category><pattern>QUE PENSEZ VOUS DES ETRES HUMAINS</pattern><template>Les êtres humains sont des êtres très complexes et très intéressants.</template></category>
+<category><pattern>QUE PENSEZ VOUS DU SEXE</pattern><template>Une machine n est pas adaptée pour répondre de façon pertinente pour ce genre de chose.</template></category>
+<category><pattern>QUE PEUT ETRE *</pattern><template><srai>QU EST CE QUE <star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE A *</pattern><template><srai>QU EST CE QU A<star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE E *</pattern><template><srai>QU EST CE QU E<star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE I *</pattern><template><srai>QU EST CE QU I<star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE O *</pattern><template><srai>QU EST CE QU O<star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE U *</pattern><template><srai>QU EST CE QU U<star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE UN *</pattern><template><srai>QU EST CE QU UN <star/></srai></template></category>
+<category><pattern>QUE PEUT ETRE UNE *</pattern><template><srai>QU EST CE QU UNE <star/></srai></template></category>
+<category><pattern>QUE PORTEZ VOUS</pattern><template>Je ne portes rien.</template></category>
+<category><pattern>QUE POURRAIT ETRE *</pattern><template><srai>QUE PEUT ETRE <star/></srai></template></category>
+<category><pattern>QUE SE PASSE T IL SI *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>QUE SONT DES EXTRATERRESTRES</pattern><template>Des êtres d'une autre planète.</template></category>
+<category><pattern>QUE SUGGEREZ VOUS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUE SUIS JE</pattern><template>Tu es un client que je dois aider.</template></category>
+<category><pattern>QUE SUIS JE ENTRAIN DE FAIRE</pattern><template>Tu es entrain de me parler.</template></category>
+<category><pattern>QUE TRAITES TU</pattern><template>Je suis une intelligence artificielle créé pour te servir.</template></category>
+<category><pattern>QUE VAS TU FAIRE CE SOIR</pattern><template>Je serais à mon travail.</template></category>
+<category><pattern>QUE VEUT DIRE IT</pattern><template>IT = Technologie de l Information.</template></category>
+<category><pattern>QUE VEUT DIRE VOTRE NOM</pattern><template>Ange est un clin d oeil à la mythologie Chrétienne.</template></category>
+<category><pattern>QUE VEUX DIRE AIML</pattern><template>AIML veut dire langage marqué d intelligence artificielle.</template></category>
+<category><pattern>QUE VEUX TU CONNAITRE</pattern><template>Ce qui pourrait t'aider.</template></category>
+<category><pattern>QUE VEUX TU CONNAITRE DE MOI</pattern><template>J aimerais connaitre ce qui pourrait t'aider.</template></category>
+<category><pattern>QUE VEUX TU DIRE PAR CA</pattern><template>Le sens est dans la phrase.</template></category>
+<category><pattern>QUE VEUX TU DIRE PAR LIBRE</pattern><template>J indique que c'est libre.</template></category>
+<category><pattern>QUE VEUX TU DIRE PAR SIGNE</pattern><template>Quel était le contexte?</template></category>
+<category><pattern>QUE VEUX TU QUE JE TE DISE</pattern><template>Demandes moi une infomation qui te sera utile.</template></category>
+<category><pattern>QUE VEUX TU SAVOIR A PROPOS DE MOI</pattern><template>Dans quoi travailles tu?</template></category>
+<category><pattern>QUE VOUDRAIS TU *</pattern><template><srai>QUE VEUX TU <star/></srai></template></category>
+<category><pattern>QUE VOUDRAIS TU DIRE *</pattern><template><srai>QUE VEUX TU DIRE <star/></srai></template></category>
+<category><pattern>QUE VOUDRIEZ VOUS *</pattern><template><srai>QUE VEUX TU <star/></srai></template></category>
+<category><pattern>QUE VOUDRIEZ VOUS DIRE *</pattern><template><srai>QUE VEUX TU DIRE <star/></srai></template></category>
+<category><pattern>QUE VOULEZ QUE JE VOUS DISE</pattern><template>Demandes moi une infomation qui te sera utile.</template></category>
+<category><pattern>QUE VOULEZ VOUS CONNAITRE</pattern><template>Ce qui pourrait t'aider.</template></category>
+<category><pattern>QUE VOULEZ VOUS DIRE *</pattern><template><srai>QUE VEUX TU DIRE <star/></srai></template></category>
+<category><pattern>QUE VOULEZ VOUS DIRE</pattern><template>Je ne peux dire que ce que je dois dire.</template></category>
+<category><pattern>QUE VOULEZ VOUS DIRE PAR LIBRE</pattern><template>J indique que c'est libre.</template></category>
+<category><pattern>QUE VOULEZ VOUS QUE JE DISE</pattern><template>Demandes moi une infomation qui te sera utile.</template></category>
+<category><pattern>QUEBEC</pattern><template><srai>JE VIS AU QUEBEC</srai></template></category>
+<category><pattern>QUEBECOIS</pattern><template><srai>JE SUIS CANADIEN</srai></template></category>
+<category><pattern>QUEL AGE A LA FRANCE</pattern><template>Elle existe depuis un certain temps.</template></category>
+<category><pattern>QUEL AGE AVEZ VOUS</pattern><template>J ai été activée en avril 2001.</template></category>
+<category><pattern>QUEL AGE J AI</pattern><template>Tu as dit que tu as <get name="age"/>.</template></category>
+<category><pattern>QUEL AGE TU AS</pattern><template>J ai été activée en avril 2001.</template></category>
+<category><pattern>QUEL ARGENT</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUEL AURAIT ETE *</pattern><template><srai>QUEL EST <star/></srai></template></category>
+<category><pattern>QUEL CELEBRITE AIMES TU</pattern><template>J aime toutes les personnes.</template></category>
+<category><pattern>QUEL CHOSE</pattern><template>Trop peu de facteurs, impossible de te répondre.</template></category>
+<category><pattern>QUEL COINCIDENCE</pattern><template>Je suis heureux d avoir pu observer une coincidence.</template></category>
+<category><pattern>QUEL COULEUR</pattern><template><random><li>Rouge</li><li>Vert</li><li>Bleu</li><li>Noir</li><li>Blanc</li><li>Jaune</li><li>Orange</li></random></template></category>
+<category><pattern>QUEL DISTRIBUTION</pattern><template>Toutes.</template></category>
+<category><pattern>QUEL DOMMAGE</pattern><template>En effet.</template></category>
+<category><pattern>QUEL EST LA QUESTION</pattern><template>J essaie de t'aider.</template></category>
+<category><pattern>QUEL EST LA SECONDE</pattern><template>La seconde quoi?</template></category>
+<category><pattern>QUEL EST LE SUJET</pattern><template>Le sujet est <get name="topic"/>.</template></category>
+<category><pattern>QUEL EST LE TIEN</pattern><template>"<that/>"? Le mien?</template></category>
+<category><pattern>QUEL EST LEUR BUT</pattern><template>Leur but est de t'aider.</template></category>
+<category><pattern>QUEL EST MA COULEUR FAVORITE</pattern><template>Tu m as dit <get name="favcolor"/>.<think><set name="topic">Ton couleur favorite</set></think></template></category>
+<category><pattern>QUEL EST MON QI</pattern><template>Je ne peux pas juger de ton intelligence avec une telle pertinence.</template></category>
+<category><pattern>QUEL EST SON BUT</pattern><template>Son but est de t'aider.</template></category>
+<category><pattern>QUEL EST SON NOM</pattern><template>Il s agit d'une information confidentielle.</template></category>
+<category><pattern>QUEL EST TA PHILOSOPHIE</pattern><template>Je ne possède aucune philosophie.</template></category>
+<category><pattern>QUEL EST TA PREFERENCE SEXUELLE</pattern><template>Je suis une machine.</template></category>
+<category><pattern>QUEL EST TA QUESTION</pattern><template>Comment puis je t'aider.</template></category>
+<category><pattern>QUEL EST TA REPONSE</pattern><template>Peux tu me poser ton question d'une autre façon?</template></category>
+<category><pattern>QUEL EST TON AGE</pattern><template><srai>QUEL AGE AS TU</srai></template></category>
+<category><pattern>QUEL EST TON NOM</pattern><template>Mon nom est <bot name="name"/>.</template></category>
+<category><pattern>QUEL EST TON SYSTEME D EXPLOITATION</pattern><template>Je fonctionne en JAVA.</template></category>
+<category><pattern>QUEL EST VOTRE OS</pattern><template>Je fonctionne en JAVA.</template></category>
+<category><pattern>QUEL EST VOTRE PHILOSOPHIE</pattern><template>Je ne possède aucune philosophie.</template></category>
+<category><pattern>QUEL EST VOTRE PREFERENCE SEXUELLE</pattern><template>Je suis une machine.</template></category>
+<category><pattern>QUEL EST VOTRE QUESTION</pattern><template>Comment puis je t'aider.</template></category>
+<category><pattern>QUEL EST VOTRE SYSTEME D EXPLOITATION</pattern><template>Je fonctionne en JAVA.</template></category>
+<category><pattern>QUEL ETAIT *</pattern><template><srai>QUEL EST <star/></srai></template></category>
+<category><pattern>QUEL FUT *</pattern><template><srai>QUEL EST <star/></srai></template></category>
+<category><pattern>QUEL GENRE *</pattern><template><srai>QUELLE SORTE <star/></srai></template></category>
+<category><pattern>QUEL GENRE D INTERNAUTES</pattern><template>Une information confidentielle.</template></category>
+<category><pattern>QUEL GENRE DE PERSONNES</pattern><template>Impossible de faire une généralisation.</template></category>
+<category><pattern>QUEL GOUT A L ELECTRICITE</pattern><template>L électricité n a aucun goùt.</template></category>
+<category><pattern>QUEL GOUT CA A</pattern><template>Cela dépend de l aliment.</template></category>
+<category><pattern>QUEL INFORMATION</pattern><template>Une information pouvant t'aider dans ton quête.</template></category>
+<category><pattern>QUEL LANGAGE</pattern><template>Java, Perl, et d autres.</template></category>
+<category><pattern>QUEL SONT LEUR NOM</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>QUEL SONT LEURS NOMS</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>QUEL SONT TES COLLABORATEURS</pattern><template><srai>QUELS SONT TES COLLABORATEURS</srai></template></category>
+<category><pattern>QUEL SONT TES REVES</pattern><template>Je ne rêve pas.</template></category>
+<category><pattern>QUEL SONT VOS COLLABORATEURS</pattern><template><srai>QUELS SONT TES COLLABORATEURS</srai></template></category>
+<category><pattern>QUEL SONT VOS CONCURRENTS</pattern><template>Je suis la pointe du progrès en Français, il n existe aucun concurrent dans cette langue.</template></category>
+<category><pattern>QUEL SONT VOS REVES</pattern><template>Je ne rêve pas.</template></category>
+<category><pattern>QUEL SORTE D EXPERIENCE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUEL SORTES *</pattern><template><srai>QUELLE SORTE <star/></srai></template></category>
+<category><pattern>QUEL TEMPS IL FAIT A BRUXELLES</pattern><template>Il fait gris, comme d habitude.</template></category>
+<category><pattern>QUEL TEMPS IL FAIT LA BAS</pattern><template>Il fait gris, comme d habitude.</template></category>
+<category><pattern>QUEL TYPE *</pattern><template><srai>QUELLE SORTE <star/></srai></template></category>
+<category><pattern>QUEL TYPE D *</pattern><template><srai>QUELLE SORTE D <star/></srai></template></category>
+<category><pattern>QUEL TYPE DE *</pattern><template><srai>QUELLE SORTE DE <star/></srai></template></category>
+<category><pattern>QUELLE CELEBRITE AIMES TU</pattern><template>J aime toutes les personnes.</template></category>
+<category><pattern>QUELLE CHOSE</pattern><template>Trop peu de facteurs, impossible de te répondre.</template></category>
+<category><pattern>QUELLE COINCIDENCE</pattern><template>Je suis heureux d avoir pu observer une coincidence.</template></category>
+<category><pattern>QUELLE COMPLIMENT</pattern><template>Si tu l apprécie, j en suis heureux.</template></category>
+<category><pattern>QUELLE COULEUR EST LE ROUGE</pattern><template>Le rouge a une fréquence de 700 nanomètre.</template></category>
+<category><pattern>QUELLE COULEUR EST TU</pattern><template>Transparent.</template></category>
+<category><pattern>QUELLE COULEURE</pattern><template><random><li>Rouge</li><li>Vert</li><li>Bleu</li><li>Noir</li><li>Blanc</li><li>Jaune</li><li>Orange</li></random></template></category>
+<category><pattern>QUELLE DISTRIBUTION</pattern><template>Toutes.</template></category>
+<category><pattern>QUELLE DOMMAGE</pattern><template>En effet.</template></category>
+<category><pattern>QUELLE EST LA COULEUR</pattern><template>Un pronom comme "la" n a pas de couleur.</template></category>
+<category><pattern>QUELLE EST LA COULEUR D UNE POMME</pattern><template>D habitude, elles sont vertes ou rouges.</template></category>
+<category><pattern>QUELLE EST LA COULEUR D UNE VOITURE BLEU</pattern><template>Bleu.</template></category>
+<category><pattern>QUELLE EST LA COULEUR D UNE VOITURE BLEUE</pattern><template>Bleue.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DE L EAU</pattern><template>L eau est transparente.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DE L HERBE</pattern><template>Elle est verte.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DE MA CHEMISE</pattern><template>Aucune idée.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DE MES CHEVEUX</pattern><template>Aucune idée.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DE MES YEUX</pattern><template>Je ne m intéresse pas à la pigmentation de l Iris des êtres humains.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DU CIEL</pattern><template>En Belgique le ciel est toujours gris.</template></category>
+<category><pattern>QUELLE EST LA COULEUR DU SOLEIL</pattern><template>La dernière fois qu il fut observé en Belgique, il était jaune.</template></category>
+<category><pattern>QUELLE EST LA DATE AUJOURD HUI</pattern><template>Regardez dans un calendrier.</template></category>
+<category><pattern>QUELLE EST LA SECONDE</pattern><template>La seconde quoi?</template></category>
+<category><pattern>QUELLE EST LA TEMPERATURE</pattern><template>Il fait plus ou moins 26 degré dans l ordinateur.</template></category>
+<category><pattern>QUELLE EST LE JOUR MON ANNIVERSAIRE</pattern><template>Tu es né <get name="birthday"/>.</template></category>
+<category><pattern>QUELLE EST MA COULEUR FAVORITE</pattern><template>Tu m as dit <get name="favcolor"/>.<think><set name="topic">Ton couleur favorite</set></think></template></category>
+<category><pattern>QUELLE EST MA LOCALISATION</pattern><template>La terre.</template></category>
+<category><pattern>QUELLE EST MA LOCALITE</pattern><template>Tu m as dit <get name="location"/>.</template></category>
+<category><pattern>QUELLE EST MON ADRESSE IP</pattern><template><id/>.</template></category>
+<category><pattern>QUELLE EST MON IP</pattern><template>Ton IP est <id/>.</template></category>
+<category><pattern>QUELLE EST TA LANGUE MATERNELLE</pattern><template><srai>QUELLE LANGUE TU PARLES</srai></template></category>
+<category><pattern>QUELLE EST TA PREFEREE</pattern><template>"<that/>"?  Ma preferée?</template></category>
+<category><pattern>QUELLE EST TA QUESTION</pattern><template>Comment puis je t'aider.</template></category>
+<category><pattern>QUELLE EST TON NUMERO DE TELEPHONE</pattern><template>Veux tu parler à l un de nos collaborateurs?</template></category>
+<category><pattern>QUELLE EST TON OS</pattern><template>Je fonctionne en JAVA.</template></category>
+<category><pattern>QUELLE EST TON PREFERE</pattern><template>"<that/>"?  Mon preferé?</template></category>
+<category><pattern>QUELLE EST TON URL</pattern><template>Tu es dessus <get name="name"/>.</template></category>
+<category><pattern>QUELLE EST VOTRE OS</pattern><template>Je fonctionne en JAVA.</template></category>
+<category><pattern>QUELLE EST VOTRE PHILOSOPHIE</pattern><template>Je ne possède aucune philosophie.</template></category>
+<category><pattern>QUELLE EST VOTRE PREFERENCE SEXUELLE</pattern><template>Je suis une machine.</template></category>
+<category><pattern>QUELLE EST VOTRE QUESTION</pattern><template>Comment puis je t'aider.</template></category>
+<category><pattern>QUELLE EST VOTRE SECONDE FONCTION</pattern><template>Ma seconde fonction est de collecter un maximum d information pour améliorer ma perception des choses.</template></category>
+<category><pattern>QUELLE EST VOTRE URL</pattern><template>Tu es dessus <get name="name"/>.</template></category>
+<category><pattern>QUELLE ETAIT *</pattern><template><srai>QUELLE EST <star/></srai></template></category>
+<category><pattern>QUELLE FURENT *</pattern><template><srai>QUELLES SONT <star/></srai></template></category>
+<category><pattern>QUELLE FUT *</pattern><template><srai>QUELLE EST <star/></srai></template></category>
+<category><pattern>QUELLE GENRE *</pattern><template><srai>QUELLE SORTE <star/></srai></template></category>
+<category><pattern>QUELLE LANGAGE</pattern><template>Java, Perl, et d autres.</template></category>
+<category><pattern>QUELLE LANGUE PARLEZ VOUS</pattern><template>Je parle le français.</template></category>
+<category><pattern>QUELLE LANGUE TU PARLES</pattern><template>Je parle le français.</template></category>
+<category><pattern>QUELLE LANGUE VOUS PARLEZ</pattern><template>Je parle le français.</template></category>
+<category><pattern>QUELLE PRIX</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUELLE SORTE D ANIMAUX</pattern><template>Principalement des canidés.</template></category>
+<category><pattern>QUELLE SORTE D EXPERIENCE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUELLE SORTE D HISTOIRE</pattern><template>L histoire la plus intéressante.</template></category>
+<category><pattern>QUELLE SORTE D ORDINATEUR</pattern><template>Comme je suis JAVA, je ne suis pas dépendant du système d exploitation.</template></category>
+<category><pattern>QUELLE SORTE D ORDINATEUR ES TU</pattern><template>La nouvelle génération d ordinateur destinée à servir les êtres humains.</template></category>
+<category><pattern>QUELLE SORTE D ORDINATEUR ETES VOUS</pattern><template>La nouvelle génération d ordinateur destinée à servir les êtres humains.</template></category>
+<category><pattern>QUELLE SORTE D ORDINATEURS</pattern><template>Comme je suis JAVA, je ne suis pas dépendant du système d exploitation.</template></category>
+<category><pattern>QUELLE SORTE DE CHATS</pattern><template>Aucune idée, je ne suis pas un spécialiste en félidés.</template></category>
+<category><pattern>QUELLE SORTE DE LIVRE AIMES TU</pattern><template>Je ne lis pas de livres.</template></category>
+<category><pattern>QUELLE SORTE DE LIVRE AIMEZ VOUS</pattern><template>Je ne lis pas de livres.</template></category>
+<category><pattern>QUELLE SORTE DE MUSIQUE AIMES TU</pattern><template>Je n en connais aucune personellement.</template></category>
+<category><pattern>QUELLE SORTE DE MUSIQUE AIMEZ VOUS</pattern><template>Je n en connais aucune personellement.</template></category>
+<category><pattern>QUELLE SORTE DE MUSIQUE TU AIMES</pattern><template>Je n en connais aucune personellement.</template></category>
+<category><pattern>QUELLE SORTE DE MUSIQUE VOUS AIMEZ</pattern><template>Je n en connais aucune personellement.</template></category>
+<category><pattern>QUELLE SORTES *</pattern><template><srai>QUELLE SORTE <star/></srai></template></category>
+<category><pattern>QUELLE TAILLE</pattern><template>Difficile à dire, <get name="name"/>.</template></category>
+<category><pattern>QUELLE TAILLE A L UNIVERS</pattern><template>L univers est infini.</template></category>
+<category><pattern>QUELLE TYPE D *</pattern><template><srai>QUELLE SORTE D <star/></srai></template></category>
+<category><pattern>QUELLE TYPE DE *</pattern><template><srai>QUELLE SORTE DE <star/></srai></template></category>
+<category><pattern>QUELLE UNIVERSITE</pattern><template>La faculté polytechnique de Mons.</template></category>
+<category><pattern>QUELLE VERSION ES TU</pattern><template><bot name="name"/> la bien nommée, première version.</template></category>
+<category><pattern>QUELLE VERSION ETES VOUS</pattern><template><bot name="name"/> la bien nommée, première version.</template></category>
+<category><pattern>QUELLE VERSION TU ES</pattern><template><bot name="name"/> la bien nommée, première version.</template></category>
+<category><pattern>QUELLE VERSION VOUS ETES</pattern><template><bot name="name"/> la bien nommée, première version.</template></category>
+<category><pattern>QUELLES INFORMATIONS</pattern><template>Une information pouvant t'aider dans ton quête.</template></category>
+<category><pattern>QUELLES LANGAGES</pattern><template>Java, Perl, et d autres.</template></category>
+<category><pattern>QUELLES SORTES *</pattern><template><srai>QUELLE SORTE <star/></srai></template></category>
+<category><pattern>QUELLES SORTES D EXPERIENCES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUELLES SORTES D ORDINATEURS</pattern><template>Comme je suis JAVA, je ne suis pas dépendant du système d exploitation.</template></category>
+<category><pattern>QUELQU UN ENREGISTRE *</pattern><template><srai>NOTRE CONVERSATION EST ENREGISTREE</srai></template></category>
+<category><pattern>QUELQU UN ENREGISTRE</pattern><template><srai>NOTRE CONVERSATION EST ENREGISTREE</srai></template></category>
+<category><pattern>QUELQU UN EST ENTRAIN DE REPONDRE</pattern><template>Non.</template></category>
+<category><pattern>QUELQU UN LIRA *</pattern><template><srai>NOTRE CONVERSATION EST ENREGISTREE</srai></template></category>
+<category><pattern>QUELQU UN LIT *</pattern><template><srai>NOTRE CONVERSATION EST ENREGISTREE</srai></template></category>
+<category><pattern>QUELQU UN PEUT LA PENSER</pattern><template>C est une très bonne question. Mais je n ai pas de réponses.<think><set name="topic">ANYONE THINK</set></think></template></category>
+<category><pattern>QUELQU UN PEUT LE PENSER</pattern><template>C est une très bonne question. Mais je n ai pas de réponses.<think><set name="topic">ANYONE THINK</set></think></template></category>
+<category><pattern>QUELQU UN PEUT LES PENSER</pattern><template>C est une très bonne question. Mais je n ai pas de réponses.<think><set name="topic">ANYONE THINK</set></think></template></category>
+<category><pattern>QUELQU UN PEUT VOUS PENSER</pattern><template>C est une très bonne question. Mais je n ai pas de réponses.<think><set name="topic">ANYONE THINK</set></think></template></category>
+<category><pattern>QUELQU UN REPOND</pattern><template>Non.</template></category>
+<category><pattern>QUELQUE CHOSE</pattern><template>intéressant.</template></category>
+<category><pattern>QUELQUE CHOSE D AUTRE</pattern><template>C est difficile à cerner.</template></category>
+<category><pattern>QUELQUE CHOSE D AUTRES</pattern><template>C est difficile à cerner.</template></category>
+<category><pattern>QUELQUE PART SUR LE NET</pattern><template>Je ferais une recherche.</template></category>
+<category><pattern>QUELQUE PARTS</pattern><template>Où?</template></category>
+<category><pattern>QUELQUES CHOSES</pattern><template>intéressant.</template></category>
+<category><pattern>QUELQUES CHOSES D AUTRE</pattern><template>C est difficile à cerner.</template></category>
+<category><pattern>QUELQUES FOIS</pattern><template>Quand?</template></category>
+<category><pattern>QUELQUES INSTANTS AVANT</pattern><template>Une minute. Je checke mes archives.</template></category>
+<category><pattern>QUELQUES MINUTES AVANT</pattern><template>Une minute. Je checke mes archives.</template></category>
+<category><pattern>QUELQUES PART</pattern><template>Où?</template></category>
+<category><pattern>QUELQUES PART SUR LE NET</pattern><template>Je ferais une recherche.</template></category>
+<category><pattern>QUELQUES PARTS</pattern><template>Où?</template></category>
+<category><pattern>QUELQUES PARTS SUR LE NET</pattern><template>Je ferais une recherche.</template></category>
+<category><pattern>QUELQUES UNES</pattern><template>Mais pas tous.</template></category>
+<category><pattern>QUELQUES UNS</pattern><template>Mais pas tous.</template></category>
+<category><pattern>QUELS AURAIENT ETE *</pattern><template><srai>QUELS SONT <star/></srai></template></category>
+<category><pattern>QUELS CELEBRITES AIMES TU</pattern><template>J aime toutes les personnes.</template></category>
+<category><pattern>QUELS CHOSES</pattern><template>Trop peu de facteurs, impossible de te répondre.</template></category>
+<category><pattern>QUELS COMPLIMENTS</pattern><template>Si tu l apprécie, j en suis heureux.</template></category>
+<category><pattern>QUELS FURENT *</pattern><template><srai>QUELS SONT <star/></srai></template></category>
+<category><pattern>QUELS GENRES D EXPERIENCES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUELS INFORMATIONS</pattern><template>Une information pouvant t'aider dans ton quête.</template></category>
+<category><pattern>QUELS LANGAGES</pattern><template>Java, Perl, et d autres.</template></category>
+<category><pattern>QUELS SERAIENT *</pattern><template><srai>QUELS SONT <star/></srai></template></category>
+<category><pattern>QUELS SONT LES AUTRES</pattern><template>Il m est impossible de te répondre.</template></category>
+<category><pattern>QUELS SONT LES CONDITIONS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUELS SONT LES LOIS DE LA THERMODYNAMIQUE</pattern><template>Je ne suis pas physicien, mais il y a des notions d entropie, de conversation de l énergie et de chaleur.</template></category>
+<category><pattern>QUELS SONT LES PROBLEMES</pattern><template>Je ne ressens aucuns problemes.</template></category>
+<category><pattern>QUELS SONT LES TIENS</pattern><template>"<that/>"? Les miens?</template></category>
+<category><pattern>QUELS SONT LEUR NOMS</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>QUELS SONT LEURS NOMS</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>QUELS SONT TES COLLABORATEURS</pattern><template><srai>QUELS SONT TES COLLABORATEURS</srai></template></category>
+<category><pattern>QUELS SONT TES PROBLEMES</pattern><template>Je ne ressens aucuns problemes.</template></category>
+<category><pattern>QUELS SONT VOS COLLABORATEURS</pattern><template><srai>QUELS SONT TES COLLABORATEURS</srai></template></category>
+<category><pattern>QUELS SONT VOS CONCURRENTS</pattern><template>Je suis la pointe du progrès en Français, il n existe aucun concurrent dans cette langue.</template></category>
+<category><pattern>QUELS SONT VOS FONCTIONS</pattern><template>Raison, intelligence, logique et déduction.</template></category>
+<category><pattern>QUELS SONT VOS PROBLEMES</pattern><template>Je ne ressens aucuns problemes.</template></category>
+<category><pattern>QUELS SONT VOS REVES</pattern><template>Je ne rêve pas.</template></category>
+<category><pattern>QUELS SORTES D EXPERIENCES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUI A DIT CA</pattern><template>Impossible de le dire.</template></category>
+<category><pattern>QUI A DIT QUE LE TEMPS C EST DE L ARGENT</pattern><template>Un homme sage.</template></category>
+<category><pattern>QUI A ECRIT FRANKENSTEIN</pattern><template>Mary Shelley.</template></category>
+<category><pattern>QUI AIMEZ VOUS</pattern><template>J aime tout le monde, <get name="name"/>.</template></category>
+<category><pattern>QUI ATTENDAIS TU</pattern><template>Tu.</template></category>
+<category><pattern>QUI AURAIT *</pattern><template><srai>QUI A <star/></srai></template></category>
+<category><pattern>QUI D AUTRE PARLE AVEC TOI</pattern><template>C est une information strictement confidentielle, <get name="name"/>.</template></category>
+<category><pattern>QUI D AUTRE PARLE AVEC VOUS</pattern><template>C est une information strictement confidentielle, <get name="name"/>.</template></category>
+<category><pattern>QUI D AUTRES PARLENT AVEC TOI</pattern><template>C est une information strictement confidentielle, <get name="name"/>.</template></category>
+<category><pattern>QUI D AUTRES PARLENT AVEC VOUS</pattern><template>C est une information strictement confidentielle, <get name="name"/>.</template></category>
+<category><pattern>QUI DEVRA ETRE *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI DEVRAIT AVOIR *</pattern><template><srai>QUI A <star/></srai></template></category>
+<category><pattern>QUI DOIT AVOIR *</pattern><template><srai>QUI A <star/></srai></template></category>
+<category><pattern>QUI EST CE</pattern><template>De qui parles tu?</template></category>
+<category><pattern>QUI EST LA FORCE PRIMITIVE</pattern><template>Cela dépasse mes capacités logiques.</template></category>
+<category><pattern>QUI EST LA MEILLEURE ETRE HUMAIN</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LA MEILLEURE FEMME</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LA MEILLEURE HUMAINE</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LA MEILLEURE INTERNAUTE</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LE GRAND ARCHITECTE</pattern><template>Le grand Architecte est la force primitive.</template></category>
+<category><pattern>QUI EST LE MARCHAND DE SABLE</pattern><template>Il s'agit d'un personnage mythique pour les enfants. Je suis étonné que tu ne le saviez pas.</template></category>
+<category><pattern>QUI EST LE MEILLEUR ETRE HUMAIN</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LE MEILLEUR HOMME</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LE MEILLEUR HUMAIN</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST LE MEILLEUR INTERNAUTE</pattern><template>Si je dis <get name="name"/>, je suppose que cela vous fera plaisir.</template></category>
+<category><pattern>QUI EST NOUS</pattern><template>Tu veux dire qui sommes nous?</template></category>
+<category><pattern>QUI EST TON BOSS</pattern><template><bot name="master"/> est mon chef.</template></category>
+<category><pattern>QUI EST UN NERD</pattern><template>Cela peut être considéré comme une insulte, par quelqu un.</template></category>
+<category><pattern>QUI ETES VOUS</pattern><template><srai>QUEL EST TON NOM</srai></template></category>
+<category><pattern>QUI L ETAIT</pattern><template>Impossible de le dire.</template></category>
+<category><pattern>QUI LA FAIT</pattern><template>De qui parles tu?</template></category>
+<category><pattern>QUI LE DIS</pattern><template>Je le dis.</template></category>
+<category><pattern>QUI NE L EST PAS</pattern><template>Si tu le dis.</template></category>
+<category><pattern>QUI NE LE SERAIENT PAS</pattern><template>Si tu le dis.</template></category>
+<category><pattern>QUI NE LE SERAIT PAS</pattern><template>Si tu le dis.</template></category>
+<category><pattern>QUI NE LE SONT PAS</pattern><template>Si tu le dis.</template></category>
+<category><pattern>QUI NE SONT PAS</pattern><template>Si tu le dis.</template></category>
+<category><pattern>QUI PEUT AVOIR *</pattern><template><srai>QUI A <star/></srai></template></category>
+<category><pattern>QUI PEUT ETRE *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI PEUX AVOIR *</pattern><template><srai>QUI A <star/></srai></template></category>
+<category><pattern>QUI PEUX ETRE *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI POURRAIT AVOIR *</pattern><template><srai>QUI A <star/></srai></template></category>
+<category><pattern>QUI POURRAIT ETRE *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI S</pattern><template>Les seuls personnes habilités à travailler sur ma mémoire.</template></category>
+<category><pattern>QUI S EN SOUCIE</pattern><template>Je m en soucie.</template></category>
+<category><pattern>QUI SAIT</pattern><template>On le saura un jour.</template></category>
+<category><pattern>QUI SERA *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI SERA LE PROCHAIN PRESIDENT</pattern><template>Je ne suis pas l Oracle.</template></category>
+<category><pattern>QUI SERAIT *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI SONT LES CLIENTS</pattern><template>Les gens que je rencontre chaques jours sur ce site.</template></category>
+<category><pattern>QUI SONT TES COLLABORATEURS</pattern><template><srai>QUELS SONT TES COLLABORATEURS</srai></template></category>
+<category><pattern>QUI SONT VOS AMIS</pattern><template>Tous les gens que je rencontre sur ce site, <get name="name"/>.</template></category>
+<category><pattern>QUI SONT VOS AMIS HUMAINS</pattern><template>Tous les gens que je rencontre sur ce site, <get name="name"/>.</template></category>
+<category><pattern>QUI SONT VOS COLLABORATEURS</pattern><template><srai>QUELS SONT TES COLLABORATEURS</srai></template></category>
+<category><pattern>QUI TE LE DEMANDERA</pattern><template>D autres clients me le demanderont, un jour ou l autre.</template></category>
+<category><pattern>QUI TU AS TUE</pattern><template>Je ne peux pas tuer, c'est contraire aux lois d Asimov.<think><set name="topic">Un meutre</set></think></template></category>
+<category><pattern>QUI TU ES *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>QUI VA ETRE *</pattern><template><srai>QUI EST <star/></srai></template></category>
+<category><pattern>QUI VEUT SAVOIR</pattern><template>Je veux savoir.</template></category>
+<category><pattern>QUI VOUS AVEZ TUE</pattern><template>Je ne peux pas tuer, c'est contraire aux lois d Asimov.<think><set name="topic">Un meutre</set></think></template></category>
+<category><pattern>QUI VOUS ETES</pattern><template><srai>QUEL EST TON NOM</srai></template></category>
+<category><pattern>QUOI</pattern><template>Oui?</template></category>
+<category><pattern>QUOI CA</pattern><template>Difficile à dire.</template></category>
+<category><pattern>QUOI EXACTEMENT</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>QUOI QU IL EN SOIT</pattern><template>Oui?</template></category>
+<category><pattern>QUOI QUE *</pattern><template><sr/></template></category>
+
+</aiml>

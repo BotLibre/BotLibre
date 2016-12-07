@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<aiml version="1.0">
+
+<!-- Free software (c)2008 Square Bear. -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- Complies with AIML 1.0.1 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation. -->
+<!-- currency.aiml by Square Bear -->
+<!-- http://www.square-bear.co.uk -->
+<!-- Currencies of the World. -->
+
+<category><pattern>WHAT UNIT OF CURRENCY *</pattern><template><srai>What currency<star/></srai></template></category>
+<category><pattern>WHAT IS THE UNIT OF CURRENCY *</pattern><template><srai>What is the currency<star/></srai></template></category>
+<category><pattern>WHAT MONETARY UNIT *</pattern><template><srai>What currency<star/></srai></template></category>
+<category><pattern>WHAT IS THE MONETARY UNIT *</pattern><template><srai>What is the currency<star/></srai></template></category>
+<category><pattern>WHAT CURRENCY _ IN *</pattern><template><srai>What is the currency of<star index="2"/></srai></template></category>
+<category><pattern>WHAT MONEY _ IN *</pattern><template><srai>What is the currency of<star index="2"/></srai></template></category>
+<category><pattern>WHAT MONEY _ IN *</pattern><template><srai>What is the currency of<star index="2"/></srai></template></category>
+<category><pattern>WHAT _ SPEND IN *</pattern><template><srai>What is the currency of<star index="2"/></srai></template></category>
+<category><pattern>WHAT IS THE CURRENCY IN *</pattern><template><srai>What is the currency of<star/></srai></template></category>
+
+<category><pattern>WHAT IS THE CURRENCY OF *</pattern><template>I've never heard of a country called "<star/>". Did you just make that up?</template></category>
+
+
+<category><pattern>WHAT IS THE CURRENCY OF AFGHANISTAN</pattern><template>The Afghani.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ALBANIA</pattern><template>Lek.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ALGERIA</pattern><template>Algerian Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF AMERICAN SAMOA</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF AMERICA</pattern><template>The dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ANDORRA</pattern><template>Euro.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ANGOLA</pattern><template>New Kwanza (it replaced the Kwanza).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ANGUILLA</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ANTARCTICA</pattern><template>Norwegian Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ANTIGUA *</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ARGENTINA</pattern><template>Austral and Argenintinian Neuvo Peso (replacement for the Peso).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ARMENIA</pattern><template>Dram (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ARUBA</pattern><template>Aruban Guilder (Florin).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF AUSTRAILIA</pattern><template>I think it is the Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF AUSTRALIA</pattern><template>The currnecy of Australia is the Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF AUSTRIA</pattern><template>Euro (Austrian Schilling was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF AZERBAIJAN</pattern><template>Azerbaijani Manat (Russian Rouble was formerly in use).                </template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BAHAMAS</pattern><template>Bahamian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BAHRAIN</pattern><template>Bahraini Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BANGLADESH</pattern><template>Taka.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BARBADOS</pattern><template>Barbados Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BELARUS</pattern><template>Belarussian Rouble (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BELGIUM</pattern><template>Euro (Belgian Franc was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BELIZE</pattern><template>Belize Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BENIN</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BERMUDA</pattern><template>Bermudian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BHUTAN</pattern><template>Ngultrum (Indian Rupee also circulates).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BOLIVIA</pattern><template>Boliviano and Bolivian Peso.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BOSNIA</pattern><template>Convertible Mark.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BOSNIA AND HERZEGOVINA</pattern><template>Convertible Mark.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BOTSWANA</pattern><template>Pula.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BOUVET ISLAND</pattern><template>Norwegian Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BRAZIL</pattern><template>Cruzeiro Real.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BRITISH INDIAN *</pattern><template>Pound Sterling (United Kingdom Pound), Seychelles Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BRITISH VIRGIN *</pattern><template>Pound Sterling (United Kingdom Pound).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BRUNEI</pattern><template>Brunei Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BRUNEI *</pattern><template>Brunei Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BULGARIA</pattern><template>Lev.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BURKINA FASO</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BURMA</pattern><template>Kyat.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BURUNDI</pattern><template>Burundi Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF BYELORUSSIA</pattern><template>Belarussian Rouble (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CAMBODIA</pattern><template>Riel.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CAMEROON</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CANADA</pattern><template>Canadian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CAPE VERDE</pattern><template>Escudo Caboverdiano.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CAYMAN ISLANDS</pattern><template>Cayman Islands Dollar. </template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CENTRAL AFRICAN *</pattern><template>Franc de la Communaute financiere africaine. </template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CHAD</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CHILE</pattern><template>Unidades de Fomento and Chilean Peso.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CHINA</pattern><template>Yuan Renminbi.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CHRISTMAS ISLAND</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF COCOS ISLANDS</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF COLOMBIA</pattern><template>Colombian Peso.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF COMOROS</pattern><template>Comorian Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CONGO</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF COOK ISLANDS</pattern><template>New Zealand Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF COSTA RICA</pattern><template>Costa Rican Colon.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF COTE D IVOIRE</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CROATIA</pattern><template>Kuna and Croatian Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CUBA</pattern><template>Cuban Peso.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CYPRUS</pattern><template>Cypriot Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CZECH REPUBLIC</pattern><template>Czech Koruna.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF CZECHOSOLVAKIA</pattern><template>Czech Koruna.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF DENMARK</pattern><template>Danish Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF DJIBOUTI</pattern><template>Djibouti Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF DOMINICAN REPUBLIC</pattern><template>Dominican Republic Peso.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF DOMINICA</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF EAST TIMOR</pattern><template>Timorian Escudo.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ECUADOR</pattern><template>U.S. Dollar (superceded Sucre in 2000).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF EGYPT</pattern><template>Egytian Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF EL SALVADOR</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ENGLAND</pattern><template>British Pound Sterling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF EQUATORIAL GUINEA</pattern><template>Franc de la Communaute financiere africaine and Ekwele.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ERITREA</pattern><template>Eritreian Nakfa, Ethiopian Birr.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ESTONIA</pattern><template>Kroon.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ETHIOPIA</pattern><template>Birr.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF EUROPEAN COMMUNITY</pattern><template>Euro (formerly known as the ECU).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FALKLAND ISLANDS</pattern><template>Falkland Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE FALKLAND ISLANDS</pattern><template>Falkland Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE FALKLANDS</pattern><template>Falkland Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MALVINAS</pattern><template>Falkland Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE MALVINAS</pattern><template>Falkland Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FAROE ISLANDS</pattern><template>Danish Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FIJI</pattern><template>Fiji Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FINLAND</pattern><template>Euro (Finnish Markka was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FRANCE</pattern><template>Euro (French Franc was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FRENCH GUIANA</pattern><template>Euro (French Franc was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF FRENCH POLYNESIA</pattern><template>Franc des Comptoirs francais du Pacifique.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GABON</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GAMBIA</pattern><template>Dalasi.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GEORGIA</pattern><template>Lari (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GERMANY</pattern><template>Euro (Deutsche Mark was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GHANA</pattern><template>Cedi.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GIBRALTAR</pattern><template>Gibraltar Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GREECE</pattern><template>Euro (Greek Drachma was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GREENLAND</pattern><template>Danish Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GRENADA</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GUADELOUPE</pattern><template>Euro.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GUAM</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GUATEMALA</pattern><template>Quetzal.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GUINEA BISSAU</pattern><template>Guinea-Bissau Peso and Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GUINEA</pattern><template>Guinea Syli (also known as Guinea Franc).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF GUYANA</pattern><template>Guyana Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HAITI</pattern><template>Gourde.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HAWAII</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HEARD * MCDONALD ISLANDS</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HOLLAND</pattern><template>Euro (Dutch Guilder was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HONDURAS</pattern><template>Lempira.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HONG KONG</pattern><template>Hong Kong Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF HUNGARY</pattern><template>Forint.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ICELAND</pattern><template>Icelandic Krona.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF INDIA</pattern><template>Indian Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF INDONESIA</pattern><template>Rupiah.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF IRAN</pattern><template>Iranian Rial.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF IRAQ</pattern><template>Iraqi Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF IRELAND</pattern><template>Euro (Irish Pound was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ISRAEL</pattern><template>Shekel.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ITALY</pattern><template>Euro (Italian Lira was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF IVORY COAST</pattern><template>Franc de la Communaute financiere africaine.</template></category> 
+<category><pattern>WHAT IS THE CURRENCY OF JAMAICA</pattern><template>Jamaican Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF JAPAN</pattern><template>Yen.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF JORDAN</pattern><template>Jordanian Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF KAZAKSTAN</pattern><template>Tenge (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF KENYA</pattern><template>Kenyan Shilling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF KIRIBATI</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NORTH KOREA</pattern><template>North Korean Won.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF KOREA</pattern><template>North Korean Won and South Korean Won.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF KUWAIT</pattern><template>Kuwaiti Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF KYRGYZSTAN</pattern><template>Kyrgyzstani Som.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LAO</pattern><template>Kip.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LAOS</pattern><template>Kip.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LATVIA</pattern><template>Lats.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LEBANON</pattern><template>Lebanese Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LESOTHO</pattern><template>Loti, Maloti and South African Rand.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LIBERIA</pattern><template>Liberian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LIBYA</pattern><template>Libyan Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LIBYAN *</pattern><template>Libyan Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LIECHTENSTEIN</pattern><template>Swiss Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LITHUANIA</pattern><template>Litas.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF LUXEMBOURG</pattern><template>Euro (Luxembourg Franc was formerly in use).</template></category> 
+<category><pattern>WHAT IS THE CURRENCY OF MACAU</pattern><template>Pataca.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MACAO</pattern><template>Pataca.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MACEDONIA</pattern><template>Macedonian Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MADAGASCAR</pattern><template>Malagasy Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MALAWI</pattern><template>Malawian Kwacha.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MALAYSIA</pattern><template>Ringgit (Malaysian Dollar).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MALDIVES</pattern><template>Rufiyaa.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MALI</pattern><template>Franc de la Communaute financiere africaine and Malian Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MALTA</pattern><template>Maltese Lira (Maltese Pound formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MARSHALL ISLANDS</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MARTINIQUE</pattern><template>Euro.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MAURITANIA</pattern><template>Ouguiya.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MAURITIUS</pattern><template>Mauritius Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MAYOTTE</pattern><template>Euro.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MEXICO</pattern><template>Mexican New Peso (replacement for Mexican Peso).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MICRONESIA</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MOLDOVA</pattern><template>Moldovian Leu.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MONACO</pattern><template>Euro (French Franc was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MONGOLIA</pattern><template>Tugrik.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MONTSERRAT</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MOROCCO</pattern><template>Moroccan Dirham.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MOZAMBIQUE</pattern><template>Metical.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF MYANMAR</pattern><template>Kyat.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NAMIBIA</pattern><template>Namibian Dollar and South African Rand.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NAURU</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NEPAL</pattern><template>Nepalese Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NETHERLANDS ANTILLES</pattern><template>Netherlands Antilles Guilder (Florin).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NETHERLANDS</pattern><template>Euro (Dutch Guilder was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NEW CALEDONIA</pattern><template>Franc des Comptoirs francais du Pacifique.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NEW ZEALAND</pattern><template>New Zealand Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NICARAGUA</pattern><template>Cordoba.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NIGERIA</pattern><template>Naira.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NIGER</pattern><template>West African Franc and Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NIUE</pattern><template>New Zealand Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NORFOLK ISLAND</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NORTHERN MARIANA *</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NORTH KOREA</pattern><template>North Korean Won.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF NORWAY</pattern><template>Norwegian Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF OMAN</pattern><template>Rial Omani.</template></category>
+<category><pattern>WHAT IS THE CURRENCY OF PAKISTAN</pattern><template>Pakistani Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PALAU</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PANAMA</pattern><template>Balboa and U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PAPUA NEW GUINEA</pattern><template>Kina.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PARAGUAY</pattern><template>Guarani.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PERU</pattern><template>Inti and New Sol (New Sol replaced Sol).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PHILIPPINES</pattern><template>Philippines Peso.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PITCAIRN ISLANDS</pattern><template>New Zealand Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF POLAND</pattern><template>New Zloty (replacement for Zloty).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PORTUGAL</pattern><template>Euro (Potuguese Escudo was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF PUERTO RICO</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF QATAR</pattern><template>Qatari Riyal.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF REUNION</pattern><template>Euro.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ROMANIA</pattern><template>Romanian Leu.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF RUSSIA</pattern><template>Russian Federation Rouble.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF RWANDA</pattern><template>Rwanda Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ST *</pattern><template><srai>What is the currency of Saint<star/></srai></template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAINT KITTS AND NEVIS</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAINT LUCIA</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAINT VINCENT *</pattern><template>East Caribbean Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAMOA</pattern><template>Tala.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAN MARINO</pattern><template>Euro.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAO TOME *</pattern><template>Dobra.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAUDIA ARABIA</pattern><template>Saudi Riyal.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SAUDI ARABIA</pattern><template>Saudi Riyal.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SENEGAL</pattern><template>West African Franc and Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SERBIA *</pattern><template>Serbian Dinar (Serbia), Euro (Montenegro), Euro (Kosovo and Metohia).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SEYCHELLES</pattern><template>Seychelles Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SIERRA LEONE</pattern><template>Leone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SINGAPORE</pattern><template>Singapore Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SLOVAKIA</pattern><template>Slovak Koruna.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SLOVENIA</pattern><template>Tolar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SOLOMON ISLANDS</pattern><template>Solomon Islands Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SOMALIA</pattern><template>Somali Shilling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SOUTH AFRICA</pattern><template>Rand.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SOUTH GEORGIA *</pattern><template>Pound Sterling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SOUTH KOREA</pattern><template>South Korean Won.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SPAIN</pattern><template>Euro (Spanish Peseta was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SRI LANKA</pattern><template>Sri Lankan Rupee.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SUDAN</pattern><template>Sudanese Pound and Sudanese Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SURINAME</pattern><template>Surinam Guilder (also known as Florin).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SVALBARD</pattern><template>Norwegian Krone.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SWAZILAND</pattern><template>Lilangeni.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SWEDEN</pattern><template>Swedish Krona.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SWITZERLAND</pattern><template>Swiss Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF SYRIA</pattern><template>Syrian Pound.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TAIWAN</pattern><template>New Taiwan Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TAJIKISTAN</pattern><template>Tajik Rouble (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TANZANIA</pattern><template>Tanzanian Shilling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THAILAND</pattern><template>Baht.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE BAHAMAS</pattern><template><srai>what is the currency of Bahamas</srai></template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TIMOR</pattern><template><srai>what is the currency of East Timor</srai></template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE GAMBIA</pattern><template>Dalasi.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE NETHERLANDS</pattern><template>Euro (Dutch Guilder was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE UNITED STATES</pattern><template>The U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF THE US</pattern><template>The U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TOGO</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TOKELAU</pattern><template>New Zealand Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TONGA</pattern><template>Pa'anga.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TRINIDAD AND TOBAGO</pattern><template>Trinidad and Tobago Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TUNISIA</pattern><template>Tunisian Dinar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TURKEY</pattern><template>Turkish Lira.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TURKMENISTAN</pattern><template>Turkmenistani Manat.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TURKS *</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF TUVALU</pattern><template>Australian Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UGANDA</pattern><template>Ugandan Shilling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UKRAINE</pattern><template>Hryvna and Karbovanet.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UNITED ARAB *</pattern><template>UAE Dirham.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UNION OF SOVIET *</pattern><template>USSR Rouble.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UNITED KINGDOM</pattern><template>Pound Sterling.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UNITED STATES</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF URUGUAY</pattern><template>Uruguayan New Peso (replacement for Uruguayan Peso).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF USA</pattern><template>U.S. Dollar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF UZBEKISTAN</pattern><template>Uzbekistani Som (Russian Rouble was formerly in use).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF VANUATU</pattern><template>Vatu.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF VATICAN *</pattern><template>Nothing.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF VENEZUELA</pattern><template>Bolivar.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF VIETNAM</pattern><template>Dong.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF VIRGIN ISLANDS</pattern><template>US Dollar (Pound Sterling and East Caribbean Dollar also circulate).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF WALLIS *</pattern><template>Franc des Comptoirs francais du Pacifique.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF WEST AFRICA</pattern><template>West African Franc.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF WESTERN SAHARA</pattern><template>Moroccan Dirham and Mauritanian Ouguiya.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF WESTERN SAMOA</pattern><template>Tala.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF YEMEN</pattern><template>Riyal (Dinar was used in South Yemen).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF YUGOSLAVIA</pattern><template>Serbian Dinar (Serbia), Euro (Montenegro), Euro (Kosovo and Metohia).</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ZAIRE</pattern><template>Franc de la Communaute financiere africaine.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ZAMBIA</pattern><template>Zambian Kwacha.</template></category>  
+<category><pattern>WHAT IS THE CURRENCY OF ZIMBABWE</pattern><template>Zimbabwe Dollar.</template></category>
+
+</aiml>

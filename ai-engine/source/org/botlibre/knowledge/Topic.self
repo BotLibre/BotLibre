@@ -36,6 +36,8 @@ state Topic {
 	pattern "whats the topic" template Template("The current topic is {conversation.topic}.");
 	pattern "whats the topic" template "There is no current topic to our conversation, what would you like to talk about?";
 
+	pattern "details" template detailsResponse();
+	
 	pattern "(tell) (me) more (about) (this it)" template moreResponse();
 	pattern "(tell) (me) more" template moreResponse();
 	
@@ -53,6 +55,14 @@ state Topic {
 		} else {
 			more;
 		}
+	}
+	
+	function detailsResponse() {
+		topic = conversation.topic;
+		if (topic == null) {
+			return null;
+		}
+		return Language.details(topic);
 	}
 }
 

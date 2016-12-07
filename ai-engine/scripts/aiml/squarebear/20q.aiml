@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+	<!-- Free software (c) 2001-2003 ALICE A.I. Foundation.   -->
+	<!-- This program is open source code released under -->
+	<!-- the terms of the GNU General Public License     -->
+	<!-- as published by the Free Software Foundation.   -->
+	<!-- Complies with AIML 1.0 Tag Set Specification -->
+	<!-- as adopted by the ALICE A.I. Foundation.  -->
+	<!-- 20q.aiml written by Square Bear -->
+
+<category><pattern>20 Q</pattern><template><srai>20Q</srai></template></category>
+<category><pattern>TWENTY QUESTIONS</pattern><template><srai>20Q</srai></template></category>
+<category><pattern>20 QUESTIONS</pattern><template><srai>20Q</srai></template></category>
+<category><pattern>_ TWENTY QUESTIONS</pattern><template><srai>20Q</srai></template></category>
+<category><pattern>_ 20 QUESTIONS</pattern><template><srai>20Q</srai></template></category>
+<category><pattern>_ TWENTY QUESTIONS *</pattern><template><srai>20Q</srai></template></category>
+<category><pattern>_ 20 QUESTIONS *</pattern><template><srai>20Q</srai></template></category>
+
+<category>
+<pattern>20Q</pattern>
+<template>
+<think>
+<set name="qnum">1</set>
+</think>
+Ok let's play 20 questions. I will think of something animal, vegetable or mineral and you have to guess what it is by asking me "yes" or "no" questions.<br/><br/>You can ask up to 20 questions before it's game over.<br/><br/>If you give up, say "I GIVE UP" and I'll tell you what I was thinking of.<br/><br/>Type "START" to play 20 questions.
+</template>
+</category>
+
+<category>
+<pattern>START</pattern>
+<that>TYPE START TO PLAY 20 QUESTIONS</that>
+<template>
+<think>
+<set name="topic">20Q</set>
+<random>
+<li><set name="20qanswer">a horse</set><set name="20qcategory">an animal</set></li>
+<li><set name="20qanswer">an elephant</set><set name="20qcategory">an animal</set></li>
+<li><set name="20qanswer">a cat</set><set name="20qcategory">an animal</set></li>
+<li><set name="20qanswer">a fish</set><set name="20qcategory">an animal</set></li>
+<li><set name="20qanswer">a lion</set><set name="20qcategory">an animal</set></li>
+
+<li><set name="20qanswer">a rose</set><set name="20qcategory">a vegetable</set></li>
+<li><set name="20qanswer">a carrot</set><set name="20qcategory">a vegetable</set></li>
+<li><set name="20qanswer">a lettuce</set><set name="20qcategory">a vegetable</set></li>
+<li><set name="20qanswer">an apple</set><set name="20qcategory">a vegetable</set></li>
+<li><set name="20qanswer">a pickled onion</set><set name="20qcategory">a vegetable</set></li>
+
+<li><set name="20qanswer">a rock</set><set name="20qcategory">a mineral</set></li>
+<li><set name="20qanswer">a lump of coal</set><set name="20qcategory">a mineral</set></li>
+<li><set name="20qanswer">a brick</set><set name="20qcategory">a mineral</set></li>
+<li><set name="20qanswer">concrete</set><set name="20qcategory">a mineral</set></li>
+<li><set name="20qanswer">a piece of chalk</set><set name="20qcategory">a mineral</set></li>
+</random>
+
+</think>
+Ok, the object I am thinking of is classed as <get name="20qcategory"/>. Please ask your first question.
+</template>
+</category>
+
+<topic name="20Q"> 
+<category> 
+<pattern>_</pattern>
+<template>
+<think>
+<set name="question"><star/></set>
+<set name="topic"></set>
+<set name="qsubject">NO SUBJECT</set>
+</think>
+	<condition name="question"> 
+		<li value="IS IT A *">No, sorry. Ask me another question about it.<think><set name="topic">20Q</set></think></li>
+		<li value="IS IT AN *">No, sorry. Ask me another question about it.<think><set name="topic">20Q</set></think></li>
+		<li value="IS IT *"><think><set name="qsubject">is</set></think><srai>20Q RANDOM</srai></li>
+		<li value="DOES IT *"><think><set name="qsubject">does</set></think><srai>20Q RANDOM</srai></li>
+		<li value="HAS IT *"><think><set name="qsubject">has</set></think><srai>20Q RANDOM</srai></li>
+		<li value="WAS IT *"><think><set name="qsubject">was</set></think><srai>20Q RANDOM</srai></li>
+		<li value="WILL IT *"><think><set name="qsubject">will</set></think><srai>20Q RANDOM</srai></li>
+		<li value="CAN IT *"><think><set name="qsubject">can</set></think><srai>20Q RANDOM</srai></li>
+		<li value="IS *"><srai>20Q RANDOM</srai></li>
+		<li value="COULD *"><srai>20Q RANDOM</srai></li>
+		<li value="WOULD *"><srai>20Q RANDOM</srai></li>
+		<li value="SHOULD *"><srai>20Q RANDOM</srai></li>
+		<li value="DOES *"><srai>20Q RANDOM</srai></li>
+		<li value="ARE *"><srai>20Q RANDOM</srai></li>
+		<li value="HAS *"><srai>20Q RANDOM</srai></li>
+		<li value="WAS *"><srai>20Q RANDOM</srai></li>
+		<li value="WILL *"><srai>20Q RANDOM</srai></li>
+		<li value="DO *"><srai>20Q RANDOM</srai></li>
+		<li value="CAN *"><srai>20Q RANDOM</srai></li>
+		<li value="I GIVE UP"><srai>20Q GIVE UP</srai></li>
+		<li value="I GIVE IN"><srai>20Q GIVE UP</srai></li>
+		<li value="I DO NOT KNOW"><srai>20Q GIVE UP</srai></li>
+		<li value="WHAT IS IT"><srai>20Q GIVE UP</srai></li>
+		<li>That's not a "yes" or "no" question. I can only answer yes or no to your questions. Ask me another question or say "I GIVE UP". If you want to guess what it is, say "IS IT A" and then your guess.<think><set name="topic">20Q</set></think></li>
+	</condition>
+</template>
+</category>
+</topic>
+
+<category>
+<pattern>20Q RANDOM</pattern>
+<template>
+	<condition name="qsubject"> 
+		<li value="NO SUBJECT"><random><li>Yes.</li><li>No.</li></random></li>
+		<li><random><li>Yes it <get name="qsubject"/>.</li><li>No it <get name="qsubject"/> not.</li></random></li>
+	</condition>
+
+<br/><br/>
+<condition name="qnum">
+<li value="1">What is your second question?</li>
+<li value="2">What is your third question?</li>
+<li value="3">Please ask your 4th question.</li>
+<li value="4">What is your 5th question?</li>
+<li value="5">Please ask your sixth question.</li>
+<li value="6">What is your 7th question?</li>
+<li value="7">Please ask your 8th question.</li>
+<li value="8">Please ask your ninth question.</li>
+<li value="9">Half way there now. What is your 10th question?</li>
+<li value="10">What is your 11th question please?</li>
+<li value="11">What is your twelfth question?</li>
+<li value="12">What is your thirteenth question?</li>
+<li value="13">Please ask your 14th question.</li>
+<li value="14">What is your 15th question?</li>
+<li value="15">Please ask your sixteenth question.</li>
+<li value="16">What is your 17th question?</li>
+<li value="17">Please ask your 18th question.</li>
+<li value="18">Please ask your nineteenth question.</li>
+<li value="19">What is your 20th and final question?</li>
+</condition>
+<think>
+<srai>INCREASE QNUM</srai>
+<set name="topic">20Q</set>
+</think>
+<condition name="qnum">
+	<li value="FINISHED"><think><set name="topic"></set></think><srai>ALL 20Q ASKED</srai></li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>INCREASE QNUM</pattern>
+<template>
+<think>
+<condition name="qnum">
+<li value="1"><set name="qnum">2</set></li>
+<li value="2"><set name="qnum">3</set></li>
+<li value="3"><set name="qnum">4</set></li>
+<li value="4"><set name="qnum">5</set></li>
+<li value="5"><set name="qnum">6</set></li>
+<li value="6"><set name="qnum">7</set></li>
+<li value="7"><set name="qnum">8</set></li>
+<li value="8"><set name="qnum">9</set></li>
+<li value="9"><set name="qnum">10</set></li>
+<li value="10"><set name="qnum">11</set></li>
+<li value="11"><set name="qnum">12</set></li>
+<li value="12"><set name="qnum">13</set></li>
+<li value="13"><set name="qnum">14</set></li>
+<li value="14"><set name="qnum">15</set></li>
+<li value="15"><set name="qnum">16</set></li>
+<li value="16"><set name="qnum">17</set></li>
+<li value="17"><set name="qnum">18</set></li>
+<li value="18"><set name="qnum">19</set></li>
+<li value="19"><set name="qnum">20</set></li>
+<li value="20"><set name="qnum">FINISHED</set></li>
+</condition>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>20Q GIVE UP</pattern>
+<template>
+You give up? I was thinking of <get name="20qanswer"/>!
+</template>
+</category>
+
+<category>
+<pattern>ALL 20Q ASKED</pattern>
+<template>
+Sorry, you have asked 20 questions. I was thinking of <get name="20qanswer"/>!
+</template>
+</category>
+
+
+</aiml>

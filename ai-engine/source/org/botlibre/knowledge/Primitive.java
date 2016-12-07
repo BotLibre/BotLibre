@@ -211,6 +211,7 @@ public class Primitive implements Serializable {
 	public static final Primitive CASESENSITVE = new Primitive("casesensitive");
 	public static final Primitive LEARN = new Primitive("learn");
 	public static final Primitive EVAL = new Primitive("eval");
+	public static final Primitive EVALCOPY = new Primitive("evalcopy");
 	
 	public static final Primitive THE = new Primitive("the");
 	public static final Primitive A = new Primitive("a");	
@@ -226,6 +227,7 @@ public class Primitive implements Serializable {
 	public static final Primitive NOREPEAT = new Primitive("norepeat");
 	public static final Primitive ONREPEAT = new Primitive("onrepeat");
 	public static final Primitive LABEL = new Primitive("label");
+	public static final Primitive COMMAND = new Primitive("command");
 	
 	public static final Primitive GREETING = new Primitive("greeting");
 	public static final Primitive ENABLED = new Primitive("enabled");
@@ -332,6 +334,7 @@ public class Primitive implements Serializable {
 	public static final Primitive DENORMALIZE = new Primitive("denormalize");
 	public static final Primitive THINK = new Primitive("think");
 	public static final Primitive ELEMENT = new Primitive("element");
+	public static final Primitive DATA = new Primitive("data");
 
 	// AIML specific.
 	public static final Primitive AIML = new Primitive("aiml");
@@ -348,12 +351,18 @@ public class Primitive implements Serializable {
 	public static final Primitive DEFAULT = new Primitive("default");
 	
 	public static final Primitive PANNOUS = new Primitive("pannous");
+	public static final Primitive FORGE = new Primitive("forge");
 	public static final Primitive WIKIDATA = new Primitive("wikidata");
 	public static final Primitive FREEBASE = new Primitive("freebase");
 	public static final Primitive BOTLIBRE = new Primitive("botlibre");
 	public static final Primitive WIKTIONARY = new Primitive("wiktionary");
 	public static final Primitive BOTLIBRETWITTER = new Primitive("botlibretwitter");
 	public static final Primitive PAPHUS = new Primitive("paphus");
+
+	public static final Primitive XML = new Primitive("xml");
+	public static final Primitive JSON = new Primitive("json");
+	public static final Primitive HTML = new Primitive("html");
+	public static final Primitive ROOT = new Primitive("root");
 	
 	// Learning
 	public static final Primitive FORMULA = new Primitive("formula");
@@ -445,12 +454,15 @@ public class Primitive implements Serializable {
 	public static final Primitive TWITTERADDRESS = new Primitive("twitteraddress");
 	public static final Primitive TWEET = new Primitive("tweet");
 	public static final Primitive DIRECTMESSAGE = new Primitive("directmessage");
+	public static final Primitive SMS = new Primitive("sms");
+	public static final Primitive FACEBOOKMESSENGER = new Primitive("facebookmessenger");
 	public static final Primitive TREND = new Primitive("trend");
 	public static final Primitive LASTMENTION = new Primitive("lastmention");
 	public static final Primitive LASTSEARCH = new Primitive("lastsearch");
 	public static final Primitive LASTAUTOFOLLOWSEARCH = new Primitive("lastautofollowsearch");
 	public static final Primitive LASTRSS = new Primitive("lastrss");
 	public static final Primitive LASTTWEET = new Primitive("lasttweet");
+	public static final Primitive LASTLEARN = new Primitive("lastlearn");
 	public static final Primitive LASTTIMELINE = new Primitive("lasttimeline");
 	public static final Primitive LASTNEWSFEED = new Primitive("lastnewsfeed");
 	public static final Primitive LASTDIRECTMESSAGE = new Primitive("lastdirectmessage");
@@ -512,6 +524,9 @@ public class Primitive implements Serializable {
 	public static final Primitive LOVE = new Primitive(Love.class.getName());
 	public static final Primitive FEAR = new Primitive(Fear.class.getName());
 	public static final Primitive HUMOR = new Primitive(Humor.class.getName());
+
+	// Vision
+	public static final Primitive IMAGE = new Primitive("image");
 	
 	// Avatar
 	public static final Primitive POSE = new Primitive("pose");	
@@ -520,6 +535,9 @@ public class Primitive implements Serializable {
 	// IRC
 	public static final Primitive NICK = new Primitive("nick");
 	public static final Primitive WHISPER = new Primitive("whisper");
+	
+	//Slack
+	public static final Primitive SLACK = new Primitive("slack");
 	
 	private String identity;
   

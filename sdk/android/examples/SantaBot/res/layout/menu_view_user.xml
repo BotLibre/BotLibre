@@ -8,6 +8,6 @@
           android:title="Edit User" />
     
     <item android:id="@+id/menuFlag"
-          android:title="Flag User" />    
+          android:title="Flag User" />
      
 </menu>

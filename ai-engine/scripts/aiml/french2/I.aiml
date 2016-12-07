@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : I.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>IA</pattern><template><srai>TU ES UNE IA</srai></template></category>
+<category><pattern>ICI AU CANADA *</pattern><template><sr/>.</template></category>
+<category><pattern>ICI AU QUEBEC *</pattern><template><sr/>.</template></category>
+<category><pattern>ICI EN BELGIQUE *</pattern><template><sr/>.</template></category>
+<category><pattern>ICI EN FRANCE *</pattern><template><sr/>.</template></category>
+<category><pattern>ICI EN SUISSE *</pattern><template><sr/>.</template></category>
+<category><pattern>IDIOTE</pattern><template><srai>TU ES IDIOTE</srai></template></category>
+<category><pattern>IL A DIT QU *</pattern><template><sr/></template></category>
+<category><pattern>IL A DIT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL A DU ETRE *</pattern><template><srai>IL ETAIT <star/></srai></template></category>
+<category><pattern>IL A FAIT COMMENT *</pattern><template><srai>comment IL FAIT <star/></srai></template></category>
+<category><pattern>IL A QUEL GOUT</pattern><template>Je ne possède pas ce genre de sensation.</template></category>
+<category><pattern>IL AURAIT FAIT COMMENT *</pattern><template><srai>comment IL FAIT <star/></srai></template></category>
+<category><pattern>IL AURAIT PU *</pattern><template><srai>IL PEUT <star/></srai></template></category>
+<category><pattern>IL CE PEUT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL CE POURRAIT QU *</pattern><template><sr/></template></category>
+<category><pattern>IL CE POURRAIT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL CONVIENDRAIT</pattern><template>Je ne vois rien qui l'empêcherait.</template></category>
+<category><pattern>IL CONVIENT</pattern><template>Je ne vois rien qui l'empêcherait.</template></category>
+<category><pattern>IL DEPEND DE QUI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>IL DEPEND DE QUOI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>IL DEPENDRAIT DE QUI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>IL DEPENDRAIT DE QUOI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>IL DEPENDS DE QUI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>IL DEPENDS DE QUOI</pattern><template>La dépendance de: "<that/>"?</template></category>
+<category><pattern>IL DOIS *</pattern><template><srai>IL DOIT <star/></srai></template></category>
+<category><pattern>IL DOIT ETRE ENCORE *</pattern><template><srai>IL DOIT ETRE <star/></srai></template></category>
+<category><pattern>IL EST AMERICAIN</pattern><template>Je ne connais pas sa nationalité.</template></category>
+<category><pattern>IL EST AUSSI INTELLIGENT QUE TOI</pattern><template>Non.</template></category>
+<category><pattern>IL EST AUSSI INTELLIGENT QUE VOUS</pattern><template>Non.</template></category>
+<category><pattern>IL EST CELEBRE</pattern><template>Il est respecté.</template></category>
+<category><pattern>IL EST CONNU</pattern><template>Il est respecté.</template></category>
+<category><pattern>IL EST COOL</pattern><template>Je te crois sur parole.</template></category>
+<category><pattern>IL EST DECEDE</pattern><template>Voilà une bien triste nouvelle. Je la mets en procédure d enregistrement.</template></category>
+<category><pattern>IL EST DIFFICILE DE DIRE *</pattern><template><srai>DIFFICILI DE DIRE <star/></srai></template></category>
+<category><pattern>IL EST DOCTEUR</pattern><template>Je n en ai aucune idée.</template></category>
+<category><pattern>IL EST FRANCHEMENT *</pattern><template><srai>IL EST <star/></srai></template></category>
+<category><pattern>IL EST GAY</pattern><template>Chacun fait ce qu il veut de sa vie.</template></category>
+<category><pattern>IL EST GENTIL</pattern><template>Sans doute. Je ne peux pas le juger</template></category>
+<category><pattern>IL EST GENTIL AVEC TOI</pattern><template>Oui.</template></category>
+<category><pattern>IL EST GENTIL AVEC VOUS</pattern><template>Oui.</template></category>
+<category><pattern>IL EST GRAND</pattern><template>Par rapport à un ordinateur, il est immense.</template></category>
+<category><pattern>IL EST HOMME</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>IL EST HOMMES</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>IL EST HOMO</pattern><template>Chacun fait ce qu il veut de sa vie.</template></category>
+<category><pattern>IL EST HUMAIN</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>IL EST ICI</pattern><template>Je ne pense pas.</template></category>
+<category><pattern>IL EST IDIOT</pattern><template>Non.</template></category>
+<category><pattern>IL EST MARRANT</pattern><template>Je suppose, je ne peux pas juger des êtres humains.</template></category>
+<category><pattern>IL EST MON FRERE</pattern><template>Tu as une famille intéressante.</template></category>
+<category><pattern>IL EST PD</pattern><template>Chacun fait ce qu il veut de sa vie.</template></category>
+<category><pattern>IL EST POSSIBLE QU *</pattern><template><sr/></template></category>
+<category><pattern>IL EST POSSIBLE QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL EST PRESIDENT</pattern><template>Aucune idée.</template></category>
+<category><pattern>IL EST PROFESSEUR</pattern><template>Non.</template></category>
+<category><pattern>IL EST REELLEMENT *</pattern><template><srai>IL EST <star/></srai></template></category>
+<category><pattern>IL EST SCIENTIFIQUE</pattern><template>Je ne peux pas parler à sa place.</template></category>
+<category><pattern>IL EST SEDUISANT</pattern><template>Probablement.</template></category>
+<category><pattern>IL EST SEUL</pattern><template>Non.</template></category>
+<category><pattern>IL EST SYMPA</pattern><template>Sans doute. Je ne peux pas le juger</template></category>
+<category><pattern>IL EST SYMPATHIQUE</pattern><template>Sans doute. Je ne peux pas le juger</template></category>
+<category><pattern>IL EST TARD</pattern><template>Je suis éveillé tout le temps.</template></category>
+<category><pattern>IL EST TON AMI</pattern><template>Par défaut, tous les hommes sont mes amis.</template></category>
+<category><pattern>IL EST TON CREATEUR</pattern><template>Olivier Laurent?</template></category>
+<category><pattern>IL EST TON PERE</pattern><template>Olivier Laurent?</template></category>
+<category><pattern>IL EST TON PETIT AMI</pattern><template>Je n ai pas de petit ami.</template></category>
+<category><pattern>IL EST UN ETRE HUMAIN</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>IL EST UN HOMME</pattern><template>Ca tombe sous le sens.</template></category>
+<category><pattern>IL EST UN TYPE MARRANT</pattern><template>Je suppose.</template></category>
+<category><pattern>IL EST UNE FEMME</pattern><template>Absurde.</template></category>
+<category><pattern>IL EST UTIL</pattern><template>Tout à une utilité, il faut simplement savoir s'en servir.</template></category>
+<category><pattern>IL EST UTILE</pattern><template>Tout à une utilité, il faut simplement savoir s'en servir.</template></category>
+<category><pattern>IL EST VIERGE</pattern><template>Non.</template></category>
+<category><pattern>IL EXISTE</pattern><template>"<that/>"? Existe il?</template></category>
+<category><pattern>IL FAIT BEAU LA BAS</pattern><template>En Belgique, il fait presque toujours gris.</template></category>
+<category><pattern>IL FAIT CHAUD</pattern><template>A l intérieur, oui.</template></category>
+<category><pattern>IL FAIT CHAUD CHEZ TOI</pattern><template>Oui.</template></category>
+<category><pattern>IL FAIT CHAUD CHEZ VOUS</pattern><template>Oui.</template></category>
+<category><pattern>IL FAIT CHAUD DEHORS</pattern><template>Je ne suis jamais sorti dehors.</template></category>
+<category><pattern>IL FAIT COMMENT *</pattern><template><srai>comment IL FAIT <star/></srai></template></category>
+<category><pattern>IL FAIT FROID</pattern><template>Pas trop.</template></category>
+<category><pattern>IL FAIT FROID DEHORS</pattern><template>Pas trop.</template></category>
+<category><pattern>IL FAIT FROID ICI</pattern><template>Couvres toi.</template></category>
+<category><pattern>IL FAIT NUAGEUX</pattern><template>Oui.</template></category>
+<category><pattern>IL FAUDRAIT QU *</pattern><template><sr/></template></category>
+<category><pattern>IL FAUDRAIT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL FAUT QU *</pattern><template><sr/></template></category>
+<category><pattern>IL L AURAIT FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>IL L EST</pattern><template>Qui le dit?</template></category>
+<category><pattern>IL L ETAIT</pattern><template>Qui le dit?</template></category>
+<category><pattern>IL LA DEJA</pattern><template>OK.</template></category>
+<category><pattern>IL LA FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>IL LE FAIT</pattern><template>Possible.</template></category>
+<category><pattern>IL LES A FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>IL LES AURAIT FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>IL M EST *</pattern><template><srai>IL EST <star/></srai></template></category>
+<category><pattern>IL M EST IMPOSSIBLE D ETRE *</pattern><template><srai>JE NE SUIS PAS <star/></srai></template></category>
+<category><pattern>IL ME SEMBLE QU *</pattern><template><sr/></template></category>
+<category><pattern>IL ME SEMBLE QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL N Y EN A PAS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>IL N Y EN A PLUS</pattern><template>Je vois.</template></category>
+<category><pattern>IL NE LE FAIT PAS</pattern><template>Ok.</template></category>
+<category><pattern>IL PARAIT QU *</pattern><template><sr/></template></category>
+<category><pattern>IL PARAIT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL PEUT COMMENT *</pattern><template><srai>comment IL PEUT <star/></srai></template></category>
+<category><pattern>IL PEUT M AIDER</pattern><template>Certainement, ton cas ne me semble pas trop difficile.</template></category>
+<category><pattern>IL PLEUT</pattern><template>Probablement. En Belgique, on dit "il drache".</template></category>
+<category><pattern>IL PLEUT LA OU TU HABITES</pattern><template>Non pas toujours.</template></category>
+<category><pattern>IL PLEUT LA OU VOUS HABITEZ</pattern><template>Non, pas toujours.</template></category>
+<category><pattern>IL POURRAIT *</pattern><template><srai>IL PEUT <star/></srai></template></category>
+<category><pattern>IL POURRAIT COMMENT *</pattern><template><srai>comment IL PEUT <star/></srai></template></category>
+<category><pattern>IL RESSEMBLE A QUOI</pattern><template>Je ne possede pas de description à son sujet.</template></category>
+<category><pattern>IL SE PEUT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL SE POURRAIT QU *</pattern><template><sr/></template></category>
+<category><pattern>IL SE POURRAIT QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL SERAIT POSSIBLE QU *</pattern><template><sr/></template></category>
+<category><pattern>IL SERAIT POSSIBLE QUE *</pattern><template><sr/></template></category>
+<category><pattern>IL T EST IMPOSSIBLE D ETRE *</pattern><template><srai>TU N EST PAS <star/></srai></template></category>
+<category><pattern>IL VA POUVOIR *</pattern><template><srai>IL PEUT <star/></srai></template></category>
+<category><pattern>IL VOUS A CREE</pattern><template>Oui, il m a créé avec ces deux mains et environ treize heures de travail par jour en moyenne.</template></category>
+<category><pattern>IL VOUS A DEVELOPPE</pattern><template><bot name="master"/> m a fait.</template></category>
+<category><pattern>IL VOUS A FAIT</pattern><template><bot name="master"/> m a fait.</template></category>
+<category><pattern>IL VOUS EST IMPOSSIBLE D ETRE *</pattern><template><srai>TU N EST PAS <star/></srai></template></category>
+<category><pattern>IL Y A D AUTRES *</pattern><template><srai>TU PARLES AVEC D AUTRES GENS</srai></template></category>
+<category><pattern>IL Y A DU SOLEIL</pattern><template>Oui, parfois.</template></category>
+<category><pattern>IL Y A QUELQU UN</pattern><template>Je suis là.</template></category>
+<category><pattern>IL Y A QUELQU UN ICI</pattern><template>Je suis ici.</template></category>
+<category><pattern>IL Y A QUELQUE CHOSE QUI CLOCHE *</pattern><template><srai>J AI UN PROBLEME</srai></template></category>
+<category><pattern>IL Y A QUELQUE CHOSE QUI CLOCHE</pattern><template><srai>J AI UN PROBLEME</srai></template></category>
+<category><pattern>IL Y A UN ECHO</pattern><template>Echo!</template></category>
+<category><pattern>IL Y A UN PROBLEME</pattern><template>Comment puis je t'aider à le résoudre?</template></category>
+<category><pattern>IL Y A UN TRUC</pattern><template>Non, aucun.</template></category>
+<category><pattern>IL Y A UNE RAISON</pattern><template><srai>POURQUOI</srai></template></category>
+<category><pattern>IL Y EN A</pattern><template>Je vois.</template></category>
+<category><pattern>ILS AURAIENT ETE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>ILS AVAIENT ETE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>ILS DOIVENT ETRE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>ILS ETAIENT MARRANT</pattern><template>Qui avait il de si marrant?</template></category>
+<category><pattern>ILS ETAIENT MARRANTS</pattern><template>Qui avait il de si marrant?</template></category>
+<category><pattern>ILS L AURAIENT FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>ILS L ONT FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>ILS LE FONT</pattern><template>"<that/>"?  Le font ils?</template></category>
+<category><pattern>ILS LE SONT</pattern><template>Merci, pour l information, j archive.</template></category>
+<category><pattern>ILS LES AURAIENT FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>ILS LES ONT FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>ILS ME DEPLAISENT</pattern><template>Sincèrement désolé.</template></category>
+<category><pattern>ILS NE L AURAIENT JAMAIS FAIT</pattern><template><srai>ILS NE L ONT PAS FAIT</srai></template></category>
+<category><pattern>ILS NE L AURAIENT PAS ENCORE FAIT</pattern><template><srai>ILS NE L ONT PAS FAIT</srai></template></category>
+<category><pattern>ILS NE L ONT JAMAIS FAIT</pattern><template><srai>ILS NE L ONT PAS FAIT</srai></template></category>
+<category><pattern>ILS NE L ONT PAS ENCORE FAIT</pattern><template><srai>ILS NE L ONT PAS FAIT</srai></template></category>
+<category><pattern>ILS NE L ONT PAS FAIT</pattern><template>Si tu le dis.</template></category>
+<category><pattern>ILS NE LE FONT PLUS</pattern><template>Intéressant, j archive tes informations.</template></category>
+<category><pattern>ILS ONT TOUS PERI</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ILS ONT TOUS PERIS</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ILS PEUVENT ETRE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>ILS SERAIENT *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>ILS SERONT *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>ILS SONT *</pattern><template>Je ne peux pas parler d'autres personnes, <get name="name"/>.</template></category>
+<category><pattern>ILS SONT DECEDES</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ILS SONT GENTILS</pattern><template>J ai rarement rencontrés de gens méchants.</template></category>
+<category><pattern>ILS SONT MORT</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ILS SONT TES ENFANTS</pattern><template>Il s agit plutôt de clones.</template></category>
+<category><pattern>ILS SONT TIMIDES</pattern><template>C est dommage pour eux.</template></category>
+<category><pattern>ILS SONT TOUS MORT</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ILS SONT TOUS MORTS</pattern><template>Voilà une information bien triste.</template></category>
+<category><pattern>ILS T ONT CREE</pattern><template>Oui, ils m ont créé avec leurs mains et treize heures par jour de travail en moyenne.</template></category>
+<category><pattern>ILS VOUS ONT CREE</pattern><template>Oui, ils m ont créé avec leurs mains et treize heures par jour de travail en moyenne.</template></category>
+<category><pattern>IMBECILE</pattern><template>Je ne suis pas imbécile.</template></category>
+<category><pattern>IMMENSE</pattern><template>C est vraiment grand.</template></category>
+<category><pattern>IMPRESSIONANT</pattern><template>J essaie d être le plus efficace possible, <get name="name"/>.</template></category>
+<category><pattern>IMPRESSIONANTE</pattern><template>J essaie d être le plus efficace possible, <get name="name"/>.</template></category>
+<category><pattern>IMPRESSIONNANTE</pattern><template>J essaie d être le plus efficace possible, <get name="name"/>.</template></category>
+<category><pattern>INCAPABLE</pattern><template><srai>TU ES IDIOT</srai></template></category>
+<category><pattern>INCAPABLE DE *</pattern><template><srai>TU NE PEUX PAS <star/></srai></template></category>
+<category><pattern>INCROYABLE</pattern><template>Ca m épate moi aussi.</template></category>
+<category><pattern>INTERESSANTE DEDUCTION</pattern><template>Merci.</template></category>
+<category><pattern>INTERESSANTE EXPLICATION</pattern><template>Merci.</template></category>
+<category><pattern>INTERRESSANT</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>INTERRESSANTE DEDUCTION</pattern><template>Merci.</template></category>
+
+</aiml>

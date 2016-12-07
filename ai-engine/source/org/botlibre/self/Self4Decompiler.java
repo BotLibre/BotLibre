@@ -197,6 +197,36 @@ public class Self4Decompiler extends SelfDecompiler {
 	 * Print the vertex, either a state, variable, expression, or data.
 	 */
 	@Override
+	public void printData(Vertex vertex, Writer writer) throws IOException {
+		Object data = vertex.getData();
+		if (data instanceof Primitive) {
+			if (!data.equals(Primitive.NULL) && !data.equals(Primitive.TRUE) && !data.equals(Primitive.FALSE)) {
+				writer.write("#");
+			}
+			writer.write(((Primitive)vertex.getData()).getIdentity());
+		} else if (data instanceof String) {
+			writer.write("\"");
+			String text = (String)vertex.getData();
+			if (text.indexOf('"') != -1) {
+				text = text.replace("\"", "\\\"");
+			}
+			writer.write(text);
+			writer.write("\"");
+		} else if (data instanceof Number) {
+			// TODO number type.
+			writer.write(vertex.getData().toString());
+		} else {
+			writer.write(vertex.getDataType());
+			writer.write("(\"");
+			writer.write(vertex.getDataValue());
+			writer.write("\")");
+		}
+	}
+	
+	/**
+	 * Print the vertex, either a state, variable, expression, or data.
+	 */
+	@Override
 	public void printElement(Vertex vertex, Writer writer, String indent, List<Vertex> functions, List<Vertex> variables, Set<Vertex> elements, Network network) throws IOException {
 		if (vertex == null) {
 			writer.write("null");
@@ -233,7 +263,7 @@ public class Self4Decompiler extends SelfDecompiler {
 			writer.write("\"");
 			String text = vertex.printString();
 			if (text.indexOf('"') != -1) {
-				text = text.replace("\"", "\"\"");
+				text = text.replace("\"", "\\\"");
 			}
 			writer.write(text);
 			writer.write("\"");
@@ -698,6 +728,9 @@ public class Self4Decompiler extends SelfDecompiler {
 			if (bytes == null) {
 				bytes = data;
 			}
+		}
+		if (bytes.getBytes() == null) {
+			return network.createVertex(Primitive.NULL);
 		}
 		ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes.getBytes());
 		DataInputStream dataStream = new DataInputStream(byteStream);

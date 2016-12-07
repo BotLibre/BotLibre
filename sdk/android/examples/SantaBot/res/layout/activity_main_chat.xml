@@ -6,6 +6,71 @@
 	android:background="#FFFFFF"
 	android:orientation="vertical" >
 
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content" 
+            android:textSize="18sp"
+	        android:layout_margin="4sp"
+			android:text="@string/title"/>
+	
+		<Button
+			android:id="@+id/logoutButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/logout"
+			android:onClick="logout"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/viewUserButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="#eee"
+			android:onClick="viewUser"
+			android:text="" />
+	
+		<Button
+			android:id="@+id/loginButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/login"
+			android:onClick="login"
+			android:text="" />
+	    
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+		android:background="#ddd">
+    </View>
+    
 	<ImageView
 		android:id="@+id/splash"
 		android:layout_width="fill_parent"
@@ -15,61 +80,14 @@
 		android:src="@drawable/logo" />
 
           
-            <Button
-                android:id="@+id/chatButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="1sp"
-                android:background="@drawable/ok_button"
-                android:onClick="launch"
-                android:text="Chat"
-                android:textColor="@color/lgrey" />
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="1sp"
-		android:background="@color/lgrey"
-		android:orientation="horizontal" />
-
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal" >
-	
-		<Button
-			android:id="@+id/menuButton"
-			android:layout_width="42sp"
-			android:layout_height="42sp"
-			android:layout_margin="4dp"
-			android:background="@drawable/menu"
-			android:onClick="menu"
-			android:text="" />
-	
-		<Button
-			android:id="@+id/loginButton"
-			android:layout_width="42sp"
-			android:layout_height="42sp"
-			android:layout_margin="4dp"
-			android:background="@drawable/login"
-			android:onClick="login"
-			android:text="" />
-		
-		<Button
-			android:id="@+id/vewUserButton"
-			android:layout_width="42sp"
-			android:layout_height="42sp"
-			android:layout_margin="4dp"
-			android:onClick="viewUser"
-			android:text="" />
-	
-		<Button
-			android:id="@+id/logoutButton"
-			android:layout_width="42sp"
-			android:layout_height="42sp"
-			android:layout_margin="4dp"
-			android:background="@drawable/logout"
-			android:onClick="logout"
-			android:text="" />
-	
-	</LinearLayout>
+	<Button
+	    android:id="@+id/chatButton"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="1sp"
+	    android:background="@drawable/ok_button"
+	    android:onClick="launch"
+	    android:text="@string/chatwithBot"
+	    android:textColor="@color/lgrey" />
 
 </LinearLayout>

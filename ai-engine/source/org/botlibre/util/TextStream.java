@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class TextStream {
 	public static final String WHITESPACE =" \t\n\r\f";
-	public static final String HTTP =" \t\n\r\f\"";
+	public static final String HTTP =" \t\n\r\f\"{}<>";
 	public static final String TOKENS =" \t\n\r\f.,:;!()?[]{}+=^&*\"`~|/\\<>";
 	public static final String TERMINATORS =".?!。";
 	public static Set<String> ABBREVIATIONS = new HashSet<String>(Arrays.asList(new String[]{"mr","ms", "mrs", "dr", "inc", "sr", "jr", "st", "vs", "mt", "ltd", "co"}));
@@ -62,6 +62,9 @@ public class TextStream {
 	}
 	
 	public char current() {
+		if (atEnd()) {
+			return (char)-1;
+		}
 		if (this.index <= 0) {
 			return (char)0;
 		}
@@ -362,7 +365,8 @@ public class TextStream {
 				skip();
 				skipWhitespace();
 			}
-			if ((word != null) && !word.trim().equals("")) {
+			word = word.trim();
+			if ((word != null) && !word.isEmpty()) {
 				words.add(word);
 			}
 		}
@@ -441,6 +445,20 @@ public class TextStream {
 		return quotes;
 	}
 	
+	public String nextStringWithBracketsDoubleQuotes() {
+		if (atEnd()) {
+			return "";
+		}
+		int start = this.index;
+		skipStringWithBracketsDoubleQuotes();
+		int end = this.index - 1;
+		if (atEnd() && current() != '"') {
+			end = this.index;
+		}
+		String quotes = this.text.substring(start, end);
+		return quotes;
+	}
+	
 	public String nextQuotesExcludeDoubleQuote() {
 		String quotes = nextQuotes();
 		if (quotes.contains("\"\"")) {
@@ -466,6 +484,19 @@ public class TextStream {
 	}
 	
 	public void skipStringDoubleQuotes() {
+		if (atEnd()) {
+			return;
+		}
+		char next = next();
+		while (!atEnd() && (next != '"')) {
+			if ((next == '\\')) {
+				skip();
+			}
+			next = next();
+		}
+	}
+	
+	public void skipStringWithBracketsDoubleQuotes() {
 		if (atEnd()) {
 			return;
 		}
@@ -531,8 +562,11 @@ public class TextStream {
 		}
 		char next = next();
 		while (!atEnd() && (next != '}')) {
+			if ((next == '\\')) {
+				skip();
+			}
 			if (next == '"') {
-				skipStringDoubleQuotes();
+				skipStringWithBracketsDoubleQuotes();
 			}
 			if (next == '{') {
 				skipStringDoubleQuoteBrackets();
@@ -560,7 +594,7 @@ public class TextStream {
 			}
 			skip();
 		}
-		if (isWordSymbol(peek) || (!Character.isLetterOrDigit(peek) && peek != '_' && peek != '@' && !isSign)) {			
+		if (isWordSymbol(peek) || (!Character.isLetterOrDigit(peek) && peek != '_' && peek != '#' && peek != '@' && !isSign)) {			
 			skip();
 			Character.UnicodeBlock block = Character.UnicodeBlock.of(peek);
 			if (block == Character.UnicodeBlock.HIGH_SURROGATES) {
@@ -589,8 +623,8 @@ public class TextStream {
 			if (isSign && !isDigit) {
 				break;
 			} else {
-				// Allow "1.1", "1,000", "ab-ba", "ab_ba"
-				if (!Character.isLetter(peek) && !isDigit && (peek != '_')) {
+				// Allow "1.1", "1,000", "ab-ba", "ab_ba", "#abc"
+				if (!Character.isLetter(peek) && !isDigit && (peek != '_') && (peek != '#')) {
 					if (wasDigit) {
 						if ((peek != '.') && (peek != ',') && (peek != '@')) {
 							break;
@@ -662,12 +696,46 @@ public class TextStream {
 		skipToAny(TOKENS);
 	}
 	
+	/**
+	 * Return the next paragraph text including full sentences up to the max text size.
+	 */
+	public String nextParagraph(int max) {
+		skipWhitespace();
+		if (atEnd()) {
+			return null;
+		}
+		int start = this.index;
+		int last = this.index;
+		while (!atEnd()) {
+			skipSentence();
+			if ((this.index - start) > max) {
+				if (start == last) {
+					this.index = start + max;
+				} else {
+					this.index = last;
+				}
+				break;
+			}
+			last = this.index;
+		}
+		return this.text.substring(start, this.index);
+	}
+	
 	public String nextSentence() {
 		skipWhitespace();
 		if (atEnd()) {
 			return null;
 		}
 		int start = this.index;
+		skipSentence();
+		return this.text.substring(start, this.index);
+	}
+	
+	public void skipSentence() {
+		skipWhitespace();
+		if (atEnd()) {
+			return;
+		}
 		skipToAny(TERMINATORS, true);
 		while (!atEnd()) {
 			char peek = peek();
@@ -693,7 +761,6 @@ public class TextStream {
 			}
 			skipToAny(TERMINATORS, true);
 		}
-		return this.text.substring(start, this.index);
 	}
 	
 	public String nextWhitespace() {

@@ -29,5 +29,28 @@
 	<classpathentry kind="lib" path="lib/oswap/jsr305.jar"/>
 	<classpathentry kind="lib" path="lib/oswap/owasp-java-html-sanitizer.jar"/>
 	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.2.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-android-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-calibration-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-feature-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-geo-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-io-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-ip-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-jcodec-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-learning-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-openkinect-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-recognition-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-sfm-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-visualize-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-WebcamCapture-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-xuggler-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/core-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/ddogleg-0.9.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/dense64-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/equation-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/georegression-0.10.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/simple-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/xmlpull-1.1.3.1.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/xpp3_min-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/xstream-1.4.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

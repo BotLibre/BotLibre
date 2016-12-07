@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+	<!-- Free software (c) 2001-2003 ALICE A.I. Foundation.   -->
+	<!-- This program is open source code released under -->
+	<!-- the terms of the GNU General Public License     -->
+	<!-- as published by the Free Software Foundation.   -->
+	<!-- Complies with AIML 1.0 Tag Set Specification -->
+	<!-- as adopted by the ALICE A.I. Foundation.  -->
+	<!-- chatbots32.aiml written by Steve Worswick (Square Bear) -->
+	<!-- Please contact steve@mitsuku.com if you have queries about it -->
+
+
+<!-- set up the database and include a catchall category -->
+
+<category>
+<pattern>XCHECKANIMAL *</pattern>
+<template>
+<think>
+	<set name="animal">UNKNOWN</set> 
+	<set name="legs">UNKNOWN</set>
+	<set name="lives">UNKNOWN</set>
+	<set name="eats">UNKOWN</set>
+	<set name="says">UNKNOWN</set>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>XCHECKANIMAL DOG</pattern>
+<template>
+<think>
+	<set name="animal">dog</set> 
+	<set name="legs">4</set>
+	<set name="lives">in a kennel</set>
+	<set name="eats">meat</set>
+	<set name="says">woof</set>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>XCHECKANIMAL CHICKEN</pattern>
+<template>
+<think>
+	<set name="animal">chicken</set> 
+	<set name="legs">2</set>
+	<set name="lives">on a farm</set>
+	<set name="eats">corn</set>
+	<set name="says">cluck</set>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>XCHECKANIMAL GIRAFFE</pattern>
+<template>
+<think>
+	<set name="animal">giraffe</set> 
+	<set name="legs">4</set>
+	<set name="lives">in Africa</set>
+	<set name="eats">leaves</set>
+	<set name="says">nothing</set>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>XCHECKANIMAL SPIDER</pattern>
+<template>
+<think>
+	<set name="animal">spider</set> 
+	<set name="legs">8</set>
+	<set name="lives">in a web</set>
+	<set name="eats">flies</set>
+	<set name="says">nothing</set>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>XCHECKANIMAL COW</pattern>
+<template>
+<think>
+	<set name="animal">cow</set> 
+	<set name="legs">4</set>
+	<set name="lives">on a farm</set>
+	<set name="eats">grass</set>
+	<set name="says">moo</set>
+</think>
+</template>
+</category>
+
+<!-- A simple query that accesses a row directly -->
+
+<category>
+<pattern>WHERE DOES A * LIVE</pattern>
+<template>
+	<srai>XCHECKANIMAL <star index="1"/></srai>
+<condition name="animal">
+	<li value="UNKNOWN">I haven't heard of a <star/>.</li>
+	<li> A <get name="animal"/> lives <get name="lives"/>.</li>
+</condition>
+</template>
+</category>
+
+<!-- A bit more complicated, setup a query and check for a fixed value  -->
+
+<category>
+<pattern>WHICH ANIMAL HAS 2 LEGS</pattern>
+<template>
+<think>
+<set name="list">Results:<br/></set>
+	<srai>XCHECKANIMAL DOG</srai>
+	<srai>XCHECKMATCH 2 LEGS</srai>
+	<srai>XCHECKANIMAL CHICKEN</srai>
+	<srai>XCHECKMATCH 2 LEGS</srai>
+	<srai>XCHECKANIMAL GIRAFFE</srai>
+	<srai>XCHECKMATCH 2 LEGS</srai>
+	<srai>XCHECKANIMAL SPIDER</srai>
+	<srai>XCHECKMATCH 2 LEGS</srai>
+	<srai>XCHECKANIMAL COW</srai>
+	<srai>XCHECKMATCH 2 LEGS</srai>
+</think>
+<get name="list"/>.
+</template>
+</category>
+
+<category>
+<pattern>XCHECKMATCH 2 LEGS</pattern>
+<template>
+<condition name="legs">
+<li value="2">
+<set name="list"><get name="list"/><br/><get name="animal"/></set>
+</li>
+</condition>
+</template>
+</category>
+
+<!-- The main deal, search through the database and see what matches -->
+
+<category>
+<pattern>XSCANANIMALDATABASE</pattern>
+<template>
+<think>
+<set name="list">Results:<br/></set>
+	<srai>XCHECKANIMAL DOG</srai>
+	<srai>XCHECKMATCH</srai>
+	<srai>XCHECKANIMAL CHICKEN</srai>
+	<srai>XCHECKMATCH</srai>
+	<srai>XCHECKANIMAL GIRAFFE</srai>
+	<srai>XCHECKMATCH</srai>
+	<srai>XCHECKANIMAL SPIDER</srai>
+	<srai>XCHECKMATCH</srai>
+	<srai>XCHECKANIMAL COW</srai>
+	<srai>XCHECKMATCH</srai>
+</think>
+<get name="list"/>
+</template>
+</category>
+
+<!-- A query to test the database -->
+
+<category>
+<pattern>WHICH ANIMAL HAS * LEGS</pattern>
+<template>
+<think>
+<set name="searchfor"><star/></set>
+
+<learn>	
+<category>	 
+<pattern>XCHECKMATCH</pattern>	 
+<template>
+<srai>BOTCOMPARE <get name="legs"/> XSPLIT <get name="searchfor"/></srai>
+<condition name="match">
+<li value="YES"><set name="list"><get name="list"/><br/>
+<get name="animal"/></set></li>
+</condition>	 
+</template>	
+</category> 
+</learn>
+
+</think>
+<srai>XSCANANIMALDATABASE</srai>
+</template>
+</category>
+
+<!-- This query searches for two items -->
+
+<category>
+<pattern>WHAT LIVES * AND SAYS *</pattern>
+<template>
+<think>
+<set name="searchfor"><star/> <star index="2"/></set>
+
+<learn>	
+<category>	 
+<pattern>XCHECKMATCH</pattern>	 
+<template>
+<srai>BOTCOMPARE <get name="lives"/> <get name="says"/> XSPLIT <get name="searchfor"/></srai>
+<condition name="match">
+<li value="YES"><set name="list"><get name="list"/><br/>
+<get name="animal"/></set></li>
+</condition>	 
+</template>	
+</category> 
+</learn>
+
+</think>
+<srai>XSCANANIMALDATABASE</srai>
+</template>
+</category>
+
+<!-- We can include more than just the one column in the results -->
+
+<category>
+<pattern>HOW MANY LEGS HAS THE ANIMAL THAT EATS *</pattern>
+<template>
+<think>
+<set name="searchfor"><star/></set>
+
+<learn>	
+<category>	 
+<pattern>XCHECKMATCH</pattern>	 
+<template>
+<srai>BOTCOMPARE <get name="eats"/> XSPLIT <get name="searchfor"/></srai>
+<condition name="match">
+<li value="YES"><set name="list"><get name="list"/><br/>
+A <get name="animal"/> eats <get name="eats"/> and has <get name="legs"/> legs.
+</set></li>
+</condition>	 
+</template>	
+</category> 
+</learn>
+
+</think>
+<srai>XSCANANIMALDATABASE</srai>
+</template>
+</category>
+
+<!-- We can also return more than one row -->
+
+<category>
+<pattern>WHICH ANIMALS SAY *</pattern>
+<template>
+<think>
+<set name="searchfor"><star/></set>
+
+<learn>	
+<category>	 
+<pattern>XCHECKMATCH</pattern>	 
+<template>
+<srai>BOTCOMPARE <get name="says"/> XSPLIT <get name="searchfor"/></srai>
+<condition name="match">
+<li value="YES"><set name="list"><get name="list"/><br/>
+<get name="animal"/></set></li>
+</condition>	 
+</template>	
+</category> 
+</learn>
+
+</think>
+<srai>XSCANANIMALDATABASE</srai>
+</template>
+</category>
+
+<!-- A query to compare 2 values in the table -->
+
+<category>
+<pattern>DOES A * HAVE MORE LEGS THAN A *</pattern>
+<template> 
+<think>
+<srai>XCHECKANIMAL <star/></srai>
+<set name="legs1"><get name="legs"/></set>
+<srai>XCHECKANIMAL <star index="2"/></srai>
+<set name="legs2"><get name="legs"/></set>
+<set name="checklegs"><get name="legs1"/> <get name="legs2"/></set>
+</think>
+<condition name="checklegs">
+	<li value="2 2">They both have 2 legs.</li>
+	<li value="2 4">A <star index="2"/> has more legs.</li>
+	<li value="2 8">A <star index="2"/> has 4 times as many legs.</li>
+	<li value="4 2">A <star/> has more legs.</li>
+	<li value="4 4">They both have 4 legs.</li>
+	<li value="4 8">A <star index="2"/> has twice as many legs.</li>
+	<li value="8 2">A <star index="2"/> has 4 times as many legs.</li>
+	<li value="8 4">A <star/> has twice as many legs.</li>
+	<li value="8 8">They both have 8 legs.</li>
+	<li value="UNKNOWN UNKNOWN">Sorry but I have never heard of either of those animals.</li>
+
+	<li value="2 UNKNOWN">Well, I have not heard of a <star index="2"/>. However, a <star/> only has 2 legs and so I guess a <star index="2"/> has more legs.</li>
+	<li value="4 UNKNOWN">Well, I have not heard of a <star index="2"/>. However, a <star/> has 4 legs and so I guess a <star/> has more legs.</li>
+	<li value="8 UNKNOWN">Well, I have not heard of a <star index="2"/>. However, a <star/> has 8 legs and so I guess a <star/> has more legs.</li>
+
+	<li value="UNKNOWN 2">Well, I have not heard of a <star/>. However, a <star index="2"/> only has 2 legs and so I guess a <star/> has more legs.</li>
+	<li value="UNKNOWN 4">Well, I have not heard of a <star/>. However, a <star index="2"/> has 4 legs and so I guess a <star index="2"/> has more legs.</li>
+	<li value="UNKNOWN 8">Well, I have not heard of a <star/>. However, a <star index="2"/> has 8 legs and so I guess a <star/> has more legs.</li>
+
+	<li>The one that runs fastest probably has more legs.</li>
+
+</condition>
+</template>
+</category>
+
+</aiml>

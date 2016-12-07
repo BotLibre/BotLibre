@@ -416,26 +416,32 @@
 </category>
 
 <category>
+<pattern>sraixforge *</pattern>
+<template><sraix service="forge" botid="xxx" apikey="xxx"><star/></sraix>
+</template>
+</category>
+
+<category>
 <pattern>pannous *</pattern>
-<template><sraix server="https://weannie.pannous.com" service="pannous"><star/></sraix>
+<template><sraix server="http://weannie.pannous.com" service="pannous"><star/></sraix>
 </template>
 </category>
 
 <category>
-<pattern>sraixbrainbot *</pattern>
-<template><sraix bot="Brain Bot" default="Bot Libre's anonymous API limit exceeded"><star/></sraix>
+<pattern>sraixbrainbot * *</pattern>
+<template><sraix bot="Brain Bot"><apikey><star/></apikey><star index="2"/></sraix>
 </template>
 </category>
 
 <category>
-<pattern>sraixbrainbot2 *</pattern>
-<template><sraix botid="165"><star/></sraix>
+<pattern>sraixbrainbot2 * *</pattern>
+<template><sraix botid="165"><apikey><star/></apikey><star index="2"/></sraix>
 </template>
 </category>
 
 <category>
-<pattern>sraixbrainbot3 *</pattern>
-<template><sraix botid="165" service="botlibre"><star/></sraix>
+<pattern>sraixbrainbot3 * *</pattern>
+<template><sraix botid="165" service="botlibre"><apikey><star/></apikey><star index="2"/></sraix>
 </template>
 </category>
 
@@ -446,8 +452,8 @@
 </category>
 
 <category>
-<pattern>sraixbrainbot5 *</pattern>
-<template><sraix botid="165" service="botlibre" apikey="1708822271264615941"><star/></sraix>
+<pattern>sraixbrainbot5 * *</pattern>
+<template><sraix botid="165" service="botlibre"><apikey><star/></apikey><star index="2"/></sraix>
 </template>
 </category>
 
@@ -482,6 +488,24 @@
 </category>
 
 <category>
+<pattern>fetch html * *</pattern>
+<template><sraix service="html"><hint><star index="2"/></hint><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>xml * *</pattern>
+<template><sraix service="xml"><hint><star index="2"/></hint><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>json * *</pattern>
+<template><sraix service="json"><hint><star index="2"/></hint><star/></sraix>
+</template>
+</category>
+
+<category>
 <pattern>isbotname <bot name="name"/></pattern>
 <template>Yes, that is my name
 </template>
@@ -510,6 +534,48 @@
 <pattern>what is the date</pattern>
 <template>
 	The date is <date/>
+</template>
+</category>
+
+<category>
+<pattern>what is the time in GMT</pattern>
+<template>
+	The time is <date timezone="" format="%X"/>
+</template>
+</category>
+
+<category>
+<pattern>what is the time in GMT+4</pattern>
+<template>
+	The time is <date timezone="+4" format="%X"/>
+</template>
+</category>
+
+<category>
+<pattern>what is the timestamp in GMT+4</pattern>
+<template>
+	The timestamp is <date timezone="+4" format="%c"/>
+</template>
+</category>
+
+<category>
+<pattern>what is the date in french</pattern>
+<template>
+	The date is <date format="%A, %B %d" locale="fr"/>
+</template>
+</category>
+
+<category>
+<pattern>what is the date in France</pattern>
+<template>
+	The date is <date format="%A, %B %d - %H" locale="fr" timezone="-1"/>
+</template>
+</category>
+
+<category>
+<pattern>what is the jdate in France</pattern>
+<template>
+	The date is <date jformat="MMMMMMMMM dd, yyyy - h:mm:ss" locale="fr" timezone="-1"/>
 </template>
 </category>
 
@@ -662,6 +728,52 @@ seconds until Christmas.
 <pattern>do you *</pattern>
 <template>Yes, I do.
 </template>
+</category>
+
+<category>
+<pattern>(x y) [q r]</pattern>
+<template>success1
+</template>
+</category>
+
+<category>
+<pattern>^ (a b) [c d] ^</pattern>
+<template>success2
+</template>
+</category>
+
+<category>
+<pattern>^ pattern3</pattern>
+<template>success3
+</template>
+</category>
+
+<category>
+<pattern>pattern4 ^</pattern>
+<template>success4
+</template>
+</category>
+
+<category>
+<pattern>^ ^ pattern5 ^ ^</pattern>
+<template>success5
+</template>
+</category>
+
+<category>
+      <pattern>test nested</pattern>
+    <template>
+        <condition name="nested">
+                <li value="n4">nested <br/>
+            <a href="http://www.botlibre.com/images/bot.png" target="_blank"> <img alt="miniature" src="http://www.botlibre.com/images/bot.png" heigh="100" width="100"> </img></a></li>
+                <li>default</li>
+        </condition>
+    </template>
+</category>
+
+<category>
+    <pattern>set nested</pattern>
+        <template>ok <set name="nested">n4</set></template>
 </category>
 
 </aiml>

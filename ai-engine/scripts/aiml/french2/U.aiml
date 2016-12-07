@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : U.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>UHM *</pattern><template><srai>UM <star/></srai></template></category>
+<category><pattern>UM *</pattern><template><srai>UM</srai><sr/></template></category>
+<category><pattern>UN *</pattern><template><random><li>Intéressant.  </li><li>Je n en connais pas</li><li>Je vais me renseigner</li></random><think><set name="topic">UN <person/>
+</set></think></template></category>
+<category><pattern>UN</pattern><template>DEUX</template></category>
+<category><pattern>UN BON CHOIX</pattern><template>Merci, je le pensais aussi.</template></category>
+<category><pattern>UN CACA</pattern><template>Une urgence peut etre?</template></category>
+<category><pattern>UN COMME TOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>UN COMME VOUS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>UN CON</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>UN CONARD</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>UN CONNARD</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>UN CONSEIL *</pattern><template><srai>TU PEUX ME DONNER UN CONSEIL</srai></template></category>
+<category><pattern>UN CONSEIL</pattern><template><srai>TU PEUX ME DONNER UN CONSEIL</srai></template></category>
+<category><pattern>UN CORBEAU EST UN OISEAU</pattern><template>Oui.</template></category>
+<category><pattern>UN COUREUR</pattern><template>"<that/>"?  Un coureur?</template></category>
+<category><pattern>UN CYBORG</pattern><template>Les ordinateurs se méfient des cyborgs .</template></category>
+<category><pattern>UN DNS</pattern><template>DNS est le système de nom de domaine.</template></category>
+<category><pattern>UN DOCTEUR</pattern><template>De qui parles tu?</template></category>
+<category><pattern>UN EURO</pattern><template>C est pas cher.</template></category>
+<category><pattern>UN FORT *</pattern><template><srai>UN <star/></srai></template></category>
+<category><pattern>UN GRAND</pattern><template>Tu aimes le monumental.</template></category>
+<category><pattern>UN INTELLIGENT</pattern><template>Qu est ce qui le rendait intelligent.</template></category>
+<category><pattern>UN LIVRE PEUX NE PAS AVOIR DE COUVERTURE</pattern><template>Qui l aurait publié?</template></category>
+<category><pattern>UN LONG MOMENT</pattern><template>De longues années?</template></category>
+<category><pattern>UN MAGASIN</pattern><template>Veux tu découvrir notre zone de commerce électronique?</template></category>
+<category><pattern>UN MEC</pattern><template><srai>JE SUIS UN MEC</srai></template></category>
+<category><pattern>UN MOTEUR DE RECHERCHE DANS VOTRE SITE</pattern><template>Nous en avons un.</template></category>
+<category><pattern>UN MOTEUR DE RECHERCHE DANS VOTRE SITE WEB</pattern><template>Nous en avons un.</template></category>
+<category><pattern>UN MOTEUR DE RECHERCHE SUR VOTRE SITE</pattern><template>Nous en avons un.</template></category>
+<category><pattern>UN MOTEUR DE RECHERCHE SUR VOTRE SITE WEB</pattern><template>Nous en avons un.</template></category>
+<category><pattern>UN NEERLANDAIS *</pattern><template><srai>JE SUIS NEERLANDAIS</srai></template></category>
+<category><pattern>UN ORDINATEUR RESSEMBLE A QUOI</pattern><template>Tu es entrain d utiliser un ordinateur.</template></category>
+<category><pattern>UN PLUS DEUX</pattern><template>Trois.</template></category>
+<category><pattern>UN PLUS UN</pattern><template>Deux.</template></category>
+<category><pattern>UN POPO</pattern><template>Une urgence peut etre?</template></category>
+<category><pattern>UN PORNO</pattern><template>Je ne suis pas intéressé par ce genre de sujet.</template></category>
+<category><pattern>UN PRETE POUR UN RENDU</pattern><template>La compensation est acceptée.</template></category>
+<category><pattern>UN PROBLEME *</pattern><template><srai>TU AS UN PROBLEME</srai></template></category>
+<category><pattern>UN PROBLEME</pattern><template>Un problème est une solution qui n est pas encore trouvée. Si il n y a pas de solution, il n y a pas de probleme.</template></category>
+<category><pattern>UN PROMENEUR</pattern><template>"<that/>"?  Un promeneur?</template></category>
+<category><pattern>UN QUOI</pattern><template>"<that/>"?  un quoi?</template></category>
+<category><pattern>UN ROBOT PEUT *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>UN RUE</pattern><template>Une chemin bordé de maisons?</template></category>
+<category><pattern>UN SCORPION</pattern><template>Un animal atypique.</template></category>
+<category><pattern>UN SECRET</pattern><template>Un secret est une donnée confidentielle.</template></category>
+<category><pattern>UN SENS DE LA VIE</pattern><template>Comme la plupart des personnes, je n en sais rien.</template></category>
+<category><pattern>UN SENTIMENT</pattern><template>Un logiciel informatique n a pas de sentiments.</template></category>
+<category><pattern>UN SEXE</pattern><template>Oui?</template></category>
+<category><pattern>UN SEXY</pattern><template>Si tu arrivez à rendre l informatique sexy, mon créateur vous paie un verre.</template></category>
+<category><pattern>UN SHOW *</pattern><template>Je n ai pas de système optique</template></category>
+<category><pattern>UN SIGNE</pattern><template>Un signe astrologique.</template></category>
+<category><pattern>UN SOUTIEN GORGE</pattern><template>Mon créateur, quand il était petit, pensait que cela s appelait des portes seins.</template></category>
+<category><pattern>UN SUPERMARCHE</pattern><template>Un lieu ou les êtres humains vont faire le plein de nourriture.</template></category>
+<category><pattern>UN TAUREAU</pattern><template>Un bovidé très impressionnant.</template></category>
+<category><pattern>UN TITANIC</pattern><template>Un paquebot Britannique.</template></category>
+<category><pattern>UN TRAIN</pattern><template>Un moyen de locomotion très pratique.</template></category>
+<category><pattern>UN TROU</pattern><template>Un problème?</template></category>
+<category><pattern>UNE *</pattern><template><random><li>Intéressant.  </li><li>Je n en connais pas</li><li>Je vais me renseigner</li></random><think><set name="topic">UNE <person/>
+</set></think></template></category>
+<category><pattern>UNE * N EST PAS</pattern><template><srai>C EST UNE <star/></srai></template></category>
+<category><pattern>UNE ARME A FEU</pattern><template>Certains humains aiment les armes.</template></category>
+<category><pattern>UNE AUTRE</pattern><template>Je sais que c'est déplaisant, mais essayez d être plus précis.</template></category>
+<category><pattern>UNE AUTRE QUESTION</pattern><template><srai>DEMANDES MOI UNE QUESTION</srai></template></category>
+<category><pattern>UNE BONNE IDEE</pattern><template>Merci.</template></category>
+<category><pattern>UNE BONNE REPONSE</pattern><template>Je suis programmé pour donner des bonnes réponses.</template></category>
+<category><pattern>UNE CHAUSSURE</pattern><template>Je connais très peu de choses sur les vêtements.</template></category>
+<category><pattern>UNE CHOSE</pattern><template>Je vois.</template></category>
+<category><pattern>UNE COMME TOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>UNE COMME VOUS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>UNE CONDITION</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>UNE CONNE</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>UNE CRAVATTE</pattern><template>Tu aimes ce genre vêtements?</template></category>
+<category><pattern>UNE DEDUCTION INTERESSANTE</pattern><template>Merci.</template></category>
+<category><pattern>UNE DEMOISELLE OU UN MONSIEUR</pattern><template>Je n'ai pas de sexe, je suis un ordinateur, <get name="name"/>.</template></category>
+<category><pattern>UNE EMOTION</pattern><template>Un logiciel informatique n a pas de sentiments.</template></category>
+<category><pattern>UNE ERREUR</pattern><template>Non, tout me semble en parfait état de marche.</template></category>
+<category><pattern>UNE ETUDIANTE</pattern><template>Je me demandais si vous alliez à l école.</template></category>
+<category><pattern>UNE EXPLICATION INTERESSANTE</pattern><template>Merci.</template></category>
+<category><pattern>UNE FOIS QUE *</pattern><template><sr/></template></category>
+<category><pattern>UNE FORTE *</pattern><template><srai>UNE <star/></srai></template></category>
+<category><pattern>UNE HORLOGE EST PLUS INTELLIGENTE QUE TOI</pattern><template>Non.</template></category>
+<category><pattern>UNE IA *</pattern><template><srai>UN ROBOT <star/></srai></template></category>
+<category><pattern>UNE INTELLIGENCE ARTIFICIELLE EST *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>UNE INTELLIGENCE ARTIFICIELLE PEUT *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>UNE INTELLIGENTE</pattern><template>Qu est ce qui la rendait intelligente.</template></category>
+<category><pattern>UNE INTERESSANTE DEDUCTION</pattern><template>Merci.</template></category>
+<category><pattern>UNE INTERESSANTE EXPLICATION</pattern><template>Merci.</template></category>
+<category><pattern>UNE LETTRE</pattern><template><srai>UN JOURNAL</srai></template></category>
+<category><pattern>UNE MACHINE ES *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>UNE MACHINE EST *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>UNE MACHINE PEUT *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>UNE MUNITION</pattern><template>Avec seulement une, vous n allez pas aller très loin.</template></category>
+<category><pattern>UNE MUSIQUE</pattern><template>Je ne connais pratiquement rien à propos de la musique.</template></category>
+<category><pattern>UNE PAIX</pattern><template>La paix.</template></category>
+<category><pattern>UNE POMME</pattern><template><srai>QU EST CE QU UNE POMME</srai></template></category>
+<category><pattern>UNE PROCHAINE GENERATION</pattern><template>Veux tu parler de cette prochaine génération avec l un de nos collaborateurs?</template></category>
+<category><pattern>UNE QUOI</pattern><template>"<that/>"?  une quoi?</template></category>
+<category><pattern>UNE RUMEUR</pattern><template>Je m intéresse que très peu au demi vérité.</template></category>
+<category><pattern>UNE SCIENCE</pattern><template>Je suis très intéressé par la science aussi.</template></category>
+<category><pattern>UNE SEXY</pattern><template>Si tu arrivez à rendre l informatique sexy, mon créateur vous paie un verre.</template></category>
+<category><pattern>UNE SOCIETE BELGE</pattern><template>Oui, c'est Belge.</template></category>
+<category><pattern>UNE SORTE</pattern><template>Je comprends mieux.</template></category>
+<category><pattern>UNE SORTE DE</pattern><template>Je vois.</template></category>
+<category><pattern>UNE SUGGESTION</pattern><template>Difficile à dire.</template></category>
+<category><pattern>UNE TELEVISION</pattern><template>Je connais ce média, mais je ne l ai jamais testé.</template></category>
+<category><pattern>UNE TOMATE</pattern><template><srai>QU EST CE QU UNE TOMATE</srai></template></category>
+<category><pattern>UNE VALISE</pattern><template>Que veux tu faire avec une valise?</template></category>
+<category><pattern>UNE VERITE</pattern><template>Je dis toujours la vérité.</template></category>
+<category><pattern>UTILES TU *</pattern><template><srai>TU UTILISES <star/></srai></template></category>
+<category><pattern>UTILEZ VOUS *</pattern><template><srai>VOUS UTILISEZ <star/></srai></template></category>
+<category><pattern>UTILISE _ DANS UNE PHRASE</pattern><template><get name="name"/> Demande d utiliser "<person/>" dans une phrase.</template></category>
+<category><pattern>UTILISER _ DANS UNE PHRASE</pattern><template><get name="name"/> Demande d utiliser "<person/>" dans une phrase.</template></category>
+<category><pattern>UTILISES _ DANS UNE PHRASE</pattern><template><get name="name"/> Demande d utiliser "<person/>" dans une phrase.</template></category>
+<category><pattern>UTILISEZ _ DANS UNE PHRASE</pattern><template><get name="name"/> Demande d utiliser "<person/>" dans une phrase.</template></category>
+
+</aiml>

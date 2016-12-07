@@ -2,6 +2,7 @@
 <bot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
 	<memory>
 		<implementation-class>org.botlibre.knowledge.database.DatabaseMemory</implementation-class>
+		<!--implementation-class>org.botlibre.knowledge.database.DerbyMemory</implementation-class-->
 		<property name="cache.size" value="500"/>
 	</memory>
 	<mind>
@@ -96,6 +97,21 @@
 			<sense>
 				<implementation-class>org.botlibre.sense.facebook.FacebookMessaging</implementation-class>
 			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.telegram.Telegram</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.sms.Twilio</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.slack.Slack</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.vision.Vision</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.google.GoogleCalendar</implementation-class>
+			</sense>
 		</senses>
 		<tools>
 			<tool>
@@ -112,6 +128,9 @@
 			</tool>
 			<tool>
 				<implementation-class>org.botlibre.tool.Utils</implementation-class>
+			</tool>
+			<tool>
+				<implementation-class>org.botlibre.tool.JSON</implementation-class>
 			</tool>
 		</tools>
 	</awareness>

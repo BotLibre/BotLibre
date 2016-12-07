@@ -17,20 +17,27 @@
  ******************************************************************************/
 package org.botlibre.sense.http;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -38,22 +45,35 @@ import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
-import org.htmlcleaner.HtmlCleaner;
-import org.htmlcleaner.SimpleXmlSerializer;
-import org.htmlcleaner.TagNode;
 import org.botlibre.Bot;
+import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
+import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.SimpleXmlSerializer;
+import org.htmlcleaner.TagNode;
+import org.w3c.dom.Attr;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * Process http requests, gets and puts.
@@ -136,7 +156,19 @@ public class Http extends BasicSense {
 		//TagNode node = getHtmlCleaner().clean(result);
 		node.serialize(new SimpleXmlSerializer(getHtmlCleaner().getProperties()), output);
 		output.flush();
-		return new StringReader(output.toString());
+		String xhtml = output.toString();
+		return new StringReader(xhtml);
+	}
+
+	/**
+	 * Convert the HTML input stream into DOM parsable XHTML.
+	 */
+	public String convertToXHTML(String html) throws IOException {
+		StringWriter output = new StringWriter();
+		TagNode node = getHtmlCleaner().clean(html);
+		node.serialize(new SimpleXmlSerializer(getHtmlCleaner().getProperties()), output);
+		output.flush();
+		return output.toString();
 	}
 	
 	/**
@@ -176,6 +208,16 @@ public class Http extends BasicSense {
 	}
 	
 	/**
+	 * Parse the input HTML into a DOM.
+	 */
+	public Element parseHTML(String html) throws Exception {
+		String xhtml = convertToXHTML(html);
+		StringReader reader = new StringReader(xhtml);
+		Document document = getParser().parse(new InputSource(reader));
+		return document.getDocumentElement();
+	}
+	
+	/**
 	 * Parse the input XHTML stream into a DOM.
 	 */
 	public Element parseXHTML(StringReader input) throws Exception {
@@ -187,7 +229,7 @@ public class Http extends BasicSense {
 	 * Parse the input XML stream into a DOM.
 	 */
 	public Element parseXML(InputStream input) throws Exception {
-		Document document = getParser().parse(input);
+		Document document = getParser().parse(input, "UTF-8");
 		return document.getDocumentElement();
 	}
 	
@@ -242,6 +284,832 @@ public class Http extends BasicSense {
 	}
 
 	/**
+	 * Self API.
+	 * Return the XML data from the URL.
+	 */
+	public Vertex requestXML(Vertex source, Vertex url, Vertex xpath) {
+		Network network = source.getNetwork();
+		return requestXML(url.printString(), xpath.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Return the HTML data from the URL.
+	 */
+	public Vertex requestHTML(Vertex source, Vertex url, Vertex xpath) {
+		Network network = source.getNetwork();
+		return requestHTML(url.printString(), xpath.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Return the XML data from the URL.
+	 */
+	public Vertex requestXML(Vertex source, Vertex url) {
+		Network network = source.getNetwork();
+		return requestXML(url.printString(), network);
+	}
+
+	/**
+	 * Return the XML data from the URL.
+	 */
+	public Vertex requestXML(String url, String xpath, Network network) {
+		log("GET XML", Level.INFO, url, xpath);
+		try {
+			Element element = parseXMLURL(new URL(url));
+			if (element == null) {
+				return null;
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Return the HTML data from the URL.
+	 */
+	public Vertex requestHTML(String url, String xpath, Network network) {
+		log("GET HTML", Level.INFO, url, xpath);
+		try {
+			Element element = parseURL(new URL(url));
+			if (element == null) {
+				return null;
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Return the XML data object from the URL.
+	 */
+	public Vertex requestXML(String url, Network network) {
+		log("GET XML", Level.INFO, url);
+		try {
+			Element element = parseXMLURL(new URL(url));
+			if (element == null) {
+				return null;
+			}
+			Vertex root = convertElement(element, network);
+			return root;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * Return the JSON data object from the URL.
+	 */
+	public Vertex requestJSON(Vertex source, Vertex url) {
+		Network network = source.getNetwork();
+		return requestJSON(url.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Send a DELTE request to the URL.
+	 */
+	public Vertex delete(Vertex source, Vertex url) {
+		Network network = source.getNetwork();
+		return delete(url.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Return the CSV data object from the URL.
+	 */
+	public Vertex requestCSV(Vertex source, Vertex url) {
+		Network network = source.getNetwork();
+		return requestCSV(url.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Return the JSON data object from the URL.
+	 */
+	public Vertex requestJSON(Vertex source, Vertex attribute, Vertex url) {
+		Network network = source.getNetwork();
+		return requestJSON(url.printString(), attribute.printString(), network);
+	}
+
+	/**
+	 * Return the CSV data object from the URL.
+	 */
+	public Vertex requestCSV(String url, Network network) {
+		log("GET CSV", Level.INFO, url);
+		try {
+			String csv = Utils.httpGET(url);
+			Vertex rows = network.createInstance(Primitive.ARRAY);
+
+			TextStream stream = new TextStream(csv);
+			boolean first = true;
+			List<Vertex> columns = new ArrayList<Vertex>();
+			while (!stream.atEnd()) {
+				String line = stream.nextLine().trim();
+				// Skip blank lines.
+				while (line.isEmpty()) {
+					if (stream.atEnd()) {
+						return rows;
+					}
+					line = stream.nextLine().trim();
+				}
+				// Allow either ',' or '","' separators.
+				boolean quotes = line.contains("\"");
+				// "questions","answer","topic"
+				// "What is this? What's this?","This is Open Bot.","Bot"
+				TextStream lineStream = new TextStream(line);
+				if (quotes) {
+					lineStream.skipTo('"');
+					lineStream.skip();
+					if (lineStream.atEnd()) {
+						getBot().log(this, "Expecting \" character", Level.WARNING, line);
+						continue;
+					}
+				}
+				if (first) {
+					// Process columns
+					while (!lineStream.atEnd()) {
+						String value = null;
+						if (quotes) {
+							value = lineStream.upToAll("\",\"").trim();
+							lineStream.skip("\",\"".length());
+						} else {
+							value = lineStream.upTo(',').trim();
+							lineStream.skip();
+						}
+						columns.add(network.createVertex(new Primitive(value)));
+					}
+					first = false;
+				} else {
+					Vertex object = null;
+					// Process values
+					int index = 0;
+					while (!lineStream.atEnd()) {
+						String value = null;
+						if (quotes) {
+							value = lineStream.upToAll("\",\"").trim();
+							lineStream.skip("\",\"".length());
+						} else {
+							value = lineStream.upTo(',').trim();
+							lineStream.skip();
+						}
+						if (lineStream.atEnd() && !value.isEmpty() && value.charAt(value.length() - 1) == '"') {
+							value = value.substring(0, value.length() - 1);
+						}
+						Vertex column = columns.get(index);
+						boolean data = false; //column.is(Primitive.DATA);
+						if (object == null) {
+							//if (data) {
+							//	object = memory.createVertex(value);
+							//} else {
+								object = network.createVertex();
+							//}
+						}
+						if (!data && !value.isEmpty()) {
+							object.addRelationship((Primitive)column.getData(), network.createVertex(value));
+						}
+						index++;
+					}
+					if (object != null) {
+						rows.addRelationship(Primitive.ELEMENT, network.createVertex(object));
+					}
+				}
+			}
+			return rows;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Return the JSON data object from the URL.
+	 */
+	public Vertex requestJSON(String url, Network network) {
+		log("GET JSON", Level.INFO, url);
+		try {
+			String json = Utils.httpGET(url);
+			log("JSON", Level.FINE, json);
+			JSON root = (JSON)JSONSerializer.toJSON(json);
+			if (root == null) {
+				return null;
+			}
+			Vertex object = convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Send a DELETE request to the URL.
+	 */
+	public Vertex delete(String url, Network network) {
+		log("DELETE", Level.INFO, url);
+		try {
+			Utils.httpDELETE(url);
+			return network.createVertex(Primitive.TRUE);
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Return the JSON data object from the URL.
+	 */
+	public Vertex requestJSON(String url, String attribute, Network network) {
+		log("GET JSON", Level.INFO, url, attribute);
+		try {
+			String json = Utils.httpGET(url);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+			if (root == null) {
+				return null;
+			}
+			Object value = root.get(attribute);
+			if (value == null) {
+				return null;
+			}
+			Vertex object = convertElement(value, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * POST the JSON object and return the XML data from the URL.
+	 */
+	public Vertex postJSON(Vertex source, Vertex url, Vertex jsonObject) {
+		Network network = source.getNetwork();
+		return postJSON(url.printString(), jsonObject, network);
+	}
+
+	/**
+	 * Self API.
+	 * PUT the JSON object and return the XML data from the URL.
+	 */
+	public Vertex putJSON(Vertex source, Vertex url, Vertex jsonObject) {
+		Network network = source.getNetwork();
+		return putJSON(url.printString(), jsonObject, network);
+	}
+
+	/**
+	 * Self API.
+	 * Post the JSON object and return the XML data from the URL.
+	 */
+	public Vertex postJSONAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex jsonObject) {
+		Network network = source.getNetwork();
+		return postJSONAuth(url.printString(), user.printString(), password.printString(), jsonObject, network);
+	}
+
+	/**
+	 * Self API.
+	 * POST the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXML(Vertex source, Vertex url, Vertex xmlObject) {
+		Network network = source.getNetwork();
+		return postXML(url.printString(), xmlObject, network);
+	}
+
+	/**
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXML(String url, Vertex xmlObject, Network network) {
+		log("POST XML", Level.INFO, url);
+		try {
+			String data = convertToXML(xmlObject);
+			log("POST XML", Level.FINE, data);
+			String xml = Utils.httpPOST(url, "application/xml", data);
+			log("XML", Level.FINE, xml);
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
+			Element element = parseXML(stream);
+			if (element == null) {
+				return null;
+			}
+			Vertex root = convertElement(element, network);
+			return root;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXMLAuth(String url, String user, String password, Vertex xmlObject, String xpath, Network network) {
+		log("POST XML Auth", Level.INFO, url);
+		try {
+			String data = convertToXML(xmlObject);
+			log("POST XML", Level.FINE, data);
+			String xml = Utils.httpAuthPOST(url, user, password, "application/xml", data);
+			log("XML", Level.FINE, xml);
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
+			Element element = parseXML(stream);
+			if (element == null) {
+				return null;
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * POST the JSON object and return the JSON data from the URL.
+	 */
+	public Vertex postJSON(String url, Vertex jsonObject, Network network) {
+		log("POST JSON", Level.INFO, url);
+		try {
+			String data = convertToJSON(jsonObject);
+			log("POST JSON", Level.FINE, data);
+			String json = Utils.httpPOST(url, "application/json", data);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+			if (root == null) {
+				return null;
+			}
+			Vertex object = convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * PUT the JSON object and return the JSON data from the URL.
+	 */
+	public Vertex putJSON(String url, Vertex jsonObject, Network network) {
+		log("PUT JSON", Level.INFO, url);
+		try {
+			String data = convertToJSON(jsonObject);
+			log("PUT JSON", Level.FINE, data);
+			String json = Utils.httpPUT(url, "application/json", data);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+			if (root == null) {
+				return null;
+			}
+			Vertex object = convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Post the JSON object and return the JSON data from the URL.
+	 */
+	public Vertex postJSONAuth(String url, String user, String password, Vertex jsonObject, Network network) {
+		log("POST JSON Auth", Level.INFO, url);
+		try {
+			String data = convertToJSON(jsonObject);
+			log("POST JSON", Level.FINE, data);
+			String json = Utils.httpAuthPOST(url, user, password, "application/json", data);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+			if (root == null) {
+				return null;
+			}
+			Vertex object = convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * Post the HTML forms params and return the HTML data from the URL.
+	 */
+	public Vertex postHTML(Vertex source, Vertex url, Vertex paramsObject, Vertex xpath) {
+		Network network = source.getNetwork();
+		return postHTML(url.printString(), paramsObject, xpath.printString(), network);
+	}
+
+	/**
+	 * Post the HTML forms params and return the HTML data from the URL.
+	 */
+	public Vertex postHTML(String url, Vertex paramsObject, String xpath, Network network) {
+		log("POST HTML", Level.INFO, url, xpath);
+		try {
+			Map<String, String> data = convertToMap(paramsObject);
+			log("POST params", Level.FINE, data);
+			String html = Utils.httpPOST(url, data);
+			InputStream stream = new ByteArrayInputStream(html.getBytes("utf-8"));
+			StringReader reader = convertToXHTML(stream);
+			Element element = parseXHTML(reader);
+			if (element == null) {
+				return null;
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXML(Vertex source, Vertex url, Vertex xmlObject, Vertex xpath) {
+		Network network = source.getNetwork();
+		return postXML(url.printString(), xmlObject, xpath.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXMLAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex xmlObject, Vertex xpath) {
+		Network network = source.getNetwork();
+		return postXMLAuth(url.printString(), user.printString(), password.printString(), xmlObject, xpath.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Convert the object to a JSON string.
+	 */
+	public Vertex toJSON(Vertex source, Vertex jsonObject) {
+		try {
+			Network network = source.getNetwork();
+			String data = convertToJSON(jsonObject);
+			return network.createVertex(data);
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * Convert the object to an XML string.
+	 */
+	public Vertex toXML(Vertex source, Vertex xmlObject) {
+		try {
+			Network network = source.getNetwork();
+			String data = convertToXML(xmlObject);
+			return network.createVertex(data);
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * URL encode the string.
+	 */
+	public Vertex encode(Vertex source, Vertex text) {
+		return text.getNetwork().createVertex(org.botlibre.util.Utils.encodeURL(text.printString()));
+	}
+
+	/**
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXML(String url, Vertex xmlObject, String xpath, Network network) {
+		log("POST XML", Level.INFO, url, xpath);
+		try {
+			String data = convertToXML(xmlObject);
+			log("POST XML", Level.FINE, data);
+			String xml = Utils.httpPOST(url, "application/xml", data);
+			log("XML", Level.FINE, xml);
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
+			Element element = parseXML(stream);
+			if (element == null) {
+				return null;
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	public String convertToXML(Vertex object) {
+		if (object.hasData()) {
+			return object.printString();
+		}
+		try {
+			StringWriter writer = new StringWriter();
+			Vertex root = object.getRelationship(Primitive.ROOT);
+			String elementName = "root";
+			if (root != null) {
+				elementName = root.printString();
+			}
+			convertToXML(object, elementName, writer, 0);
+			return writer.toString();
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	public String convertToJSON(Vertex object) {
+		try {
+			StringWriter writer = new StringWriter();
+			convertToJSON(object, writer, 0);
+			return writer.toString();
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+	
+	public static String printDate(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		StringWriter writer = new StringWriter();
+		writer.write(String.valueOf(calendar.get(Calendar.YEAR)));
+		writer.write("-");
+		writer.write(String.valueOf(calendar.get(Calendar.MONTH) + 1));
+		writer.write("-");
+		writer.write(String.valueOf(calendar.get(Calendar.DATE)));
+		writer.write("T");
+		writer.write(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+		writer.write(":");
+		writer.write(String.valueOf(calendar.get(Calendar.MINUTE)));
+		writer.write(":");
+		writer.write(String.valueOf(calendar.get(Calendar.SECOND)));
+		long offset = calendar.getTimeZone().getOffset(calendar.getTimeInMillis());
+		int offsetHours = (int)(offset / Utils.HOUR);
+		int offsetMinutes = Math.abs((int)(offset / Utils.MINUTE) - (offsetHours * 60));
+		if (offsetHours > 0) {
+			writer.write("+");
+		} else {
+			writer.write("-");
+		}
+		if (offsetHours < 10) {
+			writer.write("0");
+		}
+		writer.write(String.valueOf(Math.abs(offsetHours)));
+		writer.write(":");
+		if (offsetMinutes < 10) {
+			writer.write("0");
+		}
+		writer.write(String.valueOf(offsetMinutes));
+		return writer.toString();
+	}
+
+	public void convertToJSON(Vertex object, Writer writer, int depth) throws Exception {
+		if (depth > 100) {
+			throw new BotException("Max JSON size exceeded");
+		}
+		if (object.hasData()) {
+			writer.write("\"");
+			if (object.getData() instanceof Timestamp) {
+				// Use JSON format.
+				writer.write(printDate((Timestamp)object.getData()));
+			} else {
+				writer.write(object.printString());
+			}
+			writer.write("\"");
+			return;
+		} else {
+			boolean first = true;
+			if (object.isArray()) {
+				writer.write("[");
+				for (Relationship relationship : object.orderedRelationships(Primitive.ELEMENT)) {
+					if (first) {
+						first = false;
+					} else {
+						writer.write(", ");
+					}
+					convertToJSON(relationship.getTarget(), writer, depth++);
+				}
+				writer.write("]");
+			} else {
+				writer.write("{");
+				for (Iterator<Relationship> iterator = object.orderedAllRelationships(); iterator.hasNext(); ) {
+					Relationship relationship = iterator.next();
+					if (relationship.isInverse()) {
+						continue;
+					}
+					String name = relationship.getType().getDataValue();
+					if (!name.equals("instantiation")) {
+						if (first) {
+							first = false;
+						} else {
+							writer.write(", ");
+						}
+						writer.write("\"");
+						writer.write(name);
+						writer.write("\":");
+						convertToJSON(relationship.getTarget(), writer, depth++);
+					}
+				}
+				writer.write("}");
+			}
+		}
+	}
+
+	public void convertToXML(Vertex object, String elementName, Writer writer, int depth) throws Exception {
+		if (depth > 100) {
+			throw new BotException("Max XML size exceeded");
+		}
+		writer.write("<");
+		writer.write(elementName);
+
+		for (Iterator<Relationship> iterator = object.orderedAllRelationships(); iterator.hasNext(); ) {
+			Relationship relationship = iterator.next();
+			if (relationship.isInverse()) {
+				continue;
+			}
+			String name = relationship.getType().getDataValue();
+			if (name.startsWith("@")) {
+				writer.write(" ");
+				writer.write(name.substring(1, name.length()));
+				writer.write("=\"");
+				writer.write(relationship.getTarget().printString());
+				writer.write("\"");
+			}
+		}
+		writer.write(">");
+		if (object.hasData()) {
+			writer.write(object.printString());
+		} else {
+			for (Iterator<Relationship> iterator = object.orderedAllRelationships(); iterator.hasNext(); ) {
+				Relationship relationship = iterator.next();
+				if (relationship.isInverse()) {
+					continue;
+				}
+				String name = relationship.getType().getDataValue();
+				if (!name.startsWith("@") && !name.equals("root") && !name.equals("instantiation")) {
+					convertToXML(relationship.getTarget(), name, writer, depth++);
+				}
+			}
+		}
+		
+		writer.write("</");
+		writer.write(elementName);
+		writer.write(">");
+	}
+
+	public Map<String, String> convertToMap(Vertex object) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (Iterator<Relationship> iterator = object.orderedAllRelationships(); iterator.hasNext(); ) {
+			Relationship relationship = iterator.next();
+			if (relationship.isInverse()) {
+				continue;
+			}
+			String name = relationship.getType().getDataValue();
+			if (!name.equals("instantiation")) {
+				map.put(name, relationship.getTarget().printString());
+			}
+			
+		}
+		return map;
+	}
+	
+	public Vertex convertElement(Element element, Network network) {
+		try {
+			if (element == null) {
+				return null;
+			}
+			NamedNodeMap attributes = element.getAttributes();
+			NodeList list = element.getChildNodes();
+			if (attributes.getLength() == 0 && list.getLength() == 0) {
+				return network.createVertex("");
+			}
+			if (list.getLength() == 1) {
+				Node child = list.item(0);
+				if (child.getNodeType() == Node.TEXT_NODE) {
+					return network.createVertex(child.getNodeValue());
+				}
+			}
+			Vertex root = network.createVertex();
+			for (int index = 0; index < attributes.getLength(); index++) {
+				Node attribute = attributes.item(index);
+				Primitive key = new Primitive(attribute.getNodeName());
+				Vertex value = network.createVertex(attribute.getNodeValue());
+				root.addRelationship(key, value);
+			}
+			for (int index = 0; index < list.getLength(); index++) {
+				Node child = list.item(index);
+				String name = child.getNodeName();
+				Primitive key = new Primitive(name);
+				Vertex value = null;
+				if (child.getNodeType() == Node.TEXT_NODE) {
+					value = network.createVertex(child.getNodeValue());
+				} else if (child instanceof Element) {
+					value = convertElement((Element)child, network);
+				} else if (child instanceof CDATASection) {
+					value = network.createVertex(((CDATASection)child).getNodeValue());
+				}
+				if (value != null) {
+					root.addRelationship(key, value);
+				}
+			}
+			return root;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Vertex convertElement(Object json, Network network) {
+		try {
+			if (json == null) {
+				return null;
+			}
+			Vertex object = null;
+			if (json instanceof JSONObject) {
+				object = network.createVertex();
+				for (Iterator iterator = ((JSONObject)json).keys(); iterator.hasNext(); ) {
+					String name = (String)iterator.next();
+					Object value = ((JSONObject)json).get(name);
+					if (value == null) {
+						continue;
+					}
+					Primitive key = new Primitive(name);
+					Vertex target = convertElement(value, network);
+					object.addRelationship(key, target);
+				}
+			} else if (json instanceof JSONArray) {
+				object = network.createInstance(Primitive.ARRAY);
+				JSONArray array = (JSONArray)json;
+				for (int index = 0; index < array.size(); index++) {
+					Vertex element = convertElement(array.get(index), network);
+					object.addRelationship(Primitive.ELEMENT, element, index);
+				}
+			} else {
+				object = network.createVertex(json);
+			}
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+	
+	/**
 	 * Parse the XML as a DOM.
 	 */
 	public Element parseXMLURL(URL url) {
@@ -257,6 +1125,58 @@ public class Http extends BasicSense {
 			} else {
 				log(ioException.toString(), Bot.WARNING, url);
 			}
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * Return the top RSS feed.
+	 */
+	public Vertex rss(Vertex source, Vertex url) {
+		log("RSS", Level.INFO, url);
+		try {
+			Network network = source.getNetwork();
+			List<Map<String, Object>> result = parseRSSFeed(new URL(url.printString()), 0);
+			if (result == null) {
+				return null;
+			}
+			for (Map<String, Object> element : result) {
+				Vertex rss = network.createInstance(Primitive.RSS);
+				for (Entry<String, Object> entry : element.entrySet()) {
+					rss.addRelationship(new Primitive(entry.getKey()), network.createVertex(entry.getValue()));
+				}
+				return rss;
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Self API.
+	 * Return the entire RSS feed.
+	 */
+	public Vertex rssFeed(Vertex source, Vertex url) {
+		log("RSS feed", Level.INFO, url);
+		try {
+			Network network = source.getNetwork();
+			List<Map<String, Object>> result = parseRSSFeed(new URL(url.printString()), 0);
+			Vertex list = network.createInstance(Primitive.ARRAY);
+			int index = 0;
+			for (Map<String, Object> element : result) {
+				Vertex rss = network.createInstance(Primitive.RSS);
+				for (Entry<String, Object> entry : element.entrySet()) {
+					rss.addRelationship(new Primitive(entry.getKey()), network.createVertex(entry.getValue()));
+				}
+				list.addRelationship(Primitive.ELEMENT, rss, index);
+				index++;
+			}
+			return list;
+		} catch (Exception exception) {
+			log(exception);
 			return null;
 		}
 	}
@@ -289,9 +1209,13 @@ public class Http extends BasicSense {
 								time = Utils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ssX").getTimeInMillis();
 							} catch (Exception exception2) {
 								try {
-									time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+									time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss X").getTimeInMillis();
 								} catch (Exception exception3) {
-									log(exception);
+									try {
+										time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+									} catch (Exception exception4) {
+										log(exception);
+									}
 								}
 							}
 						}
@@ -338,15 +1262,19 @@ public class Http extends BasicSense {
 								String date = children.item(0).getTextContent();
 								long time = System.currentTimeMillis();
 								try {
-									time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss zzz").getTimeInMillis();
+									time = Utils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ss.SSS").getTimeInMillis();
 								} catch (Exception exception) {
 									try {
-										time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+										time = Utils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ssX").getTimeInMillis();
 									} catch (Exception exception2) {
 										try {
-											time = Utils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ss.SSS").getTimeInMillis();
+											time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss X").getTimeInMillis();
 										} catch (Exception exception3) {
-											log(exception);
+											try {
+												time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+											} catch (Exception exception4) {
+												log(exception);
+											}
 										}
 									}
 								}

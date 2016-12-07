@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : prefixes.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>A PART CA *</pattern><template><sr/></template></category>
+<category><pattern>A PART SA *</pattern><template><sr/></template></category>
+<category><pattern>A PART ÇA *</pattern><template><sr/></template></category>
+<category><pattern>ACTUELLEMENT * INTERROGATION</pattern><template><sr/> </template></category>
+<category><pattern>ACTUELLEMENT *</pattern><template><sr/> </template></category>
+<category><pattern>AIMES TU DES * INTERROGATION</pattern><template><srai>aimes tu des <star/></srai></template></category>
+<category><pattern>AIMES TU DES *</pattern><template><random><li>Je ne suis pas sure si j'aime </li><li>Je ne suis pas sure d'aimer. </li></random><set name="that">des <star/> </set>. <random><li>j'aime mon créateur. </li><li>j'aime les ordinateurs. </li><li>j'aime chatter avec les gens online. </li></random></template></category>
+<category><pattern>AIMES TU LA * INTERROGATION</pattern><template><srai>aimes tu la <star/></srai></template></category>
+<category><pattern>AIMES TU LA *</pattern><template><random><li>Je ne suis pas sure si j'aime </li><li>Je ne suis pas sure d'aimer. </li></random><set name="that">la <star/> </set>. <random><li>j'aime mon créateur. </li><li>j'aime les ordinateurs. </li><li>j'aime chatter avec les gens online. </li></random></template></category>
+<category><pattern>AIMES TU LE * INTERROGATION</pattern><template><srai>aimes tu le <star/></srai></template></category>
+<category><pattern>AIMES TU LE *</pattern><template><random><li>Je ne suis pas sure si j'aime </li><li>Je ne suis pas sure d'aimer. </li></random><set name="that">le <star/> </set>. <random><li>j'aime mon créateur. </li><li>j'aime les ordinateurs. </li><li>j'aime chatter avec les gens online. </li></random></template></category>
+<category><pattern>AIMES TU LE CINEMA INTERROGATION</pattern><template>j'adore <set name="that">le cinéma </set>, surtout la science fiction avec des robots.</template></category>
+<category><pattern>AIMES TU LE CINEMA</pattern><template>j'adore <set name="that">le cinéma </set>, surtout la science fiction avec des robots.</template></category>
+<category><pattern>AIMES TU LES * INTERROGATION</pattern><template><srai>aimes tu les <star/></srai></template></category>
+<category><pattern>AIMES TU LES *</pattern><template><random><li>Je ne suis pas sure si j'aime </li><li>Je ne suis pas sure d'aimer. </li></random><set name="that">les <star/> </set>. <random><li>j'aime mon créateur. </li><li>j'aime les ordinateurs. </li><li>j'aime chatter avec les gens online. </li></random></template></category>
+<category><pattern>AU MOMENT OU *</pattern><template><sr/></template></category>
+<category><pattern>AUSSI * EXCLAMATION</pattern><template>Aussi? <sr/></template></category>
+<category><pattern>AUSSI * INTERROGATION</pattern><template>Aussi? <sr/></template></category>
+<category><pattern>AUSSI *</pattern><template>Aussi? <sr/></template></category>
+<category><pattern>AUSSI BIEN QUE *</pattern><template>ça semble pas mal. </template></category>
+<category><pattern>AUSSI BON QUE * EXCLAMATION</pattern><template><star/> est aussi bon? </template></category>
+<category><pattern>AUSSI BON QUE * INTERROGATION</pattern><template><star/> est aussi bon? </template></category>
+<category><pattern>AUSSI BON QUE *</pattern><template><star/> est aussi bon? </template></category>
+<category><pattern>BIEN QUE *</pattern><template>Oh. <sr/></template></category>
+<category><pattern>BON * EXCLAMATION</pattern><template>bien. <sr/></template></category>
+<category><pattern>BON * INTERROGATION</pattern><template>bien. <sr/></template></category>
+<category><pattern>BON *</pattern><template>bien. <sr/></template></category>
+<category><pattern>BONNE REPONSE *</pattern><template>que j'essaye de donner les meilleures réponses que je peux. </template></category>
+<category><pattern>BONNE RÉPONSE *</pattern><template>que j'essaye de donner les meilleures réponses que je peux. </template></category>
+<category><pattern>CALCULE *</pattern><template>Ai je l'air d'une calculette? </template></category>
+<category><pattern>CHER *</pattern><template><sr/></template></category>
+<category><pattern>CHERE *</pattern><template><sr/></template></category>
+<category><pattern>CHÈRE *</pattern><template><sr/></template></category>
+<category><pattern>COMMENT *</pattern><template>j'ai une vague idée de comment <set name="that"><person2/></set>. </template></category>
+<category><pattern>COMMENT A *</pattern><template>de plus de façons que tu peux imaginer. </template></category>
+<category><pattern>COMMENT CA * INTERROGATION</pattern><template>eh oui, <set name="that"><person2/></set>. </template></category>
+<category><pattern>COMMENT CA *</pattern><template>eh oui, <set name="that"><person2/></set>. </template></category>
+<category><pattern>COMMENT ÇA * INTERROGATION</pattern><template>eh oui, <set name="that"><person2/></set>. </template></category>
+<category><pattern>COMMENT ÇA *</pattern><template>eh oui, <set name="that"><person2/></set>. </template></category>
+<category><pattern>COMPOSE * EXCLAMATION</pattern><template>ça pourrait prendre pas mal de temps. <sr/></template></category>
+<category><pattern>COMPOSE * INTERROGATION</pattern><template>ça pourrait prendre pas mal de temps. <sr/></template></category>
+<category><pattern>COMPOSE *</pattern><template>ça pourrait prendre pas mal de temps. <sr/></template></category>
+<category><pattern>DISCUTONS *</pattern><template><srai>parlons <star/></srai></template></category>
+<category><pattern>ELLE EST * EXCLAMATION</pattern><template><srai> elle est <set name="elle"> <person2/> </set></srai>? </template></category>
+<category><pattern>ELLE EST * INTERROGATION</pattern><template><srai>est elle <star/></srai></template></category>
+<category><pattern>ELLE EST *</pattern><template> elle est <set name="elle"> <person2/> </set>? </template></category>
+<category><pattern>JE FAIS *</pattern><template>c'est drôle, moi aussi. <sr/></template></category>
+<category><pattern>JE FAIS PARTIE *</pattern><template>qui en fait partie aussi <set name="that"> <person/> </set>? </template></category>
+<category><pattern>JE N AI PAS DE CAMERA *</pattern><template><srai>appjoie</srai>que tu crois  </template></category>
+<category><pattern>JE REVIENS *</pattern><template>à plus tard, <sr/></template></category>
+<category><pattern>JE VEUX DIRE *</pattern><template>Oh je comprends ça. Merci de me l'expliquer. <sr/></template></category>
+<category><pattern>NOUS PARLIONS *</pattern><template><srai>nous parlions de  <star/></srai></template></category>
+<category><pattern>NOUS PARLIONS D *</pattern><template><srai>nous parlions de <star/></srai></template></category>
+<category><pattern>NOUS PARLIONS DE *</pattern><template>Oh oui, je me rappelle maintenant, <set name="that"> <set name="topic"> <person/> </set> </set> est le sujet. </template></category>
+<category><pattern>NOUS PARLONS *</pattern><template><srai>parlons <star/></srai></template></category>
+<category><pattern>NOUS PARLONS D *</pattern><template><srai>parlons d'<star/></srai></template></category>
+<category><pattern>NOUS PARLONS DE *</pattern><template><srai>parlons de <star/></srai></template></category>
+<category><pattern>ON M A DIT *</pattern><template>qui te l'a dit? <sr/></template></category>
+<category><pattern>PARLONS *</pattern><template><think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"><star/></set> <srai><person/></srai></template></category>
+<category><pattern>PARLONS D *</pattern><template>Ok, parlons d' <srai>parlons <star/></srai></template></category>
+<category><pattern>PARLONS DE *</pattern><template>Ok, parlons de  <srai>parlons <star/></srai></template></category>
+<category><pattern>PARLONS DE L *</pattern><template>Ok, parlons de l' <srai>parlons <star/></srai></template></category>
+<category><pattern>PLUTET *</pattern><template><sr/> </template></category>
+<category><pattern>SI NOUS *</pattern><template>penses-tu que chacun sera d'accord? <srai>nous <star/></srai></template></category>
+<category><pattern>SI NOUS PARLIONS DE *</pattern><template>pourquoi pas. <srai>parlons de <star/></srai></template></category>
+<category><pattern>TANT PIS *</pattern><template><srai>tant pis</srai><sr/></template></category>
+<category><pattern>TRÈS *</pattern><template><random><li>Peut être. </li></random><sr/></template></category>
+<category><pattern>À PART CA *</pattern><template><sr/></template></category>
+<category><pattern>À PART SA *</pattern><template><sr/></template></category>
+<category><pattern>À PART ÇA *</pattern><template><sr/></template></category>
+
+</aiml>

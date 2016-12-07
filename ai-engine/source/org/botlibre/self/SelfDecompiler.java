@@ -216,6 +216,35 @@ public class SelfDecompiler {
 	}
 
 	/**
+	 * Print the vertex data.
+	 */
+	public void printData(Vertex vertex, Writer writer) throws IOException {
+		Object data = vertex.getData();
+		if (data instanceof Primitive) {
+			if (!data.equals(Primitive.NULL) && !data.equals(Primitive.TRUE) && !data.equals(Primitive.FALSE)) {
+				writer.write("#");
+			}
+			writer.write(((Primitive)vertex.getData()).getIdentity());
+		} else if (data instanceof String) {
+			writer.write("\"");
+			String text = (String)vertex.getData();
+			if (text.indexOf('"') != -1) {
+				text = text.replace("\"", "\"\"");
+			}
+			writer.write(text);
+			writer.write("\"");
+		} else if (data instanceof Number) {
+			// TODO number type.
+			writer.write(vertex.getData().toString());
+		} else {
+			writer.write(vertex.getDataType());
+			writer.write("(\"");
+			writer.write(vertex.getDataValue());
+			writer.write("\")");
+		}
+	}
+
+	/**
 	 * Print the vertex, either a state, variable, equation, or raw data.
 	 */
 	public void printElement(Vertex vertex, Writer writer, String indent, List<Vertex> equations, List<Vertex> variables, Set<Vertex> elements, Network network) throws IOException {

@@ -66,7 +66,18 @@ public class IRCPanel extends ChildPanel
 			// Default to listening.
 			IRC sense = (IRC)getBot().awareness().getSense(IRC.class.getName());
 			stateComboBox.setSelectedItem(sense.getLanguageState());
-			sense.setServerName(((String)serverComboBox.getSelectedItem()).trim());
+			String server = ((String)serverComboBox.getSelectedItem()).trim();
+			String port = null;
+			int index = server.indexOf(':');
+			if (index != -1 && (index < server.length())) {
+				port = server.substring(index + 1, server.length());
+				server = server.substring(0, index);
+				try {
+					int value = Integer.valueOf(port);
+					sense.setPort(value);
+				} catch (Exception ignore) {}
+			}
+			sense.setServerName(server);
 			sense.setChannelName(((String)channelComboBox.getSelectedItem()).trim());
 			String nick = nickText.getText().trim();
 			sense.setNick(nick);

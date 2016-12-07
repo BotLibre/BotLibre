@@ -1,3 +1,21 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity.actions;
 
 import android.app.Activity;
@@ -55,9 +73,9 @@ public class HttpChatAction extends HttpAction {
 			MainActivity.conversation = this.response.conversation;
 			final ChatActivity activity = (ChatActivity)this.activity;
 
-			ImageView imageView = (ImageView)activity.findViewById(R.id.imageView);
-			final VideoView videoView = (VideoView)activity.findViewById(R.id.videoView);
-			View videoLayout = activity.findViewById(R.id.videoLayout);
+			ImageView imageView = (ImageView)activity.imageView;
+			final VideoView videoView = activity.videoView;
+			View videoLayout = activity.videoLayout;
 			
 			if (MainActivity.sound && this.response.avatarActionAudio != null && this.response.avatarActionAudio.length() > 0) {
 				// Action audio
@@ -101,7 +119,7 @@ public class HttpChatAction extends HttpAction {
 						public void onCompletion(MediaPlayer mp) {
 							activity.resetVideoErrorListener();
 							videoView.setOnCompletionListener(null);
-							activity.playVideo(response.avatar, true);
+							activity.cycleVideo(response);
 							activity.response(response);
 						}
 					});
@@ -109,7 +127,7 @@ public class HttpChatAction extends HttpAction {
 						@Override
 						public boolean onError(MediaPlayer mp, int what, int extra) {
 							activity.resetVideoErrorListener();
-							activity.playVideo(response.avatar, true);
+							activity.cycleVideo(response);
 							activity.response(response);
 							return true;
 						}
@@ -117,7 +135,7 @@ public class HttpChatAction extends HttpAction {
 					activity.playVideo(this.response.avatarAction, false);
 					return;
 				} else {
-					activity.playVideo(this.response.avatar, true);
+					activity.cycleVideo(this.response);
 				}
 			} else {
 				// Image avatar
@@ -129,8 +147,8 @@ public class HttpChatAction extends HttpAction {
 						videoLayout.setVisibility(View.GONE);
 					}
 				}
-				if (response.isVideo()) {
-					HttpGetImageAction.fetchImage(this.activity, MainActivity.instance.avatar, imageView);
+				if (this.response.isVideo()) {
+					HttpGetImageAction.fetchImage(this.activity, ((ChatActivity)this.activity).getAvatarIcon(this.response), imageView);
 				} else {
 					HttpGetImageAction.fetchImage(this.activity, this.response.avatar, imageView);					
 				}

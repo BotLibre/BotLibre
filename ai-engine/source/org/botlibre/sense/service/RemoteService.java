@@ -36,6 +36,7 @@ import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.sense.http.Freebase;
+import org.botlibre.sense.http.Http;
 import org.botlibre.sense.http.Wiktionary;
 import org.botlibre.sense.wikidata.Wikidata;
 import org.botlibre.util.TextStream;
@@ -50,7 +51,7 @@ import org.xml.sax.InputSource;
  */
 
 public class RemoteService extends BasicSense {
-	public static String PANNOUS = "https://weannie.pannous.com";
+	public static String PANNOUS = "http://weannie.pannous.com";
 	public static String SERVER = "http://www.botlibre.com";
 	
 	protected ThreadLocal<DocumentBuilder> parser = new ThreadLocal<DocumentBuilder>();
@@ -75,13 +76,21 @@ public class RemoteService extends BasicSense {
 				} else if (service.equals(Primitive.BOTLIBRETWITTER)) {
 					server = "http://twitter.botlibre.com";					
 				} else if (service.equals(Primitive.PAPHUS)) {
-					server = "http://www.paphuslivechat.com";					
+					server = "http://www.botlibre.biz";					
 				} else if (service.equals(Primitive.WIKIDATA)) {
 					return requestWikidata(message, botid, server, apikey, limit, hint, network);
 				} else if (service.equals(Primitive.FREEBASE)) {
 					return requestFreebase(message, botid, server, apikey, limit, hint, network);
 				} else if (service.equals(Primitive.WIKTIONARY)) {
 					return requestWiktionary(message, botid, server, apikey, limit, hint, network);
+				} else if (service.equals(Primitive.XML)) {
+					return requestXML(message, botid, server, apikey, limit, hint, network);
+				} else if (service.equals(Primitive.JSON)) {
+					return requestJSON(message, botid, server, apikey, limit, hint, network);
+				} else if (service.equals(Primitive.HTML)) {
+					return requestHTML(message, botid, server, apikey, limit, hint, network);
+				} else if (service.equals(Primitive.FORGE)) {
+					return requestFORGE(message, botid, server, apikey, limit, hint, network);
 				}
 			}
 			if ((server == null || server.isEmpty()) && (botid == null || botid.isEmpty()) && (bot == null || bot.isEmpty())) {
@@ -108,9 +117,9 @@ public class RemoteService extends BasicSense {
 			log("SERVICE", Level.INFO, url);
 			InputStream stream = Utils.openStream(new URL(url), 20000);
 			String result = Utils.loadTextFile(stream, "UTF-8", 1000000);
-			log("Response", Level.INFO, result);
+			log("Response", Level.FINE, result);
 			Element dom = parseXML(result);
-			log("Response", Level.INFO, result);
+			log("Response", Level.FINE, result);
 			if (result == null) {
 				return null;
 			}
@@ -158,6 +167,109 @@ public class RemoteService extends BasicSense {
 					}
 				}
 			}
+		} catch (Exception exception) {
+			log(exception);
+		}
+		return null;
+	}
+	
+	/**
+	 * Invoke the XML HTTP request.
+	 */
+	public String requestXML(String message, String botid, String server, String apikey, int limit, String hint, Network network) throws Exception {
+		try {
+			log("XML", Level.INFO, message);
+			Vertex result = null;
+			if (hint != null && !hint.isEmpty()) {
+				result = getBot().awareness().getSense(Http.class).requestXML(message, hint, network);
+			} else {
+				result = getBot().awareness().getSense(Http.class).requestXML(message, network);
+			}
+			if (result == null) {
+				return null;
+			}
+			return result.printString();
+		} catch (Exception exception) {
+			log(exception);
+		}
+		return null;
+	}
+	
+	/**
+	 * Invoke the XML HTTP request.
+	 */
+	public String requestJSON(String message, String botid, String server, String apikey, int limit, String hint, Network network) throws Exception {
+		try {
+			log("JSON", Level.INFO, message);
+			Vertex result = null;
+			if (hint != null && !hint.isEmpty()) {
+				result = getBot().awareness().getSense(Http.class).requestJSON(message, hint, network);
+				if (result == null) {
+					return null;
+				}
+			} else {
+				result = getBot().awareness().getSense(Http.class).requestJSON(message, network);
+			}
+			if (result == null) {
+				return null;
+			}
+			return result.printString();
+		} catch (Exception exception) {
+			log(exception);
+		}
+		return null;
+	}
+	
+	/**
+	 * Invoke the XML HTTP request.
+	 */
+	public String requestFORGE(String message, String botid, String server, String apikey, int limit, String hint, Network network) throws Exception {
+		try {
+			log("FORGE", Level.INFO, message);
+			String url = "";
+			if (server == null || server.isEmpty()) {
+				server = "http://www.personalityforge.com";
+			} else {
+				server = server.toLowerCase();
+				if (!server.startsWith("http")) {
+					server = "http://" + server;
+				}
+			}
+			url = server + "/api/chat/?apiKey=" + apikey + "&chatBotID=" + botid + "&message=" + message + "&externalID=123";
+			String json = Utils.httpGET(url);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+			if (root == null) {
+				return null;
+			}
+			Object response = root.get("message");
+			if (!(response instanceof JSONObject)) {
+				return null;
+			}
+			response = ((JSONObject)response).get("message");
+			if (!(response instanceof String)) {
+				return null;
+			}
+			return (String)response;
+		} catch (Exception exception) {
+			log(exception);
+		}
+		return null;
+	}
+	
+	/**
+	 * Invoke the HTML HTTP request.
+	 */
+	public String requestHTML(String message, String botid, String server, String apikey, int limit, String hint, Network network) throws Exception {
+		try {
+			log("HTML", Level.INFO, message);
+			Vertex result = null;
+			if (hint != null && !hint.isEmpty()) {
+				result = getBot().awareness().getSense(Http.class).requestHTML(message, hint, network);
+			}
+			if (result == null) {
+				return null;
+			}
+			return result.printString();
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -227,7 +339,7 @@ public class RemoteService extends BasicSense {
 			String url = server + "/api?input=" + Utils.encodeURL(message);
 			log("PANNOUS", Level.INFO, url);
 			InputStream stream = Utils.openStream(new URL(url));
-			String result = Utils.loadTextFile(stream, "UTF-8", 1000000);
+			String result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
 			log("Response", Level.INFO, result);
 			JSONObject json = (JSONObject)JSONSerializer.toJSON(result);
 			if (json == null || json.isNullObject()) {

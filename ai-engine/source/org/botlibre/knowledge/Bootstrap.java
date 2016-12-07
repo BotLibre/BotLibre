@@ -88,7 +88,7 @@ public class Bootstrap {
 				}
 			}
 			if (addStates) {
-				stateMachineNetwork(memory.getShortTermMemory());
+				loadScripts(memory.getShortTermMemory());
 			}
 			//loadAvatarImages(memory.getShortTermMemory());
 			for (Sense sense : memory.getBot().awareness().getSenses().values()) {
@@ -182,7 +182,7 @@ public class Bootstrap {
 			mathNetwork(network);
 			englishNetwork(network);
 			
-			stateMachineNetwork(network);
+			loadScripts(network);
 			
 			network.save();
 		}
@@ -270,7 +270,7 @@ public class Bootstrap {
 	/**
 	 * Defines some basic states.
 	 */
-	public void stateMachineNetwork(Network network) {
+	public void loadScripts(Network network) {
 		Vertex language = network.createVertex(new Primitive(Language.class.getName()));
 		
 		SelfCompiler compiler = SelfCompiler.getCompiler();
@@ -293,6 +293,10 @@ public class Bootstrap {
 		compiler.pin(stateMachine);
 
 		stateMachine = compiler.parseStateMachine(getClass().getResource("Topic.self"), "", debug, network);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		compiler.pin(stateMachine);
+
+		stateMachine = compiler.parseStateMachine(getClass().getResource("Vision.self"), "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 

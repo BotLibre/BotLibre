@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuBrowse"
+          android:title="Browse" />
+ 
+    <item android:id="@+id/menuCreate"
+          android:title="Create" />
+ 
+    <item android:id="@+id/menuTest"
+          android:title="Test" />
+ 
+    <item android:id="@+id/menuEdit"
+          android:title="Edit" />
+ 
+    <item android:id="@+id/menuClear"
+          android:title="Clear" />
+     
+</menu>

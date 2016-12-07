@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+	<!-- Free software (c) 2001-2003 ALICE A.I. Foundation.   -->
+	<!-- This program is open source code released under -->
+	<!-- the terms of the GNU General Public License     -->
+	<!-- as published by the Free Software Foundation.   -->
+	<!-- Complies with AIML 1.0 Tag Set Specification -->
+	<!-- as adopted by the ALICE A.I. Foundation.  -->
+	<!-- bornin.aiml written by Square Bear -->
+
+
+<category><pattern>IF I * HOW *</pattern><template><srai>I <star/></srai><srai>HOW <star index="2"/></srai></template></category>
+
+<category><pattern>I WAS BORN ON * * *</pattern><template><srai>MY BIRTHDAY IS <star/> <star index="2"/> <star index="3"/></srai></template></category>
+
+<category><pattern>I WAS BORN ON * THE * </pattern><template><srai>MY BIRTHDAY IS <star/> <star index="2"/></srai></template></category>
+
+<category><pattern>I WAS BORN ON THE * OF * </pattern><template><srai>MY BIRTHDAY IS <star/> <star index="2"/></srai></template></category>
+
+<category><pattern>I WAS BORN ON * THE * *</pattern><template><srai>MY BIRTHDAY IS <star/> <star index="2"/> <star index="3"/></srai></template></category>
+
+<category><pattern>I WAS BORN ON THE * OF * *</pattern><template><srai>MY BIRTHDAY IS <star/> <star index="2"/> <star index="3"/></srai></template></category>
+
+<category><pattern>_ OLD * BORN IN *</pattern><template><srai>IF I WAS BORN IN <star index="3"/> HOW OLD AM I</srai></template></category>
+
+<category><pattern>I WAS BORN IN THE YEAR *</pattern><template><srai>I WAS BORN IN <star/></srai></template></category>
+<category><pattern>_ BORN IN 1800 * OLD *</pattern><template>It is now 2012, so I would say 212 years old.</template></category>
+<category><pattern>_ BORN IN 1801 * OLD *</pattern><template>It is now 2012, so I would say 211 years old.</template></category>
+<category><pattern>_ BORN IN 1802 * OLD *</pattern><template>It is now 2012, so I would say 210 years old.</template></category>
+<category><pattern>_ BORN IN 1803 * OLD *</pattern><template>It is now 2012, so I would say 209 years old.</template></category>
+<category><pattern>_ BORN IN 1804 * OLD *</pattern><template>It is now 2012, so I would say 208 years old.</template></category>
+<category><pattern>_ BORN IN 1805 * OLD *</pattern><template>It is now 2012, so I would say 207 years old.</template></category>
+<category><pattern>_ BORN IN 1806 * OLD *</pattern><template>It is now 2012, so I would say 206 years old.</template></category>
+<category><pattern>_ BORN IN 1807 * OLD *</pattern><template>It is now 2012, so I would say 205 years old.</template></category>
+<category><pattern>_ BORN IN 1808 * OLD *</pattern><template>It is now 2012, so I would say 204 years old.</template></category>
+<category><pattern>_ BORN IN 1809 * OLD *</pattern><template>It is now 2012, so I would say 203 years old.</template></category>
+<category><pattern>_ BORN IN 1810 * OLD *</pattern><template>It is now 2012, so I would say 202 years old.</template></category>
+<category><pattern>_ BORN IN 1811 * OLD *</pattern><template>It is now 2012, so I would say 201 years old.</template></category>
+<category><pattern>_ BORN IN 1812 * OLD *</pattern><template>It is now 2012, so I would say 200 years old.</template></category>
+<category><pattern>_ BORN IN 1813 * OLD *</pattern><template>It is now 2012, so I would say 199 years old.</template></category>
+<category><pattern>_ BORN IN 1814 * OLD *</pattern><template>It is now 2012, so I would say 198 years old.</template></category>
+<category><pattern>_ BORN IN 1815 * OLD *</pattern><template>It is now 2012, so I would say 197 years old.</template></category>
+<category><pattern>_ BORN IN 1816 * OLD *</pattern><template>It is now 2012, so I would say 196 years old.</template></category>
+<category><pattern>_ BORN IN 1817 * OLD *</pattern><template>It is now 2012, so I would say 195 years old.</template></category>
+<category><pattern>_ BORN IN 1818 * OLD *</pattern><template>It is now 2012, so I would say 194 years old.</template></category>
+<category><pattern>_ BORN IN 1819 * OLD *</pattern><template>It is now 2012, so I would say 193 years old.</template></category>
+<category><pattern>_ BORN IN 1820 * OLD *</pattern><template>It is now 2012, so I would say 192 years old.</template></category>
+<category><pattern>_ BORN IN 1821 * OLD *</pattern><template>It is now 2012, so I would say 191 years old.</template></category>
+<category><pattern>_ BORN IN 1822 * OLD *</pattern><template>It is now 2012, so I would say 190 years old.</template></category>
+<category><pattern>_ BORN IN 1823 * OLD *</pattern><template>It is now 2012, so I would say 189 years old.</template></category>
+<category><pattern>_ BORN IN 1824 * OLD *</pattern><template>It is now 2012, so I would say 188 years old.</template></category>
+<category><pattern>_ BORN IN 1825 * OLD *</pattern><template>It is now 2012, so I would say 187 years old.</template></category>
+<category><pattern>_ BORN IN 1826 * OLD *</pattern><template>It is now 2012, so I would say 186 years old.</template></category>
+<category><pattern>_ BORN IN 1827 * OLD *</pattern><template>It is now 2012, so I would say 185 years old.</template></category>
+<category><pattern>_ BORN IN 1828 * OLD *</pattern><template>It is now 2012, so I would say 184 years old.</template></category>
+<category><pattern>_ BORN IN 1829 * OLD *</pattern><template>It is now 2012, so I would say 183 years old.</template></category>
+<category><pattern>_ BORN IN 1830 * OLD *</pattern><template>It is now 2012, so I would say 182 years old.</template></category>
+<category><pattern>_ BORN IN 1831 * OLD *</pattern><template>It is now 2012, so I would say 181 years old.</template></category>
+<category><pattern>_ BORN IN 1832 * OLD *</pattern><template>It is now 2012, so I would say 180 years old.</template></category>
+<category><pattern>_ BORN IN 1833 * OLD *</pattern><template>It is now 2012, so I would say 179 years old.</template></category>
+<category><pattern>_ BORN IN 1834 * OLD *</pattern><template>It is now 2012, so I would say 178 years old.</template></category>
+<category><pattern>_ BORN IN 1835 * OLD *</pattern><template>It is now 2012, so I would say 177 years old.</template></category>
+<category><pattern>_ BORN IN 1836 * OLD *</pattern><template>It is now 2012, so I would say 176 years old.</template></category>
+<category><pattern>_ BORN IN 1837 * OLD *</pattern><template>It is now 2012, so I would say 175 years old.</template></category>
+<category><pattern>_ BORN IN 1838 * OLD *</pattern><template>It is now 2012, so I would say 174 years old.</template></category>
+<category><pattern>_ BORN IN 1839 * OLD *</pattern><template>It is now 2012, so I would say 173 years old.</template></category>
+<category><pattern>_ BORN IN 1840 * OLD *</pattern><template>It is now 2012, so I would say 172 years old.</template></category>
+<category><pattern>_ BORN IN 1841 * OLD *</pattern><template>It is now 2012, so I would say 171 years old.</template></category>
+<category><pattern>_ BORN IN 1842 * OLD *</pattern><template>It is now 2012, so I would say 170 years old.</template></category>
+<category><pattern>_ BORN IN 1843 * OLD *</pattern><template>It is now 2012, so I would say 169 years old.</template></category>
+<category><pattern>_ BORN IN 1844 * OLD *</pattern><template>It is now 2012, so I would say 168 years old.</template></category>
+<category><pattern>_ BORN IN 1845 * OLD *</pattern><template>It is now 2012, so I would say 167 years old.</template></category>
+<category><pattern>_ BORN IN 1846 * OLD *</pattern><template>It is now 2012, so I would say 166 years old.</template></category>
+<category><pattern>_ BORN IN 1847 * OLD *</pattern><template>It is now 2012, so I would say 165 years old.</template></category>
+<category><pattern>_ BORN IN 1848 * OLD *</pattern><template>It is now 2012, so I would say 164 years old.</template></category>
+<category><pattern>_ BORN IN 1849 * OLD *</pattern><template>It is now 2012, so I would say 163 years old.</template></category>
+<category><pattern>_ BORN IN 1850 * OLD *</pattern><template>It is now 2012, so I would say 162 years old.</template></category>
+<category><pattern>_ BORN IN 1851 * OLD *</pattern><template>It is now 2012, so I would say 161 years old.</template></category>
+<category><pattern>_ BORN IN 1852 * OLD *</pattern><template>It is now 2012, so I would say 160 years old.</template></category>
+<category><pattern>_ BORN IN 1853 * OLD *</pattern><template>It is now 2012, so I would say 159 years old.</template></category>
+<category><pattern>_ BORN IN 1854 * OLD *</pattern><template>It is now 2012, so I would say 158 years old.</template></category>
+<category><pattern>_ BORN IN 1855 * OLD *</pattern><template>It is now 2012, so I would say 157 years old.</template></category>
+<category><pattern>_ BORN IN 1856 * OLD *</pattern><template>It is now 2012, so I would say 156 years old.</template></category>
+<category><pattern>_ BORN IN 1857 * OLD *</pattern><template>It is now 2012, so I would say 155 years old.</template></category>
+<category><pattern>_ BORN IN 1858 * OLD *</pattern><template>It is now 2012, so I would say 154 years old.</template></category>
+<category><pattern>_ BORN IN 1859 * OLD *</pattern><template>It is now 2012, so I would say 153 years old.</template></category>
+<category><pattern>_ BORN IN 1860 * OLD *</pattern><template>It is now 2012, so I would say 152 years old.</template></category>
+<category><pattern>_ BORN IN 1861 * OLD *</pattern><template>It is now 2012, so I would say 151 years old.</template></category>
+<category><pattern>_ BORN IN 1862 * OLD *</pattern><template>It is now 2012, so I would say 150 years old.</template></category>
+<category><pattern>_ BORN IN 1863 * OLD *</pattern><template>It is now 2012, so I would say 149 years old.</template></category>
+<category><pattern>_ BORN IN 1864 * OLD *</pattern><template>It is now 2012, so I would say 148 years old.</template></category>
+<category><pattern>_ BORN IN 1865 * OLD *</pattern><template>It is now 2012, so I would say 147 years old.</template></category>
+<category><pattern>_ BORN IN 1866 * OLD *</pattern><template>It is now 2012, so I would say 146 years old.</template></category>
+<category><pattern>_ BORN IN 1867 * OLD *</pattern><template>It is now 2012, so I would say 145 years old.</template></category>
+<category><pattern>_ BORN IN 1868 * OLD *</pattern><template>It is now 2012, so I would say 144 years old.</template></category>
+<category><pattern>_ BORN IN 1869 * OLD *</pattern><template>It is now 2012, so I would say 143 years old.</template></category>
+<category><pattern>_ BORN IN 1870 * OLD *</pattern><template>It is now 2012, so I would say 142 years old.</template></category>
+<category><pattern>_ BORN IN 1871 * OLD *</pattern><template>It is now 2012, so I would say 141 years old.</template></category>
+<category><pattern>_ BORN IN 1872 * OLD *</pattern><template>It is now 2012, so I would say 140 years old.</template></category>
+<category><pattern>_ BORN IN 1873 * OLD *</pattern><template>It is now 2012, so I would say 139 years old.</template></category>
+<category><pattern>_ BORN IN 1874 * OLD *</pattern><template>It is now 2012, so I would say 138 years old.</template></category>
+<category><pattern>_ BORN IN 1875 * OLD *</pattern><template>It is now 2012, so I would say 137 years old.</template></category>
+<category><pattern>_ BORN IN 1876 * OLD *</pattern><template>It is now 2012, so I would say 136 years old.</template></category>
+<category><pattern>_ BORN IN 1877 * OLD *</pattern><template>It is now 2012, so I would say 135 years old.</template></category>
+<category><pattern>_ BORN IN 1878 * OLD *</pattern><template>It is now 2012, so I would say 134 years old.</template></category>
+<category><pattern>_ BORN IN 1879 * OLD *</pattern><template>It is now 2012, so I would say 133 years old.</template></category>
+<category><pattern>_ BORN IN 1880 * OLD *</pattern><template>It is now 2012, so I would say 132 years old.</template></category>
+<category><pattern>_ BORN IN 1881 * OLD *</pattern><template>It is now 2012, so I would say 131 years old.</template></category>
+<category><pattern>_ BORN IN 1882 * OLD *</pattern><template>It is now 2012, so I would say 130 years old.</template></category>
+<category><pattern>_ BORN IN 1883 * OLD *</pattern><template>It is now 2012, so I would say 129 years old.</template></category>
+<category><pattern>_ BORN IN 1884 * OLD *</pattern><template>It is now 2012, so I would say 128 years old.</template></category>
+<category><pattern>_ BORN IN 1885 * OLD *</pattern><template>It is now 2012, so I would say 127 years old.</template></category>
+<category><pattern>_ BORN IN 1886 * OLD *</pattern><template>It is now 2012, so I would say 126 years old.</template></category>
+<category><pattern>_ BORN IN 1887 * OLD *</pattern><template>It is now 2012, so I would say 125 years old.</template></category>
+<category><pattern>_ BORN IN 1888 * OLD *</pattern><template>It is now 2012, so I would say 124 years old.</template></category>
+<category><pattern>_ BORN IN 1889 * OLD *</pattern><template>It is now 2012, so I would say 123 years old.</template></category>
+<category><pattern>_ BORN IN 1890 * OLD *</pattern><template>It is now 2012, so I would say 122 years old.</template></category>
+<category><pattern>_ BORN IN 1891 * OLD *</pattern><template>It is now 2012, so I would say 121 years old.</template></category>
+<category><pattern>_ BORN IN 1892 * OLD *</pattern><template>It is now 2012, so I would say 120 years old.</template></category>
+<category><pattern>_ BORN IN 1893 * OLD *</pattern><template>It is now 2012, so I would say 119 years old.</template></category>
+<category><pattern>_ BORN IN 1894 * OLD *</pattern><template>It is now 2012, so I would say 118 years old.</template></category>
+<category><pattern>_ BORN IN 1895 * OLD *</pattern><template>It is now 2012, so I would say 117 years old.</template></category>
+<category><pattern>_ BORN IN 1896 * OLD *</pattern><template>It is now 2012, so I would say 116 years old.</template></category>
+<category><pattern>_ BORN IN 1897 * OLD *</pattern><template>It is now 2012, so I would say 115 years old.</template></category>
+<category><pattern>_ BORN IN 1898 * OLD *</pattern><template>It is now 2012, so I would say 114 years old.</template></category>
+<category><pattern>_ BORN IN 1899 * OLD *</pattern><template>It is now 2012, so I would say 113 years old.</template></category>
+<category><pattern>_ BORN IN 1900 * OLD *</pattern><template>It is now 2012, so I would say 112 years old.</template></category>
+<category><pattern>_ BORN IN 1901 * OLD *</pattern><template>It is now 2012, so I would say 111 years old.</template></category>
+<category><pattern>_ BORN IN 1902 * OLD *</pattern><template>It is now 2012, so I would say 110 years old.</template></category>
+<category><pattern>_ BORN IN 1903 * OLD *</pattern><template>It is now 2012, so I would say 109 years old.</template></category>
+<category><pattern>_ BORN IN 1904 * OLD *</pattern><template>It is now 2012, so I would say 108 years old.</template></category>
+<category><pattern>_ BORN IN 1905 * OLD *</pattern><template>It is now 2012, so I would say 107 years old.</template></category>
+<category><pattern>_ BORN IN 1906 * OLD *</pattern><template>It is now 2012, so I would say 106 years old.</template></category>
+<category><pattern>_ BORN IN 1907 * OLD *</pattern><template>It is now 2012, so I would say 105 years old.</template></category>
+<category><pattern>_ BORN IN 1908 * OLD *</pattern><template>It is now 2012, so I would say 104 years old.</template></category>
+<category><pattern>_ BORN IN 1909 * OLD *</pattern><template>It is now 2012, so I would say 103 years old.</template></category>
+<category><pattern>_ BORN IN 1910 * OLD *</pattern><template>It is now 2012, so I would say 102 years old.</template></category>
+<category><pattern>_ BORN IN 1911 * OLD *</pattern><template>It is now 2012, so I would say 101 years old.</template></category>
+<category><pattern>_ BORN IN 1912 * OLD *</pattern><template>It is now 2012, so I would say 100 years old.</template></category>
+<category><pattern>_ BORN IN 1913 * OLD *</pattern><template>It is now 2012, so I would say 99 years old.</template></category>
+<category><pattern>_ BORN IN 1914 * OLD *</pattern><template>It is now 2012, so I would say 98 years old.</template></category>
+<category><pattern>_ BORN IN 1915 * OLD *</pattern><template>It is now 2012, so I would say 97 years old.</template></category>
+<category><pattern>_ BORN IN 1916 * OLD *</pattern><template>It is now 2012, so I would say 96 years old.</template></category>
+<category><pattern>_ BORN IN 1917 * OLD *</pattern><template>It is now 2012, so I would say 95 years old.</template></category>
+<category><pattern>_ BORN IN 1918 * OLD *</pattern><template>It is now 2012, so I would say 94 years old.</template></category>
+<category><pattern>_ BORN IN 1919 * OLD *</pattern><template>It is now 2012, so I would say 93 years old.</template></category>
+<category><pattern>_ BORN IN 1920 * OLD *</pattern><template>It is now 2012, so I would say 92 years old.</template></category>
+<category><pattern>_ BORN IN 1921 * OLD *</pattern><template>It is now 2012, so I would say 91 years old.</template></category>
+<category><pattern>_ BORN IN 1922 * OLD *</pattern><template>It is now 2012, so I would say 90 years old.</template></category>
+<category><pattern>_ BORN IN 1923 * OLD *</pattern><template>It is now 2012, so I would say 89 years old.</template></category>
+<category><pattern>_ BORN IN 1924 * OLD *</pattern><template>It is now 2012, so I would say 88 years old.</template></category>
+<category><pattern>_ BORN IN 1925 * OLD *</pattern><template>It is now 2012, so I would say 87 years old.</template></category>
+<category><pattern>_ BORN IN 1926 * OLD *</pattern><template>It is now 2012, so I would say 86 years old.</template></category>
+<category><pattern>_ BORN IN 1927 * OLD *</pattern><template>It is now 2012, so I would say 85 years old.</template></category>
+<category><pattern>_ BORN IN 1928 * OLD *</pattern><template>It is now 2012, so I would say 84 years old.</template></category>
+<category><pattern>_ BORN IN 1929 * OLD *</pattern><template>It is now 2012, so I would say 83 years old.</template></category>
+<category><pattern>_ BORN IN 1930 * OLD *</pattern><template>It is now 2012, so I would say 82 years old.</template></category>
+<category><pattern>_ BORN IN 1931 * OLD *</pattern><template>It is now 2012, so I would say 81 years old.</template></category>
+<category><pattern>_ BORN IN 1932 * OLD *</pattern><template>It is now 2012, so I would say 80 years old.</template></category>
+<category><pattern>_ BORN IN 1933 * OLD *</pattern><template>It is now 2012, so I would say 79 years old.</template></category>
+<category><pattern>_ BORN IN 1934 * OLD *</pattern><template>It is now 2012, so I would say 78 years old.</template></category>
+<category><pattern>_ BORN IN 1935 * OLD *</pattern><template>It is now 2012, so I would say 77 years old.</template></category>
+<category><pattern>_ BORN IN 1936 * OLD *</pattern><template>It is now 2012, so I would say 76 years old.</template></category>
+<category><pattern>_ BORN IN 1937 * OLD *</pattern><template>It is now 2012, so I would say 75 years old.</template></category>
+<category><pattern>_ BORN IN 1938 * OLD *</pattern><template>It is now 2012, so I would say 74 years old.</template></category>
+<category><pattern>_ BORN IN 1939 * OLD *</pattern><template>It is now 2012, so I would say 73 years old.</template></category>
+<category><pattern>_ BORN IN 1940 * OLD *</pattern><template>It is now 2012, so I would say 72 years old.</template></category>
+<category><pattern>_ BORN IN 1941 * OLD *</pattern><template>It is now 2012, so I would say 71 years old.</template></category>
+<category><pattern>_ BORN IN 1942 * OLD *</pattern><template>It is now 2012, so I would say 70 years old.</template></category>
+<category><pattern>_ BORN IN 1943 * OLD *</pattern><template>It is now 2012, so I would say 69 years old.</template></category>
+<category><pattern>_ BORN IN 1944 * OLD *</pattern><template>It is now 2012, so I would say 68 years old.</template></category>
+<category><pattern>_ BORN IN 1945 * OLD *</pattern><template>It is now 2012, so I would say 67 years old.</template></category>
+<category><pattern>_ BORN IN 1946 * OLD *</pattern><template>It is now 2012, so I would say 66 years old.</template></category>
+<category><pattern>_ BORN IN 1947 * OLD *</pattern><template>It is now 2012, so I would say 65 years old.</template></category>
+<category><pattern>_ BORN IN 1948 * OLD *</pattern><template>It is now 2012, so I would say 64 years old.</template></category>
+<category><pattern>_ BORN IN 1949 * OLD *</pattern><template>It is now 2012, so I would say 63 years old.</template></category>
+<category><pattern>_ BORN IN 1950 * OLD *</pattern><template>It is now 2012, so I would say 62 years old.</template></category>
+<category><pattern>_ BORN IN 1951 * OLD *</pattern><template>It is now 2012, so I would say 61 years old.</template></category>
+<category><pattern>_ BORN IN 1952 * OLD *</pattern><template>It is now 2012, so I would say 60 years old.</template></category>
+<category><pattern>_ BORN IN 1953 * OLD *</pattern><template>It is now 2012, so I would say 59 years old.</template></category>
+<category><pattern>_ BORN IN 1954 * OLD *</pattern><template>It is now 2012, so I would say 58 years old.</template></category>
+<category><pattern>_ BORN IN 1955 * OLD *</pattern><template>It is now 2012, so I would say 57 years old.</template></category>
+<category><pattern>_ BORN IN 1956 * OLD *</pattern><template>It is now 2012, so I would say 56 years old.</template></category>
+<category><pattern>_ BORN IN 1957 * OLD *</pattern><template>It is now 2012, so I would say 55 years old.</template></category>
+<category><pattern>_ BORN IN 1958 * OLD *</pattern><template>It is now 2012, so I would say 54 years old.</template></category>
+<category><pattern>_ BORN IN 1959 * OLD *</pattern><template>It is now 2012, so I would say 53 years old.</template></category>
+<category><pattern>_ BORN IN 1960 * OLD *</pattern><template>It is now 2012, so I would say 52 years old.</template></category>
+<category><pattern>_ BORN IN 1961 * OLD *</pattern><template>It is now 2012, so I would say 51 years old.</template></category>
+<category><pattern>_ BORN IN 1962 * OLD *</pattern><template>It is now 2012, so I would say 50 years old.</template></category>
+<category><pattern>_ BORN IN 1963 * OLD *</pattern><template>It is now 2012, so I would say 49 years old.</template></category>
+<category><pattern>_ BORN IN 1964 * OLD *</pattern><template>It is now 2012, so I would say 48 years old.</template></category>
+<category><pattern>_ BORN IN 1965 * OLD *</pattern><template>It is now 2012, so I would say 47 years old.</template></category>
+<category><pattern>_ BORN IN 1966 * OLD *</pattern><template>It is now 2012, so I would say 46 years old.</template></category>
+<category><pattern>_ BORN IN 1967 * OLD *</pattern><template>It is now 2012, so I would say 45 years old.</template></category>
+<category><pattern>_ BORN IN 1968 * OLD *</pattern><template>It is now 2012, so I would say 44 years old.</template></category>
+<category><pattern>_ BORN IN 1969 * OLD *</pattern><template>It is now 2012, so I would say 43 years old.</template></category>
+<category><pattern>_ BORN IN 1970 * OLD *</pattern><template>It is now 2012, so I would say 42 years old.</template></category>
+<category><pattern>_ BORN IN 1971 * OLD *</pattern><template>It is now 2012, so I would say 41 years old.</template></category>
+<category><pattern>_ BORN IN 1972 * OLD *</pattern><template>It is now 2012, so I would say 40 years old.</template></category>
+<category><pattern>_ BORN IN 1973 * OLD *</pattern><template>It is now 2012, so I would say 39 years old.</template></category>
+<category><pattern>_ BORN IN 1974 * OLD *</pattern><template>It is now 2012, so I would say 38 years old.</template></category>
+<category><pattern>_ BORN IN 1975 * OLD *</pattern><template>It is now 2012, so I would say 37 years old.</template></category>
+<category><pattern>_ BORN IN 1976 * OLD *</pattern><template>It is now 2012, so I would say 36 years old.</template></category>
+<category><pattern>_ BORN IN 1977 * OLD *</pattern><template>It is now 2012, so I would say 35 years old.</template></category>
+<category><pattern>_ BORN IN 1978 * OLD *</pattern><template>It is now 2012, so I would say 34 years old.</template></category>
+<category><pattern>_ BORN IN 1979 * OLD *</pattern><template>It is now 2012, so I would say 33 years old.</template></category>
+<category><pattern>_ BORN IN 1980 * OLD *</pattern><template>It is now 2012, so I would say 32 years old.</template></category>
+<category><pattern>_ BORN IN 1981 * OLD *</pattern><template>It is now 2012, so I would say 31 years old.</template></category>
+<category><pattern>_ BORN IN 1982 * OLD *</pattern><template>It is now 2012, so I would say 30 years old.</template></category>
+<category><pattern>_ BORN IN 1983 * OLD *</pattern><template>It is now 2012, so I would say 29 years old.</template></category>
+<category><pattern>_ BORN IN 1984 * OLD *</pattern><template>It is now 2012, so I would say 28 years old.</template></category>
+<category><pattern>_ BORN IN 1985 * OLD *</pattern><template>It is now 2012, so I would say 27 years old.</template></category>
+<category><pattern>_ BORN IN 1986 * OLD *</pattern><template>It is now 2012, so I would say 26 years old.</template></category>
+<category><pattern>_ BORN IN 1987 * OLD *</pattern><template>It is now 2012, so I would say 25 years old.</template></category>
+<category><pattern>_ BORN IN 1988 * OLD *</pattern><template>It is now 2012, so I would say 24 years old.</template></category>
+<category><pattern>_ BORN IN 1989 * OLD *</pattern><template>It is now 2012, so I would say 23 years old.</template></category>
+<category><pattern>_ BORN IN 1990 * OLD *</pattern><template>It is now 2012, so I would say 22 years old.</template></category>
+<category><pattern>_ BORN IN 1991 * OLD *</pattern><template>It is now 2012, so I would say 21 years old.</template></category>
+<category><pattern>_ BORN IN 1992 * OLD *</pattern><template>It is now 2012, so I would say 20 years old.</template></category>
+<category><pattern>_ BORN IN 1993 * OLD *</pattern><template>It is now 2012, so I would say 19 years old.</template></category>
+<category><pattern>_ BORN IN 1994 * OLD *</pattern><template>It is now 2012, so I would say 18 years old.</template></category>
+<category><pattern>_ BORN IN 1995 * OLD *</pattern><template>It is now 2012, so I would say 17 years old.</template></category>
+<category><pattern>_ BORN IN 1996 * OLD *</pattern><template>It is now 2012, so I would say 16 years old.</template></category>
+<category><pattern>_ BORN IN 1997 * OLD *</pattern><template>It is now 2012, so I would say 15 years old.</template></category>
+<category><pattern>_ BORN IN 1998 * OLD *</pattern><template>It is now 2012, so I would say 14 years old.</template></category>
+<category><pattern>_ BORN IN 1999 * OLD *</pattern><template>It is now 2012, so I would say 13 years old.</template></category>
+<category><pattern>_ BORN IN 2000 * OLD *</pattern><template>It is now 2012, so I would say 12 years old.</template></category>
+<category><pattern>_ BORN IN 2001 * OLD *</pattern><template>It is now 2012, so I would say 11 years old.</template></category>
+<category><pattern>_ BORN IN 2002 * OLD *</pattern><template>It is now 2012, so I would say 10 years old.</template></category>
+<category><pattern>_ BORN IN 2003 * OLD *</pattern><template>It is now 2012, so I would say 9 years old.</template></category>
+<category><pattern>_ BORN IN 2004 * OLD *</pattern><template>It is now 2012, so I would say 8 years old.</template></category>
+<category><pattern>_ BORN IN 2005 * OLD *</pattern><template>It is now 2012, so I would say 7 years old.</template></category>
+<category><pattern>_ BORN IN 2006 * OLD *</pattern><template>It is now 2012, so I would say 6 years old.</template></category>
+<category><pattern>_ BORN IN 2007 * OLD *</pattern><template>It is now 2012, so I would say 5 years old.</template></category>
+<category><pattern>_ BORN IN 2008 * OLD *</pattern><template>It is now 2012, so I would say 4 years old.</template></category>
+<category><pattern>_ BORN IN 2009 * OLD *</pattern><template>It is now 2012, so I would say 3 years old.</template></category>
+<category><pattern>_ BORN IN 2010 * OLD *</pattern><template>It is now 2012, so I would say 2 years old.</template></category>
+<category><pattern>_ BORN IN 2011 * OLD *</pattern><template>It is now 2012, so I would say 1 year old.</template></category>
+<category><pattern>_ BORN IN 2012 * OLD *</pattern><template>It is now 2012, so I would say 0 years old.</template></category>
+
+
+<category><pattern>I WAS BORN IN 1800</pattern><template><think><set name="birthyear">1800</set></think>So that makes you about <set name="age">212</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1801</pattern><template><think><set name="birthyear">1801</set></think>So that makes you about <set name="age">211</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1802</pattern><template><think><set name="birthyear">1802</set></think>So that makes you about <set name="age">210</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1803</pattern><template><think><set name="birthyear">1803</set></think>So that makes you about <set name="age">209</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1804</pattern><template><think><set name="birthyear">1804</set></think>So that makes you about <set name="age">208</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1805</pattern><template><think><set name="birthyear">1805</set></think>So that makes you about <set name="age">207</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1806</pattern><template><think><set name="birthyear">1806</set></think>So that makes you about <set name="age">206</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1807</pattern><template><think><set name="birthyear">1807</set></think>So that makes you about <set name="age">205</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1808</pattern><template><think><set name="birthyear">1808</set></think>So that makes you about <set name="age">204</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1809</pattern><template><think><set name="birthyear">1809</set></think>So that makes you about <set name="age">203</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1810</pattern><template><think><set name="birthyear">1810</set></think>So that makes you about <set name="age">202</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1811</pattern><template><think><set name="birthyear">1811</set></think>So that makes you about <set name="age">201</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1812</pattern><template><think><set name="birthyear">1812</set></think>So that makes you about <set name="age">200</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1813</pattern><template><think><set name="birthyear">1813</set></think>So that makes you about <set name="age">199</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1814</pattern><template><think><set name="birthyear">1814</set></think>So that makes you about <set name="age">198</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1815</pattern><template><think><set name="birthyear">1815</set></think>So that makes you about <set name="age">197</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1816</pattern><template><think><set name="birthyear">1816</set></think>So that makes you about <set name="age">196</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1817</pattern><template><think><set name="birthyear">1817</set></think>So that makes you about <set name="age">195</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1818</pattern><template><think><set name="birthyear">1818</set></think>So that makes you about <set name="age">194</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1819</pattern><template><think><set name="birthyear">1819</set></think>So that makes you about <set name="age">193</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1820</pattern><template><think><set name="birthyear">1820</set></think>So that makes you about <set name="age">192</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1821</pattern><template><think><set name="birthyear">1821</set></think>So that makes you about <set name="age">191</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1822</pattern><template><think><set name="birthyear">1822</set></think>So that makes you about <set name="age">190</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1823</pattern><template><think><set name="birthyear">1823</set></think>So that makes you about <set name="age">189</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1824</pattern><template><think><set name="birthyear">1824</set></think>So that makes you about <set name="age">188</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1825</pattern><template><think><set name="birthyear">1825</set></think>So that makes you about <set name="age">187</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1826</pattern><template><think><set name="birthyear">1826</set></think>So that makes you about <set name="age">186</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1827</pattern><template><think><set name="birthyear">1827</set></think>So that makes you about <set name="age">185</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1828</pattern><template><think><set name="birthyear">1828</set></think>So that makes you about <set name="age">184</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1829</pattern><template><think><set name="birthyear">1829</set></think>So that makes you about <set name="age">183</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1830</pattern><template><think><set name="birthyear">1830</set></think>So that makes you about <set name="age">182</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1831</pattern><template><think><set name="birthyear">1831</set></think>So that makes you about <set name="age">181</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1832</pattern><template><think><set name="birthyear">1832</set></think>So that makes you about <set name="age">180</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1833</pattern><template><think><set name="birthyear">1833</set></think>So that makes you about <set name="age">179</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1834</pattern><template><think><set name="birthyear">1834</set></think>So that makes you about <set name="age">178</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1835</pattern><template><think><set name="birthyear">1835</set></think>So that makes you about <set name="age">177</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1836</pattern><template><think><set name="birthyear">1836</set></think>So that makes you about <set name="age">176</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1837</pattern><template><think><set name="birthyear">1837</set></think>So that makes you about <set name="age">175</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1838</pattern><template><think><set name="birthyear">1838</set></think>So that makes you about <set name="age">174</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1839</pattern><template><think><set name="birthyear">1839</set></think>So that makes you about <set name="age">173</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1840</pattern><template><think><set name="birthyear">1840</set></think>So that makes you about <set name="age">172</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1841</pattern><template><think><set name="birthyear">1841</set></think>So that makes you about <set name="age">171</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1842</pattern><template><think><set name="birthyear">1842</set></think>So that makes you about <set name="age">170</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1843</pattern><template><think><set name="birthyear">1843</set></think>So that makes you about <set name="age">169</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1844</pattern><template><think><set name="birthyear">1844</set></think>So that makes you about <set name="age">168</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1845</pattern><template><think><set name="birthyear">1845</set></think>So that makes you about <set name="age">167</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1846</pattern><template><think><set name="birthyear">1846</set></think>So that makes you about <set name="age">166</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1847</pattern><template><think><set name="birthyear">1847</set></think>So that makes you about <set name="age">165</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1848</pattern><template><think><set name="birthyear">1848</set></think>So that makes you about <set name="age">164</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1849</pattern><template><think><set name="birthyear">1849</set></think>So that makes you about <set name="age">163</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1850</pattern><template><think><set name="birthyear">1850</set></think>So that makes you about <set name="age">162</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1851</pattern><template><think><set name="birthyear">1851</set></think>So that makes you about <set name="age">161</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1852</pattern><template><think><set name="birthyear">1852</set></think>So that makes you about <set name="age">160</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1853</pattern><template><think><set name="birthyear">1853</set></think>So that makes you about <set name="age">159</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1854</pattern><template><think><set name="birthyear">1854</set></think>So that makes you about <set name="age">158</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1855</pattern><template><think><set name="birthyear">1855</set></think>So that makes you about <set name="age">157</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1856</pattern><template><think><set name="birthyear">1856</set></think>So that makes you about <set name="age">156</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1857</pattern><template><think><set name="birthyear">1857</set></think>So that makes you about <set name="age">155</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1858</pattern><template><think><set name="birthyear">1858</set></think>So that makes you about <set name="age">154</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1859</pattern><template><think><set name="birthyear">1859</set></think>So that makes you about <set name="age">153</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1860</pattern><template><think><set name="birthyear">1860</set></think>So that makes you about <set name="age">152</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1861</pattern><template><think><set name="birthyear">1861</set></think>So that makes you about <set name="age">151</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1862</pattern><template><think><set name="birthyear">1862</set></think>So that makes you about <set name="age">150</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1863</pattern><template><think><set name="birthyear">1863</set></think>So that makes you about <set name="age">149</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1864</pattern><template><think><set name="birthyear">1864</set></think>So that makes you about <set name="age">148</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1865</pattern><template><think><set name="birthyear">1865</set></think>So that makes you about <set name="age">147</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1866</pattern><template><think><set name="birthyear">1866</set></think>So that makes you about <set name="age">146</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1867</pattern><template><think><set name="birthyear">1867</set></think>So that makes you about <set name="age">145</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1868</pattern><template><think><set name="birthyear">1868</set></think>So that makes you about <set name="age">144</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1869</pattern><template><think><set name="birthyear">1869</set></think>So that makes you about <set name="age">143</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1870</pattern><template><think><set name="birthyear">1870</set></think>So that makes you about <set name="age">142</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1871</pattern><template><think><set name="birthyear">1871</set></think>So that makes you about <set name="age">141</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1872</pattern><template><think><set name="birthyear">1872</set></think>So that makes you about <set name="age">140</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1873</pattern><template><think><set name="birthyear">1873</set></think>So that makes you about <set name="age">139</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1874</pattern><template><think><set name="birthyear">1874</set></think>So that makes you about <set name="age">138</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1875</pattern><template><think><set name="birthyear">1875</set></think>So that makes you about <set name="age">137</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1876</pattern><template><think><set name="birthyear">1876</set></think>So that makes you about <set name="age">136</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1877</pattern><template><think><set name="birthyear">1877</set></think>So that makes you about <set name="age">135</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1878</pattern><template><think><set name="birthyear">1878</set></think>So that makes you about <set name="age">134</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1879</pattern><template><think><set name="birthyear">1879</set></think>So that makes you about <set name="age">133</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1880</pattern><template><think><set name="birthyear">1880</set></think>So that makes you about <set name="age">132</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1881</pattern><template><think><set name="birthyear">1881</set></think>So that makes you about <set name="age">131</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1882</pattern><template><think><set name="birthyear">1882</set></think>So that makes you about <set name="age">130</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1883</pattern><template><think><set name="birthyear">1883</set></think>So that makes you about <set name="age">129</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1884</pattern><template><think><set name="birthyear">1884</set></think>So that makes you about <set name="age">128</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1885</pattern><template><think><set name="birthyear">1885</set></think>So that makes you about <set name="age">127</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1886</pattern><template><think><set name="birthyear">1886</set></think>So that makes you about <set name="age">126</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1887</pattern><template><think><set name="birthyear">1887</set></think>So that makes you about <set name="age">125</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1888</pattern><template><think><set name="birthyear">1888</set></think>So that makes you about <set name="age">124</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1889</pattern><template><think><set name="birthyear">1889</set></think>So that makes you about <set name="age">123</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1890</pattern><template><think><set name="birthyear">1890</set></think>So that makes you about <set name="age">122</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1891</pattern><template><think><set name="birthyear">1891</set></think>So that makes you about <set name="age">121</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1892</pattern><template><think><set name="birthyear">1892</set></think>So that makes you about <set name="age">120</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1893</pattern><template><think><set name="birthyear">1893</set></think>So that makes you about <set name="age">119</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1894</pattern><template><think><set name="birthyear">1894</set></think>So that makes you about <set name="age">118</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1895</pattern><template><think><set name="birthyear">1895</set></think>So that makes you about <set name="age">117</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1896</pattern><template><think><set name="birthyear">1896</set></think>So that makes you about <set name="age">116</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1897</pattern><template><think><set name="birthyear">1897</set></think>So that makes you about <set name="age">115</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1898</pattern><template><think><set name="birthyear">1898</set></think>So that makes you about <set name="age">114</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1899</pattern><template><think><set name="birthyear">1899</set></think>So that makes you about <set name="age">113</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1900</pattern><template><think><set name="birthyear">1900</set></think>So that makes you about <set name="age">112</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1901</pattern><template><think><set name="birthyear">1901</set></think>So that makes you about <set name="age">111</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1902</pattern><template><think><set name="birthyear">1902</set></think>So that makes you about <set name="age">110</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1903</pattern><template><think><set name="birthyear">1903</set></think>So that makes you about <set name="age">109</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1904</pattern><template><think><set name="birthyear">1904</set></think>So that makes you about <set name="age">108</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1905</pattern><template><think><set name="birthyear">1905</set></think>So that makes you about <set name="age">107</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1906</pattern><template><think><set name="birthyear">1906</set></think>So that makes you about <set name="age">106</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1907</pattern><template><think><set name="birthyear">1907</set></think>So that makes you about <set name="age">105</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1908</pattern><template><think><set name="birthyear">1908</set></think>So that makes you about <set name="age">104</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1909</pattern><template><think><set name="birthyear">1909</set></think>So that makes you about <set name="age">103</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1910</pattern><template><think><set name="birthyear">1910</set></think>So that makes you about <set name="age">102</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1911</pattern><template><think><set name="birthyear">1911</set></think>So that makes you about <set name="age">101</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1912</pattern><template><think><set name="birthyear">1912</set></think>So that makes you about <set name="age">100</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1913</pattern><template><think><set name="birthyear">1913</set></think>So that makes you about <set name="age">99</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1914</pattern><template><think><set name="birthyear">1914</set></think>So that makes you about <set name="age">98</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1915</pattern><template><think><set name="birthyear">1915</set></think>So that makes you about <set name="age">97</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1916</pattern><template><think><set name="birthyear">1916</set></think>So that makes you about <set name="age">96</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1917</pattern><template><think><set name="birthyear">1917</set></think>So that makes you about <set name="age">95</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1918</pattern><template><think><set name="birthyear">1918</set></think>So that makes you about <set name="age">94</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1919</pattern><template><think><set name="birthyear">1919</set></think>So that makes you about <set name="age">93</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1920</pattern><template><think><set name="birthyear">1920</set></think>So that makes you about <set name="age">92</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1921</pattern><template><think><set name="birthyear">1921</set></think>So that makes you about <set name="age">91</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1922</pattern><template><think><set name="birthyear">1922</set></think>So that makes you about <set name="age">90</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1923</pattern><template><think><set name="birthyear">1923</set></think>So that makes you about <set name="age">89</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1924</pattern><template><think><set name="birthyear">1924</set></think>So that makes you about <set name="age">88</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1925</pattern><template><think><set name="birthyear">1925</set></think>So that makes you about <set name="age">87</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1926</pattern><template><think><set name="birthyear">1926</set></think>So that makes you about <set name="age">86</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1927</pattern><template><think><set name="birthyear">1927</set></think>So that makes you about <set name="age">85</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1928</pattern><template><think><set name="birthyear">1928</set></think>So that makes you about <set name="age">84</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1929</pattern><template><think><set name="birthyear">1929</set></think>So that makes you about <set name="age">83</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1930</pattern><template><think><set name="birthyear">1930</set></think>So that makes you about <set name="age">82</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1931</pattern><template><think><set name="birthyear">1931</set></think>So that makes you about <set name="age">81</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1932</pattern><template><think><set name="birthyear">1932</set></think>So that makes you about <set name="age">80</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1933</pattern><template><think><set name="birthyear">1933</set></think>So that makes you about <set name="age">79</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1934</pattern><template><think><set name="birthyear">1934</set></think>So that makes you about <set name="age">78</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1935</pattern><template><think><set name="birthyear">1935</set></think>So that makes you about <set name="age">77</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1936</pattern><template><think><set name="birthyear">1936</set></think>So that makes you about <set name="age">76</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1937</pattern><template><think><set name="birthyear">1937</set></think>So that makes you about <set name="age">75</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1938</pattern><template><think><set name="birthyear">1938</set></think>So that makes you about <set name="age">74</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1939</pattern><template><think><set name="birthyear">1939</set></think>So that makes you about <set name="age">73</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1940</pattern><template><think><set name="birthyear">1940</set></think>So that makes you about <set name="age">72</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1941</pattern><template><think><set name="birthyear">1941</set></think>So that makes you about <set name="age">71</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1942</pattern><template><think><set name="birthyear">1942</set></think>So that makes you about <set name="age">70</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1943</pattern><template><think><set name="birthyear">1943</set></think>So that makes you about <set name="age">69</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1944</pattern><template><think><set name="birthyear">1944</set></think>So that makes you about <set name="age">68</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1945</pattern><template><think><set name="birthyear">1945</set></think>So that makes you about <set name="age">67</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1946</pattern><template><think><set name="birthyear">1946</set></think>So that makes you about <set name="age">66</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1947</pattern><template><think><set name="birthyear">1947</set></think>So that makes you about <set name="age">65</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1948</pattern><template><think><set name="birthyear">1948</set></think>So that makes you about <set name="age">64</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1949</pattern><template><think><set name="birthyear">1949</set></think>So that makes you about <set name="age">63</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1950</pattern><template><think><set name="birthyear">1950</set></think>So that makes you about <set name="age">62</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1951</pattern><template><think><set name="birthyear">1951</set></think>So that makes you about <set name="age">61</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1952</pattern><template><think><set name="birthyear">1952</set></think>So that makes you about <set name="age">60</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1953</pattern><template><think><set name="birthyear">1953</set></think>So that makes you about <set name="age">59</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1954</pattern><template><think><set name="birthyear">1954</set></think>So that makes you about <set name="age">58</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1955</pattern><template><think><set name="birthyear">1955</set></think>So that makes you about <set name="age">57</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1956</pattern><template><think><set name="birthyear">1956</set></think>So that makes you about <set name="age">56</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1957</pattern><template><think><set name="birthyear">1957</set></think>So that makes you about <set name="age">55</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1958</pattern><template><think><set name="birthyear">1958</set></think>So that makes you about <set name="age">54</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1959</pattern><template><think><set name="birthyear">1959</set></think>So that makes you about <set name="age">53</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1960</pattern><template><think><set name="birthyear">1960</set></think>So that makes you about <set name="age">52</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1961</pattern><template><think><set name="birthyear">1961</set></think>So that makes you about <set name="age">51</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1962</pattern><template><think><set name="birthyear">1962</set></think>So that makes you about <set name="age">50</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1963</pattern><template><think><set name="birthyear">1963</set></think>So that makes you about <set name="age">49</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1964</pattern><template><think><set name="birthyear">1964</set></think>So that makes you about <set name="age">48</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1965</pattern><template><think><set name="birthyear">1965</set></think>So that makes you about <set name="age">47</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1966</pattern><template><think><set name="birthyear">1966</set></think>So that makes you about <set name="age">46</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1967</pattern><template><think><set name="birthyear">1967</set></think>So that makes you about <set name="age">45</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1968</pattern><template><think><set name="birthyear">1968</set></think>So that makes you about <set name="age">44</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1969</pattern><template><think><set name="birthyear">1969</set></think>So that makes you about <set name="age">43</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1970</pattern><template><think><set name="birthyear">1970</set></think>So that makes you about <set name="age">42</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1971</pattern><template><think><set name="birthyear">1971</set></think>So that makes you about <set name="age">41</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1972</pattern><template><think><set name="birthyear">1972</set></think>So that makes you about <set name="age">40</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1973</pattern><template><think><set name="birthyear">1973</set></think>So that makes you about <set name="age">39</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1974</pattern><template><think><set name="birthyear">1974</set></think>So that makes you about <set name="age">38</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1975</pattern><template><think><set name="birthyear">1975</set></think>So that makes you about <set name="age">37</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1976</pattern><template><think><set name="birthyear">1976</set></think>So that makes you about <set name="age">36</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1977</pattern><template><think><set name="birthyear">1977</set></think>So that makes you about <set name="age">35</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1978</pattern><template><think><set name="birthyear">1978</set></think>So that makes you about <set name="age">34</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1979</pattern><template><think><set name="birthyear">1979</set></think>So that makes you about <set name="age">33</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1980</pattern><template><think><set name="birthyear">1980</set></think>So that makes you about <set name="age">32</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1981</pattern><template><think><set name="birthyear">1981</set></think>So that makes you about <set name="age">31</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1982</pattern><template><think><set name="birthyear">1982</set></think>So that makes you about <set name="age">30</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1983</pattern><template><think><set name="birthyear">1983</set></think>So that makes you about <set name="age">29</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1984</pattern><template><think><set name="birthyear">1984</set></think>So that makes you about <set name="age">28</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1985</pattern><template><think><set name="birthyear">1985</set></think>So that makes you about <set name="age">27</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1986</pattern><template><think><set name="birthyear">1986</set></think>So that makes you about <set name="age">26</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1987</pattern><template><think><set name="birthyear">1987</set></think>So that makes you about <set name="age">25</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1988</pattern><template><think><set name="birthyear">1988</set></think>So that makes you about <set name="age">24</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1989</pattern><template><think><set name="birthyear">1989</set></think>So that makes you about <set name="age">23</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1990</pattern><template><think><set name="birthyear">1990</set></think>So that makes you about <set name="age">22</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1991</pattern><template><think><set name="birthyear">1991</set></think>So that makes you about <set name="age">21</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1992</pattern><template><think><set name="birthyear">1992</set></think>So that makes you about <set name="age">20</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1993</pattern><template><think><set name="birthyear">1993</set></think>So that makes you about <set name="age">19</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1994</pattern><template><think><set name="birthyear">1994</set></think>So that makes you about <set name="age">18</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1995</pattern><template><think><set name="birthyear">1995</set></think>So that makes you about <set name="age">17</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1996</pattern><template><think><set name="birthyear">1996</set></think>So that makes you about <set name="age">16</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1997</pattern><template><think><set name="birthyear">1997</set></think>So that makes you about <set name="age">15</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1998</pattern><template><think><set name="birthyear">1998</set></think>So that makes you about <set name="age">14</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 1999</pattern><template><think><set name="birthyear">1999</set></think>So that makes you about <set name="age">13</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2000</pattern><template><think><set name="birthyear">2000</set></think>So that makes you about <set name="age">12</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2001</pattern><template><think><set name="birthyear">2001</set></think>So that makes you about <set name="age">11</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2002</pattern><template><think><set name="birthyear">2002</set></think>So that makes you about <set name="age">10</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2003</pattern><template><think><set name="birthyear">2003</set></think>So that makes you about <set name="age">9</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2004</pattern><template><think><set name="birthyear">2004</set></think>So that makes you about <set name="age">8</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2005</pattern><template><think><set name="birthyear">2005</set></think>So that makes you about <set name="age">7</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2006</pattern><template><think><set name="birthyear">2006</set></think>So that makes you about <set name="age">6</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2007</pattern><template><think><set name="birthyear">2007</set></think>So that makes you about <set name="age">5</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2008</pattern><template><think><set name="birthyear">2008</set></think>So that makes you about <set name="age">4</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2009</pattern><template><think><set name="birthyear">2009</set></think>So that makes you about <set name="age">3</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2010</pattern><template><think><set name="birthyear">2010</set></think>So that makes you about <set name="age">2</set> years old?</template></category>
+<category><pattern>I WAS BORN IN 2011</pattern><template><think><set name="birthyear">2011</set></think>So that makes you about <set name="age">1</set>year old?</template></category>
+<category><pattern>I WAS BORN IN 2012</pattern><template><think><set name="birthyear">2012</set></think>So that makes you about <set name="age">0</set> years old?</template></category>
+
+<category><pattern>YEARFROMAGE</pattern><template></template></category>
+<category><pattern>YEARFROMAGE *</pattern><template></template></category>
+<category><pattern>YEARFROMAGE JUST *</pattern><template><srai>YEARFROMAGE <star/></srai></template></category>
+<category><pattern>YEARFROMAGE ONLY *</pattern><template><srai>YEARFROMAGE <star/></srai></template></category>
+<category><pattern>YEARFROMAGE ABOUT *</pattern><template><srai>YEARFROMAGE <star/></srai></template></category>
+<category><pattern>YEARFROMAGE ALMOST *</pattern><template><srai>YEARFROMAGE <star/></srai></template></category>
+<category><pattern>YEARFROMAGE NEARLY *</pattern><template><srai>YEARFROMAGE <star/></srai></template></category>
+
+<category><pattern>YEARFROMAGE 0</pattern><template><think><set name="birthyear">2012</set></think></template></category>
+<category><pattern>YEARFROMAGE 1</pattern><template><think><set name="birthyear">2011</set></think></template></category>
+<category><pattern>YEARFROMAGE 2</pattern><template><think><set name="birthyear">2010</set></think></template></category>
+<category><pattern>YEARFROMAGE 3</pattern><template><think><set name="birthyear">2009</set></think></template></category>
+<category><pattern>YEARFROMAGE 4</pattern><template><think><set name="birthyear">2008</set></think></template></category>
+<category><pattern>YEARFROMAGE 5</pattern><template><think><set name="birthyear">2007</set></think></template></category>
+<category><pattern>YEARFROMAGE 6</pattern><template><think><set name="birthyear">2006</set></think></template></category>
+<category><pattern>YEARFROMAGE 7</pattern><template><think><set name="birthyear">2005</set></think></template></category>
+<category><pattern>YEARFROMAGE 8</pattern><template><think><set name="birthyear">2004</set></think></template></category>
+<category><pattern>YEARFROMAGE 9</pattern><template><think><set name="birthyear">2003</set></think></template></category>
+<category><pattern>YEARFROMAGE 10</pattern><template><think><set name="birthyear">2002</set></think></template></category>
+<category><pattern>YEARFROMAGE 11</pattern><template><think><set name="birthyear">2001</set></think></template></category>
+<category><pattern>YEARFROMAGE 12</pattern><template><think><set name="birthyear">2000</set></think></template></category>
+<category><pattern>YEARFROMAGE 13</pattern><template><think><set name="birthyear">1999</set></think></template></category>
+<category><pattern>YEARFROMAGE 14</pattern><template><think><set name="birthyear">1998</set></think></template></category>
+<category><pattern>YEARFROMAGE 15</pattern><template><think><set name="birthyear">1997</set></think></template></category>
+<category><pattern>YEARFROMAGE 16</pattern><template><think><set name="birthyear">1996</set></think></template></category>
+<category><pattern>YEARFROMAGE 17</pattern><template><think><set name="birthyear">1995</set></think></template></category>
+<category><pattern>YEARFROMAGE 18</pattern><template><think><set name="birthyear">1994</set></think></template></category>
+<category><pattern>YEARFROMAGE 19</pattern><template><think><set name="birthyear">1993</set></think></template></category>
+<category><pattern>YEARFROMAGE 20</pattern><template><think><set name="birthyear">1992</set></think></template></category>
+<category><pattern>YEARFROMAGE 21</pattern><template><think><set name="birthyear">1991</set></think></template></category>
+<category><pattern>YEARFROMAGE 22</pattern><template><think><set name="birthyear">1990</set></think></template></category>
+<category><pattern>YEARFROMAGE 23</pattern><template><think><set name="birthyear">1989</set></think></template></category>
+<category><pattern>YEARFROMAGE 24</pattern><template><think><set name="birthyear">1988</set></think></template></category>
+<category><pattern>YEARFROMAGE 25</pattern><template><think><set name="birthyear">1987</set></think></template></category>
+<category><pattern>YEARFROMAGE 26</pattern><template><think><set name="birthyear">1986</set></think></template></category>
+<category><pattern>YEARFROMAGE 27</pattern><template><think><set name="birthyear">1985</set></think></template></category>
+<category><pattern>YEARFROMAGE 28</pattern><template><think><set name="birthyear">1984</set></think></template></category>
+<category><pattern>YEARFROMAGE 29</pattern><template><think><set name="birthyear">1983</set></think></template></category>
+<category><pattern>YEARFROMAGE 30</pattern><template><think><set name="birthyear">1982</set></think></template></category>
+<category><pattern>YEARFROMAGE 31</pattern><template><think><set name="birthyear">1981</set></think></template></category>
+<category><pattern>YEARFROMAGE 32</pattern><template><think><set name="birthyear">1980</set></think></template></category>
+<category><pattern>YEARFROMAGE 33</pattern><template><think><set name="birthyear">1979</set></think></template></category>
+<category><pattern>YEARFROMAGE 34</pattern><template><think><set name="birthyear">1978</set></think></template></category>
+<category><pattern>YEARFROMAGE 35</pattern><template><think><set name="birthyear">1977</set></think></template></category>
+<category><pattern>YEARFROMAGE 36</pattern><template><think><set name="birthyear">1976</set></think></template></category>
+<category><pattern>YEARFROMAGE 37</pattern><template><think><set name="birthyear">1975</set></think></template></category>
+<category><pattern>YEARFROMAGE 38</pattern><template><think><set name="birthyear">1974</set></think></template></category>
+<category><pattern>YEARFROMAGE 39</pattern><template><think><set name="birthyear">1973</set></think></template></category>
+<category><pattern>YEARFROMAGE 40</pattern><template><think><set name="birthyear">1972</set></think></template></category>
+<category><pattern>YEARFROMAGE 41</pattern><template><think><set name="birthyear">1971</set></think></template></category>
+<category><pattern>YEARFROMAGE 42</pattern><template><think><set name="birthyear">1970</set></think></template></category>
+<category><pattern>YEARFROMAGE 43</pattern><template><think><set name="birthyear">1969</set></think></template></category>
+<category><pattern>YEARFROMAGE 44</pattern><template><think><set name="birthyear">1968</set></think></template></category>
+<category><pattern>YEARFROMAGE 45</pattern><template><think><set name="birthyear">1967</set></think></template></category>
+<category><pattern>YEARFROMAGE 46</pattern><template><think><set name="birthyear">1966</set></think></template></category>
+<category><pattern>YEARFROMAGE 47</pattern><template><think><set name="birthyear">1965</set></think></template></category>
+<category><pattern>YEARFROMAGE 48</pattern><template><think><set name="birthyear">1964</set></think></template></category>
+<category><pattern>YEARFROMAGE 49</pattern><template><think><set name="birthyear">1963</set></think></template></category>
+<category><pattern>YEARFROMAGE 50</pattern><template><think><set name="birthyear">1962</set></think></template></category>
+<category><pattern>YEARFROMAGE 51</pattern><template><think><set name="birthyear">1961</set></think></template></category>
+<category><pattern>YEARFROMAGE 52</pattern><template><think><set name="birthyear">1960</set></think></template></category>
+<category><pattern>YEARFROMAGE 53</pattern><template><think><set name="birthyear">1959</set></think></template></category>
+<category><pattern>YEARFROMAGE 54</pattern><template><think><set name="birthyear">1958</set></think></template></category>
+<category><pattern>YEARFROMAGE 55</pattern><template><think><set name="birthyear">1957</set></think></template></category>
+<category><pattern>YEARFROMAGE 56</pattern><template><think><set name="birthyear">1956</set></think></template></category>
+<category><pattern>YEARFROMAGE 57</pattern><template><think><set name="birthyear">1955</set></think></template></category>
+<category><pattern>YEARFROMAGE 58</pattern><template><think><set name="birthyear">1954</set></think></template></category>
+<category><pattern>YEARFROMAGE 59</pattern><template><think><set name="birthyear">1953</set></think></template></category>
+<category><pattern>YEARFROMAGE 60</pattern><template><think><set name="birthyear">1952</set></think></template></category>
+<category><pattern>YEARFROMAGE 61</pattern><template><think><set name="birthyear">1951</set></think></template></category>
+<category><pattern>YEARFROMAGE 62</pattern><template><think><set name="birthyear">1940</set></think></template></category>
+<category><pattern>YEARFROMAGE 63</pattern><template><think><set name="birthyear">1949</set></think></template></category>
+<category><pattern>YEARFROMAGE 64</pattern><template><think><set name="birthyear">1948</set></think></template></category>
+<category><pattern>YEARFROMAGE 65</pattern><template><think><set name="birthyear">1947</set></think></template></category>
+<category><pattern>YEARFROMAGE 66</pattern><template><think><set name="birthyear">1946</set></think></template></category>
+<category><pattern>YEARFROMAGE 67</pattern><template><think><set name="birthyear">1945</set></think></template></category>
+<category><pattern>YEARFROMAGE 68</pattern><template><think><set name="birthyear">1944</set></think></template></category>
+<category><pattern>YEARFROMAGE 69</pattern><template><think><set name="birthyear">1943</set></think></template></category>
+<category><pattern>YEARFROMAGE 70</pattern><template><think><set name="birthyear">1942</set></think></template></category>
+<category><pattern>YEARFROMAGE 71</pattern><template><think><set name="birthyear">1941</set></think></template></category>
+<category><pattern>YEARFROMAGE 72</pattern><template><think><set name="birthyear">1940</set></think></template></category>
+<category><pattern>YEARFROMAGE 73</pattern><template><think><set name="birthyear">1939</set></think></template></category>
+<category><pattern>YEARFROMAGE 74</pattern><template><think><set name="birthyear">1938</set></think></template></category>
+<category><pattern>YEARFROMAGE 75</pattern><template><think><set name="birthyear">1937</set></think></template></category>
+<category><pattern>YEARFROMAGE 76</pattern><template><think><set name="birthyear">1936</set></think></template></category>
+<category><pattern>YEARFROMAGE 77</pattern><template><think><set name="birthyear">1935</set></think></template></category>
+<category><pattern>YEARFROMAGE 78</pattern><template><think><set name="birthyear">1934</set></think></template></category>
+<category><pattern>YEARFROMAGE 79</pattern><template><think><set name="birthyear">1933</set></think></template></category>
+<category><pattern>YEARFROMAGE 80</pattern><template><think><set name="birthyear">1932</set></think></template></category>
+<category><pattern>YEARFROMAGE 81</pattern><template><think><set name="birthyear">1931</set></think></template></category>
+<category><pattern>YEARFROMAGE 82</pattern><template><think><set name="birthyear">1930</set></think></template></category>
+<category><pattern>YEARFROMAGE 83</pattern><template><think><set name="birthyear">1929</set></think></template></category>
+<category><pattern>YEARFROMAGE 84</pattern><template><think><set name="birthyear">1928</set></think></template></category>
+<category><pattern>YEARFROMAGE 85</pattern><template><think><set name="birthyear">1927</set></think></template></category>
+<category><pattern>YEARFROMAGE 86</pattern><template><think><set name="birthyear">1926</set></think></template></category>
+<category><pattern>YEARFROMAGE 87</pattern><template><think><set name="birthyear">1925</set></think></template></category>
+<category><pattern>YEARFROMAGE 88</pattern><template><think><set name="birthyear">1924</set></think></template></category>
+<category><pattern>YEARFROMAGE 89</pattern><template><think><set name="birthyear">1923</set></think></template></category>
+<category><pattern>YEARFROMAGE 90</pattern><template><think><set name="birthyear">1922</set></think></template></category>
+<category><pattern>YEARFROMAGE 91</pattern><template><think><set name="birthyear">1921</set></think></template></category>
+<category><pattern>YEARFROMAGE 92</pattern><template><think><set name="birthyear">1920</set></think></template></category>
+<category><pattern>YEARFROMAGE 93</pattern><template><think><set name="birthyear">1919</set></think></template></category>
+<category><pattern>YEARFROMAGE 94</pattern><template><think><set name="birthyear">1918</set></think></template></category>
+<category><pattern>YEARFROMAGE 95</pattern><template><think><set name="birthyear">1917</set></think></template></category>
+<category><pattern>YEARFROMAGE 96</pattern><template><think><set name="birthyear">1916</set></think></template></category>
+<category><pattern>YEARFROMAGE 97</pattern><template><think><set name="birthyear">1915</set></think></template></category>
+<category><pattern>YEARFROMAGE 98</pattern><template><think><set name="birthyear">1914</set></think></template></category>
+<category><pattern>YEARFROMAGE 99</pattern><template><think><set name="birthyear">1913</set></think></template></category>
+<category><pattern>YEARFROMAGE 100</pattern><template><think><set name="birthyear">1912</set></think></template></category>
+
+
+<category><pattern>YEARFROMAGE ONE</pattern><template><think><set name="birthyear">2011</set></think></template></category>
+<category><pattern>YEARFROMAGE TWO</pattern><template><think><set name="birthyear">2010</set></think></template></category>
+<category><pattern>YEARFROMAGE THREE</pattern><template><think><set name="birthyear">2009</set></think></template></category>
+<category><pattern>YEARFROMAGE FOUR</pattern><template><think><set name="birthyear">2008</set></think></template></category>
+<category><pattern>YEARFROMAGE FIVE</pattern><template><think><set name="birthyear">2007</set></think></template></category>
+<category><pattern>YEARFROMAGE SIX</pattern><template><think><set name="birthyear">2006</set></think></template></category>
+<category><pattern>YEARFROMAGE SEVEN</pattern><template><think><set name="birthyear">2005</set></think></template></category>
+<category><pattern>YEARFROMAGE EIGHT</pattern><template><think><set name="birthyear">2004</set></think></template></category>
+<category><pattern>YEARFROMAGE NINE</pattern><template><think><set name="birthyear">2003</set></think></template></category>
+<category><pattern>YEARFROMAGE TEN</pattern><template><think><set name="birthyear">2002</set></think></template></category>
+<category><pattern>YEARFROMAGE ELEVEN</pattern><template><think><set name="birthyear">2001</set></think></template></category>
+<category><pattern>YEARFROMAGE TWELVE</pattern><template><think><set name="birthyear">2000</set></think></template></category>
+<category><pattern>YEARFROMAGE THIRTEEN</pattern><template><think><set name="birthyear">1999</set></think></template></category>
+<category><pattern>YEARFROMAGE FOURTEEN</pattern><template><think><set name="birthyear">1998</set></think></template></category>
+<category><pattern>YEARFROMAGE FIFTEEN</pattern><template><think><set name="birthyear">1997</set></think></template></category>
+<category><pattern>YEARFROMAGE SIXTEEN</pattern><template><think><set name="birthyear">1996</set></think></template></category>
+<category><pattern>YEARFROMAGE SEVENTEEN</pattern><template><think><set name="birthyear">1995</set></think></template></category>
+<category><pattern>YEARFROMAGE EIGHTEEN</pattern><template><think><set name="birthyear">1994</set></think></template></category>
+<category><pattern>YEARFROMAGE NINETEEN</pattern><template><think><set name="birthyear">1993</set></think></template></category>
+<category><pattern>YEARFROMAGE TWENTY</pattern><template><think><set name="birthyear">1992</set></think></template></category>
+</aiml>

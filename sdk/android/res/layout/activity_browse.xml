@@ -6,157 +6,106 @@
 	android:background="#FFFFFF"
     android:orientation="vertical" >
 
-    <ScrollView
-        android:id="@+id/scrollView"
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content" 
+            android:textSize="18sp"
+	        android:layout_margin="4sp"
+			android:text="Browse"/>
+
+	    <Button
+	        android:id="@+id/previousButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/up"
+	        android:onClick="previousPage"
+	        android:text="" />
+
+	    <Button
+	        android:id="@+id/nextButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/down"
+	        android:onClick="nextPage"
+	        android:text="" />
+	
+		<Button
+			android:id="@+id/searchButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/search"
+			android:onClick="search"
+			android:text="" />
+	    
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+		android:background="#ddd">
+    </View>
+    
+    <ListView
+        android:id="@+id/instancesList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="true"
-        android:scrollbars="vertical" >
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        
-    <Button
-        android:id="@+id/lastButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:background="@drawable/ok_button"
-        android:onClick="openLast"
-        android:text="Last"
-        android:textColor="@color/lgrey" />
-    
-    <RadioGroup
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/publicRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-        	android:checked="true"
-            android:text="Public" />
-
-        <RadioButton
-            android:id="@+id/privateRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Private" />
-
-        <RadioButton
-            android:id="@+id/personalRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Bots" />
         
-    </RadioGroup>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-        
-    <TextView
-        android:id="@+id/categoryLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category" />
-    
-    <AutoCompleteTextView
-        android:id="@+id/categoriesText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:imeOptions="actionDone"
-        android:inputType="text" />
-        
-    </LinearLayout>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-        
-    <TextView
-        android:id="@+id/tagLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tag" />
-    
-    <AutoCompleteTextView
-        android:id="@+id/tagsText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:imeOptions="actionDone"
-        android:inputType="text" />
-        
-    </LinearLayout>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-        
-    <TextView
-        android:id="@+id/filterLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filter" />
-    
-    <EditText
-        android:id="@+id/filterText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-    	android:imeOptions="actionDone"/>
-    
-    </LinearLayout>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-    
-    <TextView
-        android:id="@+id/sortLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sort" />
-    
-    <Spinner
-        android:id="@+id/sortSpin"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-    
-    </LinearLayout>
-    
-    <CheckBox
-        android:id="@+id/imagesCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Show Images" />
-        
-    <TextView
-        android:id="@+id/filler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-      	android:layout_weight="1"
-        android:text=""/>
-    
     <Button
-        android:id="@+id/browseButton"
-        android:layout_width="fill_parent"
+        android:id="@+id/connectButton"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="selectInstance"
+        android:text="Select"
+        android:textColor="@color/lgrey" />
+
+    <Button
+        android:id="@+id/chatButton"
+        android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
+        android:layout_weight="1"
         android:background="@drawable/ok_button"
-        android:onClick="browse"
-        android:text="Browse"
+        android:onClick="chat"
+        android:text="Chat"
         android:textColor="@color/lgrey" />
     
-        </LinearLayout>
-	</ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

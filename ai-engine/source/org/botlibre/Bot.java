@@ -60,10 +60,9 @@ import org.w3c.dom.NodeList;
  * and controls module registration, startup and shutdown.
  * It defines a singleton that represents the system.
  */
-
 public class Bot {	
 	public static String PROGRAM = "Bot";
-	public static String VERSION = "4.0.2 - 2016-02-29";
+	public static String VERSION = "5.0 - 2016-11-24";
 	
 	public static final Level FINE = Level.FINE;
 	public static final Level WARNING = Level.WARNING;
@@ -91,9 +90,10 @@ public class Bot {
 	private ActiveState state = ActiveState.INIT;
 	public enum ActiveState {INIT, ACTIVE, POOLED, SHUTDOWN}
 
-	private Set<LogListener> logListeners = new HashSet<LogListener>();	
-	private Level debugLevel = DEFAULT_DEBUG_LEVEL;	
+	private Set<LogListener> logListeners = new HashSet<LogListener>();
+	private Level debugLevel = DEFAULT_DEBUG_LEVEL;
 	private Logger log;
+	private Stats stats;
 		
 	static {
 		Logger root = Logger.getLogger("org.botlibre");
@@ -211,6 +211,23 @@ public class Bot {
 		this.parent = systemCache;
 	}
 	
+	/**
+	 * Raise the statistic event.
+	 */
+	public void stat(String stat) {
+		if (this.stats != null) {
+			this.stats.stat(stat);;
+		}
+	}
+	
+	public Stats getStats() {
+		return stats;
+	}
+
+	public void setStats(Stats stats) {
+		this.stats = stats;
+	}
+
 	public ActiveState getState() {
 		return state;
 	}
@@ -588,11 +605,11 @@ public class Bot {
 			memory().getShortTermMemory().clear();
 		}
 		if (Utils.checkLowMemory()) {
-			log(this, "Low memory - clearing server cache", Level.WARNING);
+			log(this, "Low memory - clearing server cache", Level.INFO);
 			memory().freeMemory();
 		}
 		if ((Utils.checkLowMemory(0.2) && (memory().cacheSize() > MIN_CACHE)) || memory().cacheSize() > MAX_CACHE) {
-			log(this, "Cache too big - clearing server cache", Level.WARNING, memory().cacheSize(), MIN_CACHE, MAX_CACHE);
+			log(this, "Cache too big - clearing server cache", Level.INFO, memory().cacheSize(), MIN_CACHE, MAX_CACHE);
 			memory().freeMemory();
 		}
 		if (instances.containsKey(name)) {

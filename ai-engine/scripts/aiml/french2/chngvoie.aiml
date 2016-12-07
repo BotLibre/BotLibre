@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : chngvoie.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+<!-- changement de voie active passive -->
+
+<category><pattern>CHNGVOIE *</pattern><template><star/></template></category>
+<category><pattern>CHNGVOIE * EST *</pattern><template><star index="2"/>a été <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * SONT *</pattern><template><star index="2"/>ont été <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * ÉTAIT *</pattern><template><star index="2"/>avait été <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * ÉTAIENT *</pattern><template><star index="2"/>avaient été <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * SERA *</pattern><template><star index="2"/>aura été <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * SERONT *</pattern><template><star index="2"/>auront été <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * A *</pattern><template><star index="2"/>a eu <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * ONT *</pattern><template><star index="2"/>ont eu <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * AVAIT *</pattern><template><star index="2"/>avait eu <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * AVAIENT *</pattern><template><star index="2"/>avaient eu <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * AURA *</pattern><template><star index="2"/>aura eu <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * AURONT *</pattern><template><star index="2"/>auront eu <star index="1"/></template></category>
+
+<category><pattern>CHNGVOIE * * *</pattern><template><star index="3"/> a <srai>passif <star index="2"/></srai> <star index="1"/></template></category>
+<category><pattern>CHNGVOIE * * * *</pattern><template><star index="4"/>a <srai>passif <star index="3"/></srai> <star index="1"/> <star index="2"/></template></category>
+
+
+<category><pattern>PASSIF AIMER</pattern><template> été aimé par </template></category>
+<category><pattern>PASSIF AIME</pattern><template> été aimé par </template></category>
+<category><pattern>PASSIF AIMENT</pattern><template> été aimé par </template></category>
+<category><pattern>PASSIF AIMAIT</pattern><template> été aimé par </template></category>
+<category><pattern>PASSIF AIMAIENT</pattern><template> été aimé par </template></category>
+<category><pattern>PASSIF AIMERA</pattern><template> été aimé par </template></category>
+<category><pattern>PASSIF AIMERONT</pattern><template> été aimé par </template></category>
+
+
+
+</aiml>

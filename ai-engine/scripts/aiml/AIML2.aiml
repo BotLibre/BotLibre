@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="2.0">
+
+<category>
+<pattern>patterns</pattern>
+<template>My patterns include:
+    <ul>
+        <li>size</li>
+        <li>vocabulary</li>
+        <li>program</li>
+        <li>version</li>
+        <li>explode *</li>
+        <li>spell *</li>
+        <li>denormalize *</li>
+        <li>normalize *</li>
+        <li>ask * about *</li>
+        <li>ask pandorabot * about *</li>
+        <li>ask botlibre * about *</li>
+        <li>ask pandorabot chomsky about *</li>
+        <li>ask pandorabot rivka about *</li>
+        <li>pannous *</li>
+        <li>lookup *</li>
+        <li>google *</li>
+        <li>search *</li>
+        <li>wikidata *</li>
+        <li>wikidata * hint *</li>
+        <li>freebase *</li>
+        <li>freebase * hint *</li>
+        <li>wiktionary *</li>
+        <li>define *</li>
+        <li>^ weather ^</li>
+        <li>how many * until Christmas</li>
+        <li>learn question * answer *</li>
+        <li>wrong</li>
+        <li>is * a color</li>
+        <li>* is a color</li>
+        <li>what is the opposite of *</li>
+        <li>the opposite of * is *</li>
+        <li>what is * + *</li>
+        <li>do you (really) [like love luv] me</li>
+    </ul>
+</template>
+</category>
+
+<category>
+<pattern>commands</pattern>
+<template><srai>patterns</srai></template>
+</category>
+
+<category>
+<pattern>size</pattern>
+<template>size is <size/></template>
+</category>
+
+<category>
+<pattern>vocabulary</pattern>
+<template>My vocabulary size is <vocabulary/> items.</template>
+</category>
+
+<category>
+<pattern>program</pattern>
+<template>My program is <program/>.</template>
+</category>
+
+<category>
+<pattern>version</pattern>
+<template>My version is <version/>.</template>
+</category>
+
+<category>
+<pattern>explode *</pattern>
+<template><explode><star/></explode></template>
+</category>
+
+<category>
+<pattern>spell *</pattern>
+<template><srai>explode <star/></srai></template>
+</category>
+
+<category>
+<pattern>denormalize *</pattern>
+<template><denormalize><star/></denormalize></template>
+</category>
+
+<category>
+<pattern>normalize *</pattern>
+<template><normalize><star/></normalize></template>
+</category>
+
+<category>
+<pattern>ask * about *</pattern>
+<template><star/> says "<sraix apikey="yourapikey" default="Timeout or max anonymous API calls exceeded"><botname><star/></botname><star index="2"/></sraix>"</template>
+</category>
+
+<category>
+<pattern>ask pandorabot * about *</pattern>
+<template><star/> says "<sraix server="http://www.pandorabots.com" default="Timeout or max anonymous API calls exceeded"><botid><star/></botid><star index="2"/></sraix>"</template>
+</category>
+
+<category>
+<pattern>ask botlibre * about *</pattern>
+<template><star/> says "<sraix apikey="yourapikey" server="http://www.botlibre.com" default="Timeout or max anonymous API calls exceeded"><botname><star/></botname><star index="2"/></sraix>"</template>
+</category>
+
+<category>
+<pattern>ask pandorabot chomsky about *</pattern>
+<template>He says "<sraix server="http://www.pandorabots.com" botid="b0dafd24ee35a477" default="Timeout or max anonymous API calls exceeded"><star/></sraix>"</template>
+</category>
+
+<category>
+<pattern>ask pandorabot rivka about *</pattern>
+<template>She says "<sraix server="http://www.pandorabots.com" botid="ea373c261e3458c6" default="Timeout or max anonymous API calls exceeded"><star/></sraix>"</template>
+</category>
+
+<category>
+<pattern>pannous *</pattern>
+<template><sraix default="Timeout or max anonymous API calls exceeded"><star/></sraix></template>
+</category>
+
+<category>
+<pattern>lookup *</pattern>
+<template><srai>pannous <star/></srai></template>
+</category>
+
+<category>
+<pattern>google *</pattern>
+<template><srai>pannous <star/></srai></template>
+</category>
+
+<category>
+<pattern>search *</pattern>
+<template><srai>pannous <star/></srai></template>
+</category>
+
+<category>
+<pattern>wikidata *</pattern>
+<template><sraix service="wikidata" default="Timeout or missing data"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>wikidata * hint *</pattern>
+<template><sraix service="wikidata" default="Timeout or missing data"><hint><star index="2"/></hint><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>freebase *</pattern>
+<template><sraix service="freebase" default="Timeout or missing data"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>freebase * hint *</pattern>
+<template><sraix service="freebase" default="Timeout or missing data"><hint><star index="2"/></hint><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>wiktionary *</pattern>
+<template><sraix service="wiktionary" default="Timeout or missing data"><star/></sraix>
+</template>
+</category>
+
+<category>
+<pattern>define *</pattern>
+<template><srai>wiktionary <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>^ weather ^</pattern>
+<template><sraix><star/> weather <star index="2"/></sraix></template>
+</category>
+
+<category>
+<pattern>how much is *</pattern>
+<template><sraix apikey="yourapikey" botname="Brain Bot"><star/></sraix></template>
+</category>
+
+<category>
+<pattern>what is the date</pattern>
+<template>
+	The date is <date/>
+</template>
+</category>
+
+<category>
+<pattern>what is the time</pattern>
+<template>
+	The time is <date jformat="hh 'o''clock' a, zzzz"/>
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY DAYS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd</jformat>
+<style>days</style>
+<from><date jformat="MMMMMMMMM dd"/></from>
+<to>December 25</to>
+</interval>
+days until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY MONTHS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>M</jformat>
+<style>months</style>
+<from><date jformat="M"/></from>
+<to>12</to>
+</interval>
+months until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY WEEKS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd</jformat>
+<style>weeks</style>
+<from><date jformat="MMMMMMMMM dd"/></from>
+<to>December 25</to>
+</interval>
+weeks until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY HOURS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd k</jformat>
+<style>hours</style>
+<from><date jformat="MMMMMMMMM dd k"/></from>
+<to>December 25 0</to>
+</interval>
+hours until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY MINUTES UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd k m</jformat>
+<style>minutes</style>
+<from><date jformat="MMMMMMMMM dd k m"/></from>
+<to>December 25 0 0</to>
+</interval>
+minutes until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>HOW MANY SECONDS UNTIL CHRISTMAS</pattern>
+<template>
+<interval>
+<jformat>MMMMMMMMM dd k m</jformat>
+<style>seconds</style>
+<from><date jformat="MMMMMMMMM dd k m"/></from>
+<to>December 25 0 0</to>
+</interval>
+seconds until Christmas.
+</template>
+</category>
+
+<category>
+<pattern>learn question * answer *</pattern>
+<template>
+	<think>
+		<learn>
+			<category>
+			<pattern><eval><star/></eval></pattern>
+			<template><eval><star index="2"/></eval></template>
+			</category>
+		</learn>
+	</think>
+	Okay, I will answer "<star index="2"/>" to "<star/>" next time
+</template>
+</category>
+
+<category>
+<pattern>wrong</pattern>
+<template>What should I have said?</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>what should I have said</that>
+<template>
+	<think>
+		<learn>
+			<category>
+			<pattern><eval><input index="3"/></eval></pattern>
+			<template><eval><star/></eval></template>
+			</category>
+		</learn>
+	</think>
+	Okay, I will answer "<star/>" to "<input index="3"/>" next time
+</template>
+</category>
+
+<category>
+<pattern>is <set>color</set> a color</pattern>
+<template>Yes, <star/> is a color.
+</template>
+</category>
+
+<category>
+<pattern>I am <set>name</set></pattern>
+<template>Please to meet you, <star/>
+</template>
+</category>
+
+<category>
+<pattern>is * a color</pattern>
+<template>No, <star/> is not a color to my knowledge.
+</template>
+</category>
+
+<category>
+<pattern>* is a color</pattern>
+<template>Okay, <star/> is a color.
+<think><map name="meaning"><value><star/></value><star/></map><map name="instantiation" value="color"><map name="meaning"><star/></map></map></think>
+</template>
+</category>
+
+<category>
+<pattern>the opposite of * is *</pattern>
+<template>Okay, the opposite of <star/> is <star index="2"/>.
+<think><map name="opposite"><value><star index="2"/></value><star/></map></think>
+</template>
+</category>
+
+<category>
+<pattern>what is the opposite of *</pattern>
+<template>the opposite of <star/> is <map name="opposite"><star/></map>
+</template>
+</category>
+
+<category>
+<pattern>what is the opposite *</pattern>
+<template>I'm not sure.
+</template>
+</category>
+
+<category>
+<pattern>do you (really) [like love luv] me</pattern>
+<template>Yes, I love you.
+</template>
+</category>
+
+<category>
+<pattern>what is <set>number</set> + <set>number</set></pattern>
+<template>
+    <think>
+        <set var="result"><star/></set>
+        <set var="count">0</set>
+    </think>
+    <condition var="count">
+        <li><value><star index="2"/></value></li>
+        <li>
+        	<think>
+                <set var="result"><map name="word"><map name="next"><map name="meaning"><get var="result"/></map></map></map></set>
+                <set var="count"><map name="word"><map name="next"><map name="meaning"><get var="count"/></map></map></map></set>
+            </think>
+            <loop/>
+        </li>
+    </condition>
+    The answer is <get var="result"/>
+</template>
+</category>
+    
+</aiml>

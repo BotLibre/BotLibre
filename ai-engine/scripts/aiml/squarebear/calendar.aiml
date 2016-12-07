@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<aiml version="1.0">
+
+<!-- Free software (c)2008 Square Bear. -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- Complies with AIML 1.0.1 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation. -->
+<!-- calendar.aiml by Square Bear -->
+<!-- http://www.square-bear.co.uk -->
+<!-- Displays the current month's calendar. -->
+
+<!-- Modified by Ciprian Murariu to fix the non-fixed font layout to table layouts -->
+<!-- http://ciprianmp.com/plus/bot/talk.php -->
+
+<!-- Work out which calendar format to display. -->
+
+<category>
+<pattern>CALENDAR</pattern>
+<template>
+<think>
+	<set name="day"><date format="%A"/></set>
+	<set name="date"><set name="tempdate"><date format="%d"/></set></set>
+	<set name="month"><date format="%B"/></set>
+	<set name="year"><date format="%Y"/></set>
+	<set name="29th">29</set>
+	<set name="30th">30</set>
+	<set name="31st">31</set>
+	<condition name="month">
+		<li value="February">
+		<set name="29th">--</set>
+		<set name="30th">--</set>
+		<set name="31st">--</set>
+		<condition name="year">
+			<li value="2000"><set name="29th">29</set></li>
+			<li value="2004"><set name="29th">29</set></li>
+			<li value="2008"><set name="29th">29</set></li>
+			<li value="2012"><set name="29th">29</set></li>
+			<li value="2016"><set name="29th">29</set></li>
+			<li value="2020"><set name="29th">29</set></li>
+			<li value="2024"><set name="29th">29</set></li>
+			<li value="2028"><set name="29th">29</set></li>
+			<li value="2032"><set name="29th">29</set></li>
+			<li value="2036"><set name="29th">29</set></li>
+			<li value="2040"><set name="29th">29</set></li>
+			<li value="2044"><set name="29th">29</set></li>
+			<li value="2048"><set name="29th">29</set></li>
+			<li value="2052"><set name="29th">29</set></li>
+			<li value="2056"><set name="29th">29</set></li>
+			<li value="2060"><set name="29th">29</set></li>
+			<li value="2064"><set name="29th">29</set></li>
+			<li value="2068"><set name="29th">29</set></li>
+			<li value="2072"><set name="29th">29</set></li>
+			<li value="2076"><set name="29th">29</set></li>
+			<li value="2080"><set name="29th">29</set></li>
+			<li value="2084"><set name="29th">29</set></li>
+			<li value="2088"><set name="29th">29</set></li>
+			<li value="2092"><set name="29th">29</set></li>
+			<li value="2096"><set name="29th">29</set></li>
+		</condition>
+		</li> 
+		<li value="April"><set name="31st">--</set></li> 
+		<li value="June"><set name="31st">--</set></li> 
+		<li value="September"><set name="31st">--</set></li> 
+		<li value="November"><set name="31st">--</set></li> 
+	</condition>
+	<condition name="date">
+		<li value="08"><set name="tempdate">01</set></li>
+		<li value="09"><set name="tempdate">02</set></li>
+		<li value="10"><set name="tempdate">03</set></li>
+		<li value="11"><set name="tempdate">04</set></li>
+		<li value="12"><set name="tempdate">05</set></li>
+		<li value="13"><set name="tempdate">06</set></li>
+		<li value="14"><set name="tempdate">07</set></li>
+		<li value="15"><set name="tempdate">01</set></li>
+		<li value="16"><set name="tempdate">02</set></li>
+		<li value="17"><set name="tempdate">03</set></li>
+		<li value="18"><set name="tempdate">04</set></li>
+		<li value="19"><set name="tempdate">05</set></li>
+		<li value="20"><set name="tempdate">06</set></li>
+		<li value="21"><set name="tempdate">07</set></li>
+		<li value="22"><set name="tempdate">01</set></li>
+		<li value="23"><set name="tempdate">02</set></li>
+		<li value="24"><set name="tempdate">03</set></li>
+		<li value="25"><set name="tempdate">04</set></li>
+		<li value="26"><set name="tempdate">05</set></li>
+		<li value="27"><set name="tempdate">06</set></li>
+		<li value="28"><set name="tempdate">07</set></li>
+		<li value="29"><set name="tempdate">01</set></li>
+		<li value="30"><set name="tempdate">02</set></li>
+		<li value="31"><set name="tempdate">03</set></li>
+	</condition>
+	<set name="checkdate"><get name="day"/> <get name="tempdate"/></set>
+	<condition name="checkdate">
+		<li value="Monday 01"><set name="layout">1</set></li>
+		<li value="Monday 02"><set name="layout">2</set></li>
+		<li value="Monday 03"><set name="layout">3</set></li>
+		<li value="Monday 04"><set name="layout">4</set></li>
+		<li value="Monday 05"><set name="layout">5</set></li>
+		<li value="Monday 06"><set name="layout">6</set></li>
+		<li value="Monday 07"><set name="layout">7</set></li>
+		<li value="Tuesday 01"><set name="layout">2</set></li>
+		<li value="Tuesday 02"><set name="layout">1</set></li>
+		<li value="Tuesday 03"><set name="layout">7</set></li>
+		<li value="Tuesday 04"><set name="layout">6</set></li>
+		<li value="Tuesday 05"><set name="layout">5</set></li>
+		<li value="Tuesday 06"><set name="layout">4</set></li>
+		<li value="Tuesday 07"><set name="layout">3</set></li>
+		<li value="Wednesday 01"><set name="layout">3</set></li>
+		<li value="Wednesday 02"><set name="layout">2</set></li>
+		<li value="Wednesday 03"><set name="layout">1</set></li>
+		<li value="Wednesday 04"><set name="layout">7</set></li>
+		<li value="Wednesday 05"><set name="layout">6</set></li>
+		<li value="Wednesday 06"><set name="layout">5</set></li>
+		<li value="Wednesday 07"><set name="layout">4</set></li>
+		<li value="Thursday 01"><set name="layout">4</set></li>
+		<li value="Thursday 02"><set name="layout">3</set></li>
+		<li value="Thursday 03"><set name="layout">2</set></li>
+		<li value="Thursday 04"><set name="layout">1</set></li>
+		<li value="Thursday 05"><set name="layout">7</set></li>
+		<li value="Thursday 06"><set name="layout">6</set></li>
+		<li value="Thursday 07"><set name="layout">5</set></li>
+		<li value="Friday 01"><set name="layout">5</set></li>
+		<li value="Friday 02"><set name="layout">4</set></li>
+		<li value="Friday 03"><set name="layout">3</set></li>
+		<li value="Friday 04"><set name="layout">2</set></li>
+		<li value="Friday 05"><set name="layout">1</set></li>
+		<li value="Friday 06"><set name="layout">7</set></li>
+		<li value="Friday 07"><set name="layout">6</set></li>
+		<li value="Saturday 01"><set name="layout">6</set></li>
+		<li value="Saturday 02"><set name="layout">5</set></li>
+		<li value="Saturday 03"><set name="layout">4</set></li>
+		<li value="Saturday 04"><set name="layout">3</set></li>
+		<li value="Saturday 05"><set name="layout">2</set></li>
+		<li value="Saturday 06"><set name="layout">1</set></li>
+		<li value="Saturday 07"><set name="layout">7</set></li>
+		<li value="Sunday 01"><set name="layout">7</set></li>
+		<li value="Sunday 02"><set name="layout">6</set></li>
+		<li value="Sunday 03"><set name="layout">5</set></li>
+		<li value="Sunday 04"><set name="layout">4</set></li>
+		<li value="Sunday 05"><set name="layout">3</set></li>
+		<li value="Sunday 06"><set name="layout">2</set></li>
+		<li value="Sunday 07"><set name="layout">1</set></li>
+	</condition>
+</think>
+Today is <date/>.
+<table class="table">
+<tr align="center" class="tabtitle"><td colspan="7"><b><get name="month"/> <get name="year"/></b></td></tr>
+<tr align="center" class="tabtitle"><td><b>Mo</b></td><td><b>Tu</b></td><td><b>We</b></td><td><b>Th</b></td><td><b>Fr</b></td><td><b>Sa</b></td><td><b>Su</b></td></tr>
+<condition name="layout">
+	<li value="1"><srai>CALLAYOUT1</srai></li>
+	<li value="2"><srai>CALLAYOUT2</srai></li>
+	<li value="3"><srai>CALLAYOUT3</srai></li>
+	<li value="4"><srai>CALLAYOUT4</srai></li>
+	<li value="5"><srai>CALLAYOUT5</srai></li>
+	<li value="6"><srai>CALLAYOUT6</srai></li>
+	<li value="7"><srai>CALLAYOUT7</srai></li>
+</condition>
+</table>
+</template>
+</category>
+
+
+<!-- The different possible calendar layouts. These may need adjusting if your bot doesn't used a fixed width font. Just pad them out with spaces until they look right. -->
+
+<category>
+<pattern>CALLAYOUT1</pattern>
+<template>
+<tr align="center"><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td></tr>
+<tr align="center"><td>08</td><td>09</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
+<tr align="center"><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
+<tr align="center"><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
+<tr align="center"><td><get name="29th"/></td><td><get name="30th"/></td><td><get name="31st"/></td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+</template>
+</category>
+
+<category>
+<pattern>CALLAYOUT2</pattern>
+<template>
+<tr align="center"><td>--</td><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td></tr>
+<tr align="center"><td>07</td><td>08</td><td>09</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+<tr align="center"><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+<tr align="center"><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
+<tr align="center"><td>28</td><td><get name="29th"/></td><td><get name="30th"/></td><td><get name="31st"/></td><td>--</td><td>--</td><td>--</td></tr>
+</template>
+</category>
+
+<category>
+<pattern>CALLAYOUT3</pattern>
+<template>
+<tr align="center"><td>--</td><td>--</td><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td></tr>
+<tr align="center"><td>06</td><td>07</td><td>08</td><td>09</td><td>10</td><td>11</td><td>12</td></tr>
+<tr align="center"><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+<tr align="center"><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr>
+<tr align="center"><td>27</td><td>28</td><td><get name="29th"/></td><td><get name="30th"/></td><td><get name="31st"/></td><td>--</td><td>--</td></tr>
+</template>
+</category>
+
+<category>
+<pattern>CALLAYOUT4</pattern>
+<template>
+<tr align="center"><td>--</td><td>--</td><td>--</td><td>01</td><td>02</td><td>03</td><td>04</td></tr>
+<tr align="center"><td>05</td><td>06</td><td>07</td><td>08</td><td>09</td><td>10</td><td>11</td></tr>
+<tr align="center"><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr>
+<tr align="center"><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+<tr align="center"><td>26</td><td>27</td><td>28</td><td><get name="29th"/></td><td><get name="30th"/></td><td><get name="31st"/></td><td>--</td></tr>
+</template>
+</category>
+
+<category>
+<pattern>CALLAYOUT5</pattern>
+<template>
+<tr align="center"><td>--</td><td>--</td><td>--</td><td>--</td><td>01</td><td>02</td><td>03</td></tr>
+<tr align="center"><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td><td>09</td><td>10</td></tr>
+<tr align="center"><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+<tr align="center"><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
+<tr align="center"><td>25</td><td>26</td><td>27</td><td>28</td><td><get name="29th"/></td><td><get name="30th"/></td><td><get name="31st"/></td></tr>
+</template>
+</category>
+
+<category>
+<pattern>CALLAYOUT6</pattern>
+<template>
+<tr align="center"><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>01</td><td>02</td></tr>
+<tr align="center"><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td><td>09</td></tr>
+<tr align="center"><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+<tr align="center"><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+<tr align="center"><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td><get name="29th"/></td><td><get name="30th"/></td></tr>
+<condition name="31st">
+	<li value="31"><tr align="center"><td>31</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td></tr></li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>CALLAYOUT7</pattern>
+<template>
+<tr align="center"><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>01</td></tr>
+<tr align="center"><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td></tr>
+<tr align="center"><td>09</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+<tr align="center"><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td></tr>
+<tr align="center"><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td><get name="29th"/></td></tr>
+<think>
+	<set name="endofmonth"><get name="30th"/> <get name="31st"/></set>
+</think>
+<condition name="endofmonth">
+	<li value="30 31"><tr align="center"><td>30</td><td>31</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td></tr></li>
+	<li value="30 --"><tr align="center"><td>30</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td></tr></li>
+</condition>
+</template>
+</category>
+
+</aiml>

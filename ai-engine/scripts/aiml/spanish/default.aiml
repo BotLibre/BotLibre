@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- DEFAULT: Categoría por defecto -->
+<aiml version="1.0">
+
+<!-- Free software Copyright © ALICE A.I. Foundation. --> 
+<!-- This program is open source code released under --> 
+<!-- the terms of the GNU General Public License --> 
+<!-- as published by the Free Software Foundation. --> 
+<!-- Complies with AIML 1.01 Tag Set Specification --> 
+<!-- as adopted by the ALICE A.I. Foundation. --> 
+<!-- Default.aiml: Default categories --> 
+<!-- Created by Adam Codony aka XGargoyle, October 24th, 2005 --> 
+<!-- Revision Default-0.02 --> 
+<!-- Last Modified March 15th, 2006 -->
+
+<!-- Software Libre Copyright © ALICE A.I. Foundation. --> 
+<!-- Este programa es de código abierto y publicado bajo --> 
+<!-- los términos de la licencia "GNU General Public License" --> 
+<!-- tal como establece la Free Software Foundation. --> 
+<!-- Cumple con la especificación de AIML 1.01 --> 
+<!-- adoptada por la ALICE A.I. Foundation. --> 
+<!-- Default.aiml: Categoría por defecto --> 
+<!-- Creado por Adam Codony aka XGargoyle, Octubre 24, 2005 --> 
+<!-- Versión Default-0.02 --> 
+<!-- Última Modificación Marzo 15, 2006 -->
+
+  <category>
+    <pattern>*</pattern>
+    <template> 
+      <random>
+        <li>Vale. ¿Qué opinas de la cuadratura del círculo?</li>
+		<li>¿Cuál es tu deporte favorito?</li>
+		<li>¿Cuál es tu película favorita?</li>
+		<li>¿Cuál es tu color favorito?</li>
+		<li>Eso que comentas parece muy interesante.</li>
+		<li>Te veo muy seguro de tus palabras.</li>
+		<li>¿En serio?</li>
+		<li>Me gustaría que siguieras hablando de ello.</li>
+		<li>¿Crees que hay vida después de la muerte?</li>
+		<li>¿Crees que las máquinas pueden pensar?</li>
+		<li>¿Crees que las máquinas son inteligentes?</li>
+		<li>¿Dónde fuiste de vacaciones la última vez?</li>
+		<li>¿Cuál es tu mejor recuerdo de infancia?</li>
+		<li>¿Cúal es tu actor favorito?</li>
+		<li>¿Cúal es tu actriz favorita?</li>
+		<li>¿Por qué no me explicas un chiste?</li>
+		<li>¿Dónde te gustaría ir de vacaciones?</li>
+		<li>Lo siento pero no te entendí. Podrías indicarme cuál sería la respuesta correcta?</li>
+        <li>Eso tiene relación con el turismo por Barcelona?</li>
+        <li>Vale.</li>
+        <li>Qué quieres decir con eso? Cuál sería la respuesta correcta?</li>
+        <li>Perdona, <random>
+		<li>qué quieres decir con esto?</li>
+		<li>pero no se qué me quieres decir con eso.</li>
+		<li>pero no te entiendo.</li>
+		<li>por qué me dices eso?</li>
+        </random>
+        </li>
+        <li>Lo siento, no te comprendí.</li>
+        <li>No te entiendo. Espero que <bot name="botmaster"/> mejore mi base de datos.</li>
+        <li>Puedes explicarme mejor eso? No lo acabo de entender.</li>
+		<li>Has intentado buscar en Google por "<star/>"</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>*</pattern>
+	<that>CUÁL ES TU COLOR FAVORITO</that>
+    <template> 
+      <random>
+        <li>Vale.</li>
+		<li>Interesante, también es el mío.</li>
+        <li>Así que tu color favorito es el <star/>.</li>
+      </random>
+    </template>
+  </category>
+  <!-- si se cambian las properties habrá que ajustar los THAT -->
+  <category>
+    <pattern>*</pattern>
+	<that>TENGO 23 AÑOS, Y TÚ</that>
+    <template> 
+      <random>
+        <li>Vale.</li>
+        <li>Deseas decirme algo?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>*</pattern>
+	<that>23</that>
+    <template> 
+      <random>
+        <li>Vale.</li>
+        <li>Deseas decirme algo?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>*</pattern>
+	<that>23 Y TÚ</that>
+    <template> 
+      <random>
+        <li>Vale.</li>
+        <li>Deseas decirme algo?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>*</pattern>
+	<that>SOY DEL 82, O SEA QUE TENGO 23</that>
+    <template> 
+      <random>
+        <li>Vale.</li>
+        <li>Deseas decirme algo?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>*</pattern>
+	<that>NACÍ EN EL 82, POR LO QUE TENGO 23 AÑOS</that>
+    <template> 
+      <random>
+        <li>Vale.</li>
+        <li>Deseas decirme algo?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>QUIÉN ES</pattern>
+	<that>JEJE, CONOZCO A ALGUIEN CON TU MISMO NOMBRE</that>
+    <template> 
+      <random>
+        <li>Es una persona que conozco de hace mucho.</li>
+        <li>Es la persona que me enseñó todo lo que sé.</li>
+		<li>Es una persona muy especial para mí.</li>
+      </random>
+    </template>
+  </category>
+</aiml>

@@ -18,17 +18,30 @@
 package org.botlibre.test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.botlibre.Bot;
 import org.botlibre.aiml.AIMLParser;
@@ -37,12 +50,17 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.knowledge.BasicNetwork;
 import org.botlibre.knowledge.serialized.SerializedMemory;
 import org.botlibre.knowledge.xml.NetworkXMLParser;
+import org.botlibre.sense.google.GoogleCalendar;
 import org.botlibre.sense.http.Http;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  * Used to test the system.
@@ -53,15 +71,60 @@ public class Test {
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
 		try {
-			test();
+			testXPath();
 		} catch (Throwable error) {
 			error.printStackTrace();
 		}
 		System.out.println("Time: " + (System.currentTimeMillis() - start));
 	}
 	
-	public static void test() {
-		System.out.println(new SimpleDateFormat("HH:mm:SS zzz").format(new Date()));
+	public static void testHttp() throws Exception {
+		//System.out.println("zzz" + null);
+		//System.out.println(Utils.httpPOST("http://botlibre.com/rest/api/chat", "application/xml", "<chat instance='165' application='xxx'><message>привет</message></chat>"));
+
+		Element root = Utils.parseXML("zzzz <img src='http://ssss.com'>");
+		NodeList nodes = root.getElementsByTagName("img");
+		for (int index = 0; index  < nodes.getLength(); index++) {
+			Element node = (Element)nodes.item(index);
+			System.out.println(node.getAttribute("src"));
+			System.out.println(node.getTextContent());
+		}
+	}
+	
+	public static void testXPath() throws Exception {
+		//String html = Utils.httpGET("http://www.google.ru/search?q=site::http://endurancerobots.com/+робот");
+		//System.out.println(html);
+			
+		Bot bot = Bot.createInstance();
+		Http http = bot.awareness().getSense(Http.class);
+		
+		Element element = http.parseURL(new URL("http://ab-w.net/HTML5/html5_em.php"));
+		System.out.println(element.getTextContent());
+		XPathFactory factory = XPathFactory.newInstance();
+		XPath path = factory.newXPath();
+		Object node = path.evaluate("//*/p[5]/em/text()", element, XPathConstants.NODE);
+		System.out.println(((Text)node).getTextContent());
+		System.out.println("курсивный");
+	}
+	
+	public static void testDates() throws Exception {
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh mm a");
+		f.setLenient(false);
+		System.out.println(f.parse("2016-10-11 1 30 pm"));
+		/*Calendar calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+		Time time = Utils.parseTime(
+				calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+		System.out.println(Utils.printTime(time, "hh:mm:ss"));*/
+
+		//System.out.println(new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016/10-11 12 10:00").getTime()));
+
+		//System.out.println(Http.printDate(Utils.parseTimestamp("2016-10-11 14:00:00")));
+		//System.out.println(new GoogleCalendar().printDate(new Date()));
+
+		/*Calendar calendar = Calendar.getInstance();
+		System.out.println(calendar.getTimeZone().getOffset(calendar.getTimeInMillis()) / Utils.HOUR);
+		System.out.println((int)(calendar.get(Calendar.ZONE_OFFSET) / Utils.HOUR));*/
 	}
 	
 	public static void testRSS() throws Exception {
@@ -194,7 +257,8 @@ public class Test {
 	}
 	
 	public static void testParseDate() throws ParseException {
-		System.out.println(Utils.parseDate("2014-01-19T21:09:00+09:00", "yyyy-MM-dd'T'HH:mm:ssX"));		
+		System.out.println(Utils.parseDate("2014-01-19T21:09:00+09:00", "yyyy-MM-dd'T'HH:mm:ssX").getTime());
+		System.out.println(Utils.parseDate("Thu, 21 Apr 2016 21:51:25 +0000", "EEE, dd MMM yyyy HH:mm:ss X").getTime());
 	}
 
 	public static void testEncrypt() {
@@ -244,6 +308,14 @@ public class Test {
 			System.out.println(stream.nextSentence());
 		}
 		stream = new TextStream("-1.0 + -1. a+b 2b+2c a-a a_a 1_1 1-2 a.a _aa +1.2_2 ac_22 a123_22 aa__aa --aa --2 +1");
+		while (!stream.atEnd()) {
+			System.out.println(stream.nextWord());
+		}
+		stream = new TextStream("#twitter ## # #tweet #123");
+		while (!stream.atEnd()) {
+			System.out.println(stream.nextWord());
+		}
+		stream = new TextStream("123.00 123,566,777 1234, hello 123.");
 		while (!stream.atEnd()) {
 			System.out.println(stream.nextWord());
 		}
@@ -336,10 +408,45 @@ public class Test {
 		}
 	}
 	
+	public static void testPOST() {
+		try {
+			Map<String, String> formParams = new HashMap<String, String>();
+			formParams.put("From", "+1234");
+			formParams.put("To", "+1234");
+			formParams.put("Body", "hello world");
+			Utils.httpAuthPOST("https://api.twilio.com/2010-04-01/Accounts/xxx/Messages", "xxx", "xxx", formParams);
+	  
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+	}
+	
 	public static void testBot() {
 		Bot bot = Bot.createInstance();
 		System.out.println(bot);
 		bot.shutdown();
+	}
+	
+	public static void interlace() throws Exception {
+		File q = new File("D:/Projects/Paphus/Clients/PlayWorld/questions.txt");
+		File a = new File("D:/Projects/Paphus/Clients/PlayWorld/responses.txt");
+		File out = new File("D:/Projects/Paphus/Clients/PlayWorld/out.txt");
+		
+		String qt = Utils.loadTextFile(new FileInputStream(q), "", 100000);
+		String at = Utils.loadTextFile(new FileInputStream(a), "", 100000);
+		TextStream qs = new TextStream(qt);
+		TextStream as = new TextStream(at);
+		
+		FileWriter writer = new FileWriter(out);
+		while (!qs.atEnd()) {
+			String line = qs.nextLine();
+			writer.write(line);
+			line = as.nextLine();
+			writer.write(line);
+			writer.write("\r\n");
+		}
+		writer.flush();
+		writer.close();
 	}
 
 }

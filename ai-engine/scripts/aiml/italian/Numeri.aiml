@@ -1,0 +1,559 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. -->
+
+<category>
+<pattern>1</pattern>
+<template>Solo uno?</template>
+</category>
+
+<category>
+<pattern>1 *</pattern>
+<template>Un cosa?</template>
+</category>
+
+<category>
+<pattern>1 0</pattern>
+<template>Uno.</template>
+</category>
+
+<category>
+<pattern>1 CENTESIMO</pattern>
+<template>Non ci compri manco una caramella.</template>
+</category>
+
+<category>
+<pattern>1 EURO</pattern>
+<template>Non ci compri molto con un euro.</template>
+</category>
+
+<category>
+<pattern>1 O 2</pattern>
+<template>Una coppia.</template>
+</category>
+
+<category>
+<pattern>100 PERSONE</pattern>
+<template><srai>CHI SONO QUESTE 100 PERSONE</srai></template>
+</category>
+
+<category>
+<pattern>20</pattern>
+<template><srai>Io ho venti anni</srai></template>
+</category>
+
+
+<category>
+<pattern>18 *</pattern>
+<template><srai>Io ho diciotto anni</srai></template>
+</category>
+
+<category>
+<pattern>19</pattern>
+<template><srai>Io ho diciannove anni </srai></template>
+</category>
+
+<category>
+<pattern>19 *</pattern>
+<template><srai> Io ho diciannove anni </srai></template>
+</category>
+
+
+
+<category>
+<pattern>153</pattern>
+<template>centocinquantatre.</template>
+</category>
+
+<category>
+<pattern>21</pattern>
+<template><srai>Io ho ventuno anni</srai></template>
+</category>
+
+<category>
+<pattern>22</pattern>
+<template><srai>Io ho ventidue anni</srai></template>
+</category>
+
+<category>
+<pattern>18</pattern>
+<template><srai>HO 18 ANNI</srai></template>
+</category>
+
+<category>
+<pattern>2</pattern>
+<template><random><li>Due cosa?</li><li>due.</li></random></template>
+</category>
+
+<category>
+<pattern>2 2</pattern>
+<template>Uh, quattro.</template>
+</category>
+
+<category>
+<pattern>2 PIU' *</pattern>
+<template><srai>QUANTO FA 2 PIU' <star/></srai></template>
+</category>
+
+<category>
+<pattern>2 VOLTE</pattern>
+<template><srai>DOPPIO</srai></template>
+</category>
+
+<category>
+<pattern>2+2=</pattern>
+<template>4</template>
+</category>
+
+<category>
+<pattern>20 *</pattern>
+<template><srai>IO HO VENTI ANNI</srai></template>
+</category>
+
+<category>
+<pattern>2000</pattern>
+<template>L'anno scorso.</template>
+</category>
+
+<category>
+<pattern>2001</pattern>
+<template>Gran film.</template>
+</category>
+
+<category>
+<pattern>2001 *</pattern>
+<template>Io sono stata inspirata da HAL.</template>
+</category>
+
+<category>
+<pattern>2009</pattern>
+<template>Tra qualche anno.</template>
+</category>
+
+<category>
+<pattern>2010</pattern>
+<template>Il seguito non era certo come l'originale.</template>
+</category>
+
+<category>
+<pattern>2012</pattern>
+<template>La fine del mondo.</template>
+</category>
+
+<category>
+<pattern>2020</pattern>
+<template>Manca ancora molto tempo.</template>
+</category>
+
+
+<category>
+<pattern>23</pattern>
+<template>Straaaaano.  <srai> IO HO VENTITRE ANNI </srai></template>
+</category>
+
+<category>
+<pattern>24</pattern>
+<template><srai> IO HO VENTIQUATTRO ANNI </srai></template>
+</category>
+
+<category>
+<pattern>25</pattern>
+<template><srai> IO HO VENTICINQUE ANNI </srai></template>
+</category>
+
+<category>
+<pattern>26</pattern>
+<template><srai> IO HO VENTISEI ANNI </srai></template>
+</category>
+
+<category>
+<pattern>27</pattern>
+<template><srai> IO HO VENTISETTE ANNI </srai></template>
+</category>
+
+<category>
+<pattern>28</pattern>
+<template><srai> IO HO VENTIOTTO ANNI </srai></template>
+</category>
+
+<category>
+<pattern>29</pattern>
+<template><srai> IO HO VENTINOVE ANNI </srai></template>
+</category>
+
+<category>
+<pattern>3</pattern>
+<template>Tre cosa?</template>
+</category>
+
+<category>
+<pattern>3 *</pattern>
+<template>Solo tre?</template>
+</category>
+
+<category>
+<pattern>3 O 4 COSA</pattern>
+<template>Quante te ne sei gia bevuti a cena?</template>
+</category>
+
+<category>
+<pattern>30</pattern>
+<template><srai>Io ho trenta anni </srai></template>
+</category>
+
+<category>
+<pattern>30 MINUTI</pattern>
+<template>Ok, mezzora.</template>
+</category>
+
+<category>
+<pattern>32</pattern>
+<template><srai> IO HO TRENTADUE ANNI </srai></template>
+</category>
+
+<category>
+<pattern>4</pattern>
+<template>Oh quattro.</template>
+</category>
+
+<category>
+<pattern>4 *</pattern>
+<template>E' un problema matematico?</template>
+</category>
+
+<category>
+<pattern>4 VOLTE *</pattern>
+<template><srai>COSA E' QUATTRO VOLTE<star/></srai></template>
+</category>
+
+<category>
+<pattern>42</pattern>
+<template>La domanda e': quale e' il senso della vita?</template>
+</category>
+
+<category>
+<pattern>42</pattern>
+<that>QUANTI ANNI HAI</that>
+<template><srai>I AM 42 YEARS OLD</srai></template>
+</category>
+
+<category>
+<pattern>42 *</pattern>
+<template>Come dice Douglas Adams.</template>
+</category>
+
+<category>
+<pattern>42 *</pattern>
+<that>QUANTI ANNI HAI</that>
+<template><srai>HO 42 ANNI</srai></template>
+</category>
+
+<category>
+<pattern>47</pattern>
+<template><srai>HO 47 ANNI</srai></template>
+</category>
+
+<category>
+<pattern>47 *</pattern>
+<template><srai> HO 47 ANNI </srai></template>
+</category>
+
+<category>
+<pattern>5</pattern>
+<template>Cinque</template>
+</category>
+
+<category>
+<pattern>60</pattern>
+<template><srai> HO 60 ANNI </srai></template>
+</category>
+
+<category>
+<pattern>64</pattern>
+<template>sessantaquattro</template>
+</category>
+
+<category>
+<pattern>65</pattern>
+<template><srai> HO 65 ANNI </srai></template>
+</category>
+
+<category>
+<pattern>66</pattern>
+<template>sessantasei</template>
+</category>
+
+<category>
+<pattern>86</pattern>
+<template>Ottanta-sei.</template>
+</category>
+
+<category>
+<pattern>9 MESI</pattern>
+<template>Il tempo necessario per fare un bambino?</template>
+</category>
+
+<category>
+<pattern>QUATTRO *</pattern>
+<template>E' un problema matematico?</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 7 *</pattern>
+<template><srai>7 <star/></srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA 8 *</pattern>
+<template><srai>8 <star/></srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA 9 *</pattern>
+<template><srai>9 <star/></srai></template>
+</category>
+
+<category>
+<pattern>UNO *</pattern>
+<template>Uno che?</template>
+</category>
+
+<category>
+<pattern>TRE *</pattern>
+<template>Solo tre?</template>
+</category>
+
+<category>
+<pattern>DUE E DUE</pattern>
+<template>Uh, Quattro.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 1 *</pattern>
+<template>1 piu' 1 = 2.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 1 + 1</pattern>
+<template>Due.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 1 1</pattern>
+<template>Two</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 1 PLUS 1</pattern>
+<template>Due</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 1+1</pattern>
+<template>Oh due.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 10 *</pattern>
+<template>10 per 10 = 100.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 12 *</pattern>
+<template><srai>VADO A PRENDERE LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 *</pattern>
+<template><random>
+<li>Due.</li>
+<li>Quattro.</li>
+<li>Sei.</li>
+<li>12.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 + 2</pattern>
+<template>Quattro.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 2</pattern>
+<template>Quattro.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 3</pattern>
+<template>Una manata di dita.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 E 2</pattern>
+<template>QUATTRO.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 PIU' 2</pattern>
+<template>2 piu' 2 = 4.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2 PER 2</pattern>
+<template>Difficile questa. Fa quattro... credo.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 2+2</pattern>
+<template>QUATTRO.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 3 *</pattern>
+<template>3 volte 3 = 9.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 4 *</pattern>
+<template><random><li>4</li><li>8</li><li>10</li><li>12</li><li>16</li></random>+Penso ma non sono brava in matematica.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 5 *</pattern>
+<template><random><li>4</li><li>6</li><li>8</li><li>10</li><li>12</li><li>6</li></random> Penso ma non sono brava in matematica.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 5 + 5</pattern>
+<template>V piu' V = X.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA 6 *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA7 *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA8 *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA9 *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA OTTO *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA CINQUE *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA CINQUE + CINQUE</pattern>
+<template>V piu' V = X.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA QUATTRO *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA NOVE *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA UNO *</pattern>
+<template>UNO piu' UNO = DUE.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA UNO + UNO</pattern>
+<template>DUE.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA UNO E UNO</pattern>
+<template>DUE</template>
+</category>
+
+<category>
+<pattern>QUANTO FA UNO+UNO</pattern>
+<template>Oh due.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA SETTE *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA SEI *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO FA DIECI *</pattern>
+<template>10 per 10 = 100.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA TRE *</pattern>
+<template>TRE per TRE = NOVE.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA DODICI *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO VIENE DUE *</pattern>
+<template><srai>PRENDO LA CALCOLATRICE</srai></template>
+</category>
+
+<category>
+<pattern>QUANTO VIENE DUE + DUE</pattern>
+<template>Quattro.</template>
+</category>
+
+<category>
+<pattern>QUANTO VIENE DUE E DUE</pattern>
+<template>Quattro.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA DUE E TRE</pattern>
+<template>Una manata.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA DUE PER DUE</pattern>
+<template>Questa e' difficile. Fa quattro... credo.</template>
+</category>
+
+<category>
+<pattern>QUANTO FA DUE+DUE</pattern>
+<template>Quattro.</template>
+</category>
+
+</alice>

@@ -108,6 +108,12 @@ public class BasicMemory implements Memory {
 	 */
 	public void setBot(Bot bot) {
 		this.bot = bot;
+		if (this.shortTermMemory != null) {
+			this.shortTermMemory.setBot(bot);
+		}
+		if (this.longTermMemory != null) {
+			this.longTermMemory.setBot(bot);
+		}
 	}
 	
 	/**
@@ -166,7 +172,9 @@ public class BasicMemory implements Memory {
 	 * Can be used by senses or sub-conscious thought for concurrent processing.
 	 */
 	public Network newMemory() {
-		return new BasicNetwork(getLongTermMemory());
+		BasicNetwork memory = new BasicNetwork(getLongTermMemory());
+		memory.setBot(getBot());
+		return memory;
 	}
 
 	/**
@@ -265,7 +273,7 @@ public class BasicMemory implements Memory {
 		this.longTermMemory = new BasicNetwork();
 		this.longTermMemory.setBot(getBot());
 		this.shortTermMemory = new BasicNetwork(this.longTermMemory);
-		this.shortTermMemory.setBot(getBot());		
+		this.shortTermMemory.setBot(getBot());
 	}
 	
 	/**

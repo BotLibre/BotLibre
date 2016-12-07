@@ -17,13 +17,13 @@
  ******************************************************************************/
 
 /**
- * Project libre open SDK.
+ * Bot Libre open SDK.
  * This JavaScript SDK lets you access chat bot, live chat, chatroom, and forum services on
- * the Project libre compatible websites, including:
- * - BOT libre!
- * - Paphus Live Chat
- * - LIVE CHAT libre!
- * - FORUMS libre!
+ * the Bot Libre compatible websites, including:
+ * - Bot Libre!
+ * - Bot Libre for Business
+ * - Live Chat libre!
+ * - Forums libre!
  * 
  * This JavaScript script can be used directly, or copied/modified on your own website.
  * 
@@ -33,7 +33,8 @@
  * This is used for chat bots, forums, user admin, and domains.
  * 
  * LiveChatConnection uses web sockets to provide access to live chat and chatrooms.
- * Version: 3.5.2-2016-01-12
+ * 
+ * Version: 5.0-2016-11-23
  */
 
 /**
@@ -43,19 +44,22 @@
 var SDK = {};
 
 SDK.DOMAIN = "www.botlibre.com";
+SDK.NAME = "Bot Libre!";
 SDK.APP = "";
 
 //SDK.DOMAIN = window.location.host;
 //SDK.APP = "/botlibre";
 
 SDK.PATH = "/rest/api";
-SDK.MAX_FILE_UPLOAD = 2000000;
+SDK.MAX_FILE_UPLOAD = 5000000;
 
 SDK.host = SDK.DOMAIN;
 SDK.app = SDK.APP;
 SDK.scheme = 'https:' == document.location.protocol ? "https" : "http";
 SDK.url = SDK.scheme + "://" + SDK.DOMAIN + SDK.APP;
 SDK.rest = SDK.url + SDK.PATH;
+SDK.backlinkURL = SDK.url;
+SDK.backlink = true;
 
 /**
  * You must set your application ID to use the SDK.
@@ -77,6 +81,14 @@ SDK.lang = "en";
 SDK.debug = false;
 
 /**
+ * Escape and filter bot messages for HTML and JavaScript content for XSS security.
+ * This prevents bots sending advanced HTML and JavaScript in their messages.
+ * Set this to false to allow your bot to send JavaScript.
+ * @static
+ */
+SDK.secure = true;
+
+/**
  * Force avatars to use canvas for video (currently used only for Chrome and Firefox).
  * @static
  */
@@ -89,16 +101,44 @@ SDK.useCanvas = null;
 SDK.fixBrightness = null;
 
 /**
+ * Attempt to fix an issue with Chrome not processing the CSS after correctly when the chat bubble resizes.
+ * @static
+ */
+SDK.fixChromeResizeCSS = true;
+
+/**
  * Set the error static field to trap or log any errors.
  */
 SDK.error = function(message) {
 	console.log(message);
 }
 
+/**
+ * Allow our native speech API to use the third party ResponsiveVoice API.
+ * You must create an account with ResponsiveVoice to use their API, see https://responsivevoice.com
+ * @static
+ */
+SDK.responsiveVoice = false;
+SDK.speechSynthesis = 'speechSynthesis' in window;
+SDK.initResponsiveVoice = function() {
+	if (!('responsiveVoice' in window)) {
+		console.log("ResponsiveVoice missing, you must load its script first");
+		return;
+	}
+	SDK.responsiveVoice = true;
+	SDK.speechSynthesis = true;
+}
+if (SpeechSynthesisUtterance == null) {
+	function SpeechSynthesisUtterance(text) {
+		this.text = text;
+	}
+}
+
 SDK.currentAudio = null;
 SDK.recognition = null;
 SDK.recognitionActive = false;
 SDK.backgroundAudio = null;
+SDK.currentBackgroundAudio = null;
 SDK.timers = {};
 
 /**
@@ -135,7 +175,7 @@ SDK.playChime = true;
  */
 SDK.chime = function() {
 	if (SDK.playChime) {
-		this.play(SDK.url + '/chime.wav');
+		this.play(SDK.url + '/chime.mp3');
 		SDK.playChime = false;
 		var timer = setInterval(function () {
 			SDK.playChime = true;
@@ -150,9 +190,9 @@ SDK.chime = function() {
  * For native voices a language code can be given.
  * If the browser supports TTS the native voice will be used by default.
  */
-SDK.tts = function(text, voice, native, lang, nativeVoice) {
+SDK.tts = function(text, voice, native, lang, nativeVoice, mod) {
 	try {
-		if ((native || (native == null && voice == null)) && ('speechSynthesis' in window)) {
+		if ((native || (native == null && voice == null)) && SDK.speechSynthesis) {
 			var utterance = new SpeechSynthesisUtterance(text);
 			SDK.nativeTTS(utterance, lang, nativeVoice);
 		} else {		
@@ -160,6 +200,9 @@ SDK.tts = function(text, voice, native, lang, nativeVoice) {
 			url = url + encodeURIComponent(text);
 			if (voice != null) {
 				url = url + '&voice=' + voice;
+			}
+			if (mod != null) {
+				url = url + '&mod=' + mod;
 			}
 			if (SDK.applicationId != null) {
 				url = url + '&application=' + SDK.applicationId;
@@ -185,9 +228,40 @@ SDK.tts = function(text, voice, native, lang, nativeVoice) {
 }
 
 /**
+ * Use the ResponsiveVoice API.
+ */
+SDK.responsiveVoiceTTS = function(utterance, lang, voice) {
+	var events = {};
+	try {
+		SDK.pauseSpeechRecognition();
+		if (voice == null || voice == "") {
+			voice = "US English Female";
+		}
+		if (SDK.recognitionActive) {
+			events.onend = function() {
+				SDK.startSpeechRecognition();
+			}
+		}
+		if (utterance.onend != null) {
+			events.onend = utterance.onend;
+		}
+		if (utterance.onstart != null) {
+			events.onstart = utterance.onstart;
+		}
+		responsiveVoice.speak(utterance.text, voice, events);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+/**
  * Speak the native utterance first setting the voice and language.
  */
 SDK.nativeTTS = function(utterance, lang, voice) {
+	if (SDK.responsiveVoice) {
+		SDK.responsiveVoiceTTS(utterance, lang, voice);
+		return;
+	}
 	if (lang == null) {
 		lang = SDK.lang;
 	}
@@ -260,17 +334,43 @@ SDK.nativeTTS = function(utterance, lang, voice) {
 }
 
 /**
+ * Allow text to be translated into another language is the interface elements.
+ */
+SDK.translator = null;
+SDK.translate = function(text) {
+	if (SDK.translator == null) {
+		SDK.translator = SDK.translators[SDK.lang];
+		if (SDK.translator == null) {
+			SDK.translator = {};
+		}
+	}
+	var translated = SDK.translator[text];
+	if (translated != null) {
+		return translated;
+	}
+	return text
+}
+SDK.translators = {
+	"pt" : {
+		"Name" : "Nome",
+		"Phone" : "Telemóvel",
+		"Connect" : "Ligar"
+	}
+}
+
+/**
  * Detect Chrome browser.
  */
 SDK.isChrome = function() {
-	return navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+	var agent = navigator.userAgent.toLowerCase()
+	return agent.indexOf('chrome') != -1 && agent.indexOf('edge') == -1;
 }
 
 /**
  * Detect Firefox browser.
  */
 SDK.isFirefox = function() {
-	return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+	return navigator.userAgent.toLowerCase().indexOf('firefox') != -1;
 }
 
 /**
@@ -289,6 +389,9 @@ SDK.isMobile = function() {
 		return false;
 	}
 }
+
+SDK.hd = false;
+SDK.format = (SDK.isChrome() || SDK.isFirefox()) ? "webm" : "mp4";
 
 /**
  * Insert the text into the input field.
@@ -345,6 +448,7 @@ SDK.innerHTML = function(element) {
 SDK.stripTags = function(html) {
 	var element = document.createElement("p");
 	element.innerHTML = html;
+	SDK.removeScripts(element);
 	return element.innerText || element.textContent;
 }
 
@@ -578,6 +682,61 @@ SDK.showError = function(message, title) {
 }
 
 /**
+ * Evaluate any script tags in the node's descendants.
+ * This is required when innerHtml contains script nodes as they are not evaluated.
+ */
+SDK.evalScripts = function(node) {
+    if (node.tagName == 'SCRIPT') {
+        var script  = document.createElement("script");
+        script.text = node.innerHTML;
+        for (var index = node.attributes.length-1; index >= 0; i--) {
+        	script.setAttribute(node.attributes[index].name, node.attributes[index].value);
+        }
+    	node.parentNode.replaceChild(script, node);
+    } else {
+        var index = 0;
+        var children = node.childNodes;
+        while (index < children.length) {
+        	SDK.evalScripts(children[index]);
+        	index++;
+        }
+    }
+    return node;
+}
+
+/**
+ * Remove any script tags from the node.
+ */
+SDK.removeScripts = function(node) {
+    if (node.tagName == 'SCRIPT') {
+        node.parentNode.removeChild(node);
+    } else {
+        var index = 0;
+        var children = node.childNodes;
+        while (index < children.length) {
+        	SDK.removeScripts(children[index]);
+        	index++;
+        }
+    }
+    return node;
+}
+
+/**
+ * Add a style tag to the page.
+ */
+SDK.addStyle = function(css) {
+	var body = document.body || document.getElementsByTagName('body')[0];
+	var style = document.createElement('style');
+	style.type = 'text/css';
+	if (style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		style.appendChild(document.createTextNode(css));
+	}
+	body.appendChild(style);
+}
+
+/**
  * Graphics upload dialog and shared repositry browser.
  * This provides a generic media upload dialog with many features:
  * <ul>
@@ -649,7 +808,7 @@ function GraphicsUploader() {
 		if (this.showBrowse) {
 			html = html
 				+ "<div class='" + this.prefix + "dialog-div'>\n"
-					+ "<a id='" + this.prefix + "browse-library' href='#' class='" + this.prefix + "button' title='Browse our shared media library'>\n"
+					+ "<a id='" + this.prefix + "browse-library' onclick='return false;' href='#' class='" + this.prefix + "button' title='Browse our shared media library'>\n"
 					+ "<img src='images/importr.png' style='vertical-align: middle'>\n"
 					+ "Browse media library\n"
 					+ "</a>\n"
@@ -661,7 +820,7 @@ function GraphicsUploader() {
 			}
 			html = html
 				+ "<div class='" + this.prefix + "dialog-div'>\n"
-					+ "<a id='" + this.prefix + "upload-media' href='#' class='" + this.prefix + "button' title='Upload an image or media file from your computer or device'>\n"
+					+ "<a id='" + this.prefix + "upload-media' onclick='return false;' href='#' class='" + this.prefix + "button' title='Upload an image or media file from your computer or device'>\n"
 					+ "<img src='images/upload.png' style='vertical-align: middle'>\n"
 					+ "Upload from computer or device</a>\n"
 				+ "</div>\n"
@@ -677,7 +836,7 @@ function GraphicsUploader() {
 			}
 			html = html
 				+ "<div class='" + this.prefix + "dialog-div'>\n"
-					+ "<a id='" + this.prefix + "upload-url' href='#' class='" + this.prefix + "button' title='Import an image or media file from the web URL'>\n"
+					+ "<a id='" + this.prefix + "upload-url' onclick='return false;' href='#' class='" + this.prefix + "button' title='Import an image or media file from the web URL'>\n"
 					+ "<img src='images/importr.png' style='vertical-align: middle'>\n"
 					+ "Import from web URL\n"
 					+ "</a>\n"
@@ -782,7 +941,7 @@ function GraphicsUploader() {
 				+ "." + this.prefix + "browse-div { display:inline-block;margin:2px;vertical-align:top; }\n"
 				+ "." + this.prefix + "browse-details { font-size:12px;color:grey; }\n"
 				+ "." + this.prefix + "browse-img { max-width:100px;max-height:100px; }\n"
-				+ "." + this.prefix + "browse-span div { position:absolute;margin:-1px 0 0 0;padding:3px 3px 3px 3px;background:#fff;border-style:solid;border-color:black;border-width:1px;max-width:300px;min-width:100px;z-index:52;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; } \n"
+				+ "." + this.prefix + "browse-span div { position:absolute;margin:-1px 0 0 0;padding:3px 3px 3px 3px;background:#fff;border-style:solid;border-color:black;border-width:1px;max-width:300px;min-width:100px;z-index:152;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; } \n"
 				+ "." + this.prefix + "browse-span:hover div { display:inline;visibility:visible;opacity:1;transition-delay:0.5s; }\n"
 				+ "</style>\n"
 				+ "<div><div class='" + this.prefix + "search-div'><span class='" + this.prefix + "search-span'>Categories</span><input id='" + this.prefix + "browse-categories' type='text'/></div>"
@@ -1157,7 +1316,9 @@ function WebLiveChatListener() {
 	/** Link to online user list users to their profile page. */
 	this.linkUsers = true;
 	/** Configure message log format (table or log). */
-	this.chatLogType = "table";
+	this.chatLogType = "log";
+	/** Configure the chat to auto accept a bot after waiting */
+	this.autoAccept = null;
 	/** Prompt for name/email before connecting. */
 	this.promptContactInfo = false;
 	this.hasContactInfo = false;
@@ -1210,7 +1371,7 @@ function WebLiveChatListener() {
 			background = "background-size:" + this.width + "px auto;";
 			divWidth = minWidth;
 			divHeight = "min-height:" + this.width + "px;";
-			responseWidth = "width:" + (this.width - 16) + "px;";
+			responseWidth = "width:" + (this.width - 32) + "px;";
 		}
 		if (this.height != null) {
 			minHeight = "height:" + this.height + "px;";
@@ -1245,29 +1406,31 @@ function WebLiveChatListener() {
 		var box = document.createElement('div');
 		var html =
 			"<style>\n"
-				+ "." + this.prefix + "box { position:fixed;" + boxloc + ";z-index:52;margin:2px;display:none;" + border + " }\n"
+				+ "." + this.prefix + "box img { display:inline; }\n"
+				+ "." + this.prefix + "boxbar img { display:inline; }\n"
+				+ "." + this.prefix + "box { position:fixed;" + boxloc + ";z-index:152;margin:2px;display:none;" + border + " }\n"
 				+ "." + this.prefix + "box:hover { border:1px;border-style:solid;border-color:black; }\n"
 				+ "." + this.prefix + "boxmenu { visibility:" + hidden + "; margin-bottom:12px; }\n"
 				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n"
 				+ "." + this.prefix + "boxclose, ." + this.prefix + "boxmin, ." + this.prefix + "boxmax { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
 				+ (this.forceStyles ? "#" : ".") + "" + this.prefix + "boxbarmax { font-size:18px;margin:2px;padding:0px;text-decoration:none;color:white; }\n"
 				+ "." + this.prefix + "boxclose:hover, ." + this.prefix + "boxmin:hover, ." + this.prefix + "boxmax:hover { color: #fff;background: grey; }\n"
-				+ "." + this.prefix + "boxbar { position:fixed;" + boxbarloc + ";z-index:52;margin:0;padding:6px;" + buttonstyle + " }\n"
+				+ "." + this.prefix + "boxbar { position:fixed;" + boxbarloc + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
 				+ "." + this.prefix + "boxbar:hover { " + buttonHoverStyle + " }\n"
 				+ "#" + this.prefix + "contactinfo { " + minHeight + minWidth + " }\n"
 				+ "#" + this.prefix + "contactinfo span { margin-left:4px;margin-top:4px; }\n"
 				+ "#" + this.prefix + "contactinfo input { margin:4px;font-size:13px;height:33px;width:90%;border:1px solid #d5d5d5; }\n"
 				+ "." + this.prefix + "contactconnect { margin:4px;padding:8px;color:white;text-decoration:none;" + buttonstyle + " }\n"
-				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; }\n"
+				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; color:black; }\n"
 				+ "." + this.prefix + "no-bubble-plain { margin:4px; padding:8px; border:1px; }\n"
 				+ "." + this.prefix + "no-bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
 				+ "." + this.prefix + "boxbutton { width:20px;height:20px;margin2px; }\n"
 				+ "." + this.prefix + "bubble-div { padding-bottom:15px;position:relative; }\n"
-				+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; }\n"
-				+ "." + this.prefix + "bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
+				+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; color:black; }\n"
+				+ "." + this.prefix + "bubble-text { " + responseWidth + "; margin:4px; max-height:100px; overflow:auto; }\n"
 				+ "." + this.prefix + "bubble:before { content:''; position:absolute; bottom:0px; left:40px; border-width:20px 0 0 20px; border-style:solid; border-color:black transparent; display:block; width:0;}\n"
 				+ "." + this.prefix + "bubble:after { content:''; position:absolute; bottom:3px; left:42px; border-width:18px 0 0 16px; border-style:solid; border-color:white transparent; display:block; width:0;}\n"
-				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:100%;height:22px; }\n"
+				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:99%;min-height:22px; }\n"
 				+ "." + this.prefix + "box-input-span { display:block; overflow:hidden; margin:4px; padding-right:4px; }\n"
 				+ "." + this.prefix + "scroller { overflow:auto;" + minHeight + minWidth + " }\n"
 				+ "a." + this.prefix + "menuitem { text-decoration: none;display: block;color: #585858; }\n"
@@ -1277,7 +1440,7 @@ function WebLiveChatListener() {
 				+ "span." + this.prefix + "menu { color: #818181;font-size: 12px; }\n"
 				+ "img." + this.prefix + "toolbar { width: 32px;height: 32px;margin: 1px;padding: 1px;cursor: pointer;vertical-align: middle;border-style: solid;border-width: 1px;border-color: #fff; }\n"
 				+ "td." + this.prefix + "toolbar { width: 36px;height: 36px }\n"
-				+ "." + this.prefix + "menupopup div { position:absolute;margin: -1px 0 0 0;padding: 3px 3px 3px 3px;background: #fff;border-style:solid;border-color:black;border-width:1px;width:160px;max-width:300px;z-index:52;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; }\n"
+				+ "." + this.prefix + "menupopup div { position:absolute;margin: -1px 0 0 0;padding: 3px 3px 3px 3px;background: #fff;border-style:solid;border-color:black;border-width:1px;width:160px;max-width:300px;z-index:152;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; }\n"
 				+ "." + this.prefix + "menupopup:hover div { display:inline;visibility:visible;opacity:1;transition-delay:0.5s; }\n"
 				+ ".online-user { border-style: solid;border-color: grey;border-width: 1px;margin: 2px;padding: 2px;display: inline-block; }\n"
 				+ ".online-user-label { color: #818181;font-size: 12px;margin: 2px;max-width: 200px;overflow: hidden; }\n"
@@ -1291,8 +1454,8 @@ function WebLiveChatListener() {
 			+ "</style>\n"
 			+ "<div id='" + this.prefix + "box' class='" + this.prefix + "box' " + backgroundstyle + ">"
 				+ "<div class='" + this.prefix + "boxmenu'>"
-					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> <a id='"
-					+ this.prefix + "boxmax' class='" + this.prefix + "boxmax' href='#'><img src='" + SDK.url + "/images/open.png'></a></span><br/>"
+					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> <a id='"
+					+ this.prefix + "boxmax' class='" + this.prefix + "boxmax' onclick='return false;' href='#'><img src='" + SDK.url + "/images/open.png'></a></span><br/>"
 				+ "</div>";
 		
 		if (this.online) {
@@ -1312,60 +1475,63 @@ function WebLiveChatListener() {
 		var urlprefix = this.sdk.credentials.url + "/";
 		html = html
 				+ "<div>\n"
-					+ "<div " + (this.bubble ? "class='" + this.prefix + "bubble-div'" : "") + ">"
-					+ "<div class='" + this.prefix + "" + (this.bubble ? "bubble" : (this.background == null ? "no-bubble" : "no-bubble-plain") )
-					+ "'><div class='" + this.prefix + (this.bubble ? "bubble-text" : "no-bubble-text" ) + "'>"
+					+ "<div " + (this.bubble ? "id='" + this.prefix + "bubble-div' class='" + this.prefix + "bubble-div'" : "") + ">"
+					+ "<div "
+					+ "id='" + this.prefix + (this.bubble ? "bubble" : (this.background == null ? "no-bubble" : "no-bubble-plain") )
+					+ "' class='" + this.prefix + (this.bubble ? "bubble" : (this.background == null ? "no-bubble" : "no-bubble-plain") )
+					+ "'><div id='" + this.prefix + (this.bubble ? "bubble-text" : "no-bubble-text" ) + "' "
+						+ "class='" + this.prefix + (this.bubble ? "bubble-text" : "no-bubble-text" ) + "'>"
 						+ "<span id='" + this.prefix + "response'>" + this.loading + "</span><br/>"
 					+ "</div></div></div>\n";
 		html = html
 			+ "<table id='" + this.prefix + "boxtable' class='" + this.prefix + "boxtable' style='width:100%'><tr>\n"
 			+ "<td class='" + this.prefix + "toolbar'><span class='" + this.prefix + "menu'>\n"
 			+ "<div style='inline-block;position:relative'>\n"
-			+ "<span class='" + this.prefix + "menupopup'>\n"
+			+ "<span id='" + this.prefix + "menupopup' class='" + this.prefix + "menupopup'>\n"
 			+ "<div style='text-align:left;bottom:36px'>\n"
 			+ "<table>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-			+ "<td><a id='" + this.prefix + "ping' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='Verify your connection to the server'> Ping server</a></td>"
+			+ "<td><a id='" + this.prefix + "ping' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Verify your connection to the server") + "'> " + SDK.translate("Ping server") + "</a></td>"
 			+ "</tr>\n";
     	if (this.chatroom) {
 		    html = html
         		+ "<tr class='" + this.prefix + "menuitem'>"
-        			+ "<td><a id='" + this.prefix + "flag' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/flag2.png' title='Flag a user for offensive content'> Flag user</a></td>"
+        			+ "<td><a id='" + this.prefix + "flag' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/flag2.png' title='" + SDK.translate("Flag a user for offensive content") + "'> " + SDK.translate("Flag user") + "</a></td>"
         		+ "</tr>\n"
         		+ "<tr class='" + this.prefix + "menuitem'>"
-        			+ "<td><a id='" + this.prefix + "whisper' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/whisper.png' title='Send a private message to another user'> Whisper user</a></td>"
+        			+ "<td><a id='" + this.prefix + "whisper' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/whisper.png' title='" + SDK.translate("Send a private message to another user") + "'> " + SDK.translate("Whisper user") + "</a></td>"
         		+ "</tr>\n"
         		+ "<tr class='" + this.prefix + "menuitem'>"
-        			+ "<td><a id='" + this.prefix + "pvt' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='Invite another user to a private channel'> Request private</a></td>"
+        			+ "<td><a id='" + this.prefix + "pvt' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='" + SDK.translate("Invite another user to a private channel") + "'> " + SDK.translate("Request private") + "</a></td>"
         		+ "</tr>\n"
     	}
 		html = html
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "clear' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='Clear the local chat log'> Clear log</a></td>"
+				+ "<td><a id='" + this.prefix + "clear' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Clear the local chat log") + "'> " + SDK.translate("Clear log") + "</a></td>"
 			+ "</tr>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "accept' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='Accept a private request from an operator, bot, or another user'> Accept private</a></td>"
+				+ "<td><a id='" + this.prefix + "accept' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='" + SDK.translate("Accept a private request from an operator, bot, or another user") + "'> " + SDK.translate("Accept private") + "</a></td>"
 			+ "</tr>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/image.png' title='Resize and send an image attachment'> Send image</a></td>"
+				+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/image.png' title='" + SDK.translate("Resize and send an image attachment") + "'> " + SDK.translate("Send image") + "</a></td>"
 			+ "</tr>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/attach.png' title='Send an image or file attachment'> Send file</a></td>"
+				+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/attach.png' title='" + SDK.translate("Send an image or file attachment") + "'> " + SDK.translate("Send file") + "</a></td>"
 			+ "</tr>\n";
 		html = html
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "toggleChime' class='" + this.prefix + "menuitem' href='#'><img id='boxchime' class='" + this.prefix + "menu' src='" + SDK.url + "/images/sound.png' title='Play a chime when a message is recieved'> Chime</a></td>"
+				+ "<td><a id='" + this.prefix + "toggleChime' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxchime' class='" + this.prefix + "menu' src='" + SDK.url + "/images/sound.png' title='" + SDK.translate("Play a chime when a message is recieved") + "'> " + SDK.translate("Chime") + "</a></td>"
 			+ "</tr>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "toggleSpeak' class='" + this.prefix + "menuitem' href='#'><img id='boxtalk' class='" + this.prefix + "menu' src='" + SDK.url + "/images/talkoff.png' title='Speak each message using voice synthesis'> Text to speech</a></td>"
+				+ "<td><a id='" + this.prefix + "toggleSpeak' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxtalk' class='" + this.prefix + "menu' src='" + SDK.url + "/images/talkoff.png' title='" + SDK.translate("Speak each message using voice synthesis") + "'> " + SDK.translate("Text to speech") + "</a></td>"
 			+ "</tr>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "toggleListen' class='" + this.prefix + "menuitem' href='#'>"
-						+ "<img id='boxmic' class='" + this.prefix + "menu' src='" + SDK.url + "/images/micoff.png' title='Enable speech recognition (browser must support HTML5 speech recognition, such as Chrome)'> Speech recognition</a>"
+				+ "<td><a id='" + this.prefix + "toggleListen' class='" + this.prefix + "menuitem' onclick='return false;' href='#'>"
+						+ "<img id='boxmic' class='" + this.prefix + "menu' src='" + SDK.url + "/images/micoff.png' title='" + SDK.translate("Enable speech recognition (browser must support HTML5 speech recognition, such as Chrome)") + "'> " + SDK.translate("Speech recognition") + "</a>"
 				+ "</td>"
 			+ "</tr>\n"
 			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "exit' class='" + this.prefix + "menuitem' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/quit.png' title='Exit the channel or active private channel'> Quit private or channel</a></td>"
+				+ "<td><a id='" + this.prefix + "exit' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/quit.png' title='" + SDK.translate("Exit the channel or active private channel") + "'> " + SDK.translate("Quit private or channel") + "</a></td>"
 			+ "</tr>\n"
 			+ "</table>\n"
 			+ "</div>\n"
@@ -1375,13 +1541,15 @@ function WebLiveChatListener() {
     		+ "</span></td>\n";
 		
 		html = html
-			+ "<td><span class='" + this.prefix + "box-input-span'><input id='" + this.prefix + "chat' type='text' class='" + this.prefix + "box-input'/></span></td>"
+			+ "<td><span class='" + this.prefix + "box-input-span'><input id='" + this.prefix
+				+ "chat' type='text' id='" + this.prefix + "box-input' "
+				+ "class='" + this.prefix + "box-input'/></span></td>"
 			+ "</tr></table>"
 			+ "</div>\n"
 			+ "</div>\n"
 			+ "<div id='" + this.prefix + "boxbar' class='" + this.prefix + "boxbar'>"
-				+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + (this.forceStyles ? "style='color:white' " : "") + "href='#'><img src='" + SDK.url + "/images/maximizew.png'> " + this.caption + " </a>"
-				+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
+				+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'><img src='" + SDK.url + "/images/maximizew.png'> " + this.caption + " </a>"
+				+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
 				+ "</span>"
 			+ "</div>\n";
 		
@@ -1389,13 +1557,13 @@ function WebLiveChatListener() {
 			html = html
 				+ "<div id='" + this.prefix + "contactinfo' class='" + this.prefix + "box' " + backgroundstyle + ">"
 					+ "<div class='" + this.prefix + "boxmenu'>"
-						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "boxmin' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
+						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
 					+ "</div>\n"
 					+ "<div style='margin:10px'>\n"
-						+ "<span>Name</span><br/><input id='" + this.prefix + "contactname' type='text' /><br/>\n"
-						+ "<span>Email</span><br/><input id='" + this.prefix + "contactemail' type='email' /><br/>\n"
-						+ "<span>Phone</span><br/><input id='" + this.prefix + "contactphone' type='text' /><br/>\n"
-						+ "<br/><a id='" + this.prefix + "contactconnect' class='" + this.prefix + "contactconnect' " + (this.forceStyles ? "style='color:white' " : "") + "href='#'>Connect</a>\n"
+						+ "<span>" + SDK.translate("Name") + "</span><br/><input id='" + this.prefix + "contactname' type='text' /><br/>\n"
+						+ "<span>" + SDK.translate("Email") + "</span><br/><input id='" + this.prefix + "contactemail' type='email' /><br/>\n"
+						+ "<span>" + SDK.translate("Phone") + "</span><br/><input id='" + this.prefix + "contactphone' type='text' /><br/>\n"
+						+ "<br/><a id='" + this.prefix + "contactconnect' class='" + this.prefix + "contactconnect' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'>" + SDK.translate("Connect") + "</a>\n"
 					+ "</div>\n"
 				+ "</div>";
 		}
@@ -1540,10 +1708,23 @@ function WebLiveChatListener() {
 	this.contactConnect = function() {
 		this.hasContactInfo = true;
 		this.contactName = document.getElementById(this.prefix + "contactname").value;
+		var ok = true;
+		if (this.contactName != null && this.contactName == "") {
+			ok = false;
+			document.getElementById(this.prefix + "contactname").style.borderColor = "red";
+			document.getElementById(this.prefix + "contactname").placeholder = SDK.translate("Enter name");
+		}
 		this.contactEmail = document.getElementById(this.prefix + "contactemail").value;
+		if (this.contactEmail != null && this.contactEmail.indexOf("@") == -1) {
+			ok = false;
+			document.getElementById(this.prefix + "contactemail").style.borderColor = "red";
+			document.getElementById(this.prefix + "contactemail").placeholder = SDK.translate("Enter valid email");
+		}
 		this.contactPhone = document.getElementById(this.prefix + "contactphone").value;
 		this.contactInfo = this.contactName + " " + this.contactEmail + " " + this.contactPhone;
-		this.maximizeBox();
+		if (ok) {
+			this.maximizeBox();
+		}
 	}
 	
 	/**
@@ -1581,6 +1762,12 @@ function WebLiveChatListener() {
 		    channel.id = this.instance;
 		    chat.listener = this;
 			chat.connect(channel, this.sdk.user);
+			var self = this;
+			if (this.autoAccept != null) {
+				setTimeout(function() {
+					chat.accept();
+				}, self.autoAccept);
+			}
 		}
 		return false;
 	}
@@ -1617,7 +1804,11 @@ function WebLiveChatListener() {
 			box.style.display = 'none';
 		}
 		if (this.popupURL != null) {
-			SDK.popupwindow(this.popupURL + "&info=" + encodeURI(this.contactInfo), 'child', 700, 520);
+			var popupURL = this.popupURL;
+			if (popupURL.indexOf("livechat?") != -1 && this.contactInfo != null && this.contactInfo != "") {
+				popupURL = popupURL + "&info=" + encodeURI(this.contactInfo);
+			}
+			SDK.popupwindow(popupURL, 'child', 700, 520);
 		} else {
 		    var form = document.createElement("form");
             form.setAttribute("method", "post");
@@ -1675,6 +1866,58 @@ function WebLiveChatListener() {
 	window.onblur = function() {
 		self.isActive = false;
 	};
+
+	
+	/**
+	 * Search for link using <a href="chat:yes">...
+	 * Switch them to use an onclick to post the chat back to the chat.
+	 */
+	this.linkChatPostbacks = function(node) {
+		var self = this;
+        var links = node.getElementsByTagName("a");
+        for (var index = 0; index < links.length; index++) {
+        	var a = links[index];
+        	var href = a.getAttribute("href");
+        	if (href != null && href.indexOf("chat:") != -1) {
+        		var chat = href.substring("chat:".length, href.length).trim();
+        		var temp = function(param, element) {
+        			element.onclick = function() {
+        				self.connection.sendMessage(param);
+	        			return false;
+	        		};
+        		}
+        		temp(chat, a);
+        	}
+        }
+        var buttons = node.getElementsByTagName("button");
+        for (var index = 0; index < buttons.length; index++) {
+        	var button = buttons[index];
+        	if (button.parentNode.nodeName == "A") {
+        		continue;
+        	}
+        	var chat = button.textContent;
+        	if (chat != null && chat.length > 0) {
+        		var temp = function(param, element) {
+        			element.onclick = function() {
+	        			self.connection.sendMessage(param);
+	        			return false;
+	        		};
+        		}
+        		temp(chat, button);
+        	}
+        }
+        var choices = node.getElementsByTagName("select");
+        for (var index = 0; index < choices.length; index++) {
+        	var choice = choices[index];
+    		var temp = function(param) {
+    			param.addEventListener("change", function() {
+        			self.connection.sendMessage(param.value);
+        			return false;
+        		});
+    		}
+    		temp(choice);
+        }
+	}
 		
 	/**
 	 * A user message was received from the channel.
@@ -1695,7 +1938,16 @@ function WebLiveChatListener() {
 			if (this.speak) {
 				SDK.tts(SDK.stripTags(responseText), this.voice, this.nativeVoice, this.lang, this.nativeVoiceName);
 			}
-			document.getElementById(this.prefix + 'response').innerHTML = SDK.linkURLs(message);
+			document.getElementById(this.prefix + 'response').innerHTML = SDK.linkURLs(responseText);
+			this.linkChatPostbacks(document.getElementById(this.prefix + 'response'));
+			// Fix Chrome bug,
+			if (SDK.fixChromeResizeCSS && SDK.isChrome()) {
+				var padding = document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding;
+		    	document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = "7px";
+				setTimeout(function() {
+		    		document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = padding;
+				}, 10);
+			}
 		}
 		var scroller = document.getElementById(this.prefix + 'scroller');
 		var consolepane = document.getElementById(this.prefix + 'console');
@@ -1713,9 +1965,12 @@ function WebLiveChatListener() {
 				chatClass = this.prefix + 'chat-2';
 			}
 			span.className = this.prefix + 'chat-user';
-			span.innerHTML = speaker;
+			var date = new Date(); 
+			var time = date.getHours() + ":" + ((date.getMinutes() < 10)? "0" : "") + date.getMinutes() + ":" + ((date.getSeconds() < 10)? "0" : "") + date.getSeconds();
+			span.innerHTML = speaker + " <small>" + time + "</small>";
 			span2.className = chatClass;
 			span2.innerHTML = SDK.linkURLs(responseText);
+			this.linkChatPostbacks(span2);
 			td.className = chatClass;
 			td.setAttribute('width', '100%');
 			td.setAttribute('align', 'left');
@@ -1738,6 +1993,7 @@ function WebLiveChatListener() {
 			span.innerHTML = speaker;
 			span2.className = chatClass;
 			span2.innerHTML = SDK.linkURLs(responseText);
+			this.linkChatPostbacks(span2);
 			td.className = this.prefix + 'chat-user';
 			td.setAttribute('nowrap', 'nowrap');
 			td2.className = chatClass;
@@ -2051,7 +2307,7 @@ function WebLiveChatListener() {
  * Shared method for updating an avatar image/video/audio from the chat response.
  */
 SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, channelaudio, afterFunction, nativeVoice, lang, voice) {
-	nativeVoice = nativeVoice && ('speechSynthesis' in window);
+	nativeVoice = nativeVoice && SDK.speechSynthesis;
 	if (elementPrefix == null) {
 		elementPrefix = "";
 	}
@@ -2079,13 +2335,18 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 		var audio = new Audio(urlprefix + responseMessage.avatarActionAudio);
 		audio.play();
 	}
-	if (SDK.backgroundAudio != null) {
-		SDK.backgroundAudio.pause();
-	}
-	if (responseMessage.avatarAudio != null && speak) {
-		SDK.backgroundAudio = new Audio(urlprefix + responseMessage.avatarAudio);
-		SDK.backgroundAudio.loop = true;
-		SDK.backgroundAudio.play();
+	if (!speak || SDK.currentBackgroundAudio != responseMessage.avatarAudio) {
+		// Only switch if different audio.
+		if (SDK.backgroundAudio != null) {
+			SDK.backgroundAudio.pause();
+			SDK.currentBackgroundAudio = null;
+		}
+		if (responseMessage.avatarAudio != null && speak) {
+			SDK.currentBackgroundAudio = responseMessage.avatarAudio;
+			SDK.backgroundAudio = new Audio(urlprefix + responseMessage.avatarAudio);
+			SDK.backgroundAudio.loop = true;
+			SDK.backgroundAudio.play();
+		}
 	}
 	if (responseMessage.avatarType != null && responseMessage.avatarType.indexOf("video") != -1) {
 		var div = document.getElementById(elementPrefix + "avatar-image-div");
@@ -2166,7 +2427,26 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 		}
 		var end = function() {
 			video.src = urlprefix + responseMessage.avatar;
-			video.loop = true;
+			if (responseMessage.avatar2 == null) {
+				video.loop = true;
+			} else {
+				video.loop = false;
+				video.onended = function() {
+					var index = Math.floor(Math.random() * 5);
+					if (index == 4 && responseMessage.avatar5 != null) {
+						video.src = urlprefix + responseMessage.avatar5;
+					} else if (index == 3 && responseMessage.avatar4 != null) {
+						video.src = urlprefix + responseMessage.avatar4;
+					} else if (index == 2 && responseMessage.avatar3 != null) {
+						video.src = urlprefix + responseMessage.avatar3;
+					} else if (index == 1 && responseMessage.avatar2 != null) {
+						video.src = urlprefix + responseMessage.avatar2;
+					} else {
+						video.src = urlprefix + responseMessage.avatar;
+					}
+					video.play();
+				}
+			}
 			video.play();
 			if (afterFunction != null) {
 				afterFunction();
@@ -2186,11 +2466,14 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 	
 							if (nativeVoice) {
 								var utterance = new SpeechSynthesisUtterance(SDK.stripTags(responseMessage.message));
+								SDK.utterance = utterance;
 								utterance.onstart = function() {
 									if (playing) {
 										return false;
 									}
-									speechSynthesis.pause();
+									if ('speechSynthesis' in window) {
+										speechSynthesis.pause();
+									}
 									video.src = urlprefix + responseMessage.avatarTalk;
 									video.loop = true;
 									video.oncanplay = function() {
@@ -2198,7 +2481,9 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 											return false;
 										}
 										playing = true;
-										speechSynthesis.resume();
+										if ('speechSynthesis' in window) {
+											speechSynthesis.resume();
+										}
 									}
 									video.play();
 								}
@@ -2209,6 +2494,7 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 								utterance.onend = function() {
 									end();
 								}
+								
 								SDK.nativeTTS(utterance, lang, voice);
 							} else {
 								//var audio = new Audio(urlprefix + responseMessage.speech, channelaudio);
@@ -2347,6 +2633,12 @@ function WebChatbotListener() {
 	this.caption = null;
 	/** Disallow speech. */
 	this.allowSpeech = true;
+	/** Disallow file uploads. */
+	this.allowFiles = true;
+	/** Remove menubar. */
+	this.showMenubar = true;
+	/** Remove language choice. */
+	this.showChooseLanguage = true;
 	/** Enable or disable speech. */
 	this.speak = true;
 	/** Configure if the browser's native voice TTS should be used. */
@@ -2355,8 +2647,16 @@ function WebChatbotListener() {
 	this.nativeVoiceName = null;
 	/** Set the language for the native voice. */
 	this.lang = null;
+	/** Translate between the user's language, and the bot's language. */
+	this.translate = false;
 	/** Enable or disable avatar. */
 	this.avatar = true;
+	/** Set the avatar. */
+	this.avatarId = null;
+	/** Set if the avatar should request HD (high def) video/images. */
+	this.hd = null;
+	/** Set if the avatar should request a specific video or image format. */
+	this.format = null;
 	/** A SDK connection must be set, be sure to include your app id. */
 	this.connection = null;
 	/** The id or name of the bot instance to connect to. */
@@ -2387,7 +2687,9 @@ function WebChatbotListener() {
 	this.popupURL = null;
 	/** Print response in chat bubble. */
 	this.bubble = false;
-	/** Initial message to display. */
+	/** Initial message to send to the bot. */
+	this.greetingMessage = null;
+	/** Initial message to display from the bot. (it is normally better to set a greeting in the bot instead). */
 	this.greeting = null;
 	/** Loading message to display. */
 	this.loading = "loading...";
@@ -2399,6 +2701,8 @@ function WebChatbotListener() {
 	this.userThumb;
 	/** Set styles explictly to avoid inheriting page styles. Disable this to be able to override styles. */
 	this.forceStyles = true;
+	/** Add additional css style code. */
+	this.style = "";
 	/** Set the location of the button and box, one of "bottom-right", "bottom-left", "top-right", "top-left". */
 	this.boxLocation = "bottom-right";
 	/** Prompt for name/email before connecting. */
@@ -2408,6 +2712,8 @@ function WebChatbotListener() {
 	this.contactEmail = null;
 	this.contactPhone = null;
 	this.contactInfo = "";
+	/** Set if the backlink should be displayed. */
+	this.backlink = SDK.backlink;
 
 	/** Support connections to external bots through their web API. */
 	this.external = false;
@@ -2495,38 +2801,49 @@ function WebChatbotListener() {
 		var box = document.createElement('div');
 		var html =
 			"<style>\n"
-				+ "." + this.prefix + "box { position:fixed;" + boxloc + ";z-index:52;margin:2px;display:none;" + border + " }\n"
+				+ "." + this.prefix + "box { position:fixed;" + boxloc + ";z-index:152;margin:2px;display:none;" + border + " }\n"
 				+ "." + this.prefix + "box:hover { border:1px;border-style:solid;border-color:black; }\n"
 				+ "." + this.prefix + "boxmenu { visibility:" + hidden + "; margin-bottom:12px; }\n"
 				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n"
 				+ "." + this.prefix + "boxclose, ." + this.prefix + "boxmin, ." + this.prefix + "boxmax { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
 				+ (this.forceStyles ? "#" : ".") + "" + this.prefix + "boxbarmax { font-size:18px;margin:2px;padding:0px;text-decoration:none;color:white; }\n"
 				+ "." + this.prefix + "boxclose:hover, ." + this.prefix + "boxmin:hover, ." + this.prefix + "boxmax:hover { color: #fff;background: grey; }\n"
-				+ "." + this.prefix + "boxbar { position:fixed;" + boxbarloc + ";z-index:52;margin:0;padding:6px;" + buttonstyle + " }\n"
+				+ "." + this.prefix + "boxbar { position:fixed;" + boxbarloc + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
 				+ "." + this.prefix + "boxbar:hover { " + buttonHoverStyle + " }\n"
-				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; }\n"
+				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; color:#585858; }\n"
 				+ "." + this.prefix + "no-bubble-plain { margin:4px; padding:8px; border:1px; }\n"
 				+ "." + this.prefix + "no-bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
 				+ "#" + this.prefix + "contactinfo { " + minHeight + minWidth + " }\n"
 				+ "#" + this.prefix + "contactinfo span { margin-left:4px;margin-top:4px; }\n"
 				+ "#" + this.prefix + "contactinfo input { margin:4px;font-size:13px;height:33px;width:90%;border:1px solid #d5d5d5; }\n"
 				+ "." + this.prefix + "contactconnect { margin:4px;padding:8px;color:white;text-decoration:none;" + buttonstyle + " }\n"
-				+ "." + this.prefix + "boxbutton { width:20px;height:20px;margin2px; }\n"
+				+ "." + this.prefix + "boxbutton { width:20px;height:20px;margin:4px; }\n"
+				+ "." + this.prefix + "menupopup div { position:absolute;margin: -1px 0 0 0;padding: 3px 3px 3px 3px;background: #fff;border-style:solid;border-color:black;border-width:1px;width:180px;max-width:300px;z-index:152;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; }\n"
+				+ "." + this.prefix + "menupopup:hover div { display:inline;visibility:visible;opacity:1;transition-delay:0.5s; }\n"
+				+ "a." + this.prefix + "menuitem { text-decoration: none;display: block;color: #585858; }\n"
+				+ "a." + this.prefix + "menuitem:hover { color: #fff;background: grey; }\n"
+				+ "tr." + this.prefix + "menuitem:hover { background: grey; }\n"
+				+ "." + this.prefix + "yandex { display:none; }\n"
+				+ "." + this.prefix + "powered { margin:4px;color:grey;font-size:10px; }\n"
+				+ "img." + this.prefix + "menu { width: 24px;height: 24px;margin: 2px;cursor: pointer;vertical-align: middle; }\n"
+				+ "span." + this.prefix + "menu { color: #818181;font-size: 12px; }\n"
 				+ "." + this.prefix + "bubble-div { padding-bottom:15px;position:relative; }\n"
-				+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; }\n"
+				+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; color:#585858; }\n"
 				+ "." + this.prefix + "bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
 				+ "." + this.prefix + "bubble:before { content:''; position:absolute; bottom:0px; left:40px; border-width:20px 0 0 20px; border-style:solid; border-color:black transparent; display:block; width:0;}\n"
 				+ "." + this.prefix + "bubble:after { content:''; position:absolute; bottom:3px; left:42px; border-width:18px 0 0 16px; border-style:solid; border-color:white transparent; display:block; width:0;}\n"
-				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:100%;height:22px; }\n"
+				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:99%;min-height:22px; }\n"
 				+ "." + this.prefix + "box-input-span { display:block; overflow:hidden; margin:4px; padding-right:4px; }\n"
 				+ "#" + this.prefix + "boxtable { background:none; border:none; margin:0; }\n"
+				+ this.style
 			+ "</style>\n"
 			+ "<div id='" + this.prefix + "box' class='" + this.prefix + "box' " + backgroundstyle + ">"
 				+ "<div class='" + this.prefix + "boxmenu'>"
-					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> <a id='"
-					+ this.prefix + "boxmax' class='" + this.prefix + "boxmax' href='#'><img src='" + SDK.url + "/images/open.png'> </a></span><br/>"
+					+ (this.backlink ? "<span class='" + this.prefix + "powered'>powered by <a href='" + SDK.backlinkURL + "' target='_blank'>" + SDK.NAME + "</a></span>" : "")
+					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> <a id='"
+					+ this.prefix + "boxmax' class='" + this.prefix + "boxmax' onclick='return false;' href='#'><img src='" + SDK.url + "/images/open.png'> </a></span><br/>"
 				+ "</div>";
-		
+
 		if (this.avatar) {
 			html = html
 				+ "<div id='" + this.prefix + "avatar-image-div' style='display:none;" + minHeight + minWidth + "'>"
@@ -2551,37 +2868,161 @@ function WebChatbotListener() {
 					+ "'><div class='" + this.prefix + (this.bubble ? "bubble-text" : "no-bubble-text" ) + "'>"
 						+ "<span id='" + this.prefix + "response'>" + (this.greeting == null ? this.loading : this.greeting) + "</span><br/>"
 					+ "</div></div></div>"
-					+ (this.allowSpeech ? "<table id='" + this.prefix + "boxtable' class='" + this.prefix + "boxtable' style='width:100%'><tr><td>" : "")
-					+ "<span class='" + this.prefix + "box-input-span'><input id='" + this.prefix + "chat' type='text' class='" + this.prefix + "box-input'/></span>"
-					+ (this.allowSpeech ?
-						("</td><td><a href='#' title='Speech'><img id='" + this.prefix + "boxspeak' class='" + this.prefix + "boxbutton' src='"
+					+ "<div><span class='" + this.prefix + "box-input-span'><input id='" + this.prefix + "chat' type='text' class='" + this.prefix + "box-input'/></span></div>";
+		html = html
+			+ "<div>"
+			+ "<span class='" + this.prefix + "menu'>\n"
+			+ "<div style='inline-block;position:relative'>\n"
+			+ "<span class='" + this.prefix + "menupopup'>"
+			+ "<div style='text-align:left;bottom:36px'>"
+			+ "<table>\n"
+			+ "<tr class='" + this.prefix + "menuitem'>"
+				+ "<td><a class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "images/language.png' title='Translate to and from your selected language'>"
+				+ " <select id='" + this.prefix + "chooselanguage'>"
+					+ "<option value='none'>Choose Language</option>"
+					+ "<option value='en'>English</option>"
+					+ "<option value='zh'>Chinese</option>"
+					+ "<option value='es'>Spanish</option>"
+					+ "<option value='pt'>Portuguese</option>"
+					+ "<option value='de'>German</option>"
+					+ "<option value='fr'>French</option>"
+					+ "<option value='ja'>Japanese</option>"
+					+ "<option value='ar'>Arabic</option>"
+					+ "<option value='none'>None</option>"
+					+ "<option value='none'></option>"
+					+ "<option value='af'>Afrikaans</option>"
+					+ "<option value='sq'>Albanian</option>"
+					+ "<option value='hy'>Armenian</option>"
+					+ "<option value='az'>Azerbaijani</option>"
+					+ "<option value='ba'>Bashkir</option>"
+					+ "<option value='eu'>Basque</option>"
+					+ "<option value='be'>Belarusian</option>"
+					+ "<option value='bn'>Bengali</option>"
+					+ "<option value='bs'>Bosnian</option>"
+					+ "<option value='bg'>Bulgarian</option>"
+					+ "<option value='ca'>Catalan</option>"
+					+ "<option value='za'>Chinese</option>"
+					+ "<option value='hr'>Croatian</option>"
+					+ "<option value='cs'>Czech</option>"
+					+ "<option value='da'>Danish</option>"
+					+ "<option value='nl'>Dutch</option>"
+					+ "<option value='en'>English</option>"
+					+ "<option value='et'>Estonian</option>"
+					+ "<option value='fi'>Finnish</option>"
+					+ "<option value='fr'>French</option>"
+					+ "<option value='gl'>Galician</option>"
+					+ "<option value='ka'>Georgian</option>"
+					+ "<option value='de'>German</option>"
+					+ "<option value='gu'>Gujarati</option>"
+					+ "<option value='ht'>Haitian</option>"
+					+ "<option value='he'>Hebrew</option>"
+					+ "<option value='hi'>Hindi</option>"
+					+ "<option value='hu'>Hungarian</option>"
+					+ "<option value='id'>Indonesian</option>"
+					+ "<option value='ga'>Irish</option>"
+					+ "<option value='it'>Italian</option>"
+					+ "<option value='ja'>Japanese</option>"
+					+ "<option value='kn'>Kannada</option>"
+					+ "<option value='kk'>Kazakh</option>"
+					+ "<option value='ky'>Kirghiz</option>"
+					+ "<option value='ko'>Korean</option>"
+					+ "<option value='la'>Latin</option>"
+					+ "<option value='lv'>Latvian</option>"
+					+ "<option value='lt'>Lithuanian</option>"
+					+ "<option value='mk'>Macedonian</option>"
+					+ "<option value='mg'>Malagasy</option>"
+					+ "<option value='ms'>Malay</option>"
+					+ "<option value='mt'>Maltese</option>"
+					+ "<option value='mn'>Mongolian</option>"
+					+ "<option value='no'>Norwegian</option>"
+					+ "<option value='fa'>Persian</option>"
+					+ "<option value='pl'>Polish</option>"
+					+ "<option value='pt'>Portuguese</option>"
+					+ "<option value='pa'>Punjabi</option>"
+					+ "<option value='ro'>Romanian</option>"
+					+ "<option value='ru'>Russian</option>"
+					+ "<option value='sr'>Serbian</option>"
+					+ "<option value='si'>Sinhalese</option>"
+					+ "<option value='sk'>Slovak</option>"
+					+ "<option value='es'>Spanish</option>"
+					+ "<option value='sw'>Swahili</option>"
+					+ "<option value='sv'>Swedish</option>"
+					+ "<option value='tl'>Tagalog</option>"
+					+ "<option value='tg'>Tajik</option>"
+					+ "<option value='ta'>Tamil</option>"
+					+ "<option value='tt'>Tatar</option>"
+					+ "<option value='th'>Thai</option>"
+					+ "<option value='tr'>Turkish</option>"
+					+ "<option value='uk'>Ukrainian</option>"
+					+ "<option value='ur'>Urdu</option>"
+					+ "<option value='uz'>Uzbek</option>"
+					+ "<option value='cy'>Welsh</option>"
+			  	+ "</select>"
+			+ "</a></td>"
+			+ "</tr>\n";
+		if (this.allowFiles) {
+			html = html
+				+ "<tr class='" + this.prefix + "menuitem'>"
+					+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/image.png' title='Resize and send an image attachment'> Send image</a></td>"
+				+ "</tr>\n"
+				+ "<tr class='" + this.prefix + "menuitem'>"
+					+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/attach.png' title='Send an image or file attachment'> Send file</a></td>"
+				+ "</tr>\n";
+		}
+		if (this.allowSpeech) {
+			html = html
+				+ "<tr class='" + this.prefix + "menuitem'>"
+					+ "<td><a id='" + this.prefix + "boxspeakmenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='" + this.prefix + "boxspeak2' class='" + this.prefix + "menu' src='" + urlprefix + (this.speak ? "images/sound.png": "images/mute.png") +"' title='Speech'> Speech</a></td>"
+				+ "</tr>\n";
+			if (SDK.isChrome()) {
+				html = html
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "boxspeakrecognitionmenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'>"
+								+ "<img id='" + this.prefix + "boxspeakrecognition2' class='" + this.prefix + "menu' src='" + urlprefix + "/images/micoff.png' title='Speech recognition (browser must support HTML5 speech recognition, such as Chrome)'> Speech Recognition</a>"
+						+ "</td>"
+					+ "</tr>\n"
+			}
+		}
+		html = html
+			+ "</table>\n"
+			+ "</div>"
+			+ "<img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/menu.png'>"
+			+ "<img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/language.png'>"
+			+ "</span>";
+		if (this.allowSpeech) {
+			html = html
+				+ "<a onclick='return false;' href='#' title='Speech'><img id='" + this.prefix + "boxspeak' class='" + this.prefix + "boxbutton' src='"
 								+ urlprefix
-								+ (this.speak ? "images/sound.png": "images/mute.png") +"'></a></td>")
-						: "")
-					+ (this.allowSpeech && SDK.isChrome() ?
-							("<td><a href='#' title='Speech Recognition'><img id='" + this.prefix + "boxspeakrecognition' class='" + this.prefix + "boxbutton' src='"
+								+ (this.speak ? "images/sound.png": "images/mute.png") +"'></a></td>"
+					+ (SDK.isChrome() ?
+							("<a onclick='return false;' href='#' title='Speech Recognition'><img id='" + this.prefix + "boxspeakrecognition' class='" + this.prefix + "boxbutton' src='"
 									+ urlprefix
-									+ "images/micoff.png'></a></td>")
-							: "")
-					+ (this.allowSpeech ? "</tr></table>" : "")
-				+ "</div>"
+									+ "images/micoff.png'></a>")
+							: "");
+		}
+		html = html
+			+ "</span>"
+			+ "</div>"
+			+ "</div>"
+			+ "<div id='" + this.prefix + "yandex' class='" + this.prefix + "yandex'><span>Powered by <a target='_blank' href='http://translate.yandex.com/'>Yandex.Translate</a></span></div>"
+			+ "</div>"
 			+ "</div>"
 			+ "<div id='" + this.prefix + "boxbar' class='" + this.prefix + "boxbar'>"
-				+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + (this.forceStyles ? "style='color:white' " : "") + "href='#'><img src='" + SDK.url + "/images/maximizew.png'> " + this.caption + "</a></span>"
-				+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
+				+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'><img src='" + SDK.url + "/images/maximizew.png'> " + this.caption + "</a></span>"
+				+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' onclick='return false;' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
 			+ "</div>";
 		
 		if (this.promptContactInfo) {
 			html = html
 				+ "<div id='" + this.prefix + "contactinfo' class='" + this.prefix + "box' " + backgroundstyle + ">"
 					+ "<div class='" + this.prefix + "boxmenu'>"
-						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "boxmin' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
+						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
 					+ "</div>\n"
 					+ "<div style='margin:10px'>\n"
 						+ "<span>Name</span><br/><input id='" + this.prefix + "contactname' type='text' /><br/>\n"
 						+ "<span>Email</span><br/><input id='" + this.prefix + "contactemail' type='email' /><br/>\n"
 						+ "<span>Phone</span><br/><input id='" + this.prefix + "contactphone' type='text' /><br/>\n"
-						+ "<br/><a id='" + this.prefix + "contactconnect' class='" + this.prefix + "contactconnect' " + (this.forceStyles ? "style='color:white' " : "") + "href='#'>Connect</a>\n"
+						+ "<br/><a id='" + this.prefix + "contactconnect' class='" + this.prefix + "contactconnect' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'>Connect</a>\n"
 					+ "<br/><br/></div>\n"
 				+ "</div>";
 		}
@@ -2622,14 +3063,64 @@ function WebChatbotListener() {
 			self.maximizeBox();
 			return false;
 		});
+		var langOrig = null;
+		var nativeVoiceOrig = null;
+		var voiceOrig = null;
+		document.getElementById(this.prefix + "chooselanguage").addEventListener("change", function() {
+			if (nativeVoiceOrig == null && langOrig == null) {
+				langOrig = self.lang;
+				nativeVoiceOrig = self.nativeVoice;
+				voiceOrig = self.voice;
+			}
+			var element = document.getElementById(self.prefix + 'chooselanguage');
+			self.lang = element.value;
+			if (self.lang != "none") {
+				document.getElementById(self.prefix + 'yandex').style.display = "inline";
+				self.nativeVoice = true;
+				self.translate = true;
+				self.voice = null;
+			} else {
+				document.getElementById(self.prefix + 'yandex').style.display = "none";
+				self.translate = false;
+				self.lang = langOrig;
+				self.nativeVoice = nativeVoiceOrig;
+				self.voice = voiceOrig;
+			}
+		});
+		if (document.getElementById(this.prefix + "sendImage") != null) {
+			document.getElementById(this.prefix + "sendImage").addEventListener("click", function() {
+				self.sendImage();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "sendAttachment") != null) {
+			document.getElementById(this.prefix + "sendAttachment").addEventListener("click", function() {
+				self.sendAttachment();
+				return false;
+			});
+		}
 		if (document.getElementById(this.prefix + "boxspeak") != null) {
 			document.getElementById(this.prefix + "boxspeak").addEventListener("click", function() {
 				self.speak = !self.speak;
 				var urlprefix = self.connection.credentials.url + "/";
 				if (self.speak) {
 					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/sound.png";
+					document.getElementById(self.prefix + "boxspeak2").src = urlprefix + "images/sound.png";
 				} else {
-					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/mute.png";				
+					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/mute.png";
+					document.getElementById(self.prefix + "boxspeak2").src = urlprefix + "images/mute.png";
+				}
+				return false;
+			});
+			document.getElementById(this.prefix + "boxspeakmenu").addEventListener("click", function() {
+				self.speak = !self.speak;
+				var urlprefix = self.connection.credentials.url + "/";
+				if (self.speak) {
+					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/sound.png";
+					document.getElementById(self.prefix + "boxspeak2").src = urlprefix + "images/sound.png";
+				} else {
+					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/mute.png";
+					document.getElementById(self.prefix + "boxspeak2").src = urlprefix + "images/mute.png";
 				}
 				return false;
 			});
@@ -2643,9 +3134,23 @@ function WebChatbotListener() {
 				if (self.listen) {
 					SDK.startSpeechRecognition();
 					document.getElementById(self.prefix + 'boxspeakrecognition').src = urlprefix + "images/mic.png";
+					document.getElementById(self.prefix + 'boxspeakrecognition2').src = urlprefix + "images/mic.png";
 				} else {
 					SDK.stopSpeechRecognition();
 					document.getElementById(self.prefix + 'boxspeakrecognition').src = urlprefix + "images/micoff.png";
+					document.getElementById(self.prefix + 'boxspeakrecognition2').src = urlprefix + "images/micoff.png";
+				}
+			});
+			document.getElementById(this.prefix + "boxspeakrecognitionmenu").addEventListener("click", function() {
+				self.listen = !self.listen;
+				if (self.listen) {
+					SDK.startSpeechRecognition();
+					document.getElementById(self.prefix + 'boxspeakrecognition').src = urlprefix + "images/mic.png";
+					document.getElementById(self.prefix + 'boxspeakrecognition2').src = urlprefix + "images/mic.png";
+				} else {
+					SDK.stopSpeechRecognition();
+					document.getElementById(self.prefix + 'boxspeakrecognition').src = urlprefix + "images/micoff.png";
+					document.getElementById(self.prefix + 'boxspeakrecognition2').src = urlprefix + "images/micoff.png";
 				}
 			});
 		}
@@ -2673,12 +3178,12 @@ function WebChatbotListener() {
 		}
 		var html =
 			"<style>\n"
-				+ "." + this.prefix + "livechatboxbar { position:fixed;bottom:2px;" + position + ";z-index:52;margin:0;padding:6px;" + buttonstyle + " }\n"
+				+ "." + this.prefix + "livechatboxbar { position:fixed;bottom:2px;" + position + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
 				+ "." + this.prefix + "livechatboxbar:hover { " + buttonHoverStyle + " }\n"
 				+ (this.forceStyles ? "#" : ".") + this.prefix + "livechatboxmax { color:white;font-size:18px;margin:2px;padding:0px;text-decoration:none; }\n"
 			+ "</style>\n"
 			+ "<div id='" + this.prefix + "livechatboxbar' class='" + this.prefix + "livechatboxbar'>"
-			+ "<span><a id='" + this.prefix + "livechatboxmax' class='" + this.prefix + "livechatboxmax' href='#'>" + label + "</a></span>"
+			+ "<span><a id='" + this.prefix + "livechatboxmax' class='" + this.prefix + "livechatboxmax' onclick='return false;' href='#'>" + label + "</a></span>"
 			+ "</div>";
 		
 		box.innerHTML = html;
@@ -2713,10 +3218,23 @@ function WebChatbotListener() {
 	this.contactConnect = function() {
 		this.hasContactInfo = true;
 		this.contactName = document.getElementById(this.prefix + "contactname").value;
+		var ok = true;
+		if (this.contactName != null && this.contactName == "") {
+			ok = false;
+			document.getElementById(this.prefix + "contactname").style.borderColor = "red";
+			document.getElementById(this.prefix + "contactname").placeholder = "Enter name";
+		}
 		this.contactEmail = document.getElementById(this.prefix + "contactemail").value;
+		if (this.contactEmail != null && this.contactEmail.indexOf("@") == -1) {
+			ok = false;
+			document.getElementById(this.prefix + "contactemail").style.borderColor = "red";
+			document.getElementById(this.prefix + "contactemail").placeholder = "Enter valid email";
+		}
 		this.contactPhone = document.getElementById(this.prefix + "contactphone").value;
 		this.contactInfo = this.contactName + " " + this.contactEmail + " " + this.contactPhone;
-		this.maximizeBox();
+		if (ok) {
+			this.maximizeBox();
+		}
 	}
 	
 	/**
@@ -2780,7 +3298,11 @@ function WebChatbotListener() {
 			height = 220;
 		}
 		if (this.popupURL != null) {
-			SDK.popupwindow(this.popupURL + "&info=" + encodeURI(this.contactInfo), 'child', 700, height);
+			var popupURL = this.popupURL;
+			if (popupURL.indexOf("chat?") != -1 && this.contactInfo != null && this.contactInfo != "") {
+				popupURL = popupURL + "&info=" + encodeURI(this.contactInfo);
+			}
+			SDK.popupwindow(popupURL, 'child', 700, height);
 		} else {			
 			var form = document.createElement("form");
             form.setAttribute("method", "post");
@@ -2833,18 +3355,150 @@ function WebChatbotListener() {
 		this.minimizeBox();
 		return false;
 	}
+
+	this.sendImage = function() {
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			alert('The File APIs are not fully supported in this browser.');
+			return false;
+		}
+		var form = document.createElement("form");
+		form.enctype = "multipart/form-data";
+		form.method = "post";
+		form.name = "fileinfo";
+		var fileInput = document.createElement("input");
+		var self = this;
+		fileInput.name = "file";
+		fileInput.type = "file";
+		form.appendChild(fileInput);
+		fileInput.onchange = function() {
+			var file = fileInput.files[0];
+			self.sendFileAttachment(file, true, form);
+		}
+		fileInput.click();
+		return false;
+	};
+
+	this.sendAttachment = function() {
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			alert('The File APIs are not fully supported in this browser.');
+			return false;
+		}
+		var form = document.createElement("form");
+		form.enctype = "multipart/form-data";
+		form.method = "post";
+		form.name = "fileinfo";
+		var fileInput = document.createElement("input");
+		var self = this;
+		fileInput.name = "file";
+		fileInput.type = "file";
+		form.appendChild(fileInput);
+		fileInput.onchange = function() {
+			var file = fileInput.files[0];
+			self.sendFileAttachment(file, false, form);
+		}
+		fileInput.click();
+		return false;
+	};
+
+	this.sendFileAttachment = function(file, resize, form) {
+		var self = this;
+		var media = new MediaConfig();
+		if (this.instance == null) {
+			this.connection.error("Missing instance property");
+			return false;
+		}
+		media.instance = this.instance;
+		media.name = file.name;
+		media.type = file.type;
+		if (!resize && file.size > SDK.MAX_FILE_UPLOAD) {
+			this.connection.error("File exceeds maximum upload size of " + (SDK.MAX_FILE_UPLOAD / 1000000) + "meg");
+		} else {
+			this.connection.createBotAttachment(media, file, resize, form, function(media) {
+				//var message = "file: " + file.name + " : " + file.type + " : " + self.connection.fetchLink(media.file);
+				var message = self.connection.fetchLink(media.file);
+				message = document.getElementById(self.prefix + 'chat').value + " " + message;
+				document.getElementById(self.prefix + 'chat').value = message;
+				//self.sendMessage();
+			})
+		}
+		return false;
+	};
+	
+	/**
+	 * Search for link using <a href="chat:yes">...
+	 * Switch them to use an onclick to post the chat back to the bot.
+	 */
+	this.linkChatPostbacks = function(node) {
+		var self = this;
+        var links = node.getElementsByTagName("a");
+        for (var index = 0; index < links.length; index++) {
+        	var a = links[index];
+        	var href = a.getAttribute("href");
+        	if (href != null && href.indexOf("chat:") != -1) {
+        		var chat = href.substring("chat:".length, href.length).trim();
+        		var temp = function(param, element) {
+        			element.onclick = function() {
+	        			self.sendMessage(param);
+	        			return false;
+	        		};
+        		}
+        		temp(chat, a);
+        	}
+        }
+        var buttons = node.getElementsByTagName("button");
+        for (var index = 0; index < buttons.length; index++) {
+        	var button = buttons[index];
+        	if (button.parentNode.nodeName == "A") {
+        		continue;
+        	}
+        	var chat = button.textContent;
+        	if (chat != null && chat.length > 0) {
+        		var temp = function(param, element) {
+        			element.onclick = function() {
+	        			self.sendMessage(param);
+	        			return false;
+	        		};
+        		}
+        		temp(chat, button);
+        	}
+        }
+        var choices = node.getElementsByTagName("select");
+        for (var index = 0; index < choices.length; index++) {
+        	var choice = choices[index];
+    		var temp = function(param) {
+    			param.addEventListener("change", function() {
+        			self.sendMessage(param.value);
+        			return false;
+        		});
+    		}
+    		temp(choice);
+        }
+	}
 	
 	/**
 	 * A chat message was received from the bot.
 	 */
 	this.response = function(user, message) {
 		document.getElementById(this.prefix + 'response').innerHTML = SDK.linkURLs(message);
+		this.linkChatPostbacks(document.getElementById(this.prefix + 'response'));
+		if (!SDK.secure) {
+			SDK.evalScripts(document.getElementById(this.prefix + 'response'));
+		}
 		this.message(user, message);
 		if (this.focus) {
 			document.getElementById(this.prefix + 'chat').focus();
 		}
 		if (this.onresponse != null) {
 			this.onresponse(message);
+		}
+		var self = this;
+		// Fix Chrome bug,
+		if (SDK.fixChromeResizeCSS && SDK.isChrome()) {
+			var padding = document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding;
+	    	document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = "7px";
+			setTimeout(function() {
+	    		document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = padding;
+			}, 10);
 		}
 	}
 	
@@ -2884,6 +3538,7 @@ function WebChatbotListener() {
 		}
 		span2.className = chatClass;
 		span2.innerHTML = SDK.linkURLs(message);
+		this.linkChatPostbacks(span2);
 		td.className = 'chat-user';
 		td.setAttribute('nowrap', 'nowrap');
 		td2.className = chatClass;
@@ -2924,9 +3579,18 @@ function WebChatbotListener() {
 			self.response("Error", message);
 		}
 		if (this.avatar) {
-			var config = new InstanceConfig();
-			config.id = this.instance;
-			this.connection.initAvatar(config, function(responseMessage) {
+			var config = new ChatConfig();
+			config.instance = this.instance;
+			if (this.translate) {
+				config.language = this.lang;
+			}
+			if (this.format != null) {
+				config.avatarFormat = this.format;
+			}
+			if (this.hd != null) {
+				config.avatarHD = this.hd;
+			}
+			this.connection.initChat(config, function(responseMessage) {
 				if (this.conversation == null) {
 					self.updateAvatar(responseMessage);
 				}
@@ -2943,7 +3607,24 @@ function WebChatbotListener() {
 		var chat = new ChatConfig();
 		chat.info = this.contactInfo;
 		chat.instance = this.instance;
-		if (this.nativeVoice && ('speechSynthesis' in window)) {
+		if (this.greetingMessage != null) {
+			chat.message = this.greetingMessage;
+		}
+		if (this.translate) {
+			chat.language = this.lang;
+		}
+		if (this.avatarId != null) {
+			chat.avatar = this.avatarId;
+		}
+		if (this.hd != null) {
+			chat.avatarHD = this.hd;
+		} else if ((this.width != null && this.width > 400) || (this.height != null && this.height > 400)) {
+			chat.avatarHD = true;
+		}
+		if (this.format != null) {
+			chat.avatarFormat = this.format;
+		}
+		if (this.nativeVoice && SDK.speechSynthesis) {
 			chat.speak = false;
 		} else {
 			chat.speak = this.speak;
@@ -2968,14 +3649,30 @@ function WebChatbotListener() {
 	/**
 	 * Send the current text from the chat input as a message to the bot, and process the response.
 	 */
-	this.sendMessage = function() {
-		var message = document.getElementById(this.prefix + 'chat').value;
+	this.sendMessage = function(message) {
+		if (message == null) {
+			message = document.getElementById(this.prefix + 'chat').value;
+		}
 		if (message != '') {
 			this.message(this.userName, message);
 			var chat = new ChatConfig();
 			chat.message = message;
 			chat.instance = this.instance;
-			if (this.nativeVoice && ('speechSynthesis' in window)) {
+			if (this.translate) {
+				chat.language = this.lang;
+			}
+			if (this.avatarId != null) {
+				chat.avatar = this.avatarId;
+			}
+			if (this.hd != null) {
+				chat.avatarHD = this.hd;
+			} else if ((this.width != null && this.width > 400) || (this.height != null && this.height > 400)) {
+				chat.avatarHD = true;
+			}
+			if (this.format != null) {
+				chat.avatarFormat = this.format;
+			}
+			if (this.nativeVoice && SDK.speechSynthesis) {
 				chat.speak = false;
 			} else {
 				chat.speak = this.speak;
@@ -3027,6 +3724,7 @@ function WebChatbotListener() {
 					var logText = responseMessage.log;
 					if (log != null) {
 						if (logText != null) {
+							log.style.display = "inline";
 							log.innerHTML = logText;
 						} else {
 							log.innerHTML = "";
@@ -3120,6 +3818,7 @@ function WebChatbotListener() {
 		var avatarCanvasDiv = document.getElementById(this.prefix + "avatar-canvas-div");
 		var scroller = document.getElementById(this.prefix + "scroller");
 		if (!this.big) {
+			this.hd = true;
 			if (avatar != null) {
 				avatar.className = "avatar-big";
 			}
@@ -3140,6 +3839,7 @@ function WebChatbotListener() {
 			}
 			this.big = true;
 		} else {
+			this.hd = false;
 			if (avatar != null) {
 				avatar.className = "avatar";
 			}
@@ -3196,6 +3896,8 @@ function WebAvatar() {
 	this.avatar = null;
 	/** The name of the voice to use. */
 	this.voice = null;
+	/** The name of the voice mod to use. */
+	this.voiceMod = null;
 	/** Allow the background color to be set. */
 	this.background = null;
 	/** Avatar image/video width. */
@@ -3213,7 +3915,11 @@ function WebAvatar() {
 	/** Store list of messages to output. */
 	this.messages = null;
 	/** Function to invoke when processing all messages is complete. */
-	this.ended = null;		
+	this.ended = null;
+	/** Set if the avatar should request HD (high def) video/images. */
+	this.hd = null;
+	/** Set if the avatar should request a specific video or image format. */
+	this.format = null;
 	
 	/**
 	 * Create an embedding bar and div in the current webpage.
@@ -3254,16 +3960,17 @@ function WebAvatar() {
 		}
 		var html =
 			"<style>\n"
-				+ "." + this.prefix + "avatarbox { position:fixed;bottom:10px;left:10px;z-index:52;margin:2px;" + border + " }\n"
+				+ "." + this.prefix + "avatarbox { position:fixed;bottom:10px;left:10px;z-index:152;margin:2px;" + border + " }\n"
 				+ "." + this.prefix + "avatarbox:hover { border:1px;border-style:solid;border-color:black; }\n"
 				+ "." + this.prefix + "avatarbox ." + this.prefix + "avatarboxmenu { visibility:" + hidden + "; }\n"
 				+ "." + this.prefix + "avatarbox:hover ." + this.prefix + "avatarboxmenu { visibility:visible; }\n"
-				+ "#" + this.prefix + "avatarboxclose { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
+				+ "img." + this.prefix + "avatarboxclose { margin:4px }\n"
+				+ "#" + this.prefix + "avatarboxclose { margin:0px;font-size:26px; }\n"
 				+ "#" + this.prefix + "avatarboxclose:hover { color: #fff;background: grey; }\n"
 			+ "</style>\n"
 			+ "<div id='" + this.prefix + "avatarbox' class='" + this.prefix + "avatarbox' " + backgroundstyle + ">"
 				+ "<div class='" + this.prefix + "avatarboxmenu'>"
-					+ "<span style='float:right'><a id='" + this.prefix + "avatarboxclose' href='#'>&times;</a></span><br/>"
+					+ "<span style='float:right'><a id='" + this.prefix + "avatarboxclose' onclick='return false;' href='#'><img class='" + this.prefix + "avatarboxclose' src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
 				+ "</div>"
 				+ "<div id='" + this.prefix + "avatar-image-div' style='display:none;" + minWidth + minHeight + "'>"
 					+ "<img id='" + this.prefix + "avatar' style='" + minWidth + minHeight + "'/>"
@@ -3330,11 +4037,20 @@ function WebAvatar() {
 		var config = new AvatarMessage();
 		config.message = message;
 		config.avatar = this.avatar;
-		if (this.nativeVoice && ('speechSynthesis' in window)) {
+		if (this.hd != null) {
+			config.hd = this.hd;
+		} else if ((this.width != null && this.width > 400) || (this.height != null && this.height > 400)) {
+			config.hd = true;
+		}
+		if (this.format != null) {
+			config.format = this.format;
+		}
+		if (this.nativeVoice && SDK.speechSynthesis) {
 			config.speak = false;
 		} else {
 			config.speak = this.speak;
 			config.voice = this.voice;
+			config.voiceMod = this.voiceMod;
 		}
 		config.emote = emote;
 		config.action = action;
@@ -3381,11 +4097,12 @@ function WebAvatar() {
 		var config = new AvatarMessage();
 		config.message = message;
 		config.avatar = this.avatar;
-		if (this.nativeVoice && ('speechSynthesis' in window)) {
+		if (this.nativeVoice && SDK.speechSynthesis) {
 			config.speak = false;
 		} else {
 			config.speak = this.speak;
 			config.voice = this.voice;
+			config.voiceMod = this.voiceMod;
 		}
 		config.emote = emote;
 		config.action = action;
@@ -4039,6 +4756,32 @@ function SDKConnection() {
 	}
 
 	/**
+	 * Create a new file/image/media attachment for a bot.
+	 */
+	this.createBotAttachment = function(config, file, resize, form, processor) {
+		config.addCredentials(this);
+		if (resize) {
+			this.POST_IMAGE(this.credentials.rest + "/create-bot-attachment", file, form, config.toXML(), function(xml) {
+				if (xml == null) {
+					return null;
+				}
+				var media = new MediaConfig();
+				media.parseXML(xml);
+				processor(media);
+			});
+		} else {
+			this.POST_FILE(this.credentials.rest + "/create-bot-attachment", form, config.toXML(), function(xml) {
+				if (xml == null) {
+					return null;
+				}
+				var media = new MediaConfig();
+				media.parseXML(xml);
+				processor(media);
+			});
+		}
+	}
+
+	/**
 	 * Create a new file/image/media attachment for a forum.
 	 */
 	this.createForumAttachment = function(config, file, resize, form, processor) {
@@ -4351,10 +5094,27 @@ function SDKConnection() {
 	/**
 	 * Initialize the bot's avatar for a chat session.
 	 * This can be done before processing the first message for a quick response.
+	 * @deprecated replaced by initChat()
 	 */
 	this.initAvatar = function(config, processor) {
 		config.addCredentials(this);
 		this.POST(this.credentials.rest + "/init-avatar", config.toXML(), function(xml) {
+			if (xml == null) {
+				return;
+			}
+			var response = new ChatResponse();
+			response.parseXML(xml);
+			processor(response);
+		});
+	}
+	
+	/**
+	 * Initialize the bot's avatar for a chat session.
+	 * This can be done before processing the first message for a quick response.
+	 */
+	this.initChat = function(config, processor) {
+		config.addCredentials(this);
+		this.POST(this.credentials.rest + "/init-chat", config.toXML(), function(xml) {
 			if (xml == null) {
 				return;
 			}
@@ -4879,11 +5639,19 @@ function ChatConfig() {
 	/** Enable or disable the bot's learning for this message. */
 	this.learn;
 	/** Escape and filter the response message HTML content for XSS security. */
-	this.secure = true;
+	this.secure = SDK.secure;
 	/** Strip any HTML tags from the response message. */
 	this.plainText;
 	/** Send extra info with the message, such as the user's contact info (name email phone). */
 	this.info;
+	/** Request a specific avatar (by ID). */
+	this.avatar;
+	/** Request the response avatar media in HD. */
+	this.avatarHD = SDK.hd;
+	/** Request the response avatar media in a video or image format. */
+	this.avatarFormat = SDK.format;
+	/** Translate between the user's language and the bot's language. */
+	this.language;
 	
 	this.toXML = function() {
 		var xml = "<chat";
@@ -4899,6 +5667,15 @@ function ChatConfig() {
 		}
 		if (this.speak) {
 			xml = xml + (" speak=\"" + this.speak + "\"");
+		}
+		if (this.language != null) {
+			xml = xml + (" language=\"" + this.language + "\"");
+		}
+		if (this.avatarHD) {
+			xml = xml + (" avatarHD=\"" + this.avatarHD + "\"");
+		}
+		if (this.avatarFormat != null) {
+			xml = xml + (" avatarFormat=\"" + this.avatarFormat + "\"");
 		}
 		if (this.correction) {
 			xml = xml + (" correction=\"" + this.correction + "\"");
@@ -4972,6 +5749,14 @@ function ChatResponse() {
 	this.conversation;
 	/** Server relative URL for the avatar image or video. */
 	this.avatar;
+	/** Second avatar animation. */
+	this.avatar2;
+	/** Third avatar animation. */
+	this.avatar3;
+	/** Forth avatar animation. */
+	this.avatar4;
+	/** Fifth avatar animation. */
+	this.avatar5;
 	/** Avatar MIME file type, (mpeg, webm, ogg, jpeg, png) */
 	this.avatarType;
 	/** Server relative URL for the avatar talking image or video. */
@@ -5019,6 +5804,10 @@ function ChatResponse() {
 	this.parseXML = function(element) {
 		this.conversation = element.getAttribute("conversation");
 		this.avatar = element.getAttribute("avatar");
+		this.avatar2 = element.getAttribute("avatar2");
+		this.avatar3 = element.getAttribute("avatar3");
+		this.avatar4 = element.getAttribute("avatar4");
+		this.avatar5 = element.getAttribute("avatar5");
 		this.avatarType = element.getAttribute("avatarType");
 		this.avatarTalk = element.getAttribute("avatarTalk");
 		this.avatarTalkType = element.getAttribute("avatarTalkType");
@@ -5102,10 +5891,13 @@ function AvatarMessage() {
 	this.avatar;
 	this.speak;
 	this.voice;
+	this.voiceMod;
 	this.message;
 	this.emote;
 	this.action;
 	this.pose;
+	this.hd = SDK.hd;
+	this.format = SDK.format;
 	
 	this.toXML = function() {
 		var xml = "<avatar-message";
@@ -5125,8 +5917,17 @@ function AvatarMessage() {
 		if (this.voice != null) {
 			xml = xml + (" voice=\"" + this.voice + "\"");
 		}
+		if (this.voiceMod != null) {
+			xml = xml + (" voiceMod=\"" + this.voiceMod + "\"");
+		}
+		if (this.format != null) {
+			xml = xml + (" format=\"" + this.format + "\"");
+		}
 		if (this.speak) {
 			xml = xml + (" speak=\"" + this.speak + "\"");
+		}
+		if (this.hd) {
+			xml = xml + (" hd=\"" + this.hd + "\"");
 		}
 		xml = xml + (">");
 		
@@ -6021,4 +6822,13 @@ TrainingConfig.constructor = TrainingConfig;
  */
 if (typeof SDK_onLoaded !== 'undefined') {
 	SDK_onLoaded();
+}
+
+/**
+ * Allow for botlibre.SDK namespace.
+ */
+var botlibre = {};
+botlibre.SDK = {};
+for (var attr in SDK) {
+    botlibre.SDK[attr] = SDK[attr];
 }

@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuCorrection"
+          android:icon="@drawable/check"
+          android:title="Correct response" />
+    
+    <item android:id="@+id/menuFlag"
+          android:title="Flag response as offensive" />
       
     <item android:id="@+id/menuSound"
           android:title="Speak"
           android:checkable="true" />
     
     <item android:id="@+id/menuDeviceVoice"
-          android:title="Use Device Voice"
+          android:title="Device Voice"
           android:checkable="true" />
+    
+    <item android:id="@+id/menuChangeVoice"
+          android:title="Change Voice" />
+    
+    <item android:id="@+id/menuChangeLanguage"
+          android:title="Change Language" />
+    
+    <item android:id="@+id/menuChangeAvatar"
+          android:title="Change Avatar" />
     
     <item android:id="@+id/menuDisableVideo"
           android:title="Disable Video"
           android:checkable="true" />
- 
-    <item android:id="@+id/menuCorrection"
-          android:icon="@drawable/check"
-          android:title="Correct last response"
+    
+    <item android:id="@+id/menuWebm"
+          android:title="Webm Video"
           android:checkable="true" />
     
-    <item android:id="@+id/menuFlag"
-          android:icon="@drawable/flag"
-          android:title="Flag response as offensive"
+    <item android:id="@+id/menuHD"
+          android:title="HD Video"
           android:checkable="true" />
      
 </menu>

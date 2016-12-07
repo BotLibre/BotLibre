@@ -65,8 +65,18 @@ public class Utils extends BasicTool {
 		return fragment;
 	}
 
+	public Vertex capitalize(Vertex source, Vertex text) {
+		Vertex fragment = text.getNetwork().createFragment(org.botlibre.util.Utils.capitalize(text.printString()));
+		fragment.addRelationship(Primitive.TYPE, Primitive.CASESENSITVE);
+		return fragment;
+	}
+
 	public Vertex explode(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(explode(text.printString()));
+	}
+
+	public Vertex encode(Vertex source, Vertex text) {
+		return text.getNetwork().createVertex(org.botlibre.util.Utils.encodeURL(text.printString()));
 	}
 
 	public Vertex normalize(Vertex source, Vertex text) {

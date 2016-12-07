@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : reponses.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>ON VERRA BIEN</pattern><template>oui, j'espère. </template></category>
+<category><pattern>INCH ALLAH</pattern><template>oui, j'espère aussi. </template></category>
+<category><pattern>J ESPÈRE</pattern><template>oui, moi aussi. </template></category>
+
+
+</aiml>

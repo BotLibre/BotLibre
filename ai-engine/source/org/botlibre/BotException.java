@@ -43,7 +43,7 @@ public class BotException extends RuntimeException {
 	}
 	
 	public static BotException offensive() {
-		BotException exception = new BotException("Profanity, offensive or sexual language is not permitted.");
+		ProfanityException exception = new ProfanityException(ProfanityException.MESSAGE);
 		throw exception;
 	}
 }

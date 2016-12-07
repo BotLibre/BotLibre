@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : srai-dedustion.aiml   -   version :   0.3   -   MàJ : 01/01/2003- -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>C EST QUOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>CONNAIS TU *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>DEFINI *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>DEFINIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>DÉFINI *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>DÉFINIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>ON FAIT QUOI A *</pattern><template><srai>que fait on à <star/></srai></template></category>
+<category><pattern>ON FAIT QUOI À *</pattern><template><srai>que fait on à <star/></srai></template></category>
+<category><pattern>ON Y FAIT QUOI</pattern><template><srai>que fait on à <get name="courant"/></srai></template></category>
+<category><pattern>QU EST CE QU *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QU A *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QU UN *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QU UNE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST DU *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST L *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST LA *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST LE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QU UN *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QU UNE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE DU *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE L *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE LA *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE LE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE UN *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C EST QUE UNE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C ETAIT QUE ÇA</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE C ÉTAIT QUE ÇA</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE C ETAIT QUE CA</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE C ÉTAIT QUE CA</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE C ETAIT QUE CELA</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE C ÉTAIT QUE CELA</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE C ETAIT TA *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ta <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C ETAIT TON *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>QU EST CE QUE C ÉTAIT *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE CE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE CELA *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QU EST CE QUE CES *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE D *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE DES *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE DU *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE L *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE LA *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE LE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE LES *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE UN *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU EST CE QUE UNE *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE SONT DES *</pattern><template><srai>que sont <star/></srai></template></category>
+<category><pattern>QUE SONT LES *</pattern><template><srai>que sont <star/></srai></template></category>
+<category><pattern>QUEL EST L AUTEUR DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a écrit <star/></srai></template></category>
+<category><pattern>QUEL EST LE COMPOSITEUR DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a composé <star/></srai></template></category>
+<category><pattern>QUEL EST LE REALISATEUR DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a dirigé <star/></srai></template></category>
+<category><pattern>QUEL EST LE RÉALISATEUR DE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a dirigé <star/></srai></template></category>
+<category><pattern>QUI A ASSASSINE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a tué <star/></srai></template></category>
+<category><pattern>QUI A ASSASSINÉ *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a tué <star/></srai></template></category>
+<category><pattern>QUI A COMPOSE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a composé <star/></srai></template></category>
+<category><pattern>QUI A CONSTRUIT *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A CREE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A CRÉE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A CRÉÉ *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A DECOUVERT *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI A DIRIGE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a dirigé <star/></srai></template></category>
+<category><pattern>QUI A DIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a dit <star/></srai></template></category>
+<category><pattern>QUI A DÉCOUVERT *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI A ECRIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a écrit <star/></srai></template></category>
+<category><pattern>QUI A ECRIT *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a écrit <star/></srai></template></category>
+<category><pattern>QUI A FAIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A INVENTE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A INVENTÉ *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI A TUE *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a tué <star/></srai></template></category>
+<category><pattern>QUI A ÉCRIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a écrit <star/></srai></template></category>
+<category><pattern>QUI AI *</pattern><template><think><set name="courant"><star/></set></think><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI DIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a dit <star/></srai></template></category>
+<category><pattern>QUI DIT *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a dit <star/></srai></template></category>
+<category><pattern>QUI ES *</pattern><template><think><set name="courant"><star/></set></think><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI ETAIS *</pattern><template><think><set name="courant"><star/></set></think><srai>c'était <star/></srai></template></category>
+<category><pattern>QUI ETAIT *</pattern><template><think><set name="courant"><star/></set></think><srai>c'était <star/></srai></template></category>
+<category><pattern>QUI FAIS *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI FAIT *</pattern><template><think><set name="courant"><star/></set></think><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI ÉTAIS *</pattern><template><think><set name="courant"><star/></set></think><srai>c'était <star/></srai></template></category>
+<category><pattern>QUI ÉTÉ *</pattern><template><think><set name="courant"><star/></set></think><srai>c'était <star/></srai></template></category>
+
+</aiml>

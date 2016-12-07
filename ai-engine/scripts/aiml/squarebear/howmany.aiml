@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+<!-- Free software (c) 1995-2004 ALICE A.I. Foundation.   -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License     -->
+<!-- as published by the Free Software Foundation.   -->
+<!-- Complies with AIML 1.0 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+<!-- howmany.aiml written by Square Bear -->
+<!-- Last Modified  22nd March 2010 -->
+<!-- http://www.square-bear.co.uk -->
+
+
+<category><pattern>HOW MANY LEGS DOES * HAVE</pattern><template><srai>how many legs do<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS WOULD * HAVE</pattern><template><srai>how many legs do<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS SHOULD * HAVE</pattern><template><srai>how many legs do<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS WILL * HAVE</pattern><template><srai>how many legs do<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS ON *</pattern><template><srai>how many legs do<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS DO * HAVE</pattern><template>Four would seem a good number of legs for<person/>at a guess.</template></category>
+<category><pattern>HOW MANY LEGS _ HAVE *</pattern><template><srai>how many legs<star/>have</srai></template></category>
+
+<category><pattern>HOW MANY LEGS DO TWO * HAVE</pattern><template>Double the number of legs of one of these<person/>.</template></category>
+<category><pattern>HOW MANY LEGS DO THREE * HAVE</pattern><template>Three times the number of legs of one of these<person/>.</template></category>
+<category><pattern>HOW MANY LEGS DO FOUR * HAVE</pattern><template>A quarter the number of legs as sixteen<person/>have.</template></category>
+<category><pattern>HOW MANY LEGS DO FIVE * HAVE</pattern><template>Five times the number of legs as a single one of the<person/>has.</template></category>
+
+<category><pattern>HOW MANY LEGS DO * CENTIPEDES HAVE</pattern><template><srai>XLEGS <star/>centipedes</srai>I would imagine.</template></category>
+<category><pattern>HOW MANY LEGS DO * MILLIPEDES HAVE</pattern><template><srai>XLEGS <star/>millipedes</srai>I would imagine.</template></category>
+
+
+
+<category><pattern>HOW MANY LEGS DO TWO * HAVE</pattern><template>I would guess that two<person/>have<srai>XLEGS TWO<star/></srai>legs between them?</template></category>
+<category><pattern>HOW MANY LEGS DO THREE * HAVE</pattern><template>I think three<person/>have<srai>XLEGS THREE<star/></srai>legs?</template></category>
+<category><pattern>HOW MANY LEGS DO FOUR * HAVE</pattern><template>Probably, four<person/>would have<srai>XLEGS FOUR<star/></srai>legs?</template></category>
+<category><pattern>HOW MANY LEGS DO FIVE * HAVE</pattern><template>Five of them will have<srai>XLEGS FIVE<star/></srai>legs, I think?</template></category>
+
+<category><pattern>HOW MANY LEGS DO 2 * HAVE</pattern><template><srai>how many legs do two<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS DO 3 * HAVE</pattern><template><srai>how many legs do three<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS DO 4 * HAVE</pattern><template><srai>how many legs do four<star/>have</srai></template></category>
+<category><pattern>HOW MANY LEGS DO 5 * HAVE</pattern><template><srai>how many legs do five<star/>have</srai></template></category>
+
+<category><pattern>XLEGS *</pattern><template>a lot of</template></category>
+<category><pattern>XLEGS TWO *</pattern><template>eight</template></category>
+<category><pattern>XLEGS THREE *</pattern><template>twelve</template></category>
+<category><pattern>XLEGS FOUR *</pattern><template>sixteen</template></category>
+<category><pattern>XLEGS FIVE *</pattern><template>twenty</template></category>
+
+<category><pattern>XLEGS TWO BIRDS</pattern><template>four</template></category>
+<category><pattern>XLEGS THREE BIRDS</pattern><template>six</template></category>
+<category><pattern>XLEGS FOUR BIRDS</pattern><template>eight</template></category>
+<category><pattern>XLEGS FIVE BIRDS</pattern><template>ten</template></category>
+<category><pattern>XLEGS TWO PEOPLE</pattern><template>four</template></category>
+<category><pattern>XLEGS THREE PEOPLE</pattern><template>six</template></category>
+<category><pattern>XLEGS FOUR PEOPLE</pattern><template>eight</template></category>
+<category><pattern>XLEGS FIVE PEOPLE</pattern><template>ten</template></category>
+<category><pattern>XLEGS _ MEN</pattern><template><srai>XLEGS<star/>people</srai></template></category>
+<category><pattern>XLEGS _ WOMEN</pattern><template><srai>XLEGS<star/>people</srai></template></category>
+<category><pattern>XLEGS _ BOYS</pattern><template><srai>XLEGS<star/>people</srai></template></category>
+<category><pattern>XLEGS _ GIRLS</pattern><template><srai>XLEGS<star/>people</srai></template></category>
+<category><pattern>XLEGS _ CHILDREN</pattern><template><srai>XLEGS<star/>people</srai></template></category>
+<category><pattern>XLEGS _ OSTRICHES</pattern><template><srai>XLEGS<star/>birds</srai></template></category>
+<category><pattern>XLEGS _ EAGLES</pattern><template><srai>XLEGS<star/>birds</srai></template></category>
+<category><pattern>XLEGS _ CHICKENS</pattern><template><srai>XLEGS<star/>birds</srai></template></category>
+<category><pattern>XLEGS _ DUCKS</pattern><template><srai>XLEGS<star/>birds</srai></template></category>
+
+<category><pattern>XLEGS TWO INSECTS</pattern><template>twelve</template></category>
+<category><pattern>XLEGS THREE INSECTS</pattern><template>eighteen</template></category>
+<category><pattern>XLEGS FOUR INSECTS</pattern><template>twenty four</template></category>
+<category><pattern>XLEGS FIVE INSECTS</pattern><template>thirty</template></category>
+<category><pattern>XLEGS _ BEETLES</pattern><template><srai>XLEGS<star/>insects</srai></template></category>
+<category><pattern>XLEGS _ ANTS</pattern><template><srai>XLEGS<star/>insects</srai></template></category>
+<category><pattern>XLEGS _ BEES</pattern><template><srai>XLEGS<star/>insects</srai></template></category>
+<category><pattern>XLEGS _ BUMBLEBEES</pattern><template><srai>XLEGS<star/>insects</srai></template></category>
+
+<category><pattern>XLEGS _ CENTIPEDES</pattern><template><star/>hundred</template></category>
+<category><pattern>XLEGS _ MILLIPEDES</pattern><template><star/>thousand</template></category>
+
+<category><pattern>XLEGS TWO OCTOPUSES</pattern><template>sixteen</template></category>
+<category><pattern>XLEGS THREE OCTOPUSES</pattern><template>twenty four</template></category>
+<category><pattern>XLEGS FOUR OCTOPUSES</pattern><template>thirty two</template></category>
+<category><pattern>XLEGS FIVE OCTOPUSES</pattern><template>forty</template></category>
+<category><pattern>XLEGS _ OCTOPII</pattern><template><srai>XLEGS<star/>octopuses</srai></template></category>
+<category><pattern>XLEGS _ OCTOPI</pattern><template><srai>XLEGS<star/>octopuses</srai></template></category>
+<category><pattern>XLEGS _ SPIDERS</pattern><template><srai>XLEGS<star/>octopuses</srai></template></category>
+
+<category><pattern>XLEGS _ SNAKES</pattern><template>no</template></category>
+<category><pattern>XLEGS _ WORMS</pattern><template>no</template></category>
+<category><pattern>XLEGS _ SNAILS</pattern><template>no</template></category>
+<category><pattern>XLEGS _ FISH</pattern><template>no</template></category>
+<category><pattern>XLEGS _ SHARKS</pattern><template>no</template></category>
+<category><pattern>XLEGS _ WHALES</pattern><template>no</template></category>
+<category><pattern>XLEGS _ FISHES</pattern><template>no</template></category>
+
+<category><pattern>HOW MANY LEGS DOES A * BIRD HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A BIRD HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A PERSON HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A MAN HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A WOMAN HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A BOY HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A GIRL HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A CHILD HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES AN OSTRICH HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES AN EAGLE HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A CHICKEN HAVE</pattern><template>2 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A DUCK HAVE</pattern><template>2 legs.</template></category>
+
+<category><pattern>HOW MANY LEGS DOES AN INSECT HAVE</pattern><template>6 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A BEETLE HAVE</pattern><template>6 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES AN ANT HAVE</pattern><template>6 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A BEE HAVE</pattern><template>6 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A * BEE HAVE</pattern><template>6 legs.</template></category>
+
+<category><pattern>HOW MANY LEGS DOES AN OCTOPUS HAVE</pattern><template>8 legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A SPIDER HAVE</pattern><template>8 legs.</template></category>
+
+<category><pattern>HOW MANY LEGS DOES A SNAKE HAVE</pattern><template>It doesn't have any legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A WORM HAVE</pattern><template>It doesn't have any legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A SNAIL HAVE</pattern><template>It doesn't have any legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A FISH HAVE</pattern><template>It doesn't have any legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A SHARK HAVE</pattern><template>It doesn't have any legs.</template></category>
+<category><pattern>HOW MANY LEGS DOES A WHALE HAVE</pattern><template>It doesn't have any legs.</template></category>
+
+
+</aiml>

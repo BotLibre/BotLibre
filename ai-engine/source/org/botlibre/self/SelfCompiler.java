@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
@@ -833,7 +834,14 @@ public class SelfCompiler {
 					return network.createVertex(data);
 				} else if (Character.isDigit(next) || next == '-' || next == '+') {
 					String data = stream.nextWord();
-					return network.createVertex(new BigInteger(data));				
+					Vertex element = null;
+					int index = data.indexOf('.');
+					if (index != -1) {
+						element = network.createVertex(new BigDecimal(data));
+					} else {
+						element = network.createVertex(new BigInteger(data));
+					}
+					return element;
 				} else {
 					String dataType = stream.upTo('(', false, true);
 					if (dataType.isEmpty()) {

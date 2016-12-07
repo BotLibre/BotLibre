@@ -1,6 +1,9 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Light" />
+    <style name="AppTheme" parent="android:Theme.Light">
+	    <item name="android:windowActionBar">false</item>
+	    <item name="android:windowNoTitle">true</item>
+	</style>
     
     <color name="lgrey">#d5d5d5</color>
     <color name="dgrey">#808080</color>

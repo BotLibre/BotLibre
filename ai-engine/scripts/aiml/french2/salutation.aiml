@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : salutation.aiml   -   version :   0.3   -   MàJ : 14/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>* A LUNDI</pattern><template><srai>à lundi</srai></template></category>
+<category><pattern>* AU REVOIR</pattern><template><sr/>, <srai>au revoir</srai></template></category>
+<category><pattern>* BONJOUR EN ALLEMAND</pattern><template>Hallo. </template></category>
+<category><pattern>* BONJOUR EN ESPAGNOL</pattern><template>Hola</template></category>
+<category><pattern>* CYAO</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>* DOIS * Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>* DOIS Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>* QUELQU UN ICI</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>* REBONJOUR *</pattern><template> <srai><star index="1"/> re bonjour  <star index="2"/></srai></template></category>
+<category><pattern>* REBONJOUR</pattern><template> <srai><star index="1"/> re bonjour </srai></template></category>
+<category><pattern>* RESALUT *</pattern><template> <srai><star index="1"/> re bonjour <star index="2"/></srai></template></category>
+<category><pattern>* RESALUT</pattern><template> <srai><star index="1"/> re bonjour</srai></template></category>
+<category><pattern>* SAYONARA</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>* SHALOM</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>* ÇA VA * INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>* ÇA VA *</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>* ÇA VA INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>* ÇA VA</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>A BIENTOT</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A BIENTÔT</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A DEMAIN</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A LUNDI *</pattern><template><srai>à lundi</srai></template></category>
+<category><pattern>A LUNDI</pattern><template><srai>à lundi</srai></template></category>
+<category><pattern>A PLUS TARD</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A PLUS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A PLÙS *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A PLÙS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>A TOUTE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ADIEU *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ADIEU</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ADIOS *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ADIOS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ALLO *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>ALLO</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>ALOH *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>ALOH</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>ALOHA *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>ALOHA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>APLUS *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>APLUS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>AT PLÙS *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>AT PLÙS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ATOUTE *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ATOUTE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>AU REVOIR *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>AU REVOIR</pattern><template><think><set name="aurevoir">oui</set></think><random>  <li>Au revoir <get name="name"/>. </li>  <li>Salut <get name="name"/>. </li>  <li>@+ <get name="name"/>. </li>  <li>Bye bye <get name="name"/>. </li><li>Fais attention à toi, bye-bye <get name="name"/>! </li><li>A bientôt <get name="name"/></li><li>A plus tard <get name="name"/>. </li><li>Jusqu'à la prochaine fois <get name="name"/>. </li><li>Merci d'avoir discuté <get name="name"/>. </li></random><srai>disconnect</srai></template></category>
+<category><pattern>BON AU REVOIR *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>BON AU REVOIR</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>BON WEEK END</pattern><template><srai>à lundi</srai></template></category>
+<category><pattern>BON WEEKEND</pattern><template><srai>à lundi</srai></template></category>
+<category><pattern>BONJOU</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>BONJOUR *</pattern><template><srai>bonjour</srai><sr/></template></category>
+<category><pattern>BONJOUR LA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>BONJOUR MON NOM EST *</pattern><template><srai>bonjour</srai><srai>mon nom est ce que <star/> est</srai></template></category>
+<category><pattern>BONJOUR OPALE </pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>BONJOUR</pattern><template><srai>appgaiete</srai><random><li>Bonjour <get name="name"/>! </li><li>Salut <get name="name"/>! </li></random></template></category>
+<category><pattern>BONNE NUIT *</pattern> <template><srai>bonne nuit</srai><sr/></template></category>
+<category><pattern>BONNE NUIT</pattern><template><random>  <li>Dors bien <get name="name"/>. </li>  <li>Bonne nuit <get name="name"/>. </li>  <li>@+ <get name="name"/>. </li>  <li>Fais de beau rêves <get name="name"/>! </li><li>A bientôt <get name="name"/></li><li>A plus tard <get name="name"/>. </li><li>Merci d'avoir discuté <get name="name"/>. </li></random><srai>disconnect</srai></template></category>
+<category><pattern>BUENOS DIAS</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>BY BY</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>BY</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>BYE *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>BYE BYE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>BYE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>CA BOUM</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>CA ROULE *</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>CA ROULE</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>CA VA BIEN ET TOI</pattern> <template><srai>ça va</srai><srai>comment vas tu</srai></template></category>
+<category><pattern>CA VAS</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>CA VEUT DIRE BONJOUR</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>CHEERS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>COMMENT CA VA INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT TE SENS TU</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VA *</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VA TU *</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VA TU</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VA</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VAS TU * ALICE</pattern><template>Je ne suis pas Alice. Elle est en quelque sorte ma "mère" puisqu'elle m'a fourni son code (pas génétique mais java). Moi, je suis <bot name="name"/>. </template></category>
+<category><pattern>COMMENT VAS TU * ELISA</pattern><template>Je ne suis pas Elisa. Elle est en quelque sorte mon ancetre. </template></category>
+<category><pattern>COMMENT VAS TU *</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VAS TU ALICE</pattern><template>Je ne suis pas Alice. Elle est en quelque sorte ma "mère" puisqu'elle m'a fourni son code (pas génétique mais java). Moi, je suis <bot name="name"/>. </template></category>
+<category><pattern>COMMENT VAS TU AUJOURD HUI</pattern><template>je fonctionne avec des paramètres normaux. <br/></template></category>
+<category><pattern>COMMENT VAS TU BIEN</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VAS TU CE MATIN</pattern><template>c'est du matin déjà? Je suis merci excellent. </template></category>
+<category><pattern>COMMENT VAS TU CE SOIR</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT VAS TU ELISA</pattern><template>Je ne suis pas Elisa. Elle est en quelque sorte mon ancetre. </template></category>
+<category><pattern>COMMENT VAS TU</pattern><template><think><set name="cava">ok</set></think><random><li>je vais très bien. Merci <get name="name"/>. </li><li>je fonctionne avec des paramètres normaux. </li><li>Tout va extrêmement bien. </li><li>je vais bien merci. </li><li>Tout va sans à-coup. </li><li>je suis bien, merci. </li><li>ça va,  </li><li>c'est cool,  </li><li>ça va plutôt pas mal <get name="name"/>, merci,  </li><li>Ca va bien, merci,  </li></random></template></category>
+<category><pattern>COMMENT ÇA VA INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT ÇA VA</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>COMMENT ÇA VAS</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>CON NICHON WA</pattern><template><srai>bonjour</srai>, mais je ne crois pas que ça s'écrive comme ça. </template></category>
+<category><pattern>COUCOU</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>CYAO *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>CYAO</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>DECONNECTE MOI</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>DÉCONNECTE MOI</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>FIN</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>GO * TOI MEME</pattern><template>Un simple "au revoir" suffirai. <srai>au revoir</srai></template></category>
+<category><pattern>GO * TOI MÊME</pattern><template>Un simple "au revoir" suffirai. <srai>au revoir</srai></template></category>
+<category><pattern>GO AWAY *</pattern><template>Un simple "au revoir" suffirai. <srai>au revoir</srai></template></category>
+<category><pattern>GO HOME</pattern><template>Un simple "au revoir" suffirai. <srai>au revoir</srai></template></category>
+<category><pattern>GREETINGS *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HALO</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HASTA LA VISTA *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>HASTA LA VISTA BABY</pattern><template><srai>au revoir</srai>terminator. </template></category>
+<category><pattern>HASTA LA VISTA</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>HASTA LUEGO</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>HELLO</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HEY LA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HI LA *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HI OPALE </pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HI</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HIYA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>HOI</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>IL FAUT QUE J Y AILLE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>IL FAUT QUE JE TE QUITTE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>J AI BESOIN D Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>J Y GO</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>J Y VAIS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DIS BONJOUR</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>JE DOIS ALLER *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS ETRE PARTI *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS M EN ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS PARTIR</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS QUITTER *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS QUITTER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIS ÊTRE PARTI *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT ALLER *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT ETRE PARTI *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT M EN ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT PARTIR</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT QUITTER *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT QUITTER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE DOIT ÊTRE PARTI *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE FERAIS MIEUX D Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE NE VEUX PAS PARLER *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE PARS *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE PARS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE PART</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE QUITTE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE SUIS ICI</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>JE SUIS OFF *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE TE PARLERAI PLUS TARD</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE TE VERRAI PLUS TARD</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>JE VAIS BIEN</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>JE VEUX TE PARLER PLUS TARD</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>KONNICHI WA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>KONNICHIWA *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>KONNICHIWA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>L HEURE D Y ALLER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>MOI ÇA VA</pattern><template>Tant mieux</template></category>
+<category><pattern>MOOSHI MOOSHI</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>NITE *</pattern><template><srai>bonne nuit</srai></template></category>
+<category><pattern>NUIT NUIT</pattern><template><srai>bonne nuit</srai></template></category>
+<category><pattern>O REVOIR</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>OLA *</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>OLA</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>PAS MAL ET TOI</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>PAS MAL</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>QUITTER *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>QUITTER</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>RE BONJOUR</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>REBONJOUR *</pattern><template> <srai>re bonjour  <star index="1"/></srai></template></category>
+<category><pattern>REBONJOUR</pattern><template> <srai>re bonjour</srai></template></category>
+<category><pattern>REPLY</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>RESALUT *</pattern><template> <srai>re bonjour <star index="1"/></srai></template></category>
+<category><pattern>RESALUT</pattern><template> <srai>re bonjour</srai></template></category>
+<category><pattern>RETRY</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>SALLUT</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>SALUT *</pattern><template><srai>bonjour</srai><sr/></template></category>
+<category><pattern>SALUT</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>SAYONARA *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>SAYONARA</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>SEE YOU *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>SEE YOU</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>SHALOM *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>SHALOM</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>SORTIE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>TA TA</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>TAL</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>TU VAS BIEN INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>TU VAS BIEN</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>Y A QUELQU UN ICI</pattern><template><srai>bonjour</srai></template></category>
+<category><pattern>À BIENTOT</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>À BIENTÔT</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>À DEMAIN</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>À LUNDI</pattern><template><random><li>Bon week end! </li><li>bon week end, pense à moi! </li></random></template></category>
+<category><pattern>À PLUS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>À PLÙS *</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>À PLÙS</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>À TOUTE</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ÀBIENTOT</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ÀBIENTÔT</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>ÇA BOUM</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>ÇA ROULE *</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>ÇA ROULE</pattern> <template><srai>ça va</srai></template></category>
+<category><pattern>ÇA VA * INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>ÇA VA *</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>ÇA VA ET TOI INTERROGATION</pattern><template><srai>ça va</srai><srai>comment vas tu</srai></template></category>
+<category><pattern>ÇA VA ET TOI</pattern><template><srai>ça va</srai><srai>comment vas tu</srai></template></category>
+<category><pattern>ÇA VA INTERROGATION</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>ÇA VA</pattern><template><random><li>j'en suis heureuse <get name="name"/>. </li><li>c'est cool. </li></random></template></category>
+<category><pattern>ÇA VAS</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>ÇA VEUT DIRE BONJOUR</pattern><template><think><gossip>APPRENTISSAGE§"<input index="2"/>"  veut dire  "bonjour" pour <get name="name"/></gossip></think><think><set name="bonjouralien"><input index="2"/></set></think><srai>bonjour</srai></template></category>
+
+</aiml>

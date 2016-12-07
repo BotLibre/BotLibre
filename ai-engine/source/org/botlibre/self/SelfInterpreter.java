@@ -20,10 +20,13 @@ package org.botlibre.self;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -260,6 +263,8 @@ public class SelfInterpreter {
 					result = evaluateDIVIDE(expression, arguments, variables, network, startTime, maxTime, stack);
 				} else if (operator.is(Primitive.SYMBOL)) {
 					result = evaluateSYMBOL(expression, arguments, variables, network, startTime, maxTime, stack);
+				} else if (operator.is(Primitive.EVALCOPY)) {
+					result = evaluateEVALCOPY(expression, arguments, variables, network, startTime, maxTime, stack);
 				} else if (operator.is(Primitive.LEARN)) {
 					result = evaluateLEARN(expression, arguments, variables, network, startTime, maxTime, stack);
 				} else if (operator.is(Primitive.SRAI) || operator.is(Primitive.REDIRECT)) {
@@ -424,6 +429,9 @@ public class SelfInterpreter {
 			Vertex variable = arguments.get(index).getTarget();
 			Vertex getExpression = arguments.get(index + 1).getTarget();
 			List<Vertex> values = getExpression.orderedRelations(Primitive.ARGUMENT);
+			if (values == null) {
+				continue;
+			}
 			Vertex source = evaluateExpression(values.get(0), variables, network, startTime, maxTime, stack);
 			Vertex relationship = evaluateExpression(values.get(1), variables, network, startTime, maxTime, stack);
 			List<Relationship> sequence = source.orderedRelationships(relationship);
@@ -465,6 +473,29 @@ public class SelfInterpreter {
 			}
 		}
 		return network.createVertex(Primitive.NULL);
+	}
+	
+	/**
+	 * Evaluate the literal object into a copy.
+	 * evalcopy { name : speaker.name.toUpperCase(), salary : speaker.salary }
+	 */
+	public Vertex evaluateEVALCOPY(Vertex expression, List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network, long startTime, long maxTime, int stack) {
+		if (! checkArguments(expression, arguments, 1, network)) {
+			return network.createVertex(Primitive.NULL);
+		}
+		Relationship literal = arguments.get(0);
+		if (literal.getTarget().hasData()) {
+			// Return
+			return literal.getTarget();
+		}
+		// Copy.
+		Vertex result = network.createVertex();
+		for (Iterator<Relationship> iterator = literal.getTarget().orderedAllRelationships(); iterator.hasNext(); ) {
+			Relationship relationship = iterator.next();
+			Vertex value = evaluateExpression(relationship.getTarget(), variables, network, startTime, maxTime, stack);
+			result.addRelationship(network.createVertex(relationship.getType()), value);
+		}
+		return result;
 	}
 	
 	/**
@@ -521,9 +552,36 @@ public class SelfInterpreter {
 			return network.createVertex(Primitive.NULL);
 		}
 		Vertex learning = arguments.get(0).getTarget();
+		// Cannot evaluate evalcopy as will evaluate templates.
+		if (learning.instanceOf(Primitive.EXPRESSION)) {
+			// Check for byte-code.
+			if (learning.getData() instanceof BinaryData) {
+				learning = SelfDecompiler.getDecompiler().parseExpressionByteCode(learning, (BinaryData)learning.getData(), learning.getNetwork());
+			}
+			Vertex operator = learning.getRelationship(Primitive.OPERATOR);
+			if (operator == null) {
+				return network.createVertex(Primitive.NULL);
+			}
+			if (operator.is(Primitive.EVALCOPY)) {
+				List<Relationship> learnArguments = learning.orderedRelationships(Primitive.ARGUMENT);
+				if (learnArguments != null && !learnArguments.isEmpty()) {
+					learning = learnArguments.get(0).getTarget();
+				}
+			} else {
+				learning = evaluateExpression(arguments.get(0).getTarget(), variables, network, startTime, maxTime, stack);
+			}
+		} else {
+			learning = evaluateExpression(arguments.get(0).getTarget(), variables, network, startTime, maxTime, stack);
+		}
 		Vertex pattern = learning.getRelationship(Primitive.PATTERN);
+		if (pattern == null) {
+			return network.createVertex(Primitive.NULL);
+		}
 		pattern = evaluateEVAL(pattern, arguments, variables, network, startTime, maxTime, stack);
 		Vertex template = learning.getRelationship(Primitive.TEMPLATE);
+		if (template == null) {
+			return network.createVertex(Primitive.NULL);
+		}
 		template = evaluateEVAL(template, arguments, variables, network, startTime, maxTime, stack);
 		Relationship relationship = pattern.addRelationship(Primitive.RESPONSE, template);
 		template.addRelationship(Primitive.QUESTION, pattern);
@@ -625,7 +683,7 @@ public class SelfInterpreter {
 		String hintValue = null;
 		String defaultValue = null;
 		if (arguments.size() > 1) {
-			Vertex argument = arguments.get(1).getTarget();
+			Vertex argument = evaluateExpression(arguments.get(1).getTarget(), variables, network, startTime, maxTime, stack);
 			Vertex apikey = argument.getRelationship(Primitive.APIKEY);
 			if (apikey != null) {
 				apikey = evaluateExpression(apikey, variables, network, startTime, maxTime, stack);
@@ -810,8 +868,11 @@ public class SelfInterpreter {
 		if ((index != null) && (index.getData() instanceof Number)) {
 			int position = ((Number)index.getData()).intValue();
 			List<Vertex> values = source.orderedRelations(relationship);
+			if (values == null) {
+				return network.createVertex(Primitive.NULL);
+			}
 			if (position < 0) {
-				if ((position * -1) >= values.size()) {
+				if ((position * -1) > values.size()) {
 					return network.createVertex(Primitive.NULL);
 				}
 				// Negative means from end
@@ -919,7 +980,11 @@ public class SelfInterpreter {
 				source.addRelationship(relationship, target, position);
 			}
 		} else {
-			source.setRelationship(relationship, target);
+			if (target.is(Primitive.NULL)) {
+				source.internalRemoveRelationships(relationship);
+			} else {
+				source.setRelationship(relationship, target);
+			}
 		}
 		// Following some crazy AIML implied rules here...
 		if (relationship.isPrimitive() && (relationship.is(Primitive.IT) || relationship.is(Primitive.HE) || relationship.is(Primitive.SHE))) {
@@ -1019,11 +1084,7 @@ public class SelfInterpreter {
 		if ((left.getData() instanceof Number) && (right.getData() instanceof Number)) {
 			return new org.botlibre.tool.Math().instance.plus(expression, left, right);
 		}
-		if (left.getData() instanceof String) {
-			return network.createVertex(((String)left.getData()) + right.printString());
-		}
-		network.getBot().log(this, "Invalid numbers for operation", Level.WARNING, expression, left, right);
-		return network.createVertex(Primitive.NULL);
+		return network.createVertex(left.printString() + right.printString());
 	}
 
 	/**
@@ -1329,7 +1390,20 @@ public class SelfInterpreter {
 		Object sourceObject = null;
 		if (source.isPrimitive()) {
 			String name = ((Primitive)source.getData()).getIdentity().toLowerCase();
-			sourceObject = network.getBot().awareness().getSense(name);
+			if (name.equals("avatar")) {
+				sourceObject = network.getBot().avatar();
+			} else if (name.equals("memory")) {
+				sourceObject = network.getBot().memory();
+			} else if (name.equals("mood")) {
+				sourceObject = network.getBot().mood();
+			} else if (name.equals("mind")) {
+				sourceObject = network.getBot().mind();
+			} else if (name.equals("awareness")) {
+				sourceObject = network.getBot().awareness();
+			}
+			if (sourceObject == null) {
+				sourceObject = network.getBot().awareness().getSense(name);
+			}
 			if (sourceObject == null) {
 				sourceObject = network.getBot().mind().getThought(name);
 			}
@@ -1371,7 +1445,12 @@ public class SelfInterpreter {
 				throw new SelfExecutionException(expression, "Missing function: " + functionName + " on: " + source);
 			}
 		}
-		Vertex result = (Vertex)method.invoke(sourceObject, methodArguments);
+		Vertex result = null;
+		try {
+			result = (Vertex)method.invoke(sourceObject, methodArguments);
+		} catch (Exception exception) {
+			network.getBot().log(sourceObject, exception);
+		}
 		if (result == null) {
 			result = network.createVertex(Primitive.NULL);
 		} else {
@@ -1458,7 +1537,11 @@ public class SelfInterpreter {
 	 * This first clears any existing relationships of the same type.
 	 */
 	public Vertex set(Vertex source, Vertex type, Vertex target) {
-		source.setRelationship(type, target);
+		if (target.is(Primitive.NULL)) {
+			source.internalRemoveRelationships(type);
+		} else {
+			source.setRelationship(type, target);
+		}
 		// Following some crazy AIML implied rules here...
 		if (type.isPrimitive() && (type.is(Primitive.IT) || type.is(Primitive.HE) || type.is(Primitive.SHE))) {
 			return type;
@@ -1587,6 +1670,11 @@ public class SelfInterpreter {
 		return source;
 	}
 	
+	public Vertex remove(Vertex source, Vertex type) {
+		source.internalRemoveRelationships(type);
+		return source;
+	}
+	
 	public Vertex delete(Vertex source, Vertex type, Vertex target) {
 		source.internalRemoveRelationship(type, target);
 		return source;
@@ -1641,12 +1729,23 @@ public class SelfInterpreter {
 	
 	public Vertex set(Vertex source, Vertex type, Vertex target, Vertex index) {
 		List<Vertex> values = source.orderedRelations(type);
-		int indexValue = values.size() + 1;
+		int size = 0;
+		if (values != null) {
+			size = values.size();
+		}
+		int indexValue = size;
 		if (index.getData() instanceof Number) {
 			indexValue = ((Number)index.getData()).intValue();
 			if (indexValue < 0) {
-				indexValue = values.size();
+				indexValue = size + indexValue;
 			}
+		} else {
+			try {
+				indexValue = Integer.valueOf(index.printString());
+				if (indexValue < 0) {
+					indexValue = size + indexValue;
+				}
+			} catch (Exception invalid) {};
 		}
 		source.addRelationship(type, target, indexValue);
 		return source;
@@ -1680,6 +1779,40 @@ public class SelfInterpreter {
 		return all;
 	}
 	
+	public Vertex creationDate(Vertex source) {
+		return source.getNetwork().createVertex(source.getCreationDate());
+	}
+	
+	public Vertex accessCount(Vertex source) {
+		return source.getNetwork().createVertex(source.getAccessCount());
+	}
+	
+	public Vertex hasData(Vertex source) {
+		if (source.hasData()) {
+			return source.getNetwork().createVertex(Primitive.TRUE);
+		} else {
+			return source.getNetwork().createVertex(Primitive.FALSE);
+		}
+	}
+	
+	public Vertex dataType(Vertex source) {
+		if (source.hasData()) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		} else {
+			return source.getNetwork().createVertex(new Primitive(source.getDataType()));
+		}
+	}
+	
+	public Vertex pin(Vertex source) {
+		source.setPinned(true);
+		return source;
+	}
+	
+	public Vertex unpin(Vertex source) {
+		source.setPinned(false);
+		return source;
+	}
+	
 	public Vertex get(Vertex source, Vertex type) {
 		Vertex value = source.mostConscious(type);
 		if (value == null) {
@@ -1690,17 +1823,24 @@ public class SelfInterpreter {
 	
 	public Vertex get(Vertex source, Vertex type, Vertex index) {
 		List<Vertex> values = source.orderedRelations(type);
-		int indexValue = values.size() + 1;
+		if (values == null) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		}
+		int indexValue = 0;
 		if (index.getData() instanceof Number) {
 			indexValue = ((Number)index.getData()).intValue();
-			if (indexValue < 0) {
-				indexValue = values.size() + indexValue;
-			}
-			if (indexValue >= 0 && indexValue < values.size()) {
-				return values.get(indexValue);
-			}
+		} else {
+			try {
+				indexValue = Integer.valueOf(index.printString());
+			} catch (Exception invalid) {};
 		}
-		source.getNetwork().getBot().log(this, "Invalid GET index", Level.WARNING, source, type, index);
+		if (indexValue < 0) {
+			indexValue = values.size() + indexValue;
+		}
+		if (indexValue >= 0 && indexValue < values.size()) {
+			return values.get(indexValue);
+		}
+		source.getNetwork().getBot().log(this, "Invalid GET index", Level.FINE, source, type, index);
 		return source.getNetwork().createVertex(Primitive.NULL);
 	}
 	
@@ -1808,6 +1948,15 @@ public class SelfInterpreter {
 		return source.getNetwork().createVertex(Primitive.UNKNOWN);
 	}
 	
+	public Vertex meta(Vertex source, Vertex type, Vertex target) {
+		Relationship relationship = source.getRelationship(type, target);
+		if (relationship == null) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		} else {
+			return source.getNetwork().createMeta(relationship);
+		}
+	}
+	
 	/**
 	 * Check if any of the words have the relationship.
 	 */
@@ -1882,6 +2031,14 @@ public class SelfInterpreter {
 		}
 	}
 	
+	public Vertex random(Vertex source, Vertex type) {
+		Collection<Relationship> relationships = source.getRelationships(type);
+		if (relationships == null) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		}
+		return Utils.random(relationships).getTarget();
+	}
+	
 	public Vertex getLast(Vertex source, Vertex relationship) {
 		List<Vertex> values = source.orderedRelations(relationship);
 		if (values.isEmpty()) {
@@ -1929,11 +2086,39 @@ public class SelfInterpreter {
 		}
 	}
 
+	public Vertex startsWith(Vertex source, Vertex argument) {
+		if (source.printString().startsWith(argument.printString()) == false) {
+			return source.getNetwork().createVertex(Primitive.FALSE);
+		} else {
+			return source.getNetwork().createVertex(Primitive.TRUE);
+		}
+	}
+
+	public Vertex endsWith(Vertex source, Vertex argument) {
+		if (source.printString().endsWith(argument.printString()) == false) {
+			return source.getNetwork().createVertex(Primitive.FALSE);
+		} else {
+			return source.getNetwork().createVertex(Primitive.TRUE);
+		}
+	}
+
 	public Vertex charAt(Vertex source, Vertex index) {
 		if (index.getData() instanceof Number) {
 			return source.getNetwork().createVertex(Primitive.NULL);
 		}
 		return source.getNetwork().createVertex(String.valueOf(source.printString().charAt(((Number)index.getData()).intValue())));
+	}
+
+	public Vertex indexOf(Vertex source, Vertex argument) {
+		if (source.instanceOf(Primitive.ARRAY)) {
+			Relationship relationship = source.getRelationship(Primitive.ELEMENT, argument);
+			if (relationship == null) {
+				return source.getNetwork().createVertex(-1);
+			}
+			return source.getNetwork().createVertex(relationship.getIndex());
+		}
+		int index = source.printString().indexOf(argument.printString());
+		return source.getNetwork().createVertex(index);
 	}
 
 	public Vertex substring(Vertex source, Vertex start, Vertex end) {
@@ -1943,10 +2128,27 @@ public class SelfInterpreter {
 		return source.getNetwork().createVertex(source.printString().substring(((Number)start.getData()).intValue(), ((Number)end.getData()).intValue()));
 	}
 
+	public Vertex replace(Vertex source, Vertex token, Vertex replacement) {
+		return source.getNetwork().createVertex(source.printString().replace(token.printString(), replacement.printString()));
+	}
+
 	public Vertex toLowerCase(Vertex text) {
 		Vertex fragment = text.getNetwork().createFragment(text.printString().toLowerCase());
 		fragment.addRelationship(Primitive.TYPE, Primitive.CASESENSITVE);
 		return fragment;
+	}
+
+	public Vertex toNumber(Vertex text) {
+		try {
+			String value = text.printString();
+			if (value.indexOf('.') == -1) {
+				return text.getNetwork().createVertex(new BigDecimal(value));
+			} else {
+				return text.getNetwork().createVertex(new BigInteger(value));
+			}
+		} catch (Exception exception) {
+			return null;
+		}
 	}
 	
 	@Override

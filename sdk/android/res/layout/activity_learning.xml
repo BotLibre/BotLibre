@@ -5,7 +5,58 @@
     android:layout_height="match_parent"
 	android:background="#FFFFFF"
     android:orientation="vertical" >
-        
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content"
+            android:textSize="18sp"
+	        android:layout_margin="8sp"
+			android:text="Learning"/>
+		
+		<Button
+			android:id="@+id/helpButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/help"
+			android:onClick="help"
+			android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
+    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+		        
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+    	
 	<LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -42,19 +93,171 @@
     
     </LinearLayout>
     
-    <CheckBox
-        android:id="@+id/enableEmoteCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Enable Emoting" />
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/learningRateLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Learning Rate %" />
+	    
+	    <EditText
+	        android:id="@+id/learningRateText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/scriptTimeoutLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Script Timeout" />
+	    
+	    <EditText
+	        android:id="@+id/scriptTimeoutText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/responseTimeoutLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Response Timeout" />
+	    
+	    <EditText
+	        android:id="@+id/responseTimeoutText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/conversationMatchLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Conversation Match %" />
+	    
+	    <EditText
+	        android:id="@+id/conversationMatchText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/discussionMatchLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Discussion Match %" />
+	    
+	    <EditText
+	        android:id="@+id/discussionMatchText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
     
     <CheckBox
-        android:id="@+id/enableComprehensionCheckBox"
+        android:id="@+id/emotingCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Enable Comprehension" />
+        android:text="Emoting" />
+    
+    <CheckBox
+        android:id="@+id/emotionsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Emotions" />
+    
+    <CheckBox
+        android:id="@+id/comprehensionCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comprehension" />
+    
+    <CheckBox
+        android:id="@+id/consciousnessCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consciousness" />
+    
+    <CheckBox
+        android:id="@+id/wiktionaryCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wiktionary" />
+    
+    <CheckBox
+        android:id="@+id/responseMatchingCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Response Matching" />
+    
+    <CheckBox
+        android:id="@+id/checkEactMatchFirstCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check Exact Match First" />
+    
+    <CheckBox
+        android:id="@+id/fixTemplateCaseCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fix Tempate Case" />
+    
+    <CheckBox
+        android:id="@+id/learnGrammarCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Learn Grammar" />
+    
+    <CheckBox
+        android:id="@+id/synthsizeResponseCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Synthesize Response" />
             
     <TextView
         android:id="@+id/filler"
@@ -72,5 +275,9 @@
         android:onClick="save"
         android:text="Save"
         android:textColor="@color/lgrey" />
+    
+    </LinearLayout>
+     
+    </ScrollView>
 
 </LinearLayout>

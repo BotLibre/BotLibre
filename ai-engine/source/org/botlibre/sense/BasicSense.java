@@ -50,6 +50,7 @@ public class BasicSense implements Sense {
 	public static long DAY = 1000 * 60 * 60 * 24;
 	/** Number of attempt to retry sensory input on failure. */
 	public static int RETRY = 3;
+	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
 	
 	/** Default user if none specified. */
 	public static String DEFAULT_SPEAKER = "Anonymous";

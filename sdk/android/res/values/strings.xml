@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">BOT libre!</string>
+    <string name="app_name">Bot Libre!</string>
+    <!--string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string-->
+
+    <string name="chatwithyourBot">Your Bot</string>
+    <string name="upgrade">Upgrade</string>
+    
+    <string name="title">Bot Libre!</string>
+    <string name="chatwithBot">Chat</string>
+    <string name="about">About</string>
+    <string name="myBot">My Bot</string>
+    <string name="myBots">My Bots</string>
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="signOut">Sign Out</string>
+    <string name="viewProfile">View Profile</string>
+    <string name="editProfile">Edit Profile</string>
+    <string name="website">Website</string>
+
 </resources>

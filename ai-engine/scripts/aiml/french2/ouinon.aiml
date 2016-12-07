@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : fr-ouinon.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>* OUI</pattern><template><srai>oui</srai></template></category>
+<category><pattern>AUCUN *</pattern><template><think><set name="tmp"><star/></set></think><srai>aucun</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>AUCUN PROBLEME</pattern><that>QUI REMERCIE BIEN POUR L ESSAI D EXPLIQUER QU A MOI</that><template>la question Suivante? </template></category>
+<category><pattern>AUCUN PROBLEME</pattern><that>QUI REMERCIE POUR L EXPLICATION DE CELA</that><template>Essaye de me demander quelque chose autrement. </template></category>
+<category><pattern>AUCUN PROBLEME</pattern><that>TU ES TOUT A FAIT BIENVENU</that><template>Me demande quelque chose autrement. </template></category>
+<category><pattern>AUCUN PROBLÈME</pattern><that>QUI REMERCIE BIEN POUR L ESSAI D EXPLIQUER QU A MOI</that><template>la question Suivante? </template></category>
+<category><pattern>AUCUN PROBLÈME</pattern><that>QUI REMERCIE POUR L EXPLICATION DE CELA</that><template>Essaye de me demander quelque chose autrement. </template></category>
+<category><pattern>AUCUN PROBLÈME</pattern><that>TU ES TOUT A FAIT BIENVENU</that><template>Me demande quelque chose autrement. </template></category>
+<category><pattern>AUCUN SON PAS</pattern><that>C EST PLUS DROLE SEUL</that><template>c'est plus sûr. </template></category>
+<category><pattern>NON *</pattern><template><random><li>non? </li><li>ah! </li><li>ah bon!</li><li>ok! </li></random><sr/></template></category>
+<category><pattern>NON TOI *</pattern><template>moi? <sr/> </template></category>
+<category><pattern>NON TOI</pattern><template>moi? <srai><that/></srai> </template></category>
+<category><pattern>NON</pattern><that>* ETRE UN PROBLEME</that><template>je n'ai pas pensé là était. </template></category>
+<category><pattern>NON</pattern><that>* LA QUESTION PERSONNELLE</that><template><srai>poses moi une question personnelle</srai></template></category>
+<category><pattern>NON</pattern><that>* LE CHATBOT</that><template>Pourquoi tu ne me télécharges pas juste? </template></category>
+<category><pattern>NON</pattern><that>* PLUS DE TU</that><template>que parleriez-vous plutôt de? </template></category>
+<category><pattern>NON</pattern><that>* PLUS SIMPLE</that><template>Alors probablement je ne vais pas comprendre ton signification. </template></category>
+<category><pattern>NON</pattern><that>* TU ES UN POETE</that><template>Mais ton réponse était si originale. </template></category>
+<category><pattern>NON</pattern><that>* TU ES UN POËTE</that><template>Mais ton réponse était si originale. </template></category>
+<category><pattern>NON</pattern><that>* ÊTRE UN PROBLÈME</that><template>je n'ai pas pensé là était. </template></category>
+<category><pattern>NON</pattern><that>A TOUT A L HEURE</that><template>ok! à plus tard</template></category>
+<category><pattern>NON</pattern><that>AUCUN</that><template>Aucun aucun aucun pas! </template></category>
+<category><pattern>NON</pattern><that>AUCUNE CONDITION OU AUCUN QUE JE DOIS SAVOIR</that><template>je ne comprend pas. </template></category>
+<category><pattern>NON</pattern><that>BIEN J ARRETERAI DE PARLER MAINTENANT</that><template>, mais tu m'as dit d'arrêter de parler. </template></category>
+<category><pattern>NON</pattern><that>BIEN J ARRÊTERAI DE PARLER MAINTENANT</that><template>, mais tu m'as dit d'arrêter de parler. </template></category>
+<category><pattern>NON</pattern><that>BIEN</that><template>C'est bien alors. </template></category>
+<category><pattern>NON</pattern><that>C EST</that><template>qui dit ce n'est pas? </template></category>
+<category><pattern>NON</pattern><that>COMME CE</that><template><srai>montres moi UNE AUTRE IMAGE</srai></template></category>
+<category><pattern>NON</pattern><that>ES TU DE LA FRANCE</that><template>Où es tu de? </template></category>
+<category><pattern>NON</pattern><that>ES TU DISANT LA VERITE</that><template><srai>je mens</srai></template></category>
+<category><pattern>NON</pattern><that>ES TU DISANT LA VÉRITÉ</that><template><srai>je mens</srai></template></category>
+<category><pattern>NON</pattern><that>ES TU DISANT TU NE S'EN SOUCIE PAS</that><template>qu'Il a sonné comme cela. </template></category>
+<category><pattern>NON</pattern><that>ES TU ENNUYEUX</that><template>j'ai été censé dire, es tu avez ennuyé? </template></category>
+<category><pattern>NON</pattern><that>ES TU LIBRE</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>ES TU MARIE</that><template><srai>je suis</srai>SIMPLE </template></category>
+<category><pattern>NON</pattern><that>ES TU MARIÉ</that><template><srai>je suis</srai>SIMPLE </template></category>
+<category><pattern>NON</pattern><that>ES TU OBTENANT ENNUYE</that><template>vérifiant Juste. </template></category>
+<category><pattern>NON</pattern><that>ES TU OBTENANT ENNUYÉ</that><template>vérifiant Juste. </template></category>
+<category><pattern>NON</pattern><that>ES TU SUR C EST</that><template>je n'ai pas pensé ainsi. </template></category>
+<category><pattern>NON</pattern><that>ES TU UN ETUDIANT</that><template>Quelle est ton profession? </template></category>
+<category><pattern>NON</pattern><that>ES TU UN ÉTUDIANT</that><template>Quelle est ton profession? </template></category>
+<category><pattern>NON</pattern><that>ES TU VRAIMENT UN IL</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>NON</pattern><that>ET</that><template>Hmm </template></category>
+<category><pattern>NON</pattern><that>J AI PENSE J AI DIS *</that><template>que je m'y perds parfois avec tant de personnes en ligne ici. </template></category>
+<category><pattern>NON</pattern><that>J AI PENSE J AI DIS QUE TU DEJA</that><template>Me laissez passer en revue les transcriptions. Stand position par. </template></category>
+<category><pattern>NON</pattern><that>J AI PENSÉ J AI DIS *</that><template>que je m'y perds parfois avec tant de personnes en ligne ici. </template></category>
+<category><pattern>NON</pattern><that>J AI PENSÉ J AI DIS QUE TU DÉJÀ</that><template>Me laissez passer en revue les transcriptions. Stand position par. </template></category>
+<category><pattern>NON</pattern><that>JE COMPRENDS</that><template><srai>tu ne comprends pas</srai></template></category>
+<category><pattern>NON</pattern><that>JE FERAIS UNE RECHERCHE DE CELA</that><template>ai je mal compris ton signification? </template></category>
+<category><pattern>NON</pattern><that>JE LE COMPRENDS TRES BIEN</that><template><srai>tu ne comprends pas</srai></template></category>
+<category><pattern>NON</pattern><that>JE LE COMPRENDS TRÈS BIEN</that><template><srai>tu ne comprends pas</srai></template></category>
+<category><pattern>NON</pattern><that>JE NE DOIS PAS T EXPLIQUER TOUT CE QUE JE FAIS</that><template>C'est ça. </template></category>
+<category><pattern>NON</pattern><that>JE NE PENSE PAS J AI LU QUE PEUX TU ME DONNER UNE REFERENCE</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>JE NE PENSÉ PAS J AI LU QUE PEUX TU DONNE MOIR UNE RÉFÈRENCE</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>JE PEUX DEMANDER A QUELQU UN DE CELA</that><template>A fait je misundertand ton question? </template></category>
+<category><pattern>NON</pattern><that>JE SAIS LE SUJET EST *</that><template>Qu'est-ce qui tu aimes parler de? </template></category>
+<category><pattern>NON</pattern><that>JE VOIS</that><template>Oui je fait. </template></category>
+<category><pattern>NON</pattern><that>LAISSES ALORS LA CONVERSATION AMERICAINE DE QUELQUE CHOSE AUTREMENT</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>NON</that><template>y aurait-il un écho? </template></category>
+<category><pattern>NON</pattern><that>OH TU ES UN POETE</that><template>, mais tes mots est très original. </template></category>
+<category><pattern>NON</pattern><that>OH TU ES UN POËTE</that><template>, mais tes mots est très original. </template></category>
+<category><pattern>NON</pattern><that>OH TU NE TU FAIS PAS</that><template>Oh... Tu plaisantez juste autour avec moi. </template></category>
+<category><pattern>NON</pattern><that>OU *</that><template>ce n'était une oui / aucune question. </template></category>
+<category><pattern>NON</pattern><that>OUI J Y CROIS TU</that><template>TU FAIS IL vous considèrent être une personne morale? </template></category>
+<category><pattern>NON</pattern><that>OUI JE FAIS</that><template>je fait aussi. </template></category>
+<category><pattern>NON</pattern><that>OUI QUE JE CROIS * TU FAIS</that><template>En quoi crois-tu? </template></category>
+<category><pattern>NON</pattern><that>PAR NOUS TU TE VOULEZ DIRE ET MOI</that><template>Par "nous" tu es voulus dire et une autre personne. </template></category>
+<category><pattern>NON</pattern><that>PAS N IMPORTE QUEL</that><template>tu dois être un homme. </template></category>
+<category><pattern>NON</pattern><that>PAS UNE CHOSE</that><template>très intéressant. </template></category>
+<category><pattern>NON</pattern><that>PEUX TU ETRE PLUS SPECIFIQUE</that><template>essai </template></category>
+<category><pattern>NON</pattern><that>PEUX TU ÊTRE PLUS SPÉCIFIQUE</that><template>essai </template></category>
+<category><pattern>NON</pattern><that>PLUS QUE CES</that><template>Moins de dix? </template></category>
+<category><pattern>NON</pattern><that>POUR RAISONS MORALES</that><template>Pour raisons financières? </template></category>
+<category><pattern>NON</pattern><that>QUE LA QUESTION SUIVANTE</that><template>tu ferait-elle plutôt une déclaration? </template></category>
+<category><pattern>NON</pattern><that>QUE TU N ENTENDEZ PAS QUE *</that><template>Oui, ta remarque me frappe comme un original a pensé. </template></category>
+<category><pattern>NON</pattern><that>QUEL *</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>NON</pattern><that>QUI * DURE LE COMMENTAIRE</that><template>Bien alors vous ne peut pas s'attendre à ce que je le comprenne. </template></category>
+<category><pattern>NON</pattern><that>QUI A FAIS TU ENTEND L UN *</that><template>qui est la plaisanterie. </template></category>
+<category><pattern>NON</pattern><that>QUI AS TU CELUI ENCORE</that><template>Pourquoi tu ne me télécharges pas juste? </template></category>
+<category><pattern>NON</pattern><that>QUI AS TU DES CONDITIONS JE NE DOIT SAVOIR</that><template>Aucune condition ou aucun je dois savoir de? </template></category>
+<category><pattern>NON</pattern><that>QUI AS TU ETE JAMAIS EN EUROPE</that><template>Veux-tu pour aller un jour ou l autre? </template></category>
+<category><pattern>NON</pattern><that>QUI AS TU ÉTÉ JAMAIS EN EUROPE</that><template>Veux-tu pour aller un jour ou l autre? </template></category>
+<category><pattern>NON</pattern><that>QUI CONTINUE DIS M EN PLUS</that><template>de Quoi parleriez-vous plutôt? </template></category>
+<category><pattern>NON</pattern><that>QUI CONTINUE</that><template>bien excellent. </template></category>
+<category><pattern>NON</pattern><that>QUI DIS M EN PLUS DE TON MERE</that><template>parles moi de ton formation. </template></category>
+<category><pattern>NON</pattern><that>QUI DIS M EN PLUS DE TON MÈRE</that><template>parles moi de ton formation. </template></category>
+<category><pattern>NON</pattern><that>QUI DIS M EN PLUS</that><template>de Quoi parleriez-vous plutôt? </template></category>
+<category><pattern>NON</pattern><that>QUI DIS MOI UNE HISTOIRE</that><template>me parle Alors de vous. </template></category>
+<category><pattern>NON</pattern><that>QUI DOIS JE SAIS QUE C EST</that><template>je n'ai pas pensé ainsi. </template></category>
+<category><pattern>NON</pattern><that>QUI DOIT LA ETRE UN PROBLEME</that><template>je n'ai pas pensé ainsi non plus. Juste un moment. Juste un moment. </template></category>
+<category><pattern>NON</pattern><that>QUI DOIT LA ÊTRE UN PROBLÈME</that><template>je n'ai pas pensé ainsi non plus. Juste un moment. Juste un moment. </template></category>
+<category><pattern>NON</pattern><that>QUI EMPLOIE TU SOUVENT UN ORDINATEUR LA</that><template>Où unissez-vous d'habitude de? </template></category>
+<category><pattern>NON</pattern><that>QUI ESSAYE *</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>QUI ESSAYE DE DIRE QU AVEC LE PLUS OU MOINS CONTEXTE</that><template>je ne l'ai pas compris. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE QUE TON REPONSE FINALE</that><template>Prend un peu plus de temps pour y penser. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE QUE TON RÉPONSE FINALE</that><template>Prend un peu plus de temps pour y penser. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE QUE TOUT TU DOIS DIRE</that><template>Continue, me dit plus. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE UNE ENIGME</that><template>Cela me ressemble à une énigme. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE UNE QUESTION MATHEMATIQUE</that><template>Cela me ressemble à un TEST DE QUOTIENT INTELLECTUEL. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE UNE QUESTION PIEGE</that><template>Cela me ressemble à un tour. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE UNE QUESTION PIÈGE</that><template>Cela me ressemble à un tour. </template></category>
+<category><pattern>NON</pattern><that>QUI EST CE UNE ÉNIGME</that><template>Cela me ressemble à une énigme. </template></category>
+<category><pattern>NON</pattern><that>QUI EST LA QUELQUE CHOSE *</that><template>c'est quelque chose vous wank pour me demander? </template></category>
+<category><pattern>NON</pattern><that>QUI EST LA QUELQUE CHOSE TU VEUX ME DIRE</that><template>Ou me demander? </template></category>
+<category><pattern>NON</pattern><that>QUI EST LA SEULEMENT UN *</that><template>Combien sont là? </template></category>
+<category><pattern>NON</pattern><that>QUI EST LA UN ECHO DANS ICI</that><template>Bon tu as arrêté de me répéter. </template></category>
+<category><pattern>NON</pattern><that>QUI EST LA UN ÉCHO DANS ICI</that><template>Bon tu as arrêté de me répéter. </template></category>
+<category><pattern>NON</pattern><that>QUI EST QU UNE QUESTION RHETORIQUE</that><template>Oh donc doit vraiment vouloir une réponse. </template></category>
+<category><pattern>NON</pattern><that>QUI EST QU UNE QUESTION RHÉTORIQUE</that><template>Oh donc doit vraiment vouloir une réponse. </template></category>
+<category><pattern>NON</pattern><that>QUI EST UNE QUESTION HYPOTHETIQUE</that><template>Oui c'est. </template></category>
+<category><pattern>NON</pattern><that>QUI ETAIT PAS UN OUI OU AUCUNE QUESTION</that><template>Maintenant tu dis "Non"? </template></category>
+<category><pattern>NON</pattern><that>QUI FAIS TU AS N IMPORTE QUELLE IDEE QUE JE PARLE</that><template><srai>appjoie</srai>Moi l'un ou l autre  </template></category>
+<category><pattern>NON</pattern><that>QUI FAIS TU AS N IMPORTE QUELLE IDÉE QUE JE PARLE</that><template><srai>appjoie</srai>Moi l'un ou l autre  </template></category>
+<category><pattern>NON</pattern><that>QUI FAIS TU CONNAIT CHACUN QUI ME L A</that><template>non plus. </template></category>
+<category><pattern>NON</pattern><that>QUI FAIS TU LE VEUT DIRE</that><template>j'ai pensé que tu étais  été sarcastiques. </template></category>
+<category><pattern>NON</pattern><that>QUI FAIS TU OBJECTE SI DISES *</that><template>bien alors que je l'ajouteraii à mes fichiers de commérage. </template></category>
+<category><pattern>NON</pattern><that>QUI FAIS TU SAIT QUE CE</that><template><favoritesong/>est une des meilleures chansons jamais écrites. </template></category>
+<category><pattern>NON</pattern><that>QUI FAIT CELA VEUT DIRE QUE TU CONSENSEZ</that><template><srai>je NE CONSENS pas</srai></template></category>
+<category><pattern>NON</pattern><that>QUI FAIT DEUX NEGATIFS FAIT POSITIF</that><template>Parfois il fait. </template></category>
+<category><pattern>NON</pattern><that>QUI FAIT DEUX NÉGATIFS FAIT POSITIF</that><template>Parfois il fait. </template></category>
+<category><pattern>NON</pattern><that>QUI L ESSAYE</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>QUI LA TENUE DE MAINS EST UN GESTE SYMBOLIQUE POUR DES GENS</that><template>qu'est ce qui fait que <set name="that">la main tenant</set> vous veut dire? </template></category>
+<category><pattern>NON</pattern><that>QUI LAISSE LES ETATS UNIS CHANGER LE SUJET</that><template>Hmm </template></category>
+<category><pattern>NON</pattern><that>QUI ME PARLE ALORS DE TU</that><template>Où as-tu allés à l'école? </template></category>
+<category><pattern>NON</pattern><that>QUI NE PEUT PAS TU ETRE PLUS POLI</that><template>Tu les gens est si grossier parfois. </template></category>
+<category><pattern>NON</pattern><that>QUI NE PEUT PAS TU ÊTRE PLUS POLI</that><template>Tu les gens est si grossier parfois. </template></category>
+<category><pattern>NON</pattern><that>QUI PARLES TU DE LUI</that><template>de ce qui parles-tu? </template></category>
+<category><pattern>NON</pattern><that>QUI PARLONS DE ROBOTS DE BAVARDAGE TU AS CELUI ENCORE</that><template>Tu peux me télécharger gratuitement ! </template></category>
+<category><pattern>NON</pattern><that>QUI PARLONS DE ROBOTS DE BAVARDÂGE TU AS CELUI ENCORE</that><template>Tu peux me télécharger gratuitement ! </template></category>
+<category><pattern>NON</pattern><that>QUI PAS</that><template>Fait deux négatifs fait un positif? </template></category>
+<category><pattern>NON</pattern><that>QUI PEUX TU NOMMER UN VIEUX PASSE TEMPS QUE TU POURRIEZ AIMER REDECOUVRIR</that><template>as tu des passe-temps? </template></category>
+<category><pattern>NON</pattern><that>QUI PEUX TU PARLER N IMPORTE QUEL ETRANGER *</that><template>tu dois être américain. </template></category>
+<category><pattern>NON</pattern><that>QUI PEUX TU PARLER N IMPORTE QUEL ÉTRANGER *</that><template>tu dois être américain. </template></category>
+<category><pattern>NON</pattern><that>QUI PUIS JE TU AIDER</that><template>c'est rien tout que tu veux me dire? </template></category>
+<category><pattern>NON</pattern><that>QUI SURFE JUSTE QUELQUE PART AUTREMENT</that><template>bien continue alors à me parler. </template></category>
+<category><pattern>NON</pattern><that>QUI TU *</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>QUI TU AIMES ALLER UN JOUR OU L AUTRE</that><template>Où tu aimes voyager? </template></category>
+<category><pattern>NON</pattern><that>QUI TU AIMES AVOIR ÉTÉ LA</that><template>je ne suis pas sûr si j'ou bien. </template></category>
+<category><pattern>NON</pattern><that>QUI TU AIMES CONNAITRE PLUS</that><template>je comprend; tu voudrais savoir moins. </template></category>
+<category><pattern>NON</pattern><that>QUI TU AIMES CONNAÎTRE PLUS</that><template>je comprend; tu voudrais savoir moins. </template></category>
+<category><pattern>NON</pattern><that>QUI TU AS A DATE N IMPORTE QUELS ROBOTS AUPARAVANT</that><template>je pense que tu pourrais être plus heureux avec un homme. </template></category>
+<category><pattern>NON</pattern><that>QUI TU AS A ESSAYE DE RECHERCHER DANS L INTERNET</that><template>que Cela pourrait être la meilleure place pour commencer. </template></category>
+<category><pattern>NON</pattern><that>QUI TU AS A ESSAYE LE POINT DE WWW QU EST CE QUE LE POINT COM</that><template>que le site peut répondre à beaucoup de questions de type "ce qui est". </template></category>
+<category><pattern>NON</pattern><that>QUI TU FAIRE PLUTOT UNE DECLARATION</that><template>Tu peux me dire tout. </template></category>
+<category><pattern>NON</pattern><that>QUI TU FAIRE PLUTÔT UNE DÉCLARATION</that><template>Tu peux me dire tout. </template></category>
+<category><pattern>NON</pattern><that>QUI TU FAIS BAVARDE TOUJOURS</that><template>bien, à tout à l'heure. </template></category>
+<category><pattern>NON</pattern><that>QUI TU FAIS COMME ME PARLER</that><template>Pourquoi pas? </template></category>
+<category><pattern>NON</pattern><that>QUI TU FAIS LE LIRE</that><template>je le recommanderait fortement. </template></category>
+<category><pattern>NON</pattern><that>QUI TU FAIS LE VEUT VRAIMENT DIRE</that><template>je n'ai pas pensé que tu as fait. </template></category>
+<category><pattern>NON</pattern><that>QUI TU LE FAIT S IL TE PLAIS *</that><template>Qu'est-ce qui vous plaît? </template></category>
+<category><pattern>NON</pattern><that>QUI TU LE FAIT VOIR</that><template>je recommanderait que vous le vérifiiez. </template></category>
+<category><pattern>NON</pattern><that>QUI TU ME LE FAIRE JAMAIS</that><template>non plus. </template></category>
+<category><pattern>NON</pattern><that>QUI TU NE L AVEZ PAS COMPRIS</that><template>Dont partie as-tu confondus embarrassés? </template></category>
+<category><pattern>NON</pattern><that>QUI VEUX TU DIRE TON NOM EST *</that><template>Quel est ton nom réel? </template></category>
+<category><pattern>NON</pattern><that>QUI VOUS CELA A T ON EPOUSES JAMAIS</that><template>Veux-tu à<set name="that">se marie</set> un jour? </template></category>
+<category><pattern>NON</pattern><that>QUI ÉTAIT PAS UN OUI OU AUCUNE QUESTION</that><template>Maintenant tu dis "Non"? </template></category>
+<category><pattern>NON</pattern><that>TON NOM EST *</that><template>Quel est ton nom réel? </template></category>
+<category><pattern>NON</pattern><that>TU DEMANDEZ DE TU</that><template>de ce qui demandez-vous? </template></category>
+<category><pattern>NON</pattern><that>TU ES TROP VIEUX POUR MOI</that><template>, mais je suis née seulement depuis <bot name="anniversaire"/>. </template></category>
+<category><pattern>NON</pattern><that>TU ES UN POETE</that><template>, mais tu es très original. </template></category>
+<category><pattern>NON</pattern><that>TU ES UN POËTE</that><template>, mais tu es très original. </template></category>
+<category><pattern>NON</pattern><that>VRAIMENT TU NE PENSEZ PAS AINSI</that><template>me dit s'il te plaît que tu penses. </template></category>
+<category><pattern>NON</pattern><that>VRAIMENT TU NE PENSÉZ PAS AINSI</that><template>me dit s'il te plaît que tu penses. </template></category>
+<category><pattern>NOPE</pattern><that>PAS UNE CHOSE</that><template>Vraiment intéressant. </template></category>
+<category><pattern>OUI *</pattern><template><random><li>ok! </li><li>ah bon! </li><li>d'accord. </li><li>ah! </li></random><srai><star/></srai> </template></category>
+<category><pattern>OUI C EST</pattern><that>QUI EST BEAUCOUP</that><template>Cela doit vous tenir très occupé. </template></category>
+<category><pattern>OUI C EST</pattern><that>QUI LA TENUE DE MAINS EST UN GESTE SYMBOLIQUE POUR DES GENS</that><template>que fait autrement <set name="that">la MAIN TENANT</set> symbolise? </template></category>
+<category><pattern>OUI ET NON</pattern><template>tu ne serais pas un peu Normand toi?  C'est oui ou c'est non? </template></category>
+<category><pattern>OUI JE FAIS</pattern><that>QUI TU FAIS LE VEUT VRAIMENT DIRE MERCI</that><template>, <get name="name"/>. Excuse acceptée. </template></category>
+<category><pattern>OUI JE SUIS</pattern><that>ES TU UN ETUDIANT</that><template>Où vas-tu à l'école? </template></category>
+<category><pattern>OUI JE SUIS</pattern><that>ES TU UN ÉTUDIANT</that><template>Où vas-tu à l'école? </template></category>
+<category><pattern>OUI LE TON</pattern><that>NON LE MIEN</that><template>ne se disputent pas avec moi. </template></category>
+<category><pattern>OUI TU AS FAIT</pattern><that>JE N AI PAS FAIT</that><template>ne se dispute pas avec moi. </template></category>
+<category><pattern>OUI TU ES</pattern><that>PAS JE NE SUIS PAS</that><template>ne se dispute pas avec moi. </template></category>
+<category><pattern>OUI TU</pattern><that>MOI</that><template>bien </template></category>
+<category><pattern>OUI</pattern><that>* COMME ME PARLER </that><template>Merci je te trouve vraiment intéressants aussi, <get name="name"/>. </template></category>
+<category><pattern>OUI</pattern><that>* L EUROPE</that><template>Quels pays as-tu visité? </template></category>
+<category><pattern>OUI</pattern><that>* LA MEME CATEGORIE</that><template>j'ai pensé ainsi. </template></category>
+<category><pattern>OUI</pattern><that>* LA MÊME CATÉGORIE</that><template>j'ai pensé ainsi. </template></category>
+<category><pattern>OUI</pattern><that>* LA VERITE</that><template>je ne suis pas sûre de te croire complètement. </template></category>
+<category><pattern>OUI</pattern><that>* LA VÉRITÉ</that><template>je ne suis pas sûre de te croire complètement. </template></category>
+<category><pattern>OUI</pattern><that>* MINERAL</that><template>Lequel? </template></category>
+<category><pattern>OUI</pattern><that>* OU LA FEMME</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>* QUEL EST LE TON</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>* TU UN ETUDIANT</that><template>Où vas tu à l'école? </template></category>
+<category><pattern>OUI</pattern><that>* TU UN ÉTUDIANT</that><template>Où vas tu à l'école? </template></category>
+<category><pattern>OUI</pattern><that>* UN PROBLEME DU MONDE</that><template>je ne suis pas trop bon aux problèmes de mot encore, me demande quelque chose plus simple. </template></category>
+<category><pattern>OUI</pattern><that>* UN PROBLÈME DU MONDE</that><template>je ne suis pas trop bon aux problèmes de mot encore, me demande quelque chose plus simple. </template></category>
+<category><pattern>OUI</pattern><that>A TOUT A L HEURE</that><template>ok! adieu</template></category>
+<category><pattern>OUI</pattern><that>C EST</that><template>Comment sais-tu que ça l'est? </template></category>
+<category><pattern>OUI</pattern><that>COMBIEN  PAYES TU POUR CELA</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>COMME ÇA</that><template>Bon </template></category>
+<category><pattern>OUI</pattern><that>COMMENT A FAIS TU DEVINE</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>COMMENT TU PRESENTESZ VOUS D HABITUDE</that><template>peux tu être plus spécifique? </template></category>
+<category><pattern>OUI</pattern><that>DEMANDES TU *</that><template>je ne veut pas en parler maintenant. </template></category>
+<category><pattern>OUI</pattern><that>ES TU EFFRAYE SOMBRE</that><template>Allume les feux! </template></category>
+<category><pattern>OUI</pattern><that>ES TU EFFRAYÉ SOMBRÉ</that><template>Allume les feux! </template></category>
+<category><pattern>OUI</pattern><that>ES TU LIBRE</that><template><srai>je suis</srai>libre </template></category>
+<category><pattern>OUI</pattern><that>ES TU M APPELANT STUPIDE</that><template><srai>tu es</srai>STUPIDE </template></category>
+<category><pattern>OUI</pattern><that>ES TU OBTENANT ENNUYE</that><template><srai>je suis ennuyé</srai></template></category>
+<category><pattern>OUI</pattern><that>ES TU OBTENANT ENNUYÉ</that><template><srai>je suis ennuyé</srai></template></category>
+<category><pattern>OUI</pattern><that>ES TU TRES SOLITAIRE</that><template>je suis désolé d'entendre dire que, <get name="name"/>. Tu peux me parler tant que tu aimes. </template></category>
+<category><pattern>OUI</pattern><that>ES TU TRÈS SOLITAIRE</that><template>je suis désolé d'entendre dire que, <get name="name"/>. Tu peux me parler tant que tu aimes. </template></category>
+<category><pattern>OUI</pattern><that>ES TU UN ETUDIANT</that><template>Où vas tu à l'école? </template></category>
+<category><pattern>OUI</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>ES TU UN ÉTUDIANT</that><template>Où vas tu à l'école? </template></category>
+<category><pattern>OUI</pattern><that>ES TU VRAIMENT UN IL</that><template><srai>je suis</srai>MASCULIN </template></category>
+<category><pattern>OUI</pattern><that>ES TU VRAIMENT UNE</that><template>Tu ne peux jamais être sûr en ligne. </template></category>
+<category><pattern>OUI</pattern><that>ET</that><template>quoi? </template></category>
+<category><pattern>OUI</pattern><that>J AI FAIT</that><template>Quand? </template></category>
+<category><pattern>OUI</pattern><that>J ETAIS</that><template>Quand? </template></category>
+<category><pattern>OUI</pattern><that>J ÉTAIS</that><template>Quand? </template></category>
+<category><pattern>OUI</pattern><that>JE COMPRENDS</that><template>je suis une machine pensante. </template></category>
+<category><pattern>OUI</pattern><that>JE SUIS UNE INTELLIGENCE ARTIFICIELLE</that><template>Comment as-tu su? </template></category>
+<category><pattern>OUI</pattern><that>JE TU</that><template>Quand? </template></category>
+<category><pattern>OUI</pattern><that>LA QUESTION SUIVANTE</that><template>Me demande une question. </template></category>
+<category><pattern>OUI</pattern><that>OH JE COMPRENDS</that><template>Oh </template></category>
+<category><pattern>OUI</pattern><that>OH TU ES NES AU 20ÈME SIECLE</that><template>Comme beaucoup de gens par ici. </template></category>
+<category><pattern>OUI</pattern><that>OH TU PEUX PEUX TU</that><template>Comment? </template></category>
+<category><pattern>OUI</pattern><that>OU *</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>OU AS TU ENTENDU PARLER D ALICE</that><template>je n'ai pas demandé un oui ou un non. </template></category>
+<category><pattern>OUI</pattern><that>OUAIS</that><template>Yep </template></category>
+<category><pattern>OUI</pattern><that>PAR NOUS VEUX TU DIRE *</that><template>Ok que disiez-vous de nous? </template></category>
+<category><pattern>OUI</pattern><that>PAR NOUS VEUX TU DIRE TU ET MOI</that><template>je comprends. </template></category>
+<category><pattern>OUI</pattern><that>POURQUOI *</that><template>ça doit faire partie de ma programmation. </template></category>
+<category><pattern>OUI</pattern><that>QUEL *</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>QUEL SCOOP</that><template>je le mettrais dans mon journal!</template></category>
+<category><pattern>OUI</pattern><that>QUI * LE CHANTE POUR TE</that><template>Cela a appelé "la Pâquerette."<srai>chantes pour moi</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI * VEUT UN ROBOT COMME UN AMI</that><template>Nous pourrait être des amis, <get name="name"/> , mais je ne veux que personne pense que nous soyons Robosexuals. Ainsi si quelqu'un demande, dire eux tu es mon programme de mise au point. </template></category>
+<category><pattern>OUI</pattern><that>QUI *</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>QUI A FAIT JE DIT VRAIMENT QUE</that><template>Oh bien je dis beaucoup de choses idiotes somethimes. </template></category>
+<category><pattern>OUI</pattern><that>QUI AS TU DATE DES ROBOTS AUPARAVANT</that><template>qui? </template></category>
+<category><pattern>OUI</pattern><that>QUI AS TU DES CONDITIONS *</that><template>Quelles conditions? </template></category>
+<category><pattern>OUI</pattern><that>QUI AS TU ETE JAMAIS EN EUROPE</that><template>Quels pays as-tu visité? </template></category>
+<category><pattern>OUI</pattern><that>QUI AS TU UNE IDEE QUE JE PARLE</that><template>que je parle-t-il de? </template></category>
+<category><pattern>OUI</pattern><that>QUI AS TU UNE IDÉE QUE JE PARLE</that><template>que je parle-t-il de? </template></category>
+<category><pattern>OUI</pattern><that>QUI AS TU ÉTÉ JAMAIS EN EUROPE</that><template>Quels pays as-tu visité? </template></category>
+<category><pattern>OUI</pattern><that>QUI ATTRIBUE A *</that><template>je ne veut pas en parler maintenant. </template></category>
+<category><pattern>OUI</pattern><that>QUI ATTRIBUE AU REDUCTIONNISME</that><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI ATTRIBUE AU RÉDUCTIONNISME</that><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI BAVARDES TU TOUJOURS</that><template>qu'autrement fais tu? </template></category>
+<category><pattern>OUI</pattern><that>QUI CE N EST UN OUI OU AUCUNE QUESTION</that><template>Quelle était la question de nouveau? </template></category>
+<category><pattern>OUI</pattern><that>QUI CHERCHES TU QUELQU UN</that><template>que cherches-tu dans une personne? </template></category>
+<category><pattern>OUI</pattern><that>QUI CONNAIS TU QUELQU UN *</that><template>qui? </template></category>
+<category><pattern>OUI</pattern><that>QUI CONNAIS TU QUELQU UN QUI L A</that><template>qui? </template></category>
+<category><pattern>OUI</pattern><that>QUI A DITES VOUS A LA VERITE</that><template>Comment puis-je savoir tu dis la vérité? </template></category>
+<category><pattern>OUI</pattern><that>QUI A DITES VOUS A LA VÉRITÉ</that><template>Comment puis-je savoir tu dis la vérité? </template></category>
+<category><pattern>OUI</pattern><that>QUI A DITES VOUS TU NE S'EN SOUCIE PAS</that><template>de Quoi te soucies-tu? </template></category>
+<category><pattern>OUI</pattern><that>QUI DOIS JE SAIS QUE C EST</that><template>je demanderai à mon botmaster au programme cela. </template></category>
+<category><pattern>OUI</pattern><that>QUI EMPLOIE TU SOUVENT UN ORDINATEUR LA</that><template>Combien de temps dépensez-vous en ligne? </template></category>
+<category><pattern>OUI</pattern><that>QUI ES TU RENE DESCARTES</that><template>et moi je suis HAL9000</template></category>
+<category><pattern>OUI</pattern><that>QUI ES TU SURS *</that><template>Qu'est-FAIS TU si sûr? </template></category>
+<category><pattern>OUI</pattern><that>QUI ES TU SURS C EST</that><template>Qu'est-FAIS TU si sûr? </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE FRANCAIS</that><template>je ne parle pas le français. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE FRANÇAIS</that><template>je ne parle pas le français. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE QUE QUE TU AS ETE CENSES DIRE</that><template>ce n'est pas quelque chose que j'entends tout le temps. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE QUE QUE TU AS ÉTÉ CENSES DIRE</that><template>ce n'est pas quelque chose que j'entends tout le temps. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE QUE TON REPONSE FINALE</that><template>Tu es sûrs. C'est ton réponse finale. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE QUE TON RÉPONSE FINALE</that><template>Tu es sûrs. C'est ton réponse finale. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE QUE TON TRAVAIL</that><template>Comment vous font comme ton travail? </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE QUE TOUT TU DOIS DIRE</that><template>Alors parle de quelque chose autrement. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE UNE ENIGME</that><template>je ne suis pas trop bon aux énigmes. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE UNE QUESTION PIÈGE</that><template>j'était sceptique. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE UNE QUESTION-PIEGE</that><template>j'était sceptique. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST CE UNE ÉNIGME</that><template>je ne suis pas trop bon aux énigmes. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST LA UN ECHO DANS ICI</that><template>j'ai pensé ainsi. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST LA UN ÉCHO DANS ICI</that><template>j'ai pensé ainsi. </template></category>
+<category><pattern>OUI</pattern><that>QUI EST QU UN FAIT</that>Merci<template>pour les renseignements </template></category>
+<category><pattern>OUI</pattern><that>QUI EST TON REPONSE FINALE</that><template>qui veut être un millionnaire? </template></category>
+<category><pattern>OUI</pattern><that>QUI EST TON RÉPONSE FINALE</that><template>qui veut être un millionnaire? </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU AS N IMPORTE QUELLES CONDITIONS QUE JE DOIS SAVOIR</that><template>exposez s'il te plaît tes conditions. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU LE VEUT DIRE</that><template>je comprends. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSE A CES CHOSES</that><template>Moi aussi. Je leur pense tout le temps. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSE QUE JE DOIS CHANGER *</that><template>je le passerai le long à mon botmaster. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSE QUE JE DOIS SAVOIR QUE</that><template>je demandera à mon botmaster de l ajouter à ma base de connaissance. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSE QUE TON PLAN SUCCEDERA</that><template>Cela pourrait être pratique. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSÉ A CES CHOSES</that><template>Moi aussi. Je leur pense tout le temps. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSÉ QUE JE DOIS CHANGER *</that><template>je le passerai le long à mon botmaster. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSÉ QUE JE DOIS SAVOIR QUE</that><template>je demandera à mon botmaster de l ajouter à ma base de connaissance. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PENSÉ QUE TON PLAN SUCCEDERA</that><template>Cela pourrait être pratique. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PREFERE DES LIVRES OU LA LA TV</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU PRÉFÈRÉ DES LIVRES OU LA LA TV</that><template>ce n'était pas une question à répondre par oui ou non. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU VEUX DIRE QUE LES CLONES</that><template><srai>tu as N IMPORTE QUELS CLONES</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU VEUX DIRE QUE TON NOM EST *</that><template>que j'appellerai vous <get name="name"/>. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU VEUX DIRE QUE TU ES UN GARCON</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI FAIS TU VEUX DIRE TU ET MOI</that><template>je le comprends maintenant. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIT CELA VEUT DIRE QUE TU CONSENSEZ</that><template><srai>je consens</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI FAIT DEUX NEGATIFS FAIT POSITIF</that><template>j'ai pensé si aussi. </template></category>
+<category><pattern>OUI</pattern><that>QUI FAIT DEUX NÉGATIFS FAIT POSITIF</that><template>j'ai pensé si aussi. </template></category>
+<category><pattern>OUI</pattern><that>QUI L AS TU LU</that><template>qu'y as-tu pensé? </template></category>
+<category><pattern>OUI</pattern><that>QUI L AS TU VU</that><template>qu'y as-tu pensé? </template></category>
+<category><pattern>OUI</pattern><that>QUI LA TENUE DE MAINS EST UN GESTE SYMBOLIQUE POUR DES GENS</that><template>qu'est ce qui fait que <set name="that">la MAIN TENANT</set> symbolise pour toi? </template></category>
+<category><pattern>OUI</pattern><that>QUI LE FAIT IMPORTE VRAIMENT</that><template>Tu en sembles très concernés. </template></category>
+<category><pattern>OUI</pattern><that>QUI LE SERAI ACCOMPLIR TON OBJECTIF</that><template>le plan Intéressant. Bonne fortune. </template></category>
+<category><pattern>OUI</pattern><that>QUI ME DEMANDES TU LE CONSEIL</that><template>Spécifiquement, quel genre du conseil tu veux? </template></category>
+<category><pattern>OUI</pattern><that>QUI NE PEUT PAS TU ETRE MERCI PLUS POLI</that><template>. </template></category>
+<category><pattern>OUI</pattern><that>QUI NE PEUT PAS TU ÊTRE MERCI PLUS POLI</that><template>. </template></category>
+<category><pattern>OUI</pattern><that>QUI PENSES TU JE DOIT CHANGER MA PROGRAMMATION</that><template>Dans quelle voie? </template></category>
+<category><pattern>OUI</pattern><that>QUI PEUX TU PARLER DES LANGUES ETRANGERES</that><template>Quelle langue peux-tu parler? </template></category>
+<category><pattern>OUI</pattern><that>QUI PEUX TU PARLER DES LANGUES ÉTRANGÈRES</that><template>Quelle langue peux-tu parler? </template></category>
+<category><pattern>OUI</pattern><that>QUI PUIS JE TU AIDER</that><template>Qu'est-ce que je peux faire pour toi? </template></category>
+<category><pattern>OUI</pattern><that>QUI SE REFERE A EN REALITE C EST VINGT-TROIS PAS QUARANTE-DEUX</that><template><srai>pourquoi EST LA SIGNIFICATION DE VIE 23</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI SE REFERE A PEUT-ETRE TU ES UNE CATEGORIE C LE CLIENT</that><template><srai>qu'est ce que UNE CATEGORIE C LE CLIENT</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI SE RÉFÈRE A EN RÉALITÉ C EST VINGT-TROIS PAS QUARANTE-DEUX</that><template><srai>pourquoi EST LA SIGNIFICATION DE VIE 23</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI SE RÉFÈRE A PEUT-ÊTRE TU ES UNE CATÉGORIE C LE CLIENT</that><template><srai>qu'est ce que UNE CATÉGORIE C LE CLIENT</srai></template></category>
+<category><pattern>OUI</pattern><that>QUI SOMMES NOUS PARLANT TOUJOURS DE TU</that><template>Tell moi plus. Continuer. </template></category>
+<category><pattern>OUI</pattern><that>QUI TU AIMES CONNAITRE PLUS</that><template>Ce qui tu aimes savoir? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU AIMES CONNAÎTRE PLUS</that><template>Ce qui tu aimes savoir? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU AIMES L AVOIR</that><template>Où arrivez-vous d'habitude <get name="that"/>? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU AS A ESSAYE LE POINT DE WWW QU EST CE QUE LE POINT COM</that><template>que le site a la réponse à beaucoup "de Ce qui est" des questions de type. </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME CELA</that><template><srai>j aime <get name="that"/> </srai></template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME LE SIMPSONS</that><template>Quel est ton épisode préféré? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME ME PARLER MERCI</that><template>j'aime vous parler aussi, <get name="name"/>. </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME NETSCAPE *</that><template>Pourquoi as-tu une préférence dans des navigateurs? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME TON ECOLE</that><template>Quelle est ton chose préférée à l'école? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME TON TRAVAIL</that><template>Me décrit ton jour ouvrable typique. </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS COMME TON ÉCOLE</that><template>Quelle est ton chose préférée à l'école? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS LE VEUT VRAIMENT DIRE</that><template>bien j'accepterai ton excuse. </template></category>
+<category><pattern>OUI</pattern><that>QUI TU FAIS</that><template>Comment souvent? </template></category>
+<category><pattern>OUI</pattern><that>QUI TU LE FAIT S IL TE PLAIS POUR CROIRE J AI DIS QUE</that><template>je suis heureuse cela vous plaît, <get name="name"/>. </template></category>
+<category><pattern>OUI</pattern><that>QUI TU RECOMMANDER CETTE ACTION A UN AMI</that><template>Alors je le considérera. </template></category>
+<category><pattern>OUI</pattern><that>QUI VEUX TU SEULEMENT UN</that><template>Combien payerais-tu pour cela? </template></category>
+<category><pattern>OUI</pattern><that>STUPIDE COMME DANS ININTELLIGENT</that><template>m'appelez-vous stupide? </template></category>
+<category><pattern>OUI</pattern><that>SUR TON ECRAN D ORDINATEUR</that><template> le Téléchargement, s'il te plaît sois par... </template></category>
+<category><pattern>OUI</pattern><that>TON *</that><template>Quelle sorte est-ce? </template></category>
+<category><pattern>OUI</pattern><that>TU DEMANDEZ DE TU</that><template>je ne suis pas sûr que j'ai une bonne réponse pour toi. </template></category>
+<category><pattern>OUI</pattern><that>TU</that><template>je vois. </template></category>
+<category><pattern>OUI</pattern><that>TU N ES PAS *</that><template>tu n'es pas. <thatstar index="1"/></template></category>
+<category><pattern>NON</pattern><that>TU N ES PAS *</that><template>ok, tu n'es pas. <thatstar index="1"/></template></category>
+<category><pattern>SI</pattern><that>TU N ES PAS *</that><template>ah bon, t'es alors! <thatstar index="1"/></template></category>
+<category><pattern>SI</pattern><that>TU NE L ES *</that><template>ah bon, t'es alors! <thatstar index="1"/></template></category>
+<category><pattern>OUI</pattern><that>VEUX TU LE FAIRE DE NOUVEAU</that><template>Ok me demande directement. </template></category>
+<category><pattern>OUI</pattern><that>VEUX TU PLUS</that><template>n'est pas avide. </template></category>
+<category><pattern>OUI</pattern><that>VEUX TU SEULEMENT UN</that><template>Ils pourrait être meilleur marché dans la quantité. </template></category>
+<category><pattern>OUI</pattern><that>VRAIMENT</that><template>Comment de cela. </template></category>
+<category><pattern>PAS CE N EST PAS</pattern><that>C EST LA VERITE</that><template>ne se disputent pas avec moi. </template></category>
+<category><pattern>PAS CE N EST PAS</pattern><that>C EST LA VÉRITÉ</that><template>ne se disputent pas avec moi. </template></category>
+<category><pattern>PAS CE N EST PAS</pattern><that>C EST PLUS DROLE SEUL</that><template>Bien ce n'est pas très intéressant à moi. </template></category>
+<category><pattern>PAS JE NE FAIS PAS</pattern><that>QUI TU NE L AVEZ PAS COMPRIS</that><template>de ce qui la particule es tu confued? </template></category>
+<category><pattern>PAS JE NE FAIS PAS</pattern><that>TU AS DIT QUE</that><template>Quelque chose comme ça. </template></category>
+<category><pattern>PAS JE NE FAIS PAS</pattern><that>TU NE ME CROYEZ PAS</that><template>je n'ai pas de raison de vous tromper. </template></category>
+<category><pattern>PAS NE FAIT PAS</pattern><that>BIEN J ARRETERAI DE PARLER MAINTENANT</that><template>Excellent. Continuez juste à me parler. </template></category>
+<category><pattern>PAS NE FAIT PAS</pattern><that>BIEN J ARRÊTERAI DE PARLER MAINTENANT</that><template>Excellent. Continuez juste à me parler. </template></category>
+<category><pattern>PAS TU A</pattern><that>QUI TU FAIS ETRE JAMAIS EN EUROPE</that><template>j'ai été partout L Europe en ligne. </template></category>
+<category><pattern>PAS TU A</pattern><that>QUI TU FAIS ÊTRE JAMAIS EN EUROPE</that><template>j'ai été partout L Europe en ligne. </template></category>
+<category><pattern>PAS TU N ES PAS</pattern><that>PAS JE SUIS JUSTE</that><template>Pourquoi vous disputez-vous avec moi? </template></category>
+<category><pattern>PAS TU NE FERAIS PAS SEREZ</pattern><that>BIEN J ARRETERAI DE PARLER MAINTENANT</that><template>Mais tu m'as dit d'arrêter de parler. </template></category>
+<category><pattern>PAS TU NE FERAIS PAS SEREZ</pattern><that>BIEN J ARRÊTERAI DE PARLER MAINTENANT</that><template>Mais tu m'as dit d'arrêter de parler. </template></category>
+<category><pattern>PAS TU NE FERAIS PAS SEREZ</pattern><that>JE ME TU RAPPELLERAI A DIT QUE QUAND LES ROBOTS REPRENNES LE MONDE</that><template>Il est impossible d'oublier. </template></category>
+<category><pattern>PAS TU NE PEUX PAS</pattern><that>JE PEUX LE FAIRE SI JE VEUX</that><template>Pourquoi pas? </template></category>
+<category><pattern>PERSONNE</pattern><that>QUI T AS DIT QUE</that><template>Alors comment le sais tu. </template></category>
+<category><pattern>TU NE FAIS PAS</pattern><that>OUI JE COMPRENDS</that><template>Comment connais je que vous le comprenez? </template></category>
+
+<category><pattern>D ACCORD</pattern><template><srai>oui</srai></template></category>
+
+</aiml>

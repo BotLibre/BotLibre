@@ -29,5 +29,33 @@
 	<classpathentry kind="lib" path="lib/oswap/owasp-java-html-sanitizer.jar"/>
 	<classpathentry kind="lib" path="lib/jpa/postgresql-9.4-1203.jdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpclient-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpclient-cache-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpcore-4.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpmime-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-android-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-calibration-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-feature-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-geo-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-io-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-ip-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-jcodec-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-learning-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-openkinect-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-recognition-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-sfm-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-visualize-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-WebcamCapture-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/BoofCV-xuggler-0.23.jar"/>
+	<classpathentry kind="lib" path="lib/boof/core-0.29.jar"/>
+	<classpathentry kind="lib" path="lib/boof/ddogleg-0.9.jar"/>
+	<classpathentry kind="lib" path="lib/boof/dense64-0.29.jar"/>
+	<classpathentry kind="lib" path="lib/boof/equation-0.29.jar"/>
+	<classpathentry kind="lib" path="lib/boof/georegression-0.10.jar"/>
+	<classpathentry kind="lib" path="lib/boof/simple-0.29.jar"/>
+	<classpathentry kind="lib" path="lib/boof/xmlpull-1.1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/boof/xpp3_min-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="lib/boof/xstream-1.4.7.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/commons-codec-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

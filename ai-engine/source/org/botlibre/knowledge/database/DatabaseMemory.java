@@ -78,8 +78,15 @@ public class DatabaseMemory extends BasicMemory {
 	public static String DATABASE_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
 	public static String DATABASE_USER = "SA";*/
 	/* Derby
-	public static String DATABASE_URL = "jdbc:derby:Bot;create=true";
-	public static String DATABASE_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";*/
+	public static String DATABASE_URL_PREFIX = "jdbc:derby:";
+	public static String SCHEMA_URL_PREFIX = "jdbc:derby:";
+	public static String DATABASE_URL_SUFFIX = "";
+	public static String SCHEMA_URL_SUFFIX = "";
+	public static String DATABASE_URL = "jdbc:derby:Bot";
+	public static String DATABASE_TEST_URL = "jdbc:derby:Bot";
+	public static String DATABASE_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+	public static String DATABASE_USER = "";
+	public static String DATABASE_PASSWORD = "";*/
 	/* MySQL
 	public static String DATABASE_USER = "root";
 	public static String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
@@ -98,12 +105,12 @@ public class DatabaseMemory extends BasicMemory {
 	
 	public static ConcurrentMap<String, SessionInfo> sessions = new ConcurrentHashMap<String, SessionInfo>();
 	
-	private EntityManagerFactory factory;
-	private EntityManager entityManager;
-	private LogListener listener;
-	private String database;
-	private boolean isFast;
-	private boolean isSchema;
+	protected EntityManagerFactory factory;
+	protected EntityManager entityManager;
+	protected LogListener listener;
+	protected String database;
+	protected boolean isFast;
+	protected boolean isSchema;
 	
 	public class SessionInfo {
 		public ServerSession session;
@@ -123,9 +130,9 @@ public class DatabaseMemory extends BasicMemory {
 	public DatabaseMemory() {
 		super();
 		if (TEST) {
-			this.database = DATABASE_TEST_URL.substring(DATABASE_URL_PREFIX.length());
+			this.database = DATABASE_TEST_URL.replace(DATABASE_URL_PREFIX, "");
 		} else {
-			this.database = DATABASE_URL.substring(DATABASE_URL_PREFIX.length());
+			this.database = DATABASE_URL.replace(DATABASE_URL_PREFIX, "");
 		}
 	}
 	
@@ -192,7 +199,7 @@ public class DatabaseMemory extends BasicMemory {
 			this.bot.log(this, "Low memory - clearing short term memory", Level.INFO);
 			getShortTermMemory().clear();
 			if (cacheSize() > Bot.MAX_CACHE) {
-				this.bot.log(this, "Cache too big - clearing server cache", Level.WARNING, cacheSize(), Bot.MAX_CACHE);
+				this.bot.log(this, "Cache too big - clearing server cache", Level.INFO, cacheSize(), Bot.MAX_CACHE);
 				freeMemory();
 			}
 		} else {
@@ -356,10 +363,10 @@ public class DatabaseMemory extends BasicMemory {
 			if (database.equals("")) {
 				if (TEST) {
 					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_TEST_URL);
-					this.database = DATABASE_TEST_URL.substring(DATABASE_URL_PREFIX.length());
+					this.database = DATABASE_TEST_URL.replace(DATABASE_URL_PREFIX, "");
 				} else {
 					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_URL);
-					this.database = DATABASE_URL.substring(DATABASE_URL_PREFIX.length());
+					this.database = DATABASE_URL.replace(DATABASE_URL_PREFIX, "");
 				}
 			} else {
 				if (this.isSchema) {

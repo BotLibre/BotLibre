@@ -19,10 +19,13 @@ package org.botlibre.test;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.logging.Level;
 
 import org.junit.AfterClass;
@@ -112,6 +115,66 @@ public class TestAIML2 extends TextTest {
 		response = waitForOutput(output);
 		checkResponse(response, "The time is " + time);
 		
+		text.input("what is the time in GMT");
+		Calendar calendar = Calendar.getInstance();
+		response = waitForOutput(output);
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+		Time timeValue = Utils.parseTime(
+				calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+		today = Utils.printTime(timeValue, "HH:mm:ss");
+		checkResponse(response, "The time is " + today);
+		
+		text.input("what is the time in GMT+4");
+		calendar = Calendar.getInstance();
+		response = waitForOutput(output);
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT+4"));
+		timeValue = Utils.parseTime(
+				calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+		today = Utils.printTime(timeValue, "HH:mm:ss");
+		checkResponse(response, "The time is " + today);
+		
+		text.input("what is the timestamp in GMT+4");
+		calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT+4"));
+		java.sql.Timestamp timestampValue = Utils.parseTimestamp(
+				calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE) + " "
+				+ calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+		response = waitForOutput(output);
+		checkResponse(response, "The timestamp is " + timestampValue.toString());
+		
+		text.input("what is the date in french");
+		calendar = Calendar.getInstance();
+		response = waitForOutput(output);
+		Locale locale = Locale.FRENCH;
+		String result = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale) + ", "
+					+ calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, locale) + " "
+					+ String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+		checkResponse(response, "The date is " + result);
+		
+		text.input("what is the date in France");
+		calendar = Calendar.getInstance();
+		response = waitForOutput(output);
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT-1"));
+		locale = Locale.FRENCH;
+		result = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale) + ", "
+					+ calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, locale) + " "
+					+ String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + " - "
+					+ String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+		checkResponse(response, "The date is " + result);
+		
+		text.input("what is the jdate in France");
+		response = waitForOutput(output);
+		calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT-1"));
+		locale = Locale.FRENCH;
+		result = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, locale) + " "
+					+ ((calendar.get(Calendar.DAY_OF_MONTH) < 10) ? "0" : "") + String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + ", "
+					+ String.valueOf(calendar.get(Calendar.YEAR)) + " - "
+					+ String.valueOf(calendar.get(Calendar.HOUR)) + ":"
+					+ ((calendar.get(Calendar.MINUTE) < 10) ? "0" : "") + String.valueOf(calendar.get(Calendar.MINUTE)) + ":"
+					+ ((calendar.get(Calendar.SECOND) < 10) ? "0" : "") + String.valueOf(calendar.get(Calendar.SECOND));
+		checkResponse(response, "The date is " + result);
+		
 		text.input("how many days until Christmas?");
 		response = waitForOutput(output);
 		Calendar christmas = Calendar.getInstance();
@@ -130,7 +193,7 @@ public class TestAIML2 extends TextTest {
 		text.input("how many weeks until Christmas?");
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
-		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR);
+		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR) - 2;
 		checkResponse(response, "" + weeks + " weeks until Christmas.");
 		
 		text.input("how many hours until Christmas?");
@@ -811,6 +874,82 @@ public class TestAIML2 extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
+		text.input("x q");
+		response = waitForOutput(output);
+		checkResponse(response, "success1");
+		
+		text.input("q");
+		response = waitForOutput(output);
+		checkResponse(response, "success1");
+		
+		text.input("r");
+		response = waitForOutput(output);
+		checkResponse(response, "success1");
+		
+		text.input("x");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		text.input("a d");
+		response = waitForOutput(output);
+		checkResponse(response, "success2");
+		
+		text.input("d");
+		response = waitForOutput(output);
+		checkResponse(response, "success2");
+		
+		text.input("x d");
+		response = waitForOutput(output);
+		checkResponse(response, "success2");
+		
+		text.input("x d x");
+		response = waitForOutput(output);
+		checkResponse(response, "success2");
+		
+		text.input("x a x");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		text.input("pattern3");
+		response = waitForOutput(output);
+		checkResponse(response, "success3");
+		
+		text.input("x pattern3");
+		response = waitForOutput(output);
+		checkResponse(response, "success3");
+		
+		text.input("x y pattern3");
+		response = waitForOutput(output);
+		checkResponse(response, "success3");
+		
+		text.input("x y pattern3 x");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		text.input("pattern4");
+		response = waitForOutput(output);
+		checkResponse(response, "success4");
+		
+		text.input("pattern4 x y");
+		response = waitForOutput(output);
+		checkResponse(response, "success4");
+		
+		text.input("x pattern4");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		text.input("pattern5");
+		response = waitForOutput(output);
+		checkResponse(response, "success5");
+		
+		text.input("x y pattern5 x");
+		response = waitForOutput(output);
+		checkResponse(response, "success5");
+		
+		text.input("x y pattern5 x xx");
+		response = waitForOutput(output);
+		checkResponse(response, "success5");
+		
 		bot.shutdown();		
 	}
 
@@ -829,6 +968,18 @@ public class TestAIML2 extends TextTest {
 		text.input("html bar");
 		String response = waitForOutput(output);
 		if (!response.equals("<b>bold</b><a href=\"foo.com\" target=\"_blank\">bar</a><p>hello<br>world</br></p><ol><li>foo</li><li>bar</li></ol>")) {
+			fail("Incorrect response: " + response);
+		}
+		
+		text.input("set nested");
+		response = waitForOutput(output);
+		if (!response.equals("Ok n4")) {
+			fail("Incorrect response: " + response);
+		}
+		
+		text.input("test nested");
+		response = waitForOutput(output);
+		if (!response.equals("Nested <br/>   <a href=\"http://www.botlibre.com/images/bot.png\" target=\"_blank\"><img alt=\"miniature\" heigh=\"100\" src=\"http://www.botlibre.com/images/bot.png\" width=\"100\"></img></a>")) {
 			fail("Incorrect response: " + response);
 		}
 		

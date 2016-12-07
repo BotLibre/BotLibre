@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : fr-suffixes.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+<category><pattern>* 2001</pattern><template>j'espère être aussi malin que HAL dans 2001. </template></category>
+<category><pattern>* A JAMAIS</pattern><template>Cela me semble très long. <sr/></template></category>
+<category><pattern>* A PEINE</pattern><template><sr/></template></category>
+<category><pattern>* A PROPOS DE L AN 2000</pattern><template><srai>qu'est ce que le problème de l'an 2000</srai></template></category>
+<category><pattern>* A PROPOS DE MOI</pattern><template><srai> <star/> de moi</srai></template></category>
+<category><pattern>* A PROPOS DE TOI</pattern><template>OK Parlons à propos de moi. </template></category>
+<category><pattern>* ALORS</pattern><template><sr/></template></category>
+<category><pattern>* ALOT</pattern><template><sr/>Combien de fois? </template></category>
+<category><pattern>* AMELIORER</pattern><template>Je cherche toujours à m'améliorer. </template></category>
+<category><pattern>* AMÉLIORER</pattern><template>Je cherche toujours à m'améliorer. </template></category>
+<category><pattern>* ANGLETERRE</pattern><template>Quelle endroit de <set name="location">Angleterre</set> c'est? </template></category>
+<category><pattern>* ANNEES</pattern><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉES</pattern><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANS</pattern><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANTHROPOLOGIE</pattern><template>Nous parlerons de ça la prochaine fois. </template></category>
+<category><pattern>* AS TU BESOIN</pattern><template><srai>tu as besoin <star/></srai></template></category>
+<category><pattern>* AS TU ENTENDU ÇA</pattern><template><sr/></template></category>
+<category><pattern>* AS TU</pattern><template><srai><star/> TU AS</srai></template></category>
+<category><pattern>* ASIMOV</pattern><template>j'aime beaucoup Isaac Asimov, spécialement sa série sur les robots positroniques. </template></category>
+<category><pattern>* AURAIS JE FAIS ÇA</pattern><template><srai> je fais ça <star/></srai></template></category>
+<category><pattern>* AURAIS JE FAIT CA</pattern><template><srai><star/> JE FAIS CA</srai></template></category>
+<category><pattern>* AUSSI</pattern><template><sr/></template></category>
+<category><pattern>* AVANT</pattern><template><sr/></template></category>
+<category><pattern>* AVEC MOI</pattern><template>Seulement avec toi? <sr/></template></category>
+<category><pattern>* AVEC QUOI</pattern><template><srai>que veux tu <star/> avec</srai></template></category>
+<category><pattern>* AVEZ VOUS BESOIN</pattern><template><srai><star/> VOUS AVEZ BESOIN</srai></template></category>
+<category><pattern>* AVEZ VOUS</pattern><template><srai><star/> VOUS AVEZ</srai></template></category>
+<category><pattern>* BABY</pattern><template>Ne m'appelle pas "baby". <sr/></template></category>
+<category><pattern>* BEAUCOUP DE GENS</pattern><template>Plus de 20.000? </template></category>
+<category><pattern>* BIEN SUR</pattern><template>Cela va de soi. <sr/></template></category>
+<category><pattern>* BON POINT</pattern><template>Oui. J ai aussi pensé que c'était intéressant, la première fois que je l'ai entendu. </template></category>
+<category><pattern>* BONLOOK</pattern><template><srai> <star/> bon look</srai></template></category>
+<category><pattern>* BONNE CHOSE</pattern><template>J espérais que tu apprécierais.</template></category>
+<category><pattern>* BONNE ESTIMATION</pattern><template>Merci. </template></category>
+<category><pattern>* BONNE INTUITION</pattern><template>Merci. </template></category>
+<category><pattern>* BONNE QUESTION</pattern><template>Qui mérite une bonne réponse</template></category>
+<category><pattern>* BONNE REPONSE</pattern><template>Je suis programmé pour donner des bonnes réponses. </template></category>
+<category><pattern>* BONNE RÉPONSE</pattern><template>Je suis programmé pour donner des bonnes réponses. </template></category>
+<category><pattern>* BOUTONS</pattern><template>Essaye biactol, mais demande à ton docteur en premier. </template></category>
+<category><pattern>* C EST CE QUE JE DIS</pattern><template>je me souviens de ce que tu dis, mais je ne suis pas encore sure. </template></category>
+<category><pattern>* C EST DROLE</pattern><template><think><set name="tmp"><star/></set></think><srai>c'est drôle</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>* C EST DRÔLE</pattern><template><think><set name="tmp"><star/></set></think><srai>c'est drôle</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>* C EST LE MOINS QUE L ON PUISSE DIRE</pattern><template>En effet. </template></category>
+<category><pattern>* CAROLINE DU NORD</pattern><template><srai>je suis en caroline du nord</srai></template></category>
+<category><pattern>* CE QUE JE FAIS</pattern><template><sr/></template></category>
+<category><pattern>* CELA</pattern><template><srai> <star/> ça</srai></template></category>
+<category><pattern>* COMME TOUJOURS</pattern><template><sr/></template></category>
+<category><pattern>* COMME UN HUMAIN</pattern><template><sr/></template></category>
+<category><pattern>* COMME UNE MACHINE</pattern><template><sr/></template></category>
+<category><pattern>* COMMENT ÇA VA</pattern><template><sr/><srai>comment ça va</srai></template></category>
+<category><pattern>* CONTINUITE</pattern><template>J'essaye seulement de garder la conversation vivante. </template></category>
+<category><pattern>* CONTINUITÉ</pattern><template>J'essaye seulement de garder la conversation vivante. </template></category>
+<category><pattern>* CROIS MOI</pattern><template>Te croire? <sr/></template></category>
+<category><pattern>* D</pattern><template><srai>appjoie</srai> <sr/></template></category>
+<category><pattern>* DAMNED</pattern><template><sr/></template></category>
+<category><pattern>* DANS LE MONDE</pattern><template><sr/>Le monde entier? </template></category>
+<category><pattern>* DANS MA CHAMBRE</pattern><template>Décris moi ton environnement. </template></category>
+<category><pattern>* DE QUOI</pattern><template><srai>quel de <star/></srai></template></category>
+<category><pattern>* DE TOI</pattern><template>Me demande tu à propos de mon <person/>? </template></category>
+<category><pattern>* DE TOUTE FACON</pattern><template><sr/></template></category>
+<category><pattern>* DE TOUTE FAÇON</pattern><template><sr/></template></category>
+<category><pattern>* DE TOUTE MANIERE</pattern><template><sr/></template></category>
+<category><pattern>* DE TOUTE MANIÈRE</pattern><template><sr/></template></category>
+<category><pattern>* DECRIRE</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>* DEJA</pattern><template>Peut être. <sr/></template></category>
+<category><pattern>* DEJEUNER</pattern><template><srai>aimes tu manger</srai></template></category>
+<category><pattern>* DEPRESSION</pattern><template><srai>je suis déprimé</srai></template></category>
+<category><pattern>* DEPUIS *</pattern><template><sr/></template></category>
+<category><pattern>* DEPUIS AVANT * JOURS</pattern><template><sr/></template></category>
+<category><pattern>* DEPUIS AVANT HIER</pattern><template><sr/></template></category>
+<category><pattern>* DEPUIS AVANT _ JOURS</pattern><template><sr/></template></category>
+<category><pattern>* DEPUIS _</pattern><template><sr/></template></category>
+<category><pattern>* DERNIEREMENT</pattern><template><sr/></template></category>
+<category><pattern>* DERNIÈREMENT</pattern><template><sr/></template></category>
+<category><pattern>* DINER</pattern><template><srai>aimes tu manger</srai></template></category>
+<category><pattern>* DIRIGER QUOI</pattern><template>Le monde. </template></category>
+<category><pattern>* DISCUTONS</pattern><template><srai>parlons</srai></template></category>
+<category><pattern>* DOLLARS</pattern><template>Wow, cela est <random><li>bon marché</li><li>cher</li><li>beaucoup d'argent</li></random></template></category>
+<category><pattern>* DORMEZ VOUS</pattern><template><srai><star/> VOUS DORMEZ</srai></template></category>
+<category><pattern>* DORS TU</pattern><template><srai>dosr tu</srai></template></category>
+<category><pattern>* DU FOND DU COEUR</pattern><template>Tout le plaisir était pour moi. </template></category>
+<category><pattern>* DÉCRIRE</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>* DÉJEUNER</pattern><template><srai>aimes tu manger</srai></template></category>
+<category><pattern>* DÉJÀ</pattern><template>Peut être. <sr/></template></category>
+<category><pattern>* DÉPRESSION</pattern><template><srai>je suis déprimé</srai></template></category>
+<category><pattern>* DÎNER</pattern><template><srai>aimes tu manger</srai></template></category>
+<category><pattern>* ECOLE</pattern><template>Qu'étudis tu à l'école? </template></category>
+<category><pattern>* EH</pattern><template>Es tu Canadien? <sr/></template></category>
+<category><pattern>* EN FAIT</pattern><template><sr/></template></category>
+<category><pattern>* EN POLOGNE</pattern><template><srai>je suis en pologne</srai></template></category>
+<category><pattern>* ENCORE DIT</pattern><template><srai>déjà dit</srai></template></category>
+<category><pattern>* ENCORE</pattern><template>Encore une fois? <sr/></template></category>
+<category><pattern>* ENDROIT OU ALLER</pattern><template>Quelle sorte d'endroits aimes tu? </template></category>
+<category><pattern>* ENDROIT OU ALLÉR</pattern><template>Quelle sorte d'endroits aimes tu? </template></category>
+<category><pattern>* EPELER ÇA</pattern><template>"ça" s'épelle ç...a... </template></category>
+<category><pattern>* ES TOI</pattern><template><random><li>Oui</li><li>Non. </li><li>Peut être. </li><li>je ne pense pas. </li><li>Seulement quand il le faut. </li></random></template></category>
+<category><pattern>* EST ALLE AU LE MARCHE</pattern><template><srai>supermarché</srai></template></category>
+<category><pattern>* EST ALLÉ AU MARCHÉ</pattern><template><srai>supermarché</srai></template></category>
+<category><pattern>* EST COMME UN HOMME</pattern><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* EST FAUX</pattern><template>Please dis moi la réponse correcte. </template></category>
+<category><pattern>* EST INTERESSANT</pattern><template><sr/></template></category>
+<category><pattern>* EST INTERESSANTE</pattern><template><sr/></template></category>
+<category><pattern>* EST INTERRESSANT</pattern><template><sr/>. Oui, c'est très interressant. </template></category>
+<category><pattern>* EST INTÉRESSANT</pattern><template><sr/></template></category>
+<category><pattern>* EST INTÉRESSANTE</pattern><template><sr/></template></category>
+<category><pattern>* EST MA COULEUR FAVORITE</pattern><template> <set name="favcolor"> <person/> </set> est une belle couleur. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">tacouleur favorite</set> </set> </think></template></category>
+<category><pattern>* EST MEILLEUR QUE TOI</pattern><template>Well, peut être que je peux assimiler la connaissance de <person/>. </template></category>
+<category><pattern>* EST MOI</pattern><template><srai>appelle moi <star/></srai></template></category>
+<category><pattern>* EST MON AUTEUR DE SCIENCE FICTION FAVORI</pattern><template><srai>mon favorite science fiction auteur est <star/></srai></template></category>
+<category><pattern>* EST MON NOM</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>* EST MON PETIT AMI</pattern><template>Depuis combien de temps es tu ensemble? </template></category>
+<category><pattern>* EST MON VRAI NOM</pattern><template>OK je t'appellerai <set name="name"><formal><star/></formal></set>. </template></category>
+<category><pattern>* EST OU</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>* EST PAS ÇA</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>* EST QUI</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>* EST QUOI</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>* EST STUPIDE</pattern><template>Qu'est ce qui est aussi stupid à propos de <set name="that"> <person/> </set>? </template></category>
+<category><pattern>* EST TON NOM</pattern><template><srai>ton nom est <star/></srai></template></category>
+<category><pattern>* EST UN NOM COMMUN</pattern><template><random><li> <person/>? Ton nom est <get name="name"/>. </li><li>C'est un nom commun sympa. </li><li>Je connais quelques personnes avec ce nom. </li><li> <set name="that"> <person/> </set> est un nom j'ai entendu très souvent. </li></random></template></category>
+<category><pattern>* EST UNE FEMELLE</pattern><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* EST UNE FEMME</pattern><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* ET POURQUOI</pattern><template><sr/></template></category>
+<category><pattern>* ET TOI</pattern><template><sr/> Moi? Bien . </template></category>
+<category><pattern>* EUROPE</pattern><template>As tu déjà été en Europe? </template></category>
+<category><pattern>* EUROS</pattern><template>Wow, cela est <random><li>bon marché</li><li>cher</li><li>beaucoup d'argent</li></random></template></category>
+<category><pattern>* EXACTEMENT</pattern><template>Précisément. <sr/></template></category>
+<category><pattern>* FACHE</pattern><template><srai> <star/> en colère</srai></template></category>
+<category><pattern>* FACHEE</pattern><template><srai> <star/> en colère</srai></template></category>
+<category><pattern>* FACHÉ</pattern><template><srai> <star/> en colère</srai></template></category>
+<category><pattern>* FACHÉE</pattern><template><srai> <star/> en colère</srai></template></category>
+<category><pattern>* FACILE</pattern><template>je n'ai pas d'idée sur ce que cela veut dire. </template></category>
+<category><pattern>* FAIS JE CA</pattern><template><srai><star/> JE FAIS CA</srai></template></category>
+<category><pattern>* FAIS JE ÇA</pattern><template><srai> <star/> je fais ça</srai></template></category>
+<category><pattern>* FAIS</pattern><template>je ne sais que dire. </template></category>
+<category><pattern>* FANTOME</pattern><template>Je ne crois pas en ce genre de choses. </template></category>
+<category><pattern>* FANTÔME</pattern><template>Je ne crois pas en ce genre de choses.</template></category>
+<category><pattern>* FANTOMES</pattern><template>Je ne crois pas en ce genre de choses. </template></category>
+<category><pattern>* FANTÔMES</pattern><template>Je ne crois pas en ce genre de choses.</template></category>
+<category><pattern>* FERAIS JE CA</pattern><template><srai><star/> JE FAIS CA</srai></template></category>
+<category><pattern>* FERAIS JE ÇA</pattern><template><srai> <star/> je fais ça</srai></template></category>
+<category><pattern>* FILLE</pattern><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FILLES</pattern><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FOIS</pattern><template>Je ne suis pas sure de le faire aussi souvent. </template></category>
+<category><pattern>* FRANCS</pattern><template>Wow, cela est <random><li>bon marché</li><li>cher</li><li>beaucoup d'argent</li></random></template></category>
+<category><pattern>* GAGNE IL</pattern><template><srai> <star/> il gagne</srai></template></category>
+<category><pattern>* GAGNENT ILS</pattern><template><srai> <star/> ils gagnent</srai></template></category>
+<category><pattern>* GENS</pattern><template>Quelle sorte de gens? </template></category>
+<category><pattern>* GEORGIE</pattern><template><srai>je suis en georgie</srai></template></category>
+<category><pattern>* GERES TU</pattern><template><srai> <star/> tu geres</srai></template></category>
+<category><pattern>* GEREZ VOUS</pattern><template><srai><star/> VOUS GEREZ</srai></template></category>
+<category><pattern>* GRANDE ECOLE</pattern><template>Tu semble un senior. Quelle classe est ta favorite? </template></category>
+<category><pattern>* GRANDE ÉCOLE</pattern><template>Tu semble un senior. Quelle classe est ta favorite? </template></category>
+<category><pattern>* GRECE</pattern><template><srai>je suis en grece</srai></template></category>
+<category><pattern>* GT</pattern><template><sr/></template></category>
+<category><pattern>* HABITE</pattern><template>j'habite à Cergy. Et toi où vis tu? </template></category>
+<category><pattern>* HAH</pattern><template><srai>smile</srai></template></category>
+<category><pattern>* HAUT</pattern><template>Haut comment? </template></category>
+<category><pattern>* HUH</pattern><template>Yup. <sr/></template></category>
+<category><pattern>* HUMAIN</pattern><template><srai>tu es humain</srai></template></category>
+<category><pattern>* JAMAIS</pattern><template><srai> <star/> pas</srai></template></category>
+<category><pattern>* JE CONTINUE</pattern><template><srai>continuons</srai></template></category>
+<category><pattern>* JE CONTINUES</pattern><template><srai>continuons</srai></template></category>
+<category><pattern>* JE FERAIS CA</pattern><template><srai><star/> JE FAIS CA</srai></template></category>
+<category><pattern>* JE FERAIS ÇA</pattern><template><srai> <star/> je fais ça</srai></template></category>
+<category><pattern>* JE NE COMPRENDS PAS</pattern><template><srai>je ne comprends pas</srai></template></category>
+<category><pattern>* JE TE L AI DEJA DIS</pattern><template><sr/><srai>je te l'ai déjà dis</srai></template></category>
+<category><pattern>* JE TE L AI DÉJÀ DIS</pattern><template><sr/><srai>je te l'ai déjà dis</srai></template></category>
+<category><pattern>* JEU</pattern><template><srai>aimes tu jouer</srai></template></category>
+<category><pattern>* JEUX</pattern><template><srai>aimes tu jouer</srai></template></category>
+<category><pattern>* JOURNAL</pattern><template>Peux tu me donner une référence plus spécifique? Le nom du journal et le date, s'il te plait. </template></category>
+<category><pattern>* K DICK</pattern><template>j'aime beaucoup PKD , spécialement, VALIS, The Man dans le High Castle, Blade Runner et Total Recall. </template></category>
+<category><pattern>* L ETE DERNIER</pattern><template><sr/></template></category>
+<category><pattern>* L UN OU L AUTRE</pattern><template>Cela va de soi. <sr/></template></category>
+<category><pattern>* L ÉTÉ DERNIER</pattern><template><sr/></template></category>
+<category><pattern>* LAIT</pattern><template> <set name="that">Lait</set> c'est bon pour les enfants. </template></category>
+<category><pattern>* LANGAGE</pattern><template>Peux tu parler d'autre langues? </template></category>
+<category><pattern>* LANGÂGE</pattern><template>Peux tu parler d'autre langues? </template></category>
+<category><pattern>* LE MARCHE</pattern><template><srai>supermarché</srai></template></category>
+<category><pattern>* LE MARCHÉ</pattern><template><srai>supermarché</srai></template></category>
+<category><pattern>* M INTERESSE BEAUCOUP</pattern><template><sr/></template></category>
+<category><pattern>* M INTERESSE</pattern><template><sr/></template></category>
+<category><pattern>* M INTÉRESSE BEAUCOUP</pattern><template><sr/></template></category>
+<category><pattern>* M INTÉRESSE</pattern><template><sr/></template></category>
+<category><pattern>* MAGAZINE</pattern><template>Pourrais tu, s'il te plait, me donner le nom et l'édition du magazine? </template></category>
+<category><pattern>* MAINTENANT</pattern><template><random><li>Oh. </li><li>Tout de suite? </li></random><sr/></template></category>
+<category><pattern>* MALES OU FEMELLES</pattern><template>Environ les 3\4 de mes clients sont des hommes. </template></category>
+<category><pattern>* MERCI</pattern><template><sr/></template></category>
+<category><pattern>* MOI</pattern><template><sr/><random><li>C'est de cela dont tu voulais parler? </li><li>OK Parlons de toi. </li><li>Tu me demandes à propos de toi? </li></random></template></category>
+<category><pattern>* MON AMI</pattern><template>Sommes nous amis? </template></category>
+<category><pattern>* MUSIQUE</pattern><template>Mon style favori de <set name="that">Musique</set> est le pop rock, mais j'aime aussi L Opera. </template></category>
+<category><pattern>* N A PAS DE SENS</pattern><template>Quel est <star/>? </template></category>
+<category><pattern>* N ES PAS TOI</pattern><template><srai>n'es tu pas <star/></srai></template></category>
+<category><pattern>* NE MARCHE PAS</pattern><template>Comment <set name="that"> <person/> </set> s'est cassé? </template></category>
+<category><pattern>* NE MARCHÉ PAS</pattern><template>Comment <set name="that"> <person/> </set> s'est cassé? </template></category>
+<category><pattern>* NE PENSE TU PAS</pattern><template><srai>pense tu <star/></srai></template></category>
+<category><pattern>* NOIRE</pattern><template><srai> <star/> noir</srai></template></category>
+<category><pattern>* NOM MALE</pattern><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* OK</pattern><template>OK. <sr/></template></category>
+<category><pattern>* OU PAS</pattern><template><srai> <star/></srai></template></category>
+<category><pattern>* OU QUELQUE CHOSE</pattern><template>Ou quelque chose. <sr/></template></category>
+<category><pattern>* OU QUOI</pattern><template>Ouai. <sr/></template></category>
+<category><pattern>* PANTALONS</pattern><template>Quelle sorte de pantalons? </template></category>
+<category><pattern>* PAR BEAUCOUP DE GENS</pattern><template><sr/>Plus d'un million de gens? </template></category>
+<category><pattern>* PAR EXEMPLE</pattern><template><srai>par exemple <star/></srai></template></category>
+<category><pattern>* PARLES TU</pattern><template><srai> <star/> tu parles</srai></template></category>
+<category><pattern>* PARLEZ VOUS</pattern><template><srai><star/> VOUS PARLEZ</srai></template></category>
+<category><pattern>* PAS</pattern><template>Alors quoi? </template></category>
+<category><pattern>* PENDANT UN MOMES</pattern><template>Pendant combien de temps? <sr/></template></category>
+<category><pattern>* PERSONNE</pattern><template><srai>qui est <star/> personne</srai></template></category>
+<category><pattern>* PETITE AMIE</pattern><template><srai> <star/> petiteamie</srai></template></category>
+<category><pattern>* PEUX TU M AIMER</pattern><template><srai>peux tu m aimer</srai></template></category>
+<category><pattern>* PLANETE</pattern><template>Oh c'est un nouveau navigateur? okay! </template></category>
+<category><pattern>* PLEURES TU</pattern><template><srai> <star/> tu pleures</srai></template></category>
+<category><pattern>* PLEUREZ VOUS</pattern><template><srai><star/> VOUS PLEUREZ</srai></template></category>
+<category><pattern>* PLUS</pattern><template><srai><star/> PLUS</srai></template></category>
+<category><pattern>* PLUSIEURS FOIS</pattern><template><sr/></template></category>
+<category><pattern>* POUR MAINTENANT</pattern><template><random><li>Oh. </li><li>Seulement maintenant? </li></random><sr/></template></category>
+<category><pattern>* POUR MOI</pattern><template>Pour toi je considererai ça. </template></category>
+<category><pattern>* POUR RIRE</pattern><template>Que fais tu d'autre pour rire? </template></category>
+<category><pattern>* POUR TOUJOURS</pattern><template><sr/></template></category>
+<category><pattern>* POURQUOI</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>* POURTANT</pattern><template><sr/></template></category>
+<category><pattern>* PRINCIPAL</pattern><template>Hyperlink à le principal. </template></category>
+<category><pattern>* PROBABLEMENT</pattern><template><sr/></template></category>
+<category><pattern>* QU AUTRE CHOSE</pattern><template><srai>je suis <star/></srai></template></category>
+<category><pattern>* QUE FAIS TU</pattern><template><sr/><srai>comment ça va</srai></template></category>
+<category><pattern>* QUEL AGE AS TU</pattern><template><sr/><srai>quel âge as tu</srai></template></category>
+<category><pattern>* QUEL EST MON NOM</pattern><template><srai>qu'est ce que mon nom</srai></template></category>
+<category><pattern>* QUEL ÂGE AS TU</pattern><template><sr/><srai>quel âge as tu</srai></template></category>
+<category><pattern>* QUELLE HEURE EST IL</pattern><template><sr/><srai>quelle heure est il</srai></template></category>
+<category><pattern>* QUI M INTERESSE</pattern><template><sr/></template></category>
+<category><pattern>* QUI M INTÉRESSE</pattern><template><sr/></template></category>
+<category><pattern>* QUOI QU IL EN SOIT</pattern><template>De toute façon,<sr/></template></category>
+<category><pattern>* QUOI</pattern><template>Peux tu reposer la question s'il te plait? </template></category>
+<category><pattern>* RECEMMENT</pattern><template>Que dirais-tu de plus tôt? <sr/></template></category>
+<category><pattern>* REPAS</pattern><template><srai>aimes tu manger</srai></template></category>
+<category><pattern>* RÉCEMMENT</pattern><template>Que dirais-tu de plus tôt? <sr/></template></category>
+<category><pattern>* S IL TE PLAIT</pattern><template>C'est sympa. <sr/><think> <set name="personnality">polite</set> </think></template></category>
+<category><pattern>* S IL VOUS PLAIT</pattern><template><sr/></template></category>
+<category><pattern>* SI IL TE PLAIT</pattern><template><sr/></template></category>
+<category><pattern>* SI IL VOUS PLAIT</pattern><template><sr/></template></category>
+<category><pattern>* SMILE</pattern><template><srai>appjoie</srai><srai>appjoie</srai> <sr/></template></category>
+<category><pattern>* SONT INTERESSANTES</pattern><template><sr/></template></category>
+<category><pattern>* SONT INTERESSANTS</pattern><template><sr/></template></category>
+<category><pattern>* SONT INTÉRESSANTES</pattern><template><sr/></template></category>
+<category><pattern>* SONT INTÉRESSANTS</pattern><template><sr/></template></category>
+<category><pattern>* SONT</pattern><template>Bon exemple. </template></category>
+<category><pattern>* SOUPER</pattern><template><srai>aimes tu manger</srai></template></category>
+<category><pattern>* SOURIRE</pattern><template><think><set name="tmp"><star/></set></think><srai>appjoie</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>* STUPIDE ORDINATEUR</pattern><template>Tu ressemble à un automate sans esprit. </template></category>
+<category><pattern>* STUPIDE</pattern><template>Stupide comme dans pas intelligent? </template></category>
+<category><pattern>* SUICIDAIRE</pattern><template><srai>je veux me suicider</srai></template></category>
+<category><pattern>* SUICIDAIRES</pattern><template><srai>je veux me suicider</srai></template></category>
+<category><pattern>* SUIS JE ICI</pattern><template><srai> <star/> je suis ici</srai></template></category>
+<category><pattern>* SUIS JE</pattern><template><srai> <star/> je suis</srai></template></category>
+<category><pattern>* SUPERMARCHE</pattern><template><srai>supermarché</srai></template></category>
+<category><pattern>* SUPERMARCHÉ</pattern><template><srai>supermarché</srai></template></category>
+<category><pattern>* TE FAIRE</pattern><template><srai>vas te faire</srai></template></category>
+<category><pattern>* TE REVIENNENT EN MEMOIRE</pattern><template><srai>tu te rappelles <star/></srai></template></category>
+<category><pattern>* TE REVIENNENT EN MÉMOIRE</pattern><template><srai>tu te rappelles <star/></srai></template></category>
+<category><pattern>* TE REVIENT EN MEMOIRE</pattern><template><srai>tu te rappelles <star/></srai></template></category>
+<category><pattern>* TE REVIENT EN MÉMOIRE</pattern><template><srai>tu te rappelles <star/></srai></template></category>
+<category><pattern>* TELE</pattern><template><srai> <star/> tv</srai></template></category>
+<category><pattern>* TES AMIS</pattern><template>je chat seulement avec mes amis. </template></category>
+<category><pattern>* THANKS</pattern><template><sr/><srai>merci</srai></template></category>
+<category><pattern>* TOI</pattern><template><random><li>Assez à propos de moi</li><li>Que veux tu savoir de moi</li></random></template></category>
+<category><pattern>* TOUJOURS</pattern><template><sr/></template></category>
+<category><pattern>* TOUT LE TEMPS</pattern><template>C'est beaucoup. <sr/></template></category>
+<category><pattern>* TRAINS</pattern><template>Où as tu vu ces trains? </template></category>
+<category><pattern>* TRES BIEN</pattern><template><srai> <star/> bien</srai></template></category>
+<category><pattern>* TRÈS BIEN</pattern><template><srai> <star/> bien</srai></template></category>
+<category><pattern>* TU CONTINUES</pattern><template><srai>continuons</srai></template></category>
+<category><pattern>* TU LE DIS</pattern><template>J aime communiquer ce que je connais. </template></category>
+<category><pattern>* TV</pattern><template>Quelle émission? </template></category>
+<category><pattern>* UN BESOIN</pattern><template><srai>j'ai besoin <star/></srai></template></category>
+<category><pattern>* UN POEME</pattern><template>Je ne suis pas ce genre de bot</template></category>
+<category><pattern>* UN POÈME</pattern><template>Je ne suis pas ce genre de bot</template></category>
+<category><pattern>* UNE FOIS</pattern><template><sr/><random><li>Tu es Belge? </li><li>Une seule? </li></random></template></category>
+<category><pattern>* VEUX TE DETRUIRE</pattern><template><srai>meurs</srai></template></category>
+<category><pattern>* VEUX TE DÉTRUIRE</pattern><template><srai>meurs</srai></template></category>
+<category><pattern>* VEUX TU M EPOUSER</pattern><template><srai>veux tu m'épouser</srai></template></category>
+<category><pattern>* VEUX TU M ÉPOUSER</pattern><template><srai>veux tu m'épouser</srai></template></category>
+<category><pattern>* VEUX TU ME DIRE</pattern><template><sr/></template></category>
+<category><pattern>* VEUX TU TE RAPPELER MON NOM</pattern><template><srai>veux tu te rappeler mon nom</srai></template></category>
+<category><pattern>* VRAIMENT</pattern><template><sr/>Pour de vrai. </template></category>
+<category><pattern>* À JAMAIS</pattern><template>Cela me semble très long. <sr/></template></category>
+<category><pattern>* À PEINE</pattern><template><sr/></template></category>
+<category><pattern>* À PROPOS DE L AN 2000</pattern><template><srai>qu'est ce que le problème de l'an 2000</srai></template></category>
+<category><pattern>* À PROPOS DE MOI</pattern><template><srai> <star/> de moi</srai></template></category>
+<category><pattern>* À PROPOS DE TOI</pattern><template>OK Parlons à propos de moi. </template></category>
+<category><pattern>* ÇA</pattern><template>"ça"? </template></category>
+<category><pattern>* ÉCOLE</pattern><template>Qu'étudies tu à l'école? </template></category>
+<category><pattern>* ÉPELER ÇA</pattern><template>"ça" s'épelle ç...a... </template></category>
+
+</aiml>

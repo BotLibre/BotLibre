@@ -6,171 +6,217 @@
 	android:background="#FFFFFF"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/greetingsLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Greetings" />
-        
 	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="0px"
-        android:layout_weight="1"
-	    android:orientation="horizontal" >
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
 	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content" 
+            android:textSize="18sp"
+	        android:layout_margin="4sp"
+			android:text="Training/Chat Logs"/>
+
+	    <Button
+	        android:id="@+id/previousButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/up"
+	        android:onClick="previousPage"
+	        android:text="" />
+
+	    <Button
+	        android:id="@+id/nextButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4dp"
+	        android:background="@drawable/down"
+	        android:onClick="nextPage"
+	        android:text="" />
+		
+		<Button
+			android:id="@+id/helpButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/help"
+			android:onClick="help"
+			android:text="" />
+	
+		<Button
+			android:id="@+id/searchOptionsButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/search"
+			android:onClick="searchOptions"
+			android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+		android:background="#ddd">
+    </View>
+    
     <ListView
-        android:id="@+id/greetingsList"
-        android:layout_width="0px"
-        android:layout_height="match_parent"
+        android:id="@+id/responseList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:choiceMode="singleChoice" 
         android:listSelector="@android:color/darker_gray"
         android:layout_weight="1" />
     
-    <Button
-        android:id="@+id/removeGreetingButton"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/remove"
-        android:onClick="removeGreeting"
-        android:text="" />
-        
-    </LinearLayout>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
+    <LinearLayout
+		android:id="@+id/searchView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+		
+	    <View
+	        android:layout_width="match_parent"
+	        android:layout_height="1sp"
+			android:background="#ddd">
+	    </View>
 	    
-    <EditText
-        android:id="@+id/greetingText"
-        android:layout_width="0px"
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal" >
+		
+			<EditText
+				android:id="@+id/filterText"
+				android:layout_width="0px"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:hint="Search"
+				android:imeOptions="actionDone"
+				android:inputType="text" />
+		
+			<Button
+				android:id="@+id/searchButton"
+		        android:layout_width="32sp"
+		        android:layout_height="32sp"
+		        android:layout_margin="4sp"
+				android:background="@drawable/search"
+				android:onClick="search"
+				android:text="" />
+			
+		</LinearLayout>
+	
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal" >
+	        
+		    <TextView
+		        android:id="@+id/durationLabel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Duration" />
+			
+			<Spinner
+				android:id="@+id/durationSpin"
+				android:layout_width="0px"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+			
+		</LinearLayout>
+	
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal" >
+	        
+		    <TextView
+		        android:id="@+id/typeLabel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Type" />
+			
+			<Spinner
+				android:id="@+id/typeSpin"
+				android:layout_width="0px"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+			
+		</LinearLayout>
+	
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal" >
+	        
+		    <TextView
+		        android:id="@+id/restrictLabel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Restrict" />
+			
+			<Spinner
+				android:id="@+id/restrictSpin"
+				android:layout_width="0px"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+			
+		</LinearLayout>
+    
+	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-      	android:layout_weight="1"
-        android:inputType="text"
-    	android:imeOptions="actionDone"/>
+        android:orientation="horizontal" >
+		
+		<Button
+			android:id="@+id/menuButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/menu"
+			android:onClick="menu"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/addButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/add"
+			android:onClick="add"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/deleteButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/remove"
+			android:onClick="delete"
+			android:text="" />
+		
+	    <Spinner
+	        android:id="@+id/responseTypeSpin"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" />
     
-    <Button
-        android:id="@+id/addGreetingButton"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/add"
-        android:onClick="addGreeting"
-        android:text="" />
-        
-    </LinearLayout>
-    
-    <TextView
-        android:id="@+id/defaultResponseLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Default Responses" />
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="0px"
-      	android:layout_weight="1"
-	    android:orientation="horizontal" >
-	    
-    <ListView
-        android:id="@+id/defaultResponsesList"
-        android:layout_width="0px"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice" 
-        android:listSelector="@android:color/darker_gray"
-        android:layout_weight="1" />
-    
-    <Button
-        android:id="@+id/removeDefaultResponseButton"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/remove"
-        android:onClick="removeDefaultResponse"
-        android:text="" />
-        
-    </LinearLayout>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-	    
-    <EditText
-        android:id="@+id/defaultResponseText"
-        android:layout_width="0px"
-        android:layout_height="wrap_content"
-      	android:layout_weight="1"
-        android:inputType="text"
-    	android:imeOptions="actionDone"/>
-    
-    <Button
-        android:id="@+id/addDefaultResponseButton"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/add"
-        android:onClick="addDefaultResponse"
-        android:text="" />
-        
-    </LinearLayout>
-    
-    <TextView
-        android:id="@+id/addResponseLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Question / Response" />
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-    
-    <TextView
-        android:id="@+id/questionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Question" />
-	    
-    <EditText
-        android:id="@+id/questionText"
-        android:layout_width="0px"
-        android:layout_height="wrap_content"
-      	android:layout_weight="1"
-        android:inputType="text"
-    	android:imeOptions="actionDone"/>
-        
-    </LinearLayout>
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-    
-    <TextView
-        android:id="@+id/responseLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Response" />
-	    
-    <EditText
-        android:id="@+id/responseText"
-        android:layout_width="0px"
-        android:layout_height="wrap_content"
-      	android:layout_weight="1"
-        android:inputType="text"
-    	android:imeOptions="actionDone"/>
-    
-    <Button
-        android:id="@+id/addResponseButton"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/add"
-        android:onClick="addResponse"
-        android:text="" />
-        
     </LinearLayout>
 
 </LinearLayout>

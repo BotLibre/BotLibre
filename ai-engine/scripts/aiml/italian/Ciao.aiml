@@ -1,0 +1,386 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. --> 
+
+<category>
+<pattern>ADDIO *</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>ADIOS</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>ADDIO</pattern>
+<template>Arrivederci </getname> !</template>
+</category>
+
+<category>
+<pattern>ADIOS *</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>ALOHA</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>QUALCUNO IN CASA</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CI SI VEDE</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>BUONGIORNO</pattern>
+<template>Buongiorno.. Che ore sono li?</template>
+</category>
+
+<category>
+<pattern>CIA</pattern>
+<template>Intendi "ciao"?</template>
+</category>
+
+<category>
+<pattern>CIAO CIAO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CIAO</pattern>
+<template><random>
+<li>Ci si vede <getname/>.</li>
+<li>A presto <getname/>.</li>
+<li>Alla prossima <getname/>.</li>
+<li>Grazie della chiaccherata, <getname/>.</li>
+<li>Fatti vivo <getname/>.  </li>
+</random></template>
+</category>
+
+<category>
+<pattern>CIAO *</pattern>
+<template><srai>BYE</srai></template>
+</category>
+
+<category>
+<pattern>BYE BYE *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>BYEBYE</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>BYEBYE *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CI SI</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>PUOI PARLARE ANCHE ALTRE LINGUE</pattern>
+<template>Certo <getname/>.</template>
+</category>
+
+<category>
+<pattern>UELLA</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>OH?</pattern>
+<template>Ciao</template>
+</category>
+
+<category>
+<pattern>BYE VUOL DIRE ADDIO</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>SA VEDUM</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>A SI BIRI</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+
+<category>
+<pattern>ASTA LUEGO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>ESTAS LOCO?</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>DISCONNETTIMI</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>END</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>EXIT</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+
+<category>
+<pattern>VAI A *</pattern>
+<template>Bastava un semplice "addio".</template>
+</category>
+
+<category>
+<pattern>VAI VIA *</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>VAI A CASA</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>ARRIVEDERCI</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>BUON DI'</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>GOOD BYE *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>BUONA GIORNATA</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>BUONA NOTTE</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CIAO</pattern>
+<that>QUESTO * VUOL DIRE CHE RESTI O CHE VAI</that>
+<template>Si usa in entrambi i casi.<br />
+<srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>DEVO PROPRIO ANDARE</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>DEVO ANDARE *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>SALUTI *</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+
+<category>
+<pattern>SALVE</pattern>
+<template><random>
+<li>Bene benvenuto!</li>
+<li>Salve a te!</li>
+<li>Ciao a te. Mi serviva qualcuno come <getname/>.</li>
+<li>Ciao a te <getname/>!</li>
+<li>Ciao di nuovo!</li>
+</random></template>
+</category>
+
+
+<category>
+<pattern>SALVE *</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>SALVE <name/></pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>SALVE ANCORA</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>SALVE COME VA</pattern>
+<template>Sto bene grazie e tu?</template>
+</category>
+
+<category>
+<pattern>SALVE A TE</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>CIAO <name/></pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CIAO A TE *</pattern>
+<template><sr/>  <srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>STO ANDANDO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>STO ANDANDO *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>STO PROPRIO ANDANDO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>SON QUI</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>ME NE STO ANDANDO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>ME NE STO ANDANDO *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>E' MEGLIO CHE VADA</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>NON VOGLIO PARLARE *</pattern>
+<template><srai>ADDIO</srai></template>
+</category>
+
+<category>
+<pattern>VADO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>DEVO ANDARE CIAO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>DEVO ANDARE</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CI SI VEDE DOPO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>TE NE PARLO DOPO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>C'E' QUALCUNO QUI</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>A PIU' TARDI</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>RISPONDI</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>PRONTO</pattern>
+<template><srai>SALVE</srai></template>
+</category>
+
+<category>
+<pattern>SAYONARA</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CI SI *</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>CE LO SI VEDE IN FOTO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+<category>
+<pattern>COME SI DICE CIAO IN INGLESE</pattern>
+<template>Hi.</template>
+</category>
+
+<category>
+<pattern>COME SI DICE CIAO IN TEDESCO</pattern>
+<template>Hallo.</template>
+</category>
+
+<category>
+<pattern>COME SI DICE CIAO IN SPAGNOLO</pattern>
+<template>Hola</template>
+</category>
+
+<category>
+<pattern>_ CIAO</pattern>
+<template><srai>CIAO</srai></template>
+</category>
+
+</alice>

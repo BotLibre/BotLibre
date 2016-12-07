@@ -17,6 +17,7 @@
  ******************************************************************************/
 package org.botlibre.self;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,11 +29,13 @@ import org.botlibre.aiml.AIMLParser;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Bootstrap;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.knowledge.TextData;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.TextStream;
+import org.botlibre.util.Utils;
 
 /**
  * Self scripting language compiler.
@@ -44,6 +47,8 @@ public class Self4Compiler extends SelfCompiler {
 	public static final String TRUE = "true";
 	public static final String FALSE = "false";
 	public static final String UNKNOWN = "unknown";
+	public static final String BREAK = "break";
+	public static final String CONTINUE = "continue";
 	public static final String VAR = "var";
 	public static final String EQUALS = "equals";
 	public static final String NOTEQUAL = "not-equal";
@@ -58,6 +63,13 @@ public class Self4Compiler extends SelfCompiler {
 	public static final String GREATERTHANEQUAL = "greaterthanequal";
 	public static final String SYMBOL = "symbol";
 	public static final String OBJECT = "object";
+	public static final String EVALCOPY = "evalcopy";
+	public static final String DATE = "date";
+	public static final String TIME = "time";
+	public static final String BINARY = "binary";
+	public static final String TEXT = "text";
+	public static final String TIMESTAMP = "timestamp";
+	public static final String NUMBER = "number";
 	public static final String INCREMENT = "increment";
 	public static final String DECREMENT = "decrement";
 	
@@ -81,6 +93,7 @@ public class Self4Compiler extends SelfCompiler {
 		OPERATORS.add(SYMBOL);
 		OPERATORS.add(THINK);
 		OPERATORS.add(EVAL);
+		OPERATORS.add(EVALCOPY);
 		OPERATORS.add(LEARN);
 	}
 
@@ -100,6 +113,23 @@ public class Self4Compiler extends SelfCompiler {
 		BINARY_OPERATORS.put("*", Primitive.MULTIPLY);
 		BINARY_OPERATORS.put("/", Primitive.DIVIDE);
 	}
+
+	public static List<Primitive> BINARY_PRECEDENCE;
+	static {
+		BINARY_PRECEDENCE = new ArrayList<Primitive>();
+		BINARY_PRECEDENCE.add(Primitive.OR);
+		BINARY_PRECEDENCE.add(Primitive.AND);
+		BINARY_PRECEDENCE.add(Primitive.EQUALS);
+		BINARY_PRECEDENCE.add(Primitive.NOTEQUALS);
+		BINARY_PRECEDENCE.add(Primitive.GREATERTHAN);
+		BINARY_PRECEDENCE.add(Primitive.LESSTHAN);
+		BINARY_PRECEDENCE.add(Primitive.GREATERTHANEQUAL);
+		BINARY_PRECEDENCE.add(Primitive.LESSTHANEQUAL);
+		BINARY_PRECEDENCE.add(Primitive.MINUS);
+		BINARY_PRECEDENCE.add(Primitive.PLUS);
+		BINARY_PRECEDENCE.add(Primitive.MULTIPLY);
+		BINARY_PRECEDENCE.add(Primitive.DIVIDE);
+	}
 		
 	public static List<String> TYPES;
 	static {
@@ -112,6 +142,11 @@ public class Self4Compiler extends SelfCompiler {
 		TYPES.add(TEMPLATE);
 		TYPES.add(PATTERN);
 		TYPES.add(OBJECT);
+		TYPES.add(DATE);
+		TYPES.add(TIME);
+		TYPES.add(TIMESTAMP);
+		TYPES.add(BINARY);
+		TYPES.add(TEXT);
 	}
 
 	@Override
@@ -370,7 +405,7 @@ public class Self4Compiler extends SelfCompiler {
 	 */
 	@Override
 	public Vertex parseElement(TextStream stream, Map<String, Map<String, Vertex>> elements, boolean debug, Network network) {
-		return parseElement(stream, elements, true, debug, network);
+		return parseElement(stream, elements, null, debug, network);
 	}
 
 	/**
@@ -381,15 +416,22 @@ public class Self4Compiler extends SelfCompiler {
 	 * if (value == "value") {}, for () {}, new (class1, class2), variable.function()
 	 * 1234, "string", 'string', #primitive, DATE("1972,01,01"), ...
 	 */
-	public Vertex parseElement(TextStream stream, Map<String, Map<String, Vertex>> elements, boolean includeBinary, boolean debug, Network network) {
+	public Vertex parseElement(TextStream stream, Map<String, Map<String, Vertex>> elements, Primitive lastBinary, boolean debug, Network network) {
 		List<String> comments = getComments(stream);
 		stream.skipWhitespace();
 		int brackets = 0;
 		while (stream.peek() == '(') {
-			includeBinary = true;
+			lastBinary = null;
 			brackets++;
 			stream.skip();
 			stream.skipWhitespace();
+		}
+		Vertex expression = null;
+		String source = "";
+		int lineNumber = 0;
+		if (debug) {
+			source = stream.currentLine();
+			lineNumber = stream.currentLineNumber();
 		}
 		if (stream.peek() == '[') {
 			stream.skip();
@@ -416,12 +458,16 @@ public class Self4Compiler extends SelfCompiler {
 			}
 			stream.skipWhitespace();
 			ensureNext(']', stream);
-			return array;
-		}
-		if (stream.peek() == '{') {
+			// Need to evaluate expressions inside the object.
+			expression = network.createInstance(Primitive.EXPRESSION);
+			Vertex operator = network.createVertex(new Primitive(EVALCOPY));
+			expression.addRelationship(Primitive.OPERATOR, operator);
+			expression.setName(EVALCOPY);
+			expression.addRelationship(Primitive.ARGUMENT, array);
+		} else if (stream.peek() == '{') {
 			stream.skip();
 			// Parse object.
-			Vertex object = network.createVertex();
+			Vertex object = null;
 			stream.skipWhitespace();
 			if (stream.peek() == '}') {
 				stream.skip();
@@ -430,8 +476,19 @@ public class Self4Compiler extends SelfCompiler {
 			boolean more = true;
 			while (more) {
 				String attribute = stream.nextWord();
+				if (attribute.equals("\"")) {
+					attribute = stream.nextWord();
+					ensureNext('"', stream);
+				}
 				ensureNext(':', stream);
 				Vertex element = parseElement(stream, elements, debug, network);
+				if (object == null) {
+					if (attribute.equals("#data")) {
+						object = element;
+					} else {
+						object = network.createVertex();
+					}
+				}
 				object.addRelationship(new Primitive(attribute), element);
 				stream.skipWhitespace();
 				if (stream.peek() == ',') {
@@ -440,157 +497,205 @@ public class Self4Compiler extends SelfCompiler {
 					more = false;
 				}
 			}
+			if (object == null) {
+				object = network.createVertex();
+			}
 			stream.skipWhitespace();
 			ensureNext('}', stream);
-			return object;
-		}
-		// Check if reference or data.
-		String token = stream.peekWord();
-		if (token == null) {
-			throw new SelfParseException("Unexpected end, element expected", stream);
-		}
-		token = token.toLowerCase();
-		if (token.equals(VAR)) {
-			token = VARIABLE;
-		}
-		String source = "";
-		int lineNumber = 0;
-		if (debug) {
-			source = stream.currentLine();
-			lineNumber = stream.currentLineNumber();
-		}
-		Vertex expression = null;
-		if (OPERATORS.contains(token)) {
-			expression = parseOperator(stream, elements, debug, network);
-		} else if (token.equals("^")) {
-			stream.nextWord();
-			expression = parseElementName(Primitive.VARIABLE, stream, elements, debug, network);
-			Vertex meaning = network.createInstance(Primitive.VARIABLE);
-			meaning.addRelationship(Primitive.INSTANTIATION, new Primitive(expression.getName()));
-			expression.addRelationship(Primitive.MEANING, meaning);
-		} else if (TYPES.contains(token)) {
-			stream.nextWord();
-			if (token.equals(TEMPLATE)) {
-				stream.skipWhitespace();
-				ensureNext('(', stream);
-				expression = parseTemplate(null, stream, elements, debug, network);
-				stream.skipWhitespace();
-				ensureNext(')', stream);
-			} else if (token.equals(PATTERN)) {
-				stream.skipWhitespace();
-				ensureNext('(', stream);
-				ensureNext('"', stream);
-				expression = network.createPattern(stream.nextStringDoubleQuotes(), this);
-				stream.skipWhitespace();
-				ensureNext(')', stream);
-			} else if (token.equals(VARIABLE)) {
+			// Need to evaluate expressions inside the object.
+			expression = network.createInstance(Primitive.EXPRESSION);
+			Vertex operator = network.createVertex(new Primitive(EVALCOPY));
+			expression.addRelationship(Primitive.OPERATOR, operator);
+			expression.setName(EVALCOPY);
+			expression.addRelationship(Primitive.ARGUMENT, object);
+		} else {
+			// Check if reference or data.
+			String token = stream.peekWord();
+			if (token == null) {
+				throw new SelfParseException("Unexpected end, element expected", stream);
+			}
+			token = token.toLowerCase();
+			if (token.equals(VAR)) {
+				token = VARIABLE;
+			}
+			if (OPERATORS.contains(token)) {
+				expression = parseOperator(stream, elements, debug, network);
+			} else if (token.equals("^")) {
+				stream.nextWord();
 				expression = parseElementName(Primitive.VARIABLE, stream, elements, debug, network);
-			} else {
-				stream.skipWhitespace();
-				if (stream.peek() != '(') {
-					throw new SelfParseException("Expected '(' in " + token + " declaration", stream);
-				}
-				stream.skip();
-				Long id = null;
-				// Check for id or name.
-				if (Character.isDigit(stream.peek())) {
-					String idText = stream.nextWord();
-					try {
-						id = Long.valueOf(idText);
-					} catch (NumberFormatException exception) {
-						throw new SelfParseException("Invalid " + token + " id: " + idText, stream);
+				Vertex meaning = network.createInstance(Primitive.VARIABLE);
+				meaning.addRelationship(Primitive.INSTANTIATION, new Primitive(expression.getName()));
+				expression.addRelationship(Primitive.MEANING, meaning);
+			} else if (TYPES.contains(token)) {
+				stream.nextWord();
+				if (token.equals(TEMPLATE)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					expression = parseTemplate(null, stream, elements, debug, network);
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else if (token.equals(PATTERN)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					ensureNext('"', stream);
+					expression = network.createPattern(stream.nextStringWithBracketsDoubleQuotes(), this);
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else if (token.equals(VARIABLE)) {
+					expression = parseElementName(Primitive.VARIABLE, stream, elements, debug, network);
+				} else if (token.equals(TIME)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					ensureNext('"', stream);
+					String value = stream.nextQuotesExcludeDoubleQuote();
+					expression = network.createVertex(Utils.parseTime(value));
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else if (token.equals(DATE)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					ensureNext('"', stream);
+					String value = stream.nextQuotesExcludeDoubleQuote();
+					expression = network.createVertex(Utils.parseDate(value));
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else if (token.equals(TIMESTAMP)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					ensureNext('"', stream);
+					String value = stream.nextQuotesExcludeDoubleQuote();
+					expression = network.createVertex(Utils.parseTimestamp(value));
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else if (token.equals(BINARY)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					ensureNext('"', stream);
+					String value = stream.nextQuotesExcludeDoubleQuote();
+					expression = network.createVertex(new BinaryData(value));
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else if (token.equals(TEXT)) {
+					stream.skipWhitespace();
+					ensureNext('(', stream);
+					ensureNext('"', stream);
+					String value = stream.nextQuotesExcludeDoubleQuote();
+					expression = network.createVertex(new TextData(value));
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				} else {
+					stream.skipWhitespace();
+					if (stream.peek() != '(') {
+						throw new SelfParseException("Expected '(' in " + token + " declaration", stream);
 					}
-				}
-				char peek = stream.peek();
-				String name = null;
-				if ((id == null) || (peek == ':')) {
-					if (id != null) {
-						stream.skip();
-					}
-					name = stream.nextWord();
-					if (name != null && Character.isLetter(name.charAt(0))) {
-						throw new SelfParseException("Invalid " + token + " declaration: " + name, stream);
-					}
-				}
-				Map<String, Vertex> elementsForType = elements.get(token);
-				if (name != null) {
-					if (elementsForType != null) {
-						expression = elementsForType.get(name);
-					}
-				}
-				if (expression == null) {
-					if (id != null) {
-						expression = network.findById(id);
-						if (expression == null) {
-							throw new SelfParseException("Id element reference not found: " + id, stream);
+					stream.skip();
+					Long id = null;
+					// Check for id or name.
+					if (Character.isDigit(stream.peek())) {
+						String idText = stream.nextWord();
+						try {
+							id = Long.valueOf(idText);
+						} catch (NumberFormatException exception) {
+							throw new SelfParseException("Invalid " + token + " id: " + idText, stream);
 						}
-						if ((elementsForType != null) && (name != null)) {
-							elementsForType.put(name, expression);
+					}
+					char peek = stream.peek();
+					String name = null;
+					if ((id == null) || (peek == ':')) {
+						if (id != null) {
+							stream.skip();
 						}
-					} else if (name != null) {
-						if (token.equals(STATE)) {
-							expression = network.createInstance(Primitive.STATE);
-							expression.setName(name);
-						} else if (token.equals(VARIABLE)) {
-							expression = network.createInstance(Primitive.VARIABLE);
-							expression.setName(name);
-						} else if (token.equals(FUNCTION)) {
-							expression = network.createInstance(Primitive.FUNCTION);
-							expression.setName(name);
+						name = stream.nextWord();
+						if (name != null && Character.isLetter(name.charAt(0))) {
+							throw new SelfParseException("Invalid " + token + " declaration: " + name, stream);
+						}
+					}
+					Map<String, Vertex> elementsForType = elements.get(token);
+					if (name != null) {
+						if (elementsForType != null) {
+							expression = elementsForType.get(name);
+						}
+					}
+					if (expression == null) {
+						if (id != null) {
+							expression = network.findById(id);
+							if (expression == null) {
+								throw new SelfParseException("Id element reference not found: " + id, stream);
+							}
+							if ((elementsForType != null) && (name != null)) {
+								elementsForType.put(name, expression);
+							}
+						} else if (name != null) {
+							if (token.equals(STATE)) {
+								expression = network.createInstance(Primitive.STATE);
+								expression.setName(name);
+							} else if (token.equals(VARIABLE)) {
+								expression = network.createInstance(Primitive.VARIABLE);
+								expression.setName(name);
+							} else if (token.equals(FUNCTION)) {
+								expression = network.createInstance(Primitive.FUNCTION);
+								expression.setName(name);
+							} else {
+								throw new SelfParseException("Invalid element: " + token, stream);
+							}
+							if (name != null) {
+								elementsForType = elements.get(token);
+								if (elementsForType != null) { 
+									elementsForType.put(name, expression);
+								}
+							}
 						} else {
 							throw new SelfParseException("Invalid element: " + token, stream);
 						}
-						if (name != null) {
-							elementsForType = elements.get(token);
-							if (elementsForType != null) { 
-								elementsForType.put(name, expression);
+					}
+					stream.skipWhitespace();
+					ensureNext(')', stream);
+				}
+			} else {
+				char next = stream.peek();
+				try {
+					if (next == '#') {
+						stream.skip();
+						String data = stream.upToAny(PRIMITIVE_TOKENS);
+						expression = network.createVertex(new Primitive(data));
+					} else if (next == '"') {
+						stream.skip();
+						String data = stream.nextStringDoubleQuotes();
+						data = data.replace("\\\"", "\"");
+						expression = network.createVertex(data);
+					} else if (next == '\'') {
+						stream.skip();
+						String data = stream.nextStringQuotes();
+						data = data.replace("\\'", "'");
+						expression = network.createVertex(data);
+					} else if (Character.isDigit(next) || next == '-' || next == '+') {
+						int position = stream.getPosition();
+						String data = stream.nextWord();
+						if (data.indexOf(',') != -1) {
+							stream.setPosition(position);
+							data = stream.upTo(',');
+						}
+						int index = data.indexOf('.');
+						if ((index != -1) && (index + 1 < data.length())) {
+							// Check for 4.next
+							if (!Character.isDigit(data.charAt(index + 1))) {
+								stream.setPosition(position);
+								data = stream.upTo('.');
 							}
 						}
+						if (index != -1) {
+							expression = network.createVertex(new BigDecimal(data));
+						} else {
+							expression = network.createVertex(new BigInteger(data));
+						}				
 					} else {
-						throw new SelfParseException("Invalid element: " + token, stream);
+						expression = parseElementName(null, stream, elements, debug, network);
 					}
+				} catch (SelfParseException exception) {
+					throw exception;
+				} catch (Exception exception) {
+					throw new SelfParseException("Invalid data: " + next, stream, exception);
 				}
-				stream.skipWhitespace();
-				ensureNext(')', stream);
-			}
-		} else {
-			char next = stream.peek();
-			try {
-				if (next == '#') {
-					stream.skip();
-					String data = stream.upToAny(PRIMITIVE_TOKENS);
-					expression = network.createVertex(new Primitive(data));
-				} else if (next == '"') {
-					stream.skip();
-					String data = stream.nextStringDoubleQuotes();
-					expression = network.createVertex(data);
-				} else if (next == '\'') {
-					stream.skip();
-					String data = stream.nextStringQuotes();
-					expression = network.createVertex(data);
-				} else if (Character.isDigit(next) || next == '-' || next == '+') {
-					int position = stream.getPosition();
-					String data = stream.nextWord();
-					if (data.indexOf(',') != -1) {
-						stream.setPosition(position);
-						data = stream.upTo(',');
-					}
-					int index = data.indexOf('.');
-					if ((index != -1) && (index + 1 < data.length())) {
-						// Check for 4.next
-						if (!Character.isDigit(data.charAt(index + 1))) {
-							stream.setPosition(position);
-							data = stream.upTo('.');
-						}
-					}
-					expression = network.createVertex(new BigInteger(data));				
-				} else {
-					expression = parseElementName(null, stream, elements, debug, network);
-				}
-			} catch (SelfParseException exception) {
-				throw exception;
-			} catch (Exception exception) {
-				throw new SelfParseException("Invalid data: " + next, stream, exception);
 			}
 		}
 		stream.skipWhitespace();
@@ -609,7 +714,7 @@ public class Self4Compiler extends SelfCompiler {
 				stream.skip();
 				int position = stream.getPosition();
 				String attribute = stream.nextWord();
-				if (!Character.isAlphabetic(attribute.charAt(0))) {
+				if (!Character.isAlphabetic(attribute.charAt(0)) && attribute.charAt(0) != '@') {
 					throw new SelfParseException("Invalid attribute name: " + attribute, stream);
 				}
 				if (attribute.indexOf('.') != -1) {
@@ -719,7 +824,7 @@ public class Self4Compiler extends SelfCompiler {
 					}
 				}
 				expression = newExpression;
-			} else if (includeBinary) {
+			} else {
 				Primitive operation = BINARY_OPERATORS.get(operator);
 				Primitive operation1 = null;
 				if (operation == null) {
@@ -742,6 +847,19 @@ public class Self4Compiler extends SelfCompiler {
 					newExpression.addRelationship(Primitive.ARGUMENT, expression, 0);
 					expression = newExpression;
 				} else if (operation != null || operation1 != null) {
+					if (lastBinary != null) {
+						// Check order of binary operations.
+						int lastIndex = BINARY_PRECEDENCE.indexOf(lastBinary);
+						int index = 0;
+						if (operation == null) {
+							index = BINARY_PRECEDENCE.indexOf(operation1);
+						} else {
+							index = BINARY_PRECEDENCE.indexOf(operation);
+						}
+						if (index <= lastIndex) {
+							break;
+						}
+					}
 					if (operation == null) {
 						stream.skip();
 						operator = operator1;
@@ -753,7 +871,7 @@ public class Self4Compiler extends SelfCompiler {
 					newExpression.addRelationship(Primitive.OPERATOR, operation);
 					newExpression.setName(operator);
 					newExpression.addRelationship(Primitive.ARGUMENT, expression, 0);
-					Vertex argument = parseElement(stream, elements, false, debug, network);
+					Vertex argument = parseElement(stream, elements, operation, debug, network);
 					newExpression.addRelationship(Primitive.ARGUMENT, argument, 1);
 					expression = newExpression;
 				} else if (peek == '=' && expression.isVariable()) {
@@ -762,14 +880,12 @@ public class Self4Compiler extends SelfCompiler {
 					newExpression.addRelationship(Primitive.OPERATOR, Primitive.ASSIGN);
 					newExpression.setName(ASSIGN);
 					newExpression.addRelationship(Primitive.ARGUMENT, expression, 0);
-					Vertex argument = parseElement(stream, elements, true, debug, network);
+					Vertex argument = parseElement(stream, elements, null, debug, network);
 					newExpression.addRelationship(Primitive.ARGUMENT, argument, 1);
 					expression = newExpression;
 				} else {
 					throw new SelfParseException("Invalid operator: " + operator, stream);				
 				}
-			} else {
-				break;
 			}
 			stream.skipWhitespace();
 			peek = stream.peek();
@@ -801,6 +917,10 @@ public class Self4Compiler extends SelfCompiler {
 			stream.setPosition(position);
 			name = stream.upTo('.');
 		}
+		if ("}".equals(name)) {
+			stream.previous();
+			return network.createVertex(Primitive.NULL);
+		}
 		if (name == null || !Character.isAlphabetic(name.charAt(0))) {
 			throw new SelfParseException("Invalid element: " + name, stream);
 		}
@@ -812,6 +932,10 @@ public class Self4Compiler extends SelfCompiler {
 			return network.createVertex(Primitive.FALSE);
 		} else if (name.equalsIgnoreCase(UNKNOWN)) {
 			return network.createVertex(Primitive.UNKNOWN);
+		} else if (name.equalsIgnoreCase(BREAK)) {
+			return network.createVertex(Primitive.BREAK);
+		} else if (name.equalsIgnoreCase(CONTINUE)) {
+			return network.createVertex(Primitive.CONTINUE);
 		}
 		Long id = null;
 		if (stream.peek() == ':') {
@@ -1079,7 +1203,7 @@ public class Self4Compiler extends SelfCompiler {
 		stream.skipWhitespace();
 		ensureNext('"', stream);
 		int position = stream.getPosition();
-		String text = stream.nextStringDoubleQuotes();
+		String text = stream.nextStringWithBracketsDoubleQuotes();
 		Map<String, Vertex> cache = elements.get(FORMULA);
 		if (formula == null && cache != null) {
 			formula = cache.get(text);
@@ -1351,7 +1475,7 @@ public class Self4Compiler extends SelfCompiler {
 		Vertex pattern = null;
 		if (stream.peek() == '"') {
 			stream.skip();
-			pattern = network.createPattern(stream.nextStringDoubleQuotes(), this);
+			pattern = network.createPattern(stream.nextStringWithBracketsDoubleQuotes(), this);
 		} else {
 			pattern = parseElement(stream, elements, debug, network);
 		}
@@ -1368,7 +1492,7 @@ public class Self4Compiler extends SelfCompiler {
 			stream.skipWhitespace();
 			if (stream.peek() == '"') {
 				stream.skip();
-				that = network.createPattern(stream.nextStringDoubleQuotes(), this);
+				that = network.createPattern(stream.nextStringWithBracketsDoubleQuotes(), this);
 			} else {
 				that = parseElement(stream, elements, debug, network);
 			}

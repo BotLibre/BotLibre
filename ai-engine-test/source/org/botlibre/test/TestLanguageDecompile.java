@@ -43,6 +43,7 @@ public class TestLanguageDecompile extends TestLanguage {
 
 	@BeforeClass
 	public static void setup() {
+		SelfCompiler.setCompiler(new Self4Compiler());
 		bootstrap();
 		Bot bot = Bot.createInstance();
 		

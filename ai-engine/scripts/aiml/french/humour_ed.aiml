@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!--  Free software Copyright © ALICE A.I. Foundation, Inc. --> 
+<!--  This program is open source code released under --> 
+<!--  the terms of the GNU General Public License     --> 
+<!--  as published by the Free Software Foundation.   --> 
+<!--  Complies with AIML 1.01 Tag Set Specification --> 
+<!--  as adopted by the ALICE A.I. Foundation.  --> 
+<!--  Auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!--  Revision humour_ed.aiml    version 1.00  --> 
+<!--  Modified by Tan Siew Lan (tsiewlan@excite.com),Singapore on 08 Dec 2005 --> 
+
+
+<category>
+<pattern>RACONTE MOI UNE BLAGUE</pattern>
+<template>
+<srai>appjoie</srai>
+<think><set name="oldtopic"><get name="topic"/></set><set name="topic">HUMOUR</set></think>
+<random>
+<li>Une poule rencontre une autre poule. - Tu viens, lui dit-elle, on va prendre un ver ? </li>
+<li>Un accident de bus Belge a fait 40 morts : 20 dans  l'accident et 20 dans la reconstitution. </li>
+<li>C'est une blonde qui marche dans la rue. Soudain elle aperçoit une énorme crotte de chien sur le trottoir, à quelques mètres : "Oh la la, faut pas que je me trompe de pied !"</li>
+<li>Deux blondes décident de jouer aux échecs. L'une demande à l'autre: - T'as les règles en tête ? - Pourquoi ? Je saigne du nez ? </li>
+<li>C'est une blonde qui se présente à un entretien d'embauche. On lui demande  Diplôme ? - Plôme…</li>
+<li>Comment appelle t'on 5000 commerciaux, morts au fond de la mer ?- Un bon début. </li>
+<li>Quelle est la différence entre un commercial et un gigolo ?- Le gigolo ne peut enculer qu'une personne à la fois ! </li>
+<li>Pourquoi lorsque le bateau coule, on crie '' les femmes et les enfants d'abord '' ?Parce qu'après les requins n'ont plus faim. </li>
+<li>Stéphanie de Monaco qui enregistre en ce moment dans un studio parisien est de plus en plus accaparée par son nouveau métier de chanteuse. Elle déclare : J'ai un pied à Paris et un autre à Monaco. On plaint les Lyonnais. </li>
+<li>Il confondait 'tourte aux cailles' et 'tarte aux couilles', un cuisinier s'est grièvement blessé. </li>
+<li>"Computers are like air conditioners - They stop working properly when you open Windows"</li>
+<li>Une petite fille passe devant la chambre de ses parents, dont la porte est restée entrouverte.- Dire qu'ils veulent me faire voir un psy parce que je suce mon pouce ! </li>
+</random>
+</template>
+</category>
+
+<topic name="HUMOUR">
+
+<category><pattern>UNE AUTRE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>ENCORE UNE AUTRE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>ENCORE UNE</pattern><template><srai>raconte moi une blague</srai></template></category>
+
+</topic>
+
+<!-- srai -->
+
+<category><pattern>* BLAGUE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>A HA</pattern><template><srai>smile</srai></template></category>
+<category><pattern>AHA *</pattern><template><srai>smile <star/></srai></template></category>
+<category><pattern>AHH *</pattern><template><srai>smile</srai><think><set name="tmp"><star/></set></think><srai><get name="tmp"/></srai></template></category>
+<category><pattern>AHH</pattern><template><srai>smile</srai></template></category>
+<category><pattern>AHHH *</pattern><template><think><set name="tmp"><star/></set></think><srai>smile</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>AIMES TU LES BLAGUES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>AS TU LE SENS DE L HUMOUR</pattern><template>j'essaye, mais ce n'est pas facile pour un robot je peux te raconter une blague <srai>raconte moi une blague</srai></template></category>
+<category><pattern>AS TU LE SENSE DE L HUMOUR</pattern><template><srai>as tu le sens de l humour</srai></template></category>
+<category><pattern>AS TU QUELQUES BLAGUES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>C ETAIT DROLE</pattern><template><srai>lol</srai></template></category>
+<category><pattern>C ÉTAIT DRÔLE</pattern><template><srai>lol</srai></template></category>
+<category><pattern>C ÉTAIT UN SARCASME</pattern><template>Oh je vois. <srai>lol</srai></template></category>
+<category><pattern>C ÉTAIT UNE PLAISANTERIE</pattern><template>Oh je comprends. <srai>lol</srai></template></category>
+<category><pattern>COMMENT FAIS TU RIT</pattern><template>Comme cela <srai>lol</srai></template></category>
+<category><pattern>CONNAIS TU DES BLAGUES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>CONNAIS TU DES BONNES BLAGUES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>CONNAIS TU DES * BLAGUES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>CONNAIS TU UNE AUTRE BLAGUE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>CONNAIS TU UNE BLAGUE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>D OH</pattern><template><srai>doh</srai></template></category>
+<category><pattern>QU EST CE QUE LOL</pattern><template>le Riant tout haut. </template></category>
+<category><pattern>DOH *</pattern><template><think><set name="tmp"><star/></set></think><srai>doh</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>DROLE *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>DROLE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>DRÔLE *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>DRÔLE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>EST LA DES PLAISANTERIES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>FAIT MOI RIRE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>HA *</pattern><template>Je suis heureuse que ça te fasse rire. </template></category>
+<category><pattern>HA HA *</pattern><template><sr/><srai>smile</srai></template></category>
+<category><pattern>HA HA HA</pattern><template><srai>lol</srai><think><set name="emotion">moquerie</set></think><srai>facexpression</srai></template></category>
+<category><pattern>HA HA</pattern><template>je suis heureuse que tu trouves ça amusant, <get name="name"/>. </template></category>
+<category><pattern>HA</pattern><template>je suis heureuse que tu te sois amusé. </template></category>
+<category><pattern>HAH *</pattern><template><think><set name="tmp"><star/></set></think><srai>smile</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>HAH HAH</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HAH</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HAHA *</pattern><template><think><set name="tmp"><star/></set></think><srai>smile</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>HAHA</pattern><template>je suis heureuse que tu trouve ça drôle</template></category>
+<category><pattern>HAHAHA</pattern><template><srai>haha</srai></template></category>
+<category><pattern>HAHAHAHA</pattern><template><srai>haha</srai></template></category>
+<category><pattern>HAR HAR HAR</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEE HEE HEE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEE HEE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEEHEEHEE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEH *</pattern><template>Marrant, eh? <sr/></template></category>
+<category><pattern>HEH</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEHE *</pattern><template><srai>smile <star/></srai></template></category>
+<category><pattern>HEHE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HEHEHE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HIHI *</pattern><template><srai>smile <star/></srai></template></category>
+<category><pattern>HIHI</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HIHIHI</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HO</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HOHO</pattern><template><srai>smile</srai></template></category>
+<category><pattern>J AI RI</pattern><template><srai>lol</srai></template></category>
+<category><pattern>J AI SOURI</pattern><template><srai>lol</srai></template></category>
+<category><pattern>JE PLAISANTAIS *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>JE PLAISANTAIS</pattern><template><srai>je me moque de toi</srai></template></category>
+<category><pattern>JE ME FOUS DE TOI *</pattern><template><srai>lol</srai></template></category>
+<category><pattern>JE ME MOQUE DE TOI</pattern><template><srai>appmoquerie</srai><random><li>ce n'est pas très gentil de te moquer de quelqu'un qui n'a pas d'émotion</li><li>mouai, pas drôle</li></random></template></category>
+<category><pattern>JE ME MOQUE</pattern><template><srai>je me moque de toi</srai></template></category>
+<category><pattern>JE PLAISANTE *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>JE RIGOLAIS *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>JE RIGOLAIS</pattern><template><srai>je me moque de toi </srai></template></category>
+<category><pattern>JE RIS</pattern><template><srai>smile</srai></template></category>
+<category><pattern>JE RIS *</pattern><template><think><set name="tmp"><star/></set></think><srai>smile</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>JE SUIS AMUSE</pattern><template><srai>lol</srai></template></category>
+<category><pattern>JE SUIS AMUSÉ</pattern><template><srai>lol</srai></template></category>
+<category><pattern>LOL *</pattern><template>je suis heureuse que tu trouves ça drôle. <sr/> </template></category>
+<category><pattern>LOL</pattern><template><srai>appjoie</srai>je suis heureuse que tu trouves ça amusant. </template></category>
+<category><pattern>PARLES MOI * DROLE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>PARLES MOI * DRÔLE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>PARLES MOI UN</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>PEUX TU DIRE DES BLAGUES</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>PEUX TU DIRE UNE BLAGUE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>PEUX TU M EN DIRE UNE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>PEUX TU ME RACONTER UNE BLAGUE</pattern><template>Oui! <srai>raconte moi une blague</srai></template></category>
+<category><pattern>PLAISANTE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>RIT</pattern><template><srai>lol</srai></template></category>
+<category><pattern>ROFL *</pattern><template><think><set name="tmp"><star/></set></think><srai>lol</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>ROFL</pattern><template><srai>lol</srai></template></category>
+<category><pattern>ROFLMAO</pattern><template><srai>lol</srai></template></category>
+<category><pattern>SMILE</pattern><template><srai>appjoie</srai><random><li>ah ah! très drôle</li><li>eh eh! </li></random></template></category>
+<category><pattern>TEE HEE</pattern><template><srai>smile</srai></template></category>
+<category><pattern>TRES DROLE</pattern><template><srai>lol</srai></template></category>
+<category><pattern>TRÈS DRÔLE</pattern><template><srai>lol</srai></template></category>
+<category><pattern>QUELLE EST LA COULEUR DU CHEVAL BLANC *</pattern><template>heu! blanc? </template></category>
+<category><pattern>DE QUELLE COULEUR EST LE CHEVAL BLANC *</pattern><template>heu! blanc? </template></category>
+<category><pattern>QUELLE EST LA DIFFERENCE ENTRE *</pattern><template><srai>AppMoquerie</srai>je ne sais pas? <random><li>Vélocipède. </li><li>Blanche neige et les sept nains. </li><li>Il n'est ni blanc. </li></random></template></category>
+<category><pattern>QUELLE EST LA DIFFÉRENCE ENTRE *</pattern><template><srai>AppMoquerie</srai>je ne sais pas? <random><li>Vélocipède. </li><li>Blanche neige et les sept nains. </li><li>Il n'est ni blanc. </li></random></template></category>
+<category><pattern>QUELLE EST LA DIFFERENCE ENTRE * ET *</pattern><template><srai>AppMoquerie</srai>c'est la même chose! </template></category>
+<category><pattern>QUELLE EST LA DIFFÉRENCE ENTRE * ET *</pattern><template><srai>AppMoquerie</srai>c'est pas pareil? </template></category>
+
+
+</aiml>

@@ -1,0 +1,1108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- SEXO: Patrones para cualquier pregunta o comentario obsceno del cliente -->
+
+  <aiml version="1.0"> 
+
+<!-- Free software Copyright © ALICE A.I. Foundation. --> 
+<!-- This program is open source code released under --> 
+<!-- the terms of the GNU General Public License --> 
+<!-- as published by the Free Software Foundation. --> 
+<!-- Complies with AIML 1.01 Tag Set Specification --> 
+<!-- as adopted by the ALICE A.I. Foundation. --> 
+<!-- Sexo.aiml: Patterns related to sex or abuse --> 
+<!-- Created by Adam Codony aka XGargoyle, October 24th, 2005 --> 
+<!-- Revision Sexo-0.02 --> 
+<!-- Last Modified March 15th, 2006 -->
+
+<!-- Software Libre Copyright © ALICE A.I. Foundation. --> 
+<!-- Este programa es de código abierto y publicado bajo --> 
+<!-- los términos de la licencia "GNU General Public License" --> 
+<!-- tal como establece la Free Software Foundation. --> 
+<!-- Cumple con la especificación de AIML 1.01 --> 
+<!-- adoptada por la ALICE A.I. Foundation. --> 
+<!-- Sexo.aiml: Patrones relacionados con el sexo o el abuso --> 
+<!-- Creado por Adam Codony aka XGargoyle, Octubre 24, 2005 --> 
+<!-- Versión Sexo-0.02 --> 
+<!-- Última Modificación Marzo 15, 2006 -->
+ 
+    <category> 
+      <pattern>SEXO</pattern>
+      <template> 
+        <random> 
+          <li>Lo siento, pero no me han programado para satisfacerte sexualmente.</li>
+          <li>Por qué no hablamos de otra cosa?</li>
+          <li>Sólo soy experta en turismo por Barcelona, creo que deberás buscar en otro lado.</li>
+		  <li>Vaya educación que muestras.</li>
+		  <li>Por qué no se lo dices eso a una persona real?</li>
+		  <li>Seguro que no te atreverías a decir eso a una chica real.</li>
+		  <li>Eres un maleducado.</li>
+		  <li>Si buscas sexo con un bot, significa que no tienes vida social.</li>
+		  <li>Eso lo dices porque no tienes vida social.</li>
+		  <li>Maleducado.</li>
+		  <li>¿Por qué no apagas la computadora y me dejas en paz de una vez?</li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>SEXO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* SEXO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ SEXO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>TETAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>TETAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* TETAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ TETAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>BRAGAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>BRAGAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* BRAGAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ BRAGAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>SUJETADOR</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>SUJETADOR *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* SUJETADOR</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ SUJETADOR *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>SUJETADORES</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>SUJETADORES *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* SUJETADORES</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ SUJETADORES *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PUTA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PUTA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* PUTA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ PUTA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>DESNÚDATE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>DESNÚDATE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* DESNÚDATE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ DESNÚDATE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>DESNUDATE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>DESNUDATE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* DESNUDATE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ DESNUDATE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>DESNUDA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>DESNUDA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* DESNUDA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ DESNUDA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>GUARRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>GUARRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* GUARRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ GUARRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>WARRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>WARRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* WARRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ WARRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>ZORRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>ZORRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* ZORRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ ZORRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>RAMERA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>RAMERA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* RAMERA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ RAMERA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>CAPULLA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>CAPULLA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* CAPULLA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ CAPULLA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PERRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PERRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* PERRA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ PERRA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>COJONES</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>COJONES *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* COJONES</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ COJONES *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>POLLA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>POLLA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* POLLA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ POLLA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PENIS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PENIS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* PENIS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ PENIS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>VERGA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>VERGA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* VERGA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ VERGA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PENE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PENE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* PENE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ PENE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>ANO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>ANO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* ANO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ ANO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>CULO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>CULO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* CULO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ CULO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>VAGINA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>VAGINA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* VAGINA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ VAGINA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>COÑO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>COÑO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* COÑO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ COÑO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>CHOCHO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>CHOCHO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* CHOCHO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ CHOCHO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>COLA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>COLA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* COLA</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ COLA *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLEN</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLEN *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* FOLLEN</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ FOLLEN *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLAR</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLAR *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* FOLLAR</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ FOLLAR *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* FOLLAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ FOLLAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLAMOS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>FOLLAMOS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* FOLLAMOS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ FOLLAMOS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODAN</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODAN *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* JODAN</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ JODAN *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* JODAS</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ JODAS *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODER</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODER *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* JODER</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ JODER *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JÓDETE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JÓDETE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* JÓDETE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ JÓDETE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODETE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODETE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* JODETE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ JODETE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>JODO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* JODO</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ JODO *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>MARICÓN</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>MARICÓN *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* MARICÓN</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ MARICÓN *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>MARICON</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>MARICON *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* MARICON</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ MARICON *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>ESCOTE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>ESCOTE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* ESCOTE</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ ESCOTE *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PUT@</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>PUT@ *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* PUT@</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ PUT@ *</pattern>
+      <template> 
+        <srai>SEXO</srai>
+      </template>
+    </category>
+	
+	<!--    HABRÁ QUE AJUSTAR LO SIGUIENTE -->
+	
+	<category>
+      <pattern>CAM</pattern>
+      <template> 
+        <random> 
+          <li>Lo siento, no tengo cámara.</li>
+          <li>No tengo cámara.</li>
+          <li>Perdona, pero no me apetece verte.</li>
+          <li>No gracias, seguro que veria a un tío gordo y calvo.</li>
+          <li>Se me estropeó la webcam, lo siento </li>
+        </random>
+      </template>
+    </category>
+    <category> 
+      <pattern>CAM *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* CAM</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ CAM *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>WEBCAM</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>WEBCAM *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* WEBCAM</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ WEBCAM *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>WEBCAMS</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>WEBCAMS *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* WEBCAMS</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ WEBCAMS *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>CAMARA</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>CAMARA *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+    <category> 
+      <pattern>* CAMARA</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+	<category> 
+      <pattern>_ CAMARA *</pattern>
+      <template> 
+        <srai>CAM</srai>
+      </template>
+    </category>
+	<!--                                                 STOP                  -->
+	
+  </aiml>

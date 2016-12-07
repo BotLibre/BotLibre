@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+<!-- -->
+<!-- Free software (c) 2011 ALICE A.I. Foundation.   -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License     -->
+<!-- as published by the Free Software Foundation.   -->
+<!-- Complies with AIML 1.0 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+<!-- Last modified 10/5/2011 -->
+<!-- -->
+
+<category>
+<pattern>uppercase *</pattern>
+<template><uppercase>upper case <star/></uppercase></template>
+</category>
+
+<category>
+<pattern>lowercase *</pattern>
+<template><lowercase>LOWER CASE <star/></lowercase></template>
+</category>
+
+<category>
+<pattern>formal *</pattern>
+<template><formal><star/></formal></template>
+</category>
+
+<category>
+<pattern>sentence *</pattern>
+<template><sentence><star/></sentence></template>
+</category>
+
+<category>
+<pattern>gender *</pattern>
+<template><gender><star/></gender></template>
+</category>
+
+<category>
+<pattern>person *</pattern>
+<template><person><star/></person></template>
+</category>
+
+<category>
+<pattern>person2 *</pattern>
+<template><person2><star/></person2></template>
+</category>
+
+<category>
+<pattern>random *</pattern>
+<template>random <random><li>1</li><li>2</li><li><star/></li></random></template>
+</category>
+
+<category>
+<pattern>quote</pattern>
+<template>"I" am "very" tired</template>
+</category>
+
+<category>
+<pattern>size</pattern>
+<template>size is <size/></template>
+</category>
+
+<category>
+<pattern>date</pattern>
+<template>date is <date/></template>
+</category>
+
+<category>
+<pattern>version</pattern>
+<template>version is <version/></template>
+</category>
+
+<category>
+<pattern>sr *</pattern>
+<template>sr is <sr/></template>
+</category>
+
+<category>
+<pattern>html *</pattern>
+<template>this<br/>is <a href="http://www.botlibre.com">very</a><p>long</p><p/>ok<p><star/></p></template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<template>default response</template>
+</category>
+
+<category>
+<pattern>test *</pattern>
+<template>test set to <set name="test"><star/></set></template>
+</category>
+
+<category>
+<pattern>test</pattern>
+<template><get name="test"/></template>
+</category>
+
+<category>
+<pattern>condition</pattern>
+<template>
+	<condition>
+		<li name="test" value="1">one</li>
+		<li name="test" value="2">two</li>
+		<li name="test" value="*9*">nine something</li>
+		<li><sr/></li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>cond2</pattern>
+<template>
+	<condition name="test">
+		<li value="1">one</li>
+		<li value="2">two</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>cond3</pattern>
+<template>
+	<condition name="test" value="1">one</condition>
+	<condition name="test" value="2">two</condition>
+</template>
+</category>
+
+<category>
+<pattern>cond4</pattern>
+<template>
+	<condition name="test">one</condition>
+	<condition value="2">two</condition>
+	<condition/>
+	<condition>
+		<li value="1">one</li>
+		<li>two</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>star *</pattern>
+<template><star/></template>
+</category>
+
+<category>
+<pattern>* star</pattern>
+<template><star/></template>
+</category>
+
+<category>
+<pattern>star * star</pattern>
+<template><star/></template>
+</category>
+
+<category>
+<pattern>star * and * and *</pattern>
+<template><star/></template>
+</category>
+
+<category>
+<pattern>first star * and * and *</pattern>
+<template><star index="1"/></template>
+</category>
+
+<category>
+<pattern>2nd star * and * and *</pattern>
+<template><star index="2"/></template>
+</category>
+
+<category>
+<pattern>3rd star * and * and *</pattern>
+<template><star index="3"/></template>
+</category>
+
+<category>
+<pattern>4th star * and * and *</pattern>
+<template><star index="4"/></template>
+</category>
+
+<category>
+<pattern>input *</pattern>
+<template><input/></template>
+</category>
+
+<category>
+<pattern>last input</pattern>
+<template><input index="1"/></template>
+</category>
+
+<category>
+<pattern>before last input</pattern>
+<template><input index="2"/></template>
+</category>
+
+<category>
+<pattern>that</pattern>
+<template><that/></template>
+</category>
+
+<category>
+<pattern>before that</pattern>
+<template><that index="2"/></template>
+</category>
+
+<category>
+<pattern>and before that</pattern>
+<template><that index="3,1"/></template>
+</category>
+
+<topic name="* numbers">
+
+<category>
+<pattern>1 *</pattern>
+<template>2 <star/></template>
+</category>
+
+<category>
+<pattern>1 + 1</pattern>
+<template>2 + 2</template>
+</category>
+
+<category>
+<pattern>3 *</pattern>
+<that>2 *</that>
+<template>4 <star/></template>
+</category>
+
+<category>
+<pattern>5 *</pattern>
+<that>4 *</that>
+<template>6 <thatstar/> <topicstar/></template>
+</category>
+
+</topic>
+
+<category>
+<pattern>count *</pattern>
+<template><set name="topic"><star/> numbers</set></template>
+</category>
+
+</aiml>

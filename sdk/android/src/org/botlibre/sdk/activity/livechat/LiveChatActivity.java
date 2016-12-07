@@ -1,10 +1,49 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.activity.livechat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
+import org.botlibre.sdk.LiveChatConnection;
+import org.botlibre.sdk.LiveChatListener;
+import org.botlibre.sdk.activity.LibreActivity;
+import org.botlibre.sdk.activity.MainActivity;
+import org.botlibre.sdk.activity.ViewUserActivity;
+import org.botlibre.sdk.activity.actions.HttpAction;
+import org.botlibre.sdk.activity.actions.HttpCreateChannelFileAttachmentAction;
+import org.botlibre.sdk.activity.actions.HttpCreateChannelImageAttachmentAction;
+import org.botlibre.sdk.activity.actions.HttpGetImageAction;
+import org.botlibre.sdk.activity.actions.HttpGetLiveChatUsersAction;
+import org.botlibre.sdk.config.ChannelConfig;
+import org.botlibre.sdk.config.MediaConfig;
+import org.botlibre.sdk.config.UserConfig;
+import org.botlibre.sdk.config.VoiceConfig;
+import org.botlibre.sdk.config.WebMediumConfig;
+import org.botlibre.sdk.util.Utils;
+
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
+import org.botlibre.sdk.R;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -26,35 +65,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import org.botlibre.sdk.LiveChatConnection;
-import org.botlibre.sdk.LiveChatListener;
-import org.botlibre.sdk.activity.MainActivity;
-import org.botlibre.sdk.R;
-import org.botlibre.sdk.activity.ViewUserActivity;
-import org.botlibre.sdk.activity.actions.HttpAction;
-import org.botlibre.sdk.activity.actions.HttpCreateChannelFileAttachmentAction;
-import org.botlibre.sdk.activity.actions.HttpCreateChannelImageAttachmentAction;
-import org.botlibre.sdk.activity.actions.HttpGetImageAction;
-import org.botlibre.sdk.activity.actions.HttpGetLiveChatUsersAction;
-import org.botlibre.sdk.config.ChannelConfig;
-import org.botlibre.sdk.config.MediaConfig;
-import org.botlibre.sdk.config.UserConfig;
-import org.botlibre.sdk.config.VoiceConfig;
-import org.botlibre.sdk.config.WebMediumConfig;
-import org.botlibre.sdk.util.Utils;
-
 /**
  * Activity for live chat and chatrooms.
  * To launch this activity from your app you can use the HttpFetchAction passing the channel id or name as a config, and launch=true.
  */
-public class LiveChatActivity extends Activity implements TextToSpeech.OnInitListener {
+public class LiveChatActivity extends LibreActivity implements TextToSpeech.OnInitListener {
     static final int RESULT_SPEECH = 1;
     
     protected TextToSpeech tts;
@@ -66,6 +87,7 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
     protected String childActivity = "";
     protected long startTime;
     protected boolean closing;
+    protected ChannelConfig instance;
     
     public String html = "";
 	
@@ -73,15 +95,24 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        startTime = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis();
         
         setContentView(R.layout.activity_livechat);
 
-        setTitle(MainActivity.instance.name);
-        
-        TextView text = (TextView) findViewById(R.id.nameLabel);
-        text.setText(MainActivity.instance.name);
-        
+		this.instance = (ChannelConfig)MainActivity.instance;
+		/*if (this.instance.showAds && (MainActivity.user == null || MainActivity.user.type == null || MainActivity.user.type.equals("Basic"))) {
+	        AdView mAdView = (AdView) findViewById(R.id.adView);
+	        AdRequest adRequest = new AdRequest.Builder().build();
+	        mAdView.loadAd(adRequest);
+		} else {
+	        AdView mAdView = (AdView) findViewById(R.id.adView);
+    		mAdView.setVisibility(View.GONE);
+		}*/
+
+        setTitle(Utils.stripTags(this.instance.name));
+		((TextView) findViewById(R.id.title)).setText(Utils.stripTags(this.instance.name));
+        HttpGetImageAction.fetchImage(this, this.instance.avatar, findViewById(R.id.icon));
+                
         this.tts = new TextToSpeech(this, this);
 
         this.textView = (EditText) findViewById(R.id.messageText);
@@ -93,19 +124,7 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 			}
 		});
 
-        WebView webView = (WebView) findViewById(R.id.responseText);
-        webView.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            	try {
-            		view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-            	} catch (Exception failed) {
-            		return false;
-            	}
-                return true;
-            }
-        });
-
-        webView = (WebView) findViewById(R.id.logText);
+        WebView webView = (WebView) findViewById(R.id.logText);
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
             	try {
@@ -171,8 +190,6 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 				return detector.onTouchEvent(event);
 			}
 		});
-		
-        HttpGetImageAction.fetchImage(this, MainActivity.instance.avatar, (ImageView)findViewById(R.id.imageView));
 
 		try {
 			this.connection = new LiveChatConnection(MainActivity.connection.getCredentials(),
@@ -201,10 +218,20 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 						@Override
 						public void closed() {	}		
 					});
-			this.connection.connect((ChannelConfig)MainActivity.instance, MainActivity.user);
+			this.connection.connect((ChannelConfig)this.instance, MainActivity.user);
 		} catch (Exception exception) {
 			MainActivity.error(exception.getMessage(), exception, this);
 		}
+	}
+	
+	@Override
+	public void onResume() {
+		if ((MainActivity.instance instanceof ChannelConfig) && MainActivity.instance.id.equals(this.instance.id)) {
+			this.instance = (ChannelConfig)MainActivity.instance;
+		} else {
+			MainActivity.instance = this.instance;
+		}
+		super.onResume();
 	}
 	
 	@Override
@@ -239,7 +266,7 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 			MediaConfig config = new MediaConfig();
 			config.name = MainActivity.getFileNameFromPath(file);
 			config.type = MainActivity.getFileTypeFromPath(file);
-			config.instance = MainActivity.instance.id;
+			config.instance = this.instance.id;
 			if (this.childActivity.equals("sendImage")) {
 				HttpAction action = new HttpCreateChannelImageAttachmentAction(this, file, config);
 				action.execute().get();
@@ -278,14 +305,14 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 
 	public void sendFile() {
 		Intent upload = new Intent(Intent.ACTION_GET_CONTENT);
-		upload.setType("file/*");
+		upload.setType("*/*");
 		this.childActivity = "sendFile";
 		try {
 			startActivityForResult(upload, 1);
 		} catch (Exception notFound) {
 			this.childActivity = "sendFile";
 			upload = new Intent(Intent.ACTION_GET_CONTENT);
-			upload.setType("*/*");
+			upload.setType("file/*");
 			startActivityForResult(upload, 1);
 		}
 	}
@@ -489,12 +516,14 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 		if (user.equals("Media")) {
 			return;
 		}
-		
-		WebView responseView = (WebView) findViewById(R.id.responseText);
-		responseView.loadDataWithBaseURL(null, Utils.linkHTML(text), "text/html", "utf-8", null);
+		if (user.equals("Channel")) {
+			return;
+		}
 
 		WebView log = (WebView) findViewById(R.id.logText);
-		this.html = this.html + "<b>" + user + "</b><br/>"  + Utils.linkHTML(message) + "<br/>";
+		this.html = this.html + "<b>" + user + "</b> <span style='font-size:10px;color:grey'>"
+					+ Utils.displayTime(new Date()) + "</span><br/>"
+					+ Utils.linkHTML(message) + "<br/>";
 		log.loadDataWithBaseURL(null, this.html, "text/html", "utf-8", null);
 		
 		final ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
@@ -503,6 +532,11 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 		    	scroll.fullScroll(View.FOCUS_DOWN);
 		    }
 		}, 200);
+		scroll.postDelayed(new Runnable() {
+		    public void run() {
+		    	scroll.fullScroll(View.FOCUS_DOWN);
+		    }
+		}, 400);
 		
 		if ((System.currentTimeMillis() - startTime) < (1000 * 5)) {
 	    	return;
@@ -548,7 +582,7 @@ public class LiveChatActivity extends Activity implements TextToSpeech.OnInitLis
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-        WebMediumConfig instance = MainActivity.instance;
+        WebMediumConfig instance = this.instance;
         
         boolean isAdmin = (MainActivity.user != null) && instance.isAdmin;
         if (!isAdmin) {

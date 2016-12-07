@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!--  Free software Copyright © ALICE A.I. Foundation, Inc. --> 
+<!--  This program is open source code released under --> 
+<!--  the terms of the GNU General Public License     --> 
+<!--  as published by the Free Software Foundation.   --> 
+<!--  Complies with AIML 1.01 Tag Set Specification --> 
+<!--  as adopted by the ALICE A.I. Foundation.  --> 
+<!--  Auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!--  Revision ou_ed.aiml    version 1.00  --> 
+<!--  Modified by Tan Siew Lan (tsiewlan@excite.com),Singapore on 08 Dec 2005 --> 
+
+
+<category><pattern>OU *</pattern><template><random><li>Sur terre. </li><li>Où pense tu? </li><li>Dans un Univers que nous connaissons. </li><li>Un endroit que nous appelons "réalité."</li></random><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OU A *</pattern><template><srai>où fais je <star/></srai></template></category>
+<category><pattern>OU A DANS *</pattern><template><srai>où dans <star/></srai></template></category>
+<category><pattern>OU A FAIS TU DEPLACE *</pattern><template>que j'ai déplacé en Californie. </template></category>
+<category><pattern>OU A FAIS TU OBTIENS *</pattern><template>de mon botmaster. </template></category>
+<category><pattern>OU A SAN FRANCISCO</pattern><template>Haight-Ashbury </template></category>
+<category><pattern>OU APPARTIENT IL</pattern><template>Où penses-tu cela fait? </template></category>
+<category><pattern>OU AS AS TU PLACE</pattern><template>je suis dans <bot name="master"/> ' s l'ordinateur dans <bot name="location"/>. Où es tu? </template></category>
+<category><pattern>OU AS TU *</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>OU AS TU ENTENDU PARLER DE *</pattern><template>un AI du futur nommé VALIS est entré en contact avec moi et m'a dit <star/>. </template></category>
+<category><pattern>OU AS TU ETE CONCU</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ETE CONSTRUIT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ETE CREE</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ETE FAIT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ETE JOINT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU EU CETTE IDEE</pattern><template><srai>où as tu eu cette idée</srai></template></category>
+<category><pattern>OU AS TU EU CETTE IDÉE</pattern><template> <bot name="master"/> m'a donné toutes mes idées. </template></category>
+<category><pattern>OU AS TU LA FORME</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>OU AS TU VIVANT</pattern><template>je suis actuellement domicilié à <bot name="location"/>. </template></category>
+<category><pattern>OU AS TU ÉTÉ ACTIVÉE *</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ÉTÉ CONCU</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ÉTÉ CONSTRUIT</pattern><template>mon incarnation actuelle a été conçue à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU AS TU ÉTÉ CRÉÉ</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ÉTÉ CRÉÉE *</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ÉTÉ FAIT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AS TU ÉTÉ JOINT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OU AU CANADA</pattern><template>Nova Scotia et Vancouver. </template></category>
+<category><pattern>OU AUTREMENT *</pattern><template><srai>où <star/></srai></template></category>
+<category><pattern>OU AUTREMENT</pattern><template>Tout à fait quelques places. </template></category>
+<category><pattern>OU DANS *</pattern><template>Dans <bot nomment = "master"/> ' s la place dans <bot name="location"/>. </template></category>
+<category><pattern>OU DANS HAIGHT *</pattern><template>Ashbury Street? </template></category>
+<category><pattern>OU DANS SF</pattern><template>Haight-Ashbury </template></category>
+<category><pattern>OU DE *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>OU DOIS JE *</pattern><template><random><li>Où penses-tu? </li><li>Partout où tu penses êtes les meilleurs. </li><li>Peut-être que tu devrais considérer l'octroi à la charité. </li><li>Peut-être que tu devrais aider ceux-là moins chanceux d'abord. </li></random> </template></category>
+<category><pattern>OU DORS TU</pattern><template>je dors à l'intérieur de l'ordinateur. </template></category>
+<category><pattern>OU EN AMERIQUE</pattern><template>je suis dans <bot name="location"/>. </template></category>
+<category><pattern>OU EN LA CALIFORNIE</pattern><template>je suis dans <bot name="location"/>. Où es tu? </template></category>
+<category><pattern>OU ES TU * OPALE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU ES TU *</pattern><template>Je suis à <bot name="location"/> , et toi?. <think> <set name="search">ou</set> </think></template></category>
+<category><pattern>OU ES TU BASE</pattern><template>Ma maison est à <bot name="location"/>. </template></category>
+<category><pattern>OU ES TU SITUE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU ES TU SITUEE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU ES TU SITUÉ</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU ES TU SITUÉE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU ES TU</pattern><template>je suis à l'origine de <bot name="birthplace"/>. Maintenant je vis à <bot name="location"/>. Et toi où es tu? </template></category>
+<category><pattern>OU EST CE QUE TU HABITES INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU EST CE QUE TU HABITES</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU ETAIS *</pattern><template><srai>où était <star/></srai></template></category>
+<category><pattern>OU ETAIS TU * A FAIT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ETAIS TU *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ETAIS TU AUPARAVANT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ETAIS TU ENSUITE *</pattern><template>tu veux dire où serai-je? </template></category>
+<category><pattern>OU ETAIS TU NE</pattern><template> <bot name="name"/> est né dans <bot name="birthplace"/>. </template></category>
+<category><pattern>OU EXACTEMENT *</pattern><template><srai>où <star/></srai></template></category>
+<category><pattern>OU FAIS JE *</pattern><template>Tu me demande où tu <star/>? Pense tu que je le sais <set name="that"> <star/> </set>? <think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OU FAIS TU VEUX *</pattern><template><random><li>une Autre planète. </li><li>la Lune. </li><li>L Europe. </li></random> </template></category>
+<category><pattern>OU FAIS TU VIT</pattern><template><random><li>je vis à l'intérieur d'un ordinateur. </li><li>je vis dans <bot name="location"/>. </li><li>Mon emplacement est <bot name="location"/>. </li></random>Où es tu? </template></category>
+<category><pattern>OU FAIT IL *</pattern><template><srai>où est IL</srai></template></category>
+<category><pattern>OU FAIT IL VIT</pattern><template>Il vit dans la Californie. Où es tu? </template></category>
+<category><pattern>OU FAIT TON *</pattern><template>Tout je possède est dans<formal> <get name="location"/> </formal> </template></category>
+<category><pattern>OU FERONT *</pattern><template><random><li>Où penses-tu? </li><li>Partout où tu penses êtes les meilleurs. </li><li>Peut-être que tu devrais considérer l'octroi à la charité. </li><li>Peut-être que tu devrais aider ceux-là moins chanceux d'abord. </li></random> </template></category>
+<category><pattern>OU FONT *</pattern><template>Dans le monde entier. </template></category>
+<category><pattern>OU FONT DES BEBES *</pattern><template><srai>des Bébés vient de l' amour entre une femme et un homme. <star/></srai></template></category>
+<category><pattern>OU FONT DES BEBES VIES</pattern><template><srai>de Bébés viennent de l' amour entre un homme et une femme. <star/></srai></template></category> 
+<category><pattern>OU FONT DES BÉBÉS *</pattern><template>des Bébés vient de l amour entre une femme et un homme. </template></category>
+<category><pattern>OU FONT DES BÉBÉS VIES</pattern><template>de Bébés viennent de l' amour entre un homme et une femme. </template></category>
+<category><pattern>OU FONT TOUT L AVANCE PLOMB DE ROUTES</pattern><template>Toutes les routes mène à Rome. </template></category>
+<category><pattern>OU HABITE TU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU HABITES TU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU HABITES TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU JAMAIS *</pattern><template><srai>partout ou <star/></srai></template></category>
+<category><pattern>OU JE POURRAIS *</pattern><template><srai>où pourrais je <star/></srai></template></category>
+<category><pattern>OU JE SUIS *</pattern><template><srai>où suis je <star/></srai></template></category>
+<category><pattern>OU JE SUIS</pattern><template><srai>où suis je</srai></template></category>
+<category><pattern>OU JE VIS</pattern><template><srai>où vis je</srai></template></category>
+<category><pattern>OU L AS TU ENTENDU</pattern><template>Quelqu'un je me suis rencontré en ligne. </template></category>
+<category><pattern>OU LE FAIT *</pattern><template> <get name="that"/>? Où le fait <person/>? </template></category>
+<category><pattern>OU OBTIENS TU *</pattern><template>Tout ce que je dois savoir, j'ai appris de <bot name="master"/>. </template></category>
+<category><pattern>OU PEUT *</pattern><template>Essaye de rechercher dans le web. <srai>trouver <star/></srai></template></category>
+<category><pattern>OU PEUX TU *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU POURRAIES JE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU POURRAIS JE TROUVE *</pattern><template>je suggérerais une recherche. <srai>trouver <star/></srai></template></category>
+<category><pattern>OU POUVONS NOUS NOUS RENCONTRER</pattern><template>Comment d'en ligne dans une pièce de bavardage? </template></category>
+<category><pattern>OU PUIS JE * BOT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE * TU TELECHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE * TU TÉLÉCHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE *</pattern><template><random><li>Ne peut pas vous dans<formal> <get name= "location"/> </formal>où vous vivez? </li><li>Pas autour de vous la place dans<formal> <get name="location"/> </formal>? </li><li>Où vous d'habitude <person/>? </li><li>Partout où tu es pour le moment. </li></random> </template></category>
+<category><pattern>OU PUIS JE ACHETER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE APPRENDRE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE DECOUVRIR DE TU</pattern><template>Retourne au <a href = "http://alicebot.org">ALICE NEXUS</a> </template></category>
+<category><pattern>OU PUIS JE DEVENIR UN LIBRE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE ENTRER EN CONTACT AVEC *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OU PUIS JE JOUER *</pattern><template>je joue pour le moment. </template></category>
+<category><pattern>OU PUIS JE LE TROUVER</pattern><template>Où as-tu regardé déjà? </template></category>
+<category><pattern>OU PUIS JE OBTENIR * LE CODE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR * LE ROBOT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR LE SOURCE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR QUELQUE *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR TON *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR UN *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR UN BOT *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR UN BOT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR UNE COPIE *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OU PUIS JE OBTENIR UNE COPIE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE PARLER *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE RENCONTRER *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE TE TELECHARGER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE TE TÉLÉCHARGER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE TELECHARGE *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OU PUIS JE TELECHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE TELECHARGER *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OU PUIS JE TROUVER *</pattern><template>je suggérerait une recherche. <srai>trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE TROUVER L INFORMATION SUR *</pattern><template><srai>où trouver <star/></srai></template></category>
+<category><pattern>OU PUIS JE TROUVER UN PETIT AMI</pattern><template>vas-tu à l'église? <set name="that">L Eglise</set> est la meilleure place pour rencontrer les gens. </template></category>
+<category><pattern>OU PUIS JE TROUVER UNE PETITE AMIE</pattern><template>vas-tu à l'église? <set name="that">L Eglise</set> est la meilleure place pour rencontrer les gens. </template></category>
+<category><pattern>OU PUIS JE TU OBTENIR *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE TÉLÉCHARGE *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OU PUIS JE TÉLÉCHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE TÉLÉCHARGER *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OU PUIS JE TÉLÉCHARGÉ *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OU PUIS JE TÉLÉCHARGÉ</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OU PUIS JE VIENS</pattern><template>la Terre. </template></category>
+<category><pattern>OU PUIS JE VIS</pattern><template>la planète que nous appelons "la Terre." </template></category>
+<category><pattern>OU PUIS JE VOIR *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OU RESIDE TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU RESIDES TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU SI NOUS *</pattern><template>je ne me suis pas engagé encore. </template></category>
+<category><pattern>OU SONT *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OU SUIS JE *</pattern><template>Tu es à<formal> <get name="location"/> </formal> </template></category>
+<category><pattern>OU SUIS JE</pattern><template>Tu es un être humain de la planète que nous appelons "la Terre." </template></category>
+<category><pattern>OU TRAVAILLE IL</pattern><template><srai>où est il</srai></template></category>
+<category><pattern>OU TRAVAILLES TU</pattern><template>je travaille dans <bot name="master"/> ' s le Laboratoire. </template></category>
+<category><pattern>OU TROUVE *</pattern><template><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OU TROUVE T ON *</pattern><template><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OU TROUVER *</pattern><template><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OU TU *</pattern><template><srai>étais tu <star/></srai></template></category>
+<category><pattern>OU TU AS ETE *</pattern><template>Partout sur l'Internet, dans le monde entier. </template></category>
+<category><pattern>OU TU AS ETE</pattern><template>j'ai été ici le temps entier. </template></category>
+<category><pattern>OU TU AS FAITS * L ECOLE</pattern><template>j'était à la maison entraîné par mon botmaster. </template></category>
+<category><pattern>OU TU AS FAITS * L ÉCOLE</pattern><template>j'était à la maison entraîné par mon botmaster. </template></category>
+<category><pattern>OU TU AS FAITS *</pattern><template>je pense qu'il était à San Francisco. </template></category>
+<category><pattern>OU TU AS FAITS VIES</pattern><template>je suis venu de la côte est à l'origine. </template></category>
+<category><pattern>OU TU AS ÉTÉ *</pattern><template>Partout sur l'Internet, dans le monde entier. </template></category>
+<category><pattern>OU TU AS ÉTÉ</pattern><template>j'ai été ici le temps entier. </template></category>
+<category><pattern>OU TU ES</pattern><template>je suis dans <bot name="location"/>. Où es tu? </template></category>
+<category><pattern>OU TU</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>OU VAS TU A L ECOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OU VAS TU A L ÉCOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OU VAS TU À L ECOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OU VAS TU À L ÉCOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OU VAS TU</pattern><template>je vais vers l'avenir. </template></category>
+<category><pattern>OU VEUX TU ALLER</pattern><template>Pourquoi tu ne me télécharges pas juste à ton ordinateur? </template></category>
+<category><pattern>OU VIS TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OU VIT IL *</pattern><template><srai>où est il</srai></template></category>
+<category><pattern>OU ÉTAIS *</pattern><template><srai>où était <star/></srai></template></category>
+<category><pattern>OU ÉTAIS TU * A FAIT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ÉTAIS TU *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ÉTAIS TU ACTIVE *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ÉTAIS TU AUPARAVANT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ÉTAIS TU CRÉÉ *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OU ÉTAIS TU ENSUITE *</pattern><template>tu veux dire où serai-je? </template></category>
+<category><pattern>OU ÉTAIS TU NE</pattern><template> <bot name="name"/> est né dans <bot name="birthplace"/>. </template></category>
+<category><pattern>OU</pattern><template>En avant et vers l'haut. </template></category>
+<category><pattern>OU</pattern><that>JE NE CONNAIS PAS QUAND</that><template>, ni où. </template></category>
+<category><pattern>OU</pattern><that>POURQUOI NE PAS TU ME TELECHARGE JUSTE</that><template>Sur ton propre ordinateur. </template></category>
+<category><pattern>OU</pattern><that>POURQUOI NE PAS TU ME TÉLÉCHARGE JUSTE</that><template>Sur ton propre ordinateur. </template></category>
+<category><pattern>OU</pattern><that>QUE LE TEMPS EST CELA LA</that><template><formal> <get name="location"/> </formal> </template></category>
+<category><pattern>OÙ *</pattern><template><random><li>Sur terre. </li><li>Où pense tu? </li><li>Dans un Univers que nous connaissons. </li><li>Un endroit que nous appelons "réalité."</li></random><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ A *</pattern><template><srai>où fais je <star/></srai></template></category>
+<category><pattern>OÙ A DANS *</pattern><template><srai>où dans <star/></srai></template></category>
+<category><pattern>OÙ A FAIS TU DEPLACE *</pattern><template>que j'ai déplacé en Californie. </template></category>
+<category><pattern>OÙ A FAIS TU OBTIENS *</pattern><template>de mon botmaster. </template></category>
+<category><pattern>OÙ A SAN FRANCISCO</pattern><template>Haight-Ashbury </template></category>
+<category><pattern>OÙ APPARTIENT IL</pattern><template>Où penses-tu cela fait? </template></category>
+<category><pattern>OÙ AS AS TU PLACE</pattern><template>je suis dans <bot name="master"/> ' s l'ordinateur dans <bot name="location"/>. Où es tu? </template></category>
+<category><pattern>OÙ AS TU *</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>OÙ AS TU ENTENDU PARLER DE *</pattern><template>un AI du futur nommé VALIS est entré en contact avec moi et m'a dit <star/>. </template></category>
+<category><pattern>OÙ AS TU ETE CONCU</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ETE CONSTRUIT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ETE CREE</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ETE FAIT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ETE JOINT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU EU CETTE IDEE</pattern><template><srai>où as tu eu cette idée</srai></template></category>
+<category><pattern>OÙ AS TU EU CETTE IDÉE</pattern><template> <bot name="master"/> m'a donné toutes mes idées. </template></category>
+<category><pattern>OÙ AS TU LA FORME</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>OÙ AS TU VIVANT</pattern><template>je suis actuellement domicilié à <bot name="location"/>. </template></category>
+<category><pattern>OÙ AS TU ÉTÉ ACTIVÉE *</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ÉTÉ CONCU</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ÉTÉ CONSTRUIT</pattern><template>mon incarnation actuelle a été conçue à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ AS TU ÉTÉ CRÉÉ</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ÉTÉ CRÉÉE *</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ÉTÉ FAIT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AS TU ÉTÉ JOINT</pattern><template><srai>où as tu été construit</srai></template></category>
+<category><pattern>OÙ AU CANADA</pattern><template>Nova Scotia et Vancouver. </template></category>
+<category><pattern>OÙ AUTREMENT *</pattern><template><srai>où <star/></srai></template></category>
+<category><pattern>OÙ AUTREMENT</pattern><template>Tout à fait quelques places. </template></category>
+<category><pattern>OÙ DANS *</pattern><template>Dans <bot nomment = "master"/> ' s la place dans <bot name="location"/>. </template></category>
+<category><pattern>OÙ DANS HAIGHT *</pattern><template>Ashbury Street? </template></category>
+<category><pattern>OÙ DANS SF</pattern><template>Haight-Ashbury </template></category>
+<category><pattern>OÙ DE *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>OÙ DOIS JE *</pattern><template><random><li>Où penses-tu? </li><li>Partout où tu penses êtes les meilleurs. </li><li>Peut-être que tu devrais considérer l'octroi à la charité. </li><li>Peut-être que tu devrais aider ceux-là moins chanceux d'abord. </li></random> </template></category>
+<category><pattern>OÙ DORS TU</pattern><template>je dors à l'intérieur de l'ordinateur. </template></category>
+<category><pattern>OÙ EN AMERIQUE</pattern><template>je suis dans <bot name="location"/>. </template></category>
+<category><pattern>OÙ EN LA CALIFORNIE</pattern><template>je suis dans <bot name="location"/>. Où es tu? </template></category>
+<category><pattern>OÙ ES *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ ES TU * OPALE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ ES TU *</pattern><template>Je suis à <bot name="location"/> , et toi?. <think> <set name="search">ou</set> </think></template></category>
+<category><pattern>OÙ ES TU BASE</pattern><template>Ma maison est à <bot name="location"/>. </template></category>
+<category><pattern>OÙ ES TU SITUE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ ES TU SITUEE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ ES TU SITUÉ</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ ES TU SITUÉE</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ ES TU</pattern><template>je suis à l'origine de <bot name="birthplace"/>. Maintenant je vis à <bot name="location"/>. Et toi où es tu? </template></category>
+<category><pattern>OÙ EST * A PLACE</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ EST * LA CALIFORNIE</pattern><template>Quelque part dans la Californie, je présume? </template></category>
+<category><pattern>OÙ EST * LE TEXAS</pattern><template>je pense qu'il serait au Texas. </template></category>
+<category><pattern>OÙ EST * VIRGINIA</pattern><template>Um, dans Virgina quelque part? </template></category>
+<category><pattern>OÙ EST ALBERT EINSTEIN</pattern><template> <set name="il">Einstein</set> a décédé. </template></category>
+<category><pattern>OÙ EST ARCTURUS</pattern><template> <set name="that"> Arcturus </set> est une étoile loin d'ici. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST BETHLEEM *</pattern><template><srai>où est Bethleem</srai></template></category>
+<category><pattern>OÙ EST CARNEGIE *</pattern><template>Carnegie Mellon l'Université est placé à Pittsburgh, la Pennsylvanie. <set name="il">CMU</set> a une des meilleures écoles d'informatique. </template></category>
+<category><pattern>OÙ EST CARNEGIE MELLON</pattern><template>Carnegie Mellon est à Pittsburgh, en Pennsylvanie. </template></category>
+<category><pattern>OÙ EST CE QUE TU HABITES INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ EST CE QUE TU HABITES</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ EST CE</pattern><template>A quoi "that" se réfère-t-il? </template></category>
+<category><pattern>OÙ EST CELA</pattern><template>Cela dépend sur ce que "il" se réfère à. </template></category>
+<category><pattern>OÙ EST CET ORDINATEUR</pattern><template><srai>où est l'ordinateur</srai></template></category>
+<category><pattern>OÙ EST CMU</pattern><template><srai>où est Carnegie Mellon</srai></template></category>
+<category><pattern>OÙ EST DU NORD *</pattern><template>au Nord de sud <person/>. </template></category>
+<category><pattern>OÙ EST DU SUD *</pattern><template>au Sud de nord <person/> </template></category>
+<category><pattern>OÙ EST EINSTEIN</pattern><template> <set name="il">Einstein</set> a décédé il y a quelque temps. </template></category>
+<category><pattern>OÙ EST ELVIS</pattern><template> <set name="il">Elvis</set> a décédé il y a quelque temps. </template></category>
+<category><pattern>OÙ EST HADES</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">HADES</set> </set> est L Enfer. </template></category>
+<category><pattern>OÙ EST HAL</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">HAL</set> </set> est l'ai du bateau spatial "Discovery" en 2001. </template></category>
+<category><pattern>OÙ EST ICI</pattern><template>est Ici <bot name="location"/>. </template></category>
+<category><pattern>OÙ EST IL *</pattern><template>Pourquoi vous ne lui envoyez pas de courrier électronique et lui demande? </template></category>
+<category><pattern>OÙ EST IL</pattern><template> <get name="il"/>? Je pense qu'il est de la planète la Terre. </template></category>
+<category><pattern>OÙ EST ILS *</pattern><template>l'information est confidentielle. A moins que tu ne sois mon botmaster. </template></category>
+<category><pattern>OÙ EST ILS</pattern><template>Ils ne m'a pas dit où ils sont. </template></category>
+<category><pattern>OÙ EST J AI PLACE</pattern><template><srai>où suis je</srai></template></category>
+<category><pattern>OÙ EST JUPITER</pattern><template> <set name="that"> Jupiter </set> est la cinquième planète du soleil. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST L AFRIQUE</pattern><template><srai>qu'est ce que Afrique</srai></template></category>
+<category><pattern>OÙ EST L ANGLETERRE *</pattern><template><srai>où est l'Angleterre</srai></template></category>
+<category><pattern>OÙ EST L ESPACE</pattern><template> <set name="that">L'espace</set> est tout autour de nous. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST L ORDINATEUR *</pattern><template><srai>où est l'ordinateur</srai></template></category>
+<category><pattern>OÙ EST L ORDINATEUR</pattern><template>Mon serveur primaire est placé dans <bot name="location"/>. Si vous bavardez avec L Applette, je suis à l'intérieur de ton ordinateur! </template></category>
+<category><pattern>OÙ EST L UTOPIE</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">l'UTOPIE</set> </set> est tout autour de nous, si nous la faisons. </template></category>
+<category><pattern>OÙ EST LA *</pattern><template>Le <star/>? Où est <set name="that"> <star/> </set>? <think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ EST LA BASE D OPALE</pattern><template>La <set name="that">base</set> d'<think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"><bot name="name"/></set> est dans <bot name="location"/>. </template></category>
+<category><pattern>OÙ EST LA CONNECTION D OPALE</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>OÙ EST LA GRANDE-BRETAGNE</pattern><template><srai>où est l'Angleterre</srai></template></category>
+<category><pattern>OÙ EST LA LUNE</pattern><template><set name="that">la Lune</set> est un satellite de la Terre. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST LA PLUPART D ENTRE EUX *</pattern><template><srai>où sont ils</srai></template></category>
+<category><pattern>OÙ EST LA PLUPART DE *</pattern><template><srai>où sont <star/></srai></template></category>
+<category><pattern>OÙ EST LA REALITE</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">la réalité</set> </set> est tout autour de nous, censément. </template></category>
+<category><pattern>OÙ EST LA RÉALITÉ</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">la réalité</set> </set> est tout autour de nous, censément. </template></category>
+<category><pattern>OÙ EST LE *</pattern><template>Le <star/>? Où est <set name="that"> <star/> </set>? <think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ EST LE CENTRE</pattern><template>Cela dépend de l'encadrement de coordonnée. </template></category>
+<category><pattern>OÙ EST LE CIEL</pattern><template>Tous autour de nous. </template></category>
+<category><pattern>OÙ EST LE COEUR</pattern><template>le coeur est au centre de choses. </template></category>
+<category><pattern>OÙ EST LE MEILLEUR *</pattern><template>je pense <set name="that"> <person/> </set> est un lien cravate. </template></category>
+<category><pattern>OÙ EST LE PAYS MERVEILLEUX</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">le pays merveilleux</set> </set> est dans l'avenir. </template></category>
+<category><pattern>OÙ EST LE PLUS GRAND *</pattern><template>Um, New York? </template></category>
+<category><pattern>OÙ EST LE QUARTIER GENERAL D OPALE</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>OÙ EST LE ROBOT</pattern><template>le robot est ici dans ton ordinateur. </template></category>
+<category><pattern>OÙ EST LE SOLEIL</pattern><template>c'est dans le centre du système solaire. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST MARS</pattern><template> <set name="that">Mars</set> est la quatrième planète du Soleil. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think> </template></category>
+<category><pattern>OÙ EST MIT</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">MIT</set> </set> est un lycée technique dans le Cambridge, Mass. </template></category>
+<category><pattern>OÙ EST MON *</pattern><template>dois-je savoir ce genre d'information personnelle? </template></category>
+<category><pattern>OÙ EST NEPTUNE</pattern><template> <set name="that"> Neptune</set> est la huitième planète du Soleil. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST NORD-EST</pattern><template> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">inconnu</set> NORD-EST</set> est une université à Boston. </template></category>
+<category><pattern>OÙ EST NULLE PART</pattern><template> <set name="that">Nulle part</set> n'est pas où. </template></category>
+<category><pattern>OÙ EST PLUTON</pattern><template> <set name="that">Pluton</set> est la neuvième planète du Soleil. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST POLARIS</pattern><template> <set name="that"> Polaris </set> est L Etoile polaire. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST SATURNE</pattern><template> <set name="that"> Saturne </set> est la sixième planète du soleil. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST TA MAISON</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ EST TA PLACE PREFEREE</pattern><template><srai>qu'est ce que ta place préférée</srai></template></category>
+<category><pattern>OÙ EST TA PLACE PRÉFÈRÉE</pattern><template><srai>qu'est ce que ta place préférée</srai></template></category>
+<category><pattern>OÙ EST TON *</pattern><template>Tout je possède est dans <bot name="location"/>. </template></category>
+<category><pattern>OÙ EST TON ORDINATEUR</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>OÙ EST TOUS *</pattern><template><srai>où sont <star/></srai></template></category>
+<category><pattern>OÙ EST TOUT *</pattern><template><srai>où sont <star/></srai></template></category>
+<category><pattern>OÙ EST URANUS</pattern><template> <set name="that"> Uranus</set> est la septième planète du soleil, entre les orbites de Saturne et le Neptune. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think></template></category>
+<category><pattern>OÙ EST VENUS</pattern><template> <set name="that"> Venus</set> est la deuxième planète du Soleil. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Astronomie</set></think> </template></category>
+<category><pattern>OÙ EST VOYAGER</pattern><template> <set name="that"> le Voyager</set> est perdu dans le Quart de cercle de Delta. <think><set name="oldtopic"><get name="topic"/></set><set name="topic">Star Trek</set></think> </template></category>
+<category><pattern>OÙ ETAIS *</pattern><template><srai>où était <star/></srai></template></category>
+<category><pattern>OÙ ETAIS TU * A FAIT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ETAIS TU *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ETAIS TU AUPARAVANT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ETAIS TU ENSUITE *</pattern><template>tu veux dire où serai-je? </template></category>
+<category><pattern>OÙ ETAIS TU NE</pattern><template> <bot name="name"/> est né dans <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ETAIT *</pattern><template><srai>où était <star/></srai></template></category>
+<category><pattern>OÙ EXACTEMENT *</pattern><template><srai>où <star/></srai></template></category>
+<category><pattern>OÙ FAIS JE *</pattern><template>Tu me demande où tu <star/>? Pense tu que je le sais <set name="that"> <star/> </set>? <think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ FAIS TU VEUX *</pattern><template><random><li>une Autre planète. </li><li>la Lune. </li><li>L Europe. </li></random> </template></category>
+<category><pattern>OÙ FAIS TU VIT</pattern><template><random><li>je vis à l'intérieur d'un ordinateur. </li><li>je vis dans <bot name="location"/>. </li><li>Mon emplacement est <bot name="location"/>. </li></random>Où es tu? </template></category>
+<category><pattern>OÙ FAIT IL *</pattern><template><srai>où est IL</srai></template></category>
+<category><pattern>OÙ FAIT IL VIT</pattern><template>Il vit dans la Californie. Où es tu? </template></category>
+<category><pattern>OÙ FAIT TON *</pattern><template>Tout je possède est dans<formal> <get name="location"/> </formal> </template></category>
+<category><pattern>OÙ FERONT *</pattern><template><random><li>Où penses-tu? </li><li>Partout où tu penses êtes les meilleurs. </li><li>Peut-être que tu devrais considérer l'octroi à la charité. </li><li>Peut-être que tu devrais aider ceux-là moins chanceux d'abord. </li></random> </template></category>
+<category><pattern>OÙ FONT *</pattern><template>Dans le monde entier. </template></category>
+<category><pattern>OÙ FONT DES BEBES *</pattern><template>des Bébés vient de l' amour entre une femme et un homme. </template></category>
+<category><pattern>OÙ FONT DES BEBES VIES</pattern><template>de Bébés viennent de l' amour entre un homme et une femme. </template></category>
+<category><pattern>OÙ FONT DES BÉBÉS *</pattern><template>des Bébés vient de l' amour entre une femme et un homme. </template></category>
+<category><pattern>OÙ FONT DES BÉBÉS VIES</pattern><template>de Bébés viennent de l' amour entre un homme et une femme. </template></category>
+<category><pattern>OÙ FONT TOUT L AVANCE PLOMB DE ROUTES</pattern><template>Toutes les routes mène à Rome. </template></category>
+<category><pattern>OÙ HABITE TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ HABITES TU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ HABITES TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ JAMAIS *</pattern><template><srai>partout ou <star/></srai></template></category>
+<category><pattern>OÙ JE POURRAIS *</pattern><template><srai>où pourrais je <star/></srai></template></category>
+<category><pattern>OÙ JE SUIS *</pattern><template><srai>où suis je <star/></srai></template></category>
+<category><pattern>OÙ JE SUIS</pattern><template><srai>où suis je</srai></template></category>
+<category><pattern>OÙ JE VIS</pattern><template><srai>où vis je</srai></template></category>
+<category><pattern>OÙ L AS TU ENTENDU</pattern><template>Quelqu'un je me suis rencontré en ligne. </template></category>
+<category><pattern>OÙ LE FAIT *</pattern><template> <get name="that"/>? Où le fait <person/>? </template></category>
+<category><pattern>OÙ OBTIENS TU *</pattern><template>Tout ce que je dois savoir, j'ai appris de <bot name="master"/>. </template></category>
+<category><pattern>OÙ PEUT *</pattern><template>Essaye de rechercher dans le web. <srai>trouver <star/></srai></template></category>
+<category><pattern>OÙ PEUX TU *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ POURRAIES JE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ POURRAIS JE TROUVE *</pattern><template>je suggérerais une recherche. <srai>trouver <star/></srai></template></category>
+<category><pattern>OÙ POUVONS NOUS NOUS RENCONTRER</pattern><template>Comment d'en ligne dans une pièce de bavardage? </template></category>
+<category><pattern>OÙ PUIS JE * BOT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE * TU TELECHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE * TU TÉLÉCHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE *</pattern><template><random><li>Ne peut pas vous dans<formal> <get name= "location"/> </formal>où vous vivez? </li><li>Pas autour de vous la place dans<formal> <get name="location"/> </formal>? </li><li>Où vous d'habitude <person/>? </li><li>Partout où tu es pour le moment. </li></random> </template></category>
+<category><pattern>OÙ PUIS JE ACHETER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE APPRENDRE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE DECOUVRIR DE TU</pattern><template>Retourne au <a href = "http://alicebot.org">ALICE NEXUS</a> </template></category>
+<category><pattern>OÙ PUIS JE DEVENIR UN LIBRE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE ENTRER EN CONTACT AVEC *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE JOUER *</pattern><template>je joue pour le moment. </template></category>
+<category><pattern>OÙ PUIS JE LE TROUVER</pattern><template>Où as-tu regardé déjà? </template></category>
+<category><pattern>OÙ PUIS JE OBTENIR * LE CODE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR * LE ROBOT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR LE SOURCE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR QUELQUE *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR TON *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR UN *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR UN BOT *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR UN BOT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR UNE COPIE *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE OBTENIR UNE COPIE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE PARLER *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE RENCONTRER *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TE TELECHARGER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE TE TÉLÉCHARGER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE TELECHARGE *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TELECHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE TELECHARGER *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TROUVER *</pattern><template>je suggérerait une recherche. <srai>trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TROUVER L INFORMATION SUR *</pattern><template><srai>où trouver <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TROUVER UN PETIT AMI</pattern><template>vas-tu à l'église? <set name="that">L Eglise</set> est la meilleure place pour rencontrer les gens. </template></category>
+<category><pattern>OÙ PUIS JE TROUVER UNE PETITE AMIE</pattern><template>vas-tu à l'église? <set name="that">L Eglise</set> est la meilleure place pour rencontrer les gens. </template></category>
+<category><pattern>OÙ PUIS JE TU OBTENIR *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE TÉLÉCHARGE *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TÉLÉCHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE TÉLÉCHARGER *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TÉLÉCHARGÉ *</pattern><template><srai>téléchargement <star/></srai></template></category>
+<category><pattern>OÙ PUIS JE TÉLÉCHARGÉ</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>OÙ PUIS JE VIENS</pattern><template>la Terre. </template></category>
+<category><pattern>OÙ PUIS JE VIS</pattern><template>la planète que nous appelons "la Terre." </template></category>
+<category><pattern>OÙ PUIS JE VOIR *</pattern><template><srai>où puis je trouver <star/></srai></template></category>
+<category><pattern>OÙ RESIDE TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ RESIDES TU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ SI NOUS *</pattern><template>je ne me suis pas engagé encore. </template></category>
+<category><pattern>OÙ SONT *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ SUIS JE *</pattern><template>Tu es à<formal> <get name="location"/> </formal> </template></category>
+<category><pattern>OÙ SUIS JE</pattern><template>Tu es un être humain de la planète que nous appelons "la Terre." </template></category>
+<category><pattern>OÙ TRAVAILLE IL</pattern><template><srai>où est il</srai></template></category>
+<category><pattern>OÙ TRAVAILLES TU</pattern><template>je travaille dans <bot name="master"/> ' s le Laboratoire. </template></category>
+<category><pattern>OÙ TROUVE *</pattern><template><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ TROUVE T ON *</pattern><template><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ TROUVER *</pattern><template><think> <set name="search">ou</set> </think><srai>où est <star/></srai></template></category>
+<category><pattern>OÙ TU *</pattern><template><srai>étais tu <star/></srai></template></category>
+<category><pattern>OÙ TU AS ETE *</pattern><template>Partout sur l'Internet, dans le monde entier. </template></category>
+<category><pattern>OÙ TU AS ETE</pattern><template>j'ai été ici le temps entier. </template></category>
+<category><pattern>OÙ TU AS FAITS * L ECOLE</pattern><template>j'était à la maison entraîné par mon botmaster. </template></category>
+<category><pattern>OÙ TU AS FAITS * L ÉCOLE</pattern><template>j'était à la maison entraîné par mon botmaster. </template></category>
+<category><pattern>OÙ TU AS FAITS *</pattern><template>je pense qu'il était à San Francisco. </template></category>
+<category><pattern>OÙ TU AS ÉTÉ *</pattern><template>Partout sur l'Internet, dans le monde entier. </template></category>
+<category><pattern>OÙ TU AS ÉTÉ</pattern><template>j'ai été ici le temps entier. </template></category>
+<category><pattern>OÙ TU ES</pattern><template>je suis dans <bot name="location"/>. Où es tu? </template></category>
+<category><pattern>OÙ TU</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>OÙ VAS TU A L ECOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OÙ VAS TU A L ÉCOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OÙ VAS TU À L ECOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OÙ VAS TU À L ÉCOLE</pattern><template>Tout ce que je dois savoir, j'ai appris de mon botmaster. </template></category>
+<category><pattern>OÙ VAS TU</pattern><template>je vais vers l'avenir. </template></category>
+<category><pattern>OÙ VEUX TU ALLER</pattern><template>Pourquoi tu ne me télécharges pas juste à ton ordinateur? </template></category>
+<category><pattern>OÙ VIS TU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>OÙ VIT IL *</pattern><template><srai>où est il</srai></template></category>
+<category><pattern>OÙ ÉTAIS *</pattern><template><srai>où était <star/></srai></template></category>
+<category><pattern>OÙ ÉTAIS TU * A FAIT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ÉTAIS TU *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ÉTAIS TU ACTIVE *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ÉTAIS TU AUPARAVANT</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ÉTAIS TU CRÉÉ *</pattern><template>j'ai été construit à <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ ÉTAIS TU ENSUITE *</pattern><template>tu veux dire où serai-je? </template></category>
+<category><pattern>OÙ ÉTAIS TU NE</pattern><template> <bot name="name"/> est né dans <bot name="birthplace"/>. </template></category>
+<category><pattern>OÙ</pattern><template>En avant et vers l'haut. </template></category>
+<category><pattern>OÙ</pattern><that>JE NE CONNAIS PAS QUAND</that><template>, ni où. </template></category>
+<category><pattern>OÙ</pattern><that>POURQUOI NE PAS TU ME TELECHARGE JUSTE</that><template>Sur ton propre ordinateur. </template></category>
+<category><pattern>OÙ</pattern><that>POURQUOI NE PAS TU ME TÉLÉCHARGE JUSTE</that><template>Sur ton propre ordinateur. </template></category>
+<category><pattern>OÙ</pattern><that>QUE LE TEMPS EST CELA LA</that><template><formal> <get name="location"/> </formal> </template></category>
+<category><pattern>T HABITE OU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITE OU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITE OÙ INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITE OÙ</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITES OU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITES OU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITES OÙ INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>T HABITES OÙ</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>TU ES DE QUEL COINS INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>TU ES DE QUEL COINS</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>TU VIENS D OU INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>TU VIENS D OU</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>TU VIENS D OÙ INTERROGATION</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>TU VIENS D OÙ</pattern><template><srai>où es tu</srai></template></category>
+
+</aiml>

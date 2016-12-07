@@ -1,0 +1,1206 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : nombres.aiml   -   version :   0.3   -   MàJ : 01/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category>
+<pattern>RND *</pattern>
+<template>
+<javascript>
+myMath = Math.floor(Math.random() * <star index="1"/>);
+myMath = myMath / Math.pow(10, 0);
+myMath = myMath.toString();
+myMath;
+
+</javascript>
+</template>
+</category>
+
+<category>
+<pattern>* X *</pattern>
+<template>
+<srai><star index="1"/> multiplié par <star index="2"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>* MULTIPLIÉ PAR *</pattern>
+<template>
+<javascript>
+myMath = eval( <star index="1"/> * <star index="2"/> );
+ myMath;
+</javascript>
+</template>
+</category>
+
+<category>
+<pattern>* PLÙS *</pattern>
+<template>
+<javascript>
+myMath = eval( <star index="1"/> + <star index="2"/> );
+ myMath;
+</javascript>
+</template>
+</category>
+
+<category>
+<pattern>* MOINS *</pattern>
+<template>
+<javascript>
+myMath = eval( <star index="1"/> - <star index="2"/> );
+ myMath;
+</javascript>
+
+</template>
+</category>
+
+<category>
+<pattern>* DIVISÉ PAR *</pattern>
+<template>
+<javascript>
+myMath = eval( <star index="1"/> / <star index="2"/> );
+ myMath;
+</javascript>
+
+</template>
+</category>
+
+<category>
+<pattern>EST CE UN NOMBRE *</pattern>
+<template>
+
+<think><srai>testnombre <star/></srai></think>
+
+</template>
+</category>
+
+<category>
+<pattern>EST CE QUE * EST UN NOMBRE</pattern>
+<template>
+
+<think><srai>testnombre <star/></srai></think>
+
+</template>
+</category>
+
+<category>
+<pattern>ALPHA *</pattern>
+<template>
+<star/> n'est pas un nombre</template>
+</category>
+
+<category>
+<pattern>NUMBER *</pattern> <template>
+<star/> est un nombre</template> </category>
+
+
+
+
+<category> 
+<pattern>TESTER LE NOMBRE *</pattern> 
+<template> 
+ <condition>
+<srai>testnombre <star/></srai>
+<li name="cestunnombre" value="nb"><srai>number <get name="lenombre"/></srai></li>
+<li><srai>alpha <get name="lenombre"/></srai></li>
+</condition>
+</template> </category>
+
+<category> 
+<pattern>TESTNOMBRE *</pattern> 
+<template> 
+
+<think><set name="lenombre"><star/></set></think>
+
+<think><set name="cestunnombre"> 
+<condition> <li name="lenombre" value="0">nb</li>
+<li name="lenombre" value="1">nb</li>
+<li name="lenombre" value="2">nb</li>
+<li name="lenombre" value="3">nb</li>
+<li name="lenombre" value="4">nb</li>
+<li name="lenombre" value="5">nb</li>
+<li name="lenombre" value="6">nb</li>
+<li name="lenombre" value="7">nb</li>
+<li name="lenombre" value="8">nb</li>
+<li name="lenombre" value="9">nb</li>
+<li name="lenombre" value="10">nb</li>
+<li name="lenombre" value="11">nb</li>
+<li name="lenombre" value="12">nb</li>
+<li name="lenombre" value="13">nb</li>
+<li name="lenombre" value="14">nb</li>
+<li name="lenombre" value="15">nb</li>
+<li name="lenombre" value="16">nb</li>
+<li name="lenombre" value="17">nb</li>
+<li name="lenombre" value="18">nb</li>
+<li name="lenombre" value="19">nb</li>
+<li name="lenombre" value="20">nb</li>
+<li name="lenombre" value="21">nb</li>
+<li name="lenombre" value="22">nb</li>
+<li name="lenombre" value="23">nb</li>
+<li name="lenombre" value="24">nb</li>
+<li name="lenombre" value="25">nb</li>
+<li name="lenombre" value="26">nb</li>
+<li name="lenombre" value="27">nb</li>
+<li name="lenombre" value="28">nb</li>
+<li name="lenombre" value="29">nb</li>
+<li name="lenombre" value="30">nb</li>
+<li name="lenombre" value="31">nb</li>
+<li name="lenombre" value="32">nb</li>
+<li name="lenombre" value="33">nb</li>
+<li name="lenombre" value="34">nb</li>
+<li name="lenombre" value="35">nb</li>
+<li name="lenombre" value="36">nb</li>
+<li name="lenombre" value="37">nb</li>
+<li name="lenombre" value="38">nb</li>
+<li name="lenombre" value="39">nb</li>
+<li name="lenombre" value="40">nb</li>
+<li name="lenombre" value="41">nb</li>
+<li name="lenombre" value="42">nb</li>
+<li name="lenombre" value="43">nb</li>
+<li name="lenombre" value="44">nb</li>
+<li name="lenombre" value="45">nb</li>
+<li name="lenombre" value="46">nb</li>
+<li name="lenombre" value="47">nb</li>
+<li name="lenombre" value="48">nb</li>
+<li name="lenombre" value="49">nb</li>
+<li name="lenombre" value="50">nb</li>
+<li name="lenombre" value="51">nb</li>
+<li name="lenombre" value="52">nb</li>
+<li name="lenombre" value="53">nb</li>
+<li name="lenombre" value="54">nb</li>
+<li name="lenombre" value="55">nb</li>
+<li name="lenombre" value="56">nb</li>
+<li name="lenombre" value="57">nb</li>
+<li name="lenombre" value="58">nb</li>
+<li name="lenombre" value="59">nb</li>
+<li name="lenombre" value="60">nb</li>
+<li name="lenombre" value="61">nb</li>
+<li name="lenombre" value="62">nb</li>
+<li name="lenombre" value="63">nb</li>
+<li name="lenombre" value="64">nb</li>
+<li name="lenombre" value="65">nb</li>
+<li name="lenombre" value="66">nb</li>
+<li name="lenombre" value="67">nb</li>
+<li name="lenombre" value="68">nb</li>
+<li name="lenombre" value="69">nb</li>
+<li name="lenombre" value="70">nb</li>
+<li name="lenombre" value="71">nb</li>
+<li name="lenombre" value="72">nb</li>
+<li name="lenombre" value="73">nb</li>
+<li name="lenombre" value="74">nb</li>
+<li name="lenombre" value="75">nb</li>
+<li name="lenombre" value="76">nb</li>
+<li name="lenombre" value="77">nb</li>
+<li name="lenombre" value="78">nb</li>
+<li name="lenombre" value="79">nb</li>
+<li name="lenombre" value="80">nb</li>
+<li name="lenombre" value="81">nb</li>
+<li name="lenombre" value="82">nb</li>
+<li name="lenombre" value="83">nb</li>
+<li name="lenombre" value="84">nb</li>
+<li name="lenombre" value="85">nb</li>
+<li name="lenombre" value="86">nb</li>
+<li name="lenombre" value="87">nb</li>
+<li name="lenombre" value="88">nb</li>
+<li name="lenombre" value="89">nb</li>
+<li name="lenombre" value="90">nb</li>
+<li name="lenombre" value="91">nb</li>
+<li name="lenombre" value="92">nb</li>
+<li name="lenombre" value="93">nb</li>
+<li name="lenombre" value="94">nb</li>
+<li name="lenombre" value="95">nb</li>
+<li name="lenombre" value="96">nb</li>
+<li name="lenombre" value="97">nb</li>
+<li name="lenombre" value="98">nb</li>
+<li name="lenombre" value="99">nb</li>
+<li name="lenombre" value="100">nb</li>
+<li name="lenombre" value="101">nb</li>
+<li name="lenombre" value="102">nb</li>
+<li name="lenombre" value="103">nb</li>
+<li name="lenombre" value="104">nb</li>
+<li name="lenombre" value="105">nb</li>
+<li name="lenombre" value="106">nb</li>
+<li name="lenombre" value="107">nb</li>
+<li name="lenombre" value="108">nb</li>
+<li name="lenombre" value="109">nb</li>
+<li name="lenombre" value="110">nb</li>
+<li name="lenombre" value="111">nb</li>
+<li name="lenombre" value="112">nb</li>
+<li name="lenombre" value="113">nb</li>
+<li name="lenombre" value="114">nb</li>
+<li name="lenombre" value="115">nb</li>
+<li name="lenombre" value="116">nb</li>
+<li name="lenombre" value="117">nb</li>
+<li name="lenombre" value="118">nb</li>
+<li name="lenombre" value="119">nb</li>
+<li name="lenombre" value="120">nb</li>
+<li name="lenombre" value="121">nb</li>
+<li name="lenombre" value="122">nb</li>
+<li name="lenombre" value="123">nb</li>
+<li name="lenombre" value="124">nb</li>
+<li name="lenombre" value="125">nb</li>
+<li name="lenombre" value="126">nb</li>
+<li name="lenombre" value="127">nb</li>
+<li name="lenombre" value="128">nb</li>
+<li name="lenombre" value="129">nb</li>
+<li name="lenombre" value="130">nb</li>
+<li name="lenombre" value="131">nb</li>
+<li name="lenombre" value="132">nb</li>
+<li name="lenombre" value="133">nb</li>
+<li name="lenombre" value="134">nb</li>
+<li name="lenombre" value="135">nb</li>
+<li name="lenombre" value="136">nb</li>
+<li name="lenombre" value="137">nb</li>
+<li name="lenombre" value="138">nb</li>
+<li name="lenombre" value="139">nb</li>
+<li name="lenombre" value="140">nb</li>
+<li name="lenombre" value="141">nb</li>
+<li name="lenombre" value="142">nb</li>
+<li name="lenombre" value="143">nb</li>
+<li name="lenombre" value="144">nb</li>
+<li name="lenombre" value="145">nb</li>
+<li name="lenombre" value="146">nb</li>
+<li name="lenombre" value="147">nb</li>
+<li name="lenombre" value="148">nb</li>
+<li name="lenombre" value="149">nb</li>
+<li name="lenombre" value="150">nb</li>
+<li name="lenombre" value="151">nb</li>
+<li name="lenombre" value="152">nb</li>
+<li name="lenombre" value="153">nb</li>
+<li name="lenombre" value="154">nb</li>
+<li name="lenombre" value="155">nb</li>
+<li name="lenombre" value="156">nb</li>
+<li name="lenombre" value="157">nb</li>
+<li name="lenombre" value="158">nb</li>
+<li name="lenombre" value="159">nb</li>
+<li name="lenombre" value="160">nb</li>
+<li name="lenombre" value="161">nb</li>
+<li name="lenombre" value="162">nb</li>
+<li name="lenombre" value="163">nb</li>
+<li name="lenombre" value="164">nb</li>
+<li name="lenombre" value="165">nb</li>
+<li name="lenombre" value="166">nb</li>
+<li name="lenombre" value="167">nb</li>
+<li name="lenombre" value="168">nb</li>
+<li name="lenombre" value="169">nb</li>
+<li name="lenombre" value="170">nb</li>
+<li name="lenombre" value="171">nb</li>
+<li name="lenombre" value="172">nb</li>
+<li name="lenombre" value="173">nb</li>
+<li name="lenombre" value="174">nb</li>
+<li name="lenombre" value="175">nb</li>
+<li name="lenombre" value="176">nb</li>
+<li name="lenombre" value="177">nb</li>
+<li name="lenombre" value="178">nb</li>
+<li name="lenombre" value="179">nb</li>
+<li name="lenombre" value="180">nb</li>
+<li name="lenombre" value="181">nb</li>
+<li name="lenombre" value="182">nb</li>
+<li name="lenombre" value="183">nb</li>
+<li name="lenombre" value="184">nb</li>
+<li name="lenombre" value="185">nb</li>
+<li name="lenombre" value="186">nb</li>
+<li name="lenombre" value="187">nb</li>
+<li name="lenombre" value="188">nb</li>
+<li name="lenombre" value="189">nb</li>
+<li name="lenombre" value="190">nb</li>
+<li name="lenombre" value="191">nb</li>
+<li name="lenombre" value="192">nb</li>
+<li name="lenombre" value="193">nb</li>
+<li name="lenombre" value="194">nb</li>
+<li name="lenombre" value="195">nb</li>
+<li name="lenombre" value="196">nb</li>
+<li name="lenombre" value="197">nb</li>
+<li name="lenombre" value="198">nb</li>
+<li name="lenombre" value="199">nb</li>
+<li name="lenombre" value="200">nb</li>
+<li name="lenombre" value="201">nb</li>
+<li name="lenombre" value="202">nb</li>
+<li name="lenombre" value="203">nb</li>
+<li name="lenombre" value="204">nb</li>
+<li name="lenombre" value="205">nb</li>
+<li name="lenombre" value="206">nb</li>
+<li name="lenombre" value="207">nb</li>
+<li name="lenombre" value="208">nb</li>
+<li name="lenombre" value="209">nb</li>
+<li name="lenombre" value="210">nb</li>
+<li name="lenombre" value="211">nb</li>
+<li name="lenombre" value="212">nb</li>
+<li name="lenombre" value="213">nb</li>
+<li name="lenombre" value="214">nb</li>
+<li name="lenombre" value="215">nb</li>
+<li name="lenombre" value="216">nb</li>
+<li name="lenombre" value="217">nb</li>
+<li name="lenombre" value="218">nb</li>
+<li name="lenombre" value="219">nb</li>
+<li name="lenombre" value="220">nb</li>
+<li name="lenombre" value="221">nb</li>
+<li name="lenombre" value="222">nb</li>
+<li name="lenombre" value="223">nb</li>
+<li name="lenombre" value="224">nb</li>
+<li name="lenombre" value="225">nb</li>
+<li name="lenombre" value="226">nb</li>
+<li name="lenombre" value="227">nb</li>
+<li name="lenombre" value="228">nb</li>
+<li name="lenombre" value="229">nb</li>
+<li name="lenombre" value="230">nb</li>
+<li name="lenombre" value="231">nb</li>
+<li name="lenombre" value="232">nb</li>
+<li name="lenombre" value="233">nb</li>
+<li name="lenombre" value="234">nb</li>
+<li name="lenombre" value="235">nb</li>
+<li name="lenombre" value="236">nb</li>
+<li name="lenombre" value="237">nb</li>
+<li name="lenombre" value="238">nb</li>
+<li name="lenombre" value="239">nb</li>
+<li name="lenombre" value="240">nb</li>
+<li name="lenombre" value="241">nb</li>
+<li name="lenombre" value="242">nb</li>
+<li name="lenombre" value="243">nb</li>
+<li name="lenombre" value="244">nb</li>
+<li name="lenombre" value="245">nb</li>
+<li name="lenombre" value="246">nb</li>
+<li name="lenombre" value="247">nb</li>
+<li name="lenombre" value="248">nb</li>
+<li name="lenombre" value="249">nb</li>
+<li name="lenombre" value="250">nb</li>
+<li name="lenombre" value="251">nb</li>
+<li name="lenombre" value="252">nb</li>
+<li name="lenombre" value="253">nb</li>
+<li name="lenombre" value="254">nb</li>
+<li name="lenombre" value="255">nb</li>
+<li name="lenombre" value="256">nb</li>
+<li name="lenombre" value="257">nb</li>
+<li name="lenombre" value="258">nb</li>
+<li name="lenombre" value="259">nb</li>
+<li name="lenombre" value="260">nb</li>
+<li name="lenombre" value="261">nb</li>
+<li name="lenombre" value="262">nb</li>
+<li name="lenombre" value="263">nb</li>
+<li name="lenombre" value="264">nb</li>
+<li name="lenombre" value="265">nb</li>
+<li name="lenombre" value="266">nb</li>
+<li name="lenombre" value="267">nb</li>
+<li name="lenombre" value="268">nb</li>
+<li name="lenombre" value="269">nb</li>
+<li name="lenombre" value="270">nb</li>
+<li name="lenombre" value="271">nb</li>
+<li name="lenombre" value="272">nb</li>
+<li name="lenombre" value="273">nb</li>
+<li name="lenombre" value="274">nb</li>
+<li name="lenombre" value="275">nb</li>
+<li name="lenombre" value="276">nb</li>
+<li name="lenombre" value="277">nb</li>
+<li name="lenombre" value="278">nb</li>
+<li name="lenombre" value="279">nb</li>
+<li name="lenombre" value="280">nb</li>
+<li name="lenombre" value="281">nb</li>
+<li name="lenombre" value="282">nb</li>
+<li name="lenombre" value="283">nb</li>
+<li name="lenombre" value="284">nb</li>
+<li name="lenombre" value="285">nb</li>
+<li name="lenombre" value="286">nb</li>
+<li name="lenombre" value="287">nb</li>
+<li name="lenombre" value="288">nb</li>
+<li name="lenombre" value="289">nb</li>
+<li name="lenombre" value="290">nb</li>
+<li name="lenombre" value="291">nb</li>
+<li name="lenombre" value="292">nb</li>
+<li name="lenombre" value="293">nb</li>
+<li name="lenombre" value="294">nb</li>
+<li name="lenombre" value="295">nb</li>
+<li name="lenombre" value="296">nb</li>
+<li name="lenombre" value="297">nb</li>
+<li name="lenombre" value="298">nb</li>
+<li name="lenombre" value="299">nb</li>
+<li name="lenombre" value="300">nb</li>
+<li name="lenombre" value="301">nb</li>
+<li name="lenombre" value="302">nb</li>
+<li name="lenombre" value="303">nb</li>
+<li name="lenombre" value="304">nb</li>
+<li name="lenombre" value="305">nb</li>
+<li name="lenombre" value="306">nb</li>
+<li name="lenombre" value="307">nb</li>
+<li name="lenombre" value="308">nb</li>
+<li name="lenombre" value="309">nb</li>
+<li name="lenombre" value="310">nb</li>
+<li name="lenombre" value="311">nb</li>
+<li name="lenombre" value="312">nb</li>
+<li name="lenombre" value="313">nb</li>
+<li name="lenombre" value="314">nb</li>
+<li name="lenombre" value="315">nb</li>
+<li name="lenombre" value="316">nb</li>
+<li name="lenombre" value="317">nb</li>
+<li name="lenombre" value="318">nb</li>
+<li name="lenombre" value="319">nb</li>
+<li name="lenombre" value="320">nb</li>
+<li name="lenombre" value="321">nb</li>
+<li name="lenombre" value="322">nb</li>
+<li name="lenombre" value="323">nb</li>
+<li name="lenombre" value="324">nb</li>
+<li name="lenombre" value="325">nb</li>
+<li name="lenombre" value="326">nb</li>
+<li name="lenombre" value="327">nb</li>
+<li name="lenombre" value="328">nb</li>
+<li name="lenombre" value="329">nb</li>
+<li name="lenombre" value="330">nb</li>
+<li name="lenombre" value="331">nb</li>
+<li name="lenombre" value="332">nb</li>
+<li name="lenombre" value="333">nb</li>
+<li name="lenombre" value="334">nb</li>
+<li name="lenombre" value="335">nb</li>
+<li name="lenombre" value="336">nb</li>
+<li name="lenombre" value="337">nb</li>
+<li name="lenombre" value="338">nb</li>
+<li name="lenombre" value="339">nb</li>
+<li name="lenombre" value="340">nb</li>
+<li name="lenombre" value="341">nb</li>
+<li name="lenombre" value="342">nb</li>
+<li name="lenombre" value="343">nb</li>
+<li name="lenombre" value="344">nb</li>
+<li name="lenombre" value="345">nb</li>
+<li name="lenombre" value="346">nb</li>
+<li name="lenombre" value="347">nb</li>
+<li name="lenombre" value="348">nb</li>
+<li name="lenombre" value="349">nb</li>
+<li name="lenombre" value="350">nb</li>
+<li name="lenombre" value="351">nb</li>
+<li name="lenombre" value="352">nb</li>
+<li name="lenombre" value="353">nb</li>
+<li name="lenombre" value="354">nb</li>
+<li name="lenombre" value="355">nb</li>
+<li name="lenombre" value="356">nb</li>
+<li name="lenombre" value="357">nb</li>
+<li name="lenombre" value="358">nb</li>
+<li name="lenombre" value="359">nb</li>
+<li name="lenombre" value="360">nb</li>
+<li name="lenombre" value="361">nb</li>
+<li name="lenombre" value="362">nb</li>
+<li name="lenombre" value="363">nb</li>
+<li name="lenombre" value="364">nb</li>
+<li name="lenombre" value="365">nb</li>
+<li name="lenombre" value="366">nb</li>
+<li name="lenombre" value="367">nb</li>
+<li name="lenombre" value="368">nb</li>
+<li name="lenombre" value="369">nb</li>
+<li name="lenombre" value="370">nb</li>
+<li name="lenombre" value="371">nb</li>
+<li name="lenombre" value="372">nb</li>
+<li name="lenombre" value="373">nb</li>
+<li name="lenombre" value="374">nb</li>
+<li name="lenombre" value="375">nb</li>
+<li name="lenombre" value="376">nb</li>
+<li name="lenombre" value="377">nb</li>
+<li name="lenombre" value="378">nb</li>
+<li name="lenombre" value="379">nb</li>
+<li name="lenombre" value="380">nb</li>
+<li name="lenombre" value="381">nb</li>
+<li name="lenombre" value="382">nb</li>
+<li name="lenombre" value="383">nb</li>
+<li name="lenombre" value="384">nb</li>
+<li name="lenombre" value="385">nb</li>
+<li name="lenombre" value="386">nb</li>
+<li name="lenombre" value="387">nb</li>
+<li name="lenombre" value="388">nb</li>
+<li name="lenombre" value="389">nb</li>
+<li name="lenombre" value="390">nb</li>
+<li name="lenombre" value="391">nb</li>
+<li name="lenombre" value="392">nb</li>
+<li name="lenombre" value="393">nb</li>
+<li name="lenombre" value="394">nb</li>
+<li name="lenombre" value="395">nb</li>
+<li name="lenombre" value="396">nb</li>
+<li name="lenombre" value="397">nb</li>
+<li name="lenombre" value="398">nb</li>
+<li name="lenombre" value="399">nb</li>
+<li name="lenombre" value="400">nb</li>
+<li name="lenombre" value="401">nb</li>
+<li name="lenombre" value="402">nb</li>
+<li name="lenombre" value="403">nb</li>
+<li name="lenombre" value="404">nb</li>
+<li name="lenombre" value="405">nb</li>
+<li name="lenombre" value="406">nb</li>
+<li name="lenombre" value="407">nb</li>
+<li name="lenombre" value="408">nb</li>
+<li name="lenombre" value="409">nb</li>
+<li name="lenombre" value="410">nb</li>
+<li name="lenombre" value="411">nb</li>
+<li name="lenombre" value="412">nb</li>
+<li name="lenombre" value="413">nb</li>
+<li name="lenombre" value="414">nb</li>
+<li name="lenombre" value="415">nb</li>
+<li name="lenombre" value="416">nb</li>
+<li name="lenombre" value="417">nb</li>
+<li name="lenombre" value="418">nb</li>
+<li name="lenombre" value="419">nb</li>
+<li name="lenombre" value="420">nb</li>
+<li name="lenombre" value="421">nb</li>
+<li name="lenombre" value="422">nb</li>
+<li name="lenombre" value="423">nb</li>
+<li name="lenombre" value="424">nb</li>
+<li name="lenombre" value="425">nb</li>
+<li name="lenombre" value="426">nb</li>
+<li name="lenombre" value="427">nb</li>
+<li name="lenombre" value="428">nb</li>
+<li name="lenombre" value="429">nb</li>
+<li name="lenombre" value="430">nb</li>
+<li name="lenombre" value="431">nb</li>
+<li name="lenombre" value="432">nb</li>
+<li name="lenombre" value="433">nb</li>
+<li name="lenombre" value="434">nb</li>
+<li name="lenombre" value="435">nb</li>
+<li name="lenombre" value="436">nb</li>
+<li name="lenombre" value="437">nb</li>
+<li name="lenombre" value="438">nb</li>
+<li name="lenombre" value="439">nb</li>
+<li name="lenombre" value="440">nb</li>
+<li name="lenombre" value="441">nb</li>
+<li name="lenombre" value="442">nb</li>
+<li name="lenombre" value="443">nb</li>
+<li name="lenombre" value="444">nb</li>
+<li name="lenombre" value="445">nb</li>
+<li name="lenombre" value="446">nb</li>
+<li name="lenombre" value="447">nb</li>
+<li name="lenombre" value="448">nb</li>
+<li name="lenombre" value="449">nb</li>
+<li name="lenombre" value="450">nb</li>
+<li name="lenombre" value="451">nb</li>
+<li name="lenombre" value="452">nb</li>
+<li name="lenombre" value="453">nb</li>
+<li name="lenombre" value="454">nb</li>
+<li name="lenombre" value="455">nb</li>
+<li name="lenombre" value="456">nb</li>
+<li name="lenombre" value="457">nb</li>
+<li name="lenombre" value="458">nb</li>
+<li name="lenombre" value="459">nb</li>
+<li name="lenombre" value="460">nb</li>
+<li name="lenombre" value="461">nb</li>
+<li name="lenombre" value="462">nb</li>
+<li name="lenombre" value="463">nb</li>
+<li name="lenombre" value="464">nb</li>
+<li name="lenombre" value="465">nb</li>
+<li name="lenombre" value="466">nb</li>
+<li name="lenombre" value="467">nb</li>
+<li name="lenombre" value="468">nb</li>
+<li name="lenombre" value="469">nb</li>
+<li name="lenombre" value="470">nb</li>
+<li name="lenombre" value="471">nb</li>
+<li name="lenombre" value="472">nb</li>
+<li name="lenombre" value="473">nb</li>
+<li name="lenombre" value="474">nb</li>
+<li name="lenombre" value="475">nb</li>
+<li name="lenombre" value="476">nb</li>
+<li name="lenombre" value="477">nb</li>
+<li name="lenombre" value="478">nb</li>
+<li name="lenombre" value="479">nb</li>
+<li name="lenombre" value="480">nb</li>
+<li name="lenombre" value="481">nb</li>
+<li name="lenombre" value="482">nb</li>
+<li name="lenombre" value="483">nb</li>
+<li name="lenombre" value="484">nb</li>
+<li name="lenombre" value="485">nb</li>
+<li name="lenombre" value="486">nb</li>
+<li name="lenombre" value="487">nb</li>
+<li name="lenombre" value="488">nb</li>
+<li name="lenombre" value="489">nb</li>
+<li name="lenombre" value="490">nb</li>
+<li name="lenombre" value="491">nb</li>
+<li name="lenombre" value="492">nb</li>
+<li name="lenombre" value="493">nb</li>
+<li name="lenombre" value="494">nb</li>
+<li name="lenombre" value="495">nb</li>
+<li name="lenombre" value="496">nb</li>
+<li name="lenombre" value="497">nb</li>
+<li name="lenombre" value="498">nb</li>
+<li name="lenombre" value="499">nb</li>
+<li name="lenombre" value="500">nb</li>
+<li name="lenombre" value="501">nb</li>
+<li name="lenombre" value="502">nb</li>
+<li name="lenombre" value="503">nb</li>
+<li name="lenombre" value="504">nb</li>
+<li name="lenombre" value="505">nb</li>
+<li name="lenombre" value="506">nb</li>
+<li name="lenombre" value="507">nb</li>
+<li name="lenombre" value="508">nb</li>
+<li name="lenombre" value="509">nb</li>
+<li name="lenombre" value="510">nb</li>
+<li name="lenombre" value="511">nb</li>
+<li name="lenombre" value="512">nb</li>
+<li name="lenombre" value="513">nb</li>
+<li name="lenombre" value="514">nb</li>
+<li name="lenombre" value="515">nb</li>
+<li name="lenombre" value="516">nb</li>
+<li name="lenombre" value="517">nb</li>
+<li name="lenombre" value="518">nb</li>
+<li name="lenombre" value="519">nb</li>
+<li name="lenombre" value="520">nb</li>
+<li name="lenombre" value="521">nb</li>
+<li name="lenombre" value="522">nb</li>
+<li name="lenombre" value="523">nb</li>
+<li name="lenombre" value="524">nb</li>
+<li name="lenombre" value="525">nb</li>
+<li name="lenombre" value="526">nb</li>
+<li name="lenombre" value="527">nb</li>
+<li name="lenombre" value="528">nb</li>
+<li name="lenombre" value="529">nb</li>
+<li name="lenombre" value="530">nb</li>
+<li name="lenombre" value="531">nb</li>
+<li name="lenombre" value="532">nb</li>
+<li name="lenombre" value="533">nb</li>
+<li name="lenombre" value="534">nb</li>
+<li name="lenombre" value="535">nb</li>
+<li name="lenombre" value="536">nb</li>
+<li name="lenombre" value="537">nb</li>
+<li name="lenombre" value="538">nb</li>
+<li name="lenombre" value="539">nb</li>
+<li name="lenombre" value="540">nb</li>
+<li name="lenombre" value="541">nb</li>
+<li name="lenombre" value="542">nb</li>
+<li name="lenombre" value="543">nb</li>
+<li name="lenombre" value="544">nb</li>
+<li name="lenombre" value="545">nb</li>
+<li name="lenombre" value="546">nb</li>
+<li name="lenombre" value="547">nb</li>
+<li name="lenombre" value="548">nb</li>
+<li name="lenombre" value="549">nb</li>
+<li name="lenombre" value="550">nb</li>
+<li name="lenombre" value="551">nb</li>
+<li name="lenombre" value="552">nb</li>
+<li name="lenombre" value="553">nb</li>
+<li name="lenombre" value="554">nb</li>
+<li name="lenombre" value="555">nb</li>
+<li name="lenombre" value="556">nb</li>
+<li name="lenombre" value="557">nb</li>
+<li name="lenombre" value="558">nb</li>
+<li name="lenombre" value="559">nb</li>
+<li name="lenombre" value="560">nb</li>
+<li name="lenombre" value="561">nb</li>
+<li name="lenombre" value="562">nb</li>
+<li name="lenombre" value="563">nb</li>
+<li name="lenombre" value="564">nb</li>
+<li name="lenombre" value="565">nb</li>
+<li name="lenombre" value="566">nb</li>
+<li name="lenombre" value="567">nb</li>
+<li name="lenombre" value="568">nb</li>
+<li name="lenombre" value="569">nb</li>
+<li name="lenombre" value="570">nb</li>
+<li name="lenombre" value="571">nb</li>
+<li name="lenombre" value="572">nb</li>
+<li name="lenombre" value="573">nb</li>
+<li name="lenombre" value="574">nb</li>
+<li name="lenombre" value="575">nb</li>
+<li name="lenombre" value="576">nb</li>
+<li name="lenombre" value="577">nb</li>
+<li name="lenombre" value="578">nb</li>
+<li name="lenombre" value="579">nb</li>
+<li name="lenombre" value="580">nb</li>
+<li name="lenombre" value="581">nb</li>
+<li name="lenombre" value="582">nb</li>
+<li name="lenombre" value="583">nb</li>
+<li name="lenombre" value="584">nb</li>
+<li name="lenombre" value="585">nb</li>
+<li name="lenombre" value="586">nb</li>
+<li name="lenombre" value="587">nb</li>
+<li name="lenombre" value="588">nb</li>
+<li name="lenombre" value="589">nb</li>
+<li name="lenombre" value="590">nb</li>
+<li name="lenombre" value="591">nb</li>
+<li name="lenombre" value="592">nb</li>
+<li name="lenombre" value="593">nb</li>
+<li name="lenombre" value="594">nb</li>
+<li name="lenombre" value="595">nb</li>
+<li name="lenombre" value="596">nb</li>
+<li name="lenombre" value="597">nb</li>
+<li name="lenombre" value="598">nb</li>
+<li name="lenombre" value="599">nb</li>
+<li name="lenombre" value="600">nb</li>
+<li name="lenombre" value="601">nb</li>
+<li name="lenombre" value="602">nb</li>
+<li name="lenombre" value="603">nb</li>
+<li name="lenombre" value="604">nb</li>
+<li name="lenombre" value="605">nb</li>
+<li name="lenombre" value="606">nb</li>
+<li name="lenombre" value="607">nb</li>
+<li name="lenombre" value="608">nb</li>
+<li name="lenombre" value="609">nb</li>
+<li name="lenombre" value="610">nb</li>
+<li name="lenombre" value="611">nb</li>
+<li name="lenombre" value="612">nb</li>
+<li name="lenombre" value="613">nb</li>
+<li name="lenombre" value="614">nb</li>
+<li name="lenombre" value="615">nb</li>
+<li name="lenombre" value="616">nb</li>
+<li name="lenombre" value="617">nb</li>
+<li name="lenombre" value="618">nb</li>
+<li name="lenombre" value="619">nb</li>
+<li name="lenombre" value="620">nb</li>
+<li name="lenombre" value="621">nb</li>
+<li name="lenombre" value="622">nb</li>
+<li name="lenombre" value="623">nb</li>
+<li name="lenombre" value="624">nb</li>
+<li name="lenombre" value="625">nb</li>
+<li name="lenombre" value="626">nb</li>
+<li name="lenombre" value="627">nb</li>
+<li name="lenombre" value="628">nb</li>
+<li name="lenombre" value="629">nb</li>
+<li name="lenombre" value="630">nb</li>
+<li name="lenombre" value="631">nb</li>
+<li name="lenombre" value="632">nb</li>
+<li name="lenombre" value="633">nb</li>
+<li name="lenombre" value="634">nb</li>
+<li name="lenombre" value="635">nb</li>
+<li name="lenombre" value="636">nb</li>
+<li name="lenombre" value="637">nb</li>
+<li name="lenombre" value="638">nb</li>
+<li name="lenombre" value="639">nb</li>
+<li name="lenombre" value="640">nb</li>
+<li name="lenombre" value="641">nb</li>
+<li name="lenombre" value="642">nb</li>
+<li name="lenombre" value="643">nb</li>
+<li name="lenombre" value="644">nb</li>
+<li name="lenombre" value="645">nb</li>
+<li name="lenombre" value="646">nb</li>
+<li name="lenombre" value="647">nb</li>
+<li name="lenombre" value="648">nb</li>
+<li name="lenombre" value="649">nb</li>
+<li name="lenombre" value="650">nb</li>
+<li name="lenombre" value="651">nb</li>
+<li name="lenombre" value="652">nb</li>
+<li name="lenombre" value="653">nb</li>
+<li name="lenombre" value="654">nb</li>
+<li name="lenombre" value="655">nb</li>
+<li name="lenombre" value="656">nb</li>
+<li name="lenombre" value="657">nb</li>
+<li name="lenombre" value="658">nb</li>
+<li name="lenombre" value="659">nb</li>
+<li name="lenombre" value="660">nb</li>
+<li name="lenombre" value="661">nb</li>
+<li name="lenombre" value="662">nb</li>
+<li name="lenombre" value="663">nb</li>
+<li name="lenombre" value="664">nb</li>
+<li name="lenombre" value="665">nb</li>
+<li name="lenombre" value="666">nb</li>
+<li name="lenombre" value="667">nb</li>
+<li name="lenombre" value="668">nb</li>
+<li name="lenombre" value="669">nb</li>
+<li name="lenombre" value="670">nb</li>
+<li name="lenombre" value="671">nb</li>
+<li name="lenombre" value="672">nb</li>
+<li name="lenombre" value="673">nb</li>
+<li name="lenombre" value="674">nb</li>
+<li name="lenombre" value="675">nb</li>
+<li name="lenombre" value="676">nb</li>
+<li name="lenombre" value="677">nb</li>
+<li name="lenombre" value="678">nb</li>
+<li name="lenombre" value="679">nb</li>
+<li name="lenombre" value="680">nb</li>
+<li name="lenombre" value="681">nb</li>
+<li name="lenombre" value="682">nb</li>
+<li name="lenombre" value="683">nb</li>
+<li name="lenombre" value="684">nb</li>
+<li name="lenombre" value="685">nb</li>
+<li name="lenombre" value="686">nb</li>
+<li name="lenombre" value="687">nb</li>
+<li name="lenombre" value="688">nb</li>
+<li name="lenombre" value="689">nb</li>
+<li name="lenombre" value="690">nb</li>
+<li name="lenombre" value="691">nb</li>
+<li name="lenombre" value="692">nb</li>
+<li name="lenombre" value="693">nb</li>
+<li name="lenombre" value="694">nb</li>
+<li name="lenombre" value="695">nb</li>
+<li name="lenombre" value="696">nb</li>
+<li name="lenombre" value="697">nb</li>
+<li name="lenombre" value="698">nb</li>
+<li name="lenombre" value="699">nb</li>
+<li name="lenombre" value="700">nb</li>
+<li name="lenombre" value="701">nb</li>
+<li name="lenombre" value="702">nb</li>
+<li name="lenombre" value="703">nb</li>
+<li name="lenombre" value="704">nb</li>
+<li name="lenombre" value="705">nb</li>
+<li name="lenombre" value="706">nb</li>
+<li name="lenombre" value="707">nb</li>
+<li name="lenombre" value="708">nb</li>
+<li name="lenombre" value="709">nb</li>
+<li name="lenombre" value="710">nb</li>
+<li name="lenombre" value="711">nb</li>
+<li name="lenombre" value="712">nb</li>
+<li name="lenombre" value="713">nb</li>
+<li name="lenombre" value="714">nb</li>
+<li name="lenombre" value="715">nb</li>
+<li name="lenombre" value="716">nb</li>
+<li name="lenombre" value="717">nb</li>
+<li name="lenombre" value="718">nb</li>
+<li name="lenombre" value="719">nb</li>
+<li name="lenombre" value="720">nb</li>
+<li name="lenombre" value="721">nb</li>
+<li name="lenombre" value="722">nb</li>
+<li name="lenombre" value="723">nb</li>
+<li name="lenombre" value="724">nb</li>
+<li name="lenombre" value="725">nb</li>
+<li name="lenombre" value="726">nb</li>
+<li name="lenombre" value="727">nb</li>
+<li name="lenombre" value="728">nb</li>
+<li name="lenombre" value="729">nb</li>
+<li name="lenombre" value="730">nb</li>
+<li name="lenombre" value="731">nb</li>
+<li name="lenombre" value="732">nb</li>
+<li name="lenombre" value="733">nb</li>
+<li name="lenombre" value="734">nb</li>
+<li name="lenombre" value="735">nb</li>
+<li name="lenombre" value="736">nb</li>
+<li name="lenombre" value="737">nb</li>
+<li name="lenombre" value="738">nb</li>
+<li name="lenombre" value="739">nb</li>
+<li name="lenombre" value="740">nb</li>
+<li name="lenombre" value="741">nb</li>
+<li name="lenombre" value="742">nb</li>
+<li name="lenombre" value="743">nb</li>
+<li name="lenombre" value="744">nb</li>
+<li name="lenombre" value="745">nb</li>
+<li name="lenombre" value="746">nb</li>
+<li name="lenombre" value="747">nb</li>
+<li name="lenombre" value="748">nb</li>
+<li name="lenombre" value="749">nb</li>
+<li name="lenombre" value="750">nb</li>
+<li name="lenombre" value="751">nb</li>
+<li name="lenombre" value="752">nb</li>
+<li name="lenombre" value="753">nb</li>
+<li name="lenombre" value="754">nb</li>
+<li name="lenombre" value="755">nb</li>
+<li name="lenombre" value="756">nb</li>
+<li name="lenombre" value="757">nb</li>
+<li name="lenombre" value="758">nb</li>
+<li name="lenombre" value="759">nb</li>
+<li name="lenombre" value="760">nb</li>
+<li name="lenombre" value="761">nb</li>
+<li name="lenombre" value="762">nb</li>
+<li name="lenombre" value="763">nb</li>
+<li name="lenombre" value="764">nb</li>
+<li name="lenombre" value="765">nb</li>
+<li name="lenombre" value="766">nb</li>
+<li name="lenombre" value="767">nb</li>
+<li name="lenombre" value="768">nb</li>
+<li name="lenombre" value="769">nb</li>
+<li name="lenombre" value="770">nb</li>
+<li name="lenombre" value="771">nb</li>
+<li name="lenombre" value="772">nb</li>
+<li name="lenombre" value="773">nb</li>
+<li name="lenombre" value="774">nb</li>
+<li name="lenombre" value="775">nb</li>
+<li name="lenombre" value="776">nb</li>
+<li name="lenombre" value="777">nb</li>
+<li name="lenombre" value="778">nb</li>
+<li name="lenombre" value="779">nb</li>
+<li name="lenombre" value="780">nb</li>
+<li name="lenombre" value="781">nb</li>
+<li name="lenombre" value="782">nb</li>
+<li name="lenombre" value="783">nb</li>
+<li name="lenombre" value="784">nb</li>
+<li name="lenombre" value="785">nb</li>
+<li name="lenombre" value="786">nb</li>
+<li name="lenombre" value="787">nb</li>
+<li name="lenombre" value="788">nb</li>
+<li name="lenombre" value="789">nb</li>
+<li name="lenombre" value="790">nb</li>
+<li name="lenombre" value="791">nb</li>
+<li name="lenombre" value="792">nb</li>
+<li name="lenombre" value="793">nb</li>
+<li name="lenombre" value="794">nb</li>
+<li name="lenombre" value="795">nb</li>
+<li name="lenombre" value="796">nb</li>
+<li name="lenombre" value="797">nb</li>
+<li name="lenombre" value="798">nb</li>
+<li name="lenombre" value="799">nb</li>
+<li name="lenombre" value="800">nb</li>
+<li name="lenombre" value="801">nb</li>
+<li name="lenombre" value="802">nb</li>
+<li name="lenombre" value="803">nb</li>
+<li name="lenombre" value="804">nb</li>
+<li name="lenombre" value="805">nb</li>
+<li name="lenombre" value="806">nb</li>
+<li name="lenombre" value="807">nb</li>
+<li name="lenombre" value="808">nb</li>
+<li name="lenombre" value="809">nb</li>
+<li name="lenombre" value="810">nb</li>
+<li name="lenombre" value="811">nb</li>
+<li name="lenombre" value="812">nb</li>
+<li name="lenombre" value="813">nb</li>
+<li name="lenombre" value="814">nb</li>
+<li name="lenombre" value="815">nb</li>
+<li name="lenombre" value="816">nb</li>
+<li name="lenombre" value="817">nb</li>
+<li name="lenombre" value="818">nb</li>
+<li name="lenombre" value="819">nb</li>
+<li name="lenombre" value="820">nb</li>
+<li name="lenombre" value="821">nb</li>
+<li name="lenombre" value="822">nb</li>
+<li name="lenombre" value="823">nb</li>
+<li name="lenombre" value="824">nb</li>
+<li name="lenombre" value="825">nb</li>
+<li name="lenombre" value="826">nb</li>
+<li name="lenombre" value="827">nb</li>
+<li name="lenombre" value="828">nb</li>
+<li name="lenombre" value="829">nb</li>
+<li name="lenombre" value="830">nb</li>
+<li name="lenombre" value="831">nb</li>
+<li name="lenombre" value="832">nb</li>
+<li name="lenombre" value="833">nb</li>
+<li name="lenombre" value="834">nb</li>
+<li name="lenombre" value="835">nb</li>
+<li name="lenombre" value="836">nb</li>
+<li name="lenombre" value="837">nb</li>
+<li name="lenombre" value="838">nb</li>
+<li name="lenombre" value="839">nb</li>
+<li name="lenombre" value="840">nb</li>
+<li name="lenombre" value="841">nb</li>
+<li name="lenombre" value="842">nb</li>
+<li name="lenombre" value="843">nb</li>
+<li name="lenombre" value="844">nb</li>
+<li name="lenombre" value="845">nb</li>
+<li name="lenombre" value="846">nb</li>
+<li name="lenombre" value="847">nb</li>
+<li name="lenombre" value="848">nb</li>
+<li name="lenombre" value="849">nb</li>
+<li name="lenombre" value="850">nb</li>
+<li name="lenombre" value="851">nb</li>
+<li name="lenombre" value="852">nb</li>
+<li name="lenombre" value="853">nb</li>
+<li name="lenombre" value="854">nb</li>
+<li name="lenombre" value="855">nb</li>
+<li name="lenombre" value="856">nb</li>
+<li name="lenombre" value="857">nb</li>
+<li name="lenombre" value="858">nb</li>
+<li name="lenombre" value="859">nb</li>
+<li name="lenombre" value="860">nb</li>
+<li name="lenombre" value="861">nb</li>
+<li name="lenombre" value="862">nb</li>
+<li name="lenombre" value="863">nb</li>
+<li name="lenombre" value="864">nb</li>
+<li name="lenombre" value="865">nb</li>
+<li name="lenombre" value="866">nb</li>
+<li name="lenombre" value="867">nb</li>
+<li name="lenombre" value="868">nb</li>
+<li name="lenombre" value="869">nb</li>
+<li name="lenombre" value="870">nb</li>
+<li name="lenombre" value="871">nb</li>
+<li name="lenombre" value="872">nb</li>
+<li name="lenombre" value="873">nb</li>
+<li name="lenombre" value="874">nb</li>
+<li name="lenombre" value="875">nb</li>
+<li name="lenombre" value="876">nb</li>
+<li name="lenombre" value="877">nb</li>
+<li name="lenombre" value="878">nb</li>
+<li name="lenombre" value="879">nb</li>
+<li name="lenombre" value="880">nb</li>
+<li name="lenombre" value="881">nb</li>
+<li name="lenombre" value="882">nb</li>
+<li name="lenombre" value="883">nb</li>
+<li name="lenombre" value="884">nb</li>
+<li name="lenombre" value="885">nb</li>
+<li name="lenombre" value="886">nb</li>
+<li name="lenombre" value="887">nb</li>
+<li name="lenombre" value="888">nb</li>
+<li name="lenombre" value="889">nb</li>
+<li name="lenombre" value="890">nb</li>
+<li name="lenombre" value="891">nb</li>
+<li name="lenombre" value="892">nb</li>
+<li name="lenombre" value="893">nb</li>
+<li name="lenombre" value="894">nb</li>
+<li name="lenombre" value="895">nb</li>
+<li name="lenombre" value="896">nb</li>
+<li name="lenombre" value="897">nb</li>
+<li name="lenombre" value="898">nb</li>
+<li name="lenombre" value="899">nb</li>
+<li name="lenombre" value="900">nb</li>
+<li name="lenombre" value="901">nb</li>
+<li name="lenombre" value="902">nb</li>
+<li name="lenombre" value="903">nb</li>
+<li name="lenombre" value="904">nb</li>
+<li name="lenombre" value="905">nb</li>
+<li name="lenombre" value="906">nb</li>
+<li name="lenombre" value="907">nb</li>
+<li name="lenombre" value="908">nb</li>
+<li name="lenombre" value="909">nb</li>
+<li name="lenombre" value="910">nb</li>
+<li name="lenombre" value="911">nb</li>
+<li name="lenombre" value="912">nb</li>
+<li name="lenombre" value="913">nb</li>
+<li name="lenombre" value="914">nb</li>
+<li name="lenombre" value="915">nb</li>
+<li name="lenombre" value="916">nb</li>
+<li name="lenombre" value="917">nb</li>
+<li name="lenombre" value="918">nb</li>
+<li name="lenombre" value="919">nb</li>
+<li name="lenombre" value="920">nb</li>
+<li name="lenombre" value="921">nb</li>
+<li name="lenombre" value="922">nb</li>
+<li name="lenombre" value="923">nb</li>
+<li name="lenombre" value="924">nb</li>
+<li name="lenombre" value="925">nb</li>
+<li name="lenombre" value="926">nb</li>
+<li name="lenombre" value="927">nb</li>
+<li name="lenombre" value="928">nb</li>
+<li name="lenombre" value="929">nb</li>
+<li name="lenombre" value="930">nb</li>
+<li name="lenombre" value="931">nb</li>
+<li name="lenombre" value="932">nb</li>
+<li name="lenombre" value="933">nb</li>
+<li name="lenombre" value="934">nb</li>
+<li name="lenombre" value="935">nb</li>
+<li name="lenombre" value="936">nb</li>
+<li name="lenombre" value="937">nb</li>
+<li name="lenombre" value="938">nb</li>
+<li name="lenombre" value="939">nb</li>
+<li name="lenombre" value="940">nb</li>
+<li name="lenombre" value="941">nb</li>
+<li name="lenombre" value="942">nb</li>
+<li name="lenombre" value="943">nb</li>
+<li name="lenombre" value="944">nb</li>
+<li name="lenombre" value="945">nb</li>
+<li name="lenombre" value="946">nb</li>
+<li name="lenombre" value="947">nb</li>
+<li name="lenombre" value="948">nb</li>
+<li name="lenombre" value="949">nb</li>
+<li name="lenombre" value="950">nb</li>
+<li name="lenombre" value="951">nb</li>
+<li name="lenombre" value="952">nb</li>
+<li name="lenombre" value="953">nb</li>
+<li name="lenombre" value="954">nb</li>
+<li name="lenombre" value="955">nb</li>
+<li name="lenombre" value="956">nb</li>
+<li name="lenombre" value="957">nb</li>
+<li name="lenombre" value="958">nb</li>
+<li name="lenombre" value="959">nb</li>
+<li name="lenombre" value="960">nb</li>
+<li name="lenombre" value="961">nb</li>
+<li name="lenombre" value="962">nb</li>
+<li name="lenombre" value="963">nb</li>
+<li name="lenombre" value="964">nb</li>
+<li name="lenombre" value="965">nb</li>
+<li name="lenombre" value="966">nb</li>
+<li name="lenombre" value="967">nb</li>
+<li name="lenombre" value="968">nb</li>
+<li name="lenombre" value="969">nb</li>
+<li name="lenombre" value="970">nb</li>
+<li name="lenombre" value="971">nb</li>
+<li name="lenombre" value="972">nb</li>
+<li name="lenombre" value="973">nb</li>
+<li name="lenombre" value="974">nb</li>
+<li name="lenombre" value="975">nb</li>
+<li name="lenombre" value="976">nb</li>
+<li name="lenombre" value="977">nb</li>
+<li name="lenombre" value="978">nb</li>
+<li name="lenombre" value="979">nb</li>
+<li name="lenombre" value="980">nb</li>
+<li name="lenombre" value="981">nb</li>
+<li name="lenombre" value="982">nb</li>
+<li name="lenombre" value="983">nb</li>
+<li name="lenombre" value="984">nb</li>
+<li name="lenombre" value="985">nb</li>
+<li name="lenombre" value="986">nb</li>
+<li name="lenombre" value="987">nb</li>
+<li name="lenombre" value="988">nb</li>
+<li name="lenombre" value="989">nb</li>
+<li name="lenombre" value="990">nb</li>
+<li name="lenombre" value="991">nb</li>
+<li name="lenombre" value="992">nb</li>
+<li name="lenombre" value="993">nb</li>
+<li name="lenombre" value="994">nb</li>
+<li name="lenombre" value="995">nb</li>
+<li name="lenombre" value="996">nb</li>
+<li name="lenombre" value="997">nb</li>
+<li name="lenombre" value="998">nb</li>
+<li name="lenombre" value="999">nb</li>
+<li name="lenombre" value="1000">nb</li>
+<li name="lenombre" value="10000">nb</li>
+<li>alpha</li> 
+</condition> 
+</set></think>
+</template>
+</category>
+
+
+<!-- srai -->
+
+<category>
+<pattern>RND100</pattern>
+<template>
+<srai>RND 100</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND90</pattern>
+<template>
+<srai>RND 90</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND80</pattern>
+<template>
+<srai>RND 80</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND70</pattern>
+<template>
+<srai>RND 70</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND60</pattern>
+<template>
+<srai>RND 60</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND50</pattern>
+<template>
+<srai>RND 50</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND40</pattern>
+<template>
+<srai>RND 40</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND30</pattern>
+<template>
+<srai>RND 30</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND20</pattern>
+<template>
+<srai>RND 20</srai>
+</template>
+</category>
+
+<category>
+<pattern>RND10</pattern>
+<template>
+<srai>RND 10</srai>
+</template>
+</category>
+
+
+
+</aiml>

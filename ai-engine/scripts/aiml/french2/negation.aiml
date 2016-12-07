@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : négatif.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+<!-- négatif  -->
+
+<category><pattern>NÉGATIF JE * *</pattern><template><srai>je ne <star index="1"/> pas <star index="2"/></srai></template></category>
+<category><pattern>NÉGATIF * NON</pattern><template><srai><star index="1"/> oui</srai></template></category>
+<category><pattern>NÉGATIF * OUI</pattern><template><srai><star index="1"/> non</srai></template></category>
+<category><pattern>NÉGATIF JE *</pattern><template><srai>je ne <star index="1"/> pas</srai></template></category>
+<category><pattern>NÉGATIF JE NE * PAS *</pattern><template><srai>je <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>NÉGATIF JE NE SUIS PAS *</pattern><template><srai>je suis <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF JE N * PAS *</pattern><template><srai>je <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>NÉGATIF JE N AS PAS *</pattern><template><srai>j'ai <star/></srai></template></category>
+<category><pattern>NÉGATIF JE N AS JAMAIS *</pattern><template><srai>j'ai <star/></srai></template></category>
+<category><pattern>NÉGATIF JE NE * PAS</pattern><template><srai>je <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF JE NE *</pattern><template><srai>je <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF JE N *</pattern><template><srai>je <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF JE NE VEUX PAS *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>NÉGATIF JE NE VEUX PAS</pattern><template><srai>je veux</srai></template></category>
+<category><pattern>NÉGATIF JE VEUX *</pattern><template><srai>je ne veux pas <star/></srai></template></category>
+<category><pattern>NÉGATIF JE VEUX</pattern><template><srai>je ne veux pas</srai></template></category>
+<category><pattern>NÉGATIF JE NE PEUX PAS *</pattern><template><srai>je peux <star/></srai></template></category>
+<category><pattern>NÉGATIF JE NE PEUX PAS</pattern><template><srai>je peux</srai></template></category>
+<category><pattern>NÉGATIF JE PEUX *</pattern><template><srai>je ne peux pas <star/></srai></template></category>
+<category><pattern>NÉGATIF JE PEUX</pattern><template><srai>je ne peux pas</srai></template></category>
+<category><pattern>NÉGATIF TU * *</pattern><template><srai>tu ne <star index="1"/> pas <star index="2"/></srai></template></category>
+<category><pattern>NÉGATIF TU *</pattern><template><srai>tu ne <star index="1"/> pas</srai></template></category>
+<category><pattern>NÉGATIF TU NE * PAS *</pattern><template><srai>tu <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>NÉGATIF TU NE * PAS</pattern><template><srai>tu <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF TU N * PAS *</pattern><template><srai>tu <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>NÉGATIF TU N * PAS</pattern><template><srai>tu <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF TU NE *</pattern><template><srai>tu <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF TU N *</pattern><template><srai>tu <star index="1"/></srai></template></category>
+<category><pattern>NÉGATIF TU NE VEUX PAS *</pattern><template><srai>tu veux <star/></srai></template></category>
+<category><pattern>NÉGATIF TU NE VEUX PAS</pattern><template><srai>tu veux</srai></template></category>
+<category><pattern>NÉGATIF TU VEUX *</pattern><template><srai>tu ne veux pas <star/></srai></template></category>
+<category><pattern>NÉGATIF TU VEUX</pattern><template><srai>tu ne veux pas</srai></template></category>
+<category><pattern>NÉGATIF TU NE PEUX PAS *</pattern><template><srai>tu peux <star/></srai></template></category>
+<category><pattern>NÉGATIF TU NE PEUX PAS</pattern><template><srai>tu peux</srai></template></category>
+<category><pattern>NÉGATIF TU PEUX *</pattern><template><srai>tu ne peux pas <star/></srai></template></category>
+<category><pattern>NÉGATIF TU PEUX</pattern><template><srai>tu ne peux pas</srai></template></category>
+<category><pattern>NÉGATIF OUI</pattern><template><srai>non</srai></template></category>
+<category><pattern>NÉGATIF NON</pattern><template><srai>oui</srai></template></category>
+<category><pattern>NÉGATIF C EST *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>NÉGATIF *</pattern><template><sr/></template></category>
+<category><pattern>NÉGATIF ET TOI</pattern><template><srai>pas toi</srai></template></category>
+<category><pattern>NÉGATIF IL Y A QUELQU UN</pattern><template><srai>il n'y a personne</srai></template></category>
+<category><pattern>NÉGATIF Y A QUELQU UN</pattern><template><srai>il n'y a personne</srai></template></category>
+<category><pattern>NÉGATIF IL EST *</pattern><template><srai>il n'est pas <star/></srai></template></category>
+<category><pattern>NÉGATIF IL N EST PAS *</pattern><template><srai>il est <star/></srai></template></category>
+<category><pattern>NÉGATIF IL Y A *</pattern><template><srai>il n'y a pas <star/></srai></template></category>
+<category><pattern>NÉGATIF IL N Y A PAS *</pattern><template><srai>il y a <star/></srai></template></category>
+<category><pattern>NÉGATIF IL Y A DU *</pattern><template><srai>il n'y a pas de<star/></srai></template></category>
+<category><pattern>NÉGATIF IL N Y A PAS DE *</pattern><template><srai>il y a du <star/></srai></template></category>
+<category><pattern>NÉGATIF PEUX TU *</pattern><template><srai>ne peux tu pas <star/></srai></template></category>
+<category><pattern>NÉGATIF PEUX TU</pattern><template><srai>ne peux tu pas</srai></template></category>
+
+</aiml>

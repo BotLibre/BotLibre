@@ -8,6 +8,54 @@
     android:gravity="fill_vertical"
     android:orientation="vertical" >
 
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content" 
+            android:textSize="16sp"
+	        android:layout_margin="4sp"
+			android:text=""/>
+		
+	    <Button
+	        android:id="@+id/adminButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/properties"
+	        android:onClick="admin"
+	        android:text=""
+	        android:visibility="gone" />
+	    
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0px"
@@ -20,7 +68,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:src="@drawable/bot" />
+            android:src="@drawable/icon" />
 
         <LinearLayout
             android:layout_width="0px"
@@ -53,6 +101,14 @@
                 android:textSize="10sp" />
             
             <TextView
+                android:id="@+id/subdomainLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="subdomain"
+                android:autoLink="web"
+                android:textSize="10sp" />
+            
+            <TextView
                 android:id="@+id/licenseLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,6 +120,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="creator"
+                android:textSize="10sp" />
+            
+	        <LinearLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal">
+            
+			    <Button
+			        android:id="@+id/thumbsupButton"
+			        android:layout_width="24sp"
+			        android:layout_height="24sp"
+			        android:layout_margin="1dp"
+			        android:background="@drawable/thumbsup"
+			        android:onClick="thumbsUp"
+			        android:text="" />
+        
+	            <TextView
+	                android:id="@+id/thumbsupLabel"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="0"
+	                android:textSize="10sp" />
+			        
+			    <Button
+			        android:id="@+id/thumbsdownButton"
+			        android:layout_width="24sp"
+			        android:layout_height="24sp"
+			        android:layout_margin="1dp"
+			        android:background="@drawable/thumbsdown"
+			        android:onClick="thumbsDown"
+			        android:text="" />
+        
+	            <TextView
+	                android:id="@+id/thumbsdownLabel"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="0"
+	                android:textSize="10sp" />
+			        
+			    <Button
+			        android:id="@+id/starsButton"
+			        android:layout_width="24sp"
+			        android:layout_height="24sp"
+			        android:layout_margin="1dp"
+			        android:background="@drawable/star"
+			        android:onClick="star"
+			        android:text="" />
+        
+	            <TextView
+	                android:id="@+id/starsLabel"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="0"
+	                android:textSize="10sp" />
+	        
+			</LinearLayout>
+
+            <TextView
+                android:id="@+id/connectsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="connects"
                 android:textSize="10sp" />
 
         </LinearLayout>
@@ -130,31 +248,5 @@
 
         <requestFocus />
     </Button>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        
-    <Button
-        android:id="@+id/menuButton"
-        android:layout_width="32sp"
-        android:layout_height="32sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/menu"
-        android:onClick="menu"
-        android:text="" />
-        
-    <Button
-        android:id="@+id/adminButton"
-        android:layout_width="32sp"
-        android:layout_height="32sp"
-        android:layout_margin="1dp"
-        android:background="@drawable/properties"
-        android:onClick="admin"
-        android:text=""
-        android:visibility="gone" />
-    
-    </LinearLayout>
 
 </LinearLayout>

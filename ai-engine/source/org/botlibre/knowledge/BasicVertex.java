@@ -2182,9 +2182,15 @@ public class BasicVertex implements Vertex, Serializable {
 		if (this == vertex) {
 			return Boolean.TRUE;
 		}
-		if (hasData() && vertex.hasData() && (this.data instanceof String) && (vertex.getData() instanceof String)) {
-			if (((String)this.data).equalsIgnoreCase((String)vertex.getData())) {
-				return Boolean.TRUE;
+		if (hasData() && vertex.hasData()) {
+			if ((this.data instanceof String) && (vertex.getData() instanceof String)) {
+				if (((String)this.data).equalsIgnoreCase((String)vertex.getData())) {
+					return Boolean.TRUE;
+				}
+			} else if ((this.data instanceof Number) && (vertex.getData() instanceof Number)) {
+				if (((Number)this.data).doubleValue() == ((Number)vertex.getData()).doubleValue()) {
+					return Boolean.TRUE;
+				}
 			}
 		}
 		Vertex variable;
@@ -3558,6 +3564,13 @@ public class BasicVertex implements Vertex, Serializable {
 	/**
 	 * Set the relationship, removing the old value.
 	 */
+	public synchronized void setRelationship(Primitive type, Primitive newValue) {
+		setRelationship(this.network.createVertex(type), this.network.createVertex(newValue));
+	}
+	
+	/**
+	 * Set the relationship, removing the old value.
+	 */
 	public synchronized void setRelationship(Vertex type, Vertex newValue) {
 		Map<Relationship, Relationship> relationships = getRelationships().get(type);
 		if (relationships != null) {
@@ -3702,11 +3715,6 @@ public class BasicVertex implements Vertex, Serializable {
 	public String displayString() {
 		StringWriter writer = new StringWriter();
 		writer.write(String.valueOf(this.id));
-		if (hasName()) {
-			writer.write(" : {");
-			writer.write(getName());
-			writer.write("}");
-		}
 		if (hasData()) {
 			writer.write(" : ");
 			if (isPrimitive()) {
@@ -3718,6 +3726,12 @@ public class BasicVertex implements Vertex, Serializable {
 			writer.write(getDataValue());
 			if (this.data instanceof String) {
 				writer.write("\"");				
+			}
+		} else {
+			if (hasName()) {
+				writer.write(" : {");
+				writer.write(getName());
+				writer.write("}");
 			}
 		}
 		return writer.toString();
@@ -4143,6 +4157,8 @@ public class BasicVertex implements Vertex, Serializable {
 					this.data = new BinaryData((String)value);
 				} else if (this.dataType.equals("Text")) {
 					this.data = new TextData((String)value);
+				} else if (this.dataType.equals("URI")) {
+					this.data = new URI((String)value);
 				} else {
 					Class<Object> typeClass = (Class<Object>)Class.forName((String)this.dataType);							
 					this.data = typeClass.getConstructor(String.class).newInstance(value);
@@ -4197,6 +4213,8 @@ public class BasicVertex implements Vertex, Serializable {
 					this.data = new BinaryData((String)this.data);
 				} else if (type.equals("Text")) {
 					this.data = new TextData((String)this.data);
+				} else if (type.equals("URI")) {
+					this.data = new URI((String)this.data);
 				} else {
 					Class<Object> typeClass = (Class<Object>)Class.forName(type);							
 					this.data = typeClass.getConstructor(String.class).newInstance(this.data);
@@ -4245,6 +4263,8 @@ public class BasicVertex implements Vertex, Serializable {
 			return "Binary";
 		} else if (data instanceof TextData) {
 			return "Text";
+		} else if (data instanceof URI) {
+			return "URI";
 		} else {
 			return data.getClass().getName();
 		}
@@ -4335,6 +4355,16 @@ public class BasicVertex implements Vertex, Serializable {
 	 * Print the object's data such as a sentence or paragraph.
 	 */
 	public String printString() {
+		return printString(0);
+	}
+	
+	/**
+	 * Print the object's data such as a sentence or paragraph.
+	 */
+	public String printString(int depth) {
+		if (depth > 100) {
+			return "";
+		}
 		StringWriter writer = new StringWriter();
 		if (instanceOf(Primitive.PARAGRAPH) && this.data == null) {
 			Collection<Vertex> sentences = orderedRelations(Primitive.SENTENCE);
@@ -4351,7 +4381,7 @@ public class BasicVertex implements Vertex, Serializable {
 					if (!first) {
 						writer.write("  ");
 					}
-					last = each.getData().toString();
+					last = each.printString(depth++);
 					writer.write(last);
 					first = false;
 				}
@@ -4365,7 +4395,7 @@ public class BasicVertex implements Vertex, Serializable {
 					if (!first) {
 						writer.write(",  ");
 					}
-					writer.write(each.printString());
+					writer.write(each.printString(depth++));
 					first = false;
 				}
 			}
@@ -4379,7 +4409,7 @@ public class BasicVertex implements Vertex, Serializable {
 					if (!first) {
 						writer.write(",  ");
 					}
-					writer.write(each.printString());
+					writer.write(each.printString(depth++));
 					first = false;
 				}
 			}

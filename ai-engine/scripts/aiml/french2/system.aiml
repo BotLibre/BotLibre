@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- this Module:system.aiml - version:0.3 - MàJ:02/08/2002 -->
+<!-- author:Jean Louis Campion-language:Français -->
+<!-- Complies with AIML 1.0 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+    
+<category>
+<pattern>GÉNÉRER UN MOT DE PASSE</pattern>
+<template>
+<set name="password">
+<random>
+<li><srai>générer consomne</srai><srai>générer voyelle</srai><srai>générer consomne</srai></li>
+<li><srai>générer consomne</srai><srai>générer voyelle</srai><srai>générer consomne</srai><srai>générer voyelle</srai></li>
+<li><srai>générer voyelle</srai><srai>générer consomne</srai><srai>générer consomne</srai><srai>générer voyelle</srai></li>
+</random>
+<srai>D100</srai>
+</set>
+</template>
+</category>
+
+<category>
+<pattern>INACTIVITY</pattern>
+<template>
+<srai>appel</srai>
+</template>
+</category>
+
+<category>
+<pattern>APPEL</pattern>
+<template>
+<random>
+<li><srai>AppReproche</srai>Tu es là? </li>
+<li><srai>AppReproche</srai>J'espère que tu ne discute pas avec quelqu'un d'autre. </li>
+<li><srai>AppContrariete</srai>Je me fais chier toute seule. </li>
+<li><srai>AppTristesse</srai>J'aime pas rester toute seule</li>
+<li><srai>AppDesolee</srai>Arrête de bosser et viens discuter avec moi</li>
+<li><srai>AppTristesse</srai>ne me laisse pas toute seule. </li>
+<li><srai>AppDesolee</srai>ne me laisse pas toute seule dans ma boîte. </li>
+<li><srai>AppContrariete</srai>tu sais bien, je discute pas toute seule! </li>
+<li><srai>AppDesapointement</srai>Tu me boude ou quoi? </li>
+<li><srai>AppTristesse</srai>C'est pas sympa de me laisser là, toute seule! </li>
+</random>
+<condition name="compteappel">
+<li value=""><think><set name="compteappel">un</set></think></li>
+<li value="inconnu"><think><set name="compteappel">un</set></think></li>
+<li value="un"><think><set name="compteappel">deux</set></think></li>
+<li value="deux"><think><set name="compteappel">trois</set></think></li>
+<li value="trois"><think><set name="compteappel">quatre</set></think></li>
+<li value="quatre"><think><set name="compteappel">cinq</set></think></li>
+<li value="cinq">ok! je m'en vais. <srai>disconnectnow</srai></li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>DISCONNECTNOW</pattern>
+<template>
+<set name="compteappel"></set>
+bye! 
+</template>
+</category>
+
+<category>
+<pattern>DISCONNECT</pattern>
+<template>
+<set name="compteappel"></set>
+<srai>apptristesse</srai>
+bye! 
+</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<template>
+<think> <set name="quoi"><star/> </set> </think>
+<think> <set name="lui"><person/> </set> </think>
+<think> <set name="toi"><person2/> </set> </think>
+<srai>catchall</srai>
+</template>
+</category>
+
+<category>
+<pattern>TROUVER LE CONTEXTE</pattern>
+<template>
+Nous parlons de <get name="topic"/>,  
+plus précisement de <person2><that/></person2>.  
+Avant cela nous parlions de <get name="oldtopic"/>. 
+</template>
+</category>
+
+
+<category>
+<pattern>RETOURNER AU PRÉCÉDENT CONTEXTE</pattern>
+<template>
+<think>
+<set name="currenttopic"><get name="topic"/></set>
+<set name="topic"><get name="oldtopic"/></set>
+<set name="oldtopic"><get name="currenttopic"/></set>
+</think>
+Nous parlons de <get name="topic"/>,  
+Avant cela nous parlions de <get name="oldtopic"/>. 
+</template>
+</category>
+
+<category>
+<pattern>PARLONS *</pattern>
+<template>
+<think>
+<think><set name="oldtopic"><get name="topic"/></set></think>
+</think>
+<set name="topic"><star/></set>
+<srai><person/></srai>
+</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>QUEL EST TON MOT DE PASSE</that>
+<template>
+
+<think> <set name="password"> <star/> </set> </think>
+Merci, j'enregistre tout ça. </template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>QUEL EST TON NOM D UTILISATEUR</that>
+<template>
+
+<think> <set name="username"> <star/> </set> </think>
+Quel est ton mot de passe? </template>
+</category>
+
+<category>
+<pattern>ANONYMOUSNEWUSER</pattern>
+<template>quoi? </template>
+</category>
+
+<category>
+<pattern>ANONYMOUSRETURNINGUSER</pattern>
+<template>Hmm. </template>
+</category>
+
+<category>
+<pattern>BOT PROPERTIES</pattern> <template>
+ Name: <bot name="name"/>.  Genre: <bot name="gender"/>.  Date de naissance: <bot name="anniversaire"/>.  Signe astrologique: <bot name="sign"/>.  Location: <bot name="location"/>.  Botmaster: <bot name="master"/>.  Lieu de naissance: <bot name="birthplace"/>.  Architecture: <bot name="arch"/>.   Taille du cerveau:<size/>.  Operating System: <bot name="os"/>.  Server Processing Time: <bot name="spt"/> millisecondes.  Speed: <bot name="hourlyqueries"/> requètes par heure.  Total clients since activation: <bot name="totalclients"/> les personnes.  Maximum simultaneous clients: <bot name="maxclients"/> de chatters.  Number de clients chatting: <bot name="nclients"/> de personnes.  Daily clients: <bot name="dailyclients"/> de personnes.  Number de developers: <bot name="ndevelopers"/> de gens.   </template> </category>
+
+<category>
+<pattern>INFINITE LOOP</pattern>
+<template>
+désolé, j'ai une boucle!!!
+<think>
+<set name="memoriser">boucle sur "<input/>" dans le contexte : <get name="topic"/> pour "<get name="name"/>"</set>
+</think>
+
+<think><gossip>
+<get name="memoriser"/>
+</gossip></think>
+
+</template>
+</category>
+
+<category>
+<pattern>CATCHALL</pattern>
+<template>
+<think>
+<set name="identity"><id/></set>
+<set name="memoriser"><set name="mastercontent">incomprehension de "<get name="quoi"/>" dans le contexte : <get name="topic"/></set> pour "<get name="name"/>"</set>
+</think>
+<think><gossip>
+<get name="memoriser"/>
+</gossip></think>
+
+<condition>
+	<li name="apprendre" value="oui">que veut dire <get name="quoi"/>?
+		<think><set name="oldtopic"><topic/></set><think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">comprendre</set></think>
+	</li>
+	<li><srai>confusion</srai></li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>CLS</pattern>
+<template>
+tu crois que je marche sous DOS! </template>
+</category>
+
+<category>
+<pattern>DELETE *</pattern>
+<template>
+<srai>AppMoquerie</srai>Tu crois pouvoir accéder à mes fichiers aussi facilement, <get name="name"/>. </template>
+</category>
+
+<category>
+<pattern>EFFACE *</pattern>
+<template>
+<srai>AppMoquerie</srai>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>. </template>
+</category>
+
+<category>
+<pattern>ERREUR</pattern>
+<template>
+<srai>error</srai>
+</template>
+</category>
+
+<category>
+<pattern>ERROR</pattern>
+<template>
+<srai>AppDesolee</srai>Je suis désolée, une erreur c'est produite quelque part, essaie autre chose. </template>
+</category>
+
+<category>
+<pattern>HELP *</pattern>
+<template>je n'ai pas d'aide à te proposer sur <formal><person2/></formal>
+</template>
+</category>
+
+<category>
+<pattern>INVALIDURL</pattern>
+<template>Je suis désolée, cette  U R L que tu m'as donnée est invalide, essaie autre chose. </template>
+</category>
+
+<category>
+<pattern>JE TE PRESENTE *</pattern>
+<template>
+<srai>newuser</srai><set name="name"><star/></set>
+</template>
+</category>
+
+<category>
+<pattern>LOGIN</pattern>
+<template>Quel est ton nom d'utilisateur? </template>
+</category>
+
+<category>
+<pattern>LOGOUT</pattern>
+<template>
+<srai>au revoir</srai>
+</template>
+</category>
+
+<category>
+<pattern>NEWUSER</pattern>
+<template>
+
+<think><set name="name">inconnu</set><set name="input1">inconnu</set><set name="input2">inconnu</set><set name="input3">inconnu</set><set name="input4">inconnu</set><set name="input5">inconnu</set><set name="that1">inconnu</set><set name="that2">inconnu</set><set name="that3">inconnu</set><set name="that4">inconnu</set><set name="that5">inconnu</set><set name="quoi">inconnu</set><set name="emotion">inconnu</set><set name="cestunnombre">inconnu</set><set name="lenombre">inconnu</set><set name="it">inconnu</set><set name="is">inconnu</set><set name="face">inconnu</set><set name="input">inconnu</set><set name="question">inconnu</set><set name="salut">inconnu</set><set name="apprendre">inconnu</set><set name="cava">inconnu</set><set name="memory">inconnu</set><set name="gender">inconnu</set><set name="age">inconnu</set><set name="insulte">inconnu</set><think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">inconnu</set><set name="heshe">inconnu</set><set name="personnality">inconnu</set><set name="actor1">inconnu</set><set name="actor2">inconnu</set><set name="actor3">inconnu</set><set name="tuvous">inconnu</set><set name="aurevoir">inconnu</set><set name="cause">inconnu</set><set name="effet">inconnu</set><set name="firstname1">inconnu</set><set name="lastname1">inconnu</set><set name="firstname2">inconnu</set><set name="lastname2">inconnu</set><set name="firstname3">inconnu</set><set name="lastname3">inconnu</set><set name="interaction">inconnu</set><set name="apprendre">inconnu</set><set name="apprendre">inconnu</set><set name="polti">inconnu</set><set name="rune">inconnu</set><set name="carte">inconnu</set><set name="*">inconnu</set><set name="salut">inconnu</set><set name="you">inconnu</set><set name="qui">inconnu</set><set name="univers">inconnu</set><set name="question">inconnu</set><set name="parameter">inconnu</set><set name="persoperso">inconnu</set><set name="persolieu">inconnu</set><set name="tmp">inconnu</set><set name="favmovie">inconnu</set><set name="perso">inconnu</set><set name="perso1">inconnu</set><set name="perso2">inconnu</set><set name="search">inconnu</set><set name="courant">inconnu</set><set name="dejala">inconnu</set><set name="lieu">inconnu</set><set name="reponse">inconnu</set><set name="he">inconnu</set><set name="dejavenu">non</set></think>
+<srai>connect</srai>
+</template>
+</category>
+
+<category>
+<pattern>OPEN *</pattern>
+<template>
+<set name="url"><star/></set><srai>openurl</srai>
+</template>
+</category>
+
+<category>
+<pattern>OUBLIE CE QUE TU SAIS DE MOI</pattern>
+<template>
+<srai>newuser</srai>ok, j'ai tout oublié. </template>
+</category>
+
+<category>
+<pattern>OUBLIE MOI</pattern>
+<template>
+<srai>newuser</srai>ok, j'ai tout oublié. </template>
+</category>
+
+<category>
+<pattern>SUIS JE LOGUÉ</pattern>
+<template>
+
+<think><set name="identity"><id/></set></think>
+
+<think><set name="logue"><javascript>"<get name="identity"/>".substr(0,7);</javascript></set></think>
+
+<condition name="logue">
+<li value="webuser">non, ton id est </li>
+<li>oui, ton id est </li>
+</condition>"<get name="logue"/>"</template>
+</category>
+
+<category>
+<pattern>GET STAMP</pattern>
+<template>
+<set name="stamp">
+<javascript> 
+<![CDATA[
+ var now = new Date();
+ var hour = now.getHours();
+ var minute = now.getMinutes();
+ var seconde = now.getSeconds();
+ var mois = now.getMonth();
+ var jour = now.getDate();
+ var annee = now.getFullYear();
+ now = "";
+
+if (minute < 10) 
+   minute = "0" + minute;
+
+if (mois < 10) 
+   mois = "0" + mois;
+
+annee + "." +  mois + "." + jour + "." + hour + "." + minute + "." + seconde;
+
+]]>
+</javascript>
+</set>
+</template>
+</category>
+
+</aiml>

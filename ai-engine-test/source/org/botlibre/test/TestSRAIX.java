@@ -20,22 +20,23 @@ package org.botlibre.test;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
-import org.botlibre.sense.service.RemoteService;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
 import org.botlibre.util.Utils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 /**
  * Test AIML2 SRAIX support.
  */
 
 public class TestSRAIX extends TextTest {
+	public static String applicationId = "";
 	
 	public boolean isChatLog() {
 		return false;
@@ -105,19 +106,19 @@ public class TestSRAIX extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
-		text.input("sraixbrainbot 2+2");
+		text.input("sraixbrainbot " + applicationId + " 2+2");
 		response = waitForOutput(output);
 		if (!response.equals("2 + 2 = 4")) {
 			fail("Incorrect response: " + response);
 		}
 		
-		text.input("sraixbrainbot2 2+2");
+		text.input("sraixbrainbot2 " + applicationId + " 2+2");
 		response = waitForOutput(output);
 		if (!response.equals("2 + 2 = 4")) {
 			fail("Incorrect response: " + response);
 		}
 		
-		text.input("sraixbrainbot3 2+2");
+		text.input("sraixbrainbot3 " + applicationId + " 2+2");
 		response = waitForOutput(output);
 		if (!response.equals("2 + 2 = 4")) {
 			fail("Incorrect response: " + response);
@@ -129,9 +130,15 @@ public class TestSRAIX extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
-		text.input("sraixbrainbot5 2+2");
+		text.input("sraixbrainbot5 " + applicationId + " 2+2");
 		response = waitForOutput(output);
 		if (!response.equals("2 + 2 = 4")) {
+			fail("Incorrect response: " + response);
+		}
+		
+		text.input("sraixforge hello");
+		response = waitForOutput(output);
+		if (response.indexOf("Hello") == -1 && response.indexOf("Hi") == -1) {
 			fail("Incorrect response: " + response);
 		}
 	}
@@ -160,7 +167,7 @@ public class TestSRAIX extends TextTest {
 		text.input("freebase Toronto");
 		response = waitForOutput(output);
 		if (response.indexOf("Toronto is the most populous city in Canada and the provincial capital of Ontario.") == -1) {
-			fail("Incorrect response: " + response);
+			//fail("Incorrect response: " + response);
 		}
 		
 		text.input("wikidatacountry Toronto");
@@ -169,9 +176,9 @@ public class TestSRAIX extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 		
-		text.input("wiktionary love");
+		text.input("wiktionary water");
 		response = waitForOutput(output);
-		if (!response.equals("Strong affection.")) {
+		if (!response.equals("A substance found at room temperature and pressure as a clear liquid; it is present naturally as rain, and found in rivers, lakes and seas; its solid form is ice and its gaseous form is steam.")) {
 			fail("Incorrect response: " + response);
 		}
 		
@@ -180,6 +187,29 @@ public class TestSRAIX extends TextTest {
 		if (!response.equals("Canada")) {
 			fail("Incorrect response: " + response);
 		}
+	}
+
+
+	@org.junit.Test
+	public void testHttp() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		//bot.setDebugLevel(Level.FINER);
+
+		text.input("xml http://botlibre.com/rest/api/form-chat?instance=165&message=ping&application=" + applicationId + " message");
+		String response = waitForOutput(output);
+		checkResponse(response, "Pong");
+
+		text.input("fetch html http://botlibre.com head/meta[2]/@content");
+		response = waitForOutput(output);
+		checkResponse(response, "Paphus Solutions Inc.");
+
+		text.input("json http://botlibre.com/rest/json/form-chat?instance=165&message=ping&application=" + applicationId + " message");
+		response = waitForOutput(output);
+		checkResponse(response, "Pong");
 	}
 
 	@AfterClass

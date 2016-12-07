@@ -44,8 +44,6 @@ import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
-import org.botlibre.self.Self4Compiler;
-import org.botlibre.self.SelfByteCodeCompiler;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.self.SelfParseException;
 import org.botlibre.thought.language.Language;
@@ -155,6 +153,11 @@ public class AIMLParser {
 	 */
 	public Vertex parseAIML(String code, boolean parseAsStateMachine, boolean createStates, boolean pin, boolean indexStatic, Vertex stateMachine, Network network) {
 		try {
+			if (code.contains("&")) {
+				if (!code.contains("&amp;") && !code.contains("&lt;") && !code.contains("&gt;")) {
+					code = code.replace("&", "&amp;");
+				}
+			}
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder parser = factory.newDocumentBuilder();
 			StringReader reader = new StringReader(code);
@@ -432,7 +435,9 @@ public class AIMLParser {
 				relationship = language.addRelationship(Primitive.RESPONSE, response);
 			} else {
 				relationship = question.addRelationship(Primitive.RESPONSE, response);
-				question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
+				if (!question.instanceOf(Primitive.PATTERN)) {
+					question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
+				}
 			}
 			response.addRelationship(Primitive.QUESTION, question);
 			if (topic != null) {
@@ -566,7 +571,10 @@ public class AIMLParser {
 					if (word.getTarget().is(Primitive.UNDERSCORE) || word.getTarget().is(Primitive.POUNDWILDCARD)) {
 						currentState.addRelationship(Primitive.DO, caseMatch, 3);
 						newState.addRelationship(Primitive.DO, caseMatch, 10);
-					} else if (word.getTarget().is(Primitive.WILDCARD) || word.getTarget().is(Primitive.HATWILDCARD)) {
+					} else if (word.getTarget().is(Primitive.WILDCARD)) {
+						currentState.addRelationship(Primitive.DO, caseMatch, 7);
+						newState.addRelationship(Primitive.DO, caseMatch, 10);
+					} else if (word.getTarget().is(Primitive.HATWILDCARD)) {
 						currentState.addRelationship(Primitive.DO, caseMatch, 6);
 						newState.addRelationship(Primitive.DO, caseMatch, 10);
 					} else {
@@ -976,7 +984,7 @@ public class AIMLParser {
 				}
 				comma = true;
 				writer.write("service: ");
-				writer.write(value);
+				writer.write(value.toLowerCase());
 			}
 			value = getNodeValue(child, "server", null, false, true, multiStar, srai, network);
 			if (value != null) {
@@ -1256,15 +1264,50 @@ public class AIMLParser {
 			}
 			writer.write(")");
 		} else if (name.equals("date")) {
+			String locale = getNodeValue(child, "locale", null, false, true, multiStar, srai, network);
+			String timezone = getNodeValue(child, "timezone", null, false, true, multiStar, srai, network);
 			String format = getNodeValue(child, "format", null, false, true, multiStar, srai, network);
 			String jformat = getNodeValue(child, "jformat", null, false, true, multiStar, srai, network);
+			if (timezone != null || locale != null) {
+				if (jformat == null && format == null) {
+					format = "\"%x\"";
+				}
+			}
 			if (jformat != null) {
 				writer.write("Date.printDate(Date.timestamp(), ");
 				writer.write(jformat);
+				if (timezone != null || locale != null) {
+					writer.write(", ");
+					if (timezone != null) {
+						writer.write(timezone);
+					} else {
+						writer.write("null");
+					}
+					writer.write(", ");
+					if (locale != null) {
+						writer.write(locale);
+					} else {
+						writer.write("null");
+					}
+				}
 				writer.write(")");
 			} else if (format != null) {
 				writer.write("Date.printAIMLDate(Date.timestamp(), ");
 				writer.write(format);
+				if (timezone != null || locale != null) {
+					writer.write(", ");
+					if (timezone != null) {
+						writer.write(timezone);
+					} else {
+						writer.write("null");
+					}
+					writer.write(", ");
+					if (locale != null) {
+						writer.write(locale);
+					} else {
+						writer.write("null");
+					}
+				}
 				writer.write(")");
 			} else {
 				writer.write("Date.date()");
