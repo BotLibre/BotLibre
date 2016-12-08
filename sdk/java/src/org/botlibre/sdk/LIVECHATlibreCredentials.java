@@ -27,7 +27,7 @@ public class LIVECHATlibreCredentials extends Credentials {
 	//public static String DOMAIN = "192.168.0.12:9080";
 	public static String APP = "";
 	//public static String APP = "/livechatlibre";
-	public static String PATH = "/rest/livechatlibre";
+	public static String PATH = "/rest/api";
 
 	public LIVECHATlibreCredentials(String applicationId) {
 		this.host = DOMAIN;

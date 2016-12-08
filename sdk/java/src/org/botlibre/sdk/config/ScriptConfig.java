@@ -1,6 +1,4 @@
-/******************************************************************************
- *
- *  Copyright 2014 Paphus Solutions Inc.
+/*  Copyright 2016 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,37 +19,46 @@ package org.botlibre.sdk.config;
 import java.io.StringWriter;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
+public class ScriptConfig extends WebMediumConfig{
+	public String language;
 
-/**
- * DTO for XML bot mode config.
- */
-public class BotModeConfig extends Config {
-	
-	public String mode;	
-	public String bot;
-	
-	public void parseXML(Element element) {
-		super.parseXML(element);
-		
-		this.mode = element.getAttribute("mode");
-		this.bot = element.getAttribute("bot");
+	public String getType() {
+		return "script";
 	}
 
+	public WebMediumConfig credentials() {
+		ScriptConfig config = new ScriptConfig();
+		config.id = this.id;
+		return config;
+	}
 	
 	public String toXML() {
 		StringWriter writer = new StringWriter();
-		writer.write("<bot-mode");
-		writeCredentials(writer);
-
-		if (this.mode != null) {
-			writer.write(" mode=\"" + this.mode + "\"");
+		writer.write("<script");
+		if (this.language != null && !this.language.equals("")){
+			writer.write(" language=\"" + this.language + "\"");
 		}
-		if (this.bot != null) {
-			writer.write(" bot=\"" + this.bot + "\"");
-		}
+		writeXML(writer);
+		writer.write("</script>");
 		
-		writer.write("/>");
 		return writer.toString();
 	}
+	
+	public void parseXML(Element element){
+		super.parseXML(element);
+		Node node = element.getElementsByTagName("language").item(0);
+		if (node != null) {
+			this.language = node.getTextContent();
+		}
+	}
+	
+	@Override 
+	public String toString() {
+		return this.name;
+	}
+	
+
+
 }

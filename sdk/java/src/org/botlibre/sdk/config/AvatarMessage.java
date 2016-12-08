@@ -23,30 +23,27 @@ import java.io.StringWriter;
 import org.botlibre.sdk.util.Utils;
 
 /**
- * DTO for XML chat config.
+ * An avatar message can be used to have an avatar speak a message.
+ * The avatar message gives the avatar the text to speak, and returns a ChatResponse that includes the text-to-speech and video animation.
+ * This object can be converted to and from XML for usage with the web API.
  */
-public class ChatConfig extends Config {	
-	public String conversation;
-	public boolean correction;
-	public boolean offensive;
-	public boolean disconnect;
+public class AvatarMessage extends Config {
+	public String message;
+	public String avatar;
 	public String emote;
 	public String action;
-	public String message;
+	public String pose;
 	public boolean speak;
-	public boolean includeQuestion;
-	public boolean avatarHD;
-	public String avatarFormat;
-	public String avatar;
-	public String language;
 	public String voice;
+	public String format;
+	public boolean hd;
 	
 	public String toXML() {
 		StringWriter writer = new StringWriter();
-		writer.write("<chat");
+		writer.write("<avatar-message");
 		writeCredentials(writer);
-		if (this.conversation != null) {
-			writer.write(" conversation=\"" + this.conversation + "\"");
+		if (this.avatar != null) {
+			writer.write(" avatar=\"" + this.avatar + "\"");
 		}
 		if (this.emote != null) {
 			writer.write(" emote=\"" + this.emote + "\"");
@@ -54,35 +51,20 @@ public class ChatConfig extends Config {
 		if (this.action != null) {
 			writer.write(" action=\"" + this.action + "\"");
 		}
-		if (this.correction) {
-			writer.write(" correction=\"" + this.correction + "\"");
+		if (this.pose != null) {
+			writer.write(" pose=\"" + this.pose + "\"");
 		}
-		if (this.offensive) {
-			writer.write(" offensive=\"" + this.offensive + "\"");
-		}
-		if (this.speak) {
-			writer.write(" speak=\"" + this.speak + "\"");
-		}
-		if (this.avatar != null) {
-			writer.write(" avatar=\"" + this.avatar + "\"");
-		}
-		if (this.avatarHD) {
-			writer.write(" avatarHD=\"" + this.avatarHD + "\"");
-		}
-		if (this.avatarFormat != null) {
-			writer.write(" avatarFormat=\"" + this.avatarFormat + "\"");
-		}
-		if (this.language != null) {
-			writer.write(" language=\"" + this.language + "\"");
+		if (this.format != null) {
+			writer.write(" format=\"" + this.format + "\"");
 		}
 		if (this.voice != null) {
 			writer.write(" voice=\"" + this.voice + "\"");
 		}
-		if (this.includeQuestion) {
-			writer.write(" includeQuestion=\"" + this.includeQuestion + "\"");
+		if (this.speak) {
+			writer.write(" speak=\"" + this.speak + "\"");
 		}
-		if (this.disconnect) {
-			writer.write(" disconnect=\"" + this.disconnect + "\"");
+		if (this.hd) {
+			writer.write(" hd=\"" + this.hd + "\"");
 		}
 		writer.write(">");
 		
@@ -91,7 +73,7 @@ public class ChatConfig extends Config {
 			writer.write(Utils.escapeHTML(this.message));
 			writer.write("</message>");
 		}
-		writer.write("</chat>");
+		writer.write("</avatar-message>");
 		return writer.toString();
 	}
 }

@@ -28,7 +28,7 @@
 	
 	<target name="dist" depends="clean, compile" description="generate the distribution" >
 		<!-- Put everything in ${build} into libre-sdk.jar file -->
-		<jar jarfile="libre-sdk.jar">
+		<jar jarfile="botlibre-sdk.jar">
 			<fileset dir="${build}">
 				<include name="org/botlibre/sdk/**/*"/>
 			</fileset>
@@ -37,6 +37,6 @@
 		
 	<target name="clean" description="clean up" >
 		<!-- Delete the ${build} directory -->
-		<delete file="libre-sdk.jar"/>
+		<delete file="botlibre-sdk.jar"/>
 	</target>
 </project>

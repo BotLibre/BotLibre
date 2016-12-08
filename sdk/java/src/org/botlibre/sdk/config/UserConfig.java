@@ -1,6 +1,27 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.config;
 
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -29,13 +50,36 @@ public class UserConfig extends Config {
 	public String messages;
 	public String forums;
 	public String scripts;
+	public String graphics;
 	public String avatars;
 	public String domains;
 	public String channels;
 	
 	public String joined;
 	public String lastConnect;
-
+	public String type;
+	public boolean isFlagged;
+	public String flaggedReason;
+	
+	public String displayJoined() {
+		try {
+			SimpleDateFormat formater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+			Date date = formater.parse(joined);
+			return Utils.displayDate(date);
+		} catch (Exception exception) {
+			return joined;
+		}
+	}
+	
+	public String displayLastConnect() {
+		try {
+			SimpleDateFormat formater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+			Date date = formater.parse(lastConnect);
+			return Utils.displayTimestamp(date);
+		} catch (Exception exception) {
+			return lastConnect;
+		}
+	}
 	
 	public void addCredentials(SDKConnection connection) {
 		this.application = connection.getCredentials().getApplicationId();
@@ -66,11 +110,16 @@ public class UserConfig extends Config {
 		this.bots = element.getAttribute("bots");
 		this.posts = element.getAttribute("posts");
 		this.messages = element.getAttribute("messages");
+		this.forums = element.getAttribute("forums");
+		this.channels = element.getAttribute("channels");
 		this.avatars = element.getAttribute("avatars");
 		this.scripts = element.getAttribute("scripts");
+		this.graphics = element.getAttribute("graphics");
 		this.domains = element.getAttribute("domains");
 		this.joined = element.getAttribute("joined");
 		this.lastConnect = element.getAttribute("lastConnect");
+		this.type = element.getAttribute("type");
+		this.isFlagged = Boolean.valueOf(element.getAttribute("isFlagged"));
 		
 		Node node = element.getElementsByTagName("bio").item(0);
 		if (node != null) {
@@ -79,6 +128,10 @@ public class UserConfig extends Config {
 		node = element.getElementsByTagName("avatar").item(0);
 		if (node != null) {
 			this.avatar = node.getTextContent();
+		}
+		node = element.getElementsByTagName("flaggedReason").item(0);
+		if (node != null) {
+			this.flaggedReason = node.getTextContent();
 		}
 	}
 	

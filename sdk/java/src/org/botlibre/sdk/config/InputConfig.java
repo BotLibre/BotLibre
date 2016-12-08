@@ -18,45 +18,44 @@
 
 package org.botlibre.sdk.config;
 
-import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
+import org.botlibre.sdk.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 
 /**
- * DTO for XML content config.
+ * DTO for XML input config.
  */
-public class ContentConfig extends Config {
-	
-	public String type;
-	public String name;
-	public String icon;
-	public String description;
+public class InputConfig extends Config {
+	public String id;
+	public String creationDate;
+	public String speaker;
+	public String target;
+	public String value;
 	
 	public void parseXML(Element element) {
-		super.parseXML(element);
+		this.id = element.getAttribute("id");
+		this.creationDate = element.getAttribute("creationDate");
+		this.speaker = element.getAttribute("speaker");
+		this.target = element.getAttribute("target");
 		
-		this.type = element.getAttribute("type");
-		this.name = element.getAttribute("name");
-		this.icon = element.getAttribute("icon");
-		
-		Node node = element.getElementsByTagName("description").item(0);
+		Node node = element.getElementsByTagName("value").item(0);
 		if (node != null) {
-			this.description = node.getTextContent();
+			this.value = node.getTextContent();
 		}
 	}
 
-	public String toXML() {
-		StringWriter writer = new StringWriter();
-		writer.write("<content");
-		writeCredentials(writer);
-
-		if (this.type != null) {
-			writer.write(" type=\"" + this.type + "\"");
+	public String displayCreationDate() {
+		try {
+			SimpleDateFormat formater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+			Date date = formater.parse(creationDate);
+			return Utils.displayTime(date);
+		} catch (Exception exception) {
+			return creationDate;
 		}
-		
-		writer.write("/>");
-		return writer.toString();
 	}
 }

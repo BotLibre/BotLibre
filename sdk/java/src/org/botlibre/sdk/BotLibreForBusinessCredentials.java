@@ -19,17 +19,18 @@
 package org.botlibre.sdk;
 
 /**
- * Credentials for use with hosted services on the FORUMS libre website, a free embeddable forum hosting service.
- * http://www.forumslibre.com
+ * Credentials for use with hosted services on the Bot Libre for Business website,
+ * a commercial bot, live chat, chatroom, and forum hosting service.
+ * https://www.botlibre.biz
  */
-public class FORUMSlibreCredentials extends Credentials {
-	public static String DOMAIN = "www.forumslibre.com";
-	//public static String DOMAIN = "192.168.0.15:9080";
+public class BotLibreForBusinessCredentials extends Credentials {
+	public static String DOMAIN = "www.botlibre.biz";
+	//public static String DOMAIN = "192.168.0.11:9080";
 	public static String APP = "";
-	//public static String APP = "/forumslibre";
+	//public static String APP = "/livechat";
 	public static String PATH = "/rest/api";
 
-	public FORUMSlibreCredentials(String applicationId) {
+	public BotLibreForBusinessCredentials(String applicationId) {
 		this.host = DOMAIN;
 		this.app = APP;
 		this.url = "http://" + DOMAIN + APP + PATH;

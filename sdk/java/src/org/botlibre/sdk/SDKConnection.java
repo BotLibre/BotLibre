@@ -48,25 +48,32 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import org.botlibre.sdk.config.AvatarConfig;
+import org.botlibre.sdk.config.AvatarMedia;
+import org.botlibre.sdk.config.AvatarMessage;
 import org.botlibre.sdk.config.BotModeConfig;
 import org.botlibre.sdk.config.BrowseConfig;
 import org.botlibre.sdk.config.ChannelConfig;
 import org.botlibre.sdk.config.ChatConfig;
 import org.botlibre.sdk.config.ChatResponse;
+import org.botlibre.sdk.config.Config;
 import org.botlibre.sdk.config.ContentConfig;
+import org.botlibre.sdk.config.ConversationConfig;
 import org.botlibre.sdk.config.DomainConfig;
 import org.botlibre.sdk.config.ForumConfig;
 import org.botlibre.sdk.config.ForumPostConfig;
 import org.botlibre.sdk.config.InstanceConfig;
 import org.botlibre.sdk.config.LearningConfig;
 import org.botlibre.sdk.config.MediaConfig;
+import org.botlibre.sdk.config.ResponseConfig;
+import org.botlibre.sdk.config.ResponseSearchConfig;
+import org.botlibre.sdk.config.ScriptConfig;
+import org.botlibre.sdk.config.ScriptSourceConfig;
+import org.botlibre.sdk.config.Speech;
 import org.botlibre.sdk.config.TrainingConfig;
 import org.botlibre.sdk.config.UserAdminConfig;
 import org.botlibre.sdk.config.UserConfig;
+import org.botlibre.sdk.config.UserMessageConfig;
 import org.botlibre.sdk.config.VoiceConfig;
 import org.botlibre.sdk.config.WebMediumConfig;
 
@@ -84,14 +91,14 @@ import org.botlibre.sdk.config.WebMediumConfig;
  * </ul>
  */
 public class SDKConnection {
-	protected static String[] types = new String[]{"Bots", "Forums", "Live Chat", "Domains"};
+	protected static String[] types = new String[]{"Bots", "Forums", "Live Chat", "Domains", "Scripts"};
 	protected static String[] channelTypes = new String[]{"ChatRoom", "OneOnOne"};
 	protected static String[] accessModes = new String[]{"Everyone", "Users", "Members", "Administrators"};
+	protected static String[] mediaAccessModes = new String[]{"Everyone", "Users", "Members", "Administrators", "Disabled"};
 	protected static String[] learningModes = new String[]{"Disabled", "Administrators", "Users", "Everyone"};
 	protected static String[] correctionModes = new String[]{"Disabled", "Administrators", "Users", "Everyone"};
 	protected static String[] botModes = new String[]{"ListenOnly", "AnswerOnly", "AnswerAndListen"};
 	
-	protected String applicationId;
 	protected String url;
 	protected UserConfig user;
 	protected DomainConfig domain;
@@ -105,6 +112,12 @@ public class SDKConnection {
 	 */
 	public static String defaultUserImage() {
 		return "images/user-thumb.jpg";
+	}
+	
+	/**
+	 * Create an SDK connection.
+	 */
+	public SDKConnection() {
 	}
 	
 	/**
@@ -123,8 +136,41 @@ public class SDKConnection {
 	 * An SDKException is thrown if the connect failed.
 	 */
 	public UserConfig connect(UserConfig config) {
-		this.user = fetch(config);
+		config.addCredentials(this);
+		String xml = POST(this.url + "/check-user", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			this.user = null;
+			return null;
+		}
+		try {
+			UserConfig user = new UserConfig();
+			user.parseXML(root);
+			this.user = user;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
 		return this.user;
+	}
+	
+	/**
+	 * Execute the custom API.
+	 */
+	public Config custom(String api, Config config, Config result) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/" + api, config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			result.parseXML(root);
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+		return result;
 	}
 	
 	/**
@@ -159,12 +205,11 @@ public class SDKConnection {
 	}
 	
 	/**
-	 * Fetch the user details for the user credentials.
-	 * A token or password is required to validate the user.
+	 * Fetch the user details.
 	 */	
 	public UserConfig fetch(UserConfig config) {
 		config.addCredentials(this);
-		String xml = POST(this.url + "/check-user", config.toXML());
+		String xml = POST(this.url + "/view-user", config.toXML());
 		Element root = parse(xml);
 		if (root == null) {
 			return null;
@@ -272,26 +317,6 @@ public class SDKConnection {
 			throw this.exception;
 		}
 	}
-
-	/**
-	 * Create a new file/image/media attachment for a chat channel.
-	 */
-	public MediaConfig createChannelImageAttachment(String file, MediaConfig config) {
-		config.addCredentials(this);
-		String xml = POSTIMAGE(this.url + "/create-channel-attachment", file, config.name, config.toXML());
-		Element root = parse(xml);
-		if (root == null) {
-			return null;
-		}
-		try {
-			MediaConfig media = new MediaConfig();
-			media.parseXML(root);
-			return media;
-		} catch (Exception exception) {
-			this.exception = SDKException.parseFailure(exception);
-			throw this.exception;
-		}
-	}
 	
 	/**
 	 * Create a reply to a forum post.
@@ -312,6 +337,16 @@ public class SDKConnection {
 			this.exception = SDKException.parseFailure(exception);
 			throw this.exception;
 		}
+	}
+	
+	/**
+	 * Create a user message.
+	 * This can be used to send a user a direct message.
+	 * SPAM will cause your account to be deleted.
+	 */
+	public void createUserMessage(UserMessageConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/create-user-message", config.toXML());
 	}
 	
 	/**
@@ -400,6 +435,27 @@ public class SDKConnection {
 	}
 	
 	/**
+	 * Create or update the response.
+	 * This can also be used to flag, unflag, validate, or invalidate a response.
+	 */
+	public ResponseConfig saveResponse(ResponseConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/save-response", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			ResponseConfig response = new ResponseConfig();
+			response.parseXML(root);
+			return response;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
+	
+	/**
 	 * Update the user details.
 	 * The password must be passed to allow the update.
 	 */
@@ -438,11 +494,123 @@ public class SDKConnection {
 	}
 	
 	/**
+	 * Permanently delete the response, greetings, or default response with the response id (and question id).
+	 */
+	public void delete(ResponseConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/delete-response", config.toXML());
+	}
+	
+	/**
+	 * Permanently delete the avatar media.
+	 */
+	public void delete(AvatarMedia config) {
+		config.addCredentials(this);
+		POST(this.url + "/delete-avatar-media", config.toXML());
+	}
+	
+	/**
+	 * Permanently delete the avatar background.
+	 */
+	public void deleteAvatarBackground(AvatarConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/delete-avatar-background", config.toXML());
+	}
+	
+	/**
+	 * Save the avatar media tags.
+	 */
+	public void saveAvatarMedia(AvatarMedia config) {
+		config.addCredentials(this);
+		POST(this.url + "/save-avatar-media", config.toXML());
+	}
+	
+	/**
 	 * Flag the content as offensive, a reason is required.
 	 */
 	public void flag(WebMediumConfig config) {
 		config.addCredentials(this);
 		POST(this.url + "/flag-" + config.getType(), config.toXML());
+	}
+	
+	/**
+	 * Subscribe for email updates for the post.
+	 */
+	public void subscribe(ForumPostConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/subscribe-post", config.toXML());
+	}
+	
+	/**
+	 * Subscribe for email updates for the forum.
+	 */
+	public void subscribe(ForumConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/subscribe-forum", config.toXML());
+	}
+	
+	/**
+	 * Unsubscribe from email updates for the post.
+	 */
+	public void unsubscribe(ForumPostConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/unsubscribe-post", config.toXML());
+	}
+	
+	/**
+	 * Unsubscribe from email updates for the forum.
+	 */
+	public void unsubscribe(ForumConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/unsubscribe-forum", config.toXML());
+	}
+	
+	/**
+	 * Thumbs up the content.
+	 */
+	public void thumbsUp(WebMediumConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/thumbs-up-" + config.getType(), config.toXML());
+	}
+	
+	/**
+	 * Thumbs down the content.
+	 */
+	public void thumbsDown(WebMediumConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/thumbs-down-" + config.getType(), config.toXML());
+	}
+	
+	/**
+	 * Rate the content.
+	 */
+	public void star(WebMediumConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/star-" + config.getType(), config.toXML());
+	}
+	
+	/**
+	 * Thumbs up the content.
+	 */
+	public void thumbsUp(ForumPostConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/thumbs-up-post", config.toXML());
+	}
+	
+	/**
+	 * Thumbs down the content.
+	 */
+	public void thumbsDown(ForumPostConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/thumbs-down-post", config.toXML());
+	}
+	
+	/**
+	 * Rate the content.
+	 */
+	public void star(ForumPostConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/star-post", config.toXML());
 	}
 	
 	/**
@@ -484,6 +652,36 @@ public class SDKConnection {
 	}
 	
 	/**
+	 * Process the avatar message and return the avatars response.
+	 * This allows the speech and video animation for an avatar to be generated for the message.
+	 */
+	public ChatResponse avatarMessage(AvatarMessage config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/avatar-message", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			ChatResponse response = new ChatResponse();
+			response.parseXML(root);
+			return response;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
+	
+	/**
+	 * Process the speech message and return the server generate text-to-speech audio file.
+	 * This allows for server-side speech generation.
+	 */
+	public String tts(Speech config) {
+		config.addCredentials(this);
+		return POST(this.url + "/speak", config.toXML());
+	}
+	
+	/**
 	 * Return the administrators of the content.
 	 */
 	public List<String> getAdmins(WebMediumConfig config) {
@@ -500,43 +698,6 @@ public class SDKConnection {
 			users.add(user.user);
 		}
 		return users;
-	}
-	
-	/**
-	 * Return the avatars for the bot instances.
-	 */
-	public List<AvatarConfig> getAvatars(InstanceConfig config) {
-		config.addCredentials(this);
-		String xml = POST(this.url + "/get-avatars", config.toXML());
-		List<AvatarConfig> avatars = new ArrayList<AvatarConfig>();
-		Element root = parse(xml);
-		if (root == null) {
-			return avatars;
-		}
-		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
-			AvatarConfig avatar = new AvatarConfig();
-			avatar.parseXML((Element)root.getChildNodes().item(index));
-			avatars.add(avatar);
-		}
-		return avatars;
-	}
-	
-	/**
-	 * Return the shared avatar images for the server.
-	 */
-	public List<AvatarConfig> getSharedAvatars() {
-		String xml = GET(this.url + "/get-shared-avatars");
-		List<AvatarConfig> avatars = new ArrayList<AvatarConfig>();
-		Element root = parse(xml);
-		if (root == null) {
-			return avatars;
-		}
-		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
-			AvatarConfig config = new AvatarConfig();
-			config.parseXML((Element)root.getChildNodes().item(index));
-			avatars.add(config);
-		}
-		return avatars;
 	}
 	
 	/**
@@ -583,17 +744,18 @@ public class SDKConnection {
 	/**
 	 * Return the list of categories for the type, and domain.
 	 */
-	public List<String> getCategories(ContentConfig config) {
+	public List<ContentConfig> getCategories(ContentConfig config) {
 		config.addCredentials(this);
 		String xml = POST(this.url + "/get-categories", config.toXML());
-		List<String> categories = new ArrayList<String>();
-		categories.add("");
+		List<ContentConfig> categories = new ArrayList<ContentConfig>();
 		Element root = parse(xml);
 		if (root == null) {
 			return categories;
 		}
 		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
-			categories.add(((Element)root.getChildNodes().item(index)).getAttribute("name"));
+			ContentConfig category = new ContentConfig();
+			category.parseXML((Element)root.getChildNodes().item(index));
+			categories.add(category);
 		}
 		return categories;
 	}
@@ -704,12 +866,11 @@ public class SDKConnection {
 	}
 	
 	/**
-	 * Tag the avatar with the emotions.
-	 * The avatar will then be displayed when words or sentences trigger the emotional state.
+	 * Save the bot's avatar configuration.
 	 */
-	public void tagAvatar(AvatarConfig config) {
+	public void saveBotAvatar(InstanceConfig config) {
 		config.addCredentials(this);
-		POST(this.url + "/tag-avatar", config.toXML());
+		POST(this.url + "/save-bot-avatar", config.toXML());
 	}
 	
 	/**
@@ -729,119 +890,14 @@ public class SDKConnection {
 	}
 	
 	/**
-	 * Delete all of the avatars for the bot.
+	 * Add the avatar media file to the avatar.
 	 */
-	public void deleteAllAvatars(InstanceConfig config) {
+	public void createAvatarMedia(String file, AvatarMedia config) {
 		config.addCredentials(this);
-		POST(this.url + "/delete-all-avatars", config.toXML());
+		POSTFILE(this.url + "/create-avatar-media", file, config.name, config.toXML());
 	}
 	
-	/**
-	 * Delete the avatar from the bot.
-	 */
-	public void deleteAvatar(AvatarConfig config) {
-		config.addCredentials(this);
-		POST(this.url + "/delete-avatar", config.toXML());
-	}
-	
-	/**
-	 * Add the new avatar to the bot.
-	 * The file will be uploaded to the server.
-	 */
-	public void addAvatar(String file, InstanceConfig config) {
-		config.addCredentials(this);
-		POSTIMAGE(this.url + "/add-avatar", file, "image.jpg", config.toXML());
-	}
-	
-	/**
-	 * Update the contents icon.
-	 * The file will be uploaded to the server.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends WebMediumConfig> T updateIcon(String file, T config) {
-		config.addCredentials(this);
-		String xml = POSTIMAGE(this.url + "/update-" + config.getType() + "-icon", file, "image.jpg", config.toXML());
-		Element root = parse(xml);
-		if (root == null) {
-			return null;
-		}
-		try {
-			config = (T)config.getClass().newInstance();
-			config.parseXML(root);
-			return config;
-		} catch (Exception exception) {
-			this.exception = SDKException.parseFailure(exception);
-			throw this.exception;
-		}
-	}
-	
-	/**
-	 * Update the user's icon.
-	 * The file will be uploaded to the server.
-	 */
-	public UserConfig updateIcon(String file, UserConfig config) {
-		config.addCredentials(this);
-		String xml = POSTIMAGE(this.url + "/update-user-icon", file, "image.jpg", config.toXML());
-		Element root = parse(xml);
-		if (root == null) {
-			return null;
-		}
-		try {
-			config = new UserConfig();
-			config.parseXML(root);
-			return config;
-		} catch (Exception exception) {
-			this.exception = SDKException.parseFailure(exception);
-			throw this.exception;
-		}
-	}
-	
-	protected String POSTIMAGE(String url, String file, String name, String xml) {
-		if (this.debug) {
-			System.out.println("POST: " + url);
-			System.out.println("file: " + file);
-			System.out.println("XML: " + xml);
-		}
-		String result = "";
-		try {
-			Bitmap bitmap = loadImage(file, 300, 300);
-	        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-	        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-	        byte[] byte_arr = stream.toByteArray();
-	        ByteArrayBody fileBody = new ByteArrayBody(byte_arr, name);
-	
-	        MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-	
-	        multipartEntity.addPart("file", fileBody);
-	        multipartEntity.addPart("xml", new StringBody(xml));
-	
-	        HttpClient httpclient = new DefaultHttpClient();
-	        HttpResponse response = null;
-
-            HttpPost httppost = new HttpPost(url);
-            httppost.setEntity(multipartEntity);
-            response = httpclient.execute(httppost);
-			
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				result = EntityUtils.toString(entity, HTTP.UTF_8);
-			}
-
-			if ((response.getStatusLine().getStatusCode() != 200) && (response.getStatusLine().getStatusCode() != 204)) {
-				this.exception = new SDKException(""
-				   + response.getStatusLine().getStatusCode()
-				   + " : " + result);
-	 			throw this.exception;
-			}
-
-        } catch (Exception exception) {
- 			this.exception = new SDKException(exception);
- 			throw this.exception;
- 		}
- 		return result;
-	}
-	
-	protected String POSTFILE(String url, String path, String name, String xml) {
+	public String POSTFILE(String url, String path, String name, String xml) {
 		if (this.debug) {
 			System.out.println("POST: " + url);
 			System.out.println("file: " + path);
@@ -891,32 +947,6 @@ public class SDKConnection {
  		}
  		return result;
 	}
-
-	protected Bitmap loadImage(String path, int reqWidth, int reqHeight) {
-	    BitmapFactory.Options options = new BitmapFactory.Options();
-	    options.inJustDecodeBounds = true;
-	    BitmapFactory.decodeFile(path, options);
-
-        int height = options.outHeight;
-        int width = options.outWidth;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        int inSampleSize = 1;
-
-        if (height > reqHeight) {
-            inSampleSize = Math.round((float)height / (float)reqHeight);
-        }
-
-        int expectedWidth = width / inSampleSize;
-
-        if (expectedWidth > reqWidth) {
-            inSampleSize = Math.round((float)width / (float)reqWidth);
-        }
-
-	    options.inSampleSize = inSampleSize;
-	    options.inJustDecodeBounds = false;
-
-	    return BitmapFactory.decodeFile(path, options);
-	 }
 	
 	/**
 	 * Return the forum's bot configuration.
@@ -993,6 +1023,44 @@ public class SDKConnection {
 	}
 	
 	/**
+	 * Search the bot's responses.
+	 */
+	public List<ResponseConfig> getResponses(ResponseSearchConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/get-responses", config.toXML());
+		List<ResponseConfig> responses = new ArrayList<ResponseConfig>();
+		Element root = parse(xml);
+		if (root == null) {
+			return responses;
+		}
+		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
+			ResponseConfig response = new ResponseConfig();
+			response.parseXML((Element)root.getChildNodes().item(index));
+			responses.add(response);
+		}
+		return responses;
+	}
+	
+	/**
+	 * Search the bot's conversations.
+	 */
+	public List<ConversationConfig> getConversations(ResponseSearchConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/get-conversations", config.toXML());
+		List<ConversationConfig> conversations = new ArrayList<ConversationConfig>();
+		Element root = parse(xml);
+		if (root == null) {
+			return conversations;
+		}
+		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
+			ConversationConfig response = new ConversationConfig();
+			response.parseXML((Element)root.getChildNodes().item(index));
+			conversations.add(response);
+		}
+		return conversations;
+	}
+	
+	/**
 	 * Return the bot's learning configuration.
 	 */
 	public LearningConfig getLearning(InstanceConfig config) {
@@ -1021,12 +1089,8 @@ public class SDKConnection {
 		String type = "";
 		if (config.type.equals("Bot")) {
 			type = "/get-instances";
-		} else if (config.type.equals("Forum")) {
-			type = "/get-forums";
-		} else if (config.type.equals("Channel")) {
-			type = "/get-channels";
-		} else if (config.type.equals("Domain")) {
-			type = "/get-domains";
+		} else {
+			type = "/get-" + config.type.toLowerCase() + "s";
 		}
 		String xml = POST(this.url + type, config.toXML());
 		List<WebMediumConfig> instances = new ArrayList<WebMediumConfig>();
@@ -1044,6 +1108,10 @@ public class SDKConnection {
 				instance = new ChannelConfig();
 			} else if (config.type.equals("Domain")) {
 				instance = new DomainConfig();
+			} else if (config.type.equals("Avatar")) {
+				instance = new AvatarConfig();
+			} else if (config.type.equals("Script")) {
+				instance = new ScriptConfig();
 			}
 			instance.parseXML((Element)root.getChildNodes().item(index));
 			instances.add(instance);
@@ -1052,11 +1120,138 @@ public class SDKConnection {
 	}
 	
 	/**
-	 * Add the shared avatar to the bot's avatars.
+	 * Return the list of media for the avatar.
 	 */
-	public void addSharedAvatar(AvatarConfig config) {
+	public List<AvatarMedia> getAvatarMedia(AvatarConfig config) {
 		config.addCredentials(this);
-		POST(this.url + "/add-shared-avatar", config.toXML());
+		String xml = POST(this.url + "/get-avatar-media", config.toXML());
+		List<AvatarMedia> instances = new ArrayList<AvatarMedia>();
+		Element root = parse(xml);
+		if (root == null) {
+			return instances;
+		}
+		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
+			AvatarMedia instance = new AvatarMedia();
+			instance.parseXML((Element)root.getChildNodes().item(index));
+			instances.add(instance);
+		}
+		return instances;
+	}
+	
+	/**
+	 * Return the script source
+	 */
+	public ScriptSourceConfig getScriptSource(ScriptConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/get-script-source", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			ScriptSourceConfig script = new ScriptSourceConfig();
+			script.parseXML(root);
+			return script;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
+	
+	/**
+	 * Create or update script - Save the script source
+	 */
+	public void saveScriptSource(ScriptSourceConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/save-script-source", config.toXML());
+	}
+	
+	/**
+	 * Return the source code for a single bot script
+	 */
+	public ScriptSourceConfig getBotScriptSource(ScriptSourceConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/get-bot-script-source", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			ScriptSourceConfig botScript = new ScriptSourceConfig();
+			botScript.parseXML(root);
+			return botScript;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
+	
+	/**
+	 * Return a list of the bots scripts
+	 */
+	public List<ScriptConfig> getBotScripts(InstanceConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/get-bot-scripts", config.toXML());
+		List<ScriptConfig> botScripts = new ArrayList<ScriptConfig>();
+		Element root = parse(xml);
+		if (root == null) {
+			return botScripts;
+		}
+		for (int i = 0; i < root.getChildNodes().getLength(); i++) {
+			ScriptConfig script = new ScriptConfig();
+			script.parseXML((Element)root.getChildNodes().item(i));
+			botScripts.add(script);
+		}
+		return botScripts;
+	}
+	/**
+	 * import a script to the bot
+	 */
+	
+	public void importBotScript(ScriptConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/import-bot-script", config.toXML());
+	}
+	
+	/**
+	 * import a chatlog/response list to the bot
+	 */
+	public void importBotLog(ScriptConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/import-bot-log", config.toXML());
+	}
+	
+	
+	/**
+	 * Save the bot script source
+	 */
+	public void saveBotScriptSource(ScriptSourceConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/save-bot-script-source", config.toXML());
+	}
+	
+	/**
+	 * Delete selected bot script
+	 */
+	public void deleteBotScript(ScriptSourceConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/delete-bot-script", config.toXML());
+	}
+	
+	/**
+	 * Move up one bot script
+	 */
+	public void upBotScript(ScriptSourceConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/up-bot-script", config.toXML());
+	}
+	
+	/**
+	 * Move down one bot script
+	 */
+	public void downBotScript(ScriptSourceConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/down-bot-script", config.toXML());
 	}
 	
 	/**
@@ -1078,6 +1273,13 @@ public class SDKConnection {
 	 */
 	public String[] getAccessModes() {
 		return accessModes;
+	}
+	
+	/**
+	 * Return the media access mode types.
+	 */
+	public String[] getMediaAccessModes() {
+		return mediaAccessModes;
 	}
 	
 	/**
@@ -1145,6 +1347,7 @@ public class SDKConnection {
 	 */
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
+		this.url = credentials.url;
 	}
 	
 	/**
@@ -1172,7 +1375,7 @@ public class SDKConnection {
 		this.exception = exception;
 	}
 
-	protected String GET(String url) {
+	public String GET(String url) {
 		if (this.debug) {
 			System.out.println("GET: " + url);
 		}
@@ -1201,7 +1404,7 @@ public class SDKConnection {
 		return xml;
 	}
 
-	protected String POST(String url, String xml) {
+	public String POST(String url, String xml) {
 		if (this.debug) {
 			System.out.println("POST: " + url);
 			System.out.println("XML: " + xml);
@@ -1239,7 +1442,7 @@ public class SDKConnection {
 		return result;
 	}
 	
-	protected Element parse(String xml) {
+	public Element parse(String xml) {
 		if (this.debug) {
 			System.out.println(xml);
 		}

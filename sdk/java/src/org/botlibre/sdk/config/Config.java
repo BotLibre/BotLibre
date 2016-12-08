@@ -1,3 +1,21 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.botlibre.sdk.config;
 
 import java.io.StringWriter;
@@ -9,7 +27,7 @@ import org.botlibre.sdk.SDKConnection;
 /**
  * DTO for XML config.
  */
-public class Config {
+public class Config implements Cloneable {
 	public String application;
 	public String domain;
 	public String user;
@@ -17,15 +35,27 @@ public class Config {
 	public String instance;
 	public String type;
 	
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException exception) {
+			throw new Error(exception);
+		}
+	}
+	
 	public void addCredentials(SDKConnection connection) {
 		this.application = connection.getCredentials().getApplicationId();
 		if (connection.getUser() != null) {
 			this.user = connection.getUser().user;
 			this.token = connection.getUser().token;
 		}
-		if (connection.getDomain() != null) {
+		if (connection.getDomain() != null && this.domain == null) {
 			this.domain = connection.getDomain().id;
 		}
+	}
+	
+	public String toXML() {
+		return "<config/>";
 	}
 		
 	public void parseXML(Element element) {

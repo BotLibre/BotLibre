@@ -15,6 +15,7 @@
  *  limitations under the License.
  *
  ******************************************************************************/
+
 package org.botlibre.sdk.util;
 
 import java.util.ArrayList;
