@@ -520,7 +520,7 @@ public class TestLanguage extends TextTest {
 	@org.junit.Test
 	public void testParagraphs() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Bot.FINE);
+		bot.setDebugLevel(Bot.FINE);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
@@ -534,6 +534,10 @@ public class TestLanguage extends TextTest {
 		text.input("Hello. What is your name?");
 		response = waitForOutput(output);
 		assertKeyword(response, "My name is Test");
+		
+		text.input("");
+		response = waitForOutput(output);
+		assertKeyword(response, "");
 
 		bot.shutdown();
 	}
@@ -908,13 +912,13 @@ public class TestLanguage extends TextTest {
 					
 			text.input("Who is his child?");
 			response = waitForOutput(output);
-			if (response.indexOf("Sasha Obama") == -1 || response.indexOf("Malia Obama") == -1) {
+			if (response.indexOf("Natasha Obama") == -1 || response.indexOf("Malia Obama") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			
 			text.input("Who is Barack Obama's child?");
 			response = waitForOutput(output);
-			if (response.indexOf("Sasha Obama") == -1 || response.indexOf("Malia Obama") == -1) {
+			if (response.indexOf("Natasha Obama") == -1 || response.indexOf("Malia Obama") == -1) {
 				fail("Incorrect response: " + response);			
 			}
 			

@@ -93,7 +93,7 @@ public class TextPanel extends ChildPanel
 					// Allow Self script execution.
 					Network memory = getBot().memory().newMemory();
 					Vertex result = SelfCompiler.getCompiler().evaluateExpression(
-							text.substring(2, text.length()), sense.getUser(memory), memory.createVertex(Primitive.SELF), false, memory);
+							text.substring(2, text.length()), sense.getUser(memory), memory.createVertex(Primitive.SELF), false, false, memory);
 					memory.save();
 					appendText("Script: " + text.substring(2, text.length()) + "\n");
 					appendText("Result: " + Utils.escapeHTML(result.toString()) + "\n");

@@ -40,7 +40,9 @@ import javax.swing.WindowConstants;
 
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
+import org.botlibre.knowledge.database.DatabaseMemory;
 import org.botlibre.sense.text.TextEntry;
+import org.botlibre.test.TextTest;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
 
@@ -140,13 +142,17 @@ public class BotFrame extends JFrame {
 	        File file = chooser.getSelectedFile();
 	        lastDirectory = file.getParentFile();
 			try {
-				if (file.getName().contains("aiml")) {
+				if (file.getName().contains(".aiml")) {
 					Language language = getBot().mind().getThought(Language.class);
 					if (language != null) {
 						language.loadAIMLFileAsLog(file, "", false);
 					}				
-				} else {
+				} else if (file.getName().contains(".log")) {
 					getBot().awareness().getSense(TextEntry.class).loadChatFile(file, "Chat Log", "", true, false);
+				} else if (file.getName().contains(".csv")) {
+					getBot().awareness().getSense(TextEntry.class).loadChatFile(file, "CSV List", "", false, false);
+				} else {
+					getBot().awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, false);
 				}
 			} catch (Exception failed) {
 				failed.printStackTrace();
@@ -323,6 +329,7 @@ public class BotFrame extends JFrame {
 	
 	public static void main(String args[]) {
 		try {
+			DatabaseMemory.DATABASE_PASSWORD = TextTest.PASSWORD;
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ignore) {}
 		
@@ -339,9 +346,20 @@ public class BotFrame extends JFrame {
 	public BotFrame() {	
         super("Bot");
         
-        Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
-        
-		setBot(Bot.createInstance());
+        try {
+        	Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
+        } catch (Exception exception) {
+        	DatabaseMemory.RECREATE_DATABASE = true;
+        	Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
+        	DatabaseMemory.RECREATE_DATABASE = false;
+        }
+        try {
+        	setBot(Bot.createInstance());
+        } catch (Exception exception) {
+        	DatabaseMemory.RECREATE_DATABASE = true;
+        	setBot(Bot.createInstance());
+        	DatabaseMemory.RECREATE_DATABASE = false;
+        }
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(screenSize.width / 8, screenSize.height / 8, (int)(screenSize.width / 1.5), (int)(screenSize.height / 1.5));

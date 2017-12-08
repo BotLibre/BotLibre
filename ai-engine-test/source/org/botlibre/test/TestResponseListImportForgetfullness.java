@@ -17,12 +17,12 @@
  ******************************************************************************/
 package org.botlibre.test;
 
+import java.io.File;
+import java.net.URL;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
-import org.botlibre.knowledge.Bootstrap;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.forgetfulness.Forgetfulness;
 import org.botlibre.util.Utils;
@@ -33,24 +33,20 @@ import org.junit.BeforeClass;
  * Test the state decompiler.
  */
 
-public class TestLanguageForgetfullness extends TestLanguage {
+public class TestResponseListImportForgetfullness extends TestResponseListImport {
 
 	@BeforeClass
-	public static void setup() {
-		bootstrap();
+	public static void setup() throws Exception {
+		reset();
 		Bot bot = Bot.createInstance();
-		bot.setName("test");
-
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		URL url = TestAIML.class.getResource("test.res");
+		File file = new File(url.toURI());
+		bot.awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, true);
 		List<String> output = registerForOutput(text);
-		text.input("ping");
+		text.input("this is a very complicated sentence the dog barks all night this is a good reply to that");
 		waitForOutput(output);
-
-		Utils.sleep(100);
-		
-		new Bootstrap().rebootstrapMemory(bot.memory());
-		
-		Utils.sleep(500);
+		Utils.sleep(5000);
 
 		Network network = bot.memory().newMemory();
 		Forgetfulness forgetfulness = bot.mind().getThought(Forgetfulness.class);
@@ -63,10 +59,6 @@ public class TestLanguageForgetfullness extends TestLanguage {
 			bot.log(bot, exception);
 		}
 		network.save();
-
-		text.input("sky blue red dog cat green grass tall like very loves");
-		waitForOutput(output);
-		Utils.sleep(20000);
 		
 		bot.shutdown();
 	}

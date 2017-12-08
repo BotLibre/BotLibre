@@ -42,8 +42,24 @@ Yes, it is a nice color.
 What are you?
 Template("I am a {#self.instantiation}.")
 
+empty
+Template("")
+keywords: na
+
 test self
 Template("{1 + 1} {1*1} {1-1} {1 / 2} {var count = 0; count++; count++; count --; count;}")
+
+test command
+Template("{var detached = { name : "dont garbage collect me" }; detached.name }")
+command: { type: "intent", value: "open angry birds" }
+
+test command2
+Template("{var detached = { nested: {name : "dont garbage collect me"} }; detached.nested.name }")
+command: { quick_replies: [{ nested: {value: "open angry birds"} }] }
+
+test command3
+datatypes
+command: { reply_markup: [ {boolean : true}, {number : 3.14}, {null : null}, [false, -123, "zxv", null] ] }
 
 script: #bot.word = "bot"; "bot".meaning = #bot;
 script: #self.instantiation =+ #bot

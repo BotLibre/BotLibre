@@ -91,6 +91,18 @@ public class TestResponseListImport extends TextTest {
 		if (!response.equals("how long?")) {
 			fail("did not match: " + response);
 		}
+		
+		text.input("empty");
+		response = waitForOutput(output);
+		if (!response.equals("")) {
+			fail("did not match: " + response);
+		}
+		
+		text.input("na");
+		response = waitForOutput(output);
+		if (!response.equals("")) {
+			fail("did not match: " + response);
+		}
 
 		bot.shutdown();
 	}
@@ -236,6 +248,38 @@ public class TestResponseListImport extends TextTest {
 		text.input("test self");
 		String response = waitForOutput(output);
 		checkResponse(response, "2 1 0 0.5 1");
+		
+		bot.shutdown();
+	}
+
+	/**
+	 * Test commands.
+	 */
+	@org.junit.Test
+	public void testCommands() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("test command");
+		String response = waitForOutput(output);
+		checkResponse(response, "Dont garbage collect me");
+		String command = bot.avatar().getCommand();
+		checkResponse(command, "{\"type\":\"intent\", \"value\":\"open angry birds\"}");
+		
+		text.input("test command2");
+		response = waitForOutput(output);
+		checkResponse(response, "Dont garbage collect me");
+		command = bot.avatar().getCommand();
+		checkResponse(command, "{\"quick_replies\":[{\"nested\":{\"value\":\"open angry birds\"}}]}");
+		
+		text.input("test command3");
+		response = waitForOutput(output);
+		checkResponse(response, "datatypes");
+		command = bot.avatar().getCommand();
+		checkResponse(command, "{\"reply_markup\":[{\"boolean\":true}, {\"number\":3.14}, {\"null\":null}, [false, -123, \"zxv\", null]]}");
 		
 		bot.shutdown();
 	}

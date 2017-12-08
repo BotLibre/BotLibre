@@ -42,7 +42,7 @@ public class TestAIMLForgetfullness extends TestAIML2 {
 		Forgetfulness forgetfulness = bot.mind().getThought(Forgetfulness.class);
 		try {
 			forgetfulness.setMaxRelationships(50);
-			forgetfulness.setMaxSize(1000);
+			forgetfulness.setMaxSize(100);
 			forgetfulness.forget(network, true, 100);
 		} catch (Exception exception) {
 			bot.log(bot, exception);

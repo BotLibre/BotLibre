@@ -40,12 +40,13 @@ public class TestISpy extends TextTest {
 	@BeforeClass
 	public static void setup() {
 		bootstrap();
-		
+		Bot bot = Bot.createInstance();
 		Network network = bot.memory().newMemory();
 		Vertex language = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
 		Vertex script = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("ispy.self"), "", false, network);
 		language.setRelationship(Primitive.STATE, script);
 		network.save();
+		bot.shutdown();
 	}
 	
 	/**

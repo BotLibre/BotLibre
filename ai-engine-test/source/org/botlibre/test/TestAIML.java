@@ -23,16 +23,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
-import org.botlibre.self.Self4Compiler;
-import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
 import org.botlibre.util.Utils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 /**
  * Test language processing.
@@ -44,6 +42,7 @@ public class TestAIML extends TextTest {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("alice.aiml");

@@ -34,6 +34,7 @@ import junit.framework.Assert;
  */
 
 public abstract class TextTest {
+	public static final String PASSWORD = "";
 	protected static Bot bot;
 	
 	public static void fail(String message) {
@@ -87,12 +88,14 @@ public abstract class TextTest {
 	public static void bootstrap() {
 		reset();
 		new Bootstrap().bootstrapMemory(bot.memory(), true, false);
+		bot.shutdown();
 	}
 	
 	/**
 	 * Reset.
 	 */
 	public static void reset() {
+		DatabaseMemory.DATABASE_PASSWORD = PASSWORD;
 		DatabaseMemory.RECREATE_DATABASE = true;
 		//Bot.DEFAULT_DEBUG_LEVEL = Bot.FINE;
 		bot = Bot.createInstance();

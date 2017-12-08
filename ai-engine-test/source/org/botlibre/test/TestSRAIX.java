@@ -46,6 +46,7 @@ public class TestSRAIX extends TextTest {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("test-aiml2.aiml");
@@ -72,7 +73,7 @@ public class TestSRAIX extends TextTest {
 		
 		text.input("sraix what is love");
 		String response = waitForOutput(output);
-		if (response.indexOf("Love is a variety of different feelings") == -1) {
+		if (response.indexOf("Sometimes I think love is just a biological urge. Other times LOVE seems like a spiritual quality. Love, unlike energy or matter, seems limitless.") == -1) {
 			fail("Incorrect response: " + response);
 		}
 		
@@ -84,7 +85,7 @@ public class TestSRAIX extends TextTest {
 		
 		text.input("sraixlimit what is love");
 		response = waitForOutput(output);
-		if (!response.equals("Love is a variety of different feelings, states, and attitudes that ranges from interpersonal affection (\"I love my mother\") to pleasure (\"I loved that meal\").")) {
+		if (!response.equals("Sometimes I think love is just a biological urge.")) {
 			fail("Incorrect response: " + response);
 		}
 		
@@ -203,7 +204,7 @@ public class TestSRAIX extends TextTest {
 		String response = waitForOutput(output);
 		checkResponse(response, "Pong");
 
-		text.input("fetch html http://botlibre.com head/meta[2]/@content");
+		text.input("fetch html https://botlibre.com head/meta[2]/@content");
 		response = waitForOutput(output);
 		checkResponse(response, "Paphus Solutions Inc.");
 

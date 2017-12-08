@@ -18,6 +18,7 @@
 package org.botlibre.test;
 
 import org.botlibre.util.TextStream;
+import org.botlibre.util.Utils;
 
 /**
  * Test Self scripting and API.
@@ -43,6 +44,45 @@ public class TestUtils extends TextTest {
 		next = stream.nextParagraph(50);
 		if (next != null) {
 			fail("Expecting null.");
+		}
+		
+	}
+
+	@org.junit.Test
+	public void testStripTags() {
+		String test = "This is html <p>yo</p> <p>paragraphs eh <span>test</span> </p> ok";
+		String result = "This is html   ok";
+		String text = Utils.stripTag(test, "p");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "<p> here is a <button>button</button>!</p>";
+		result = "<p> here is a !</p>";
+		text = Utils.stripTag(test, "button");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "Do not say <p class='nospeech'>this</p>";
+		result = "Do not say ";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "Do not say <p class=\"nospeech\">this";
+		result = "Do not say ";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "Do not say <p class=\"nos";
+		result = "Do not say <p class=\"nos";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
 		}
 		
 	}

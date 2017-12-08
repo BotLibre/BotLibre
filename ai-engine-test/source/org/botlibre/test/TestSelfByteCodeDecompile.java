@@ -35,13 +35,11 @@ import org.junit.BeforeClass;
 /**
  * Test the state decompiler.
  */
-// TODO: Http fails because pattern state order is not correct for non-byte code compiler.
-// This may also cause AIML issues as "* *" should be processed before "*"
-public class TestSelfDecompile extends TestSelf {
+
+public class TestSelfByteCodeDecompile extends TestSelf {
 
 	@BeforeClass
 	public static void setup() {
-		SelfCompiler.setCompiler(new Self4Compiler());
 		bootstrap();
 		Bot bot = Bot.createInstance();
 		
@@ -64,6 +62,7 @@ public class TestSelfDecompile extends TestSelf {
 		language = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
 		Vertex script = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("test.self"), "", false, network);
 		String code = SelfDecompiler.getDecompiler().decompileStateMachine(script, network);
+		System.out.println(code);
 		Vertex newState = SelfCompiler.getCompiler().parseStateMachine(code, false, network);
 		language.setRelationship(Primitive.STATE, newState);
 		network.save();

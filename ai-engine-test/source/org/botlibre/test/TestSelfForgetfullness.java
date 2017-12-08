@@ -17,15 +17,13 @@
  ******************************************************************************/
 package org.botlibre.test;
 
-import java.util.List;
-import java.util.logging.Level;
-
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
-import org.botlibre.knowledge.Bootstrap;
-import org.botlibre.sense.text.TextEntry;
+import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.knowledge.Primitive;
+import org.botlibre.self.SelfCompiler;
 import org.botlibre.thought.forgetfulness.Forgetfulness;
-import org.botlibre.util.Utils;
+import org.botlibre.thought.language.Language;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -33,26 +31,20 @@ import org.junit.BeforeClass;
  * Test the state decompiler.
  */
 
-public class TestLanguageForgetfullness extends TestLanguage {
+public class TestSelfForgetfullness extends TestSelf {
 
 	@BeforeClass
 	public static void setup() {
 		bootstrap();
 		Bot bot = Bot.createInstance();
-		bot.setName("test");
-
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
-		List<String> output = registerForOutput(text);
-		text.input("ping");
-		waitForOutput(output);
-
-		Utils.sleep(100);
-		
-		new Bootstrap().rebootstrapMemory(bot.memory());
-		
-		Utils.sleep(500);
-
 		Network network = bot.memory().newMemory();
+		Vertex language = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
+		Vertex script = SelfCompiler.getCompiler().parseStateMachine(TestSelf.class.getResource("test.self"), "", false, network);
+		SelfCompiler.getCompiler().pin(script);
+		language.setRelationship(Primitive.STATE, script);
+		network.save();
+
+		network = bot.memory().newMemory();
 		Forgetfulness forgetfulness = bot.mind().getThought(Forgetfulness.class);
 		try {
 			forgetfulness.setMaxRelationships(50);
@@ -63,10 +55,6 @@ public class TestLanguageForgetfullness extends TestLanguage {
 			bot.log(bot, exception);
 		}
 		network.save();
-
-		text.input("sky blue red dog cat green grass tall like very loves");
-		waitForOutput(output);
-		Utils.sleep(20000);
 		
 		bot.shutdown();
 	}

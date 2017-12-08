@@ -13,7 +13,7 @@
 
 <category>
 <pattern>id</pattern>
-<template>id is <id/></template>
+<template><set name="name">anonymous</set>id is <id/></template>
 </category>
 
 <category>
@@ -405,13 +405,13 @@
 
 <category>
 <pattern>sraixchomsky *</pattern>
-<template><sraix server="www.pandorabots.com" botid="b0dafd24ee35a477"><star/></sraix>
+<template><sraix server="https://www.pandorabots.com" botid="b0dafd24ee35a477"><star/></sraix>
 </template>
 </category>
 
 <category>
 <pattern>sraixchomsky2 *</pattern>
-<template><sraix server="http://www.pandorabots.com" botid="b0dafd24ee35a477"><star/></sraix>
+<template><sraix server="https://www.pandorabots.com" botid="b0dafd24ee35a477"><star/></sraix>
 </template>
 </category>
 
@@ -761,6 +761,18 @@ seconds until Christmas.
 </category>
 
 <category>
+<pattern># pre pattern6</pattern>
+<template>success6
+</template>
+</category>
+
+<category>
+<pattern># pattern6</pattern>
+<template>fail6
+</template>
+</category>
+
+<category>
       <pattern>test nested</pattern>
     <template>
         <condition name="nested">
@@ -774,6 +786,16 @@ seconds until Christmas.
 <category>
     <pattern>set nested</pattern>
         <template>ok <set name="nested">n4</set></template>
+</category>
+
+<category>
+<pattern>* + *</pattern>
+<template><self>star[0].toNumber() + star[1].toNumber()</self></template>
+</category>
+
+<category>
+<pattern>sqrt *</pattern>
+<template><think><self>var result = Math.sqrt(star.toNumber());</self></think><self>result</self></template>
 </category>
 
 </aiml>

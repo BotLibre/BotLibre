@@ -41,6 +41,7 @@ public class TestAIML2ChatLog extends TestAIML2 {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("test-aiml2.aiml");

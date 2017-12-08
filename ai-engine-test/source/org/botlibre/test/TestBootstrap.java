@@ -18,19 +18,16 @@
 package org.botlibre.test;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
-import org.botlibre.knowledge.database.DatabaseMemory;
 import org.botlibre.sense.http.Wiktionary;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.consciousness.Consciousness;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
-import org.eclipse.persistence.logging.SessionLog;
-import org.eclipse.persistence.sessions.DatabaseSession;
-import org.eclipse.persistence.tools.profiler.PerformanceMonitor;
-import org.eclipse.persistence.tools.profiler.PerformanceProfiler;
+import org.botlibre.util.Utils;
 import org.junit.BeforeClass;
 
 /**
@@ -71,6 +68,7 @@ public class TestBootstrap extends TextTest {
 	@org.junit.Test
 	public void testBootstrapPerformance() {
 		Bot bot = Bot.createInstance();
+		//bot.setDebugLevel(Level.FINEST);
 		//PerformanceMonitor profiler = new PerformanceMonitor();
 		//((DatabaseMemory)bot.memory()).getEntityManager().unwrap(DatabaseSession.class).setProfiler(profiler);
 		//((DatabaseMemory)bot.memory()).getEntityManager().unwrap(DatabaseSession.class).setLogLevel(SessionLog.FINE);
@@ -87,6 +85,12 @@ public class TestBootstrap extends TextTest {
 		long start = System.currentTimeMillis();
 
 		String response = "";
+
+		text.input("say hello world");
+		response = waitForOutput(output);
+		if (!response.equals("hello world")) {
+			fail("incorrect:" + response);
+		}
 		
 		text.input("what is 1 + 1 + 2 + 4 + 7?");
 		response = waitForOutput(output);

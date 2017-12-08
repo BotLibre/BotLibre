@@ -40,6 +40,7 @@ public class TestAIML20q extends TextTest {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("20q.aiml");

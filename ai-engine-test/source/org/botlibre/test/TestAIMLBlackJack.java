@@ -20,6 +20,7 @@ package org.botlibre.test;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
@@ -40,6 +41,7 @@ public class TestAIMLBlackJack extends TextTest {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("blackjack.aiml");

@@ -40,6 +40,7 @@ public class TestAIMLChatLog extends TestAIML {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("alice.aiml");

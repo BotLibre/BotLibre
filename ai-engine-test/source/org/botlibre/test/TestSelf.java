@@ -19,6 +19,7 @@ package org.botlibre.test;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
@@ -42,12 +43,13 @@ public class TestSelf extends TextTest {
 	@BeforeClass
 	public static void setup() {
 		bootstrap();
-		
+		Bot bot = Bot.createInstance();
 		Network network = bot.memory().newMemory();
 		Vertex language = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
 		Vertex script = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("test.self"), "", false, network);
 		language.setRelationship(Primitive.STATE, script);
 		network.save();
+		bot.shutdown();
 	}
 
 	@org.junit.Test
@@ -62,7 +64,7 @@ public class TestSelf extends TextTest {
 			text.input("test math");
 			String response = waitForOutput(output);
 			checkResponse(response, "pass");
-			
+
 			text.input("test operations");
 			response = waitForOutput(output);
 			checkResponse(response, "pass");
@@ -75,14 +77,19 @@ public class TestSelf extends TextTest {
 	public void testDate() {
 		Bot bot = Bot.createInstance();
 		try {
+			//bot.setDebugLevel(Level.FINE);
 			Language language = bot.mind().getThought(Language.class);
 			language.setLearningMode(LearningMode.Disabled);
 			TextEntry text = bot.awareness().getSense(TextEntry.class);
 			List<String> output = registerForOutput(text);
+			
+			text.input("test dates");
+			String response = waitForOutput(output);
+			checkResponse(response, "pass");
 
 			String date = Utils.printDate(new Date(), "EEEE MMMM d y");
 			text.input("date");
-			String response = waitForOutput(output);
+			response = waitForOutput(output);
 			checkResponse(response, date);
 			
 			text.input("time");
@@ -141,6 +148,22 @@ public class TestSelf extends TextTest {
 			response = waitForOutput(output);
 			checkResponse(response, "any date 2016/100/11 1:30 pm");
 			
+			text.input("any date 2017-1-19T13:30:0-08:00");
+			response = waitForOutput(output);
+			checkResponse(response, "2017-01-19 16:30:00.0");
+			
+			text.input("any date 2 pm");
+			response = waitForOutput(output);
+			checkResponse(response, "1970-01-01 14:00:00.0");
+			
+			text.input("any date 12:30 pm");
+			response = waitForOutput(output);
+			checkResponse(response, "1970-01-01 12:30:00.0");
+			
+			text.input("any date 23:30:00");
+			response = waitForOutput(output);
+			checkResponse(response, "1970-01-01 23:30:00.0");
+			
 			text.input("hours 3 2016/10/11");
 			response = waitForOutput(output);
 			checkResponse(response, "2016-10-11 03:00:00.0");
@@ -174,6 +197,64 @@ public class TestSelf extends TextTest {
 			text.input("topic");
 			response = waitForOutput(output);
 			checkResponse(response, "none");
+			
+			text.input("test conversation");
+			response = waitForOutput(output);
+			checkResponse(response, "pass_________");
+			
+			text.input("topic empty");
+			response = waitForOutput(output);
+			checkResponse(response, "topic set");
+			
+			text.input("");
+			response = waitForOutput(output);
+			checkResponse(response, "success");
+			
+			text.input("clear topic");
+			response = waitForOutput(output);
+			checkResponse(response, "topic cleared");
+			
+		} finally {
+			bot.shutdown();
+		}
+	}
+
+	@org.junit.Test
+	public void testLanguage() {
+		Bot bot = Bot.createInstance();
+		try {
+			bot.setDebugLevel(Level.FINE);
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+
+			text.input("test language");
+			String response = waitForOutput(output);
+			checkResponse(response, "ok");
+			
+			text.input("test empty");
+			response = waitForOutput(output);
+			checkResponse(response, "");
+			
+		} finally {
+			bot.shutdown();
+		}
+	}
+
+	@org.junit.Test
+	public void testArrays() {
+		Bot bot = Bot.createInstance();
+		try {
+			//bot.setDebugLevel(Level.FINE);
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+
+			text.input("test arrays");
+			String response = waitForOutput(output);
+			checkResponse(response, "ok");
 			
 		} finally {
 			bot.shutdown();
@@ -225,7 +306,7 @@ public class TestSelf extends TextTest {
 	@org.junit.Test
 	public void testHttp() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Level.FINER);
+		bot.setDebugLevel(Level.FINE);
 		try {
 			Language language = bot.mind().getThought(Language.class);
 			language.setLearningMode(LearningMode.Disabled);
@@ -236,21 +317,21 @@ public class TestSelf extends TextTest {
 			String response = waitForOutput(output);
 			assertKeyword(response, "http://");
 
-			text.input("xml http://botlibre.com/rest/api/form-chat?instance=165&message=ping&application=" + applicationId + "");
+			text.input("xml http://botlibre.com/rest/api/form-chat?instance=14187473&message=ping&application=" + applicationId + "");
 			response = waitForOutput(output);
 			assertKeyword(response, "pong");
 			assertKeyword(response, "message");
 			assertKeyword(response, "conversation");
 
-			text.input("xml http://botlibre.com/rest/api/form-chat?instance=165&message=ping&application=" + applicationId + " message");
+			text.input("xml http://botlibre.com/rest/api/form-chat?instance=14187473&message=ping&application=" + applicationId + " message");
 			response = waitForOutput(output);
 			checkResponse(response, "pong");
 
-			text.input("xpath http://botlibre.com/rest/api/form-chat?instance=165&message=ping&application=" + applicationId + " @emote");
+			text.input("xpath http://botlibre.com/rest/api/form-chat?instance=14187473&message=ping&application=" + applicationId + " @emote");
 			response = waitForOutput(output);
 			checkResponse(response, "NONE");
 
-			text.input("xpath http://botlibre.com/rest/api/form-chat?instance=165&message=ping&application=" + applicationId + " message");
+			text.input("xpath http://botlibre.com/rest/api/form-chat?instance=14187473&message=ping&application=" + applicationId + " message");
 			response = waitForOutput(output);
 			checkResponse(response, "pong");
 
@@ -266,9 +347,26 @@ public class TestSelf extends TextTest {
 			response = waitForOutput(output);
 			assertKeyword(response, "avatar");
 
-			text.input("html http://botlibre.com head/meta[2]/@content");
+			text.input("html https://botlibre.com head/meta[2]/@content");
 			response = waitForOutput(output);
 			checkResponse(response, "Paphus Solutions Inc.");
+
+			text.input("html https://botlibre.com count(head/meta)");
+			response = waitForOutput(output);
+			checkResponse(response, "6");
+
+			text.input("html text https://botlibre.com //h1");
+			response = waitForOutput(output);
+			checkResponse(response, "Bot Libre!");
+
+			text.input("html list 1 https://botlibre.com //h3/text()");
+			response = waitForOutput(output);
+			checkResponse(response, "Sitemap");
+			
+			text.input("html xml https://botlibre.com head/meta[2]");
+			response = waitForOutput(output);
+			assertKeyword(response, "Paphus Solutions Inc.");
+			assertKeyword(response, "<meta");
 
 			text.input("postXML ping " + applicationId);
 			response = waitForOutput(output);
@@ -278,13 +376,13 @@ public class TestSelf extends TextTest {
 			response = waitForOutput(output);
 			checkResponse(response, "ping");
 
-			text.input("json http://botlibre.com/rest/json/form-chat?application=" + applicationId + "&instance=165&message=ping");
+			text.input("json https://botlibre.com/rest/json/form-chat?application=" + applicationId + "&instance=165&message=ping");
 			response = waitForOutput(output);
 			assertKeyword(response, "pong");
 			assertKeyword(response, "message");
 			assertKeyword(response, "conversation");
 
-			text.input("json http://botlibre.com/rest/json/form-chat?application=" + applicationId + "&instance=165&message=ping message");
+			text.input("json https://botlibre.com/rest/json/form-chat?application=" + applicationId + "&instance=165&message=ping message");
 			response = waitForOutput(output);
 			checkResponse(response, "pong");
 
@@ -296,13 +394,13 @@ public class TestSelf extends TextTest {
 			response = waitForOutput(output);
 			checkResponse(response, "pong");
 
-			text.input("csv http://www.botlibre.com/script?file&id=14026345");
+			text.input("csv https://www.botlibre.com/script?file&id=14026345");
 			response = waitForOutput(output);
 			assertKeyword(response, "Jon Dow");
 			assertKeyword(response, "Jane Smith");
 			assertKeyword(response, "George Jones the 3rd");
 
-			text.input("json http://www.botlibre.com/script?file&id=14026381");
+			text.input("json https://www.botlibre.com/script?file&id=14026381");
 			response = waitForOutput(output);
 			assertKeyword(response, "Jon Dow");
 			assertKeyword(response, "Jane Smith");

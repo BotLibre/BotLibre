@@ -51,6 +51,7 @@ public class TestAIML2 extends TextTest {
 	public static void setup() {
 		reset();
 		new Bootstrap().bootstrapSystem(bot, false);
+		bot.shutdown();
 		Bot bot = Bot.createInstance();
 		try {
 			URL url = TestAIML.class.getResource("test-aiml2.aiml");
@@ -194,6 +195,9 @@ public class TestAIML2 extends TextTest {
 		response = waitForOutput(output);
 		date = Calendar.getInstance();
 		int weeks = christmas.get(Calendar.WEEK_OF_YEAR) - date.get(Calendar.WEEK_OF_YEAR) - 2;
+		if (weeks < 0) {
+			weeks = 52 + weeks;
+		}
 		checkResponse(response, "" + weeks + " weeks until Christmas.");
 		
 		text.input("how many hours until Christmas?");
@@ -643,6 +647,30 @@ public class TestAIML2 extends TextTest {
 	}
 
 	@org.junit.Test
+	public void testSelf() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		//bot.setDebugLevel(Level.FINER);
+		
+		text.input("2 + 2");
+		String response = waitForOutput(output);
+		if (response.indexOf("4") == -1) {
+			fail("Incorrect response: " + response);
+		}
+		
+		text.input("sqrt 4");
+		response = waitForOutput(output);
+		if (response.indexOf("2") == -1) {
+			fail("Incorrect response: " + response);
+		}
+		
+		bot.shutdown();
+	}
+
+	@org.junit.Test
 	public void testFunctions() {
 		Bot bot = Bot.createInstance();
 		Language language = bot.mind().getThought(Language.class);
@@ -665,7 +693,7 @@ public class TestAIML2 extends TextTest {
 		
 		text.input("id");
 		response = waitForOutput(output);
-		if (response.indexOf("Id is Anonymous") == -1) {
+		if (response.indexOf("id is anonymous") == -1) {
 			fail("Incorrect response: " + response);
 		}
 		
@@ -719,7 +747,6 @@ public class TestAIML2 extends TextTest {
 		
 		bot.shutdown();
 	}
-
 
 	/**
 	 * Test new patterns wildcards.
@@ -949,6 +976,28 @@ public class TestAIML2 extends TextTest {
 		text.input("x y pattern5 x xx");
 		response = waitForOutput(output);
 		checkResponse(response, "success5");
+		
+		text.input("pre pattern6");
+		response = waitForOutput(output);
+		checkResponse(response, "success6");
+		
+		text.input("clear");
+		response = waitForOutput(output);
+		
+		text.input("x pre pattern6");
+		response = waitForOutput(output);
+		checkResponse(response, "success6");
+		
+		text.input("pattern6");
+		response = waitForOutput(output);
+		checkResponse(response, "fail6");
+		
+		text.input("clear");
+		response = waitForOutput(output);
+		
+		text.input("x pattern6");
+		response = waitForOutput(output);
+		checkResponse(response, "fail6");
 		
 		bot.shutdown();		
 	}

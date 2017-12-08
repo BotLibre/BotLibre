@@ -71,14 +71,14 @@ public class TestFreebase extends TextTest {
 			List<String> output = registerForOutput(text);
 			text.input("what is Uranium?");
 			String response = waitForOutput(output);
-			if (!response.equals("Uranium is a chemical element with symbol U and atomic number 92.")) {
+			if (!response.equals("radioactive, metallic element with the atomic number 92")) {
 				fail("Incorrect: " + response);			
 			}
 			
 			Utils.sleep(SLEEP);
 			text.input("tell me about Oxygen");
 			response = waitForOutput(output);
-			if (!response.equals("Oxygen is a chemical element with symbol O and atomic number 8.")) {
+			if (!response.equals("element with the atomic number of 8")) {
 				fail("Incorrect: " + response);			
 			}
 	
@@ -92,7 +92,7 @@ public class TestFreebase extends TextTest {
 			Utils.sleep(SLEEP);
 			text.input("who is Barack Obama?");
 			response = waitForOutput(output);
-			if (response.indexOf("Barack Hussein Obama II") == -1) {
+			if (response.indexOf("44th President of the United States of America") == -1) {
 				fail("Incorrect: " + response);
 			}
 		
@@ -129,6 +129,7 @@ public class TestFreebase extends TextTest {
 					&& !response.equals("Urban agglomeration of Montreal is in Canada.")
 					&& !response.equals("Urban agglomeration of Montreal is in Québec.")
 					&& !response.equals("Canada is in Americas.")
+					&& !response.equals("Canada is in Canada.")
 					&& !response.equals("Canada is in DVD Region 1.")
 					&& !response.equals("Québec is in Canada.")) {
 				fail("Incorrect: " + response);
@@ -166,7 +167,7 @@ public class TestFreebase extends TextTest {
 			Utils.sleep(SLEEP);
 			text.input("what is Brockville?");
 			response = waitForOutput(output);
-			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
+			if (!response.equals("city in Ontario, Canada")) {
 				fail("Incorrect: " + response);
 			}
 
@@ -174,7 +175,7 @@ public class TestFreebase extends TextTest {
 			Utils.sleep(SLEEP);
 			text.input("what is Brockville?");
 			response = waitForOutput(output);
-			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
+			if (!response.equals("city in Ontario, Canada")) {
 				fail("Incorrect: " + response);
 			}
 			
@@ -185,7 +186,7 @@ public class TestFreebase extends TextTest {
 			Utils.sleep(SLEEP);
 			text.input("what is brockville?");
 			response = waitForOutput(output);
-			if (!response.equals("Brockville, formerly Elizabethtown, is a city in Eastern Ontario, Canada in the Thousand Islands region.")) {
+			if (!response.equals("city in Ontario, Canada")) {
 				fail("Incorrect: " + response);
 			}
 	
