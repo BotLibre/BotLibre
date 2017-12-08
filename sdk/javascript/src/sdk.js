@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2014 Paphus Solutions Inc.
+ *  Copyright 2014-2017 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 /**
  * Bot Libre open SDK.
- * This JavaScript SDK lets you access chat bot, live chat, chatroom, and forum services on
+ * This JavaScript SDK lets you access chat bot, live chat, chatroom, forum, script, graphic, user services on
  * the Bot Libre compatible websites, including:
  * - Bot Libre!
  * - Bot Libre for Business
@@ -34,7 +34,7 @@
  * 
  * LiveChatConnection uses web sockets to provide access to live chat and chatrooms.
  * 
- * Version: 5.0-2016-11-23
+ * Version: 6.1.1-2017-11-16
  */
 
 /**
@@ -47,8 +47,9 @@ SDK.DOMAIN = "www.botlibre.com";
 SDK.NAME = "Bot Libre!";
 SDK.APP = "";
 
-//SDK.DOMAIN = window.location.host;
-//SDK.APP = "/botlibre";
+SDK.DOMAIN = window.location.host;
+//SDK.DOMAIN = "192.168.0.16:9080";
+SDK.APP = "/botlibre";
 
 SDK.PATH = "/rest/api";
 SDK.MAX_FILE_UPLOAD = 5000000;
@@ -60,6 +61,7 @@ SDK.url = SDK.scheme + "://" + SDK.DOMAIN + SDK.APP;
 SDK.rest = SDK.url + SDK.PATH;
 SDK.backlinkURL = SDK.url;
 SDK.backlink = true;
+SDK.commands = true;
 
 /**
  * You must set your application ID to use the SDK.
@@ -89,10 +91,16 @@ SDK.debug = false;
 SDK.secure = true;
 
 /**
- * Force avatars to use canvas for video (currently used only for Chrome and Firefox).
+ * Force avatars to enable or disable canvas for video (currently used only for Chrome and Firefox).
  * @static
  */
 SDK.useCanvas = null;
+
+/**
+ * Force avatars to enable or disable video (currently disabled for Safari on iPhone).
+ * @static
+ */
+SDK.useVideo = null;
 
 /**
  * Attempt to fix grey mp4 video background (only used for Chrome).
@@ -104,7 +112,7 @@ SDK.fixBrightness = null;
  * Attempt to fix an issue with Chrome not processing the CSS after correctly when the chat bubble resizes.
  * @static
  */
-SDK.fixChromeResizeCSS = true;
+SDK.fixChromeResizeCSS = false;
 
 /**
  * Set the error static field to trap or log any errors.
@@ -120,6 +128,18 @@ SDK.error = function(message) {
  */
 SDK.responsiveVoice = false;
 SDK.speechSynthesis = 'speechSynthesis' in window;
+/**
+ * The speechRate can be set to change the native speech voice speed.
+ * It can range between 0.1 (lowest) and 10.0 (highest).
+ * 1.0 is the default rate for the current platform or voice.
+ * Other values act as a percentage relative to this, so for example 2.0 is twice as fast, 0.5 is half as fast.
+ */
+SDK.speechRate = null;
+/**
+ * The speechPitch can be set to change the native speech voice pitch.
+ * It can range between 0.0 (lowest) and 2.0 (highest), with 1.0 being the default pitch for the current platform or voice.
+ */
+SDK.speechRate = null;
 SDK.initResponsiveVoice = function() {
 	if (!('responsiveVoice' in window)) {
 		console.log("ResponsiveVoice missing, you must load its script first");
@@ -128,8 +148,8 @@ SDK.initResponsiveVoice = function() {
 	SDK.responsiveVoice = true;
 	SDK.speechSynthesis = true;
 }
-if (SpeechSynthesisUtterance == null) {
-	function SpeechSynthesisUtterance(text) {
+if (!('SpeechSynthesisUtterance' in window)) {
+	function SpeechSynthesisUtterance2(text) {
 		this.text = text;
 	}
 }
@@ -140,31 +160,110 @@ SDK.recognitionActive = false;
 SDK.backgroundAudio = null;
 SDK.currentBackgroundAudio = null;
 SDK.timers = {};
+/**
+ * Track if auto play of media is enabled in the browser (mobile Chrome/Safari)
+ * Enable or disable to force audio auto play.
+ */
+SDK.canPlayAudio = null;
+/**
+ * Track if auto play of media is enabled in the browser (mobile Chrome/Safari)
+ * Enable or disable to force video auto play.
+ */
+SDK.canPlayVideo = null;
+SDK.disableAudioAutoPlay = false;
+SDK.audio = null;
+SDK.autoPlayActionAudio = null;
+SDK.autoPlayBackgroundAudio = null;
+SDK.autoPlayDelay = 2000;
+
+/**
+ * For some browsers audio must be initialized from a click event.
+ */
+SDK.initAudio = function() {
+	SDK.canPlayVideo = true;
+	SDK.canPlayAudio = true;
+	if (SDK.audio == null) {
+		SDK.audio = new Audio(SDK.url + '/chime.mp3');
+		SDK.audio.load();
+	}
+	if (SDK.autoPlayActionAudio == null) {
+		SDK.autoPlayActionAudio = new Audio(SDK.url + '/chime.mp3');
+		SDK.autoPlayActionAudio.load();
+		SDK.autoPlayBackgroundAudio = new Audio(SDK.url + '/chime.mp3');
+		SDK.autoPlayBackgroundAudio.load();
+	}
+}
 
 /**
  * Play the audio file given the url.
  */
 SDK.play = function(file, channelaudio) {
 	SDK.pauseSpeechRecognition();
-	var audio = new Audio(file);
-	if (SDK.recognitionActive) {
-		audio.addEventListener('ended', function() {
-			SDK.startSpeechRecognition();
-		}, false);
-	}
-	if (channelaudio == false) {
-		audio.play();
-		return audio;
-	}
-	if (SDK.currentAudio != null && !SDK.currentAudio.ended) {
-		SDK.currentAudio.addEventListener('pause', function() {
-			SDK.currentAudio = audio;
-			audio.play();
-		}, false);
-		SDK.currentAudio.pause();
+	var audio = null;
+	if (SDK.audio != null) {
+		audio = SDK.audio;
+		audio.pause();
+		audio.onended = null;
+		audio.onpause = null;
+		audio.oncanplay = null;
+		audio.src = file;
 	} else {
-		SDK.currentAudio = audio;
-		audio.play();
+		audio = new Audio(file);
+	}
+	if (SDK.recognitionActive) {
+		audio.onended = function() {
+			SDK.startSpeechRecognition();
+			if (channelaudio != false) {
+				SDK.currentAudio = null;
+			}
+		};
+	} else if (channelaudio != false) {
+		audio.onended = function() {
+			SDK.currentAudio = null;
+		};
+	}
+	var playPromise = null;
+	if (channelaudio == false) {
+		playPromise = audio.play();
+	} else {
+		if (SDK.currentAudio != null && !SDK.currentAudio.ended && !SDK.currentAudio.paused) {
+			SDK.currentAudio.onpause = function() {
+				SDK.currentAudio = audio;
+				playPromise = audio.play();
+			};
+			SDK.currentAudio.pause();
+		} else {
+			SDK.currentAudio = audio;
+			playPromise = audio.play();
+		}
+	}
+	if (playPromise !== undefined && SDK.canPlayAudio == null) {
+		playPromise.then(function() {
+			SDK.canPlayAudio = true;
+		}).catch(function(error) {
+			if (SDK.canPlayAudio == null) {
+				SDK.canPlayAudio = false;
+				SDK.playInitAudio = function() {
+					SDK.audio = new Audio(file);
+					SDK.currentAudio = SDK.audio;
+					SDK.currentAudio.onended = function() {
+						SDK.currentAudio = null;
+					};
+					SDK.canPlayAudio = true;
+					SDK.audio.play();
+					document.getElementById("sdkplaybutton").style.display = "none";
+				}
+				var body = document.body || document.getElementsByTagName('body')[0];
+				var playButton = document.createElement('div');
+				var html = "<div id='sdkplaybutton' style='position:fixed;bottom:32px;left:32px;z-index:164;'><img onclick='SDK.playInitAudio()' width='64' src='"
+					+ SDK.url + "/images/playsound.png'/></div>"
+				playButton.innerHTML = html;
+				body.appendChild(playButton);
+				setTimeout(function() {
+					document.getElementById("sdkplaybutton").style.display = "none";
+				}, 10000);
+			}
+		});
 	}
 	return audio;
 }
@@ -193,7 +292,12 @@ SDK.chime = function() {
 SDK.tts = function(text, voice, native, lang, nativeVoice, mod) {
 	try {
 		if ((native || (native == null && voice == null)) && SDK.speechSynthesis) {
-			var utterance = new SpeechSynthesisUtterance(text);
+			var utterance = null;
+			if ('SpeechSynthesisUtterance' in window) {
+				utterance = new SpeechSynthesisUtterance(text);
+			} else {
+				utterance = new SpeechSynthesisUtterance2(text);
+			}
 			SDK.nativeTTS(utterance, lang, nativeVoice);
 		} else {		
 			var url = SDK.rest + '/form-speak?&text=';
@@ -258,6 +362,12 @@ SDK.responsiveVoiceTTS = function(utterance, lang, voice) {
  * Speak the native utterance first setting the voice and language.
  */
 SDK.nativeTTS = function(utterance, lang, voice) {
+	if (SDK.speechRate != null) {
+		utterance.rate = SDK.speechRate;
+	}
+	if (SDK.speechPitch != null) {
+		utterance.pitch = SDK.speechPitch;
+	}
 	if (SDK.responsiveVoice) {
 		SDK.responsiveVoiceTTS(utterance, lang, voice);
 		return;
@@ -352,9 +462,249 @@ SDK.translate = function(text) {
 }
 SDK.translators = {
 	"pt" : {
+		"Yes" : "Sim",
+		"No" : "Não",
 		"Name" : "Nome",
-		"Phone" : "Telem�vel",
-		"Connect" : "Ligar"
+		"Email" : "O email",
+		"Phone" : "Telemóvel",
+		"Connect" : "Ligar",
+		"Speech" : "Discurso",
+		"Enter name" : "Insira o nome",
+		"Chat Log" : "Registro de bate-papo",
+		"Choose Language" : "Escolha o seu idioma",
+		"Enter valid email" : "Digite e-mail válido",
+		"Ping server" : "Servidor Ping",
+		"Flag user" : "Flag user",
+		"Whisper user" : "Usuário Whisper",
+		"Request private" : "Pedido privado",
+		"Clear log" : "Log clara",
+		"Accept private" : "Aceite privado",
+		"Send image" : "Enviar imagem",
+		"Send file" : "Enviar arquivo",
+		"Email Chat Log" : "Registro de bate-papo por email",
+		"Chime" : "Chime",
+		"Exit chat" : "Sair do bate-papo",
+		"Text to speech" : "Texto para fala",
+		"Speech recognition" : "Reconhecimento de fala",
+		"Speech Recognition" : "Reconhecimento de fala",
+		"Quit private channel" : "Saia do canal privado",
+		"Quit private or channel" : "Sair privado ou canal",
+		"Would you like a copy of the chat log sent to your email?" : "Gostaria de uma cópia do registro de bate-papo enviado para o seu e-mail?"
+	},
+	"fr" : {
+		"Yes" : "Oui",
+		"No" : "Non",
+		"Name" : "Prénom",
+		"Email" : "Email",
+		"Phone" : "Téléphone",
+		"Connect" : "Relier",
+		"Speech" : "Discours",
+		"Enter name" : "Entrez le nom",
+		"Chat Log" : "Journal de chat",
+		"Choose Language" : "Choisir la langue",
+		"Enter valid email" : "Entrez une adresse email valide",
+		"Ping server" : "Serveur ping",
+		"Flag user" : "Utilisateur du drapeau",
+		"Whisper user" : "Whisper utilisateur",
+		"Request private" : "Demander privé",
+		"Clear log" : "Effacer le journal",
+		"Accept private" : "Accepter privé",
+		"Send image" : "Envoyer une image",
+		"Send file" : "Envoyer le fichier",
+		"Email Chat Log" : "Journal de messagerie électronique",
+		"Chime" : "Carillon",
+		"Exit chat" : "Quitter le chat",
+		"Text to speech" : "Texte pour parler",
+		"Speech recognition" : "Reconnaissance vocale",
+		"Speech Recognition" : "Reconnaissance vocale",
+		"Quit private channel" : "Quitter la chaîne privée",
+		"Quit private or channel" : "Quitter privé ou canal",
+		"Would you like a copy of the chat log sent to your email?" : "Souhaitez-vous recevoir une copie du journal de chat envoyé à votre adresse e-mail?"
+	},
+	"es" : {
+		"Yes" : "Sí",
+		"No" : "No",
+		"Name" : "Nombre",
+		"Email" : "Email",
+		"Phone" : "Teléfono",
+		"Connect" : "Conectar",
+		"Speech" : "Discurso",
+		"Enter name" : "Ingrese el nombre",
+		"Chat Log" : "Registro de chat",
+		"Choose Language" : "Elija el idioma",
+		"Enter valid email" : "Ingrese un correo electrónico válido",
+		"Ping server" : "Servidor Ping",
+		"Flag user" : "Usuario de bandera",
+		"Whisper user" : "Usuario de Whisper",
+		"Request private" : "Solicitud privada",
+		"Clear log" : "Borrar registro",
+		"Accept private" : "Aceptar privado",
+		"Send image" : "Enviar imagen",
+		"Send file" : "Enviar archivo",
+		"Email Chat Log" : "Registro de chat de correo electrónico",
+		"Chime" : "Campaneo",
+		"Exit chat" : "Salir de chat",
+		"Text to speech" : "Texto a voz",
+		"Speech recognition" : "Reconocimiento de voz",
+		"Speech Recognition" : "Reconocimiento de voz",
+		"Quit private channel" : "Salir del canal privado",
+		"Quit private or channel" : "Salir de privado o canal",
+		"Would you like a copy of the chat log sent to your email?" : "Desea enviar un mensaje a su dirección de correo electrónico?"
+	},
+	"de" : {
+		"Yes" : "Ja",
+		"No" : "Nein",
+		"Name" : "Name",
+		"Email": "Email",
+		"Phone" : "Telefon",
+		"Connect" : "Verbinden",
+		"Speech" : "Rede",
+		"Enter name" : "Name eingeben",
+		"Chat Log" : "Chat Protokoll",
+		"Choose Language" : "Wähle eine Sprache",
+		"Enter valid email" : "Geben Sie gültige E-Mail-Adresse ein",
+		"Ping server" : "Ping-Server",
+		"Flag user" : "Benutzer kennzeichnen",
+		"Whisper user" : "Flüstern Benutzer",
+		"Request private" : "Privat anfragen",
+		"Clear log" : "Protokoll löschen",
+		"Accept private" : "Akzeptiere privat",
+		"Send image" : "Bild senden",
+		"Send file" : "Datei senden",
+		"Email Chat Log" : "E-Mail-Chatprotokoll",
+		"Chime" : "Glockenspiel",
+		"Exit chat" : "Chat beenden",
+		"Text to speech" : "Text zu Sprache",
+		"Speech recognition" : "Spracherkennung",
+		"Speech Recognition" : "Spracherkennung",
+		"Quit private channel" : "Beenden Sie den privaten Kanal",
+		"Quit private or channel" : "Beenden Sie private oder Kanal",
+		"Would you like a copy of the chat log sent to your email?" : "Möchten Sie eine Kopie des Chat-Protokolls an Ihre E-Mail-Adresse senden?"
+	},
+	"zh" : {
+		"Yes" : "是",
+		"No" : "沒有",
+		"Name" : "名稱",
+		"Email" : "電子郵件",
+		"Phone" : "電話",
+		"Connect" : "連",
+		"Speech" : "言語",
+		"Enter name" : "輸入名字",
+		"Chat Log" : "聊天記錄",
+		"Choose Language" : "選擇語言",
+		"Enter valid email" : "輸入有效的郵件",
+		"Ping server" : "叮噹服務器",
+		"Flag user" : "標記用戶",
+		"Whisper user" : "耳語用戶",
+		"Request private" : "請求私人",
+		"Clear log" : "清除日誌",
+		"Accept private" : "接受私人",
+		"Send image" : "發送圖像",
+		"Send file" : "發送文件",
+		"Email Chat Log" : "電子郵件聊天日誌",
+		"Chime" : "鐘",
+		"Exit chat" : "退出聊天",
+		"Text to speech" : "文字轉語音",
+		"Speech recognition" : "語音識別",
+		"Speech Recognition" : "語音識別",
+		"Quit private channel" : "退出私人頻道",
+		"Quit private or channel" : "退出私人或頻道",
+		"Would you like a copy of the chat log sent to your email?" : "你想要發送到你的電子郵件的聊天記錄的副本嗎?"
+	},
+	"ja" : {
+		"Yes" : "はい",
+		"No" : "いいえ",
+		"Name" : "名",
+		"Email" : "Eメール",
+		"Phone" : "電話",
+		"Connect" : "接続する",
+		"Disconnect" : "切断する",
+		"Speech" : "スピーチ",
+		"Enter name" : "名前を入力",
+		"Chat Log" : "チャットログ",
+		"Clear log" : "ログをクリアする",
+		"Choose Language" : "言語を選択する",
+		"Enter valid email" : "有効なメールアドレスを入力",
+		"Ping server" : "リングサーバー",
+		"Flag user" : "ユーザーにフラグを設定する",
+		"Whisper user" : "ささやくユーザー",
+		"Request private" : "プライベートをリクエストする",
+		"Accept private" : "プライベートを受け入れる",
+		"Send image" : "画像を送る",
+		"Send file" : "ファイルを送信",
+		"Upload image" : "画像をアップロードする",
+		"Upload file" : "ファイルをアップロードする",
+		"Email Chat Log" : "メールチャットログ",
+		"Chime" : "チャイム",
+		"Exit chat" : "チャットを終了",
+		"Text to speech" : "スピーチテキスト",
+		"Speech recognition" : "音声認識",
+		"Speech Recognition" : "音声認識",
+		"Quit private channel" : "プライベートチャンネルを終了する",
+		"Quit private or channel" : "プライベートまたはチャンネルを終了する",
+		"Would you like a copy of the chat log sent to your email?" : "チャットログのコピーをメールに送信しますか?"
+	},
+	"ar" : {
+		"Yes" : "نعم فعلا",
+		"No" : "لا",
+		"Name" : "اسم",
+		"Email" : "البريد الإلكتروني",
+		"Phone" : "",
+		"Connect" : "هاتف",
+		"Disconnect" : "قطع الاتصال",
+		"Speech" : "خطاب",
+		"Enter name" : "أدخل الاسم",
+		"Chat Log" : "سجل الدردشة",
+		"Clear log" : "سجل نظيف",
+		"Choose Language" : "اختر اللغة",
+		"Enter valid email" : "أدخل بريد إلكتروني صالحا",
+		"Ping server" : "خادم بينغ",
+		"Flag user" : "مستخدم العلم",
+		"Whisper user" : "الهمس المستخدم",
+		"Request private" : "طلب خاص",
+		"Clear Log" : "سجل نظيف",
+		"Accept private" : "قبول خاص",
+		"Send image" : "إرسال صورة",
+		"Send file" : "إرسال ملف",
+		"Email Chat Log" : "سجل الدردشة عبر البريد الإلكتروني",
+		"Chime" : "قرع الأجراس",
+		"Exit chat" : "الخروج من الدردشة",
+		"Text to speech" : "النص إلى الكلام",
+		"Speech Recognition" : "التعرف على الكلام",
+		"Quit private channel" : "إنهاء القناة الخاصة",
+		"Quit private or channel": "إنهاء خاص أو قناة",
+		"Would you like a copy of the chat log sent to your email?" : "هل تريد إرسال نسخة من سجل الدردشة إلى بريدك الإلكتروني؟"
+	},
+	"ru" : {
+		"Yes" : "Да",
+		"No" : "Hет",
+		"Name" : "Имя",
+		"Email": "Эл. почта",
+		"Phone" : "Телефон",
+		"Connect" : "Cоединить",
+		"Disconnect" : "Отключить",
+		"Speech" : "Pечь",
+		"Enter name" : "Введите имя",
+		"Chat Log" : "Журнал чата",
+		"Choose Language" : "Выберите язык",
+		"Enter valid email" : "Введите действующий адрес электронной почты",
+		"Ping server" : "Пинг сервер",
+		"Flag user" : "Oтметить пользователя",
+		"Whisper user" : "Прошептать пользователю",
+		"Request private" : "Частный запрос",
+		"Clear log" : "Очистить журнал",
+		"Clear Log" : "Очистить журнал",
+		"Accept private" : "Принять конфиденциальнo",
+		"Send image" : "Отправить изображение",
+		"Send file" : "Отправить файл",
+		"Email Chat Log" : "Oтправить журнал чата по электронной почте",
+		"Chime" : "Звонок",
+		"Exit chat" : "Выход из чата",
+		"Text to speech" : "Текст в речь",
+		"Speech Recognition" : "Распознавание речи",
+		"Quit private channel" : "Выйти из частного канала",
+		"Quit private or channel": "Выйти из частного канала",
+		"Would you like a copy of the chat log sent to your email?" : "Oтправить копю журнала чата на ваш адрес электронной почты?"
 	}
 }
 
@@ -374,6 +724,13 @@ SDK.isFirefox = function() {
 }
 
 /**
+ * Detect Safari browser.
+ */
+SDK.isSafari = function() {
+	return navigator.userAgent.toLowerCase().indexOf('safari') != -1;
+}
+
+/**
  * Detect mobile browser.
  */
 SDK.isMobile = function() {
@@ -390,8 +747,29 @@ SDK.isMobile = function() {
 	}
 }
 
+/**
+ * Detect iPhone OS.
+ */
+SDK.isIPhone = function() {
+	if (navigator.userAgent.match(/iPhone/i)) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Detect Mac OS.
+ */
+SDK.isMac = function() {
+	return navigator.platform.toLowerCase().indexOf('mac') != -1;
+}
+
 SDK.hd = false;
 SDK.format = (SDK.isChrome() || SDK.isFirefox()) ? "webm" : "mp4";
+// Safari displays HTML5 video very poorly on iPhone.
+if (SDK.isSafari() && SDK.isIPhone()) {
+	SDK.format = "img";
+}
 
 /**
  * Insert the text into the input field.
@@ -448,8 +826,28 @@ SDK.innerHTML = function(element) {
 SDK.stripTags = function(html) {
 	var element = document.createElement("p");
 	element.innerHTML = html;
-	SDK.removeScripts(element);
+	SDK.removeTags(element);
 	return element.innerText || element.textContent;
+}
+
+SDK.removeTags = function(node) {
+	if (node.className == 'nospeech' || node.tagName == 'SCRIPT' || node.tagName == 'SELECT' || node.tagName == 'BUTTON' || node.tagName == 'OPTION') {
+		node.parentNode.removeChild(node);
+	} else {
+		var index = 0;
+		var childNodes = node.childNodes;
+		var children = [];
+		while (index < childNodes.length) {
+			children[index] = childNodes[index];
+			index++;
+		}
+		var index = 0;
+		while (index < children.length) {
+			SDK.removeTags(children[index]);
+			index++;
+		}
+	}
+	return node;
 }
 
 /**
@@ -637,10 +1035,10 @@ SDK.resizeAndUploadImage = function(file, url, width, height, properties, onFini
 			canvas.height = tempH;
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = '#fff';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);			
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			ctx.drawImage(this, 0, 0, tempW, tempH);
-            var dataUrl = canvas.toDataURL('image/jpeg');
-            var blob = SDK.dataURLToBlob(dataUrl);
+			var dataUrl = canvas.toDataURL('image/jpeg');
+			var blob = SDK.dataURLToBlob(dataUrl);
 			var formData = new FormData();
 			if (properties != null) {
 				for (property in properties) {
@@ -665,18 +1063,45 @@ SDK.resizeAndUploadImage = function(file, url, width, height, properties, onFini
 	 reader.readAsDataURL(file);
 }
 
+/**
+ * Open a JQuery error message dialog.
+ */
 SDK.showError = function(message, title) {
 	if (title == null) {
 		title = "Error";
+	}
+	$("<div></div>").html(message).dialog({
+		title: title,
+		resizable: false,
+		modal: true,
+		buttons: {
+			"Ok": function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+}
+
+/**
+ * Open a JQuery confirm dialog.
+ */
+SDK.showConfirm = function(message, title, onYes, onNo) {
+	if (title == null) {
+		title = "Confirm";
 	}
 	$("<div></div>").html(message).dialog({
 	    title: title,
 	    resizable: false,
 	    modal: true,
 	    buttons: {
-	        "Ok": function() {
+	        "Yes": function() {
+	        	onYes();
 	            $(this).dialog("close");
-	        }
+	        },
+		    "No": function() {
+		    	onNo();
+		        $(this).dialog("close");
+		    }
 	    }
 	});
 }
@@ -719,6 +1144,18 @@ SDK.removeScripts = function(node) {
         }
     }
     return node;
+}
+
+/**
+ * Add a stylesheet link to the page.
+ */
+SDK.addStylesheet = function(fileName) {
+  var head = document.head;
+  var link = document.createElement('link');
+  link.type = 'text/css';
+  link.rel = 'stylesheet';
+  link.href = fileName;
+  head.appendChild(link);
 }
 
 /**
@@ -1152,7 +1589,7 @@ function Credentials() {
 function BOTlibreCredentials()  {
 	this.DOMAIN = "www.botlibre.com";
 	this.APP = "";
-	this.PATH = "/rest/botlibre";
+	this.PATH = "/rest/api";
 	
 	this.host = this.DOMAIN;
 	this.app = this.APP;
@@ -1162,15 +1599,15 @@ function BOTlibreCredentials()  {
 }
 
 /**
- * Credentials for use with hosted services on the Paphus Live Chat website,
- * a commercial live chat, chatroom, forum, and chat bot, hosting service.
- * http://www.paphuslivechat.com
+ * Credentials for use with hosted services on the Bot Libre for Business website,
+ * a commercial bot, live chat, chatroom, and forum, hosting service.
+ * https://www.botlibre.biz
  * @class
  */
 function PaphusCredentials()  {
-	this.DOMAIN = "www.paphuslivechat.com";
+	this.DOMAIN = "www.botlibre.biz";
 	this.APP = "";
-	this.PATH = "/rest/livechat";
+	this.PATH = "/rest/api";
 	
 	this.host = this.DOMAIN;
 	this.app = this.APP;
@@ -1187,7 +1624,7 @@ function PaphusCredentials()  {
 function LIVECHATlibreCredentials()  {
 	this.DOMAIN = "www.livechatlibre.com";
 	this.APP = "";
-	this.PATH = "/rest/livechatlibre";
+	this.PATH = "/rest/api";
 	
 	this.host = this.DOMAIN;
 	this.app = this.APP;
@@ -1204,7 +1641,7 @@ function LIVECHATlibreCredentials()  {
 function FORUMSlibreCredentials()  {
 	this.DOMAIN = "www.forumslibre.com";
 	this.APP = "";
-	this.PATH = "/rest/forumslibre";
+	this.PATH = "/rest/api";
 	
 	this.host = this.DOMAIN;
 	this.app = this.APP;
@@ -1282,11 +1719,13 @@ function WebLiveChatListener() {
 	this.connection = null;
 	this.sdk = null;
 	/** Configure if chat should be given focus after message. */
-	this.focus = true;
+	this.focus = !SDK.isMobile();
 	/** Element id and class prefix. Can be used to have multiple avatars in the same page, or avoid naming collisions. */
 	this.prefix = "";
 	/** Allow the chat box button color to be set. */
 	this.color = "#009900";
+	/** Allow the user to modify style sheets. */
+	this.version = null;
 	/** Allow the chat box hover button color to be set. */
 	this.hoverColor = "grey";
 	/** Allow the chat box background color to be set. */
@@ -1295,13 +1734,15 @@ function WebLiveChatListener() {
 	this.width = 300;
 	/** Chat box height. */
 	this.height = 320;
-	/** Chat box offest from side. */
+	/** Chat box offset from side. */
 	this.offset = 30;
+	/** Chat Button Vertial Offset*/
+	this.verticalOffset = 0;
 	/** Print response in chat bubble. */
 	this.bubble = false;
 	/** Set the location of the button and box, one of "bottom-right", "bottom-left", "top-right", "top-left". */
 	this.boxLocation = "bottom-right";
-	/** Set styles explictly to avoid inheriting page styles. Disable this to be able to override styles. */
+	/** Set styles explicitly to avoid inheriting page styles. Disable this to be able to override styles. */
 	this.forceStyles = true;
 	/** Override the URL used in the chat box popup. */
 	this.popupURL = null;
@@ -1309,8 +1750,6 @@ function WebLiveChatListener() {
 	this.chatLog = true;
 	/** Box chat loading message to display. */
 	this.loading = "loading...";
-	/** Box chat chatroom option. */
-	this.chatroom = false;
 	/** Box chat show online users option. */
 	this.online = false;
 	/** Link to online user list users to their profile page. */
@@ -1322,18 +1761,37 @@ function WebLiveChatListener() {
 	/** Prompt for name/email before connecting. */
 	this.promptContactInfo = false;
 	this.hasContactInfo = false;
+	/** Set if the back link should be displayed. */
+	this.backlink = SDK.backlink;
 	this.contactName = null;
 	this.contactEmail = null;
 	this.contactPhone = null;
 	this.contactInfo = "";
-	
+	/** Allow the close button on the box button bar to be removed, and maximize on any click to the button bar. */
+	this.showClose = true;
+	/** Provide an email chat log menu item. */
+	this.emailChatLog = false;
+	/** Ask the user if they want an email of the chat log on close. */
+	this.promptEmailChatLog = false;
 	this.windowTitle = document.title;
 	this.isActive = true;
-	
+	/** Variables used to get the user and bot images. */
+	this.botThumb = {};
+	this.userThumb = {};
 	self = this;
+	/** JSON object of all currently logged in users in the chat room take from updateUsersXML. */
+	this.users = {};
+	/** Box chat chat room option. */
+	this.chatroom = false;
+	/** Show and hides menu bar */
+	this.showMenubar = true;
+	/** Show Box Max */
+	this.showBoxmax = true;
+	/** Show Send Image */
+	this.showSendImage = true;
 	
 	/**
-	 * Create an embedding bar and div in the current webpage.
+	 * Create an embedding bar and div in the current web page.
 	 */
 	this.createBox = function() {
 		if (this.prefix == "" && this.elementPrefix != null) {
@@ -1343,10 +1801,12 @@ function WebLiveChatListener() {
 			this.caption = this.instanceName;
 		}
 		var backgroundstyle = "";
+		var backgroundstyle2 = "";
 		var buttonstyle = "";
 		var buttonHoverStyle = "";
 		var hidden = "hidden";
 		var border = "";
+		var border2 = "";
 		if (this.backgroundIfNotChrome && SDK.isChrome()) {
 			this.background = null;
 		}
@@ -1361,17 +1821,20 @@ function WebLiveChatListener() {
 		if (this.hoverColor != null) {
 			buttonHoverStyle = "background-color:" + this.hoverColor + ";";
 		}
+		
 		var minWidth = "";
 		var divWidth = "";
 		var background = "";
 		var minHeight = "";
 		var divHeight = "";
+		var maxDivWidth = "";
 		if (this.width != null) {
 			minWidth = "width:" + this.width + "px;";
 			background = "background-size:" + this.width + "px auto;";
 			divWidth = minWidth;
 			divHeight = "min-height:" + this.width + "px;";
 			responseWidth = "width:" + (this.width - 32) + "px;";
+			maxDivWidth = "max-width:" + (this.width - 50) + "px;";
 		}
 		if (this.height != null) {
 			minHeight = "height:" + this.height + "px;";
@@ -1393,75 +1856,101 @@ function WebLiveChatListener() {
         } else if (this.boxLocation == "bottom-right") {
             boxloc = "bottom:10px;right:10px";
         }
-        var boxbarloc = "bottom:2px;right:" + this.offset + "px";
+        var locationBottom = 20;
+        if (this.version < 6.0 || this.prefix != "botplatformchat") {
+        	locationBottom = 2;
+        }
+        var boxbarloc = "bottom:" + (locationBottom + this.verticalOffset) + "px;right:" + this.offset + "px";
         if (this.boxLocation == "top-left") {
-            boxbarloc = "top:2px;left:" + this.offset + "px";
+            boxbarloc = "top:" + (locationBottom + this.verticalOffset) + "px;left:" + this.offset + "px";
         } else if (this.boxLocation == "top-right") {
-            boxbarloc = "top:2px;right:" + this.offset + "px";
+            boxbarloc = "top:" + (locationBottom + this.verticalOffset) + "px;right:" + this.offset + "px";
         } else if (this.boxLocation == "bottom-left") {
-            boxbarloc = "bottom:2px;left:" + this.offset + "px";
+            boxbarloc = "bottom:" + (locationBottom + this.verticalOffset) + "px;left:" + this.offset + "px";
         } else if (this.boxLocation == "bottom-right") {
-            boxbarloc = "bottom:2px;right:" + this.offset + "px";
+            boxbarloc = "bottom:" + (locationBottom + this.verticalOffset) + "px;right:" + this.offset + "px";
         }
 		var box = document.createElement('div');
 		var html =
 			"<style>\n"
-				+ "." + this.prefix + "box img { display:inline; }\n"
-				+ "." + this.prefix + "boxbar img { display:inline; }\n"
 				+ "." + this.prefix + "box { position:fixed;" + boxloc + ";z-index:152;margin:2px;display:none;" + border + " }\n"
-				+ "." + this.prefix + "box:hover { border:1px;border-style:solid;border-color:black; }\n"
-				+ "." + this.prefix + "boxmenu { visibility:" + hidden + "; margin-bottom:12px; }\n"
-				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n"
-				+ "." + this.prefix + "boxclose, ." + this.prefix + "boxmin, ." + this.prefix + "boxmax { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
-				+ (this.forceStyles ? "#" : ".") + "" + this.prefix + "boxbarmax { font-size:18px;margin:2px;padding:0px;text-decoration:none;color:white; }\n"
-				+ "." + this.prefix + "boxclose:hover, ." + this.prefix + "boxmin:hover, ." + this.prefix + "boxmax:hover { color: #fff;background: grey; }\n"
+				+ "." + this.prefix + "boxmenu { visibility:" + hidden + "; }\n" //margin-bottom:12px;
+				+ (this.forceStyles ? "#" : ".") + "" + this.prefix + "boxbarmax { font-size:18px;margin:2px;padding:0px;text-decoration:none; }\n"
 				+ "." + this.prefix + "boxbar { position:fixed;" + boxbarloc + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
 				+ "." + this.prefix + "boxbar:hover { " + buttonHoverStyle + " }\n"
+				+ "#" + this.prefix + "emailchatlogdialog { " + minWidth + " }\n"
 				+ "#" + this.prefix + "contactinfo { " + minHeight + minWidth + " }\n"
-				+ "#" + this.prefix + "contactinfo span { margin-left:4px;margin-top:4px; }\n"
-				+ "#" + this.prefix + "contactinfo input { margin:4px;font-size:13px;height:33px;width:90%;border:1px solid #d5d5d5; }\n"
 				+ "." + this.prefix + "contactconnect { margin:4px;padding:8px;color:white;text-decoration:none;" + buttonstyle + " }\n"
-				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; color:black; }\n"
-				+ "." + this.prefix + "no-bubble-plain { margin:4px; padding:8px; border:1px; }\n"
 				+ "." + this.prefix + "no-bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
-				+ "." + this.prefix + "boxbutton { width:20px;height:20px;margin2px; }\n"
-				+ "." + this.prefix + "bubble-div { padding-bottom:15px;position:relative; }\n"
-				+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; color:black; }\n"
 				+ "." + this.prefix + "bubble-text { " + responseWidth + "; margin:4px; max-height:100px; overflow:auto; }\n"
-				+ "." + this.prefix + "bubble:before { content:''; position:absolute; bottom:0px; left:40px; border-width:20px 0 0 20px; border-style:solid; border-color:black transparent; display:block; width:0;}\n"
-				+ "." + this.prefix + "bubble:after { content:''; position:absolute; bottom:3px; left:42px; border-width:18px 0 0 16px; border-style:solid; border-color:white transparent; display:block; width:0;}\n"
 				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:99%;min-height:22px; }\n"
-				+ "." + this.prefix + "box-input-span { display:block; overflow:hidden; margin:4px; padding-right:4px; }\n"
-				+ "." + this.prefix + "scroller { overflow:auto;" + minHeight + minWidth + " }\n"
-				+ "a." + this.prefix + "menuitem { text-decoration: none;display: block;color: #585858; }\n"
-				+ "a." + this.prefix + "menuitem:hover { color: #fff;background: grey; }\n"
-				+ "tr." + this.prefix + "menuitem:hover { background: grey; }\n"
-				+ "img." + this.prefix + "menu { width: 24px;height: 24px;margin: 2px;cursor: pointer;vertical-align: middle; }\n"
-				+ "span." + this.prefix + "menu { color: #818181;font-size: 12px; }\n"
-				+ "img." + this.prefix + "toolbar { width: 32px;height: 32px;margin: 1px;padding: 1px;cursor: pointer;vertical-align: middle;border-style: solid;border-width: 1px;border-color: #fff; }\n"
-				+ "td." + this.prefix + "toolbar { width: 36px;height: 36px }\n"
-				+ "." + this.prefix + "menupopup div { position:absolute;margin: -1px 0 0 0;padding: 3px 3px 3px 3px;background: #fff;border-style:solid;border-color:black;border-width:1px;width:160px;max-width:300px;z-index:152;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; }\n"
-				+ "." + this.prefix + "menupopup:hover div { display:inline;visibility:visible;opacity:1;transition-delay:0.5s; }\n"
-				+ ".online-user { border-style: solid;border-color: grey;border-width: 1px;margin: 2px;padding: 2px;display: inline-block; }\n"
-				+ ".online-user-label { color: #818181;font-size: 12px;margin: 2px;max-width: 200px;overflow: hidden; }\n"
-				+ "img.chat-user-thumb { height: 50px; }\n"
-				+ "a.user { text-decoration: none; }\n"
-				+ "td." + this.prefix + "chat-1 { width:100%;background-color: #d5d5d5;}\n"
-				+ "span." + this.prefix + "chat-1 { color:#333;}"
-				+ "span." + this.prefix + "chat-user { color:grey;font-size:small; }"
-				+ this.prefix + "console { width:100%; }"
-				+ "#" + this.prefix + "boxtable { background:none; border:none; margin:0; }\n"
+				+ "." + this.prefix + "chat-1-div { " + maxDivWidth + "}\n"
+				+ "." + this.prefix + "chat-2-div { " + maxDivWidth + "}\n"
+				+ "." + this.prefix + "online-div { " + minWidth + " overflow-x: auto; overflow-y: hidden; white-space: nowrap; }\n"
+				+ "." + this.prefix + "scroller { overflow-x:hidden;" + minHeight + minWidth + " }\n"
+				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n";
+		if (this.version < 6.0 || this.prefix != "botplatformchat") {
+			html = html
+						+ "." + this.prefix + "box img { display:inline; }\n"
+						+ "." + this.prefix + "boxbar img { display:inline; }\n"
+						+ "." + this.prefix + "box:hover { border:1px;border-style:solid;border-color:black; }\n"
+						+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n"
+						+ "." + this.prefix + "boxclose, ." + this.prefix + "boxmin, ." + this.prefix + "boxmax { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
+						+ "." + this.prefix + "boxclose:hover, ." + this.prefix + "boxmin:hover, ." + this.prefix + "boxmax:hover { color: #fff;background: grey; }\n"
+						+ "#" + this.prefix + "emailchatlogdialog span { margin-left:0px;margin-top:4px; }\n"
+						+ "#" + this.prefix + "emailchatlogdialog input { margin:4px;font-size:13px;height:33px;width:90%;border:1px solid #d5d5d5; }\n"
+						+ "." + this.prefix + "emailconfirm { margin:4px;padding:8px;color:white;background-color:grey;text-decoration:none; }\n"
+						+ "#" + this.prefix + "contactinfo span { margin-left:4px;margin-top:4px; }\n"
+						+ "#" + this.prefix + "contactinfo input { margin:4px;font-size:13px;height:33px;width:90%;border:1px solid #d5d5d5; }\n"
+						+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; color:black; }\n"
+						+ "." + this.prefix + "boxbutton { width:20px;height:20px;margin:2px; }\n"
+						+ "." + this.prefix + "bubble-div { padding-bottom:15px;position:relative; }\n"
+						+ "." + this.prefix + "no-bubble-plain { margin:4px; padding:8px; border:1px; }\n"
+						+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; color:black; }\n"
+						+ "." + this.prefix + "bubble:before { content:''; position:absolute; bottom:0px; left:40px; border-width:20px 0 0 20px; border-style:solid; border-color:black transparent; display:block; width:0;}\n"
+						+ "." + this.prefix + "bubble:after { content:''; position:absolute; bottom:3px; left:42px; border-width:18px 0 0 16px; border-style:solid; border-color:white transparent; display:block; width:0;}\n"
+						+ "." + this.prefix + "box-input-span { display:block; overflow:hidden; margin:4px; padding-right:4px; }\n"
+						+ "a." + this.prefix + "menuitem { text-decoration: none;display: block;color: #585858; }\n"
+						+ "a." + this.prefix + "menuitem:hover { color: #fff;background: grey; }\n"
+						+ "tr." + this.prefix + "menuitem:hover { background: grey; }\n"
+						+ "." + this.prefix + "powered { margin:4px;font-size:10px; }\n"
+						+ "img." + this.prefix + "menu { width: 24px;height: 24px;margin: 2px;cursor: pointer;vertical-align: middle; }\n"
+						+ "span." + this.prefix + "menu { color: #818181;font-size: 12px; }\n"
+						+ "img." + this.prefix + "toolbar { width: 25px;height: 25px;margin: 1px;padding: 1px;cursor: pointer;vertical-align: middle;border-style: solid;border-width: 1px;border-color: #fff; }\n"
+						+ "td." + this.prefix + "toolbar { width: 36px;height: 36px }\n"
+						/*+ "." + this.prefix + "online { height: 97px;width: 300px;overflow-x: auto;overflow-y: hidden;white-space: nowrap; }\n"*/
+						+ "." + this.prefix + "menupopup div { position:absolute;margin: -1px 0 0 0;padding: 3px 3px 3px 3px;background: #fff;border-style:solid;border-color:black;border-width:1px;width:160px;max-width:300px;z-index:152;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; }\n"
+						+ "." + this.prefix + "menupopup:hover div { display:inline;visibility:visible;opacity:1;transition-delay:0.5s; }\n"
+						+ "img.chat-user-thumb { height: 50px; }\n"
+						+ "a.user { text-decoration: none; }\n"
+						+ "td." + this.prefix + "chat-1 { width:100%;background-color: #d5d5d5;}\n"
+						+ "span." + this.prefix + "chat-1 { color:#333;}\n"
+						+ "span." + this.prefix + "chat-user { color:grey;font-size:small; }\n"
+						+ "." + this.prefix + "console { width:100%; }\n"
+						+ "." + this.prefix + "online-div { display: none; }\n"
+						+ "." + this.prefix + "-channel-title { display: none; }\n"
+						+ "#" + this.prefix + "boxtable { background:none; border:none; margin:0; }\n"
+						+ "#" + this.prefix + "boxbar3 { display:none; }\n"
+						+ "#" + this.prefix + "boxbarmax { color: white; }\n"
+						+ "img." + this.prefix + "chat-user { height:40px; max-width:40px; }\n";
+		}
+		html = html
 			+ "</style>\n"
 			+ "<div id='" + this.prefix + "box' class='" + this.prefix + "box' " + backgroundstyle + ">"
 				+ "<div class='" + this.prefix + "boxmenu'>"
-					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> <a id='"
-					+ this.prefix + "boxmax' class='" + this.prefix + "boxmax' onclick='return false;' href='#'><img src='" + SDK.url + "/images/open.png'></a></span><br/>"
-				+ "</div>";
-		
+					+ (this.backlink ? "<span class='" + this.prefix + "powered'>powered by <a href='" + SDK.backlinkURL + "' target='_blank'>" + SDK.NAME + "</a></span>" : "")
+					+ "<span class=" + this.prefix + "-channel-title>" + this.instanceName + "</span>"
+					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>";
+					if (this.showBoxmax) {
+						html = html + "<a id='" + this.prefix + "boxmax' class='" + this.prefix + "boxmax' onclick='return false;' href='#'><img src='" + SDK.url + "/images/open.png'></a></span><br/>";
+					} else {
+						html = html + "</span><br/>";
+					}	
+				html = html + "</div>";
 		if (this.online) {
 			html = html
         		+ "<div id='" + this.prefix + "online-div' class='" + this.prefix + "online-div'>"
-        			+ "<div id='" + this.prefix + "online' class='" + this.prefix + "online'>"
+        			+ "<div id='" + this.prefix + "online' class='" + this.prefix + "online'" + "style='display:none;'>"
         				+ "<table></table>"
         			+ "</div>"
         		+ "</div>";
@@ -1469,7 +1958,7 @@ function WebLiveChatListener() {
 		if (this.chatLog) {
 			html = html
         		+ "<div id='" + this.prefix + "scroller' class='" + this.prefix + "scroller'>"
-        		+ "<table id='" + this.prefix + "console' class='" + this.prefix + "console' cellspacing=2></table>"
+        		+ "<table id='" + this.prefix + "console' class='" + this.prefix + "console' width=100% cellspacing=2></table>"
         		+ "</div>"
 		}
 		var urlprefix = this.sdk.credentials.url + "/";
@@ -1484,62 +1973,72 @@ function WebLiveChatListener() {
 						+ "<span id='" + this.prefix + "response'>" + this.loading + "</span><br/>"
 					+ "</div></div></div>\n";
 		html = html
-			+ "<table id='" + this.prefix + "boxtable' class='" + this.prefix + "boxtable' style='width:100%'><tr>\n"
-			+ "<td class='" + this.prefix + "toolbar'><span class='" + this.prefix + "menu'>\n"
-			+ "<div style='inline-block;position:relative'>\n"
-			+ "<span id='" + this.prefix + "menupopup' class='" + this.prefix + "menupopup'>\n"
-			+ "<div style='text-align:left;bottom:36px'>\n"
-			+ "<table>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-			+ "<td><a id='" + this.prefix + "ping' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Verify your connection to the server") + "'> " + SDK.translate("Ping server") + "</a></td>"
-			+ "</tr>\n";
-    	if (this.chatroom) {
-		    html = html
-        		+ "<tr class='" + this.prefix + "menuitem'>"
-        			+ "<td><a id='" + this.prefix + "flag' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/flag2.png' title='" + SDK.translate("Flag a user for offensive content") + "'> " + SDK.translate("Flag user") + "</a></td>"
-        		+ "</tr>\n"
-        		+ "<tr class='" + this.prefix + "menuitem'>"
-        			+ "<td><a id='" + this.prefix + "whisper' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/whisper.png' title='" + SDK.translate("Send a private message to another user") + "'> " + SDK.translate("Whisper user") + "</a></td>"
-        		+ "</tr>\n"
-        		+ "<tr class='" + this.prefix + "menuitem'>"
-        			+ "<td><a id='" + this.prefix + "pvt' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='" + SDK.translate("Invite another user to a private channel") + "'> " + SDK.translate("Request private") + "</a></td>"
-        		+ "</tr>\n"
-    	}
-		html = html
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "clear' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Clear the local chat log") + "'> " + SDK.translate("Clear log") + "</a></td>"
-			+ "</tr>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "accept' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='" + SDK.translate("Accept a private request from an operator, bot, or another user") + "'> " + SDK.translate("Accept private") + "</a></td>"
-			+ "</tr>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/image.png' title='" + SDK.translate("Resize and send an image attachment") + "'> " + SDK.translate("Send image") + "</a></td>"
-			+ "</tr>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/attach.png' title='" + SDK.translate("Send an image or file attachment") + "'> " + SDK.translate("Send file") + "</a></td>"
-			+ "</tr>\n";
-		html = html
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "toggleChime' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxchime' class='" + this.prefix + "menu' src='" + SDK.url + "/images/sound.png' title='" + SDK.translate("Play a chime when a message is recieved") + "'> " + SDK.translate("Chime") + "</a></td>"
-			+ "</tr>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "toggleSpeak' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxtalk' class='" + this.prefix + "menu' src='" + SDK.url + "/images/talkoff.png' title='" + SDK.translate("Speak each message using voice synthesis") + "'> " + SDK.translate("Text to speech") + "</a></td>"
-			+ "</tr>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "toggleListen' class='" + this.prefix + "menuitem' onclick='return false;' href='#'>"
-						+ "<img id='boxmic' class='" + this.prefix + "menu' src='" + SDK.url + "/images/micoff.png' title='" + SDK.translate("Enable speech recognition (browser must support HTML5 speech recognition, such as Chrome)") + "'> " + SDK.translate("Speech recognition") + "</a>"
-				+ "</td>"
-			+ "</tr>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a id='" + this.prefix + "exit' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/quit.png' title='" + SDK.translate("Exit the channel or active private channel") + "'> " + SDK.translate("Quit private or channel") + "</a></td>"
-			+ "</tr>\n"
-			+ "</table>\n"
-			+ "</div>\n"
-			+ "<img class='" + this.prefix + "toolbar' src='" + SDK.url + "/images/menu.png'>\n"
-			+ "</span>\n"
-			+ "</div>\n"
-    		+ "</span></td>\n";
-		
+			+ "<table id='" + this.prefix + "boxtable' class='" + this.prefix + "boxtable' style='width:100%'><tr>\n";
+			if (this.showMenubar) {
+				html = html
+					+ "<td class='" + this.prefix + "toolbar'><span class='" + this.prefix + "menu'>\n"
+					+ "<div style='inline-block;position:relative'>\n"
+					+ "<span id='" + this.prefix + "menupopup' class='" + this.prefix + "menupopup'>\n"
+					+ "<div style='text-align:left;bottom:30px'>\n"
+					+ "<table>\n"
+					+ "<tr class='" + this.prefix + "menuitem'>"
+					+ "<td><a id='" + this.prefix + "ping' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Verify your connection to the server") + "'> " + SDK.translate("Ping server") + "</a></td>"
+					+ "</tr>\n";
+		    	if (this.chatroom) {
+				    html = html
+		        		+ "<tr class='" + this.prefix + "menuitem'>"
+		        			+ "<td><a id='" + this.prefix + "flag' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/flag2.png' title='" + SDK.translate("Flag a user for offensive content") + "'> " + SDK.translate("Flag user") + "</a></td>"
+		        		+ "</tr>\n"
+		        		+ "<tr class='" + this.prefix + "menuitem'>"
+		        			+ "<td><a id='" + this.prefix + "whisper' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/whisper.png' title='" + SDK.translate("Send a private message to another user") + "'> " + SDK.translate("Whisper user") + "</a></td>"
+		        		+ "</tr>\n"
+		        		+ "<tr class='" + this.prefix + "menuitem'>"
+		        			+ "<td><a id='" + this.prefix + "pvt' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='" + SDK.translate("Invite another user to a private channel") + "'> " + SDK.translate("Request private") + "</a></td>"
+		        		+ "</tr>\n"
+		    	}
+				html = html
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "clear' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Clear the local chat log") + "'> " + SDK.translate("Clear log") + "</a></td>"
+					+ "</tr>\n"
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "accept' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/accept.png' title='" + SDK.translate("Accept a private request from an operator, bot, or another user") + "'> " + SDK.translate("Accept private") + "</a></td>"
+					+ "</tr>\n";
+					if (this.showSendImage) {
+						html = html
+						+ "<tr class='" + this.prefix + "menuitem'>"
+							+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/image.png' title='" + SDK.translate("Resize and send an image attachment") + "'> " + SDK.translate("Send image") + "</a></td>"
+						+ "</tr>\n"
+						+ "<tr class='" + this.prefix + "menuitem'>"
+							+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/attach.png' title='" + SDK.translate("Send an image or file attachment") + "'> " + SDK.translate("Send file") + "</a></td>"
+						+ "</tr>\n";
+					}
+				if (this.emailChatLog) {
+					html = html
+						+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "emailChatLog' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='email' class='" + this.prefix + "menu' src='" + SDK.url + "/images/message.png' title='" + SDK.translate("Send yourself an email of the conversation log") + "'> " + SDK.translate("Email Chat Log") + "</a></td>"
+				}
+				html = html
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "toggleChime' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxchime' class='" + this.prefix + "menu' src='" + SDK.url + "/images/sound.png' title='" + SDK.translate("Play a chime when a message is recieved") + "'> " + SDK.translate("Chime") + "</a></td>"
+					+ "</tr>\n"
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "toggleSpeak' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxtalk' class='" + this.prefix + "menu' src='" + SDK.url + "/images/talkoff.png' title='" + SDK.translate("Speak each message using voice synthesis") + "'> " + SDK.translate("Text to speech") + "</a></td>"
+					+ "</tr>\n"
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "toggleListen' class='" + this.prefix + "menuitem' onclick='return false;' href='#'>"
+								+ "<img id='boxmic' class='" + this.prefix + "menu' src='" + SDK.url + "/images/micoff.png' title='" + SDK.translate("Enable speech recognition (browser must support HTML5 speech recognition, such as Chrome)") + "'> " + SDK.translate("Speech recognition") + "</a>"
+						+ "</td>"
+					+ "</tr>\n"
+					+ "<tr class='" + this.prefix + "menuitem'>"
+						+ "<td><a id='" + this.prefix + "exit' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/quit.png' title='" + SDK.translate("Exit the channel or active private channel") + "'> " + SDK.translate("Quit private or channel") + "</a></td>"
+					+ "</tr>\n"
+					+ "</table>\n"
+					+ "</div>\n"
+					+ "<img class='" + this.prefix + "toolbar' src='" + SDK.url + "/images/menu.png'>\n"
+					+ "</span>\n"
+					+ "</div>\n"
+		    		+ "</span></td>\n";
+			}
 		html = html
 			+ "<td><span class='" + this.prefix + "box-input-span'><input id='" + this.prefix
 				+ "chat' type='text' id='" + this.prefix + "box-input' "
@@ -1548,16 +2047,30 @@ function WebLiveChatListener() {
 			+ "</div>\n"
 			+ "</div>\n"
 			+ "<div id='" + this.prefix + "boxbar' class='" + this.prefix + "boxbar'>"
-				+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'><img src='" + SDK.url + "/images/maximizew.png'> " + this.caption + " </a>"
-				+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
-				+ "</span>"
+				+ "<div id='" + this.prefix + "boxbar2' class='" + this.prefix + "boxbar2'>"
+					+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + " onclick='return false;' href='#'><img id='" + this.prefix + "boxbarmaximage' " + "src='" + SDK.url + "/images/maximizew.png'> " + this.caption + " </a>";
+		if (this.showClose) {
+			html = html + " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a>";
+		}
+		html = html
+				+ "</span><br>"
+			+ "</div>\n"
+			+ "<div id='" + this.prefix + "boxbar3' class='" + this.prefix + "boxbar3'" + ">"
+				+ "<span><a id='" + this.prefix + "boxbarmax2' class='" + this.prefix + "boxbarmax2' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'>" + "</a>"
+				+ "</span><br>";
+		if (this.showClose) {
+			html = html + " <a id='" + this.prefix + "boxclose2' class='" + this.prefix + "boxclose2' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a>";
+		}
+		html = html
+			+ "</div>\n"
+			+ "</span>"
 			+ "</div>\n";
 		
 		if (this.promptContactInfo) {
 			html = html
 				+ "<div id='" + this.prefix + "contactinfo' class='" + this.prefix + "box' " + backgroundstyle + ">"
 					+ "<div class='" + this.prefix + "boxmenu'>"
-						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
+						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "contactboxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
 					+ "</div>\n"
 					+ "<div style='margin:10px'>\n"
 						+ "<span>" + SDK.translate("Name") + "</span><br/><input id='" + this.prefix + "contactname' type='text' /><br/>\n"
@@ -1567,42 +2080,103 @@ function WebLiveChatListener() {
 					+ "</div>\n"
 				+ "</div>";
 		}
+		if (this.promptEmailChatLog) {
+			html = html
+				+ "<div id='" + this.prefix + "emailchatlogdialog' class='" + this.prefix + "box' " + backgroundstyle + ">"
+					+ "<div class='" + this.prefix + "boxmenu'>"
+						+ "<span style='float:right'><a id='" + this.prefix + "emailchatlogdialogmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
+					+ "</div>\n"
+					+ "<div style='margin:10px;margin-bottom:20px;margin-top:20px;'>\n"
+						+ "<span>" + SDK.translate("Would you like a copy of the chat log sent to your email?") + "</span><br/><input id='" + this.prefix + "emailchatlogemail' type='email' /><br/>\n"
+						+ "<br/><a id='" + this.prefix + "emailchatlogdialogyes' class='" + this.prefix + "emailconfirm' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'> " + SDK.translate("Yes") + "</a>\n"
+						+ " <a id='" + this.prefix + "emailchatlogdialogno' class='" + this.prefix + "emailconfirm' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'> " + SDK.translate("No") + "</a>\n"
+					+ "</div>\n"
+				+ "</div>";
+		}
 		
 		box.innerHTML = html;
 		document.body.appendChild(box);
 		
+		if (this.online && this.chatroom) {
+			document.getElementById(this.prefix + "online").style.height = "95px";
+		}
+		if (this.chatLog && !this.bubble) {
+			var bubbleDiv = document.getElementById(this.prefix + 'bubble-div');
+			if (bubbleDiv != null) {
+				bubbleDiv.style.display = "none";
+			}
+			document.getElementById(this.prefix + 'no-bubble-plain').style.display = "none";
+			document.getElementById(this.prefix + 'response').style.display = "none";
+		}
+		
 		var self = this;
 		var listen = false;
-		document.getElementById(this.prefix + "chat").addEventListener("keypress", function(event) {
-			if (event.keyCode == 13) {
-				self.sendMessage();
+		if (document.getElementById(this.prefix + "chat") != null) {
+			document.getElementById(this.prefix + "chat").addEventListener("keypress", function(event) {
+				if (event.keyCode == 13) {
+					self.sendMessage();
+					return false;
+				}
+			});
+		}
+		if (document.getElementById(this.prefix + "exit") != null) {
+			document.getElementById(this.prefix + "exit").addEventListener("click", function() {
+				self.exit();
 				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "ping")!= null) {
+			document.getElementById(this.prefix + "ping").addEventListener("click", function() {
+				self.ping();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "clear") != null) {
+			document.getElementById(this.prefix + "clear").addEventListener("click", function() {
+				self.clear();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "accept") != null) {
+			document.getElementById(this.prefix + "accept").addEventListener("click", function() {
+				self.accept();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "sendImage") != null) {
+			document.getElementById(this.prefix + "sendImage").addEventListener("click", function() {
+				self.sendImage();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "sendAttachment") != null) {
+			document.getElementById(this.prefix + "sendAttachment").addEventListener("click", function() {
+				self.sendAttachment();
+				return false;
+			});
+		}
+		if (this.emailChatLog) {
+			if (document.getElementById(this.prefix + "emailChatLog") != null) {
+				document.getElementById(this.prefix + "emailChatLog").addEventListener("click", function() {
+					self.emailChatLog();
+					return false;
+				});
 			}
-		});
-		document.getElementById(this.prefix + "exit").addEventListener("click", function() {
-			self.exit();
-			return false;
-		});
-		document.getElementById(this.prefix + "ping").addEventListener("click", function() {
-			self.ping();
-			return false;
-		});
-		document.getElementById(this.prefix + "clear").addEventListener("click", function() {
-			self.clear();
-			return false;
-		});
-		document.getElementById(this.prefix + "accept").addEventListener("click", function() {
-			self.accept();
-			return false;
-		});
-		document.getElementById(this.prefix + "sendImage").addEventListener("click", function() {
-			self.sendImage();
-			return false;
-		});
-		document.getElementById(this.prefix + "sendAttachment").addEventListener("click", function() {
-			self.sendAttachment();
-			return false;
-		});
+		}
+		if (this.promptEmailChatLog) {
+			document.getElementById(this.prefix + "emailchatlogdialogyes").addEventListener("click", function() {
+				self.sendEmailChatLogBox();
+				return false;
+			});
+			document.getElementById(this.prefix + "emailchatlogdialogno").addEventListener("click", function() {
+				self.minimizeEmailChatLogBox();
+				return false;
+			});
+			document.getElementById(this.prefix + "emailchatlogdialogmin").addEventListener("click", function() {
+				self.minimizeEmailChatLogBox();
+				return false;
+			});
+		}
 		var menu = document.getElementById(this.prefix + "flag");
 		if (menu != null) {
 			menu.addEventListener("click", function() {
@@ -1624,45 +2198,47 @@ function WebLiveChatListener() {
 				return false;
 			});
 		}
-		document.getElementById(this.prefix + "toggleChime").addEventListener("click", function() {
-			self.toggleChime();
-			if (self.playChime) {
-				document.getElementById('boxchime').src = SDK.url + "/images/sound.png";
-			} else {
-				document.getElementById('boxchime').src = SDK.url + "/images/mute.png";
-			}
-		});
-		document.getElementById(this.prefix + "toggleSpeak").addEventListener("click", function() {
-			self.toggleSpeak();
-			if (self.speak) {
-				document.getElementById('boxtalk').src = SDK.url + "/images/talk.png";
-			} else {
-				document.getElementById('boxtalk').src = SDK.url + "/images/talkoff.png";
-			}
-			return false;
-		});
-		document.getElementById(this.prefix + "toggleListen").addEventListener("click", function() {
-			listen = !listen;
-			if (listen) {
-				SDK.startSpeechRecognition();
-				document.getElementById('boxmic').src = SDK.url + "/images/mic.png";
-			} else {
-				SDK.stopSpeechRecognition();
-				document.getElementById('boxmic').src = SDK.url + "/images/micoff.png";
-			}
-			return false;
-		});
-		document.getElementById(this.prefix + "boxclose").addEventListener("click", function() {
-			self.closeBox();
-			return false;
-		});
+		if (document.getElementById(this.prefix + "toggleChime") != null) {
+			document.getElementById(this.prefix + "toggleChime").addEventListener("click", function() {
+				self.toggleChime();
+				if (self.playChime) {
+					document.getElementById('boxchime').src = SDK.url + "/images/sound.png";
+				} else {
+					document.getElementById('boxchime').src = SDK.url + "/images/mute.png";
+				}
+			});
+		}
+		if (document.getElementById(this.prefix + "toggleSpeak") != null) {
+			document.getElementById(this.prefix + "toggleSpeak").addEventListener("click", function() {
+				self.toggleSpeak();
+				if (self.speak) {
+					document.getElementById('boxtalk').src = SDK.url + "/images/talk.png";
+				} else {
+					document.getElementById('boxtalk').src = SDK.url + "/images/talkoff.png";
+				}
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "toggleListen") != null) {
+			document.getElementById(this.prefix + "toggleListen").addEventListener("click", function() {
+				listen = !listen;
+				if (listen) {
+					SDK.startSpeechRecognition();
+					document.getElementById('boxmic').src = SDK.url + "/images/mic.png";
+				} else {
+					SDK.stopSpeechRecognition();
+					document.getElementById('boxmic').src = SDK.url + "/images/micoff.png";
+				}
+				return false;
+			});
+		}
 		document.getElementById(this.prefix + "boxmin").addEventListener("click", function() {
 			self.minimizeBox();
 			return false;
 		});
 		if (this.promptContactInfo) {
 			document.getElementById(this.prefix + "contactboxmin").addEventListener("click", function() {
-				self.minimizeBox();
+				self.minimizeContactInfoBox();
 				return false;
 			});
 			document.getElementById(this.prefix + "contactconnect").addEventListener("click", function() {
@@ -1670,20 +2246,138 @@ function WebLiveChatListener() {
 				return false;
 			});
 		}
-		document.getElementById(this.prefix + "boxmax").addEventListener("click", function() {
-			self.popup();
-			return false;
-		});
-		document.getElementById(this.prefix + "boxbarmax").addEventListener("click", function() {
-			self.maximizeBox();
-			return false;
-		});
+		if (document.getElementById(this.prefix + "boxmax") != null) {
+			document.getElementById(this.prefix + "boxmax").addEventListener("click", function() {
+				self.popup();
+				return false;
+			});
+		}
+		if (this.showClose) {
+			document.getElementById(this.prefix + "boxclose").addEventListener("click", function() {
+				self.closeBox();
+				return false;
+			});
+			document.getElementById(this.prefix + "boxclose2").addEventListener("click", function() {
+				self.closeBox();
+				return false;
+			});
+			document.getElementById(this.prefix + "boxbarmax").addEventListener("click", function() {
+				self.maximizeBox();
+				return false;
+			});
+			document.getElementById(this.prefix + "boxbarmax2").addEventListener("click", function() {
+				self.maximizeBox();
+				return false;
+			});
+		} else {
+			document.getElementById(this.prefix + "boxbar").addEventListener("click", function() {
+				self.maximizeBox();
+				return false;
+			});
+		}
 	}
 	
 	/**
-	 * Minimize the embedding div in the current webpage.
+	 * Minimize the live chat embedding box.
 	 */
 	this.minimizeBox = function() {
+		this.onlineBar = false;
+		if (this.promptContactInfo) {
+			document.getElementById(this.prefix + "contactinfo").style.display = 'none';
+		}
+		document.getElementById(this.prefix + "box").style.display = 'none';
+		var onlineDiv = document.getElementById(this.prefix + "online");
+		if (onlineDiv != null) {
+			onlineDiv.style.display = 'none';
+		}
+		if (this.promptEmailChatLog) {
+			document.getElementById(this.prefix + "emailchatlogemail").value = this.contactEmail;
+			document.getElementById(this.prefix + "emailchatlogdialog").style.display = 'inline';
+			return false;
+		}
+		document.getElementById(this.prefix + "boxbar").style.display = 'inline';
+		if (this.prefix.indexOf("livechat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("livechat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
+		if (this.prefix.indexOf("chat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
+		this.exit();
+		setTimeout(function() {
+		    self.exit();
+		}, 100);
+		return false;
+	}
+	
+	/**
+	 * Minimize the email chat log confirm dialog.
+	 */
+	this.minimizeEmailChatLogBox = function() {
+		if (this.promptContactInfo) {
+			document.getElementById(this.prefix + "contactinfo").style.display = 'none';
+		}
+		document.getElementById(this.prefix + "box").style.display = 'none';
+		document.getElementById(this.prefix + "emailchatlogdialog").style.display = 'none';
+		document.getElementById(this.prefix + "boxbar").style.display = 'inline';
+		if (this.prefix.indexOf("livechat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("livechat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
+		if (this.prefix.indexOf("chat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
+		this.exit();
+		setTimeout(function() {
+		    self.exit();
+		}, 100);
+		return false;
+	}
+	
+	/**
+	 * Minimize the email chat log confirm dialog.
+	 */
+	this.sendEmailChatLogBox = function() {
+		this.contactEmail = document.getElementById(this.prefix + "emailchatlogemail").value;
+		this.sendEmailChatLog();
+		if (this.promptContactInfo) {
+			document.getElementById(this.prefix + "contactinfo").style.display = 'none';
+		}
+		document.getElementById(this.prefix + "box").style.display = 'none';
+		document.getElementById(this.prefix + "emailchatlogdialog").style.display = 'none';
+		document.getElementById(this.prefix + "boxbar").style.display = 'inline';
+		if (this.prefix.indexOf("livechat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("livechat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
+		if (this.prefix.indexOf("chat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
+		setTimeout(function() {
+		    self.exit();
+		}, 100);
+		return false;
+	}
+	
+	/**
+	 * Minimize the contact info box.
+	 */
+	this.minimizeContactInfoBox = function() {
 		if (this.promptContactInfo) {
 			document.getElementById(this.prefix + "contactinfo").style.display = 'none';
 		}
@@ -1695,10 +2389,12 @@ function WebLiveChatListener() {
 				chatbot.style.display = 'inline';
 			}
 		}
-		this.exit();
-		setTimeout(function() {
-		    self.exit();
-		}, 100);
+		if (this.prefix.indexOf("chat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'inline';
+			}
+		}
 		return false;
 	}
 	
@@ -1731,12 +2427,19 @@ function WebLiveChatListener() {
 	 * Maximize the embedding div in the current webpage.
 	 */
 	this.maximizeBox = function() {
+		this.onlineBar = true;
 		if (this.promptContactInfo && !this.hasContactInfo) {
 			document.getElementById(this.prefix + "contactinfo").style.display = 'inline';
 			document.getElementById(this.prefix + "boxbar").style.display = 'none';
 			document.getElementById(this.prefix + "box").style.display = 'none';
 			if (this.prefix.indexOf("livechat") != -1) {
 				var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("livechat")) + "boxbar");
+				if (chatbot != null) {
+					chatbot.style.display = 'none';
+				}
+			}
+			if (this.prefix.indexOf("chat") != -1) {
+				var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
 				if (chatbot != null) {
 					chatbot.style.display = 'none';
 				}
@@ -1749,6 +2452,12 @@ function WebLiveChatListener() {
 			document.getElementById(this.prefix + "box").style.display = 'inline';
 			if (this.prefix.indexOf("livechat") != -1) {
 				var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("livechat")) + "boxbar");
+				if (chatbot != null) {
+					chatbot.style.display = 'none';
+				}
+			}
+			if (this.prefix.indexOf("chat") != -1) {
+				var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
 				if (chatbot != null) {
 					chatbot.style.display = 'none';
 				}
@@ -1787,6 +2496,12 @@ function WebLiveChatListener() {
 				chatbot.style.display = 'none';
 			}
 		}
+		if (this.prefix.indexOf("chat") != -1) {
+			var chatbot = document.getElementById(this.prefix.substring(0, this.prefix.indexOf("chat")) + "boxbar");
+			if (chatbot != null) {
+				chatbot.style.display = 'none';
+			}
+		}
 		this.exit();
 		var self = this;
 		setTimeout(function() {
@@ -1805,8 +2520,13 @@ function WebLiveChatListener() {
 		}
 		if (this.popupURL != null) {
 			var popupURL = this.popupURL;
-			if (popupURL.indexOf("livechat?") != -1 && this.contactInfo != null && this.contactInfo != "") {
-				popupURL = popupURL + "&info=" + encodeURI(this.contactInfo);
+			if (popupURL.indexOf("livechat?") != -1) {
+				if (this.contactInfo != null && this.contactInfo != "") {
+					popupURL = popupURL + "&info=" + encodeURI(this.contactInfo);
+				}
+				if (this.translate == true && this.lang != null && this.lang != "") {
+					popupURL = popupURL + "&translate=" + encodeURI(this.lang);
+				}
 			}
 			SDK.popupwindow(popupURL, 'child', 700, 520);
 		} else {
@@ -1839,6 +2559,28 @@ function WebLiveChatListener() {
             input.value = this.connection.credentials.applicationId;
             form.appendChild(input);
  
+            if (this.css != null) {
+            	input = document.createElement('input');
+            	input.type = "hidden";
+            	input.name = "css";
+            	input.value = this.css;
+            	form.appendChild(input);
+            }
+ 
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = "language";
+            input.value = SDK.lang;
+            form.appendChild(input);
+            
+            if (this.translate == true && this.lang != null && this.lang != "") {
+	            var input = document.createElement('input');
+	            input.type = 'hidden';
+	            input.name = "translate";
+	            input.value = this.lang;
+	            form.appendChild(input);
+            }
+            
             input = document.createElement('input');
             input.type = "hidden";
             input.name = "info";
@@ -1942,68 +2684,77 @@ function WebLiveChatListener() {
 			this.linkChatPostbacks(document.getElementById(this.prefix + 'response'));
 			// Fix Chrome bug,
 			if (SDK.fixChromeResizeCSS && SDK.isChrome()) {
-				var padding = document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding;
-		    	document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = "7px";
+				var padding = document.getElementById(this.prefix + 'response').parentNode.parentNode.style.padding;
+		    	document.getElementById(this.prefix + 'response').parentNode.parentNode.style.padding = "7px";
+		    	var self = this;
 				setTimeout(function() {
 		    		document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = padding;
 				}, 10);
 			}
+		    this.switchText = false;
+		} else {
+		    this.switchText = true;
 		}
 		var scroller = document.getElementById(this.prefix + 'scroller');
 		var consolepane = document.getElementById(this.prefix + 'console');
 		if (scroller == null || consolepane == null) {
 			return;
 		}
-		if (this.chatLogType == "log") {
+		if (this.chatLog) {
 			var tr = document.createElement('tr');
+			tr.style.verticalAlign = "top";
 			var td = document.createElement('td');
+			var td2 = document.createElement('td');
+			var div = document.createElement('div');
 			var span = document.createElement('span');
 			var br = document.createElement('br');
 			var span2 = document.createElement('span');
+			var div2 = document.createElement('div');
 			var chatClass = this.prefix + 'chat-1';
+			div.className = this.prefix + 'chat-1-div';
+			div2.className = this.prefix + 'chat-1-div-2';
+			span.className = this.prefix + 'chat-user-1';
+			td.className = this.prefix + 'chat-user-1';
 			if (this.switchText) {
+				td.className = this.prefix + 'chat-user-2';
 				chatClass = this.prefix + 'chat-2';
+			    div.className = this.prefix + 'chat-2-div';
+			    div2.className = this.prefix + 'chat-2-div-2';
+			    span.className = this.prefix + 'chat-user-2';
 			}
-			span.className = this.prefix + 'chat-user';
+			var userImg = document.createElement('img');
+			userImg.className = this.prefix + 'chat-user';
+			var speakerName = speaker.slice(0, -1);
+			if (speakerName != "Info" && speakerName != "Error") {
+				for(var key in this.users) {
+					if (key === speakerName) {
+						userImg.setAttribute('alt', speakerName);
+						userImg.setAttribute('src', this.users[key]);
+						break;
+					}
+				}
+			}
+			td.appendChild(userImg);
+			td.setAttribute('nowrap', 'nowrap');
+			td2.className = chatClass;
+			td2.setAttribute('align', 'left');
+			td2.setAttribute('width', '100%');
+			
 			var date = new Date(); 
 			var time = date.getHours() + ":" + ((date.getMinutes() < 10)? "0" : "") + date.getMinutes() + ":" + ((date.getSeconds() < 10)? "0" : "") + date.getSeconds();
 			span.innerHTML = speaker + " <small>" + time + "</small>";
 			span2.className = chatClass;
 			span2.innerHTML = SDK.linkURLs(responseText);
 			this.linkChatPostbacks(span2);
-			td.className = chatClass;
-			td.setAttribute('width', '100%');
-			td.setAttribute('align', 'left');
 			consolepane.appendChild(tr);
+			
 			tr.appendChild(td);
-			td.appendChild(span);
-			td.appendChild(br);
-			td.appendChild(span2);			
-		} else {
-			var tr = document.createElement('tr');
-			var td = document.createElement('td');
-			var td2 = document.createElement('td');
-			var span = document.createElement('span');
-			var span2 = document.createElement('span');
-			var chatClass = this.prefix + 'chat-1';
-			if (this.switchText) {
-				chatClass = this.prefix + 'chat-2';
-			}
-			span.className = chatClass;
-			span.innerHTML = speaker;
-			span2.className = chatClass;
-			span2.innerHTML = SDK.linkURLs(responseText);
-			this.linkChatPostbacks(span2);
-			td.className = this.prefix + 'chat-user';
-			td.setAttribute('nowrap', 'nowrap');
-			td2.className = chatClass;
-			td2.setAttribute('align', 'left');
-			td2.setAttribute('width', '100%');
-			consolepane.appendChild(tr);
-			tr.appendChild(td);
-			td.appendChild(span);
 			tr.appendChild(td2);
-			td2.appendChild(span2);
+			div.appendChild(span);
+			div.appendChild(br);
+			div.appendChild(div2);
+			td2.appendChild(div);
+			div2.appendChild(span2);
 		}
 		this.switchText = !this.switchText;
 		while (consolepane.childNodes.length > 500) {
@@ -2017,7 +2768,6 @@ function WebLiveChatListener() {
 			document.title = SDK.stripTags(responseText);
 		}
 	};
-
 	
 	/**
 	 * An informational message was received from the channel.
@@ -2056,16 +2806,79 @@ function WebLiveChatListener() {
 	 * It can be inserted into an HTML document to display the users.
 	 */
 	this.updateUsersXML = function(usersXML) {
-		var onlineList = document.getElementById(this.prefix + 'online');
-		if (onlineList == null) {
-			return;
-		}
-		onlineList.innerHTML = '';
-		var div = document.createElement('div');
 		if (!this.linkUsers) {
 			usersXML = usersXML.split('<a').join('<span');
 			usersXML = usersXML.split('</a>').join('</span>');
 		}
+		var onlineList = document.getElementById(this.prefix + 'online');
+		if (onlineList == null) {
+			return;
+		}
+		if (!this.chatLog) {
+			onlineList.style.height = "60px";
+		}
+		var div = document.createElement('div');
+		div.innerHTML = usersXML;
+		var children = div.childNodes[0].childNodes;
+		var usersArray = {};
+		var size = children.length;
+		for(var i = 0; i < size; i++) {
+			var userName = children[i].innerText;
+			var child = children[i].childNodes;
+			var imageSrc = child[0].getAttribute('src');
+			usersArray[userName] = imageSrc;
+		}
+		this.users = usersArray;
+		if (this.onlineBar) {
+			var onlineBar = onlineList;
+			onlineBar.innerHTML = '';
+			if (this.chatroom || this.isFrame) { // displaying list of users on top
+				var count = 0;
+				var ids = {};
+				var length = children.length;
+				for (var i = 0; i < length; i++) {
+					var child = children[i - count];
+					ids[child.id] = child.id;
+					if (document.getElementById(child.id) == null) {
+						onlineList.appendChild(child);
+						count++;
+					}
+				}
+				onlineList.style.margin = "0";
+				onlineList.style.display = 'inline';
+			}
+			else { // displaying only single bot on top
+				var length = children.length;
+				var child = children[length - 1];
+				var keys = [];
+				for(var keyItem in this.users) {
+					keys.push(keyItem);
+				}
+				var botName = keys[keys.length - 1];
+				var botImageSrc = this.users[botName];
+				if (typeof botName === 'undefined' || typeof botImageSrc === 'undefined') {
+					return;
+				}
+				var botImage = document.createElement('img');
+				botImage.className = this.prefix + "-bot-image";
+				botImage.setAttribute('alt', botName);
+				botImage.setAttribute('src', botImageSrc);
+				var botSpan = document.createElement('span');
+				botSpan.className = this.prefix + "user-bot";
+				botSpan.innerHTML = botName;
+				onlineBar.append(botImage);
+				onlineBar.append(botSpan);
+				if (!this.isFrame) {
+					onlineList.style.display = 'block';
+					var line = document.createElement('hr');
+					var onlineDiv = document.getElementById(this.prefix + 'online-div');
+					onlineDiv.appendChild(line);
+				}
+			}
+			return;
+		}
+		onlineList.innerHTML = '';
+		var div = document.createElement('div');
 		div.innerHTML = usersXML;
 		var children = div.childNodes[0].childNodes;
 		var count = 0;
@@ -2267,6 +3080,16 @@ function WebLiveChatListener() {
 		return false;
 	};
 
+	this.emailChatLog = function() {
+		document.getElementById(this.prefix + 'chat').value = 'email: ' + (this.contactEmail == null ? 'user@domain.com' : this.contactEmail);
+		return false;
+	};
+
+	this.sendEmailChatLog = function() {
+		this.connection.sendMessage('email: ' + this.contactEmail);
+		return false;
+	};
+
 	this.whisper = function(user) {
 		if (user == null) {
 			user = 'user';
@@ -2307,6 +3130,48 @@ function WebLiveChatListener() {
  * Shared method for updating an avatar image/video/audio from the chat response.
  */
 SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, channelaudio, afterFunction, nativeVoice, lang, voice) {
+	try {
+
+	var noMedia = false;
+	// Some browsers disable playing of audio and video, so need to handle promise exception to request permission.
+	if (SDK.canPlayVideo == null) {
+		SDK.disableAudioAutoPlay = true;
+	}
+	var playPromise = null;
+	var end = null;
+	var playFailed = false;
+	var initVideoPromise = function() {
+		if (playPromise !== undefined && playPromise != null && SDK.canPlayVideo == null) {
+			playPromise.then(function() {
+				SDK.canPlayVideo = true;
+				var sdkvideoplaybutton2 = document.getElementById("sdkvideoplaybutton2");
+				if (sdkvideoplaybutton2 != null) {
+					sdkvideoplaybutton2.style.display = "none";
+				}
+			}).catch(function(error) {
+				if (SDK.canPlayVideo == null) {
+					playFailed = true;
+					if (SDK.canPlayVideo == null) {
+						SDK.canPlayVideo = false;
+						SDK.playInitVideo = function() {
+							SDK.initAudio();
+							SDK.updateAvatar(responseMessage, speak, urlprefix, elementPrefix, channelaudio, afterFunction, nativeVoice, lang, voice);
+							document.getElementById("sdkvideoplaybutton2").style.display = "none";
+						};
+						var body = document.body || document.getElementsByTagName('body')[0];
+						var playButton = document.createElement('div');
+						var html = "<div id='sdkvideoplaybutton2' style='position:fixed;bottom:32px;left:32px;z-index:164;'><img onclick='SDK.playInitVideo()' width='64' src='"
+							+ SDK.url + "/images/playsound.png'/></div>"
+						playButton.innerHTML = html;
+						body.appendChild(playButton);
+						setTimeout(function() {
+							document.getElementById("sdkvideoplaybutton2").style.display = "none";
+						}, 10000);
+					}
+				}
+			});
+		}
+	};
 	nativeVoice = nativeVoice && SDK.speechSynthesis;
 	if (elementPrefix == null) {
 		elementPrefix = "";
@@ -2332,8 +3197,14 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 		avatarStatus.innerHTML = status;
 	}
 	if (responseMessage.avatarActionAudio != null && speak) {
-		var audio = new Audio(urlprefix + responseMessage.avatarActionAudio);
-		audio.play();
+		var audio = SDK.autoPlayActionAudio;
+		if (audio == null) {
+			audio = new Audio(urlprefix + responseMessage.avatarActionAudio);
+		} else {
+			audio.src = urlprefix + responseMessage.avatarActionAudio;
+		}
+		playPromise = audio.play();
+		initVideoPromise();
 	}
 	if (!speak || SDK.currentBackgroundAudio != responseMessage.avatarAudio) {
 		// Only switch if different audio.
@@ -2343,13 +3214,26 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 		}
 		if (responseMessage.avatarAudio != null && speak) {
 			SDK.currentBackgroundAudio = responseMessage.avatarAudio;
-			SDK.backgroundAudio = new Audio(urlprefix + responseMessage.avatarAudio);
+			SDK.backgroundAudio = SDK.autoPlayBackgroundAudio;
+			if (SDK.backgroundAudio == null) {
+				SDK.backgroundAudio = new Audio(urlprefix + responseMessage.avatarAudio);
+			} else {
+				SDK.backgroundAudio.src = urlprefix + responseMessage.avatarAudio;
+			}
 			SDK.backgroundAudio.loop = true;
-			SDK.backgroundAudio.play();
+			playPromise = SDK.backgroundAudio.play();
+			initVideoPromise();
 		}
 	}
-	if (responseMessage.avatarType != null && responseMessage.avatarType.indexOf("video") != -1) {
+	var video = document.getElementById(elementPrefix + "avatar-video");
+	var isVideo = responseMessage.avatarType != null && responseMessage.avatarType.indexOf("video") != -1;
+	var useVideo = video != null && SDK.useVideo != false && (SDK.useVideo == true || !(SDK.isIPhone()));
+	if (isVideo && useVideo) {
 		var div = document.getElementById(elementPrefix + "avatar-image-div");
+		if (div != null) {
+			div.style.display = "none";
+		}
+		div = document.getElementById(elementPrefix + "avatar-game-div");
 		if (div != null) {
 			div.style.display = "none";
 		}
@@ -2361,7 +3245,7 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 				div.style.backgroundImage = "url(" + urlprefix + responseMessage.avatarBackground + ")";
 			}
 			var canvasDiv = document.getElementById(elementPrefix + "avatar-canvas-div");
-			if (((SDK.isChrome() && !SDK.isMobile()) || SDK.isFirefox() || SDK.useCanvas == true) && SDK.useCanvas != false && canvasDiv != null) {
+			if (((SDK.isChrome() && !SDK.isMobile()) || (SDK.isFirefox() && !SDK.isMac()) || SDK.useCanvas == true) && SDK.useCanvas != false && canvasDiv != null) {
 				div.style.position = "fixed";
 				div.style.top = "-1000";
 				div.style.left = "-1000";
@@ -2371,37 +3255,24 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 				canvas = document.getElementById(elementPrefix + "avatar-canvas");
 			}
 		}
-		var video = document.getElementById(elementPrefix + "avatar-video");
-		if (video == null) {
-			if (speak) {
-				if (nativeVoice) {
-					SDK.tts(SDK.stripTags(responseMessage.message), null, true, lang, voice);
-				} else {
-					var audio = SDK.play(urlprefix + responseMessage.speech, channelaudio);
-					audio.onended = afterFunction;
-				}
+		if (responseMessage.avatar.indexOf("mp4") != -1 && (SDK.isChrome() || SDK.isFirefox() || SDK.fixBrightness != true) && SDK.fixBrightness != false) {
+			// Hack to fix grey background in Chrome.
+			if (SDK.isChrome()) {
+				video.style.webkitFilter = "brightness(108.5%)";
+			} else {
+				video.style["filter"] = "brightness(1.085)";
 			}
-			return;
-		} else {
-			if (responseMessage.avatar.indexOf("mp4") != -1 && (SDK.isChrome() || SDK.isFirefox() || SDK.fixBrightness != true) && SDK.fixBrightness != false) {
-				// Hack to fix grey background in Chrome.
+			if (canvas != null) {
 				if (SDK.isChrome()) {
-					video.style.webkitFilter = "brightness(108.5%)";
+					canvas.style.webkitFilter = "brightness(108.5%)";
 				} else {
 					video.style["filter"] = "brightness(1.085)";
 				}
-				if (canvas != null) {
-					if (SDK.isChrome()) {
-						canvas.style.webkitFilter = "brightness(108.5%)";
-					} else {
-						video.style["filter"] = "brightness(1.085)";
-					}
-				}
 			}
-			if (canvas == null) {
-				if (responseMessage.avatarBackground != null) {
-					video.poster = urlprefix + responseMessage.avatarBackground;				
-				}
+		}
+		if (canvas == null) {
+			if (responseMessage.avatarBackground != null) {
+				video.poster = urlprefix + responseMessage.avatarBackground;				
 			}
 		}
 		var context = null;
@@ -2425,7 +3296,7 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 				setInterval(drawCanvas, 20);				
 			}
 		}
-		var end = function() {
+		end = function() {
 			video.src = urlprefix + responseMessage.avatar;
 			if (responseMessage.avatar2 == null) {
 				video.loop = true;
@@ -2447,7 +3318,8 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 					video.play();
 				}
 			}
-			video.play();
+			playPromise = video.play();
+			initVideoPromise();
 			if (afterFunction != null) {
 				afterFunction();
 			}
@@ -2462,10 +3334,15 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 							video.src = urlprefix + responseMessage.avatar;
 							video.loop = true;
 							var playing = false;
-							video.play();
+							playPromise = video.play();
+							initVideoPromise();
 	
 							if (nativeVoice) {
-								var utterance = new SpeechSynthesisUtterance(SDK.stripTags(responseMessage.message));
+								if ('SpeechSynthesisUtterance' in window) {
+									utterance = new SpeechSynthesisUtterance(SDK.stripTags(responseMessage.message));
+								} else {
+									utterance = new SpeechSynthesisUtterance2(SDK.stripTags(responseMessage.message));
+								}
 								SDK.utterance = utterance;
 								utterance.onstart = function() {
 									if (playing) {
@@ -2485,10 +3362,10 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 											speechSynthesis.resume();
 										}
 									}
-									video.play();
+									playPromise = video.play();
+									initVideoPromise();
 								}
 								utterance.onerror = function() {
-									console.log("error");
 									end();
 								}
 								utterance.onend = function() {
@@ -2501,7 +3378,7 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 								var audio = SDK.play(urlprefix + responseMessage.speech, channelaudio);
 								//audio.onabort = function() {console.log("abort");}
 								audio.oncanplay = function() {
-									if (playing) {
+									if (playing || playFailed) {
 										return false;
 									}
 									audio.pause();
@@ -2512,12 +3389,13 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 											return false;
 										}
 										playing = true;
-										audio.play();
+										playPromise = audio.play();
+										initVideoPromise();
 									}
-									video.play();
+									playPromise = video.play();
+									initVideoPromise();
 								}
 								audio.onerror = function() {
-									console.log("error");
 									end();
 								}
 								//audio.onloadeddata = function() {console.log("loadeddata");}
@@ -2526,33 +3404,57 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 								//audio.onplay = function() {console.log("play");}
 								//audio.onplaying = function() {console.log("playing");}
 								//audio.ontimeupdate = function() {console.log("timeupdate");}
+								var onended = audio.onended;
 								audio.onended = function() {
+									if (onended != null) {
+										onended();
+									}
 									end();
 								}
-								audio.play();
-								video.play();
+								playPromise = audio.play();
+								initVideoPromise();
+								playPromise = video.play();
+								initVideoPromise();
 							}
 						}
 					} else {
 						video.src = urlprefix + responseMessage.avatarTalk;
 						video.loop = false;
-						video.play();
+						playPromise = video.play();
+						initVideoPromise();
+						var onended = video.onended;
 						video.onended = function() {
+							if (onended != null) {
+								onended();
+							}
 							end();
 						}
 					}
 				} else {
 					video.src = urlprefix + responseMessage.avatar;
 					video.loop = true;
-					video.play();
+					playPromise = video.play();
+					initVideoPromise();
 					if (speak) {
 						if (nativeVoice) {
-							var utterance = new SpeechSynthesisUtterance(SDK.stripTags(responseMessage.message));
+							if ('SpeechSynthesisUtterance' in window) {
+								utterance = new SpeechSynthesisUtterance(SDK.stripTags(responseMessage.message));
+							} else {
+								utterance = new SpeechSynthesisUtterance2(SDK.stripTags(responseMessage.message));
+							}
 							utterance.onend = afterFunction;
 							SDK.nativeTTS(utterance, lang, voice);
 						} else {
 							var audio = SDK.play(urlprefix + responseMessage.speech, channelaudio);
-							audio.onended = afterFunction;						
+							var onended = audio.onended;
+							audio.onended = function() {
+								if (onended != null) {
+									onended();
+								}
+								if (afterFunction != null) {
+									afterFunction();
+								}
+							}
 						}
 					} else if (afterFunction != null) {
 						afterFunction();			
@@ -2566,8 +3468,13 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 		if (responseMessage.avatarAction != null) {
 			video.src = urlprefix + responseMessage.avatarAction;
 			video.loop = false;
-			video.play();
+			playPromise = video.play();
+			initVideoPromise();
+			var onended = video.onended;
 			video.onended = function() {
+				if (onended != null) {
+					onended();
+				}
 				talk();
 			}
 		} else {
@@ -2582,28 +3489,55 @@ SDK.updateAvatar = function(responseMessage, speak, urlprefix, elementPrefix, ch
 		if (div != null) {
 			div.style.display = "none";
 		}
+		div = document.getElementById(elementPrefix + "avatar-game-div");
+		if (div != null) {
+			div.style.display = "none";
+		}
 		div = document.getElementById(elementPrefix + "avatar-image-div");
 		if (div != null) {
 			div.style.display = "inline-block";
 		}
 		var img = document.getElementById(elementPrefix + 'avatar');
 		if (img != null) {
-			img.src = urlprefix + responseMessage.avatar;
+			if (isVideo) {
+				img.src = urlprefix + responseMessage.avatarBackground;
+			} else {
+				img.src = urlprefix + responseMessage.avatar;
+			}
 		}
 		img = document.getElementById(elementPrefix + 'avatar2');
 		if (img != null) {
-			img.src = urlprefix + responseMessage.avatar;
+			if (isVideo) {
+				img.src = urlprefix + responseMessage.avatarBackground;
+			} else {
+				img.src = urlprefix + responseMessage.avatar;
+			}
 		}
 		if (speak && responseMessage.message != null && responseMessage.message.length > 0) {
 			if (nativeVoice) {
+				noMedia = true;
 				SDK.tts(SDK.stripTags(responseMessage.message), null, true, lang, voice);
 			} else if (responseMessage.speech != null) {
 				var audio = SDK.play(urlprefix + responseMessage.speech, channelaudio);
-				audio.onended = afterFunction;
+				var onended = audio.onended;
+				audio.onended = function() {
+					if (onended != null) {
+						onended();
+					}
+					if (afterFunction != null) {
+						afterFunction();
+					}
+				}
 			}
-		} else if (afterFunction != null) {
-			afterFunction();			
+		} else {
+			noMedia = true;
+			if (afterFunction != null) {
+				afterFunction();
+			}
 		}
+	}
+	
+	} catch(err) {
 	}
 }
 
@@ -2633,10 +3567,16 @@ function WebChatbotListener() {
 	this.caption = null;
 	/** Disallow speech. */
 	this.allowSpeech = true;
-	/** Disallow file uploads. */
+	/** Disallow image/file upload menus and buttons. */
 	this.allowFiles = true;
+	/** Add image/file upload buttons to toolbar. */
+	this.showFileButtons = false;
 	/** Remove menubar. */
 	this.showMenubar = true;
+	/** Show Box Max*/
+	this.showBoxmax = true;
+	/** Show Send Image*/
+	this.showSendImage = true;
 	/** Remove language choice. */
 	this.showChooseLanguage = true;
 	/** Enable or disable speech. */
@@ -2667,6 +3607,10 @@ function WebChatbotListener() {
 	this.userName = "You";
 	/** Allow the button color to be set. */
 	this.color = "#009900";
+	/** Allow the different style sheet options */
+	this.version = null;
+	/** Set if the box chat log should be shown. */
+	this.chatLog = true;
 	/** Allow the hover button color to be set. */
 	this.hoverColor = "grey";
 	/** Allow the background color to be set. */
@@ -2677,12 +3621,14 @@ function WebChatbotListener() {
 	this.height = null;
 	/** Chat bar offest from side. */
 	this.offset = 30;
+	/** Chat Button Vertial Offset*/
+	this.verticalOffset = 0;
 	/** Only apply the background color if not Chrome. */
 	this.backgroundIfNotChrome = false;
 	/** onresponse event is raised after a response is received. */
 	this.onresponse = null;
 	/** Configure if chat should be given focus after response. */
-	this.focus = true;
+	this.focus = !SDK.isMobile();
 	/** Override the URL used in the chat bot box popup. */
 	this.popupURL = null;
 	/** Print response in chat bubble. */
@@ -2695,10 +3641,12 @@ function WebChatbotListener() {
 	this.loading = "loading...";
 	/** Element id and class prefix. This allows an id and class prefix to avoid name collisions on the element names for the chat, response, console, and avatar elements.*/
 	this.prefix = "";
+	/** This can be used to keep the bot's chat bar in synch with a livechat bar. */
+	this.livechatPrefix = null;
 	/** Allows the bot's thumbnail image to be set for chat log. */
-	this.botThumb;
+	this.botThumb = {};
 	/** Allows the user's thumbnail image to be set for chat log. */
-	this.userThumb;
+	this.userThumb = {};
 	/** Set styles explictly to avoid inheriting page styles. Disable this to be able to override styles. */
 	this.forceStyles = true;
 	/** Add additional css style code. */
@@ -2731,6 +3679,13 @@ function WebChatbotListener() {
 	 * Create an embedding bar and div in the current webpage.
 	 */
 	this.createBox = function() {
+		if (this.livechatPrefix == null) {
+			if (this.version >= 6.0) {
+				this.livechatPrefix = "chat";
+			} else {
+				this.livechatPrefix = "livechat";
+			}
+		}
 		if (this.prefix == "" && this.elementPrefix != null) {
 			this.prefix = this.elementPrefix;
 		}
@@ -2742,8 +3697,10 @@ function WebChatbotListener() {
 		var buttonHoverStyle = "";
 		var hidden = "hidden";
 		var border = "";
+		var border2 = "";
 		if (this.backgroundIfNotChrome && SDK.isChrome()) {
 			this.background = null;
+			border2 = "1px solid black";
 		}
 		if (this.background != null) {
 			backgroundstyle = " style='background-color:" + this.background + "'";
@@ -2761,14 +3718,41 @@ function WebChatbotListener() {
 		var background = "";
 		var minHeight = "";
 		var divHeight = "";
+		var maxDivWidth = "";
+		var maxHeight = null;
+		var responseWidth = "";
+		var chatWidth = "";
+		var hideAvatar = "";
+		var avatarWidth = this.width;
+		var minAvatarWidth = "";
+		var scrollerHeight = this.height;
+		var scrollerMinHeight = "";
 		if (this.width != null) {
+			if (typeof this.width === "string") {
+				this.width = parseInt(this.width);
+			}
+			// Auto correct for a short window or screen (assuming square).
+			// 250 is total box height minus avatar.
+			if ((this.width + 280) > window.innerHeight) {
+				avatarWidth = window.innerHeight - 280;
+				if (avatarWidth < 100) {
+					hideAvatar = "display:none";
+				}
+			}
 			minWidth = "width:" + this.width + "px;";
-			background = "background-size:" + this.width + "px auto;";
+			minAvatarWidth = "width:" + avatarWidth + "px;";
+			background = "background-size:" + avatarWidth + "px auto;";
 			divWidth = minWidth;
-			divHeight = "min-height:" + this.width + "px;";
+			divHeight = "min-height:" + avatarWidth + "px;";
 			responseWidth = "width:" + (this.width - 16) + "px;";
+			chatWidth = "width:" + this.width + "px;";
+			maxDivWidth = "max-width:" + (this.width - 50) + "px;";
+			scrollerHeight = avatarWidth;
 		}
 		if (this.height != null) {
+			if (typeof this.height === "string") {
+				this.height = parseInt(this.height);
+			}
 			minHeight = "height:" + this.height + "px;";
 			divHeight = minHeight;
 			if (this.width != null) {
@@ -2776,7 +3760,15 @@ function WebChatbotListener() {
 			} else {
 				background = "background-size: auto " + this.height + "px;";
 				divWidth = "min-width:" + this.height + "px;";
+				responseWidth = "width:" + (this.height - 16) + "px;";
+				chatWidth = "width:" + this.height + "px;";
 			}
+		} else {
+			scrollerMinHeight = "height:" + scrollerHeight + "px;";
+		}
+		var inputFont = "";
+		if (SDK.isMobile()) {
+			inputFont = "font-size: 16px;";
 		}
 		var boxloc = "bottom:10px;right:10px";
         if (this.boxLocation == "top-left") {
@@ -2788,35 +3780,47 @@ function WebChatbotListener() {
         } else if (this.boxLocation == "bottom-right") {
             boxloc = "bottom:10px;right:10px";
         }
-        var boxbarloc = "bottom:2px;right:" + this.offset + "px";
-        if (this.boxLocation == "top-left") {
-            boxbarloc = "top:2px;left:" + this.offset + "px";
-        } else if (this.boxLocation == "top-right") {
-            boxbarloc = "top:2px;right:" + this.offset + "px";
-        } else if (this.boxLocation == "bottom-left") {
-            boxbarloc = "bottom:2px;left:" + this.offset + "px";
-        } else if (this.boxLocation == "bottom-right") {
-            boxbarloc = "bottom:2px;right:" + this.offset + "px";
+        var locationBottom = 20;
+        if (this.version < 6.0 || this.prefix != "botplatform") {
+        	locationBottom = 2;
         }
-		var box = document.createElement('div');
+        var boxbarloc = "bottom:" + (locationBottom + this.verticalOffset) + "px;right:" + this.offset + "px";
+        if (this.boxLocation == "top-left") {
+            boxbarloc = "top:" + (locationBottom + this.verticalOffset) + "px;left:" + this.offset + "px";
+        } else if (this.boxLocation == "top-right") {
+            boxbarloc = "top:" + (locationBottom + this.verticalOffset) + "px;right:" + this.offset + "px";
+        } else if (this.boxLocation == "bottom-left") {
+            boxbarloc = "bottom:" + (locationBottom + this.verticalOffset) + "px;left:" + this.offset + "px";
+        } else if (this.boxLocation == "bottom-right") {
+            boxbarloc = "bottom:" + (locationBottom + this.verticalOffset) + "px;right:" + this.offset + "px";
+        }
+		var box = document.createElement('div');	
 		var html =
 			"<style>\n"
 				+ "." + this.prefix + "box { position:fixed;" + boxloc + ";z-index:152;margin:2px;display:none;" + border + " }\n"
-				+ "." + this.prefix + "box:hover { border:1px;border-style:solid;border-color:black; }\n"
-				+ "." + this.prefix + "boxmenu { visibility:" + hidden + "; margin-bottom:12px; }\n"
-				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n"
-				+ "." + this.prefix + "boxclose, ." + this.prefix + "boxmin, ." + this.prefix + "boxmax { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
-				+ (this.forceStyles ? "#" : ".") + "" + this.prefix + "boxbarmax { font-size:18px;margin:2px;padding:0px;text-decoration:none;color:white; }\n"
-				+ "." + this.prefix + "boxclose:hover, ." + this.prefix + "boxmin:hover, ." + this.prefix + "boxmax:hover { color: #fff;background: grey; }\n"
+				+ "." + this.prefix + "boxmenu { visibility:" + hidden + "; }\n"
+				+ (this.forceStyles ? "#" : ".") + "" + this.prefix + "boxbarmax { font-size:18px;margin:2px;padding:0px;text-decoration:none; }\n"
 				+ "." + this.prefix + "boxbar { position:fixed;" + boxbarloc + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
 				+ "." + this.prefix + "boxbar:hover { " + buttonHoverStyle + " }\n"
-				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; color:#585858; }\n"
-				+ "." + this.prefix + "no-bubble-plain { margin:4px; padding:8px; border:1px; }\n"
 				+ "." + this.prefix + "no-bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
 				+ "#" + this.prefix + "contactinfo { " + minHeight + minWidth + " }\n"
+				+ "." + this.prefix + "contactconnect { margin:4px;padding:8px;color:white;text-decoration:none;" + buttonstyle + " }\n"
+				+ "." + this.prefix + "scroller { overflow-x:hidden;" + scrollerMinHeight + minWidth + " }\n"
+				+ "." + this.prefix + "bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
+				+ "." + this.prefix + "chatchat-1-div { " + maxDivWidth + "}\n"
+				+ "." + this.prefix + "chatchat-2-div { " + maxDivWidth + "}\n"
+				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:99%;min-height:22px; }\n"
+				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n";
+		if (this.version < 6.0 || this.prefix != "botplatform") {
+			html = html
+				+ "." + this.prefix + "box:hover { border:1px;border-style:solid;border-color:black; }\n"
+				+ "." + this.prefix + "box:hover ." + this.prefix + "boxmenu { visibility:visible; }\n"
+				+ "." + this.prefix + "boxclose, ." + this.prefix + "boxmin, ." + this.prefix + "boxmax { font-size:22px;margin:2px;padding:0px;text-decoration:none; }\n"
+				+ "." + this.prefix + "boxclose:hover, ." + this.prefix + "boxmin:hover, ." + this.prefix + "boxmax:hover { color: #fff;background: grey; }\n"
+				+ "." + this.prefix + "no-bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; background-color:white; color:#585858; }\n"
+				+ "." + this.prefix + "no-bubble-plain { margin:4px; padding:8px; border:1px; }\n"
 				+ "#" + this.prefix + "contactinfo span { margin-left:4px;margin-top:4px; }\n"
 				+ "#" + this.prefix + "contactinfo input { margin:4px;font-size:13px;height:33px;width:90%;border:1px solid #d5d5d5; }\n"
-				+ "." + this.prefix + "contactconnect { margin:4px;padding:8px;color:white;text-decoration:none;" + buttonstyle + " }\n"
 				+ "." + this.prefix + "boxbutton { width:20px;height:20px;margin:4px; }\n"
 				+ "." + this.prefix + "menupopup div { position:absolute;margin: -1px 0 0 0;padding: 3px 3px 3px 3px;background: #fff;border-style:solid;border-color:black;border-width:1px;width:180px;max-width:300px;z-index:152;visibility:hidden;opacity:0;transition:visibility 0s linear 0.3s, opacity 0.3s linear; }\n"
 				+ "." + this.prefix + "menupopup:hover div { display:inline;visibility:visible;opacity:1;transition-delay:0.5s; }\n"
@@ -2824,181 +3828,223 @@ function WebChatbotListener() {
 				+ "a." + this.prefix + "menuitem:hover { color: #fff;background: grey; }\n"
 				+ "tr." + this.prefix + "menuitem:hover { background: grey; }\n"
 				+ "." + this.prefix + "yandex { display:none; }\n"
-				+ "." + this.prefix + "powered { margin:4px;color:grey;font-size:10px; }\n"
+				+ "." + this.prefix + "chatpowered { margin:4px;color:grey;font-size:10px; }\n"
 				+ "img." + this.prefix + "menu { width: 24px;height: 24px;margin: 2px;cursor: pointer;vertical-align: middle; }\n"
 				+ "span." + this.prefix + "menu { color: #818181;font-size: 12px; }\n"
 				+ "." + this.prefix + "bubble-div { padding-bottom:15px;position:relative; }\n"
 				+ "." + this.prefix + "bubble { margin:4px; padding:8px; border:1px; border-style:solid; border-color:black; border-radius:10px; background-color:white; color:#585858; }\n"
-				+ "." + this.prefix + "bubble-text { " + responseWidth + "; max-height:100px; overflow:auto; }\n"
 				+ "." + this.prefix + "bubble:before { content:''; position:absolute; bottom:0px; left:40px; border-width:20px 0 0 20px; border-style:solid; border-color:black transparent; display:block; width:0;}\n"
 				+ "." + this.prefix + "bubble:after { content:''; position:absolute; bottom:3px; left:42px; border-width:18px 0 0 16px; border-style:solid; border-color:white transparent; display:block; width:0;}\n"
-				+ (this.forceStyles ? "#" : ".") + this.prefix + "chat { width:99%;min-height:22px; }\n"
 				+ "." + this.prefix + "box-input-span { display:block; overflow:hidden; margin:4px; padding-right:4px; }\n"
 				+ "#" + this.prefix + "boxtable { background:none; border:none; margin:0; }\n"
-				+ this.style
+				+ "#" + this.prefix + "showChatLog { display:none; }\n"
+				+ "#" + this.prefix + "showChatLogButton { display:none; }\n"
+				+ "#" + this.prefix + "boxbar3 { display:none; }\n"
+				+ "#" + this.prefix + "boxbarmax { color: white; }\n"
+				+ "img." + this.prefix + "chat-user { height:40px; max-width:40px; }\n";
+		}
+		html = html + this.style
 			+ "</style>\n"
 			+ "<div id='" + this.prefix + "box' class='" + this.prefix + "box' " + backgroundstyle + ">"
 				+ "<div class='" + this.prefix + "boxmenu'>"
-					+ (this.backlink ? "<span class='" + this.prefix + "powered'>powered by <a href='" + SDK.backlinkURL + "' target='_blank'>" + SDK.NAME + "</a></span>" : "")
-					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> <a id='"
-					+ this.prefix + "boxmax' class='" + this.prefix + "boxmax' onclick='return false;' href='#'><img src='" + SDK.url + "/images/open.png'> </a></span><br/>"
-				+ "</div>";
-
-		if (this.avatar) {
-			html = html
-				+ "<div id='" + this.prefix + "avatar-image-div' style='display:none;" + minHeight + minWidth + "'>"
-					+ "<img id='" + this.prefix + "avatar' style='" + minHeight + minWidth + "'/>"
+					+ (this.backlink ? "<span class='" + this.prefix + "chatpowered'>powered by <a href='" + SDK.backlinkURL + "' target='_blank'>" + SDK.NAME + "</a></span>" : "")
+					+ "<span style='float:right'><a id='" + this.prefix + "boxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a> ";
+		if (this.showBoxmax) {
+			html = html + "<a id='" + this.prefix + "boxmax' class='" + this.prefix + "boxmax' onclick='return false;' href='#'><img src='" + SDK.url + "/images/open.png'> </a></span><br/>";
+		} else {
+			html = html + "</span><br/>";
+		}
+		html = html + "</div>";
+		html = html
+			+ "<div id='" + this.prefix + "online' class='" + this.prefix + "online'>"
+			+ "</div>"
+			+ "<div id='" + this.prefix + "scroller' class='" + this.prefix + "scroller'>"
+			+ "<table id='" + this.prefix + "console' class='" + this.prefix + "console' width=100% cellspacing=2></table>"
+			+ "</div>";
+		html = html
+			+ "<div id='" + this.prefix + "avatar-div' style='" + hideAvatar + "'>"
+				+ "<div id='" + this.prefix + "avatar-image-div' style='display:none;text-align:center;" + minHeight + minAvatarWidth + "'>"
+					+ "<img id='" + this.prefix + "avatar' style='" + minHeight + minAvatarWidth + "'/>"
 				+ "</div>"
-				+ "<div id='" + this.prefix + "avatar-video-div' style='display:none;" + divHeight + divWidth + background + "background-repeat: no-repeat;'>"
-					+ "<video id='" + this.prefix + "avatar-video' autoplay preload='auto' style='background:transparent;" + minHeight + minWidth + "'>"
+				+ "<div id='" + this.prefix + "avatar-video-div' style='display:none;text-align:center;background-position:center;" + divHeight + divWidth + background + "background-repeat: no-repeat;'>"
+					+ "<video muted='true' id='" + this.prefix + "avatar-video' autoplay preload='auto' style='background:transparent;" + minHeight + minAvatarWidth + "'>"
 						+ "Video format not supported by your browser (try Chrome)"
 					+ "</video>"
 				+ "</div>"
-				+ "<div id='" + this.prefix + "avatar-canvas-div' style='display:none;" + divHeight + divWidth + "'>"
-					+ "<canvas id='" + this.prefix + "avatar-canvas' style='background:transparent;" + minHeight + minWidth + "'>"
+				+ "<div id='" + this.prefix + "avatar-canvas-div' style='display:none;text-align:center;" + divHeight + divWidth + "'>"
+					+ "<canvas id='" + this.prefix + "avatar-canvas' style='background:transparent;" + minHeight + minAvatarWidth + "'>"
 						+ "Canvas not supported by your browser (try Chrome)"
 					+ "</canvas>"
-				+ "</div>";
-		}
+				+ "</div>"
+				+ "<div id='" + this.prefix + "avatar-game-div' style='display:none;text-align:center;" + divHeight + divWidth + "'>"
+				+ "</div>"
+			+ "</div>";
+		
 		var urlprefix = this.connection.credentials.url + "/";
 		html = html
 				+ "<div>"
-					+ "<div " + (this.bubble ? "class='" + this.prefix + "bubble-div'" : "") + ">"
+					+ "<div " + (this.bubble ? "id='" + this.prefix + "bubble-div'" : "") + " " + (this.bubble ? "class='" + this.prefix + "bubble-div'" : "") + ">"
 					+ "<div class='" + this.prefix + "" + (this.bubble ? "bubble" : (this.background == null ? "no-bubble" : "no-bubble-plain") )
 					+ "'><div class='" + this.prefix + (this.bubble ? "bubble-text" : "no-bubble-text" ) + "'>"
 						+ "<span id='" + this.prefix + "response'>" + (this.greeting == null ? this.loading : this.greeting) + "</span><br/>"
 					+ "</div></div></div>"
 					+ "<div><span class='" + this.prefix + "box-input-span'><input id='" + this.prefix + "chat' type='text' class='" + this.prefix + "box-input'/></span></div>";
-		html = html
-			+ "<div>"
-			+ "<span class='" + this.prefix + "menu'>\n"
-			+ "<div style='inline-block;position:relative'>\n"
-			+ "<span class='" + this.prefix + "menupopup'>"
-			+ "<div style='text-align:left;bottom:36px'>"
-			+ "<table>\n"
-			+ "<tr class='" + this.prefix + "menuitem'>"
-				+ "<td><a class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "images/language.png' title='Translate to and from your selected language'>"
-				+ " <select id='" + this.prefix + "chooselanguage'>"
-					+ "<option value='none'>Choose Language</option>"
-					+ "<option value='en'>English</option>"
-					+ "<option value='zh'>Chinese</option>"
-					+ "<option value='es'>Spanish</option>"
-					+ "<option value='pt'>Portuguese</option>"
-					+ "<option value='de'>German</option>"
-					+ "<option value='fr'>French</option>"
-					+ "<option value='ja'>Japanese</option>"
-					+ "<option value='ar'>Arabic</option>"
-					+ "<option value='none'>None</option>"
-					+ "<option value='none'></option>"
-					+ "<option value='af'>Afrikaans</option>"
-					+ "<option value='sq'>Albanian</option>"
-					+ "<option value='hy'>Armenian</option>"
-					+ "<option value='az'>Azerbaijani</option>"
-					+ "<option value='ba'>Bashkir</option>"
-					+ "<option value='eu'>Basque</option>"
-					+ "<option value='be'>Belarusian</option>"
-					+ "<option value='bn'>Bengali</option>"
-					+ "<option value='bs'>Bosnian</option>"
-					+ "<option value='bg'>Bulgarian</option>"
-					+ "<option value='ca'>Catalan</option>"
-					+ "<option value='za'>Chinese</option>"
-					+ "<option value='hr'>Croatian</option>"
-					+ "<option value='cs'>Czech</option>"
-					+ "<option value='da'>Danish</option>"
-					+ "<option value='nl'>Dutch</option>"
-					+ "<option value='en'>English</option>"
-					+ "<option value='et'>Estonian</option>"
-					+ "<option value='fi'>Finnish</option>"
-					+ "<option value='fr'>French</option>"
-					+ "<option value='gl'>Galician</option>"
-					+ "<option value='ka'>Georgian</option>"
-					+ "<option value='de'>German</option>"
-					+ "<option value='gu'>Gujarati</option>"
-					+ "<option value='ht'>Haitian</option>"
-					+ "<option value='he'>Hebrew</option>"
-					+ "<option value='hi'>Hindi</option>"
-					+ "<option value='hu'>Hungarian</option>"
-					+ "<option value='id'>Indonesian</option>"
-					+ "<option value='ga'>Irish</option>"
-					+ "<option value='it'>Italian</option>"
-					+ "<option value='ja'>Japanese</option>"
-					+ "<option value='kn'>Kannada</option>"
-					+ "<option value='kk'>Kazakh</option>"
-					+ "<option value='ky'>Kirghiz</option>"
-					+ "<option value='ko'>Korean</option>"
-					+ "<option value='la'>Latin</option>"
-					+ "<option value='lv'>Latvian</option>"
-					+ "<option value='lt'>Lithuanian</option>"
-					+ "<option value='mk'>Macedonian</option>"
-					+ "<option value='mg'>Malagasy</option>"
-					+ "<option value='ms'>Malay</option>"
-					+ "<option value='mt'>Maltese</option>"
-					+ "<option value='mn'>Mongolian</option>"
-					+ "<option value='no'>Norwegian</option>"
-					+ "<option value='fa'>Persian</option>"
-					+ "<option value='pl'>Polish</option>"
-					+ "<option value='pt'>Portuguese</option>"
-					+ "<option value='pa'>Punjabi</option>"
-					+ "<option value='ro'>Romanian</option>"
-					+ "<option value='ru'>Russian</option>"
-					+ "<option value='sr'>Serbian</option>"
-					+ "<option value='si'>Sinhalese</option>"
-					+ "<option value='sk'>Slovak</option>"
-					+ "<option value='es'>Spanish</option>"
-					+ "<option value='sw'>Swahili</option>"
-					+ "<option value='sv'>Swedish</option>"
-					+ "<option value='tl'>Tagalog</option>"
-					+ "<option value='tg'>Tajik</option>"
-					+ "<option value='ta'>Tamil</option>"
-					+ "<option value='tt'>Tatar</option>"
-					+ "<option value='th'>Thai</option>"
-					+ "<option value='tr'>Turkish</option>"
-					+ "<option value='uk'>Ukrainian</option>"
-					+ "<option value='ur'>Urdu</option>"
-					+ "<option value='uz'>Uzbek</option>"
-					+ "<option value='cy'>Welsh</option>"
-			  	+ "</select>"
-			+ "</a></td>"
-			+ "</tr>\n";
-		if (this.allowFiles) {
+		if (this.showMenubar) {
 			html = html
-				+ "<tr class='" + this.prefix + "menuitem'>"
-					+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/image.png' title='Resize and send an image attachment'> Send image</a></td>"
+				+ "<div>"
+				+ "<span class='" + this.prefix + "menu'>\n"
+				+ "<div style='inline-block;position:relative'>\n"
+				+ "<span class='" + this.prefix + "menupopup'>"
+				+ "<div style='text-align:left;bottom:30px'>"
+				+ "<table>\n";
+				if (this.showChooseLanguage) {
+					html = html
+					+ "<tr class='" + this.prefix + "menuitem'>"
+					+ "<td><a id='" + this.prefix + "boxlanguagemenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "images/language.png' title='Translate to and from your selected language'>"
+						+ " <select id='" + this.prefix + "chooselanguage'>"
+							+ "<option value='none'>" + SDK.translate("Choose Language") + "</option>"
+							+ "<option value='en'>English</option>"
+							+ "<option value='zh'>Chinese</option>"
+							+ "<option value='es'>Spanish</option>"
+							+ "<option value='pt'>Portuguese</option>"
+							+ "<option value='de'>German</option>"
+							+ "<option value='fr'>French</option>"
+							+ "<option value='ja'>Japanese</option>"
+							+ "<option value='ar'>Arabic</option>"
+							+ "<option value='none'>None</option>"
+							+ "<option value='none'></option>"
+							+ "<option value='af'>Afrikaans</option>"
+							+ "<option value='sq'>Albanian</option>"
+							+ "<option value='hy'>Armenian</option>"
+							+ "<option value='az'>Azerbaijani</option>"
+							+ "<option value='ba'>Bashkir</option>"
+							+ "<option value='eu'>Basque</option>"
+							+ "<option value='be'>Belarusian</option>"
+							+ "<option value='bn'>Bengali</option>"
+							+ "<option value='bs'>Bosnian</option>"
+							+ "<option value='bg'>Bulgarian</option>"
+							+ "<option value='ca'>Catalan</option>"
+							+ "<option value='za'>Chinese</option>"
+							+ "<option value='hr'>Croatian</option>"
+							+ "<option value='cs'>Czech</option>"
+							+ "<option value='da'>Danish</option>"
+							+ "<option value='nl'>Dutch</option>"
+							+ "<option value='en'>English</option>"
+							+ "<option value='et'>Estonian</option>"
+							+ "<option value='fi'>Finnish</option>"
+							+ "<option value='fr'>French</option>"
+							+ "<option value='gl'>Galician</option>"
+							+ "<option value='ka'>Georgian</option>"
+							+ "<option value='de'>German</option>"
+							+ "<option value='gu'>Gujarati</option>"
+							+ "<option value='ht'>Haitian</option>"
+							+ "<option value='he'>Hebrew</option>"
+							+ "<option value='hi'>Hindi</option>"
+							+ "<option value='hu'>Hungarian</option>"
+							+ "<option value='id'>Indonesian</option>"
+							+ "<option value='ga'>Irish</option>"
+							+ "<option value='it'>Italian</option>"
+							+ "<option value='ja'>Japanese</option>"
+							+ "<option value='kn'>Kannada</option>"
+							+ "<option value='kk'>Kazakh</option>"
+							+ "<option value='ky'>Kirghiz</option>"
+							+ "<option value='ko'>Korean</option>"
+							+ "<option value='la'>Latin</option>"
+							+ "<option value='lv'>Latvian</option>"
+							+ "<option value='lt'>Lithuanian</option>"
+							+ "<option value='mk'>Macedonian</option>"
+							+ "<option value='mg'>Malagasy</option>"
+							+ "<option value='ms'>Malay</option>"
+							+ "<option value='mt'>Maltese</option>"
+							+ "<option value='mn'>Mongolian</option>"
+							+ "<option value='no'>Norwegian</option>"
+							+ "<option value='fa'>Persian</option>"
+							+ "<option value='pl'>Polish</option>"
+							+ "<option value='pt'>Portuguese</option>"
+							+ "<option value='pa'>Punjabi</option>"
+							+ "<option value='ro'>Romanian</option>"
+							+ "<option value='ru'>Russian</option>"
+							+ "<option value='sr'>Serbian</option>"
+							+ "<option value='si'>Sinhalese</option>"
+							+ "<option value='sk'>Slovak</option>"
+							+ "<option value='es'>Spanish</option>"
+							+ "<option value='sw'>Swahili</option>"
+							+ "<option value='sv'>Swedish</option>"
+							+ "<option value='tl'>Tagalog</option>"
+							+ "<option value='tg'>Tajik</option>"
+							+ "<option value='ta'>Tamil</option>"
+							+ "<option value='tt'>Tatar</option>"
+							+ "<option value='th'>Thai</option>"
+							+ "<option value='tr'>Turkish</option>"
+							+ "<option value='uk'>Ukrainian</option>"
+							+ "<option value='ur'>Urdu</option>"
+							+ "<option value='uz'>Uzbek</option>"
+							+ "<option value='cy'>Welsh</option>"
+					  	+ "</select>"
+					+ "</a></td>"
+					+ "</tr>\n";
+				}
+			if (this.allowFiles) {
+				if (this.showSendImage) {
+					html = html
+						+ "<tr class='" + this.prefix + "menuitem'>"
+							+ "<td><a id='" + this.prefix + "sendImage' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/image.png' title='Resize and send an image attachment'> " + SDK.translate("Send image") + "</a></td>"
+						+ "</tr>\n"
+						+ "<tr class='" + this.prefix + "menuitem'>"
+							+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/attach.png' title='Send an image or file attachment'> " + SDK.translate("Send file") + "</a></td>"
+						+ "</tr>\n";
+				}
+			}
+			html = html
+				+ "<tr id='" + this.prefix + "showChatLog' class='" + this.prefix + "menuitem'>"
+					+ "<td><a class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/chat_log.png' title='Chat log'> " + SDK.translate("Chat Log") + "</a></td>"
 				+ "</tr>\n"
-				+ "<tr class='" + this.prefix + "menuitem'>"
-					+ "<td><a id='" + this.prefix + "sendAttachment' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/attach.png' title='Send an image or file attachment'> Send file</a></td>"
+				+ "<tr id='" + this.prefix + "showAvatarBot' class='" + this.prefix + "menuitem' style='display:none;'>"
+					+ "<td><a class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + urlprefix + "/images/avatar-icon.png' title='Avatar Bot'> " + SDK.translate("Show Avatar") + "</a></td>"
 				+ "</tr>\n";
-		}
-		if (this.allowSpeech) {
-			html = html
-				+ "<tr class='" + this.prefix + "menuitem'>"
-					+ "<td><a id='" + this.prefix + "boxspeakmenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='" + this.prefix + "boxspeak2' class='" + this.prefix + "menu' src='" + urlprefix + (this.speak ? "images/sound.png": "images/mute.png") +"' title='Speech'> Speech</a></td>"
-				+ "</tr>\n";
-			if (SDK.isChrome()) {
+			
+			if (this.allowSpeech) {
 				html = html
 					+ "<tr class='" + this.prefix + "menuitem'>"
-						+ "<td><a id='" + this.prefix + "boxspeakrecognitionmenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'>"
-								+ "<img id='" + this.prefix + "boxspeakrecognition2' class='" + this.prefix + "menu' src='" + urlprefix + "/images/micoff.png' title='Speech recognition (browser must support HTML5 speech recognition, such as Chrome)'> Speech Recognition</a>"
-						+ "</td>"
-					+ "</tr>\n"
+						+ "<td><a id='" + this.prefix + "boxspeakmenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='" + this.prefix + "boxspeak2' class='" + this.prefix + "menu' src='" + urlprefix + (this.speak ? "images/sound.png": "images/mute.png") +"' title='Speech'> " + SDK.translate("Speech") + "</a></td>"
+					+ "</tr>\n";
+				if (SDK.isChrome()) {
+					html = html
+						+ "<tr class='" + this.prefix + "menuitem'>"
+							+ "<td><a id='" + this.prefix + "boxspeakrecognitionmenu' class='" + this.prefix + "menuitem' onclick='return false;' href='#'>"
+									+ "<img id='" + this.prefix + "boxspeakrecognition2' class='" + this.prefix + "menu' src='" + urlprefix + "/images/micoff.png' title='Speech recognition (browser must support HTML5 speech recognition, such as Chrome)'> " + SDK.translate("Speech Recognition") + "</a>"
+							+ "</td>"
+						+ "</tr>\n"
+				}
 			}
-		}
-		html = html
-			+ "</table>\n"
-			+ "</div>"
-			+ "<img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/menu.png'>"
-			+ "<img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/language.png'>"
-			+ "</span>";
-		if (this.allowSpeech) {
 			html = html
-				+ "<a onclick='return false;' href='#' title='Speech'><img id='" + this.prefix + "boxspeak' class='" + this.prefix + "boxbutton' src='"
-								+ urlprefix
-								+ (this.speak ? "images/sound.png": "images/mute.png") +"'></a></td>"
-					+ (SDK.isChrome() ?
-							("<a onclick='return false;' href='#' title='Speech Recognition'><img id='" + this.prefix + "boxspeakrecognition' class='" + this.prefix + "boxbutton' src='"
+				+ "</table>\n"
+				+ "</div>"
+				+ "<img id='" + this.prefix + "boxmenubutton' class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/menu.png'>";
+				if (this.showChooseLanguage) {
+					html = html + "<img id='" + this.prefix + "boxlanguage' class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/language.png'>";
+				}
+				html = html + "</span>";
+			if (this.allowSpeech) {
+				html = html
+					+ "<a onclick='return false;' href='#' title='Speech'><img id='" + this.prefix + "boxspeak' class='" + this.prefix + "boxbutton' src='"
 									+ urlprefix
-									+ "images/micoff.png'></a>")
-							: "");
+									+ (this.speak ? "images/sound.png": "images/mute.png") +"'></a></td>"
+						+ (SDK.isChrome() ?
+								("<a onclick='return false;' href='#' title='Speech Recognition'><img id='" + this.prefix + "boxspeakrecognition' class='" + this.prefix + "boxbutton' src='"
+										+ urlprefix
+										+ "images/micoff.png'></a>")
+								: "");
+			}
+			html = html + "<a id='" + this.prefix + "showChatLogButton' onclick='return false;' href='#' title='Show chat log'>"
+					+ "<img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/chat_log.png' title='Chat log'></a>"
+					+ "<a id='" + this.prefix + "showAvatarBotButton' style='display:none;' onclick='return false;' href='#' title='Show Avatar Bot'>"
+					+ "<img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/avatar-icon.png' title='Avatar Bot'></a>";
+		}
+		if (this.allowFiles && this.showFileButtons) {
+			html = html
+				+ "<a id='" + this.prefix + "sendImageTool' onclick='return false;' href='#'><img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/image.png' title='Resize and send an image attachment'></a>"
+				+ "<a id='" + this.prefix + "sendAttachmentTool' onclick='return false;' href='#'><img class='" + this.prefix + "boxbutton' src='" + urlprefix + "/images/attach.png' title='Send an image or file attachment'></a>";
 		}
 		html = html
 			+ "</span>"
@@ -3008,21 +4054,28 @@ function WebChatbotListener() {
 			+ "</div>"
 			+ "</div>"
 			+ "<div id='" + this.prefix + "boxbar' class='" + this.prefix + "boxbar'>"
-				+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'><img src='" + SDK.url + "/images/maximizew.png'> " + this.caption + "</a></span>"
-				+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' onclick='return false;' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
-			+ "</div>";
+				+ "<div id='" + this.prefix + "boxbar2' class='" + this.prefix + "boxbar2'>"
+					+ "<span><a id='" + this.prefix + "boxbarmax' class='" + this.prefix + "boxbarmax' " + " onclick='return false;' href='#'><img id='" + this.prefix + "boxbarmaximage' " + "src='" + SDK.url + "/images/maximizew.png'> " + this.caption + " </a>"
+					+ " <a id='" + this.prefix + "boxclose' class='" + this.prefix + "boxclose' onclick='return false;' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
+				+ "</div>";
+		html = html
+				+ "<div id='" + this.prefix + "boxbar3' class='" + this.prefix + "boxbar3'" + ">"
+					+ "<span><a id='" + this.prefix + "boxbarmax2' class='" + this.prefix + "boxbarmax2' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'>" + "</a></span><br>"
+					+ " <a id='" + this.prefix + "boxclose2' class='" + this.prefix + "boxclose2' onclick='return false;' onclick='return false;' href='#'> <img src='" + SDK.url + "/images/closeg.png'></a></span><br/>"
+				+ "</div>\n"
+			+ "</div>\n";
 		
 		if (this.promptContactInfo) {
 			html = html
 				+ "<div id='" + this.prefix + "contactinfo' class='" + this.prefix + "box' " + backgroundstyle + ">"
 					+ "<div class='" + this.prefix + "boxmenu'>"
-						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "boxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
+						+ "<span style='float:right'><a id='" + this.prefix + "contactboxmin' class='" + this.prefix + "contactboxmin' onclick='return false;' href='#'><img src='" + SDK.url + "/images/minimize.png'></a>"
 					+ "</div>\n"
 					+ "<div style='margin:10px'>\n"
-						+ "<span>Name</span><br/><input id='" + this.prefix + "contactname' type='text' /><br/>\n"
-						+ "<span>Email</span><br/><input id='" + this.prefix + "contactemail' type='email' /><br/>\n"
-						+ "<span>Phone</span><br/><input id='" + this.prefix + "contactphone' type='text' /><br/>\n"
-						+ "<br/><a id='" + this.prefix + "contactconnect' class='" + this.prefix + "contactconnect' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'>Connect</a>\n"
+						+ "<span>" + SDK.translate("Name") + "</span><br/><input id='" + this.prefix + "contactname' type='text' /><br/>\n"
+						+ "<span>" + SDK.translate("Email") + "</span><br/><input id='" + this.prefix + "contactemail' type='email' /><br/>\n"
+						+ "<span>" + SDK.translate("Phone") + "</span><br/><input id='" + this.prefix + "contactphone' type='text' /><br/>\n"
+						+ "<br/><a id='" + this.prefix + "contactconnect' class='" + this.prefix + "contactconnect' " + (this.forceStyles ? "style='color:white' " : "") + " onclick='return false;' href='#'>" + SDK.translate("Connect") + "</a>\n"
 					+ "<br/><br/></div>\n"
 				+ "</div>";
 		}
@@ -3041,6 +4094,10 @@ function WebChatbotListener() {
 			self.closeBox();
 			return false;
 		});
+		document.getElementById(this.prefix + "boxclose2").addEventListener("click", function() {
+			self.closeBox();
+			return false;
+		});
 		document.getElementById(this.prefix + "boxmin").addEventListener("click", function() {
 			self.minimizeBox();
 			return false;
@@ -3055,38 +4112,48 @@ function WebChatbotListener() {
 				return false;
 			});
 		}
-		document.getElementById(this.prefix + "boxmax").addEventListener("click", function() {
-			self.popup();
-			return false;
-		});
+		if (document.getElementById(this.prefix + "boxmax") != null) {
+			document.getElementById(this.prefix + "boxmax").addEventListener("click", function() {
+				self.popup();
+				return false;
+			});
+		}
 		document.getElementById(this.prefix + "boxbarmax").addEventListener("click", function() {
 			self.maximizeBox();
 			return false;
 		});
+		
+		document.getElementById(this.prefix + "boxbarmax2").addEventListener("click", function() {
+			self.maximizeBox();
+			return false;
+		});
+		
 		var langOrig = null;
 		var nativeVoiceOrig = null;
 		var voiceOrig = null;
-		document.getElementById(this.prefix + "chooselanguage").addEventListener("change", function() {
-			if (nativeVoiceOrig == null && langOrig == null) {
-				langOrig = self.lang;
-				nativeVoiceOrig = self.nativeVoice;
-				voiceOrig = self.voice;
-			}
-			var element = document.getElementById(self.prefix + 'chooselanguage');
-			self.lang = element.value;
-			if (self.lang != "none") {
-				document.getElementById(self.prefix + 'yandex').style.display = "inline";
-				self.nativeVoice = true;
-				self.translate = true;
-				self.voice = null;
-			} else {
-				document.getElementById(self.prefix + 'yandex').style.display = "none";
-				self.translate = false;
-				self.lang = langOrig;
-				self.nativeVoice = nativeVoiceOrig;
-				self.voice = voiceOrig;
-			}
-		});
+		if (document.getElementById(this.prefix + "chooselanguage") != null) {
+			document.getElementById(this.prefix + "chooselanguage").addEventListener("change", function() {
+				if (nativeVoiceOrig == null && langOrig == null) {
+					langOrig = self.lang;
+					nativeVoiceOrig = self.nativeVoice;
+					voiceOrig = self.voice;
+				}
+				var element = document.getElementById(self.prefix + 'chooselanguage');
+				self.lang = element.value;
+				if (self.lang != "none") {
+					document.getElementById(self.prefix + 'yandex').style.display = "inline";
+					self.nativeVoice = true;
+					self.translate = true;
+					self.voice = null;
+				} else {
+					document.getElementById(self.prefix + 'yandex').style.display = "none";
+					self.translate = false;
+					self.lang = langOrig;
+					self.nativeVoice = nativeVoiceOrig;
+					self.voice = voiceOrig;
+				}
+			});
+		}
 		if (document.getElementById(this.prefix + "sendImage") != null) {
 			document.getElementById(this.prefix + "sendImage").addEventListener("click", function() {
 				self.sendImage();
@@ -3099,11 +4166,161 @@ function WebChatbotListener() {
 				return false;
 			});
 		}
+		if (document.getElementById(this.prefix + "sendImageTool") != null) {
+			document.getElementById(this.prefix + "sendImageTool").addEventListener("click", function() {
+				self.sendImage();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "sendAttachmentTool") != null) {
+			document.getElementById(this.prefix + "sendAttachmentTool").addEventListener("click", function() {
+				self.sendAttachment();
+				return false;
+			});
+		}
+
+		
+		if (this.avatar && this.chatLog) {
+			document.getElementById(this.prefix + "online").style.display = "none";
+			document.getElementById(this.prefix + "scroller").style.display = "none";
+			if (this.version >= 6.0 && this.prefix == "botplatform") {
+				var chatLogDiv = document.getElementById(this.prefix + "showChatLog");
+				if (chatLogDiv != null) {
+					chatLogDiv.style.display = "block";
+				}
+				var chatLogButtonDiv = document.getElementById(this.prefix + "showChatLogButton");
+				if (chatLogButtonDiv != null) {
+					chatLogButtonDiv.style.display = "inline-block";
+				}
+			}
+		} else if (this.avatar && !this.chatLog) {
+			document.getElementById(this.prefix + "online").style.display = "none";
+			document.getElementById(this.prefix + "scroller").style.display = "none";
+			var chatLogDiv = document.getElementById(this.prefix + "showChatLog");
+			var chatLogButtonDiv = document.getElementById(this.prefix + "showChatLogButton");
+			if (chatLogDiv != null) {
+				chatLogDiv.style.display = "none";
+			}
+			if (chatLogButtonDiv != null) {
+				chatLogButtonDiv.style.display = "none";
+			}
+		} else if (!this.avatar && this.chatLog) {
+			document.getElementById(this.prefix + "online").style.display = "inline";
+			document.getElementById(this.prefix + "scroller").style.display = "inline-block";
+			document.getElementById(this.prefix + "avatar-div").style.display = "none";
+			var chatLogDiv = document.getElementById(this.prefix + "showChatLog");
+			var chatLogButtonDiv = document.getElementById(this.prefix + "showChatLogButton");
+			if (chatLogDiv != null) {
+				chatLogDiv.style.display = "none";
+			}
+			if (chatLogButtonDiv != null) {
+				chatLogButtonDiv.style.display = "none";
+			}
+			var bubbleDiv = document.getElementById(this.prefix + "bubble-div");
+			if (bubbleDiv != null) {
+				bubbleDiv.style.display = "none";	
+			}
+			var noBubblePlain = document.getElementsByClassName(this.prefix + "no-bubble-plain");
+			if (noBubblePlain != null && noBubblePlain.length != 0) {
+				noBubblePlain[0].style.display = "none";
+			}
+		} else {
+			document.getElementById(this.prefix + "online").style.display = "none";
+			document.getElementById(this.prefix + "scroller").style.display = "none";
+			document.getElementById(this.prefix + "avatar-div").style.display = "none";
+			var chatLogDiv = document.getElementById(this.prefix + "showChatLog");
+			var chatLogButtonDiv = document.getElementById(this.prefix + "showChatLogButton");
+			if (chatLogDiv != null) {
+				chatLogDiv.style.display = "none";
+			}
+			if (chatLogButtonDiv != null) {
+				chatLogButtonDiv.style.display = "none";
+			}
+		}
+		
+		if (document.getElementById(this.prefix + "showChatLog") != null) {
+			document.getElementById(this.prefix + "showChatLog").addEventListener("click", function() {
+				self.showChatLog();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "showChatLogButton") != null) {
+			document.getElementById(this.prefix + "showChatLogButton").addEventListener("click", function() {
+				self.showChatLog();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "showAvatarBot") != null) {
+			document.getElementById(this.prefix + "showAvatarBot").addEventListener("click", function() {
+				self.showAvatarBot();
+				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "showAvatarBotButton") != null) {
+			document.getElementById(this.prefix + "showAvatarBotButton").addEventListener("click", function() {
+				self.showAvatarBot();
+				return false;
+			});
+		}
+		this.showChatLog = function() {
+			document.getElementById(this.prefix + "avatar-div").style.display = "none";
+			document.getElementById(this.prefix + "online").style.display = "inline";
+			var bubbleDiv = document.getElementById(this.prefix + "bubble-div");
+			if (bubbleDiv != null) {
+				bubbleDiv.style.display = "none";
+			}
+			var noBubblePlain = document.getElementsByClassName(this.prefix + "no-bubble-plain");
+			if (noBubblePlain != null && noBubblePlain.length != 0) {
+				noBubblePlain[0].style.display = "none";
+			}
+			document.getElementById(this.prefix + "scroller").style.display = "inline-block";
+			if (this.version >= 6.0 && this.prefix == "botplatform") {
+				document.getElementById(this.prefix + "showChatLog").style.display = "none";
+				document.getElementById(this.prefix + "showChatLogButton").style.display = "none";
+				document.getElementById(this.prefix + "showAvatarBot").style.display = "block";
+				document.getElementById(this.prefix + "showAvatarBotButton").style.display = "inline-block";
+			}
+			if (this.background == null && this.backgroundIfNotChrome) {
+				var box = document.getElementById(this.prefix + "box");
+				if (box != null) {
+					box.style.backgroundColor = "#fff";
+					box.style.border = border2;
+				}
+			}
+		}
+		this.showAvatarBot  = function() {
+			document.getElementById(this.prefix + "online").style.display = "none";
+			document.getElementById(this.prefix + "scroller").style.display = "none";
+			document.getElementById(this.prefix + "avatar-div").style.display = "inline-block";
+			var bubbleDiv = document.getElementById(this.prefix + "bubble-div");
+			if (bubbleDiv != null) {
+				bubbleDiv.style.display = "inherit";
+			}
+			var noBubblePlain = document.getElementsByClassName(this.prefix + "no-bubble-plain");
+			if (noBubblePlain != null && noBubblePlain.length != 0) {
+				noBubblePlain[0].style.display = "inherit";
+			}
+			if (this.version >= 6.0 && this.prefix == "botplatform") {
+				document.getElementById(this.prefix + "showChatLog").style.display = "block";
+				document.getElementById(this.prefix + "showChatLogButton").style.display = "inline-block";
+				document.getElementById(this.prefix + "showAvatarBot").style.display = "none";
+				document.getElementById(this.prefix + "showAvatarBotButton").style.display = "none";
+			}
+			if (this.background == null && this.backgroundIfNotChrome) {
+				var box = document.getElementById(this.prefix + "box");
+				if (box != null) {
+					box.style.backgroundColor = null;
+					box.style.border = null;
+				}
+			}
+		}
+		
 		if (document.getElementById(this.prefix + "boxspeak") != null) {
 			document.getElementById(this.prefix + "boxspeak").addEventListener("click", function() {
 				self.speak = !self.speak;
 				var urlprefix = self.connection.credentials.url + "/";
 				if (self.speak) {
+					SDK.initAudio();
 					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/sound.png";
 					document.getElementById(self.prefix + "boxspeak2").src = urlprefix + "images/sound.png";
 				} else {
@@ -3116,6 +4333,7 @@ function WebChatbotListener() {
 				self.speak = !self.speak;
 				var urlprefix = self.connection.credentials.url + "/";
 				if (self.speak) {
+					SDK.initAudio();
 					document.getElementById(self.prefix + "boxspeak").src = urlprefix + "images/sound.png";
 					document.getElementById(self.prefix + "boxspeak2").src = urlprefix + "images/sound.png";
 				} else {
@@ -3178,18 +4396,18 @@ function WebChatbotListener() {
 		}
 		var html =
 			"<style>\n"
-				+ "." + this.prefix + "livechatboxbar { position:fixed;bottom:2px;" + position + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
-				+ "." + this.prefix + "livechatboxbar:hover { " + buttonHoverStyle + " }\n"
-				+ (this.forceStyles ? "#" : ".") + this.prefix + "livechatboxmax { color:white;font-size:18px;margin:2px;padding:0px;text-decoration:none; }\n"
+				+ "." + this.prefix + this.livechatPrefix + "boxbar { position:fixed;bottom:2px;" + position + ";z-index:152;margin:0;padding:6px;" + buttonstyle + " }\n"
+				+ "." + this.prefix + this.livechatPrefix + "boxbar:hover { " + buttonHoverStyle + " }\n"
+				+ (this.forceStyles ? "#" : ".") + this.prefix + this.livechatPrefix + "boxmax { color:white;font-size:18px;margin:2px;padding:0px;text-decoration:none; }\n"
 			+ "</style>\n"
-			+ "<div id='" + this.prefix + "livechatboxbar' class='" + this.prefix + "livechatboxbar'>"
-			+ "<span><a id='" + this.prefix + "livechatboxmax' class='" + this.prefix + "livechatboxmax' onclick='return false;' href='#'>" + label + "</a></span>"
+			+ "<div id='" + this.prefix + this.livechatPrefix + "boxbar' class='" + this.prefix + this.livechatPrefix + "boxbar'>"
+			+ "<span><a id='" + this.prefix + this.livechatPrefix + "boxmax' class='" + this.prefix + this.livechatPrefix + "boxmax' onclick='return false;' href='#'>" + label + "</a></span>"
 			+ "</div>";
 		
 		box.innerHTML = html;
 		document.body.appendChild(box);
 		
-		document.getElementById(this.prefix + "livechatboxmax").addEventListener("click", function() {
+		document.getElementById(this.prefix + this.livechatPrefix + "boxmax").addEventListener("click", function() {
 			SDK.popupwindow(SDK.url + '/livechat?id=' + channel + '&embedded&chat','child', 700, 520);
 			return false;
 		});
@@ -3204,7 +4422,7 @@ function WebChatbotListener() {
 		}
 		document.getElementById(this.prefix + "box").style.display = 'none';
 		document.getElementById(this.prefix + "boxbar").style.display = 'inline';
-		var livechatbot = document.getElementById(this.prefix + "livechatboxbar");
+		var livechatbot = document.getElementById(this.prefix + this.livechatPrefix + "boxbar");
 		if (livechatbot != null) {
 			livechatbot.style.display = 'inline';
 		}
@@ -3241,11 +4459,12 @@ function WebChatbotListener() {
 	 * Maximize the embedding div in the current webpage.
 	 */
 	this.maximizeBox = function() {
+		SDK.initAudio();
 		if (this.promptContactInfo && !this.hasContactInfo) {
 			document.getElementById(this.prefix + "contactinfo").style.display = 'inline';
 			document.getElementById(this.prefix + "boxbar").style.display = 'none';
 			document.getElementById(this.prefix + "box").style.display = 'none';
-			var livechatbot = document.getElementById(this.prefix + "livechatboxbar");
+			var livechatbot = document.getElementById(this.prefix + this.livechatPrefix + "boxbar");
 			if (livechatbot != null) {
 				livechatbot.style.display = 'none';
 			}
@@ -3255,7 +4474,7 @@ function WebChatbotListener() {
 			}
 			document.getElementById(this.prefix + "boxbar").style.display = 'none';
 			document.getElementById(this.prefix + "box").style.display = 'inline';
-			var livechatbot = document.getElementById(this.prefix + "livechatboxbar");
+			var livechatbot = document.getElementById(this.prefix + this.livechatPrefix + "boxbar");
 			if (livechatbot != null) {
 				livechatbot.style.display = 'none';
 			}
@@ -3273,7 +4492,7 @@ function WebChatbotListener() {
 		}
 		document.getElementById(this.prefix + "boxbar").style.display = 'none';
 		document.getElementById(this.prefix + "box").style.display = 'none';
-		var livechatbot = document.getElementById(this.prefix + "livechatboxbar");
+		var livechatbot = document.getElementById(this.prefix + this.livechatPrefix + "boxbar");
 		if (livechatbot != null) {
 			livechatbot.style.display = 'none';
 		}
@@ -3294,13 +4513,18 @@ function WebChatbotListener() {
 			speech = "disable";
 		}
 		var height = 520;
-		if (!this.avatar) {
-			height = 220;
+		if (!this.avatar && !this.chatLog) {
+			height = 260;
 		}
 		if (this.popupURL != null) {
 			var popupURL = this.popupURL;
-			if (popupURL.indexOf("chat?") != -1 && this.contactInfo != null && this.contactInfo != "") {
-				popupURL = popupURL + "&info=" + encodeURI(this.contactInfo);
+			if (popupURL.indexOf("chat?") != -1) {
+				if (this.contactInfo != null && this.contactInfo != "") {
+					popupURL = popupURL + "&info=" + encodeURI(this.contactInfo);
+				}
+				if (this.translate == true && this.lang != null && this.lang != "") {
+					popupURL = popupURL + "&translate=" + encodeURI(this.lang);
+				}
 			}
 			SDK.popupwindow(popupURL, 'child', 700, height);
 		} else {			
@@ -3333,6 +4557,34 @@ function WebChatbotListener() {
             input.value = this.avatar;
             form.appendChild(input);
  
+            input = document.createElement('input');
+            input.type = "hidden";
+            input.name = "bubble";
+            input.value = this.bubble;
+            form.appendChild(input);
+ 
+            if (this.css != null) {
+            	input = document.createElement('input');
+            	input.type = "hidden";
+            	input.name = "css";
+            	input.value = this.css;
+            	form.appendChild(input);
+            }
+            
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = "language";
+            input.value = SDK.lang;
+            form.appendChild(input);
+            
+            if (this.translate == true && this.lang != null && this.lang != "") {
+	            var input = document.createElement('input');
+	            input.type = 'hidden';
+	            input.name = "translate";
+	            input.value = this.lang;
+	            form.appendChild(input);
+            }
+            
             input = document.createElement('input');
             input.type = 'hidden';
             input.name = "info";
@@ -3377,7 +4629,7 @@ function WebChatbotListener() {
 		fileInput.click();
 		return false;
 	};
-
+	
 	this.sendAttachment = function() {
 		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
 			alert('The File APIs are not fully supported in this browser.');
@@ -3479,26 +4731,34 @@ function WebChatbotListener() {
 	 * A chat message was received from the bot.
 	 */
 	this.response = function(user, message) {
-		document.getElementById(this.prefix + 'response').innerHTML = SDK.linkURLs(message);
-		this.linkChatPostbacks(document.getElementById(this.prefix + 'response'));
-		if (!SDK.secure) {
-			SDK.evalScripts(document.getElementById(this.prefix + 'response'));
-		}
-		this.message(user, message);
-		if (this.focus) {
-			document.getElementById(this.prefix + 'chat').focus();
+		var responseDiv = document.getElementById(this.prefix + 'response');
+		if (responseDiv != null) {
+			responseDiv.innerHTML = SDK.linkURLs(message);
+			this.linkChatPostbacks(responseDiv);
+			if (!SDK.secure) {
+				SDK.evalScripts(responseDiv);
+			}
+			this.message(user, message);
+			if (this.focus) {
+				var chat = document.getElementById(this.prefix + 'chat');
+				if (chat != null) {
+					chat.focus();
+				}
+			}
 		}
 		if (this.onresponse != null) {
 			this.onresponse(message);
 		}
-		var self = this;
-		// Fix Chrome bug,
-		if (SDK.fixChromeResizeCSS && SDK.isChrome()) {
-			var padding = document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding;
-	    	document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = "7px";
-			setTimeout(function() {
-	    		document.getElementById(self.prefix + 'response').parentNode.parentNode.style.padding = padding;
-			}, 10);
+		if (responseDiv != null) {
+			var self = this;
+			// Fix Chrome bug,
+			if (SDK.fixChromeResizeCSS && SDK.isChrome()) {
+				var padding = responseDiv.parentNode.parentNode.style.padding;
+				responseDiv.parentNode.parentNode.style.padding = "7px";
+				setTimeout(function() {
+					responseDiv.parentNode.parentNode.style.padding = padding;
+				}, 10);
+			}
 		}
 	}
 	
@@ -3513,42 +4773,56 @@ function WebChatbotListener() {
 			return;
 		}
 		var tr = document.createElement('tr');
+		tr.style.verticalAlign = "top";
 		var td = document.createElement('td');
 		var td2 = document.createElement('td');
+		var div = document.createElement('div');
+		var div2 = document.createElement('div');
+		var span = document.createElement('span');
 		var span2 = document.createElement('span');
-		var chatClass = 'chat-1';
-		if (this.switchText) {
-			chatClass = 'chat-2';
-		}
-		if (this.botThumb == null || this.userThumb == null) {
-			var span = document.createElement('span');
-			span.className = chatClass;
-			span.innerHTML = speaker;
-			td.appendChild(span);
+		var br = document.createElement('br');
+		var chatClass = this.prefix + 'chatchat-1';
+		div.className = this.prefix + 'chatchat-1-div';
+		div2.className = this.prefix + 'chatchat-1-div-2';
+		span.className = this.prefix + 'chatchat-user-1';
+		td.className = this.prefix + 'chat-user-1';
+		var userImg;
+		if (speaker != this.userThumb.name) {
+			userImg = document.createElement('img');
+			userImg.className = this.prefix + 'chat-user';
+			userImg.setAttribute('alt', this.botThumb.name);
+			userImg.setAttribute('src', this.botThumb.avatar);
+			td.appendChild(userImg);
 		} else {
-			var img = document.createElement('img');
-			img.className = 'chat-user';
-			img.setAttribute('alt', speaker);
-			if (user == this.userName) {
-				img.setAttribute('src', this.userThumb);
-			} else {
-				img.setAttribute('src', this.botThumb);
-			}
-			td.appendChild(img);			
+			td.className = this.prefix + 'chat-user-2';
+			chatClass = this.prefix + 'chatchat-2';
+			div.className = this.prefix + 'chatchat-2-div';
+			div2.className = this.prefix + 'chatchat-2-div-2';
+			span.className = this.prefix + 'chatchat-user-2';
+			userImg = document.createElement('img');
+			userImg.className = this.prefix + 'chat-user';
+			userImg.setAttribute('alt', this.userThumb.name);
+			userImg.setAttribute('src', this.userThumb.avatar);
+			td.appendChild(userImg);
 		}
-		span2.className = chatClass;
-		span2.innerHTML = SDK.linkURLs(message);
-		this.linkChatPostbacks(span2);
-		td.className = 'chat-user';
 		td.setAttribute('nowrap', 'nowrap');
 		td2.className = chatClass;
 		td2.setAttribute('align', 'left');
 		td2.setAttribute('width', '100%');
+		var date = new Date(); 
+		var time = date.getHours() + ":" + ((date.getMinutes() < 10)? "0" : "") + date.getMinutes() + ":" + ((date.getSeconds() < 10)? "0" : "") + date.getSeconds();
+		span.innerHTML = speaker + " <small>" + time + "</small>";
+		span2.className = chatClass;
+		span2.innerHTML = SDK.linkURLs(message);
+		this.linkChatPostbacks(span2);
 		chatconsole.appendChild(tr);
 		tr.appendChild(td);
 		tr.appendChild(td2);
-		td2.appendChild(span2);
-		this.switchText = !this.switchText;
+		div.appendChild(span);
+		div.appendChild(br);
+		div.appendChild(div2);
+		td2.appendChild(div);
+		div2.appendChild(span2);
 		while (chatconsole.childNodes.length > 500) {
 			chatconsole.removeChild(chatconsole.firstChild);
 		}
@@ -3561,8 +4835,24 @@ function WebChatbotListener() {
 	this.updateAvatar = function(responseMessage) {
 		var urlprefix = this.connection.credentials.url + "/";
 		SDK.updateAvatar(responseMessage, this.speak, urlprefix, this.prefix, null, null, this.nativeVoice, this.lang, this.nativeVoiceName);
+		if (SDK.commands && responseMessage.command != null) {
+			var command = JSON.parse(responseMessage.command);
+			if (command.start != null) {
+				this.game = new window [command.start]();
+				this.initGame(this.game)
+			}
+		}
+		if (this.game != null) {
+			this.game.updateAvatar(responseMessage);
+		}
+		console.log(responseMessage);
 	};
-
+	
+	this.initGame = function(game) {
+		this.game = game;
+		game.init(this);
+	}
+	
 	this.toggleSpeak = function() {
 		this.speak = !this.speak;
 	}
@@ -3596,6 +4886,50 @@ function WebChatbotListener() {
 				}
 			});
 		}
+		if (self.userThumb['name'] == null) {
+			if (this.connection.user != null && this.connection.user.user != null) {
+				this.connection.viewUser(this.connection.user, function(user) {
+					var urlprefix = self.connection.credentials.url + "/";
+					var userName = user.user;
+					var userAvatar = user.avatar;
+					self.userThumb['name'] = userName;
+					self.userThumb['avatar'] = urlprefix + userAvatar;
+				});
+			} else {
+				var urlprefix = this.connection.credentials.url + "/";
+				self.userThumb['name'] = "You:";
+				self.userThumb['avatar'] = urlprefix + "images/user-thumb.jpg";
+			}
+		}
+		var instanceConfig = new InstanceConfig();
+		instanceConfig.id = this.instance;
+		this.connection.fetch(instanceConfig, function(instanceConfig) {
+			var botName = instanceConfig.name;
+			var botAvatar = instanceConfig.avatar;
+			var urlprefix = self.connection.credentials.url + "/";
+			self.botThumb['name'] = botName;
+			self.botThumb['avatar'] = urlprefix + botAvatar;
+			var onlineDiv = document.getElementById(self.prefix + 'online');
+			if (onlineDiv == null) {
+				return;
+			}
+			if (!onlineDiv.hasChildNodes()) {
+				var div = document.createElement('div');
+				div.className = self.prefix + "online-user";
+				var botImage = document.createElement('img');
+				botImage.className = self.prefix + "chat-bot";
+				botImage.setAttribute('alt', self.botThumb.name);
+				botImage.setAttribute('src', self.botThumb.avatar);
+				var span = document.createElement('span');
+				span.className = self.prefix + "user-bot";
+				span.innerHTML = self.botThumb.name;
+				div.appendChild(botImage);
+				div.appendChild(span);
+				onlineDiv.appendChild(div);
+				var line = document.createElement('hr');
+				onlineDiv.appendChild(line);
+			}
+		});
 	}
 	
 	/**
@@ -3651,10 +4985,13 @@ function WebChatbotListener() {
 	 */
 	this.sendMessage = function(message) {
 		if (message == null) {
-			message = document.getElementById(this.prefix + 'chat').value;
+			var chat = document.getElementById(this.prefix + 'chat');
+			if (chat != null) {
+				message = chat.value;
+			}
 		}
 		if (message != '') {
-			this.message(this.userName, message);
+			this.message(this.userThumb.name, message);
 			var chat = new ChatConfig();
 			chat.message = message;
 			chat.instance = this.instance;
@@ -3678,41 +5015,47 @@ function WebChatbotListener() {
 				chat.speak = this.speak;
 			}
 			chat.conversation = this.conversation;
-			var correction = document.getElementById(this.prefix + 'correction');
+			var correction = document.getElementById('correction');
 			if (correction != null && correction.checked) {
 				chat.correction = true;
 				correction.checked = false;
 			}
-			var learning = document.getElementById(this.prefix + 'learning');
+			var learning = document.getElementById('learning');
 			if (learning != null && learning.style.display != "none") {
 				chat.learn = learning.checked;
 			}
-			var debug = document.getElementById(this.prefix + 'debug');
+			var debug = document.getElementById('debug');
 			if (debug != null && debug.checked) {
 				chat.debug = true;
-				var debugLevel = document.getElementById(this.prefix + 'debugLevel');
+				var debugLevel = document.getElementById('debugLevel');
 				if (debugLevel != null) {
 					chat.debugLevel = debugLevel.value;
 				}
 			}
-			var offensive = document.getElementById(this.prefix + 'offensive');
+			var offensive = document.getElementById('offensive');
 			if (offensive != null && offensive.checked) {
 				chat.offensive = true;
 				offensive.checked = false;
 			}
-			var emote = document.getElementById(this.prefix + 'emote');
+			var emote = document.getElementById('emote');
 			if (emote != null && emote.value != null && emote.value != "" && emote.value != "NONE") {
 				chat.emote = emote.value.toUpperCase();
 				emote.value = "NONE";
 			}
-			var action = document.getElementById(this.prefix + 'action');
+			var action = document.getElementById('action');
 			if (action != null && action.value != null && action.value != "") {
 				chat.action = action.value;
 				action.value = "";
 			}
+			var responseDiv = document.getElementById(this.prefix + 'response');
+			if (responseDiv != null) {
+				responseDiv.innerHTML = '<i>thinking</i>';
+			}
+			var chatInput = document.getElementById(this.prefix + 'chat');
+			if (chatInput != null) {
+				chatInput.value = '';
+			}
 			var self = this;
-			document.getElementById(this.prefix + 'response').innerHTML = '<i>thinking</i>';
-			document.getElementById(this.prefix + 'chat').value = '';
 			if (this.external) {
 				this.externalChat(chat);
 			} else {
@@ -3720,7 +5063,7 @@ function WebChatbotListener() {
 					self.conversation = responseMessage.conversation;
 					self.response(self.instanceName, responseMessage.message);
 					self.updateAvatar(responseMessage);
-					var log = document.getElementById(self.prefix + 'log');
+					var log = document.getElementById('log');
 					var logText = responseMessage.log;
 					if (log != null) {
 						if (logText != null) {
@@ -3730,6 +5073,99 @@ function WebChatbotListener() {
 							log.innerHTML = "";
 						}
 					}
+				});
+			}
+		}
+		return false;
+	};
+	
+	/**
+	 * Send the json command to the bot, and process the response.
+	 */
+	this.sendCommand = function(json, processor) {
+		if (json != '') {
+			var command = new CommandConfig();
+			command.command = json;
+			command.instance = this.instance;
+			if (this.translate) {
+				command.language = this.lang;
+			}
+			if (this.avatarId != null) {
+				command.avatar = this.avatarId;
+			}
+			if (this.hd != null) {
+				command.avatarHD = this.hd;
+			} else if ((this.width != null && this.width > 400) || (this.height != null && this.height > 400)) {
+				command.avatarHD = true;
+			}
+			if (this.format != null) {
+				command.avatarFormat = this.format;
+			}
+			if (this.nativeVoice && SDK.speechSynthesis) {
+				command.speak = false;
+			} else {
+				command.speak = this.speak;
+			}
+			command.conversation = this.conversation;
+			var correction = document.getElementById('correction');
+			if (correction != null && correction.checked) {
+				command.correction = true;
+				correction.checked = false;
+			}
+			var learning = document.getElementById('learning');
+			if (learning != null && learning.style.display != "none") {
+				command.learn = learning.checked;
+			}
+			var debug = document.getElementById('debug');
+			if (debug != null && debug.checked) {
+				command.debug = true;
+				var debugLevel = document.getElementById('debugLevel');
+				if (debugLevel != null) {
+					chat.debugLevel = debugLevel.value;
+				}
+			}
+			var offensive = document.getElementById('offensive');
+			if (offensive != null && offensive.checked) {
+				command.offensive = true;
+				offensive.checked = false;
+			}
+			var emote = document.getElementById('emote');
+			if (emote != null && emote.value != null && emote.value != "" && emote.value != "NONE") {
+				command.emote = emote.value.toUpperCase();
+				emote.value = "NONE";
+			}
+			var action = document.getElementById('action');
+			if (action != null && action.value != null && action.value != "") {
+				command.action = action.value;
+				action.value = "";
+			}
+			var responseDiv = document.getElementById(this.prefix + 'response');
+			if (responseDiv != null) {
+				responseDiv.innerHTML = '<i>thinking</i>';
+			}
+			var chatInput = document.getElementById(this.prefix + 'chat');
+			if (chatInput != null) {
+				chatInput.value = '';
+			}
+			var self = this;
+			if (this.external) {
+				return false;
+			} else {
+				this.connection.command(command, function(responseMessage) {
+					self.conversation = responseMessage.conversation;
+					self.response(self.instanceName, responseMessage.message);
+					self.updateAvatar(responseMessage);
+					var log = document.getElementById('log');
+					var logText = responseMessage.log;
+					if (log != null) {
+						if (logText != null) {
+							log.style.display = "inline";
+							log.innerHTML = logText;
+						} else {
+							log.innerHTML = "";
+						}
+					}
+					processor(responseMessage.command);
 				});
 			}
 		}
@@ -3767,7 +5203,7 @@ function WebChatbotListener() {
 			self.response(self.instanceName, responseMessage.message);
 			var urlprefix = self.apiURL.substring(0, self.apiURL.indexOf("/rest/api/form-chat")) + "/";
 			SDK.updateAvatar(responseMessage, self.speak, urlprefix, self.prefix, null, null, self.nativeVoice, self.lang, self.nativeVoiceName);
-			var log = document.getElementById(self.prefix + 'log');
+			var log = document.getElementById('log');
 			var logText = responseMessage.log;
 			if (log != null) {
 				if (logText != null) {
@@ -3817,6 +5253,8 @@ function WebChatbotListener() {
 		var avatarCanvas = document.getElementById(this.prefix + "avatar-canvas");
 		var avatarCanvasDiv = document.getElementById(this.prefix + "avatar-canvas-div");
 		var scroller = document.getElementById(this.prefix + "scroller");
+		var chatBubbleDiv = document.getElementById(web.prefix + 'bubble-div');
+		var chatBubble = document.getElementById(this.prefix + 'bubble');
 		if (!this.big) {
 			this.hd = true;
 			if (avatar != null) {
@@ -3836,6 +5274,13 @@ function WebChatbotListener() {
 			}
 			if (scroller != null) {
 				scroller.style.display = "none";
+				document.getElementById(this.prefix + 'response').style.display = "inline";
+			}
+			if (chatBubbleDiv != null) {
+				chatBubbleDiv.style.display = "block";
+			}
+			if (chatBubble != null) {
+				chatBubble.style.display = "inherit";
 			}
 			this.big = true;
 		} else {
@@ -3856,7 +5301,25 @@ function WebChatbotListener() {
 				avatarCanvasDiv.className = "avatar-canvas-div";
 			}
 			if (scroller != null) {
-				scroller.style.display = "inline-block";
+				if (this.chatLog && window.innerWidth > 480) {
+					scroller.style.display = "inline-block";
+				} else {
+					scroller.style.display = "none";
+				}
+			}
+			if (chatBubbleDiv != null) {
+				if (!this.chatLog || window.innerWidth < 480) {
+					chatBubbleDiv.style.display = "block";
+				} else {
+					chatBubbleDiv.style.display = "none";
+				}
+			}
+			if (chatBubble != null) {
+				if (!this.chatLog || window.innerWidth < 480) {
+					chatBubble.style.display = "block";
+				} else {
+					chatBubble.style.display = "none";
+				}
 			}
 			this.big = false;
 		}
@@ -3976,7 +5439,7 @@ function WebAvatar() {
 					+ "<img id='" + this.prefix + "avatar' style='" + minWidth + minHeight + "'/>"
 				+ "</div>"
 				+ "<div id='" + this.prefix + "avatar-video-div' style='display:none;" + divWidth + divHeight + background + "background-repeat: no-repeat;'>"
-					+ "<video id='" + this.prefix + "avatar-video' autoplay preload='auto' style='background:transparent;" + minWidth + minHeight + "'>"
+					+ "<video muted='true' id='" + this.prefix + "avatar-video' autoplay preload='auto' style='background:transparent;" + minWidth + minHeight + "'>"
 						+ "Video format not supported by your browser (try Chrome)"
 					+ "</video>"
 				+ "</div>"
@@ -4591,7 +6054,7 @@ function LiveChatConnection() {
 
 /**
 * Connection class for a REST service connection.
-* The SDK connection gives you access to the Paphus Live Chat or libre server services using a REST API.
+* The SDK connection gives you access to the Bot Libre services using a REST web API.
 * <p>
 * The services include:
 * <ul>
@@ -4599,7 +6062,7 @@ function LiveChatConnection() {
 * <li> Bot access, chat, and administration
 * <li> Forum access, posting, and administration
 * <li> Live chat access, chat, and administration
-* <li> Domain access, and administration
+* <li> Script, Graphic, and Domain access, and administration
 * </ul>
  * @class
  * @property user
@@ -4667,7 +6130,78 @@ function SDKConnection() {
 		this.user = null;
 		this.domain = null;
 	}
-	
+
+	//classifyImage
+	this.classifyImage = function(file, resize, form, processor) {
+		var self = this;
+		var media = new ImageClassificationConfig();
+		media.fileName = file.name;
+		media.fileType = file.type;
+		if (!resize && file.size > SDK.MAX_FILE_UPLOAD) {
+			this.error("File exceeds maximum upload size of " + (SDK.MAX_FILE_UPLOAD / 1000000) + "meg");
+		}
+		else {
+			self.createClassificationImage(media, file, resize, form, processor)
+		}
+		return false;
+	};
+
+
+
+	this.sendClassifyImage = function(processor, inputProcessor) {
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			alert('The File APIs are not fully supported in this browser.');
+			return false;
+		}
+		var form = document.createElement("form");
+		form.enctype = "multipart/form-data";
+		form.method = "post";
+		form.name = "fileinfo";
+		var fileInput = document.createElement("input");
+		var self = this;
+		fileInput.name = "file";
+		fileInput.type = "file";
+		fileInput.accept = "image/*";
+		form.appendChild(fileInput);
+		fileInput.onchange = function() {
+			var file = fileInput.files[0];
+			inputProcessor(fileInput);
+			self.classifyImage(file, true, form, processor);
+		}
+		fileInput.click();
+		return false;
+	};
+
+
+	/**
+	 * Create a new file/image/media classification.
+	 */
+	this.createClassificationImage = function(config, file, resize, form, processor) {
+		config.addCredentials(this);
+		if (resize) {
+			this.POST_IMAGE(this.credentials.rest + "/classify-image", file, form, config.toXML(), function(xml) {
+				if (xml == null) {
+					return null;
+				}
+				var media = new ImageClassificationConfig();
+				media.parseXML(xml);
+				processor(media);
+
+			});
+		} else {
+			this.POST_FILE(this.credentials.rest + "/classify-image", form, config.toXML(), function(xml) {
+				if (xml == null) {
+					return null;
+				}
+				var media = new ImageClassificationConfig();
+				media.parseXML(xml);
+				processor(media);
+			});
+		}
+	}
+
+
+
 	/**
 	 * Fetch the user details for the user credentials.
 	 * A token or password is required to validate the user.
@@ -4675,6 +6209,21 @@ function SDKConnection() {
 	this.fetchUser = function(config, processor) {
 		config.addCredentials(this);
 		this.POST(this.credentials.rest + "/check-user", config.toXML(), function(xml) {
+			if (xml == null) {
+				return;
+			}
+			var user = new UserConfig();
+			user.parseXML(xml);
+			processor(user);
+		});
+	}
+	
+	/**
+	 * Fetch the user details for the user id.
+	 */	
+	this.viewUser = function(config, processor) {
+		config.addCredentials(this);
+		this.POST(this.credentials.rest + "/view-user", config.toXML(), function(xml) {
 			if (xml == null) {
 				return;
 			}
@@ -4780,6 +6329,77 @@ function SDKConnection() {
 			});
 		}
 	}
+
+	/**
+	 * Create a new file/image/media attachment for an issue tracker.
+	 */
+	this.createIssueTrackerAttachment = function(config, file, resize, form, processor) {
+		config.addCredentials(this);
+		if (resize) {
+			this.POST_IMAGE(this.credentials.rest + "/create-issuetracker-attachment", file, form, config.toXML(), function(xml) {
+				if (xml == null) {
+					return null;
+				}
+				var media = new MediaConfig();
+				media.parseXML(xml);
+				processor(media);
+			});
+		} else {
+			this.POST_FILE(this.credentials.rest + "/create-issuetracker-attachment", form, config.toXML(), function(xml) {
+				if (xml == null) {
+					return null;
+				}
+				var media = new MediaConfig();
+				media.parseXML(xml);
+				processor(media);
+			});
+		}
+	}
+
+	/**
+	 * Create a new file/image/media attachment for an issue tracker and insert the http link into the textarea.
+	 */
+	this.uploadIssueTrackerAttachment = function(forum, resize, processor) {
+		if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+			this.error('The File APIs are not fully supported in this browser.');
+			return false;
+		}
+		var form = document.createElement("form");
+		form.enctype = "multipart/form-data";
+		form.method = "post";
+		form.name = "fileinfo";
+		var fileInput = document.createElement("input");
+		var self = this;
+		fileInput.name = "file";
+		fileInput.type = "file";
+		form.appendChild(fileInput);
+		fileInput.onchange = function() {
+			var file = fileInput.files[0];
+			self.uploadIssueTrackerFile(file, forum, resize, form, processor);
+		}
+		fileInput.click();
+	};
+
+	/**
+	 * Create a new file/image/media attachment for an issue tracker.
+	 */
+	this.uploadIssueTrackerFile = function(file, forum, resize, form, processor) {
+		var self = this;
+		var media = new MediaConfig();
+		media.instance = forum;
+		media.name = file.name;
+		media.type = file.type;
+		if (!resize && file.size > SDK.MAX_FILE_UPLOAD) {
+			this.error("File exceeds maximum upload size of " + (SDK.MAX_FILE_UPLOAD / 1000000) + "meg");
+		} else {
+			this.createIssueTrackerAttachment(media, file, resize, form, function(media) {
+				var link = self.fetchLink(media.file);
+				if (processor != null) {
+					processor(link, file.name);
+				}
+			})
+		}
+	};
 
 	/**
 	 * Create a new file/image/media attachment for a forum.
@@ -4973,7 +6593,24 @@ function SDKConnection() {
 	 */
 	this.chat = function(config, processor) {
 		config.addCredentials(this);
-		this.POST(this.credentials.rest + "/post-chat", config.toXML(), function(xml) {
+		this.POST(this.credentials.rest + "/chat", config.toXML(), function(xml) {
+			if (xml == null) {
+				return null;
+			}
+			var responseMessage = new ChatResponse();
+			responseMessage.parseXML(xml);
+			processor(responseMessage);			
+		});
+	}
+	
+	/**
+	 * Process the bot command message and return the bot's response.
+	 * The CommandConfig should contain the conversation id if part of a conversation.
+	 * If a new conversation the conversation id is returned in the response. 
+	 */
+	this.command = function(config, processor) {
+		config.addCredentials(this);
+		this.POST(this.credentials.rest + "/command", config.toXML(), function(xml) {
 			if (xml == null) {
 				return null;
 			}
@@ -5334,8 +6971,8 @@ function SDKConnection() {
 			var tempImg = new Image();
 			tempImg.src = reader.result;
 			tempImg.onload = function() {
-				var MAX_WIDTH = 300;
-				var MAX_HEIGHT = 300;
+				var MAX_WIDTH = 600;
+				var MAX_HEIGHT = 600;
 				var tempW = tempImg.width;
 				var tempH = tempImg.height;
 				if (tempW > tempH) {
@@ -5500,6 +7137,7 @@ function UserConfig() {
 	this.over18;
 	/** Read-only, server local URL for user's avatar image. */
 	this.avatar;
+	this.avatarThumb;
 
 	/** Read-only, total user connects. */
 	this.connects;
@@ -5720,6 +7358,136 @@ ChatConfig.prototype.constructor = ChatConfig;
 ChatConfig.constructor = ChatConfig;
 
 /**
+ * This object models a command message sent to a bot instance.
+ * It can be used to send JSON events and commands to the bot to process.
+ * It can convert itself to XML for web API usage.
+ * @class
+ * @property conversation
+ * @property speak
+ * @property correction
+ * @property offensive
+ * @property disconnect
+ * @property emote
+ * @property action
+ * @property command
+ * @property debug
+ * @property debugLevel
+ * @property learn
+ */
+function CommandConfig() {
+	/** The conversation id for the message.  This will be returned from the first response, and must be used for all subsequent messages to maintain the conversational state.  Without the conversation id, the bot has no context for the reply. */
+	this.conversation;
+	/** Sets if the voice audio should be generated for the bot's response. */
+	this.speak;
+	/** Sets the message to be a correction to the bot's last response. */
+	this.correction;
+	/** Flags the bot's last response as offensive. */
+	this.offensive;
+	/** Ends the conversation. Conversation should be terminated to converse server resources.  The message can be blank. */
+	this.disconnect;
+	/** 
+	 * Attaches an emotion to the user's message, one of:
+	 *  NONE,
+	 *  LOVE, LIKE, DISLIKE, HATE,
+	 *	RAGE, ANGER, CALM, SERENE,
+	 *	ECSTATIC, HAPPY, SAD, CRYING,
+	 *	PANIC, AFRAID, CONFIDENT, COURAGEOUS,
+	 *	SURPRISE, BORED,
+	 *	LAUGHTER, SERIOUS
+	 */
+	this.emote;
+	/** Attaches an action to the user's messages, such as "laugh", "smile", "kiss". */
+	this.action;
+	/** The json command. */
+	this.command;
+	/** Include the message debug log in the response. */
+	this.debug;
+	/** Set the debug level, one of: SEVER, WARNING, INFO, CONFIG, FINE, FINER. */
+	this.debugLevel;
+	/** Enable or disable the bot's learning for this message. */
+	this.learn;
+	/** Escape and filter the response message HTML content for XSS security. */
+	this.secure = SDK.secure;
+	/** Strip any HTML tags from the response message. */
+	this.plainText;
+	/** Send extra info with the message, such as the user's contact info (name email phone). */
+	this.info;
+	/** Request a specific avatar (by ID). */
+	this.avatar;
+	/** Request the response avatar media in HD. */
+	this.avatarHD = SDK.hd;
+	/** Request the response avatar media in a video or image format. */
+	this.avatarFormat = SDK.format;
+	/** Translate between the user's language and the bot's language. */
+	this.language;
+	
+	this.toXML = function() {
+		var xml = "<command";
+		xml = this.writeCredentials(xml);
+		if (this.conversation != null) {
+			xml = xml + (" conversation=\"" + this.conversation + "\"");
+		}
+		if (this.emote != null) {
+			xml = xml + (" emote=\"" + this.emote + "\"");
+		}
+		if (this.action != null) {
+			xml = xml + (" action=\"" + this.action + "\"");
+		}
+		if (this.speak) {
+			xml = xml + (" speak=\"" + this.speak + "\"");
+		}
+		if (this.language != null) {
+			xml = xml + (" language=\"" + this.language + "\"");
+		}
+		if (this.avatarHD) {
+			xml = xml + (" avatarHD=\"" + this.avatarHD + "\"");
+		}
+		if (this.avatarFormat != null) {
+			xml = xml + (" avatarFormat=\"" + this.avatarFormat + "\"");
+		}
+		if (this.correction) {
+			xml = xml + (" correction=\"" + this.correction + "\"");
+		}
+		if (this.offensive) {
+			xml = xml + (" offensive=\"" + this.offensive + "\"");
+		}
+		if (this.learn != null) {
+			xml = xml + (" learn=\"" + this.learn + "\"");
+		}
+		if (this.secure != null) {
+			xml = xml + (" secure=\"" + this.secure + "\"");
+		}
+		if (this.plainText != null) {
+			xml = xml + (" plainText=\"" + this.plainText + "\"");
+		}
+		if (this.debug) {
+			xml = xml + (" debug=\"" + this.debug + "\"");
+		}
+		if (this.info) {
+			xml = xml + (" info=\"" + SDK.escapeHTML(this.info) + "\"");
+		}
+		if (this.debugLevel != null) {
+			xml = xml + (" debugLevel=\"" + this.debugLevel + "\"");
+		}
+		if (this.disconnect) {
+			xml = xml + (" disconnect=\"" + this.disconnect + "\"");
+		}
+		xml = xml + (">");
+		
+		if (this.command != null) {
+			xml = xml + ("<command>");
+			xml = xml + (SDK.escapeHTML(this.command));
+			xml = xml + ("</command>");
+		}
+		xml = xml + ("</command>");
+		return xml;
+	}
+}
+CommandConfig.prototype = new Config();
+CommandConfig.prototype.constructor = CommandConfig;
+CommandConfig.constructor = CommandConfig;
+
+/**
  * This object models a chat message received from a chat bot instance.
  * It can be used from a chat UI, or with the Libre Web API.
  * It can convert itself from XML for web API usage.
@@ -5742,6 +7510,7 @@ ChatConfig.constructor = ChatConfig;
  * @property emote
  * @property action
  * @property pose
+ * @property command
  * @property log
  */
 function ChatResponse() {	
@@ -5798,6 +7567,8 @@ function ChatResponse() {
 	this.action;
 	/** Pose for the bot's messages, such as "dancing", "sitting", "sleeping". */
 	this.pose;
+	/** JSON Command for the bot's message. This can be by the client for mobile virtual assistant functionality, games integration, or other uses.  */
+	this.command;
 	/** The debug log of processing the message. */
 	this.log;
 
@@ -5821,6 +7592,7 @@ function ChatResponse() {
 		this.emote = element.getAttribute("emote");
 		this.action = element.getAttribute("action");
 		this.pose = element.getAttribute("pose");
+		this.command = element.getAttribute("command");
 		this.speech = element.getAttribute("speech");
 
 		var node = element.getElementsByTagName("message")[0];
@@ -6403,10 +8175,7 @@ function GraphicConfig() {
 	
 	this.parseXML = function(element) {
 		this.parseWebMediumXML(element);
-		node = element.getElementsByTagName("media")[0];
-		if (node != null) {
-			this.media = SDK.innerHTML(node);
-		}
+		this.media = element.getAttribute("media");
 	}
 }
 GraphicConfig.prototype = new WebMediumConfig();
@@ -6715,6 +8484,44 @@ MediaConfig.prototype = new Config();
 MediaConfig.prototype.constructor = MediaConfig;
 MediaConfig.constructor = MediaConfig;
 
+
+function ImageClassificationConfig() {
+	this.fileName;
+	this.fileType;
+	this.result;
+	this.percentage;
+
+	this.parseXML = function (element) {
+		this.fileName = element.getAttribute("fileName");
+		this.fileType = element.getAttribute("fileType");
+		this.result = element.getAttribute("result");
+		this.percentage = element.getAttribute("percentage");
+	}
+
+	this.toXML = function() {
+		var xml = "<image-classification";
+		xml = this.writeCredentials(xml);
+
+		if (this.fileName != null) {
+			xml = xml + (" fileName=\"" + this.fileName + "\"");
+		}
+		if (this.fileType != null) {
+			xml = xml + (" fileType=\"" + this.fileType + "\"");
+		}
+		if (this.result != null) {
+			xml = xml + (" result=\"" + this.result + "\"");
+		}
+		if (this.percentage != null) {
+			xml = xml + (" percentage=\"" + this.percentage + "\"");
+		}
+
+		xml = xml + ("/>");
+		return xml;
+	}
+}
+ImageClassificationConfig.prototype = new Config();
+ImageClassificationConfig.prototype.constructor = ImageClassificationConfig;
+ImageClassificationConfig.constructor = ImageClassificationConfig;
 /**
  * The Voice config object allows the bot's voice to be configured.
  * It inherits from the Config class.
