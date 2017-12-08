@@ -112,7 +112,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 			if (newVertex != null) { // Can be null if save failed.
 				newVertex.setConsciousnessLevel(oldVertex.getConsciousnessLevel());
 				if (newVertex.hasData()) {
-					this.verticiesByData.put(newVertex.getData(), newVertex);
+					this.verticesByData.put(newVertex.getData(), newVertex);
 				}
 			}
 		}
@@ -203,7 +203,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 	
 	public synchronized void clear() {
 		this.entityManager.clear();
-		this.verticiesByData.clear();
+		this.verticesByData.clear();
 		resetSize();
 		this.entityManager.unwrap(UnitOfWork.class).setProperty("network", this);
 	}
@@ -219,7 +219,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 		}
 		this.entityManager.persist(vertex);
 		if (vertex.hasData()) {
-			this.verticiesByData.put(vertex.getData(), vertex);
+			this.verticesByData.put(vertex.getData(), vertex);
 		}
 		//newObjects.add(vertex);
 	}
@@ -282,7 +282,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 		}
 		this.entityManager.remove(managed);
 		if (vertex.hasData()) {
-			this.verticiesByData.remove(vertex.getData());
+			this.verticesByData.remove(vertex.getData());
 			if (vertex.getData() instanceof Data) {
 				this.entityManager.remove(findData((Data)vertex.getData()));				
 			}
@@ -498,6 +498,19 @@ public class DatabaseNetwork extends AbstractNetwork {
 		query.setParameter("type", type);
 		return query.getResultList();
 	}
+	
+	/**
+	 * Find all relationships related to the vertex by the vertex type, created after the date.
+	 */
+	@SuppressWarnings("unchecked")
+	public synchronized List<Relationship> findAllRelationshipsTo(Vertex vertex, Vertex type, Date date) {
+		Query query = this.entityManager.createQuery("Select r from Relationship r where r.target = :vertex and r.type = :type and r.creationDate > :date");
+		setHints(query);
+		query.setParameter("vertex", vertex);
+		query.setParameter("type", type);
+		query.setParameter("date", date);
+		return query.getResultList();
+	}
 
 	/**
 	 * Return a query builder.
@@ -560,8 +573,8 @@ public class DatabaseNetwork extends AbstractNetwork {
 		if (data == null) {
 			return null;
 		}
-		Vertex vertex = this.verticiesByData.get(data);
-		if (vertex != null) {
+		Vertex vertex = this.verticesByData.get(data);
+		if (vertex != null && vertex.getData() != null && vertex.getData().getClass() == data.getClass()) {
 			return vertex;
 		}
 		Query query = this.entityManager.createNamedQuery("findVertexByData");
@@ -573,7 +586,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 			if (trackAccessCount()) {
 				vertex.incrementAccessCount();
 			}
-			this.verticiesByData.put(vertex.getData(), vertex);
+			this.verticesByData.put(vertex.getData(), vertex);
 			return vertex;
 		} catch (NoResultException notFound) {
 			return null;

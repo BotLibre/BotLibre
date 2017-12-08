@@ -114,7 +114,7 @@ public class TwitterDirectMessaging extends Twitter {
 				log("Processing direct message.", Level.INFO, text, fromUser);
 		    	TextStream stream = new TextStream(text);
 		    	String firstWord = stream.nextWord();
-		    	if ("follow".equals(firstWord)) {
+		    	if ("follow".equals(firstWord) && getFollowMessages()) {
 					log("Adding friend.", Level.INFO, fromUser);
 		    		getConnection().createFriendship(message.getSender().getId());
 		    	} else if ("unfollow".equals(firstWord)) {
@@ -122,7 +122,7 @@ public class TwitterDirectMessaging extends Twitter {
 		    		getConnection().destroyFriendship(message.getSender().getId());
 			    }
 				this.tweetsProcessed++;
-				inputSentence(text, fromUser, message.getRecipient().getScreenName(), network);
+				inputSentence(text, fromUser, message.getRecipient().getScreenName(), String.valueOf(message.getSender().getId()), network);
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -145,20 +145,27 @@ public class TwitterDirectMessaging extends Twitter {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, String targetUserName, Network network) {
+	public void inputSentence(String text, String userName, String targetUserName, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
 		Vertex user = network.createSpeaker(userName);
 		Vertex self = network.createVertex(Primitive.SELF);
 		input.addRelationship(Primitive.SPEAKER, user);		
 		input.addRelationship(Primitive.TARGET, self);
-		user.addRelationship(Primitive.INPUT, input);
 		
-		Vertex conversation = network.createInstance(Primitive.CONVERSATION);
+		Vertex conversationId = network.createVertex(id);
+		Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(self);
+		Vertex conversation = today.getRelationship(conversationId);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(conversationId, conversation);
+			this.conversations++;
+		} else {
+			checkEngaged(conversation);
+		}
 		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		conversation.addRelationship(Primitive.SPEAKER, self);
 		Language.addToConversation(input, conversation);
-		
 		network.save();
 		getBot().memory().addActiveMemory(input);
 	}
@@ -177,6 +184,10 @@ public class TwitterDirectMessaging extends Twitter {
 			return;
 		}
 		String text = printInput(output);
+		// Don't send empty messages.
+		if (text.isEmpty()) {
+			return;
+		}
 		Vertex target = output.mostConscious(Primitive.TARGET);
 		String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
 		sendMessage(text, replyTo);

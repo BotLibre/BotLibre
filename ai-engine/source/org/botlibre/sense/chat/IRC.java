@@ -524,7 +524,6 @@ public class IRC extends BasicSense {
 				input.addRelationship(Primitive.TARGET, targetUser);
 			}
 		}
-		user.addRelationship(Primitive.INPUT, input);
 		// Process conversation.
 		Vertex conversation = getConversation(network);
 		if (conversation == null) {

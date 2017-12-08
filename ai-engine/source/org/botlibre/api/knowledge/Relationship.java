@@ -57,6 +57,12 @@ public interface Relationship extends Comparable<Relationship> {
 	 */
 	boolean isInverse();
 
+	/**
+	 * Set the relationship id.
+	 * The id can only be set when loading or creating a relationship.
+	 */
+	void setId(Long id);
+	
 	void setSource(Vertex source);
 
 	void setTarget(Vertex target);

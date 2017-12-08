@@ -17,10 +17,10 @@
  ******************************************************************************/
 package org.botlibre.knowledge;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,17 +44,14 @@ import org.botlibre.api.knowledge.Vertex;
  * Basic implementation to allow subclasses to avoid defining some of the basic stuff.
  */
 
-public class BasicNetwork extends AbstractNetwork implements Serializable {
+public class BasicNetwork extends AbstractNetwork {
 
 	private static final long serialVersionUID = 1L;
-		
+	
 	protected Network parent;
-	protected Set<Vertex> verticies = null;
-	protected Map<Number, Vertex> verticiesById = null;
-
-	protected static long nextId() {
-		return nextId++;
-	}
+	protected Set<Vertex> vertices = null;
+	protected Map<Number, Vertex> verticesById = null;
+	protected Map<Number, Data> dataById = null;
 	
 	public BasicNetwork() {
 		this(false);
@@ -62,9 +59,10 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	
 	public BasicNetwork(boolean isShortTerm) {
 		super(isShortTerm);
-		this.verticies = new HashSet<Vertex>();
-		this.verticiesById = new HashMap<Number, Vertex>();
-		this.verticiesByData = new HashMap<Object, Vertex>();
+		this.vertices = new HashSet<Vertex>();
+		this.verticesById = new HashMap<Number, Vertex>();
+		this.verticesByData = new HashMap<Object, Vertex>();
+		this.dataById = new HashMap<Number, Data>();
 	}
 	
 	public BasicNetwork(Network parent) {
@@ -72,18 +70,25 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 		this.parent = parent;
 	}
 	
-	protected void addRelationship(Relationship relationship) {
-		// Nothing required by default.
+	public void addRelationship(Relationship relationship) {
+		if (relationship.getId() != null) {
+			// Ensure the nextId sequence is consistent when restoring the network from storage.
+			if (nextRelationshipId <= relationship.getId().longValue()) {
+				nextRelationshipId = relationship.getId().longValue() + 1;
+			}
+		} else {
+			relationship.setId(nextRelationshipId());
+		}
 	}
 	
 	public void resume() {
 		getBot().log(this, "Resuming", Bot.FINE, this);
-		Set<Vertex> newVerticies = new HashSet<Vertex>(Math.max(this.verticies.size(), MAX_SIZE));
+		Set<Vertex> newVertices = new HashSet<Vertex>(Math.max(this.vertices.size(), MAX_SIZE));
 		// Shrink to fixed size.
 		int level = 1;
-		while ((this.verticies.size() > MAX_SIZE) && (level < 256)) {
-			Iterator<Vertex> iterator = this.verticies.iterator();
-			while ((this.verticies.size() > MAX_SIZE) && iterator.hasNext()) {
+		while ((this.vertices.size() > MAX_SIZE) && (level < 256)) {
+			Iterator<Vertex> iterator = this.vertices.iterator();
+			while ((this.vertices.size() > MAX_SIZE) && iterator.hasNext()) {
 				Vertex vertex = iterator.next();
 				if ((!vertex.isPrimitive()) && vertex.getConsciousnessLevel() <= level) {
 					iterator.remove();
@@ -91,24 +96,24 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 			}
 			level = level * 2;
 		}
-		newVerticies.addAll(this.verticies);
+		newVertices.addAll(this.vertices);
 		// Reset originals and clear relationships.
 		if (getParent() != null) {
-			for (Vertex vertex : newVerticies) {
+			for (Vertex vertex : newVertices) {
 				Vertex original = getParent().findById(vertex.getId());
 				vertex.setOriginal(original);
 			}
 		}
 		// Reset id hashes.
-		this.verticies = newVerticies;
-		this.verticiesById = new HashMap<Number, Vertex>();
-		for (Vertex vertex : newVerticies) {
-			this.verticiesById.put(vertex.getId(), vertex);
+		this.vertices = newVertices;
+		this.verticesById = new HashMap<Number, Vertex>();
+		for (Vertex vertex : newVertices) {
+			this.verticesById.put(vertex.getId(), vertex);
 		}
-		this.verticiesByData = new HashMap<Object, Vertex>();
-		for (Vertex vertex : newVerticies) {
+		this.verticesByData = new HashMap<Object, Vertex>();
+		for (Vertex vertex : newVertices) {
 			if (vertex.getData() != null) {
-				this.verticiesByData.put(vertex.getData(), vertex);
+				this.verticesByData.put(vertex.getData(), vertex);
 			}
 		}
 	}
@@ -129,9 +134,9 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	 */
 	public synchronized BasicNetwork clone() {
 		BasicNetwork clone = (BasicNetwork)super.clone();
-		clone.setVerticies(new HashSet<Vertex>(getVerticies()));
-		clone.setVerticiesById(new HashMap<Number, Vertex>(getVerticiesById()));
-		clone.setVerticiesByData(new HashMap<Object, Vertex>(getVerticiesByData()));
+		clone.setVertices(new HashSet<Vertex>(getVertices()));
+		clone.setVerticesById(new HashMap<Number, Vertex>(getVerticesById()));
+		clone.setVerticesByData(new HashMap<Object, Vertex>(getVerticesByData()));
 		return clone;
 	}
 
@@ -139,9 +144,10 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	 * Clear all vertices from the network.
 	 */
 	public synchronized void clear() {
-		this.verticies = new HashSet<Vertex>();
-		this.verticiesById = new HashMap<Number, Vertex>();
-		this.verticiesByData = new HashMap<Object, Vertex>();
+		this.vertices = new HashSet<Vertex>();
+		this.verticesById = new HashMap<Number, Vertex>();
+		this.verticesByData = new HashMap<Object, Vertex>();
+		this.dataById = new HashMap<Number, Data>();
 	}
 
 	/**
@@ -154,21 +160,59 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 			if (nextId <= vertex.getId().longValue()) {
 				nextId = vertex.getId().longValue() + 1;
 			}
-			getVerticiesById().put(vertex.getId(), vertex);
+		} else {
+			vertex.setId(nextId());
 		}
+		this.verticesById.put(vertex.getId(), vertex);
 		if (vertex.getData() != null) {
-			getVerticiesByData().put(vertex.getData(), vertex);
+			if (vertex.getData() instanceof Data) {
+				Data data = (Data)vertex.getData();
+				if (data.getId() == 0) {
+					data.setId(nextDataId());
+				} else {
+					// Ensure the nextId sequence is consistent when restoring the network from storage.
+					if (nextDataId <= data.getId()) {
+						nextDataId = data.getId() + 1;
+					}
+				}
+				this.dataById.put(Long.valueOf(data.getId()), data);
+			}
+			this.verticesByData.put(vertex.getData(), vertex);
 		}
-		getVerticies().add(vertex);
+		this.vertices.add(vertex);
 		((BasicVertex) vertex).setNetwork(this);
 	}
-
-	protected Set<Vertex> getVerticies() {
-		return verticies;
+	
+	/**
+	 * Create a new vertex from the source.
+	 * The source is from another network.
+	 */
+	public synchronized Vertex createVertex(Vertex source) {
+		Vertex vertex = findById(source.getId());
+		if (vertex == null) {
+			vertex = findByData(source.getData());
+		}
+		if (vertex == null) {
+			vertex = new BasicVertex();
+			vertex.setName(source.getName());
+			vertex.setData(source.getData());
+			vertex.setAccessCount(source.getAccessCount());
+			vertex.setAccessDate(source.getAccessDate());
+			vertex.setPinned(source.isPinned());
+			vertex.setCreationDate(source.getCreationDate());
+			vertex.setConsciousnessLevel(source.getConsciousnessLevel());
+			vertex.setId(source.getId());
+			addVertex(vertex);
+		}
+		return vertex;
 	}
 
-	protected void setVerticies(Set<Vertex> verticies) {
-		this.verticies = verticies;
+	public Set<Vertex> getVertices() {
+		return vertices;
+	}
+
+	protected void setVertices(Set<Vertex> vertices) {
+		this.vertices = vertices;
 	}
 	
 	public Network getParent() {
@@ -180,7 +224,7 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	}
 
 	public int size() {
-		return getVerticies().size();
+		return getVertices().size();
 	}
 	
 	/**
@@ -205,9 +249,9 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	 * Note that the vertex must be no longer referenced by any other vertex in the network.
 	 */
 	public void removeVertex(Vertex vertex) {
-		getVerticies().remove(vertex.getId());
+		this.vertices.remove(vertex.getId());
 		if (vertex.hasData()) {
-			getVerticiesByData().remove(vertex.getData());
+			this.verticesByData.remove(vertex.getData());
 		}
 	}
 	
@@ -230,7 +274,7 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	 * Return all vertices.
 	 */
 	public List<Vertex> findAll() {
-		return new ArrayList<Vertex>(getVerticies());
+		return new ArrayList<Vertex>(getVertices());
 	}
 	
 	/**
@@ -317,10 +361,10 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 		if (data == null) {
 			return null;
 		}
-		Vertex vertex = (Vertex) getVerticiesByData().get(data);
+		Vertex vertex = (Vertex) this.verticesByData.get(data);
 		// If not local, lookup in parent and cloned into local.
-		if ((vertex == null) && (getParent() != null)) {
-			Vertex originalVertex = getParent().findByData(data);
+		if ((vertex == null) && (this.parent != null)) {
+			Vertex originalVertex = this.parent.findByData(data);
 			if (originalVertex != null) {
 				vertex = new BasicVertex(originalVertex);
 				addVertex(vertex);
@@ -334,7 +378,7 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 	 * Return the lob data.
 	 */
 	public synchronized Data findData(Data data) {
-		return data;
+		return this.dataById.get(data.getId());
 	}
 	
 	/**
@@ -359,10 +403,10 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 		if (id == null) {
 			return null;
 		}
-		Vertex vertex = (Vertex) getVerticiesById().get(id);
+		Vertex vertex = (Vertex) this.verticesById.get(id);
 		// If not local, lookup in parent and cloned into local.
-		if ((vertex == null) && (getParent() != null)) {
-			Vertex originalVertex = getParent().findById(id);
+		if ((vertex == null) && (this.parent != null)) {
+			Vertex originalVertex = this.parent.findById(id);
 			if (originalVertex != null) {
 				vertex = new BasicVertex(originalVertex);
 				addVertex(vertex);
@@ -435,13 +479,42 @@ public class BasicNetwork extends AbstractNetwork implements Serializable {
 		}
 		return relationships;
 	}
-
-	public Map<Number, Vertex> getVerticiesById() {
-		return verticiesById;
+	
+	/**
+	 * Find all relationships related to the vertex by the vertex type.
+	 */
+	public synchronized List<Relationship> findAllRelationshipsTo(Vertex vertex, Vertex type, Date date) {
+		List<Relationship> relationships = new ArrayList<Relationship>();
+		Iterator<Vertex> iterator = findAll().iterator();
+		// Remove all references.
+		while (iterator.hasNext()) {
+			Vertex next = iterator.next();
+			Collection<Relationship> allRelationships = next.getRelationships(type);
+			if (allRelationships != null) {
+				for (Relationship relationship : allRelationships) {
+					if (relationship.getTarget() == vertex && relationship.getCreationDate().after(date)) {
+						relationships.add(relationship);
+					}
+				}
+			}
+		}
+		return relationships;
 	}
 
-	public void setVerticiesById(Map<Number, Vertex> verticiesById) {
-		this.verticiesById = verticiesById;
+	public Map<Number, Vertex> getVerticesById() {
+		return verticesById;
+	}
+
+	public void setVerticesById(Map<Number, Vertex> verticesById) {
+		this.verticesById = verticesById;
+	}
+
+	public Map<Number, Data> getDataById() {
+		return dataById;
+	}
+
+	public void setDataById(Map<Number, Data> dataById) {
+		this.dataById = dataById;
 	}
 
 	public String toString() {

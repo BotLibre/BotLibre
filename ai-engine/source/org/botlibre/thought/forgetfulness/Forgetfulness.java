@@ -282,9 +282,11 @@ public class Forgetfulness extends BasicThought {
 							}
 						}
 					} else if (type == ForgetType.OldConversations) {
+						log("Removing conversation", Level.FINE, vertex);
 						memory.removeVertex(vertex);
 						//memory.removeVertexAndReferences(vertex);
 					} else {
+						log("Removing vertex", Level.FINE, vertex);
 						memory.removeVertex(vertex);
 					}					
 				} catch (Exception failure) {

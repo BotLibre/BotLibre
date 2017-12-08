@@ -79,14 +79,14 @@ public class BasicVertex implements Vertex, Serializable {
 	protected String name;
 	/** Allow for database lazy initialization. */
 	protected Collection<Relationship> allRelationships;
-	protected Map<Vertex, Map<Relationship, Relationship>> relationships;
+	protected transient Map<Vertex, Map<Relationship, Relationship>> relationships;
 	protected String dataType;
 	protected Object data;
 	protected Date creationDate;
 	protected Date accessDate;
 	protected int accessCount;
 	protected boolean pinned;
-	protected int consciousnessLevel;
+	protected transient int consciousnessLevel;
 	protected Network network;
 	protected Vertex original;
 	protected Boolean hasResponse;
@@ -390,6 +390,20 @@ public class BasicVertex implements Vertex, Serializable {
 	 */
 	public synchronized Relationship addRelationship(Vertex type, Vertex target) {
 		return addRelationship(type, target, -1, false);
+	}
+
+	/**
+	 * Add the relation of the relationship type to the end of the target vertex relationships.
+	 */
+	public synchronized Relationship appendRelationship(Vertex type, Vertex target) {
+		return addRelationship(type, target, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Add the relation of the relationship type to the end of the target vertex relationships.
+	 */
+	public synchronized Relationship appendRelationship(Primitive type, Vertex target) {
+		return addRelationship(this.network.createVertex(type), target, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -2598,7 +2612,7 @@ public class BasicVertex implements Vertex, Serializable {
 		if (targets == null) {
 			return null;
 		}		
-		return targets.values();
+		return new ArrayList<Relationship>(targets.values());
 	}
 
 	/**
@@ -3586,7 +3600,7 @@ public class BasicVertex implements Vertex, Serializable {
 		addRelationship(type, newValue);
 	}
 	
-	protected void setRelationships(Map<Vertex, Map<Relationship, Relationship>> relationships) {
+	public void setRelationships(Map<Vertex, Map<Relationship, Relationship>> relationships) {
 		this.relationships = relationships;
 	}
 	
@@ -3669,12 +3683,13 @@ public class BasicVertex implements Vertex, Serializable {
 	/**
 	 * Pin the vertex and all of its descendants into memory.
 	 * This can be used for important data such as language rules.
+	 * ** This does not work, and will cause a stack overflow **
 	 */
 	public void pinDescendants() {
 		iterate(new AbstractVertexIterator() {
 			public boolean iterate(Vertex vertex) {
-				if (vertex.isPinned() || (vertex.getCreationDate().getTime() > (System.currentTimeMillis() - 60000))) {
-					network.getBot().log(vertex, "pinned", Level.FINEST);
+				if (!vertex.isPinned() && (vertex.getCreationDate().getTime() > (System.currentTimeMillis() - 60000))) {
+					network.getBot().log(vertex, "pinned", Level.INFO);
 					vertex.setPinned(true);
 					return true;
 				} else {

@@ -28,7 +28,7 @@
 	<classpathentry kind="lib" path="lib/oswap/jsr305.jar"/>
 	<classpathentry kind="lib" path="lib/oswap/owasp-java-html-sanitizer.jar"/>
 	<classpathentry kind="lib" path="lib/jpa/postgresql-9.4-1203.jdbc4.jar"/>
-	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.8.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpclient-4.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpclient-cache-4.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpcore-4.2.4.jar"/>

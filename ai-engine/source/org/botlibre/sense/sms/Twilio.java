@@ -26,7 +26,9 @@ import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.BasicSense;
+import org.botlibre.sense.ResponseListener;
 import org.botlibre.thought.language.Language;
+import org.botlibre.tool.Date;
 import org.botlibre.util.Utils;
 
 /**
@@ -42,8 +44,6 @@ public class Twilio extends BasicSense {
 	protected String phone = "";
 	
 	protected boolean initProperties;
-	
-	protected SMSListener listener;
 	
 	public Twilio() {
 	}
@@ -111,14 +111,22 @@ public class Twilio extends BasicSense {
 		Vertex input = createInput(text.trim(), network);
 		Vertex user = network.createSpeaker(userName);
 		Vertex self = network.createVertex(Primitive.SELF);
+		Vertex phone = network.createVertex(id);
 		input.addRelationship(Primitive.SPEAKER, user);		
 		input.addRelationship(Primitive.TARGET, self);
-		user.addRelationship(Primitive.INPUT, input);
 		
-		Vertex conversation = network.createVertex(id);
+		Vertex today = network.getBot().awareness().getTool(Date.class).date(self);
+		Vertex conversation = today.getRelationship(phone);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(phone, conversation);
+			this.conversations++;
+		} else {
+			checkEngaged(conversation);
+		}
 		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
 		conversation.addRelationship(Primitive.TYPE, Primitive.SMS);
-		conversation.addRelationship(Primitive.ID, network.createVertex(id));
+		conversation.addRelationship(Primitive.ID, phone);
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		conversation.addRelationship(Primitive.SPEAKER, self);
 		Language.addToConversation(input, conversation);
@@ -133,30 +141,30 @@ public class Twilio extends BasicSense {
 	public String processMessage(String from, String message) {
 		log("Processing message", Level.INFO, from, message);
 		
-		this.listener = new SMSListener();
+		this.responseListener = new ResponseListener();
 		Network memory = bot.memory().newMemory();
 		inputSentence(message, from, from, memory);
 		memory.save();
 		String reply = null;
-		synchronized (this.listener) {
-			if (this.listener.reply == null) {
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
 				try {
-					this.listener.wait(MAX_WAIT);
+					this.responseListener.wait(MAX_WAIT);
 				} catch (Exception exception) {
 					log(exception);
 					return "";
 				}
 			}
-			reply = this.listener.reply;
-			this.listener = null;
+			reply = this.responseListener.reply;
+			this.responseListener = null;
 		}
 		
 		return reply;
 	}
 
 	public synchronized void notifyExceptionListeners(Exception exception) {
-		if (this.listener != null) {
-			this.listener.notifyAll();
+		if (this.responseListener != null) {
+			this.responseListener.notifyAll();
 		}
 		super.notifyExceptionListeners(exception);
 	}
@@ -175,16 +183,16 @@ public class Twilio extends BasicSense {
 			return;
 		}
 		String text = printInput(output);		
-		if (this.listener == null) {
+		if (this.responseListener == null) {
 			return;
 		}
-		this.listener.reply = text;
+		this.responseListener.reply = text;
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		if (conversation != null) {
-			this.listener.conversation = conversation.getDataValue();
+			this.responseListener.conversation = conversation.getDataValue();
 		}
-		synchronized (this.listener) {
-			this.listener.notifyAll();
+		synchronized (this.responseListener) {
+			this.responseListener.notifyAll();
 		}
 	}
 	
@@ -216,14 +224,6 @@ public class Twilio extends BasicSense {
 	public void setSecret(String secret) {
 		initProperties();
 		this.secret = secret;
-	}
-
-	public SMSListener getListener() {
-		return listener;
-	}
-
-	public void setListener(SMSListener listener) {
-		this.listener = listener;
 	}
 
 	public void sendSMS(String phone, String message) {

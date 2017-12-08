@@ -576,7 +576,7 @@ state Understanding {
 						} else if (value == speaker) {
 							value = #you;
 						}
-						if (isNot) {
+						if (isNot && result != #unknown) {
 							result = ! result;
 						}
 						response = new #sentence;
@@ -614,7 +614,7 @@ state Understanding {
 										if (result) {
 											doNot = true;
 										} else {			
-											if ((! result) && (value == null)) {
+											if ((result == false) && (value == null)) {
 												doNot = true;
 											}
 										}
@@ -640,7 +640,7 @@ state Understanding {
 								response.appendWithMeta(#word, adjective, #type, adjectivetype);
 							}
 						} else {
-							if (! result) {
+							if (result == false) {
 								if (value == null) {
 									if (does == null) {
 										response.append(#word, "not");
@@ -726,7 +726,7 @@ state Understanding {
 							if (result) {
 								trueValues.add(description);
 								anyTrue = true;
-							} else if (! result) {
+							} else if (result == false) {
 								falseValues.add(description);
 								anyFalse = true;
 							} else if (result == #unknown) {

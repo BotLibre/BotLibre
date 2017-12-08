@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+<category><pattern>Lam *</pattern><template><srai>Lamentations <star /></srai></template></category>
+<category><pattern>* Lam *</pattern><template><srai>Lamentations <star index="1"/></srai></template></category>
+<category><pattern>La *</pattern><template><srai>Lamentations <star /></srai></template></category>
+<category><pattern>* La *</pattern><template><srai>Lamentations <star index="1"/></srai></template></category>
+<category><pattern>Lamentations 1 1</pattern><template>How doth the city sit solitary, that was full of people! how is she become as a widow! she that was great among the nations, and princess among the provinces, how is she become tributary!</template></category>
+<category><pattern>Lamentations 1 2</pattern><template>She weepeth sore in the night, and her tears are on her cheeks: among all her lovers she hath none to comfort her: all her friends have dealt treacherously with her, they are become her enemies.</template></category>
+<category><pattern>Lamentations 1 3</pattern><template>Judah is gone into captivity because of affliction, and because of great servitude: she dwelleth among the heathen, she findeth no rest: all her persecutors overtook her between the straits.</template></category>
+<category><pattern>Lamentations 1 4</pattern><template>The ways of Zion do mourn, because none come to the solemn feasts: all her gates are desolate: her priests sigh, her virgins are afflicted, and she is in bitterness.</template></category>
+<category><pattern>Lamentations 1 5</pattern><template>Her adversaries are the chief, her enemies prosper; for the LORD hath afflicted her for the multitude of her transgressions: her children are gone into captivity before the enemy.</template></category>
+<category><pattern>Lamentations 1 6</pattern><template>And from the daughter of Zion all her beauty is departed: her princes are become like harts that find no pasture, and they are gone without strength before the pursuer.</template></category>
+<category><pattern>Lamentations 1 7</pattern><template>Jerusalem remembered in the days of her affliction and of her miseries all her pleasant things that she had in the days of old, when her people fell into the hand of the enemy, and none did help her: the adversaries saw her, and did mock at her sabbaths.</template></category>
+<category><pattern>Lamentations 1 8</pattern><template>Jerusalem hath grievously sinned; therefore she is removed: all that honoured her despise her, because they have seen her nakedness: yea, she sigheth, and turneth backward.</template></category>
+<category><pattern>Lamentations 1 9</pattern><template>Her filthiness is in her skirts; she remembereth not her last end; therefore she came down wonderfully: she had no comforter. O LORD, behold my affliction: for the enemy hath magnified himself.</template></category>
+<category><pattern>Lamentations 1 10</pattern><template>The adversary hath spread out his hand upon all her pleasant things: for she hath seen that the heathen entered into her sanctuary, whom thou didst command that they should not enter into thy congregation.</template></category>
+<category><pattern>Lamentations 1 11</pattern><template>All her people sigh, they seek bread; they have given their pleasant things for meat to relieve the soul: see, O LORD, and consider; for I am become vile.</template></category>
+<category><pattern>Lamentations 1 12</pattern><template>Is it nothing to you, all ye that pass by? behold, and see if there be any sorrow like unto my sorrow, which is done unto me, wherewith the LORD hath afflicted me in the day of his fierce anger.</template></category>
+<category><pattern>Lamentations 1 13</pattern><template>From above hath he sent fire into my bones, and it prevaileth against them: he hath spread a net for my feet, he hath turned me back: he hath made me desolate and faint all the day.</template></category>
+<category><pattern>Lamentations 1 14</pattern><template>The yoke of my transgressions is bound by his hand: they are wreathed, and come up upon my neck: he hath made my strength to fall, the LORD hath delivered me into their hands, from whom I am not able to rise up.</template></category>
+<category><pattern>Lamentations 1 15</pattern><template>The LORD hath trodden under foot all my mighty men in the midst of me: he hath called an assembly against me to crush my young men: the LORD hath trodden the virgin, the daughter of Judah, as in a winepress.</template></category>
+<category><pattern>Lamentations 1 16</pattern><template>For these things I weep; mine eye, mine eye runneth down with water, because the comforter that should relieve my soul is far from me: my children are desolate, because the enemy prevailed.</template></category>
+<category><pattern>Lamentations 1 17</pattern><template>Zion spreadeth forth her hands, and there is none to comfort her: the LORD hath commanded concerning Jacob, that his adversaries should be round about him: Jerusalem is as a menstruous woman among them.</template></category>
+<category><pattern>Lamentations 1 18</pattern><template>The LORD is righteous; for I have rebelled against his commandment: hear, I pray you, all people, and behold my sorrow: my virgins and my young men are gone into captivity.</template></category>
+<category><pattern>Lamentations 1 19</pattern><template>I called for my lovers, but they deceived me: my priests and mine elders gave up the ghost in the city, while they sought their meat to relieve their souls.</template></category>
+<category><pattern>Lamentations 1 20</pattern><template>Behold, O LORD; for I am in distress: my bowels are troubled; mine heart is turned within me; for I have grievously rebelled: abroad the sword bereaveth, at home there is as death.</template></category>
+<category><pattern>Lamentations 1 21</pattern><template>They have heard that I sigh: there is none to comfort me: all mine enemies have heard of my trouble; they are glad that thou hast done it: thou wilt bring the day that thou hast called, and they shall be like unto me.</template></category>
+<category><pattern>Lamentations 1 22</pattern><template>Let all their wickedness come before thee; and do unto them, as thou hast done unto me for all my transgressions: for my sighs are many, and my heart is faint.</template></category>
+<category><pattern>Lamentations 2 1</pattern><template>How hath the LORD covered the daughter of Zion with a cloud in his anger, and cast down from heaven unto the earth the beauty of Israel, and remembered not his footstool in the day of his anger!</template></category>
+<category><pattern>Lamentations 2 2</pattern><template>The LORD hath swallowed up all the habitations of Jacob, and hath not pitied: he hath thrown down in his wrath the strong holds of the daughter of Judah; he hath brought them down to the ground: he hath polluted the kingdom and the princes thereof.</template></category>
+<category><pattern>Lamentations 2 3</pattern><template>He hath cut off in his fierce anger all the horn of Israel: he hath drawn back his right hand from before the enemy, and he burned against Jacob like a flaming fire, which devoureth round about.</template></category>
+<category><pattern>Lamentations 2 4</pattern><template>He hath bent his bow like an enemy: he stood with his right hand as an adversary, and slew all that were pleasant to the eye in the tabernacle of the daughter of Zion: he poured out his fury like fire.</template></category>
+<category><pattern>Lamentations 2 5</pattern><template>The LORD was as an enemy: he hath swallowed up Israel, he hath swallowed up all her palaces: he hath destroyed his strong holds, and hath increased in the daughter of Judah mourning and lamentation.</template></category>
+<category><pattern>Lamentations 2 6</pattern><template>And he hath violently taken away his tabernacle, as if it were of a garden: he hath destroyed his places of the assembly: the LORD hath caused the solemn feasts and sabbaths to be forgotten in Zion, and hath despised in the indignation of his anger the king and the priest.</template></category>
+<category><pattern>Lamentations 2 7</pattern><template>The LORD hath cast off his altar, he hath abhorred his sanctuary, he hath given up into the hand of the enemy the walls of her palaces; they have made a noise in the house of the LORD, as in the day of a solemn feast.</template></category>
+<category><pattern>Lamentations 2 8</pattern><template>The LORD hath purposed to destroy the wall of the daughter of Zion: he hath stretched out a line, he hath not withdrawn his hand from destroying: therefore he made the rampart and the wall to lament; they languished together.</template></category>
+<category><pattern>Lamentations 2 9</pattern><template>Her gates are sunk into the ground; he hath destroyed and broken her bars: her king and her princes are among the Gentiles: the law is no more; her prophets also find no vision from the LORD.</template></category>
+<category><pattern>Lamentations 2 10</pattern><template>The elders of the daughter of Zion sit upon the ground, and keep silence: they have cast up dust upon their heads; they have girded themselves with sackcloth: the virgins of Jerusalem hang down their heads to the ground.</template></category>
+<category><pattern>Lamentations 2 11</pattern><template>Mine eyes do fail with tears, my bowels are troubled, my liver is poured upon the earth, for the destruction of the daughter of my people; because the children and the sucklings swoon in the streets of the city.</template></category>
+<category><pattern>Lamentations 2 12</pattern><template>They say to their mothers, Where is corn and wine? when they swooned as the wounded in the streets of the city, when their soul was poured out into their mothers' bosom.</template></category>
+<category><pattern>Lamentations 2 13</pattern><template>What thing shall I take to witness for thee? what thing shall I liken to thee, O daughter of Jerusalem? what shall I equal to thee, that I may comfort thee, O virgin daughter of Zion? for thy breach is great like the sea: who can heal thee?</template></category>
+<category><pattern>Lamentations 2 14</pattern><template>Thy prophets have seen vain and foolish things for thee: and they have not discovered thine iniquity, to turn away thy captivity; but have seen for thee false burdens and causes of banishment.</template></category>
+<category><pattern>Lamentations 2 15</pattern><template>All that pass by clap their hands at thee; they hiss and wag their head at the daughter of Jerusalem, saying, Is this the city that men call The perfection of beauty, The joy of the whole earth?</template></category>
+<category><pattern>Lamentations 2 16</pattern><template>All thine enemies have opened their mouth against thee: they hiss and gnash the teeth: they say, We have swallowed her up: certainly this is the day that we looked for; we have found, we have seen it.</template></category>
+<category><pattern>Lamentations 2 17</pattern><template>The LORD hath done that which he had devised; he hath fulfilled his word that he had commanded in the days of old: he hath thrown down, and hath not pitied: and he hath caused thine enemy to rejoice over thee, he hath set up the horn of thine adversaries.</template></category>
+<category><pattern>Lamentations 2 18</pattern><template>Their heart cried unto the LORD, O wall of the daughter of Zion, let tears run down like a river day and night: give thyself no rest; let not the apple of thine eye cease.</template></category>
+<category><pattern>Lamentations 2 19</pattern><template>Arise, cry out in the night: in the beginning of the watches pour out thine heart like water before the face of the LORD: lift up thy hands toward him for the life of thy young children, that faint for hunger in the top of every street.</template></category>
+<category><pattern>Lamentations 2 20</pattern><template>Behold, O LORD, and consider to whom thou hast done this. Shall the women eat their fruit, and children of a span long? shall the priest and the prophet be slain in the sanctuary of the Lord?</template></category>
+<category><pattern>Lamentations 2 21</pattern><template>The young and the old lie on the ground in the streets: my virgins and my young men are fallen by the sword; thou hast slain them in the day of thine anger; thou hast killed, and not pitied.</template></category>
+<category><pattern>Lamentations 2 22</pattern><template>Thou hast called as in a solemn day my terrors round about, so that in the day of the LORD's anger none escaped nor remained: those that I have swaddled and brought up hath mine enemy consumed.</template></category>
+<category><pattern>Lamentations 3 1</pattern><template>I AM the man that hath seen affliction by the rod of his wrath.</template></category>
+<category><pattern>Lamentations 3 2</pattern><template>He hath led me, and brought me into darkness, but not into light.</template></category>
+<category><pattern>Lamentations 3 3</pattern><template>Surely against me is he turned; he turneth his hand against me all the day.</template></category>
+<category><pattern>Lamentations 3 4</pattern><template>My flesh and my skin hath he made old; he hath broken my bones.</template></category>
+<category><pattern>Lamentations 3 5</pattern><template>He hath builded against me, and compassed me with gall and travail.</template></category>
+<category><pattern>Lamentations 3 6</pattern><template>He hath set me in dark places, as they that be dead of old.</template></category>
+<category><pattern>Lamentations 3 7</pattern><template>He hath hedged me about, that I cannot get out: he hath made my chain heavy.</template></category>
+<category><pattern>Lamentations 3 8</pattern><template>Also when I cry and shout, he shutteth out my prayer.</template></category>
+<category><pattern>Lamentations 3 9</pattern><template>He hath inclosed my ways with hewn stone, he hath made my paths crooked.</template></category>
+<category><pattern>Lamentations 3 10</pattern><template>He was unto me as a bear lying in wait, and as a lion in secret places.</template></category>
+<category><pattern>Lamentations 3 11</pattern><template>He hath turned aside my ways, and pulled me in pieces: he hath made me desolate.</template></category>
+<category><pattern>Lamentations 3 12</pattern><template>He hath bent his bow, and set me as a mark for the arrow.</template></category>
+<category><pattern>Lamentations 3 13</pattern><template>He hath caused the arrows of his quiver to enter into my reins.</template></category>
+<category><pattern>Lamentations 3 14</pattern><template>I was a derision to all my people; and their song all the day.</template></category>
+<category><pattern>Lamentations 3 15</pattern><template>He hath filled me with bitterness, he hath made me drunken with wormwood.</template></category>
+<category><pattern>Lamentations 3 16</pattern><template>He hath also broken my teeth with gravel stones, he hath covered me with ashes.</template></category>
+<category><pattern>Lamentations 3 17</pattern><template>And thou hast removed my soul far off from peace: I forgat prosperity.</template></category>
+<category><pattern>Lamentations 3 18</pattern><template>And I said, My strength and my hope is perished from the LORD:</template></category>
+<category><pattern>Lamentations 3 19</pattern><template>Remembering mine affliction and my misery, the wormwood and the gall.</template></category>
+<category><pattern>Lamentations 3 20</pattern><template>My soul hath them still in remembrance, and is humbled in me.</template></category>
+<category><pattern>Lamentations 3 21</pattern><template>This I recall to my mind, therefore have I hope.</template></category>
+<category><pattern>Lamentations 3 22</pattern><template>It is of the LORD's mercies that we are not consumed, because his compassions fail not.</template></category>
+<category><pattern>Lamentations 3 23</pattern><template>They are new every morning: great is thy faithfulness.</template></category>
+<category><pattern>Lamentations 3 24</pattern><template>The LORD is my portion, saith my soul; therefore will I hope in him.</template></category>
+<category><pattern>Lamentations 3 25</pattern><template>The LORD is good unto them that wait for him, to the soul that seeketh him.</template></category>
+<category><pattern>Lamentations 3 26</pattern><template>It is good that a man should both hope and quietly wait for the salvation of the LORD.</template></category>
+<category><pattern>Lamentations 3 27</pattern><template>It is good for a man that he bear the yoke of his youth.</template></category>
+<category><pattern>Lamentations 3 28</pattern><template>He sitteth alone and keepeth silence, because he hath borne it upon him.</template></category>
+<category><pattern>Lamentations 3 29</pattern><template>He putteth his mouth in the dust; if so be there may be hope.</template></category>
+<category><pattern>Lamentations 3 30</pattern><template>He giveth his cheek to him that smiteth him: he is filled full with reproach.</template></category>
+<category><pattern>Lamentations 3 31</pattern><template>For the LORD will not cast off for ever:</template></category>
+<category><pattern>Lamentations 3 32</pattern><template>But though he cause grief, yet will he have compassion according to the multitude of his mercies.</template></category>
+<category><pattern>Lamentations 3 33</pattern><template>For he doth not afflict willingly nor grieve the children of men.</template></category>
+<category><pattern>Lamentations 3 34</pattern><template>To crush under his feet all the prisoners of the earth.</template></category>
+<category><pattern>Lamentations 3 35</pattern><template>To turn aside the right of a man before the face of the most High,</template></category>
+<category><pattern>Lamentations 3 36</pattern><template>To subvert a man in his cause, the LORD approveth not.</template></category>
+<category><pattern>Lamentations 3 37</pattern><template>Who is he that saith, and it cometh to pass, when the Lord commandeth it not?</template></category>
+<category><pattern>Lamentations 3 38</pattern><template>Out of the mouth of the most High proceedeth not evil and good?</template></category>
+<category><pattern>Lamentations 3 39</pattern><template>Wherefore doth a living man complain, a man for the punishment of his sins?</template></category>
+<category><pattern>Lamentations 3 40</pattern><template>Let us search and try our ways, and turn again to the LORD.</template></category>
+<category><pattern>Lamentations 3 41</pattern><template>Let us lift up our heart with our hands unto God in the heavens.</template></category>
+<category><pattern>Lamentations 3 42</pattern><template>We have transgressed and have rebelled: thou hast not pardoned.</template></category>
+<category><pattern>Lamentations 3 43</pattern><template>Thou hast covered with anger, and persecuted us: thou hast slain, thou hast not pitied.</template></category>
+<category><pattern>Lamentations 3 44</pattern><template>Thou hast covered thyself with a cloud, that our prayer should not pass through.</template></category>
+<category><pattern>Lamentations 3 45</pattern><template>Thou hast made us as the offscouring and refuse in the midst of the people.</template></category>
+<category><pattern>Lamentations 3 46</pattern><template>All our enemies have opened their mouths against us.</template></category>
+<category><pattern>Lamentations 3 47</pattern><template>Fear and a snare is come upon us, desolation and destruction.</template></category>
+<category><pattern>Lamentations 3 48</pattern><template>Mine eye runneth down with rivers of water for the destruction of the daughter of my people.</template></category>
+<category><pattern>Lamentations 3 49</pattern><template>Mine eye trickleth down, and ceaseth not, without any intermission.</template></category>
+<category><pattern>Lamentations 3 50</pattern><template>Till the LORD look down, and behold from heaven.</template></category>
+<category><pattern>Lamentations 3 51</pattern><template>Mine eye affecteth mine heart because of all the daughters of my city.</template></category>
+<category><pattern>Lamentations 3 52</pattern><template>Mine enemies chased me sore, like a bird, without cause.</template></category>
+<category><pattern>Lamentations 3 53</pattern><template>They have cut off my life in the dungeon, and cast a stone upon me.</template></category>
+<category><pattern>Lamentations 3 54</pattern><template>Waters flowed over mine head; then I said, I am cut off.</template></category>
+<category><pattern>Lamentations 3 55</pattern><template>I called upon thy name, O LORD, out of the low dungeon.</template></category>
+<category><pattern>Lamentations 3 56</pattern><template>Thou hast heard my voice: hide not thine ear at my breathing, at my cry.</template></category>
+<category><pattern>Lamentations 3 57</pattern><template>Thou drewest near in the day that I called upon thee: thou saidst, Fear not.</template></category>
+<category><pattern>Lamentations 3 58</pattern><template>O LORD, thou hast pleaded the causes of my soul; thou hast redeemed my life.</template></category>
+<category><pattern>Lamentations 3 59</pattern><template>O LORD, thou hast seen my wrong: judge thou my cause.</template></category>
+<category><pattern>Lamentations 3 60</pattern><template>Thou hast seen all their vengeance and all their imaginations against me.</template></category>
+<category><pattern>Lamentations 3 61</pattern><template>Thou hast heard their reproach, O LORD, and all their imaginations against me;</template></category>
+<category><pattern>Lamentations 3 62</pattern><template>The lips of those that rose up against me, and their device against me all the day.</template></category>
+<category><pattern>Lamentations 3 63</pattern><template>Behold their sitting down, and their rising up; I am their musick.</template></category>
+<category><pattern>Lamentations 3 64</pattern><template>Render unto them a recompence, O LORD, according to the work of their hands.</template></category>
+<category><pattern>Lamentations 3 65</pattern><template>Give them sorrow of heart, thy curse unto them.</template></category>
+<category><pattern>Lamentations 3 66</pattern><template>Persecute and destroy them in anger from under the heavens of the LORD.</template></category>
+<category><pattern>Lamentations 4 1</pattern><template>How is the gold become dim! how is the most fine gold changed! the stones of the sanctuary are poured out in the top of every street.</template></category>
+<category><pattern>Lamentations 4 2</pattern><template>The precious sons of Zion, comparable to fine gold, how are they esteemed as earthen pitchers, the work of the hands of the potter!</template></category>
+<category><pattern>Lamentations 4 3</pattern><template>Even the sea monsters draw out the breast, they give suck to their young ones: the daughter of my people is become cruel, like the ostriches in the wilderness.</template></category>
+<category><pattern>Lamentations 4 4</pattern><template>The tongue of the sucking child cleaveth to the roof of his mouth for thirst: the young children ask bread, and no man breaketh it unto them.</template></category>
+<category><pattern>Lamentations 4 5</pattern><template>They that did feed delicately are desolate in the streets: they that were brought up in scarlet embrace dunghills.</template></category>
+<category><pattern>Lamentations 4 6</pattern><template>For the punishment of the iniquity of the daughter of my people is greater than the punishment of the sin of Sodom, that was overthrown as in a moment, and no hands stayed on her.</template></category>
+<category><pattern>Lamentations 4 7</pattern><template>Her Nazarites were purer than snow, they were whiter than milk, they were more ruddy in body than rubies, their polishing was of sapphire:</template></category>
+<category><pattern>Lamentations 4 8</pattern><template>Their visage is blacker than a coal; they are not known in the streets: their skin cleaveth to their bones; it is withered, it is become like a stick.</template></category>
+<category><pattern>Lamentations 4 9</pattern><template>They that be slain with the sword are better than they that be slain with hunger: for these pine away, stricken through for want of the fruits of the field.</template></category>
+<category><pattern>Lamentations 4 10</pattern><template>The hands of the pitiful women have sodden their own children: they were their meat in the destruction of the daughter of my people.</template></category>
+<category><pattern>Lamentations 4 11</pattern><template>The LORD hath accomplished his fury; he hath poured out his fierce anger, and hath kindled a fire in Zion, and it hath devoured the foundations thereof.</template></category>
+<category><pattern>Lamentations 4 12</pattern><template>The kings of the earth, and all the inhabitants of the world, would not have believed that the adversary and the enemy should have entered into the gates of Jerusalem.</template></category>
+<category><pattern>Lamentations 4 13</pattern><template>For the sins of her prophets, and the iniquities of her priests, that have shed the blood of the just in the midst of her,</template></category>
+<category><pattern>Lamentations 4 14</pattern><template>They have wandered as blind men in the streets, they have polluted themselves with blood, so that men could not touch their garments.</template></category>
+<category><pattern>Lamentations 4 15</pattern><template>They cried unto them, Depart ye; it is unclean; depart, depart, touch not: when they fled away and wandered, they said among the heathen, They shall no more sojourn there.</template></category>
+<category><pattern>Lamentations 4 16</pattern><template>The anger of the LORD hath divided them; he will no more regard them: they respected not the persons of the priests, they favoured not the elders.</template></category>
+<category><pattern>Lamentations 4 17</pattern><template>As for us, our eyes as yet failed for our vain help: in our watching we have watched for a nation that could not save us.</template></category>
+<category><pattern>Lamentations 4 18</pattern><template>They hunt our steps, that we cannot go in our streets: our end is near, our days are fulfilled; for our end is come.</template></category>
+<category><pattern>Lamentations 4 19</pattern><template>Our persecutors are swifter than the eagles of the heaven: they pursued us upon the mountains, they laid wait for us in the wilderness.</template></category>
+<category><pattern>Lamentations 4 20</pattern><template>The breath of our nostrils, the anointed of the LORD, was taken in their pits, of whom we said, Under his shadow we shall live among the heathen.</template></category>
+<category><pattern>Lamentations 4 21</pattern><template>Rejoice and be glad, O daughter of Edom, that dwellest in the land of Uz; the cup also shall pass through unto thee: thou shalt be drunken, and shalt make thyself naked.</template></category>
+<category><pattern>Lamentations 4 22</pattern><template>The punishment of thine iniquity is accomplished, O daughter of Zion; he will no more carry thee away into captivity: he will visit thine iniquity, O daughter of Edom; he will discover thy sins.</template></category>
+<category><pattern>Lamentations 5 1</pattern><template>Remember, O LORD, what is come upon us: consider, and behold our reproach.</template></category>
+<category><pattern>Lamentations 5 2</pattern><template>Our inheritance is turned to strangers, our houses to aliens.</template></category>
+<category><pattern>Lamentations 5 3</pattern><template>We are orphans and fatherless, our mothers are as widows.</template></category>
+<category><pattern>Lamentations 5 4</pattern><template>We have drunken our water for money; our wood is sold unto us.</template></category>
+<category><pattern>Lamentations 5 5</pattern><template>Our necks are under persecution: we labour, and have no rest.</template></category>
+<category><pattern>Lamentations 5 6</pattern><template>We have given the hand to the Egyptians, and to the Assyrians, to be satisfied with bread.</template></category>
+<category><pattern>Lamentations 5 7</pattern><template>Our fathers have sinned, and are not; and we have borne their iniquities.</template></category>
+<category><pattern>Lamentations 5 8</pattern><template>Servants have ruled over us: there is none that doth deliver us out of their hand.</template></category>
+<category><pattern>Lamentations 5 9</pattern><template>We gat our bread with the peril of our lives because of the sword of the wilderness.</template></category>
+<category><pattern>Lamentations 5 10</pattern><template>Our skin was black like an oven because of the terrible famine.</template></category>
+<category><pattern>Lamentations 5 11</pattern><template>They ravished the women in Zion, and the maids in the cities of Judah.</template></category>
+<category><pattern>Lamentations 5 12</pattern><template>Princes are hanged up by their hand: the faces of elders were not honoured.</template></category>
+<category><pattern>Lamentations 5 13</pattern><template>They took the young men to grind, and the children fell under the wood.</template></category>
+<category><pattern>Lamentations 5 14</pattern><template>The elders have ceased from the gate, the young men from their musick.</template></category>
+<category><pattern>Lamentations 5 15</pattern><template>The joy of our heart is ceased; our dance is turned into mourning.</template></category>
+<category><pattern>Lamentations 5 16</pattern><template>The crown is fallen from our head: woe unto us, that we have sinned!</template></category>
+<category><pattern>Lamentations 5 17</pattern><template>For this our heart is faint; for these things our eyes are dim.</template></category>
+<category><pattern>Lamentations 5 18</pattern><template>Because of the mountain of Zion, which is desolate, the foxes walk upon it.</template></category>
+<category><pattern>Lamentations 5 19</pattern><template>Thou, O LORD, remainest for ever; thy throne from generation to generation.</template></category>
+<category><pattern>Lamentations 5 20</pattern><template>Wherefore dost thou forget us for ever, and forsake us so long time?</template></category>
+<category><pattern>Lamentations 5 21</pattern><template>Turn thou us unto thee, O LORD, and we shall be turned; renew our days as of old.</template></category>
+<category><pattern>Lamentations 5 22</pattern><template>But thou hast utterly rejected us; thou art very wroth against us.</template></category>
+</aiml>

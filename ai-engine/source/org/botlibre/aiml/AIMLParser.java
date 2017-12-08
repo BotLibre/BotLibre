@@ -70,7 +70,7 @@ public class AIMLParser {
 	public static int MAX_IDENTIFIER = 100;
 
 	public static Set<String> htmlTags = new HashSet<String>(Arrays.asList(new String[] {
-			"p", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio",
+			"p", "button", "select", "option", "span", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio",
 			"table", "tr", "td", "tablebody", "font", "tablehead", "th"}));
 
 	public static List<String> topicChildren = Arrays.asList(new String[] {"category", "#text"});
@@ -79,7 +79,7 @@ public class AIMLParser {
 			Arrays.asList(new String[] {"#text","bot", "name", "get", "set"});
 	public static Set<String> templateChildren =
 			new HashSet<String>(Arrays.asList(new String[] {
-					"p", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio",
+					"p", "button", "select", "option", "span", "ul", "ol", "li", "b", "em", "i", "strong", "code", "br", "a", "img", "video", "audio",
 					"table", "tr", "td", "tablebody", "font", "tablehead", "th",
 					"#text",
 					"bot", "name", "get", "set", "value", "index", "map", "new",
@@ -88,7 +88,8 @@ public class AIMLParser {
 					"date", "interval", "size", "version", "id", "vocabulary", "program",
 					"person", "person2", "gender", "uppercase", "lowercase", "formal", "sentence",
 					"learn", "eval",
-					"explode", "normalize", "denormalize"}));
+					"explode", "normalize", "denormalize",
+					"self"}));
 	public static Set<String> attributeNodes =
 			new HashSet<String>(Arrays.asList(new String[] {
 					"name", "index", "value", "var", "botname", "botid", "server", "service", "limit", "apikey", "default", "hint"}));
@@ -183,6 +184,9 @@ public class AIMLParser {
 					topicFilter = network.createSentence(text);
 				} else {
 					topicFilter = network.createPattern(text, getSelfCompiler());
+				}
+				if (pin) {
+					getSelfCompiler().pin(topicFilter);
 				}
 				network.getBot().log(this, "Topic", Level.INFO, topicFilter);
 				checkSupportedChildren(topic, topicChildren, network);
@@ -312,7 +316,7 @@ public class AIMLParser {
 			question = network.createSentence(text);
 			pin =  pin || (parseAsStateMachine && indexStatic);
 			if (pin) {
-				question.setPinned(true);
+				getSelfCompiler().pin(question);
 			}
 		} else {
 			if (text.trim().length() == 1) {
@@ -320,7 +324,7 @@ public class AIMLParser {
 			}
 			question = network.createPattern(text, getSelfCompiler());
 			if (pin) {
-				question.setPinned(true);
+				getSelfCompiler().pin(question);
 			}
 			isPattern = true;
 			if (underscoreIndex != -1) {
@@ -363,7 +367,7 @@ public class AIMLParser {
 						topic = network.createSentence(Utils.reduce(text), false, true);
 					}
 					if (pin) {
-						topic.setPinned(true);
+						getSelfCompiler().pin(topic);
 					}
 					network.getBot().log(this, "Topic", Level.INFO, topic);
 					checkSupportedChildren(child, Collections.EMPTY_LIST, network);
@@ -1389,6 +1393,8 @@ public class AIMLParser {
 				}
 				writer.write("]");
 			}
+		} else if (name.equals("self")) {
+			writer.write(child.getTextContent());
 		} else {
 			writer.write("think { debug(\"invalid tag: " + name + "\"); }");			
 		}

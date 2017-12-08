@@ -601,6 +601,16 @@ public interface Vertex {
 	 * The correctness decreases the correctness of the relation.
 	 */
 	Relationship addWeakRelationship(Vertex type, Vertex target, float correctnessMultiplier);
+
+	/**
+	 * Add the relation of the relationship type to the end of the target vertex relationships.
+	 */
+	Relationship appendRelationship(Vertex type, Vertex target);
+
+	/**
+	 * Add the relation of the relationship type to the end of the target vertex relationships.
+	 */
+	Relationship appendRelationship(Primitive type, Vertex target);
 	
 	/**
 	 * Add the relation of the relationship type to the target vertex.

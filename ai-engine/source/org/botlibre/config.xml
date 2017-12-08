@@ -47,6 +47,9 @@
 			<emotion>
 				<implementation-class>org.botlibre.emotion.Humor</implementation-class>
 			</emotion>
+			<emotion>
+				<implementation-class>org.botlibre.emotion.Sentiment</implementation-class>
+			</emotion>
 		</emotions>
 	</mood>
 	<avatar>
@@ -72,6 +75,9 @@
 			</sense>
 			<sense>
 				<implementation-class>org.botlibre.sense.wikidata.Wikidata</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.wolframalpha.WolframAlpha</implementation-class>
 			</sense>
 			<sense>
 				<implementation-class>org.botlibre.sense.service.RemoteService</implementation-class>
@@ -107,10 +113,22 @@
 				<implementation-class>org.botlibre.sense.slack.Slack</implementation-class>
 			</sense>
 			<sense>
+				<implementation-class>org.botlibre.sense.skype.Skype</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.wechat.WeChat</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.kik.Kik</implementation-class>
+			</sense>
+			<sense>
 				<implementation-class>org.botlibre.sense.vision.Vision</implementation-class>
 			</sense>
 			<sense>
 				<implementation-class>org.botlibre.sense.google.GoogleCalendar</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.timer.Timer</implementation-class>
 			</sense>
 		</senses>
 		<tools>

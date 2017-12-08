@@ -127,7 +127,7 @@ public interface Sense {
 	 */
 	Primitive getPrimitive();
 
-	void notifyExceptionListeners(Exception exception);
+	void notifyExceptionListeners(Throwable exception);
 
 	/**
 	 * Migrate to new properties system.

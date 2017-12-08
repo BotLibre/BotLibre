@@ -181,9 +181,9 @@ public class RemoteService extends BasicSense {
 			log("XML", Level.INFO, message);
 			Vertex result = null;
 			if (hint != null && !hint.isEmpty()) {
-				result = getBot().awareness().getSense(Http.class).requestXML(message, hint, network);
+				result = getBot().awareness().getSense(Http.class).requestXML(message, hint, null, network);
 			} else {
-				result = getBot().awareness().getSense(Http.class).requestXML(message, network);
+				result = getBot().awareness().getSense(Http.class).requestXML(message, null, null, network);
 			}
 			if (result == null) {
 				return null;
@@ -203,12 +203,12 @@ public class RemoteService extends BasicSense {
 			log("JSON", Level.INFO, message);
 			Vertex result = null;
 			if (hint != null && !hint.isEmpty()) {
-				result = getBot().awareness().getSense(Http.class).requestJSON(message, hint, network);
+				result = getBot().awareness().getSense(Http.class).requestJSON(message, hint, null, network);
 				if (result == null) {
 					return null;
 				}
 			} else {
-				result = getBot().awareness().getSense(Http.class).requestJSON(message, network);
+				result = getBot().awareness().getSense(Http.class).requestJSON(message, null, null, network);
 			}
 			if (result == null) {
 				return null;
@@ -264,7 +264,7 @@ public class RemoteService extends BasicSense {
 			log("HTML", Level.INFO, message);
 			Vertex result = null;
 			if (hint != null && !hint.isEmpty()) {
-				result = getBot().awareness().getSense(Http.class).requestHTML(message, hint, network);
+				result = getBot().awareness().getSense(Http.class).requestHTML(message, hint, "text", null, network);
 			}
 			if (result == null) {
 				return null;

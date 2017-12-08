@@ -31,7 +31,8 @@ public enum EmotionalState {
 	ECSTATIC, HAPPY, SAD, CRYING,
 	PANIC, AFRAID, CONFIDENT, COURAGEOUS,
 	SURPRISE, BORED,
-	LAUGHTER, SERIOUS;
+	LAUGHTER, SERIOUS,
+	GOOD, GREAT, TERRIBLE, BAD;
 	
 	public Primitive primitive() {
 		return new Primitive(name().toLowerCase());
@@ -101,6 +102,18 @@ public enum EmotionalState {
 			vertex.addRelationship(Primitive.EMOTION, Primitive.HUMOR);
 		} else if (this == EmotionalState.SERIOUS) {
 			vertex.removeRelationship(Primitive.EMOTION, Primitive.HUMOR);
+		}
+		
+		else if (this == EmotionalState.GREAT) {
+			vertex.addRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
+			vertex.addRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
+		} else if (this == EmotionalState.GOOD) {
+			vertex.addRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
+		} else if (this == EmotionalState.BAD) {
+			vertex.removeRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
+		} else if (this == EmotionalState.TERRIBLE) {
+			vertex.removeRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
+			vertex.removeRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
 		}
 	}
 }

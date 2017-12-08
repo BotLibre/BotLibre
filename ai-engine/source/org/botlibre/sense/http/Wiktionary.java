@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.botlibre.Bot;
+import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
@@ -486,6 +487,21 @@ public class Wiktionary extends Http implements DiscoverySense {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Import the word from Wiktionary.
+	 */
+	public Vertex importWord(String word, Network network) {
+		try {
+			input(new URL(URL_PREFIX + URLEncoder.encode(word, "UTF-8")), network);
+		} catch (Exception failed) {
+			throw new BotException(failed);
+		}
+		network.save();
+		Vertex result = network.createVertex(word);
+		network.save();
+		return result;
 	}
 
 	/**

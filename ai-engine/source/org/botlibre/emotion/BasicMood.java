@@ -188,23 +188,24 @@ public class BasicMood implements Mood {
 					emotions = sentence.getRelationships(Primitive.EMOTION);
 					if (emotions != null) {
 						source = sentence;
+						for (Relationship emotionRelation : emotions) {
+							Relationship relationship = input.addRelationship(Primitive.EMOTION, emotionRelation.getTarget());
+							relationship.setCorrectness(emotionRelation.getCorrectness());
+						}
 					} else {
 						// Attempt to determine from words.
 						Collection<Relationship> words = sentence.getRelationships(Primitive.WORD);
 						if (words != null) {
 							for (Relationship word : words) {
-								if (word.getTarget().getRelationships(Primitive.EMOTION) != null) {
-									for (Emotion emotion : getEmotions().values()) {
-										Vertex emotionVertex = network.createVertex(emotion.primitive());
-										Relationship emotionRelation = word.getTarget().getRelationship(Primitive.EMOTION, emotionVertex);
-										if (emotionRelation != null) {
-											Relationship relationship = input.getRelationship(Primitive.EMOTION, emotionVertex);
-											if (relationship == null) {
-												relationship = input.addRelationship(Primitive.EMOTION, emotionVertex);
-												relationship.setCorrectness(emotionRelation.getCorrectness());
-											} else {
-												relationship.setCorrectness((relationship.getCorrectness() + emotionRelation.getCorrectness()) / 2);												
-											}
+								emotions = word.getTarget().getRelationships(Primitive.EMOTION);
+								if (emotions != null) {
+									for (Relationship emotionRelation : emotions) {
+										Relationship relationship = input.getRelationship(Primitive.EMOTION, emotionRelation.getTarget());
+										if (relationship == null) {
+											relationship = input.addRelationship(Primitive.EMOTION, emotionRelation.getTarget());
+											relationship.setCorrectness(emotionRelation.getCorrectness());
+										} else {
+											relationship.setCorrectness((relationship.getCorrectness() + emotionRelation.getCorrectness()) / 2);												
 										}
 									}
 								}
@@ -299,6 +300,18 @@ public class BasicMood implements Mood {
 			}
 		}
 		return source;
+	}
+
+	/**
+	 * Self API to get mood.
+	 */
+	public Vertex getEmotion(Vertex source, Vertex emotionVertex) {
+		Emotion emotion = getEmotion(emotionVertex.getDataValue());
+		if (emotion == null) {
+			log("Invalid emotion", Level.FINE, emotion);
+			return null;
+		}
+		return source.getNetwork().createVertex(emotion.getState());
 	}
 	
 	/**

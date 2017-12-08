@@ -34,6 +34,7 @@ import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.BasicSense;
+import org.botlibre.sense.ResponseListener;
 import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
@@ -42,6 +43,8 @@ import org.botlibre.util.Utils;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -58,19 +61,22 @@ public class Telegram extends BasicSense {
 	protected String token = "";
 	
 	protected boolean initProperties;
-	
+	public static int MAX_WAIT = 60 * 1000; // 1 minute
 	protected int maxErrors = 5;
 	protected int maxMessages = 200;
 	protected int maxFeed = 20;
 	protected int errors;
 	protected boolean checkMessages = false;
-	protected boolean realtimeMessages = false;
+	protected boolean realtimeMessages = true;
 	protected boolean autoPost = false;
 	protected int autoPostHours = 24;
 	protected String channel = "";
 	protected String profileName = "";
 	protected List<String> postRSS = new ArrayList<String>();
 	protected List<String> rssKeywords = new ArrayList<String>();
+	protected boolean stripButtonText = false;
+	protected boolean trackMessageObjects = false;
+	protected LanguageState groupMode = LanguageState.Discussion;
 
 	protected int posts;
 	protected int messagesProcessed;
@@ -84,6 +90,26 @@ public class Telegram extends BasicSense {
 		this(false);
 	}
 	
+	public boolean getTrackMessageObjects() {
+		initProperties();
+		return trackMessageObjects;
+	}
+
+	public void setTrackMessageObjects(boolean trackMessageObjects) {
+		initProperties();
+		this.trackMessageObjects = trackMessageObjects;
+	}
+
+	public LanguageState getGroupMode() {
+		initProperties();
+		return groupMode;
+	}
+
+	public void setGroupMode(LanguageState groupMode) {
+		initProperties();
+		this.groupMode = groupMode;
+	}
+
 	public String getChannel() {
 		return channel;
 	}
@@ -122,6 +148,16 @@ public class Telegram extends BasicSense {
 
 	public void setProfileName(String profileName) {
 		this.profileName = profileName;
+	}
+
+	public boolean getStripButtonText() {
+		initProperties();
+		return stripButtonText;
+	}
+
+	public void setStripButtonText(boolean stripButtonText) {
+		initProperties();
+		this.stripButtonText = stripButtonText;
 	}
 
 	public List<String> getRssKeywords() {
@@ -163,6 +199,7 @@ public class Telegram extends BasicSense {
 	 */
 	@Override
 	public void awake() {
+		super.awake();
 		this.userName = this.bot.memory().getProperty("Telegram.userName");
 		if (this.userName == null) {
 			this.userName = "";
@@ -212,6 +249,18 @@ public class Telegram extends BasicSense {
 			if (property != null) {
 				this.realtimeMessages = Boolean.valueOf(property);
 			}
+			property = this.bot.memory().getProperty("Telegram.stripButtonText");
+			if (property != null) {
+				this.stripButtonText = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Telegram.trackMessageObjects");
+			if (property != null) {
+				this.trackMessageObjects = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Telegram.groupMode");
+			if (property != null) {
+				this.groupMode = LanguageState.valueOf(property);
+			}
 			property = this.bot.memory().getProperty("Telegram.autoPost");
 			if (property != null) {
 				this.autoPost = Boolean.valueOf(property);
@@ -252,23 +301,26 @@ public class Telegram extends BasicSense {
 		memory.saveProperty("Telegram.profileName", this.profileName, false);
 		memory.saveProperty("Telegram.checkMessages", String.valueOf(this.checkMessages), false);
 		memory.saveProperty("Telegram.realtimeMessages", String.valueOf(this.realtimeMessages), false);
+		memory.saveProperty("Telegram.stripButtonText", String.valueOf(this.stripButtonText), false);
+		memory.saveProperty("Telegram.trackMessageObjects", String.valueOf(this.trackMessageObjects), false);
+		memory.saveProperty("Telegram.groupMode", String.valueOf(this.groupMode), false);
 		memory.saveProperty("Telegram.autoPost", String.valueOf(this.autoPost), false);
 		memory.saveProperty("Telegram.autoPostHours", String.valueOf(this.autoPostHours), false);
 
-		Vertex facebook = memory.createVertex(getPrimitive());
-		facebook.unpinChildren();
-		facebook.internalRemoveRelationships(Primitive.RSS);
+		Vertex sense = memory.createVertex(getPrimitive());
+		sense.unpinChildren();
+		sense.internalRemoveRelationships(Primitive.RSS);
 		for (String text : this.postRSS) {
 			Vertex rss =  memory.createVertex(text);
-			facebook.addRelationship(Primitive.RSS, rss);
+			sense.addRelationship(Primitive.RSS, rss);
 		}
-		facebook.internalRemoveRelationships(Primitive.RSSKEYWORDS);
+		sense.internalRemoveRelationships(Primitive.RSSKEYWORDS);
 		for (String text : this.rssKeywords) {
 			Vertex keywords =  memory.createVertex(text);
-			facebook.addRelationship(Primitive.RSSKEYWORDS, keywords);
+			sense.addRelationship(Primitive.RSSKEYWORDS, keywords);
 		}
 		if (autoPosts != null) {
-			Collection<Relationship> old = facebook.getRelationships(Primitive.AUTOPOSTS);
+			Collection<Relationship> old = sense.getRelationships(Primitive.AUTOPOSTS);
 			if (old != null) {
 				for (Relationship post : old) {
 					if (post.getTarget().instanceOf(Primitive.FORMULA)) {
@@ -276,21 +328,24 @@ public class Telegram extends BasicSense {
 					}
 				}
 			}
-			facebook.internalRemoveRelationships(Primitive.AUTOPOSTS);
+			sense.internalRemoveRelationships(Primitive.AUTOPOSTS);
 			for (String text : autoPosts) {
 				Vertex post =  memory.createSentence(text);
 				if (post.instanceOf(Primitive.FORMULA)) {
 					SelfCompiler.getCompiler().pin(post);
 				}
-				post.addRelationship(Primitive.INSTANTIATION, Primitive.TWEET);
-				facebook.addRelationship(Primitive.AUTOPOSTS, post);
+				post.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
+				sense.addRelationship(Primitive.AUTOPOSTS, post);
 			}
 		}
 
-		facebook.pinChildren();
+		sense.pinChildren();
 		memory.save();
 	}
 	
+	/**
+	 * Register the webhook for the bot for real-time messages.
+	 */
 	public void connect(String webhook) throws Exception {
 		initProperties();
 		log("Connecting to Telegram", Level.INFO);
@@ -315,8 +370,44 @@ public class Telegram extends BasicSense {
 				String response = Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/setWebhook", params);
 				log("Webhook registration response", Level.FINE, response);
 				log("Webhook registered", Level.INFO, webhook);
+			} else {
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("url", "");
+				String response = Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/setWebhook", params);
+				log("Webhook registration response", Level.FINE, response);
 			}
 			log("Connected to Telegram", Level.INFO);
+		} catch (Exception exception) {
+			throw new BotException("Invalid JSON response: " + new TextStream(json).nextLine());
+		}
+	}
+
+	/**
+	 * Remove the webhook to disable realtime messages.
+	 */
+	public void disconnect() throws Exception {
+		initProperties();
+		log("Disconnecting from Telegram", Level.INFO);
+		String json = Utils.httpGET("https://api.telegram.org/bot" + this.token + "/getMe");
+		log("Telegram response", Level.FINE, new TextStream(json).nextLine());
+
+		try {
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+			JSONObject result = root.getJSONObject("result");
+			
+			if (this.userName == null || !this.userName.equals(result.getString("username"))) {
+				this.userId = result.getString("id");
+				this.userName = result.getString("username");
+				this.profileName = result.getString("first_name");
+				saveProperties(null);
+			}
+	
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("url", "");
+			String response = Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/setWebhook", params);
+			log("Webhook registration response", Level.FINE, response);
+				
+			log("Disconnected from Telegram", Level.INFO);
 		} catch (Exception exception) {
 			throw new BotException("Invalid JSON response: " + new TextStream(json).nextLine());
 		}
@@ -397,12 +488,43 @@ public class Telegram extends BasicSense {
 		}
 	}
 
+	public String processMessage(JSONObject message, Network memory) {
+		this.responseListener = new ResponseListener();
+		checkMessage(message, 0, 0, memory);	
+		memory.save();
+		String reply = null;
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
+				try {
+					this.responseListener.wait(MAX_WAIT);
+				} catch (Exception exception) {
+					log(exception);
+					return "";
+				}
+			}
+			reply = this.responseListener.reply;
+			this.responseListener = null;
+		}
+		return reply;
+	}
+	
 	/**
 	 * Reply to the message.
+	 * 
+	 * message: {"update_id":1234, "message":{"message_id":123,"from":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"chat":{"id":-1234,"title":"test","type":"group","all_members_are_administrators":false},"date":1496344361,"text":"Hello"}}
+	 * leave: {"update_id":1234, "message":{"message_id":123,"from":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"chat":{"id":-1234,"title":"test","type":"group","all_members_are_administrators":false},"date":1496344379,"left_chat_participant":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"left_chat_member":{"id":233598213,"first_name":"Michael","last_name":"Jones","username":"mjones"}}}
+	 * join: {"update_id":1234, "message":{"message_id":123,"from":{"id":1234,"first_name":"James","last_name":"Jones","username":"jjones","language_code":"en"},"chat":{"id":-1234,"title":"test","type":"group","all_members_are_administrators":false},"date":1496344627,"new_chat_participant":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"new_chat_member":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"new_chat_members":[{"id":233598213,"first_name":"Michael","last_name":"Jones","username":"mjones"}]}}
 	 */
-	public long checkMessage(JSONObject message, long last, long max, Network memory) {
+	public long checkMessage(JSONObject message, long last, long max, Network network) {
     	String id = message.getString("message_id");
-    	String conversationId = message.getJSONObject("chat").getString("id");
+    	JSONObject chat = message.getJSONObject("chat");
+    	String chatId = chat.getString("id");
+    	String chatType = chat.getString("type");
+    	boolean group = "group".equals(chatType) || "supergroup".equals(chatType);
+    	if (group && getGroupMode() == LanguageState.Ignore) {
+    		// Ignore messages sent to a group.
+    		return max;
+    	}
     	String date = message.getString("date");
 	    Date createdTime = new Date(((long)Integer.parseInt(date)) * 1000L);
     	if ((System.currentTimeMillis() - createdTime.getTime()) > DAY) {
@@ -411,22 +533,83 @@ public class Telegram extends BasicSense {
     	}
     	if (createdTime.getTime() > last) {
     		JSONObject from = message.getJSONObject("from");
-		    String fromUser = from.getString("first_name") + " " + from.getString("last_name");
 		    String fromUserId = from.getString("id");
 		    if (!fromUserId.equals(this.userId)) {
-		    	if (message.get("text") == null) {
-					log("Ignoring empty message", Level.INFO, fromUser, createdTime, conversationId);
+			    String fromUser = fromUserId;
+			    if (from.has("first_name")) {
+			    	fromUser = from.getString("first_name");
+			    }
+			    if (from.has("last_name")) {
+			    	fromUser = fromUser + " " + from.getString("last_name");
+			    }
+			    String username = null;
+			    if (from.has("username")) {
+			    	username = from.getString("username");
+			    }
+			    String chatusername = null;
+			    if (chat.has("username")) {
+			    	chatusername = chat.getString("username");
+			    }
+			    String type = null;
+			    if (chat.has("type")) {
+			    	type = chat.getString("type");
+			    }
+			    String title = null;
+			    if (chat.has("title")) {
+			    	title = chat.getString("title");
+			    }
+			    String messageId = null;
+			    if (message.has("message_id")) {
+			    	messageId = message.getString("message_id");
+			    }
+			    String text = "";
+		    	if (message.get("text") != null) {
+					text = message.getString("text").trim();
+		    	} else if (message.get("new_chat_participant") != null) {
+		    		text = "join";
+	    		} else if (message.get("left_chat_participant") != null) {
+		    		text = "leave";
+	    		}
+		    	if (!getTrackMessageObjects() && (text == null || text.isEmpty())) {
+	    			log("Ignoring empty message", Level.INFO, fromUser, createdTime, chatId);
 		    	} else {
-					String text = message.getString("text").trim();
-					log("Processing message", Level.INFO, fromUser, createdTime, conversationId, text);
+					log("Processing message", Level.INFO, fromUser, createdTime, chatId, text);
 					this.messagesProcessed++;
-					inputSentence(text, fromUser, this.userName, conversationId, memory);
+					Vertex user = network.createUniqueSpeaker(new Primitive(fromUserId), Primitive.TELEGRAM, fromUser);
+					if (username != null) {
+						user.addRelationship(new Primitive("username"), network.createVertex(username));
+					}
+					Vertex conversationId = network.createVertex(chatId);
+					Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(conversationId);
+					Vertex conversation = today.getRelationship(conversationId);
+					if (conversation == null) {
+						conversation = network.createVertex();
+						today.setRelationship(conversationId, conversation);
+						this.conversations++;
+					} else {
+						checkEngaged(conversation);
+					}
+					conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
+					conversation.addRelationship(Primitive.TYPE, Primitive.TELEGRAM);
+					conversation.addRelationship(Primitive.ID, conversationId);
+					if (chatusername != null) {
+						conversation.addRelationship(new Primitive("username"), network.createVertex(chatusername));
+					}
+					conversation.addRelationship(Primitive.SPEAKER, Primitive.SELF);
+					if (type != null) {
+						conversation.addRelationship(new Primitive("chatType"), network.createVertex(type));
+					}
+					if (title != null) {
+						conversation.addRelationship(new Primitive("title"), network.createVertex(title));
+					}
+					conversation.addRelationship(Primitive.SPEAKER, user);
+					inputSentence(text, user, this.userName, conversation, messageId, group, message, network);
 			    	if (createdTime.getTime() > max) {
 			    		max = createdTime.getTime();
 			    	}
 		    	}
 		    } else {
-				log("Ignoring own message", Level.FINE, createdTime, conversationId);
+				log("Ignoring own message", Level.FINE, createdTime, chatId);
 		    }
     	}
     	return max;
@@ -592,11 +775,36 @@ public class Telegram extends BasicSense {
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		Vertex id = conversation.getRelationship(Primitive.ID);
 		String conversationId = id.printString();
-		
-		sendMessage(text, replyTo, conversationId);
+
+		// Don't send empty messages.
+		if (text.isEmpty()) {
+			return;
+		}
+		if (this.responseListener != null) {
+			this.responseListener.reply = text;
+		}
+		Vertex command = output.mostConscious(Primitive.COMMAND);
+		String json = null;
+		if (command != null) {
+			json = command.printString();
+		}
+		sendMessage(text, replyTo, conversationId, json);
 	}
 	
 	public String sanitize(String text) {
+		// Telegram does not support <br> but does support new lines.
+		text = text.replace("<br/>", "\n");
+		text = text.replace("<br>", "\n");
+		text = text.replace("</br>", "");
+		text = text.replace("<p/>", "\n");
+		text = text.replace("<p>", "\n");
+		text = text.replace("</p>", "");
+		text = text.replace("<li>", "\n");
+		text = text.replace("</li>", "");
+		text = text.replace("<ul>", "");
+		text = text.replace("</ul>", "\n");
+		text = text.replace("<ol>", "");
+		text = text.replace("</ol>", "\n");
 		if (sanitizer == null) {
 			sanitizer = new HtmlPolicyBuilder().allowElements(
 			        "b", "i", "strong", "code", "em", "pre").toFactory().and(Sanitizers.LINKS);
@@ -616,27 +824,188 @@ public class Telegram extends BasicSense {
 	}
 
 	/**
+	 * Call a generic Telegram web API.
+	 */
+	public Vertex postJSON(String url, Vertex paramsObject, Network network) {
+		log("POST JSON:", Level.INFO, url);
+		try {
+			Map<String, String> params = getBot().awareness().getSense(Http.class).convertToMap(paramsObject);
+			String json = Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/" + url, params);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json.trim());
+			if (root == null) {
+				return null;
+			}
+			Vertex object = getBot().awareness().getSense(Http.class).convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			this.errors++;
+			log(exception);
+		}
+		return null;
+	}
+
+	/**
+	 * Self API.
+	 * POST the HTTP params and return the JSON data from the Telegram web API.
+	 * Append the bot token.
+	 */
+	public Vertex postJSON(Vertex source, Vertex url, Vertex params) {
+		Network network = source.getNetwork();
+		return postJSON(url.printString(), params, network);
+	}
+
+	/**
 	 * Send a message to the user.
 	 */
-	public void sendMessage(String text, String replyUser, String conversationOrUserId) {
+	public void sendMessage(String text, String replyUser, String conversationOrUserId, String command) {
 		log("Sending message:", Level.INFO, text, replyUser);
 		try {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("chat_id", conversationOrUserId);
 			if (text.indexOf('<') != -1 && text.indexOf('>') != -1) {
-				params.put("text", sanitize(text));
+				String strippedText = text;
+				if (getStripButtonText()) {
+					strippedText = Utils.stripTag(strippedText, "button");
+				}
+				strippedText = sanitize(strippedText);
+				log("Sanitized message:", Level.INFO, strippedText, replyUser);
+				params.put("text", strippedText);
 				params.put("parse_mode", "Html");
 			} else {
 				params.put("text", text);
 			}
+			// Check for a command message.
+			if (command != null && !command.isEmpty()) {
+				JSONObject json = (JSONObject)JSONSerializer.toJSON(command);
+				if (json.containsKey("reply_markup")) {
+					JSONObject markup = json.getJSONObject("reply_markup");
+					params.put("reply_markup", markup.toString());
+				}
+			} else {
+				// Check for HTML content to translate to Telegram objects.
+				if ((text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+					try {
+						Element root = getBot().awareness().getSense(Http.class).parseHTML(text);
+						NodeList nodes = root.getElementsByTagName("button");
+						if (nodes.getLength() > 0) {
+							String markup = "{\"resize_keyboard\":true,\"one_time_keyboard\":true, \"keyboard\":[";
+							int count = 0;
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String button = node.getTextContent().trim();
+								if (button != null && !button.isEmpty()) {
+									if (count > 0) {
+										markup = markup + ",";
+									}
+									markup = markup + "[{\"text\":\"" + button + "\"}]";
+									count++;
+								}
+							}
+							markup = markup + "]}";
+							if (count > 0) {
+								params.put("reply_markup", markup);
+							}
+						}
+						nodes = root.getElementsByTagName("img");
+						if (nodes.getLength() > 0) {
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								String imgClass = node.getAttribute("class");
+								String title = node.getAttribute("title");
+								if (src != null && !src.isEmpty()) {
+									Map<String, String> photoParams = new HashMap<String, String>();
+									photoParams.put("chat_id", conversationOrUserId);
+									// Support stickers through class="sticker"
+									if (imgClass != null && imgClass.contains("sticker")) {
+										photoParams.put("sticker", src);
+										log("sendSticker:", Level.INFO, params);
+										Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/sendSticker", photoParams);
+									} else {
+										photoParams.put("photo", src);
+										if (title != null && !title.isEmpty()) {
+											photoParams.put("caption", title);
+										}
+										log("sendPhoto:", Level.INFO, params);
+										Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/sendPhoto", photoParams);
+									}
+								}
+							}
+						}
+						nodes = root.getElementsByTagName("video");
+						if (nodes.getLength() > 0) {
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								String title = node.getAttribute("title");
+								if (src != null && !src.isEmpty()) {
+									Map<String, String> photoParams = new HashMap<String, String>();
+									photoParams.put("chat_id", conversationOrUserId);
+									photoParams.put("video", src);
+									if (title != null && !title.isEmpty()) {
+										photoParams.put("caption", title);
+									}
+									log("sendVideo:", Level.INFO, params);
+									Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/sendVideo", photoParams);
+								}
+							}
+						}
+						nodes = root.getElementsByTagName("audio");
+						if (nodes.getLength() > 0) {
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								String title = node.getAttribute("title");
+								if (src != null && !src.isEmpty()) {
+									Map<String, String> photoParams = new HashMap<String, String>();
+									photoParams.put("chat_id", conversationOrUserId);
+									photoParams.put("audio", src);
+									if (title != null && !title.isEmpty()) {
+										photoParams.put("caption", title);
+									}
+									log("sendAudio:", Level.INFO, params);
+									Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/sendAudio", photoParams);
+								}
+							}
+						}
+					} catch (Exception exception) {
+						log(exception);
+					}
+				}
+			}
 			//params.put("reply_to_message_id", messageId);
 
+			log("sendMessage:", Level.INFO, params);
 			Utils.httpPOST("https://api.telegram.org/bot" + this.token + "/sendMessage", params);
-			
 		} catch (Exception exception) {
 			this.errors++;
 			log(exception);
 		}
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void message(Vertex source, Vertex conversationOrUserId, Vertex text) {
+		sendMessage(source, conversationOrUserId, text);
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void sendMessage(Vertex source, Vertex text, Vertex conversationOrUserId) {
+		sendMessage(text.printString(), conversationOrUserId.printString(), conversationOrUserId.printString(), null);
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void sendMessage(Vertex source, Vertex text, Vertex conversationOrUserId, Vertex command) {
+		sendMessage(text.printString(), conversationOrUserId.printString(), conversationOrUserId.printString(), command.printString());
 	}
 
 	public String getUserName() {
@@ -658,20 +1027,32 @@ public class Telegram extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, String targetUserName, String id, Network network) {
+	public void inputSentence(String text, Vertex user, String targetUserName, Vertex conversation, String messageId, boolean group, JSONObject message, Network network) {
+		String target = null;
+		if (text.startsWith("@")) {
+			TextStream stream = new TextStream(text);
+			target = stream.nextWord();
+			text = stream.upToEnd();
+		}
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
-		Vertex self = network.createVertex(Primitive.SELF);
-		input.addRelationship(Primitive.SPEAKER, user);		
-		input.addRelationship(Primitive.TARGET, self);
-		user.addRelationship(Primitive.INPUT, input);
-		
-		Vertex conversation = network.createVertex(id);
-		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
-		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
-		conversation.addRelationship(Primitive.ID, network.createVertex(id));
-		conversation.addRelationship(Primitive.SPEAKER, user);
-		conversation.addRelationship(Primitive.SPEAKER, self);
+		if (messageId != null) {
+			input.addRelationship(Primitive.ID, network.createVertex(messageId));
+		}
+		if (getTrackMessageObjects() && message != null) {
+			input.addRelationship(Primitive.MESSAGE, getBot().awareness().getSense(Http.class).convertElement(message, network));
+		}
+		input.addRelationship(Primitive.SPEAKER, user);
+		if (group) {
+			this.languageState = getGroupMode();
+			if (targetUserName.equals(target)) {
+				input.addRelationship(Primitive.TARGET, Primitive.SELF);
+			} else if (target != null) {
+				input.addRelationship(Primitive.TARGET, network.createSpeaker(target));
+			}
+		} else {
+			this.languageState = LanguageState.Answering;
+			input.addRelationship(Primitive.TARGET, Primitive.SELF);
+		}
 		Language.addToConversation(input, conversation);
 		
 		network.save();

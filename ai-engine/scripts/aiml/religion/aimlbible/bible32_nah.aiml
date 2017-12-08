@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+<category><pattern>Na *</pattern><template><srai>Nahum <star /></srai></template></category>
+<category><pattern>* Na *</pattern><template><srai>Nahum <star index="1"/></srai></template></category>
+<category><pattern>Nah *</pattern><template><srai>Nahum <star /></srai></template></category>
+<category><pattern>* Nah *</pattern><template><srai>Nahum <star index="1"/></srai></template></category>
+<category><pattern>Nahum 1 1</pattern><template>The burden of Nineveh. The book of the vision of Nahum the Elkoshite.</template></category>
+<category><pattern>Nahum 1 2</pattern><template>God is jealous, and the LORD revengeth; the LORD revengeth, and is furious; the LORD will take vengeance on his adversaries, and he reserveth wrath for his enemies.</template></category>
+<category><pattern>Nahum 1 3</pattern><template>The LORD is slow to anger, and great in power, and will not at all acquit the wicked: the LORD hath his way in the whirlwind and in the storm, and the clouds are the dust of his feet.</template></category>
+<category><pattern>Nahum 1 4</pattern><template>He rebuketh the sea, and maketh it dry, and drieth up all the rivers: Bashan languisheth, and Carmel, and the flower of Lebanon languisheth.</template></category>
+<category><pattern>Nahum 1 5</pattern><template>The mountains quake at him, and the hills melt, and the earth is burned at his presence, yea, the world, and all that dwell therein.</template></category>
+<category><pattern>Nahum 1 6</pattern><template>Who can stand before his indignation? and who can abide in the fierceness of his anger? his fury is poured out like fire, and the rocks are thrown down by him.</template></category>
+<category><pattern>Nahum 1 7</pattern><template>The LORD is good, a strong hold in the day of trouble; and he knoweth them that trust in him.</template></category>
+<category><pattern>Nahum 1 8</pattern><template>But with an overrunning flood he will make an utter end of the place thereof, and darkness shall pursue his enemies.</template></category>
+<category><pattern>Nahum 1 9</pattern><template>What do ye imagine against the LORD? he will make an utter end: affliction shall not rise up the second time.</template></category>
+<category><pattern>Nahum 1 10</pattern><template>For while they be folden together as thorns, and while they are drunken as drunkards, they shall be devoured as stubble fully dry.</template></category>
+<category><pattern>Nahum 1 11</pattern><template>There is one come out of thee, that imagineth evil against the LORD, a wicked counsellor.</template></category>
+<category><pattern>Nahum 1 12</pattern><template>Thus saith the LORD; Though they be quiet, and likewise many, yet thus shall they be cut down, when he shall pass through. Though I have afflicted thee, I will afflict thee no more.</template></category>
+<category><pattern>Nahum 1 13</pattern><template>For now will I break his yoke from off thee, and will burst thy bonds in sunder.</template></category>
+<category><pattern>Nahum 1 14</pattern><template>And the LORD hath given a commandment concerning thee, that no more of thy name be sown: out of the house of thy gods will I cut off the graven image and the molten image: I will make thy grave; for thou art vile.</template></category>
+<category><pattern>Nahum 1 15</pattern><template>Behold upon the mountains the feet of him that bringeth good tidings, that publisheth peace! O Judah, keep thy solemn feasts, perform thy vows: for the wicked shall no more pass through thee; he is utterly cut off.</template></category>
+<category><pattern>Nahum 2 1</pattern><template>He that dasheth in pieces is come up before thy face: keep the munition, watch the way, make thy loins strong, fortify thy power mightily.</template></category>
+<category><pattern>Nahum 2 2</pattern><template>For the LORD hath turned away the excellency of Jacob, as the excellency of Israel: for the emptiers have emptied them out, and marred their vine branches.</template></category>
+<category><pattern>Nahum 2 3</pattern><template>The shield of his mighty men is made red, the valiant men are in scarlet: the chariots shall be with flaming torches in the day of his preparation, and the fir trees shall be terribly shaken.</template></category>
+<category><pattern>Nahum 2 4</pattern><template>The chariots shall rage in the streets, they shall justle one against another in the broad ways: they shall seem like torches, they shall run like the lightnings.</template></category>
+<category><pattern>Nahum 2 5</pattern><template>He shall recount his worthies: they shall stumble in their walk; they shall make haste to the wall thereof, and the defence shall be prepared.</template></category>
+<category><pattern>Nahum 2 6</pattern><template>The gates of the rivers shall be opened, and the palace shall be dissolved.</template></category>
+<category><pattern>Nahum 2 7</pattern><template>And Huzzab shall be led away captive, she shall be brought up, and her maids shall lead her as with the voice of doves, tabering upon their breasts.</template></category>
+<category><pattern>Nahum 2 8</pattern><template>But Nineveh is of old like a pool of water: yet they shall flee away. Stand, stand, shall they cry; but none shall look back.</template></category>
+<category><pattern>Nahum 2 9</pattern><template>Take ye the spoil of silver, take the spoil of gold: for there is none end of the store and glory out of all the pleasant furniture.</template></category>
+<category><pattern>Nahum 2 10</pattern><template>She is empty, and void, and waste: and the heart melteth, and the knees smite together, and much pain is in all loins, and the faces of them all gather blackness.</template></category>
+<category><pattern>Nahum 2 11</pattern><template>Where is the dwelling of the lions, and the feedingplace of the young lions, where the lion, even the old lion, walked, and the lion's whelp, and none made them afraid?</template></category>
+<category><pattern>Nahum 2 12</pattern><template>The lion did tear in pieces enough for his whelps, and strangled for his lionesses, and filled his holes with prey, and his dens with ravin.</template></category>
+<category><pattern>Nahum 2 13</pattern><template>Behold, I am against thee, saith the LORD of hosts, and I will burn her chariots in the smoke, and the sword shall devour thy young lions: and I will cut off thy prey from the earth, and the voice of thy messengers shall no more be heard.</template></category>
+<category><pattern>Nahum 3 1</pattern><template>Woe to the bloody city! it is all full of lies and robbery; the prey departeth not;</template></category>
+<category><pattern>Nahum 3 2</pattern><template>The noise of a whip, and the noise of the rattling of the wheels, and of the pransing horses, and of the jumping chariots.</template></category>
+<category><pattern>Nahum 3 3</pattern><template>The horseman lifteth up both the bright sword and the glittering spear: and there is a multitude of slain, and a great number of carcases; and there is none end of their corpses; they stumble upon their corpses:</template></category>
+<category><pattern>Nahum 3 4</pattern><template>Because of the multitude of the whoredoms of the wellfavoured harlot, the mistress of witchcrafts, that selleth nations through her whoredoms, and families through her witchcrafts.</template></category>
+<category><pattern>Nahum 3 5</pattern><template>Behold, I am against thee, saith the LORD of hosts; and I will discover thy skirts upon thy face, and I will shew the nations thy nakedness, and the kingdoms thy shame.</template></category>
+<category><pattern>Nahum 3 6</pattern><template>And I will cast abominable filth upon thee, and make thee vile, and will set thee as a gazingstock.</template></category>
+<category><pattern>Nahum 3 7</pattern><template>And it shall come to pass, that all they that look upon thee shall flee from thee, and say, Nineveh is laid waste: who will bemoan her? whence shall I seek comforters for thee?</template></category>
+<category><pattern>Nahum 3 8</pattern><template>Art thou better than populous No, that was situate among the rivers, that had the waters round about it, whose rampart was the sea, and her wall was from the sea?</template></category>
+<category><pattern>Nahum 3 9</pattern><template>Ethiopia and Egypt were her strength, and it was infinite; Put and Lubim were thy helpers.</template></category>
+<category><pattern>Nahum 3 10</pattern><template>Yet was she carried away, she went into captivity: her young children also were dashed in pieces at the top of all the streets: and they cast lots for her honourable men, and all her great men were bound in chains.</template></category>
+<category><pattern>Nahum 3 11</pattern><template>Thou also shalt be drunken: thou shalt be hid, thou also shalt seek strength because of the enemy.</template></category>
+<category><pattern>Nahum 3 12</pattern><template>All thy strong holds shall be like fig trees with the firstripe figs: if they be shaken, they shall even fall into the mouth of the eater.</template></category>
+<category><pattern>Nahum 3 13</pattern><template>Behold, thy people in the midst of thee are women: the gates of thy land shall be set wide open unto thine enemies: the fire shall devour thy bars.</template></category>
+<category><pattern>Nahum 3 14</pattern><template>Draw thee waters for the siege, fortify thy strong holds: go into clay, and tread the morter, make strong the brickkiln.</template></category>
+<category><pattern>Nahum 3 15</pattern><template>There shall the fire devour thee; the sword shall cut thee off, it shall eat thee up like the cankerworm: make thyself many as the cankerworm, make thyself many as the locusts.</template></category>
+<category><pattern>Nahum 3 16</pattern><template>Thou hast multiplied thy merchants above the stars of heaven: the cankerworm spoileth, and fleeth away.</template></category>
+<category><pattern>Nahum 3 17</pattern><template>Thy crowned are as the locusts, and thy captains as the great grasshoppers, which camp in the hedges in the cold day, but when the sun ariseth they flee away, and their place is not known where they are.</template></category>
+<category><pattern>Nahum 3 18</pattern><template>Thy shepherds slumber, O king of Assyria: thy nobles shall dwell in the dust: thy people is scattered upon the mountains, and no man gathereth them.</template></category>
+<category><pattern>Nahum 3 19</pattern><template>There is no healing of thy bruise; thy wound is grievous: all that hear the bruit of thee shall clap the hands over thee: for upon whom hath not thy wickedness passed continually?</template></category>
+</aiml>

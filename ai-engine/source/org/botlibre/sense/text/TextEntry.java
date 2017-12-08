@@ -44,7 +44,7 @@ import org.botlibre.util.Utils;
  */
 
 public class TextEntry extends BasicSense {
-	public static int LOG_SLEEP = 5000;
+	public static int LOG_SLEEP = 1000;
 	
 	/**
 	 * Keeps track of the user involved in the conversation.
@@ -61,12 +61,22 @@ public class TextEntry extends BasicSense {
 	 */
 	protected Writer writer;
 	
+	protected TextListener textListener;
+	
 	/** Allows contact info to be passed to sense. */
 	protected String info;
 
 	public TextEntry() {
 	}
-	
+
+	public TextListener getTextListener() {
+		return textListener;
+	}
+
+	public void setTextListener(TextListener textListener) {
+		this.textListener = textListener;
+	}
+
 	/**
 	 * Return the user involved in the conversation.
 	 */
@@ -121,6 +131,11 @@ public class TextEntry extends BasicSense {
 		TextInput text = null;
 		if (inputText instanceof TextInput) {
 			text = (TextInput)inputText;
+		} else if (inputText instanceof CommandInput) {
+			CommandInput command = (CommandInput)inputText;
+			log("Command", Level.INFO, command.command, getUser(network), getConversation(network));
+			inputCommand(command, network);
+			return;
 		} else {
 			text = new TextInput((String)inputText);
 		}
@@ -167,7 +182,6 @@ public class TextEntry extends BasicSense {
 		boolean applyEmote = language.shouldLearn(input, speaker) || (text.isCorrection() && language.shouldCorrect(input, speaker));
 		
 		input.addRelationship(Primitive.SPEAKER, speaker);
-		speaker.addRelationship(Primitive.INPUT, input);
 		if (this.emotionalState != null && this.emotionalState != EmotionalState.NONE) {
 			this.emotionalState.apply(input);
 			if (applyEmote) {
@@ -193,12 +207,55 @@ public class TextEntry extends BasicSense {
 				infoInput.addRelationship(Primitive.INSTANTIATION, Primitive.CHAT);
 				Language.addToConversation(infoInput, conversation);
 			}
+			this.conversations++;
+		} else {
+			checkEngaged(conversation);
 		}
 		if (!newConversation) {
 			Language.addToConversation(input, conversation);
 		} else {
 			input.addRelationship(Primitive.CONVERSATION, conversation);
 		}
+		
+		network.save();
+		this.bot.memory().addActiveMemory(input);
+	}
+	
+	/**
+	 * Process the text sentence.
+	 */
+	public void inputCommand(CommandInput command, Network network) {
+		Vertex input = createInputCommand(command.command, network);
+		input.addRelationship(Primitive.INSTANTIATION, Primitive.COMMAND);
+		input.addRelationship(Primitive.TARGET, Primitive.SELF);
+		// Process speaker.
+		Vertex speaker = getUser(network);
+		if (speaker == null) {
+			speaker = network.createSpeaker(DEFAULT_SPEAKER);
+			speaker.addRelationship(Primitive.ASSOCIATED, Primitive.ANONYMOUS);
+			if (this.info != null && !this.info.isEmpty()) {
+				String name = new TextStream(this.info).nextWord();
+				speaker.addRelationship(Primitive.NAME, network.createName(name));
+			}
+			setUser(speaker);
+		}
+		
+		input.addRelationship(Primitive.SPEAKER, speaker);
+		// Process conversation.
+		Vertex conversation = getConversation(network);
+		if (conversation == null) {
+			conversation = network.createInstance(Primitive.CONVERSATION);
+			conversation.addRelationship(Primitive.TYPE, Primitive.COMMAND);
+			setConversation(conversation);
+			conversation.addRelationship(Primitive.SPEAKER, speaker);
+			conversation.addRelationship(Primitive.SPEAKER, Primitive.SELF);
+			if (this.info != null && !this.info.isEmpty()) {
+				Vertex infoInput = createInputSentence("Info: " + this.info.trim(), network);
+				infoInput.addRelationship(Primitive.INSTANTIATION, Primitive.CHAT);
+				Language.addToConversation(infoInput, conversation);
+			}
+		}
+		Language.addToConversation(input, conversation);
 		
 		network.save();
 		this.bot.memory().addActiveMemory(input);
@@ -217,14 +274,20 @@ public class TextEntry extends BasicSense {
 		if (sense == null || (!getPrimitive().equals(sense.getData()))) {
 			return;
 		}
-		if (getWriter() == null) {
-			log("Missing writer", Level.WARNING);
-			return;
-		}
-		try {
-			getWriter().write(printInput(output));
-		} catch (Exception failed) {
-			log(failed);
+		if (this.textListener != null) {
+			TextOutput text = new TextOutput();
+			text.setMessage(printInput(output));
+			this.textListener.sendMessage(text);
+		} else {
+			if (this.writer == null) {
+				log("Missing writer", Level.WARNING);
+				return;
+			}
+			try {
+				this.writer.write(printInput(output));
+			} catch (Exception failed) {
+				log(failed);
+			}
 		}
 	}
 
@@ -242,7 +305,17 @@ public class TextEntry extends BasicSense {
 		if (this.conversationId == null) {
 			return null;
 		}
-		return network.findById(this.conversationId);
+		Vertex id = network.findByData(this.conversationId);
+		if (id == null) {
+			this.conversationId = null;
+			return null;
+		}
+		Vertex conversation = id.getRelationship(Primitive.CONVERSATION);
+		if (conversation == null || !conversation.instanceOf(Primitive.CONVERSATION)) {
+			this.conversationId = null;
+			return null;
+		}
+		return conversation;
 	}
 
 	public void clearConversation() {
@@ -274,7 +347,26 @@ public class TextEntry extends BasicSense {
 	 * Set the current conversation.
 	 */
 	public void setConversation(Vertex conversation) {
-		this.conversationId = conversation.getId();
+		if (conversation == null) {
+			this.conversationId = null;
+			return;
+		}
+		// Generate a random unique id for the conversation to allow client to access the conversation by id,
+		// and still have the conversation secure.
+		Vertex id = conversation.getRelationship(Primitive.GID);
+		if (id == null) {
+			id = conversation.getNetwork().createVertex(Math.abs(Utils.random().nextLong()));
+			conversation.setRelationship(Primitive.GID, id);
+			id.setRelationship(Primitive.CONVERSATION, conversation);
+		}
+		this.conversationId = (Long)id.getData();
+	}
+
+	/**
+	 * Set the current conversation.
+	 */
+	public void setConversationId(long conversationId) {
+		this.conversationId = conversationId;
 	}
 	
 	/**
@@ -442,7 +534,7 @@ public class TextEntry extends BasicSense {
 							language.addRelationship(Primitive.GREETING, input);
 						} else if (speakerName.equalsIgnoreCase("script")) {
 							input = SelfCompiler.getCompiler().evaluateExpression(
-									message, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), false, network);
+									message, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), pin, false, network);
 						} else {
 							if (comprehension) {
 								input = createInputSentence(message, network);
@@ -467,7 +559,6 @@ public class TextEntry extends BasicSense {
 									}
 								}
 								input.addRelationship(Primitive.SPEAKER, speaker);
-								speaker.addRelationship(Primitive.INPUT, input);
 								conversation.addRelationship(Primitive.SPEAKER, speaker);
 								Language.addToConversation(input, conversation);
 								lastSpeaker = speaker;
@@ -509,10 +600,8 @@ public class TextEntry extends BasicSense {
 					}
 					this.bot.memory().addActiveMemory(input);
 					int abort = 0;
-					while ((abort < 20) && !input.hasRelationship(Primitive.CONTEXT)) {
+					while ((abort < 20) && this.bot.memory().getActiveMemory().size() > 10) {
 						Utils.sleep(100);
-						Network memory = this.bot.memory().newMemory();
-						input = memory.createVertex(input);
 						abort++;
 					}
 					if (count == 100) {
@@ -577,16 +666,23 @@ public class TextEntry extends BasicSense {
 				isDefault = true;
 				Vertex language = network.createVertex(Language.class);
 				question = network.createSentence(line);
-				question.setPinned(true);
+				if (pin) {
+					SelfCompiler.getCompiler().pin(question);
+				}
 				language.addRelationship(Primitive.RESPONSE, question);
 			} else if (command.equalsIgnoreCase("greeting")) {
 				Vertex language = network.createVertex(Language.class);
 				question = network.createSentence(line);
-				question.setPinned(true);
+				if (pin) {
+					SelfCompiler.getCompiler().pin(question);
+				}
 				language.addRelationship(Primitive.GREETING, question);
 			} else if (command.equalsIgnoreCase("script")) {
-				SelfCompiler.getCompiler().evaluateExpression(
-						line, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), false, network);
+				Vertex result = SelfCompiler.getCompiler().evaluateExpression(
+						line, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), pin, false, network);
+				if (pin) {
+					SelfCompiler.getCompiler().pin(result);
+				}
 			} else if (command.equalsIgnoreCase("keywords")) {
 				if (question == null || answer == null) {
 					throw new BotException("Missing question and response for keywords");
@@ -658,7 +754,7 @@ public class TextEntry extends BasicSense {
 					previous = network.createSentence(line);
 				}
 				if (pin) {
-					previous.setPinned(true);
+					SelfCompiler.getCompiler().pin(previous);
 				}
 				if (isDefault) {
 					Vertex language = network.createVertex(Language.class);
@@ -681,7 +777,7 @@ public class TextEntry extends BasicSense {
 					previous = network.createSentence(line);
 				}
 				if (pin) {
-					previous.setPinned(true);
+					SelfCompiler.getCompiler().pin(previous);
 				}
 				if (isDefault) {
 					Vertex language = network.createVertex(Language.class);
@@ -717,7 +813,7 @@ public class TextEntry extends BasicSense {
 				}
 				Vertex repeat = network.createSentence(line);
 				if (pin) {
-					repeat.setPinned(true);
+					SelfCompiler.getCompiler().pin(repeat);
 				}
 				if (answer == null) {
 					question.addRelationship(Primitive.ONREPEAT, repeat);
@@ -743,6 +839,9 @@ public class TextEntry extends BasicSense {
 						Language.addSentenceTopicMeta(language, question, line, network);
 					} else {
 						Vertex topicFragment = network.createFragment(line);
+						if (pin) {
+							SelfCompiler.getCompiler().pin(topicFragment);
+						}
 						topicFragment.addRelationship(Primitive.INSTANTIATION, Primitive.TOPIC);
 						network.createVertex(Primitive.TOPIC).addRelationship(Primitive.INSTANCE, topicFragment);
 						topicFragment.addRelationship(Primitive.QUESTION, question);
@@ -758,10 +857,10 @@ public class TextEntry extends BasicSense {
 				if (answer == null) {
 					if (isDefault) {
 						Vertex language = network.createVertex(Language.class);
-						Language.addSentenceCommandMeta(language, question, line, network);
+						Language.addSentenceCommandMeta(language, question, line, pin, network);
 					}
 				} else {
-					Language.addSentenceCommandMeta(question, answer, line, network);
+					Language.addSentenceCommandMeta(question, answer, line, pin, network);
 				}
 			} else if (command.equalsIgnoreCase("think")) {
 				if (question == null) {
@@ -770,10 +869,10 @@ public class TextEntry extends BasicSense {
 				if (answer == null) {
 					if (isDefault) {
 						Vertex language = network.createVertex(Language.class);
-						Language.addSentenceThinkMeta(language, question, line, network);
+						Language.addSentenceThinkMeta(language, question, line, pin, network);
 					}
 				} else {
-					Language.addSentenceThinkMeta(question, answer, line, network);
+					Language.addSentenceThinkMeta(question, answer, line, pin, network);
 				}
 			} else if (command.equalsIgnoreCase("condition")) {
 				if (question == null) {
@@ -782,10 +881,10 @@ public class TextEntry extends BasicSense {
 				if (answer == null) {
 					if (isDefault) {
 						Vertex language = network.createVertex(Language.class);
-						Language.addSentenceConditionMeta(language, question, line, network);
+						Language.addSentenceConditionMeta(language, question, line, pin, network);
 					}
 				} else {
-					Language.addSentenceConditionMeta(question, answer, line, network);
+					Language.addSentenceConditionMeta(question, answer, line, pin, network);
 				}
 			} else {
 				isDefault = false;
@@ -803,7 +902,7 @@ public class TextEntry extends BasicSense {
 					sentence = network.createSentence(originalLine);
 				}
 				if (pin) {
-					sentence.setPinned(true);
+					SelfCompiler.getCompiler().pin(sentence);
 				}
 				if (question == null) {
 					question = sentence;
@@ -883,7 +982,7 @@ public class TextEntry extends BasicSense {
 			log("Processing csv answer", Level.INFO, answerText);
 			answer = network.createSentence(answerText);
 			if (pin) {
-				answer.setPinned(true);
+				SelfCompiler.getCompiler().pin(answer);
 			}
 			// Topic
 			String topic = "";
@@ -924,7 +1023,7 @@ public class TextEntry extends BasicSense {
 				if (!questionText.isEmpty() && !questionText.equals("?")) {
 					question = network.createSentence(questionText);
 					if (pin) {
-						question.setPinned(true);
+						SelfCompiler.getCompiler().pin(question);
 					}
 					Language.addResponse(question, answer, topic, keywords, required, 0.9f, network);
 				}

@@ -77,13 +77,21 @@ public class Chat extends BasicSense {
 	/** Defines number of message repeat to consider message spam. */
 	private int maxSpam = MAX_SPAM;
 	
-	private ChatListener listener;
+	private ChatListener chatListener;
 	
 	public Chat() {
 		initialize();
 		this.languageState = LanguageState.Discussion;
 	}
 
+	public ChatListener getChatListener() {
+		return chatListener;
+	}
+
+	public void setChatListener(ChatListener chatListener) {
+		this.chatListener = chatListener;
+	}
+	
 	public void initialize() {
 		this.users = new HashSet<String>();
 		this.userNicks = new HashMap<String, String>();
@@ -92,7 +100,7 @@ public class Chat extends BasicSense {
 		this.spamText = new HashMap<String, String>();
 		this.spamCount = new HashMap<String, Integer>();
 		this.conversation = null;
-		this.listener = null;
+		this.chatListener = null;
 	}
 	
 	public void connect() {
@@ -240,10 +248,11 @@ public class Chat extends BasicSense {
 				if (targetUsers.isEmpty()) {
 					targetUsers.addAll(this.lastUsers);
 				}
-				if (getUsers().size() == 2) {
-					targetUsers.clear();
-					targetUsers.add(getNick());
-				}
+			}
+			// If in a private, or only two users, then assume the message is for the bot.
+			if (getUsers().size() == 2) {
+				targetUsers.clear();
+				targetUsers.add(getNick());
 			}
 		}
 		inputSentence(text.trim(), user, targetUsers, message.isGreet(), message.isWhisper(), network);
@@ -331,8 +340,15 @@ public class Chat extends BasicSense {
 			for (String eachUser : getUsers()) {
 				conversation.addRelationship(Primitive.SPEAKER, network.createSpeaker(eachUser));
 			}
+			this.conversations++;
+		} else {
+			checkEngaged(conversation);
 		}
-		Language.addToConversation(input, conversation);
+		if (!isGreet) {
+			Language.addToConversation(input, conversation);
+		} else {
+			input.addRelationship(Primitive.CONVERSATION, conversation);
+		}
 		network.save();
 		getBot().memory().addActiveMemory(input);
 	}
@@ -351,7 +367,7 @@ public class Chat extends BasicSense {
 			return;
 		}
 		try {
-			if (getListener() != null) {
+			if (getChatListener() != null) {
 				log("Output:", Bot.FINE, output);
 				ChatEvent message = new ChatEvent();
 				if (output.hasRelationship(Primitive.ASSOCIATED, Primitive.WHISPER)) {
@@ -359,7 +375,7 @@ public class Chat extends BasicSense {
 				}
 				message.setNick(getNick(output));
 				message.setMessage(printInput(output));
-				getListener().sendMessage(message);
+				getChatListener().sendMessage(message);
 				addLastUser(getNick());
 			}
 		} catch (Exception exception) {
@@ -383,14 +399,6 @@ public class Chat extends BasicSense {
 			return null;
 		}
 		return (String)nick.getData();		
-	}
-	
-	public ChatListener getListener() {
-		return listener;
-	}
-
-	public void setListener(ChatListener listener) {
-		this.listener = listener;
 	}
 
 	public void addLastUser(String user) {

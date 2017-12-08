@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -34,7 +32,6 @@ import javax.imageio.ImageIO;
 
 import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
-import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
@@ -49,11 +46,7 @@ import boofcv.alg.color.ColorHsv;
 import boofcv.alg.descriptor.UtilFeature;
 import boofcv.alg.feature.color.GHistogramFeatureOps;
 import boofcv.alg.feature.color.Histogram_F64;
-import boofcv.gui.ListDisplayPanel;
-import boofcv.gui.image.ScaleOptions;
-import boofcv.gui.image.ShowImages;
 import boofcv.io.image.ConvertBufferedImage;
-import boofcv.io.image.UtilImageIO;
 import boofcv.struct.image.GrayF32;
 import boofcv.struct.image.Planar;
 
@@ -67,13 +60,6 @@ public class Vision extends BasicSense {
 	public static int MAX_IMAGE_SIZE = 5000000; // 5meg
 	
 	public Vision() {
-	}
-	
-	/**
-	 * Start sensing.
-	 */
-	@Override
-	public void awake() {
 	}
 	
 	/**

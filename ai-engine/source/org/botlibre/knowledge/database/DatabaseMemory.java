@@ -92,8 +92,8 @@ public class DatabaseMemory extends BasicMemory {
 	public static String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 	public static String DATABASE_URL = "jdbc:mysql://localhost/Bot?createDatabaseIfNotExist=true";*/
 	/* PostgreSQL */
-	public static String DATABASE_USER = "postgres";
-	public static String DATABASE_PASSWORD = "password";
+	public static String DATABASE_USER = "";
+	public static String DATABASE_PASSWORD = "";
 	public static String DATABASE_URL_PREFIX = "jdbc:postgresql:";
 	public static String SCHEMA_URL_PREFIX = "jdbc:postgresql:botlibre_bots?currentSchema=";
 	public static String DATABASE_URL = "jdbc:postgresql:botlibre_bots";
@@ -379,8 +379,12 @@ public class DatabaseMemory extends BasicMemory {
 			if (RECREATE_DATABASE) {
 				recreateDatabase = true;
 			}
-			//properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
-			//properties.put(PersistenceUnitProperties.JDBC_PASSWORD, DATABASE_PASSWORD);
+			if (!DATABASE_USER.isEmpty()) {
+				properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
+			}
+			if (!DATABASE_PASSWORD.isEmpty()) {
+				properties.put(PersistenceUnitProperties.JDBC_PASSWORD, DATABASE_PASSWORD);
+			}
 			properties.put(PersistenceUnitProperties.CACHE_SIZE_DEFAULT, CACHE_SIZE);
 			properties.put(PersistenceUnitProperties.CACHE_STATEMENTS, "true");
 			properties.put(PersistenceUnitProperties.BATCH_WRITING, "JDBC");

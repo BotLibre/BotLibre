@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +54,11 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -79,6 +85,7 @@ import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 /**
@@ -174,13 +181,20 @@ public class Utils {
 		if (sanitizer == null) {
 			sanitizer = Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.IMAGES).and(Sanitizers.STYLES);
 			PolicyFactory html = new HtmlPolicyBuilder()
-				.allowElements("table", "tr", "td", "thead", "tbody", "th", "font", "button", "input", "select", "option")
+				.allowElements("table", "tr", "td", "thead", "tbody", "th", "font", "button", "input", "select", "option", "video", "audio")
+				.allowAttributes("class").globally()
 				.allowAttributes("color").globally()
 				.allowAttributes("bgcolor").globally()
 				.allowAttributes("align").globally()
 				.allowAttributes("target").globally()
 				.allowAttributes("value").globally()
 				.allowAttributes("name").globally()
+				.allowAttributes("controls").globally()
+				.allowAttributes("src").globally()
+				.allowAttributes("autoplay").globally()
+				.allowAttributes("muted").globally()
+				.allowAttributes("loop").globally()
+				.allowAttributes("poster").globally()
 				.allowUrlProtocols("http", "https", "mailto", "chat").allowElements("a")
 			    .allowAttributes("href").onElements("a").requireRelNofollowOnLinks()
 				.toFactory();
@@ -335,7 +349,7 @@ public class Utils {
 					writer.write("\n\n");
 				} else if (word.equals("br")) {
 					writer.write("\n");
-				} else if (word.equals("div")) {
+				} else if (word.equals("li")) {
 					writer.write("\n");
 				}
 				stream.skipTo('>');
@@ -345,6 +359,71 @@ public class Utils {
 				} else {
 					stream.skip();
 				}
+			}
+		}
+		return writer.toString();
+	}
+	
+	/**
+	 * Strip the html tags from the text.
+	 */
+	public static String stripTag(String html, String tag) {
+		if (html == null) {
+			return "";
+		}
+		if ((html.indexOf('<') == -1) || (html.indexOf('>') == -1)) {
+			return html;
+		}
+		StringWriter writer = new StringWriter();
+		TextStream stream = new TextStream(html);
+		String start = "<" + tag;
+		String end = "</" + tag + ">";
+		while (!stream.atEnd()) {
+			String text = stream.upToAll(start);
+			writer.write(text);
+			stream.skipToAll(end, true);
+		}
+		return writer.toString();
+	}
+	
+	/**
+	 * Strip the html tags of the class from the text.
+	 */
+	public static String stripTagClass(String html, String tagClass) {
+		if (html == null) {
+			return "";
+		}
+		if ((html.indexOf('<') == -1) || (html.indexOf('>') == -1)) {
+			return html;
+		}
+		StringWriter writer = new StringWriter();
+		TextStream stream = new TextStream(html);
+		String start = "<";
+		while (!stream.atEnd()) {
+			String text = stream.upToAll(start);
+			if (stream.atEnd()) {
+				break;
+			}
+			stream.skip(start.length());
+			int position = stream.getPosition();
+			writer.write(text);
+			String tag = stream.nextWord();
+			String attribute = stream.nextWord();
+			boolean strip = false;
+			if (attribute != null && attribute.equals("class")) {
+				stream.upToAny("\"'");
+				stream.skip();
+				String value = stream.upToAny("\"'");
+				if (tagClass.equals(value)) {
+					strip = true;
+				}
+			}
+			if (strip) {
+				String end = "</" + tag + ">";
+				stream.skipToAll(end, true);
+			} else {
+				stream.setPosition(position + start.length());
+				writer.write(start);
 			}
 		}
 		return writer.toString();
@@ -371,7 +450,17 @@ public class Utils {
 	}
 
 	public static String httpGET(String url) throws Exception {
+		return httpGET(url, null);
+	}
+
+	public static String httpGET(String url, Map<String, String> headers) throws Exception {
 		HttpGet request = new HttpGet(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
         HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
@@ -382,6 +471,7 @@ public class Utils {
 
 	public static String httpDELETE(String url) throws Exception {
 		HttpDelete request = new HttpDelete(url);
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
         HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
@@ -392,6 +482,21 @@ public class Utils {
 	
 	public static String httpAuthGET(String url, String user, String password) throws Exception {		
 		HttpGet request = new HttpGet(url);
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+                new AuthScope(AuthScope.ANY),
+                new UsernamePasswordCredentials(user, password));
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpAuthGET(String url, String user, String password, String agent) throws Exception {		
+		HttpGet request = new HttpGet(url);
+        request.setHeader("User-Agent", agent);
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
         HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
@@ -405,6 +510,24 @@ public class Utils {
 	
 	public static String httpAuthPOST(String url, String user, String password, String type, String data) throws Exception {
         HttpPost request = new HttpPost(url);
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+        StringEntity params = new StringEntity(data, "utf-8");
+        request.addHeader("content-type", type);
+        request.setEntity(params);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+                new AuthScope(AuthScope.ANY),
+                new UsernamePasswordCredentials(user, password));
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpAuthPOST(String url, String user, String password, String agent, String type, String data) throws Exception {
+        HttpPost request = new HttpPost(url);
+        request.setHeader("User-Agent", agent);
         StringEntity params = new StringEntity(data, "utf-8");
         request.addHeader("content-type", type);
         request.setEntity(params);
@@ -420,7 +543,31 @@ public class Utils {
 	}
 	
 	public static String httpPOST(String url, String type, String data) throws Exception {
+        return httpPOST(url, type, data, null);
+	}
+	
+	public static String httpPOST(String url, String type, String data, Map<String, String> headers) throws Exception {
         HttpPost request = new HttpPost(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+        StringEntity params = new StringEntity(data, "utf-8");
+        request.addHeader("content-type", type);
+        request.setEntity(params);
+        HttpParams httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+        HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpDELETE(String url, String type, String data) throws Exception {
+        HttpDeleteWithBody request = new HttpDeleteWithBody(url);
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
         StringEntity params = new StringEntity(data, "utf-8");
         request.addHeader("content-type", type);
         request.setEntity(params);
@@ -434,6 +581,7 @@ public class Utils {
 	
 	public static String httpPUT(String url, String type, String data) throws Exception {
 		HttpPut request = new HttpPut(url);
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
         StringEntity params = new StringEntity(data, "utf-8");
         request.addHeader("content-type", type);
         request.setEntity(params);
@@ -447,6 +595,7 @@ public class Utils {
 	
 	public static String httpAuthPOST(String url, String user, String password, Map<String, String> formParams) throws Exception {		
         HttpPost request = new HttpPost(url);
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		for (Map.Entry<String, String> entry : formParams.entrySet()) {
 			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
@@ -464,7 +613,17 @@ public class Utils {
 	}
 	
 	public static String httpPOST(String url, Map<String, String> formParams) throws Exception {		
+        return httpPOST(url, formParams, null);
+	}
+	
+	public static String httpPOST(String url, Map<String, String> formParams, Map<String, String> headers) throws Exception {		
         HttpPost request = new HttpPost(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
+        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		for (Map.Entry<String, String> entry : formParams.entrySet()) {
 			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
@@ -485,7 +644,7 @@ public class Utils {
 			InputStream stream = entity.getContent();
 			result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
 		}
-		if ((response.getStatusLine().getStatusCode() != 200) && (response.getStatusLine().getStatusCode() != 302) && (response.getStatusLine().getStatusCode() != 204)) {
+		if ((response.getStatusLine().getStatusCode() < 200) || (response.getStatusLine().getStatusCode() > 302)) {
 			throw new RuntimeException(""
 			   + response.getStatusLine().getStatusCode()
 			   + " : " + result);
@@ -647,10 +806,10 @@ public class Utils {
 				String url = matcher.group();
 		    	if (url.indexOf(".png") != -1 || url.indexOf(".jpg") != -1 || url.indexOf(".jpeg") != -1 || url.indexOf(".gif") != -1
 		    			|| url.indexOf(".PNG") != -1 || url.indexOf(".JPG") != -1 || url.indexOf(".JPEG") != -1 || url.indexOf(".GIF") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><img src='" + url + "' height='50'></a>";
+		    		url = "<a href='" + url + "' target='_blank'><img src='" + url + "' style='max-height:300;'></a>";
 		    	} else if (url.indexOf(".mp4") != -1 || url.indexOf(".webm") != -1 || url.indexOf(".ogg") != -1
 		    			|| url.indexOf(".MP4") != -1 || url.indexOf(".WEBM") != -1 || url.indexOf(".OGG") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><video src='" + url + "' height='50'></a>";
+		    		url = "<a href='" + url + "' target='_blank'><video src='" + url + "' style='max-height:300;'></a>";
 		    	} else if (url.indexOf(".wav") != -1 || url.indexOf(".mp3") != -1
 		    			|| url.indexOf(".WAV") != -1 || url.indexOf(".MP3") != -1) {
 		    		url = "<a href='" + url + "' target='_blank'><audio src='" + url + "' controls>audio</a>";
@@ -714,6 +873,19 @@ public class Utils {
 			InputSource source = new InputSource(reader);
 			Document document = parser.parse(source);
 			return document.getDocumentElement();
+		} catch (Exception exception) {
+			return null;
+		}
+	}
+	
+	public static String printXML(Node element) {
+		try {
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			StringWriter writer = new StringWriter();
+			transformer.transform(new DOMSource(element), new StreamResult(writer));
+			return writer.toString();
 		} catch (Exception exception) {
 			return null;
 		}
@@ -1012,6 +1184,25 @@ public class Utils {
 			}
 		}
 		return hasCaps;
+	}
+	
+	/**
+	 * Convert camel case to lower case words.
+	 */
+	public static String camelCaseToLowerCase(String text) {
+		StringWriter writer = new StringWriter();
+		for (int index = 0; index < text.length(); index++) {
+			char character = text.charAt(index);
+			if (Character.isUpperCase(character)) {
+				if (index > 0) {
+					writer.write(" ");
+				}
+				writer.write(Character.toLowerCase(character));
+			} else {
+				writer.write(character);
+			}
+		}
+		return writer.toString();
 	}
 	
 	public static boolean isAlphaNumeric(String text) {

@@ -38,7 +38,6 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
@@ -64,13 +63,15 @@ import com.sun.mail.pop3.POP3SSLStore;
 
 public class Email extends BasicSense {
 	public static int SLEEP = 1000 * 60 * 10; // 10 minutes.
-	public static String SIGNATURE = "\n\n----------\nThis is an automated message\n";
+	public static String SIGNATURE = "<br/>\n<br/>\n----------<br/>\nThis is an automated message<br/>\n";
+	public static String DEFAULT_EMAIL = "user@gmail.com";
+	public static int TIMEOUT = 10000;
 	
 	/** Signature to apply to emails. */
 	protected String signature = SIGNATURE;
 	
 	/** Email address. */
-	protected String emailAddress = "user@gmail.com";
+	protected String emailAddress = DEFAULT_EMAIL;
 	
 	/** POP info. */
 	protected String incomingHost = "imap.gmail.com";
@@ -96,13 +97,6 @@ public class Email extends BasicSense {
 		if (isEnabled()) {
 			//startCheckingEmail();
 		}
-	}
-	
-	/**
-	 * Start sensing.
-	 */
-	@Override
-	public void awake() {
 	}
 
 	/**
@@ -298,8 +292,8 @@ public class Email extends BasicSense {
 			return connectStoreSSL();
 		}
 		Properties properties = new Properties();
-		properties.put("mail." + getProtocol() + ".timeout", 5000);
-		properties.put("mail." + getProtocol() + ".connectiontimeout", 5000);
+		properties.put("mail." + getProtocol() + ".timeout", TIMEOUT);
+		properties.put("mail." + getProtocol() + ".connectiontimeout", TIMEOUT);
 		//properties.setProperty("mail.store.protocol", getProtocol());
 	    Session session = Session.getInstance(properties, null);
 	    Store store = session.getStore(getProtocol());
@@ -313,8 +307,8 @@ public class Email extends BasicSense {
 	
 	public Store connectStoreSSL() throws MessagingException {   
 		Properties properties = System.getProperties();
-		properties.put("mail." + getProtocol() + ".timeout", 5000);
-		properties.put("mail." + getProtocol() + ".connectiontimeout", 5000);
+		properties.put("mail." + getProtocol() + ".timeout", TIMEOUT);
+		properties.put("mail." + getProtocol() + ".connectiontimeout", TIMEOUT);
         properties.setProperty("mail." + getProtocol() + ".socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         properties.setProperty("mail." + getProtocol() + ".socketFactory.fallback", "false");
         properties.setProperty("mail." + getProtocol() + ".port",  String.valueOf(getIncomingPort()));
@@ -358,35 +352,47 @@ public class Email extends BasicSense {
 				}
 				long maxMessage = 0;
 				int count = 0;
-			    for (int index = 0; index < messages.length; index++) {
-			    	long recievedTime = 0;
-			    	if (messages[index].getReceivedDate() == null) {
-		    			log("Missing received date", Level.FINE, messages[index].getSubject());
-			    		recievedTime = messages[index].getSentDate().getTime();
-			    	} else {
-			    		recievedTime = messages[index].getReceivedDate().getTime();
-			    	}
-			    	if ((System.currentTimeMillis() - recievedTime) > DAY) {
-						log("Day old email", Level.INFO, messages[index].getSubject());
-			    		continue;
-			    	}
-			    	if (recievedTime > lastMessage) {
-			    		count++;
-			    		if (count > this.maxEmails) {
-			    			log("Max email limit reached", Level.WARNING, this.maxEmails);
-			    			break;
-			    		}
-			    		input(messages[index]);
-				    	Utils.sleep(100);
-				    	if (recievedTime > maxMessage) {
-				    		maxMessage = recievedTime;
+				// Increase script timeout.
+				Language language = getBot().mind().getThought(Language.class);
+				int timeout = language.getMaxStateProcess();
+				language.setMaxStateProcess(timeout * 2);
+				try {
+				    for (int index = 0; index < messages.length; index++) {
+				    	if (index > (this.maxEmails * 2)) {
+			    			log("Max old email limit reached", Level.WARNING, this.maxEmails * 2);
+				    		break;
 				    	}
-			    	}
-			    }
-			    if (maxMessage != 0) {
-					sense.setRelationship(Primitive.LASTMESSAGE, memory.createVertex(maxMessage));
-			    	memory.save();
-			    }
+				    	long recievedTime = 0;
+				    	if (messages[index].getReceivedDate() == null) {
+			    			log("Missing received date", Level.FINE, messages[index].getSubject());
+				    		recievedTime = messages[index].getSentDate().getTime();
+				    	} else {
+				    		recievedTime = messages[index].getReceivedDate().getTime();
+				    	}
+				    	if ((System.currentTimeMillis() - recievedTime) > DAY) {
+							log("Day old email", Level.INFO, messages[index].getSubject());
+				    		continue;
+				    	}
+				    	if (recievedTime > lastMessage) {
+				    		count++;
+				    		if (count > this.maxEmails) {
+				    			log("Max email limit reached", Level.WARNING, this.maxEmails);
+				    			break;
+				    		}
+				    		input(messages[index]);
+					    	Utils.sleep(100);
+					    	if (recievedTime > maxMessage) {
+					    		maxMessage = recievedTime;
+					    	}
+				    	}
+				    }
+				    if (maxMessage != 0) {
+						sense.setRelationship(Primitive.LASTMESSAGE, memory.createVertex(maxMessage));
+				    	memory.save();
+				    }
+				} finally {
+					language.setMaxStateProcess(timeout);
+				}
 		    }
 			log("Done checking email.", Level.INFO);
 		    inbox.close(false);
@@ -503,8 +509,9 @@ public class Email extends BasicSense {
 			props.put("mail.smtp.socketFactory.port", getOutgoingPort());
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.ssl.trust", getOutgoingHost());
 			 
-			session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+			session = Session.getInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(getUsername(), getPassword());
 				}
@@ -514,6 +521,7 @@ public class Email extends BasicSense {
 			props.put("mail.smtp.starttls.enable", "true");
 			props.put("mail.smtp.host", getOutgoingHost());
 			props.put("mail.smtp.port", getOutgoingPort());
+			props.put("mail.smtp.ssl.trust", getOutgoingHost());
 			 
 			session = Session.getInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
@@ -574,11 +582,7 @@ public class Email extends BasicSense {
 		    message.addRecipient(Message.RecipientType.TO, new InternetAddress(replyTo));
 		    message.setSubject(subject);
 		    if (Utils.containsHTML(text)) {
-			    MimeMultipart content = new MimeMultipart();
-			    MimeBodyPart htmlPart = new MimeBodyPart();	
-			    htmlPart.setContent(text, "text/html");
-			    content.addBodyPart(htmlPart);
-			    message.setContent(content);
+			    message.setContent(text, "text/html; charset=UTF-8");
 		    } else {
 		    	message.setText(text);
 		    }
@@ -672,11 +676,17 @@ public class Email extends BasicSense {
 	    	}
 	    	if ((text == null) && (parts.getCount() > 0)) {
 	    		text = (String)parts.getBodyPart(0).getContent();
+	    		if (text.contains("<hr")) {
+	    			text = new TextStream(text).upToAll("<hr");
+	    		}
 	    		text = Utils.stripTags(text);
 	    	}
 	    } else if (content instanceof String) {
 	    	text = (String)content;
 	    	if (message.getContentType().toLowerCase().contains("html")) {
+	    		if (text.contains("<hr")) {
+	    			text = new TextStream(text).upToAll("<hr");
+	    		}
 	    		text = Utils.stripTags(text);	    		
 	    	}
 	    }
@@ -743,9 +753,9 @@ public class Email extends BasicSense {
 					index++;
 				}
 				if (questionSentence != null) {
-					writer.write("\n");
+					writer.write("<br/>\n");
 					String questionText = questionSentence.printString();
-					if (questionText.contains("\n")) {
+					if (questionText.contains("<br/>\n")) {
 						TextStream stream = new TextStream(questionText);
 						while (!stream.atEnd()) {
 							writer.write("> ");
@@ -755,30 +765,34 @@ public class Email extends BasicSense {
 						writer.write("> ");
 						writer.write(questionText);
 					}
-					writer.write("\n");
+					writer.write("<br/>\n");
 				}
 				writer.write(sentence.printString());
-				writer.write("\n");
+				writer.write("<br/>\n");
 			}
 			text = writer.toString();
 		} else {
 			text = printInput(output);
 		}
+		// Don't send empty messages.
+		if (text.isEmpty()) {
+			return;
+		}
 		StringWriter writer = new StringWriter();
 		writer.write(text);
-		writer.write("\n");
-		writer.write("\n");
+		writer.write("<br/>\n");
+		writer.write("<br/>\n");
 		writer.write(getSignature());
 		// Append quoted original email.
 		if (input != null) {
 			String replyText = printInput(input);
-			writer.write("\n");
-			writer.write("\n");
+			writer.write("<br/>\n");
+			writer.write("<br/>\n");
 			TextStream stream = new TextStream(replyText);
 			int max = 0;
 			while (!stream.atEnd() && (max < 64)) {
 				String line = stream.nextLine();
-				writer.write(">");
+				writer.write("<br/>\n");
 				if ((line.length() > 0) && (line.charAt(0) != '>')) {
 					writer.write(" ");
 				}
@@ -923,6 +937,7 @@ public class Email extends BasicSense {
 	public void inputSentence(String text, String subject, String userName, String targetUserName, Message message, Network network) throws MessagingException {
 		Vertex input = createInputParagraph(text.trim(), network);
 		Vertex user = network.createSpeaker(userName);
+		user.addRelationship(Primitive.EMAIL, network.createVertex(userName));
 		input.addRelationship(Primitive.INSTANTIATION, Primitive.EMAIL);
 		input.getRelationship(Primitive.INPUT).addRelationship(Primitive.INSTANTIATION, Primitive.EMAIL);
 		long date = 0;
@@ -951,8 +966,8 @@ public class Email extends BasicSense {
 			conversation.addRelationship(Primitive.SPEAKER, targetUser);
 		}
 		
-		user.addRelationship(Primitive.INPUT, input);
-		user.addRelationship(Primitive.EMAIL, input);
+		//user.addRelationship(Primitive.INPUT, input);
+		//user.addRelationship(Primitive.EMAIL, input);
 		
 		network.save();
 		getBot().memory().addActiveMemory(input);

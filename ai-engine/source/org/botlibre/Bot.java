@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2014 Paphus Solutions Inc.
+ *  Copyright 2014-2017 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ import org.w3c.dom.NodeList;
  */
 public class Bot {	
 	public static String PROGRAM = "Bot";
-	public static String VERSION = "5.0 - 2016-11-24";
+	public static String VERSION = "6.1.0-2017-12-08";
 	
 	public static final Level FINE = Level.FINE;
 	public static final Level WARNING = Level.WARNING;
@@ -108,7 +108,7 @@ public class Bot {
 		out.setLevel(Level.ALL);
 		root.addHandler(out);
 		try {
-			FileHandler file = new FileHandler("Bot.log", 5000000, 10);
+			FileHandler file = new FileHandler("Bot.log", 5000000, 50);
 			file.setFormatter(new SimpleFormatter());
 			file.setLevel(Level.ALL);
 			root.addHandler(file);
@@ -116,7 +116,7 @@ public class Bot {
 			exception.printStackTrace();
 		}
 		try {
-			FileHandler file = new FileHandler("Bot.err", 5000000, 10);
+			FileHandler file = new FileHandler("Bot.err", 5000000, 50);
 			file.setFormatter(new SimpleFormatter());
 			file.setLevel(Level.WARNING);
 			root.addHandler(file);
@@ -155,28 +155,16 @@ public class Bot {
 		Bot bot = new Bot();
 		long start = System.currentTimeMillis();
 		bot.parseConfigFile(configFile);
-		long time = System.currentTimeMillis() - start;
-		if (time > 500) {
-			System.out.println("Connect parseConfigFile time: " + time);
-		}
 		bot.setState(ActiveState.ACTIVE);
 		bot.log(bot, "Fast creating instance:", Level.INFO, configFile, memory, isSchema);
 		start = System.currentTimeMillis();
 		bot.memory().fastRestore(memory, isSchema);
-		time = System.currentTimeMillis() - start;
-		if (time > 500) {
-			System.out.println("Connect fastRestore time: " + time);
-		}
 		start = System.currentTimeMillis();
 		bot.memory().awake();
 		bot.mind().awake();
 		bot.mood().awake();
 		bot.avatar().awake();
 		bot.awareness().awake();
-		time = System.currentTimeMillis() - start;
-		if (time > 500) {
-			System.out.println("Connect awake time: " + time);
-		}
 		return bot;
 	}
 	

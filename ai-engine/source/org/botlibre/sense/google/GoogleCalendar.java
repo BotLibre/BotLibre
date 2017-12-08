@@ -22,6 +22,7 @@ import java.util.logging.Level;
 
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.knowledge.Primitive;
 
 /**
  * Sense to connect with Google Calendar services.
@@ -40,25 +41,52 @@ public class GoogleCalendar extends Google {
 	 * Fetch the calendar events for the time period and convert JSON to objects.
 	 */
 	public Vertex getEvents(String calendar, Date from, Date to, Network network) {
-		String url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events?timeMax=" + printDate(to) + "&timeMin=" + printDate(from);
+		String url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events?orderBy=startTime&singleEvents=true&timeMax=" + printDate(to) + "&timeMin=" + printDate(from);
 		log("GET events", Level.INFO, url);
-		return requestJSON(url, "items", network);
+		return requestJSON(url, "items", null, network);
+	}
+    
+	/**
+	 * Count the calendar events for the time period.
+	 */
+	public int countEvents(String calendar, Date from, Date to, Network network) {
+		String url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events?timeMax=" + printDate(to) + "&timeMin=" + printDate(from);
+		log("COUNT events", Level.INFO, url);
+		return countJSON(url, "items", network);
 	}
     
 	/**
 	 * Insert the event into the calendar.
 	 */
-	public Vertex insertEvent(String calendar, Vertex event, Network network) {
+	public Vertex insertEvent(String calendar, Vertex event, boolean sendNotifications, Network network) {
 		String url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events?";
+		if (sendNotifications) {
+			url = url + "sendNotifications=true";
+		}
 		log("POST insert event", Level.INFO, url);
 		return postJSON(url, event, network);
 	}
     
 	/**
+	 * Update the event into the calendar.
+	 */
+	public Vertex updateEvent(String calendar, Vertex event, boolean sendNotifications, Network network) {
+		String url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events/" + event.getRelationship(Primitive.ID).printString();
+		if (sendNotifications) {
+			url = url + "?sendNotifications=true";
+		}
+		log("PUT update event", Level.INFO, url);
+		return putJSON(url, event, network);
+	}
+    
+	/**
 	 * Delete the event from the calendar.
 	 */
-	public Vertex deleteEvent(String calendar, String event, Network network) {
+	public Vertex deleteEvent(String calendar, String event, boolean sendNotifications, Network network) {
 		String url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events/" + event;
+		if (sendNotifications) {
+			url = url + "?sendNotifications=true";
+		}
 		log("DELETE event", Level.INFO, url);
 		return delete(url, network);
 	}
@@ -77,6 +105,18 @@ public class GoogleCalendar extends Google {
 
 	/**
 	 * Self API.
+	 * Return the number of calendar events objects for the time period.
+	 */
+	public Vertex countEvents(Vertex source, Vertex from, Vertex to) {
+		if (!(from.getData() instanceof Date) || !(to.getData() instanceof Date)) {
+			return null;
+		}
+		Network network = source.getNetwork();
+		return network.createVertex(countEvents("primary", (Date)from.getData(), (Date)to.getData(), network));
+	}
+
+	/**
+	 * Self API.
 	 * Return the calendar events objects for the time period.
 	 */
 	public Vertex getEvents(Vertex source, Vertex calendar, Vertex from, Vertex to) {
@@ -89,11 +129,32 @@ public class GoogleCalendar extends Google {
 
 	/**
 	 * Self API.
+	 * Return the calendar events objects for the time period.
+	 */
+	public Vertex countEvents(Vertex source, Vertex calendar, Vertex from, Vertex to) {
+		if (!(from.getData() instanceof Date) || !(to.getData() instanceof Date)) {
+			return null;
+		}
+		Network network = source.getNetwork();
+		return network.createVertex(countEvents(calendar.printString(), (Date)from.getData(), (Date)to.getData(), network));
+	}
+
+	/**
+	 * Self API.
 	 * Insert the event into the calendar.
 	 */
 	public Vertex insertEvent(Vertex source, Vertex event) {
 		Network network = source.getNetwork();
-		return insertEvent("primary", event, network);
+		return insertEvent("primary", event, false, network);
+	}
+
+	/**
+	 * Self API.
+	 * Update the event into the calendar.
+	 */
+	public Vertex updateEvent(Vertex source, Vertex event) {
+		Network network = source.getNetwork();
+		return updateEvent("primary", event, false, network);
 	}
 
 	/**
@@ -102,7 +163,7 @@ public class GoogleCalendar extends Google {
 	 */
 	public Vertex deleteEvent(Vertex source, Vertex event) {
 		Network network = source.getNetwork();
-		return deleteEvent("primary", event.printString(), network);
+		return deleteEvent("primary", event.printString(), false, network);
 	}
 
 	/**
@@ -111,7 +172,16 @@ public class GoogleCalendar extends Google {
 	 */
 	public Vertex deleteEvent(Vertex source, Vertex calendar, Vertex event) {
 		Network network = source.getNetwork();
-		return deleteEvent(calendar.printString(), event.printString(), network);
+		return deleteEvent(calendar.printString(), event.printString(), false, network);
+	}
+
+	/**
+	 * Self API.
+	 * Delete the event from the calendar.
+	 */
+	public Vertex deleteEvent(Vertex source, Vertex calendar, Vertex event, Vertex sendNotifications) {
+		Network network = source.getNetwork();
+		return deleteEvent(calendar.printString(), event.printString(), sendNotifications.is(Primitive.TRUE), network);
 	}
 
 	/**
@@ -120,6 +190,33 @@ public class GoogleCalendar extends Google {
 	 */
 	public Vertex insertEvent(Vertex source, Vertex calendar, Vertex event) {
 		Network network = source.getNetwork();
-		return insertEvent(calendar.printString(), event, network);
+		return insertEvent(calendar.printString(), event, false, network);
+	}
+
+	/**
+	 * Self API.
+	 * Insert the event into the calendar.
+	 */
+	public Vertex insertEvent(Vertex source, Vertex calendar, Vertex event, Vertex sendNotifications) {
+		Network network = source.getNetwork();
+		return insertEvent(calendar.printString(), event, sendNotifications.is(Primitive.TRUE), network);
+	}
+
+	/**
+	 * Self API.
+	 * Update the event in the calendar.
+	 */
+	public Vertex updateEvent(Vertex source, Vertex calendar, Vertex event) {
+		Network network = source.getNetwork();
+		return updateEvent(calendar.printString(), event, false, network);
+	}
+
+	/**
+	 * Self API.
+	 * Update the event in the calendar.
+	 */
+	public Vertex updateEvent(Vertex source, Vertex calendar, Vertex event, Vertex sendNotifications) {
+		Network network = source.getNetwork();
+		return updateEvent(calendar.printString(), event, sendNotifications.is(Primitive.TRUE), network);
 	}
 }

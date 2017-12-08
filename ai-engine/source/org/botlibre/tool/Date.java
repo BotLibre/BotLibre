@@ -89,7 +89,6 @@ public class Date extends BasicTool {
 		if (value instanceof Time) {
 			// Must use current day to account for daylight saving time, etc.
 			Calendar calendar2 = Calendar.getInstance();
-			System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
 			calendar2.setTime(value);
 			calendar.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
 			calendar.set(Calendar.MINUTE, calendar2.get(Calendar.MINUTE));
@@ -115,20 +114,12 @@ public class Date extends BasicTool {
 	        }
 			return source.getNetwork().createVertex(Utils.parseTimestamp(
 					calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE)
-					+ calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND)
+					+ " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND)
 					+ "." + nanosString));
 		}
-		java.sql.Timestamp timestamp = (java.sql.Timestamp)value;
-		String milisString;
-        if (timestamp.getNanos() == 0) {
-        	milisString = "0";
-        } else {
-        	milisString = Utils.buildZeroPrefixAndTruncTrailZeros(timestamp.getNanos(), 3);
-        }
 		return source.getNetwork().createVertex(Utils.parseTimestamp(
 				calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE)
-				+ calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND)
-				+ "." + milisString));
+				+ " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND)));
 	}
 
 	public Vertex date(Vertex source) {
@@ -225,6 +216,7 @@ public class Date extends BasicTool {
 		
 		if (this.patterns == null) {
 			List<SimpleDateFormat> patterns = new ArrayList<SimpleDateFormat>();
+			patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH mm ssX"));
 			patterns.add(new SimpleDateFormat("yyyy-MM-dd HH mm ss Z"));
 			patterns.add(new SimpleDateFormat("yyyy-MM-dd hh mm ss a"));
 			patterns.add(new SimpleDateFormat("yyyy-MM-dd HH mm ss"));
@@ -239,6 +231,16 @@ public class Date extends BasicTool {
 			patterns.add(new SimpleDateFormat("dd-MM-yyyy"));
 			patterns.add(new SimpleDateFormat("MMM d yyyy"));
 			patterns.add(new SimpleDateFormat("d MMM yyyy"));
+			patterns.add(new SimpleDateFormat("EEE MMM dd yyyy HH mm a"));
+			patterns.add(new SimpleDateFormat("MMM dd yyyy HH mm a"));
+			patterns.add(new SimpleDateFormat("EEE MMM dd HH mm ss Z yyyy"));
+			patterns.add(new SimpleDateFormat("EEE MMM dd yyyy"));
+			patterns.add(new SimpleDateFormat("HH mm ss Z"));
+			patterns.add(new SimpleDateFormat("HH mm ss"));
+			patterns.add(new SimpleDateFormat("HH mm"));
+			patterns.add(new SimpleDateFormat("hh mm ss a"));
+			patterns.add(new SimpleDateFormat("hh mm a"));
+			patterns.add(new SimpleDateFormat("hh a"));
 			for (SimpleDateFormat pattern : patterns) {
 				pattern.setLenient(false);
 			}
@@ -279,6 +281,23 @@ public class Date extends BasicTool {
 			        break;
 			    } catch (Exception exception) { }
 			}
+		}
+		return source.getNetwork().createVertex(date);
+	}
+
+	/**
+	 * Parse the date/time value in the specified format.
+	 */
+	public Vertex parse(Vertex source, Vertex value, Vertex format) {
+		String text = value.printString();
+		Timestamp date = null;
+		SimpleDateFormat pattern = new SimpleDateFormat(format.printString());
+		pattern.setLenient(false);
+	    try {
+	    	date = new Timestamp(pattern.parse(text).getTime());
+	    } catch (Exception exception) {}
+		if (date == null) {
+			return null;
 		}
 		return source.getNetwork().createVertex(date);
 	}
@@ -398,6 +417,8 @@ public class Date extends BasicTool {
 		int value = 0;
 		if (part.is(Primitive.DAY)) {
 			value = calendar.get(Calendar.DATE);
+		} else if (part.is(Primitive.DAY_OF_WEEK)) {
+			value = calendar.get(Calendar.DAY_OF_WEEK);
 		} else if (part.is(Primitive.WEEK)) {
 			value = calendar.get(Calendar.WEEK_OF_YEAR);
 		} else if (part.is(Primitive.MONTH)) {

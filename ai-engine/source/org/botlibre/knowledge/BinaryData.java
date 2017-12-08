@@ -13,6 +13,8 @@ import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Data;
 
 public class BinaryData implements Serializable, Data {
+	
+	private static final long serialVersionUID = 1L;
 
 	protected long id;
 	

@@ -28,6 +28,6 @@ public interface ExceptionEventListener extends EventListener {
 	/**
 	 * A new active memory was added.
 	 */
-	void notify(Exception exception);
+	void notify(Throwable exception);
 }
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2016 Paphus Solutions Inc.
+ *  Copyright 2017 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,14 +15,10 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-package org.botlibre.sense.sms;
 
+package org.botlibre.sense;
 
-/**
- * Allows the SMS sense to output the message reply.
- */
-
-public class SMSListener {
+public class ResponseListener {
 	public String reply;
 	public String conversation;
 }

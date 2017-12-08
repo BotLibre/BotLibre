@@ -18,11 +18,16 @@
 package org.botlibre.sense.facebook;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.self.SelfCompiler;
+import org.botlibre.sense.ResponseListener;
+import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.Utils;
@@ -38,6 +43,8 @@ import net.sf.json.JSONSerializer;
  */
 public class FacebookMessaging extends Facebook {
 
+	public static int MAX_WAIT = 60 * 1000; // 1 minute
+	
 	public FacebookMessaging() {
 		this.languageState = LanguageState.Answering;
 	}
@@ -107,7 +114,7 @@ public class FacebookMessaging extends Facebook {
 									String text = message.getString("message").trim();
 									log("Processing message", Level.INFO, fromUser, createdTime, conversationId, text);
 									this.messagesProcessed++;
-									inputSentence(text, fromUser, this.userName, conversationId, memory);
+									inputSentence(text, fromUserId, fromUser, this.userName, conversationId, memory);
 							    	if (createdTime.getTime() > max) {
 							    		max = createdTime.getTime();
 							    	}
@@ -182,11 +189,12 @@ public class FacebookMessaging extends Facebook {
 		try {
 			if (input instanceof Message) {
 				Message message = (Message)input;
+			    String fromId = message.getFrom().getId();
 			    String fromUser = message.getFrom().getName();
 				String text = message.getMessage().trim();
 				log("Processing message.", Level.INFO, text, fromUser);
 				this.messagesProcessed++;
-				inputSentence(text, fromUser, this.userName, message.getId(), network);
+				inputSentence(text, fromId, fromUser, this.userName, message.getId(), network);
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -209,20 +217,28 @@ public class FacebookMessaging extends Facebook {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, String targetUserName, String id, Network network) {
+	public void inputSentence(String text, String userId, String userName, String targetUserName, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userId), Primitive.FACEBOOKMESSENGER, userName);
 		Vertex self = network.createVertex(Primitive.SELF);
 		input.addRelationship(Primitive.SPEAKER, user);		
 		input.addRelationship(Primitive.TARGET, self);
-		user.addRelationship(Primitive.INPUT, input);
-		
-		Vertex conversation = network.createVertex(id);
-		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
-		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
-		conversation.addRelationship(Primitive.ID, network.createVertex(id));
+
+		Vertex conversationId = network.createVertex(id);
+		Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(self);
+		Vertex conversation = today.getRelationship(conversationId);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(conversationId, conversation);
+			conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
+			conversation.addRelationship(Primitive.TYPE, Primitive.FACEBOOKMESSENGER);
+			conversation.addRelationship(Primitive.ID, network.createVertex(id));
+			conversation.addRelationship(Primitive.SPEAKER, self);
+			this.conversations++;
+		} else {
+			checkEngaged(conversation);
+		}
 		conversation.addRelationship(Primitive.SPEAKER, user);
-		conversation.addRelationship(Primitive.SPEAKER, self);
 		Language.addToConversation(input, conversation);
 		
 		network.save();
@@ -232,7 +248,7 @@ public class FacebookMessaging extends Facebook {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputFacebookMessengerMessage(String text, String targetUserName, String senderId, Network network) {
+	public String inputFacebookMessengerMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
 		String senderName = null;
 		try {
 			if (getConnection() == null) {
@@ -265,23 +281,45 @@ public class FacebookMessaging extends Facebook {
 			senderName = senderId;
 		}
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(senderName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.FACEBOOKMESSENGER, senderName);
 		Vertex self = network.createVertex(Primitive.SELF);
 		input.addRelationship(Primitive.SPEAKER, user);		
 		input.addRelationship(Primitive.TARGET, self);
-		user.addRelationship(Primitive.INPUT, input);
-		
-		Vertex conversation = network.createVertex(senderId);
+		if (getTrackMessageObjects() && message != null) {
+			input.addRelationship(Primitive.MESSAGE, getBot().awareness().getSense(Http.class).convertElement(message, network));
+		}
+
+		Vertex conversationId = network.createVertex(senderId);
+		Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(self);
+		Vertex conversation = today.getRelationship(conversationId);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(conversationId, conversation);
+		}
 		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
-		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
 		conversation.addRelationship(Primitive.TYPE, Primitive.FACEBOOKMESSENGER);
-		conversation.addRelationship(Primitive.ID, network.createVertex(senderId));
+		conversation.addRelationship(Primitive.ID, conversationId);
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		conversation.addRelationship(Primitive.SPEAKER, self);
 		Language.addToConversation(input, conversation);
 		
 		network.save();
 		getBot().memory().addActiveMemory(input);
+		this.responseListener = new ResponseListener();
+		String reply = null;
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
+				try {
+					this.responseListener.wait(MAX_WAIT);
+				} catch (Exception exception) {
+					log(exception);
+					return "";
+				}
+			}
+			reply = this.responseListener.reply;
+			this.responseListener = null;
+		}
+		return reply;
 	}
 
 	/**
@@ -306,14 +344,58 @@ public class FacebookMessaging extends Facebook {
 		
 		Vertex command = output.mostConscious(Primitive.COMMAND);
 		
+		// If the response is empty, do not send it.
+		if (command == null && text.isEmpty()) {
+			return;
+		}
+		if (this.responseListener != null) {
+			this.responseListener.reply = text;
+		}
 		if (conversation.hasRelationship(Primitive.TYPE, Primitive.FACEBOOKMESSENGER)) {
-			if(command==null || command.toString().length() == 0)
+			if (command == null) {
 				sendFacebookMessengerMessage(text, replyTo, conversationId);
-			else 
-				sendFacebookMessengerButtonMessage(text, command.toString(), replyTo, conversationId);
+			} else {
+				sendFacebookMessengerButtonMessage(text, command.printString(), replyTo, conversationId);
+			}
 		} else {
 			sendMessage(text, replyTo, conversationId);
 		}
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void sendMessage(Vertex source, Vertex message, Vertex conversationId) {
+		if (message.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(message.getNetwork().createInstance(Primitive.INPUT), null, message.getNetwork(), variables);
+			message = getBot().mind().getThought(Language.class).evaluateFormula(message, variables, message.getNetwork());
+			if (message == null) {
+				log("Invalid template formula", Level.WARNING, message);
+				return;
+			}
+		}
+		String text = getBot().mind().getThought(Language.class).getWord(message, message.getNetwork()).printString();
+		sendFacebookMessengerMessage(text, "", conversationId.printString());
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void sendMessage(Vertex source, Vertex message, Vertex conversationId, Vertex command) {
+		if (message.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(message.getNetwork().createInstance(Primitive.INPUT), null, message.getNetwork(), variables);
+			message = getBot().mind().getThought(Language.class).evaluateFormula(message, variables, message.getNetwork());
+			if (message == null) {
+				log("Invalid template formula", Level.WARNING, message);
+				return;
+			}
+		}
+		String text = getBot().mind().getThought(Language.class).getWord(message, message.getNetwork()).printString();
+		sendFacebookMessengerButtonMessage(text, command.printString(), "", conversationId.printString());
 	}
 	
 	/*

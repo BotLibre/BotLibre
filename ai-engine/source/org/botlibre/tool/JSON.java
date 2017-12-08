@@ -40,7 +40,7 @@ public class JSON extends BasicTool {
 	 */
 	public Vertex parse(Vertex source, Vertex text) {
 		Network network = source.getNetwork();
-		JSONObject root = (JSONObject)JSONSerializer.toJSON(text.printString());
+		JSONObject root = (JSONObject)JSONSerializer.toJSON(text.printString().trim());
 		if (root == null) {
 			return null;
 		}

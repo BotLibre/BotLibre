@@ -1,4 +1,20 @@
-// Copyright Paphus Solutions, all rights reserved.
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
 package org.botlibre.thought.language;
 
 import java.io.File;
@@ -38,12 +54,12 @@ import org.botlibre.self.SelfParseException;
 import org.botlibre.sense.context.Context;
 import org.botlibre.sense.http.Http;
 import org.botlibre.thought.BasicThought;
+import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
 
 /**
  * Processes words to determine meaning and response.
  */
-
 public class Language extends BasicThought {
 	public static float CONVERSATION_MATCH_PERCENTAGE = 0.5f;
 	public static float DISCUSSION_MATCH_PERCENTAGE = 0.9f;
@@ -62,6 +78,7 @@ public class Language extends BasicThought {
 	protected boolean fixFormulaCase = true;
 	protected boolean learnGrammar = true;
 	protected boolean splitParagraphs = true;
+	protected boolean reduceQuestions = true;
 	protected boolean synthesizeResponse = false;
 	protected float conversationMatchPercentage = CONVERSATION_MATCH_PERCENTAGE;
 	protected float discussionMatchPercentage = DISCUSSION_MATCH_PERCENTAGE;
@@ -75,6 +92,11 @@ public class Language extends BasicThought {
 	protected int recursiveFormulaDepth;
 	protected long startTime;
 	protected boolean abort;
+	
+	public int defaultResponses;
+	public int confidence;
+	public float sentiment;
+	
 
 	/** Store the state machine used for the last response (if any). */
 	protected Long lastStateMachineId;
@@ -98,7 +120,7 @@ public class Language extends BasicThought {
 	 * Defines the various language conversational states.
 	 */
 	public enum LanguageState {
-		Associate, Conversational, Listening, ListeningOnly, Discussion, Answering
+		Ignore, Associate, Conversational, Listening, ListeningOnly, Discussion, Answering
 	}
 	/**
 	 * Defines who the bot will learn from.
@@ -123,7 +145,7 @@ public class Language extends BasicThought {
 			previous.addRelationship(Primitive.NEXT, input);
 			input.addRelationship(Primitive.PREVIOUS, previous);
 		}
-		conversation.addRelationship(Primitive.INPUT, input, Integer.MAX_VALUE);
+		conversation.appendRelationship(Primitive.INPUT, input);
 		Vertex sentence = input.getRelationship(Primitive.INPUT);
 		if (sentence != null && sentence.instanceOf(Primitive.SENTENCE)) {
 			// Also track sentences used in the conversation.
@@ -159,40 +181,50 @@ public class Language extends BasicThought {
 				List<String> words = Utils.getWords(keywords);
 				for (String keyword : words) {
 					Vertex word = network.createWord(keyword);
+					if (answer.isPinned()) {
+						SelfCompiler.getCompiler().pin(word);
+					}
 					meta.addRelationship(Primitive.KEYWORD, word);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.KEYWORD);
 					word.addRelationship(Primitive.KEYQUESTION, question);
 
-					Vertex lowercase = network.createWord(keyword.toLowerCase());
-					if (lowercase != word) {
-						meta.addRelationship(Primitive.KEYWORD, lowercase);
-						lowercase.addRelationship(Primitive.INSTANTIATION, Primitive.KEYWORD);
-						lowercase.addRelationship(Primitive.KEYQUESTION, question);
+					if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+						Vertex lowercase = network.createWord(keyword.toLowerCase());
+						if (lowercase != word) {
+							meta.addRelationship(Primitive.KEYWORD, lowercase);
+							lowercase.addRelationship(Primitive.INSTANTIATION, Primitive.KEYWORD);
+							lowercase.addRelationship(Primitive.KEYQUESTION, question);
+						}
 					}
 				}
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.internalRemoveRelationships(Primitive.KEYWORD);
-						List<String> words = Utils.getWords(keywords);
-						for (String keyword : words) {
-							Vertex word = network.createWord(keyword);
-							meta.addRelationship(Primitive.KEYWORD, word);
-							word.addRelationship(Primitive.KEYQUESTION, question);
-
-							Vertex lowercase = network.createWord(keyword.toLowerCase());
-							if (lowercase != word) {
-								meta.addRelationship(Primitive.KEYWORD, lowercase);
-								lowercase.addRelationship(Primitive.KEYQUESTION, question);
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.internalRemoveRelationships(Primitive.KEYWORD);
+							List<String> words = Utils.getWords(keywords);
+							for (String keyword : words) {
+								Vertex word = network.createWord(keyword);
+								meta.addRelationship(Primitive.KEYWORD, word);
+								word.addRelationship(Primitive.KEYQUESTION, question);
+	
+								Vertex lowercase = network.createWord(keyword.toLowerCase());
+								if (lowercase != word) {
+									if (answer.isPinned()) {
+										SelfCompiler.getCompiler().pin(lowercase);
+									}
+									meta.addRelationship(Primitive.KEYWORD, lowercase);
+									lowercase.addRelationship(Primitive.KEYQUESTION, question);
+								}
 							}
-						}
-
-					}					
+	
+						}					
+					}
 				}
 			}
 		}
@@ -214,19 +246,21 @@ public class Language extends BasicThought {
 					EmotionalState.valueOf(emote.toUpperCase()).apply(meta);
 				}
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.internalRemoveRelationships(Primitive.EMOTION);
-						List<String> words = Utils.getWords(emotes);
-						for (String emote : words) {
-							EmotionalState.valueOf(emote.toUpperCase()).apply(meta);
-						}
-					}					
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.internalRemoveRelationships(Primitive.EMOTION);
+							List<String> words = Utils.getWords(emotes);
+							for (String emote : words) {
+								EmotionalState.valueOf(emote.toUpperCase()).apply(meta);
+							}
+						}					
+					}
 				}
 			}
 		}
@@ -250,21 +284,23 @@ public class Language extends BasicThought {
 					}
 				}
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.internalRemoveRelationships(Primitive.ACTION);
-						List<String> words = Utils.getWords(actions);
-						for (String action : words) {
-							if (!action.equals("none")) {
-								meta.addRelationship(Primitive.ACTION, new Primitive(action));
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.internalRemoveRelationships(Primitive.ACTION);
+							List<String> words = Utils.getWords(actions);
+							for (String action : words) {
+								if (!action.equals("none")) {
+									meta.addRelationship(Primitive.ACTION, new Primitive(action));
+								}
 							}
-						}
-					}					
+						}					
+					}
 				}
 			}
 		}
@@ -288,21 +324,23 @@ public class Language extends BasicThought {
 					}
 				}
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.internalRemoveRelationships(Primitive.POSE);
-						List<String> words = Utils.getWords(poses);
-						for (String pose : words) {
-							if (!pose.equals("none")) {
-								meta.addRelationship(Primitive.POSE, new Primitive(pose));
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.internalRemoveRelationships(Primitive.POSE);
+							List<String> words = Utils.getWords(poses);
+							for (String pose : words) {
+								if (!pose.equals("none")) {
+									meta.addRelationship(Primitive.POSE, new Primitive(pose));
+								}
 							}
-						}
-					}					
+						}					
+					}
 				}
 			}
 		}
@@ -330,28 +368,30 @@ public class Language extends BasicThought {
 				}
 			}
 		}
-		network.checkReduction(question);
-		Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-		if (synonyms != null) {
-			for (Relationship synonym : synonyms) {
-				relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-				if (relationship != null) {
-					Vertex meta = relationship.getMeta();
-					if (previous != null) {
-						meta = network.createMeta(relationship);
-						meta.addRelationship(Primitive.PREVIOUS, previous);
-					}
-					if (meta != null) {
-						if (require) {
-							meta.addRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);					
-						} else {
-							Relationship required = meta.getRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);
-							if (required != null) {
-								relationship.getMeta().internalRemoveRelationship(required);
-							}				
+		if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+			network.checkReduction(question);
+			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+			if (synonyms != null) {
+				for (Relationship synonym : synonyms) {
+					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+					if (relationship != null) {
+						Vertex meta = relationship.getMeta();
+						if (previous != null) {
+							meta = network.createMeta(relationship);
+							meta.addRelationship(Primitive.PREVIOUS, previous);
 						}
-					}
-				}					
+						if (meta != null) {
+							if (require) {
+								meta.addRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);					
+							} else {
+								Relationship required = meta.getRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);
+								if (required != null) {
+									relationship.getMeta().internalRemoveRelationship(required);
+								}				
+							}
+						}
+					}					
+				}
 			}
 		}
 	}
@@ -374,19 +414,21 @@ public class Language extends BasicThought {
 					word.addRelationship(Primitive.QUESTION, question);
 				}
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.internalRemoveRelationships(Primitive.REQUIRED);
-						List<String> words = Utils.getWords(required);
-						for (String keyword : words) {
-							meta.addRelationship(Primitive.REQUIRED, network.createWord(keyword));
-						}
-					}					
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.internalRemoveRelationships(Primitive.REQUIRED);
+							List<String> words = Utils.getWords(required);
+							for (String keyword : words) {
+								meta.addRelationship(Primitive.REQUIRED, network.createWord(keyword));
+							}
+						}					
+					}
 				}
 			}
 		}
@@ -400,6 +442,9 @@ public class Language extends BasicThought {
 			clearSentenceMeta(question, answer, Primitive.TOPIC, network);
 		} else {
 			Vertex topicFragment = network.createFragment(topic);
+			if (answer.isPinned()) {
+				SelfCompiler.getCompiler().pin(topicFragment);
+			}
 			topicFragment.addRelationship(Primitive.INSTANTIATION, Primitive.TOPIC);
 			network.createVertex(Primitive.TOPIC).addRelationship(Primitive.INSTANCE, topicFragment);
 			topicFragment.addRelationship(Primitive.QUESTION, question);
@@ -408,14 +453,16 @@ public class Language extends BasicThought {
 				Vertex meta = network.createMeta(relationship);
 				meta.setRelationship(Primitive.TOPIC, topicFragment);
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.setRelationship(Primitive.TOPIC, topicFragment);
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.setRelationship(Primitive.TOPIC, topicFragment);
+						}
 					}
 				}
 			}
@@ -442,8 +489,10 @@ public class Language extends BasicThought {
 	public static void addResponse(Vertex question, Vertex answer, String topic, String keywords, String required, float correctness, Network network) {
 		question.addWeakRelationship(Primitive.RESPONSE, answer, correctness);
 		question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
-		network.checkReduction(question);
-		question.weakAssociateAll(Primitive.SYNONYM, answer, Primitive.RESPONSE, correctness);
+		if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+			network.checkReduction(question);
+			question.weakAssociateAll(Primitive.SYNONYM, answer, Primitive.RESPONSE, correctness);
+		}
 		if (topic != null && !topic.isEmpty()) {
 			Language.addSentenceTopicMeta(question, answer, topic, network);
 		}
@@ -458,24 +507,30 @@ public class Language extends BasicThought {
 	/**
 	 * Add the command as the command for a response match to the question meta.
 	 */
-	public static void addSentenceCommandMeta(Vertex question, Vertex answer, String command, Network network) {
+	public static void addSentenceCommandMeta(Vertex question, Vertex answer, String command, boolean pin, Network network) {
 		if (command == null || command.trim().isEmpty()) {
 			clearSentenceMeta(question, answer, Primitive.COMMAND, network);
 		} else {
 			Vertex expression = network.createTemplate("Template(\"{Http.toJSON(" + command + ")}\")");
+			if (pin) {
+				SelfCompiler.getCompiler().pin(expression);
+			}
 			Relationship relationship = question.getRelationship(Primitive.RESPONSE, answer);
 			if (relationship != null) {
 				Vertex meta = network.createMeta(relationship);
+				meta.setPinned(true);
 				meta.setRelationship(Primitive.COMMAND, expression);
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.setRelationship(Primitive.COMMAND, expression);
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.setRelationship(Primitive.COMMAND, expression);
+						}
 					}
 				}
 			}
@@ -485,24 +540,29 @@ public class Language extends BasicThought {
 	/**
 	 * Add the script as the think for a response match to the question meta.
 	 */
-	public static void addSentenceThinkMeta(Vertex question, Vertex answer, String think, Network network) {
+	public static void addSentenceThinkMeta(Vertex question, Vertex answer, String think, boolean pin, Network network) {
 		if (think == null || think.trim().isEmpty()) {
 			clearSentenceMeta(question, answer, Primitive.THINK, network);
 		} else {
 			Vertex expression = network.createTemplate("Template(\"{think {" + think + "}}\")");
+			if (pin) {
+				SelfCompiler.getCompiler().pin(expression);
+			}
 			Relationship relationship = question.getRelationship(Primitive.RESPONSE, answer);
 			if (relationship != null) {
 				Vertex meta = network.createMeta(relationship);
 				meta.setRelationship(Primitive.THINK, expression);
 			}
-			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.setRelationship(Primitive.THINK, expression);
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.setRelationship(Primitive.THINK, expression);
+						}
 					}
 				}
 			}
@@ -512,24 +572,29 @@ public class Language extends BasicThought {
 	/**
 	 * Add the script as the condition for a response match to the question meta.
 	 */
-	public static void addSentenceConditionMeta(Vertex question, Vertex answer, String condition, Network network) {
+	public static void addSentenceConditionMeta(Vertex question, Vertex answer, String condition, boolean pin, Network network) {
 		if (condition == null || condition.trim().isEmpty()) {
 			clearSentenceMeta(question, answer, Primitive.CONDITION, network);
 		} else {
 			Vertex expression = network.createTemplate("Template(\"{if (true == (" + condition + ")) { \"true\" } else { \"false\" }}\")");
+			if (pin) {
+				SelfCompiler.getCompiler().pin(expression);
+			}
 			Relationship relationship = question.getRelationship(Primitive.RESPONSE, answer);
 			if (relationship != null) {
 				Vertex meta = network.createMeta(relationship);
 				meta.setRelationship(Primitive.CONDITION, expression);
 			}
+			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
 			network.checkReduction(question);
-			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-			if (synonyms != null) {
-				for (Relationship synonym : synonyms) {
-					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-					if (relationship != null) {
-						Vertex meta = network.createMeta(relationship);
-						meta.setRelationship(Primitive.CONDITION, expression);
+				Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+				if (synonyms != null) {
+					for (Relationship synonym : synonyms) {
+						relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+						if (relationship != null) {
+							Vertex meta = network.createMeta(relationship);
+							meta.setRelationship(Primitive.CONDITION, expression);
+						}
 					}
 				}
 			}
@@ -544,13 +609,15 @@ public class Language extends BasicThought {
 		if (relationship != null && relationship.hasMeta()) {
 			relationship.getMeta().internalRemoveRelationships(type);				
 		}
-		network.checkReduction(question);
-		Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
-		if (synonyms != null) {
-			for (Relationship synonym : synonyms) {
-				relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
-				if (relationship != null && relationship.hasMeta()) {
-					relationship.getMeta().internalRemoveRelationships(type);						
+		if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+			network.checkReduction(question);
+			Collection<Relationship> synonyms = question.getRelationships(Primitive.SYNONYM);
+			if (synonyms != null) {
+				for (Relationship synonym : synonyms) {
+					relationship = synonym.getTarget().getRelationship(Primitive.RESPONSE, answer);
+					if (relationship != null && relationship.hasMeta()) {
+						relationship.getMeta().internalRemoveRelationships(type);						
+					}
 				}
 			}
 		}
@@ -571,8 +638,10 @@ public class Language extends BasicThought {
 				// First mark wrong in context, then mark wrong in general.
 				if ((relationship == null) || (relationship.getCorrectness() < 0.5)) {
 					originalQuestion.removeRelationship(Primitive.RESPONSE, wrongResponse);
-					network.checkReduction(originalQuestion);
-					originalQuestion.inverseAssociateAll(Primitive.SYNONYM, wrongResponse, Primitive.RESPONSE);
+					if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+						network.checkReduction(originalQuestion);
+						originalQuestion.inverseAssociateAll(Primitive.SYNONYM, wrongResponse, Primitive.RESPONSE);
+					}
 				} else {
 					relationship.setCorrectness(relationship.getCorrectness() / 2);
 					originalQuestionInput.removeRelationship(Primitive.RESPONSE, wrongResponseInput);
@@ -594,8 +663,10 @@ public class Language extends BasicThought {
 		if (!originalQuestion.instanceOf(Primitive.PATTERN)) {
 			originalQuestion.associateAll(Primitive.WORD, originalQuestion, Primitive.QUESTION);
 		}
-		network.checkReduction(originalQuestion);
-		originalQuestion.associateAll(Primitive.SYNONYM, correction, Primitive.RESPONSE);
+		if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+			network.checkReduction(originalQuestion);
+			originalQuestion.associateAll(Primitive.SYNONYM, correction, Primitive.RESPONSE);
+		}
 		correction.addRelationship(Primitive.QUESTION, originalQuestion);
 		originalQuestion.setPinned(true);
 		correction.setPinned(true);
@@ -685,6 +756,10 @@ public class Language extends BasicThought {
 		property = this.bot.memory().getProperty("Language.correctionMode");
 		if (property != null) {
 			setCorrectionMode(CorrectionMode.valueOf(property));
+		}
+		property = this.bot.memory().getProperty("Language.reduceQuestions");
+		if (property != null) {
+			setReduceQuestions(Boolean.valueOf(property));
 		}
 	}
 
@@ -855,6 +930,14 @@ public class Language extends BasicThought {
 		this.maxResponseMatchProcess = maxResponseMatchProcess;
 	}
 
+	public boolean getReduceQuestions() {
+		return reduceQuestions;
+	}
+
+	public void setReduceQuestions(boolean reduceQuestions) {
+		this.reduceQuestions = reduceQuestions;
+	}
+
 	public boolean getFixFormulaCase() {
 		return fixFormulaCase;
 	}
@@ -889,6 +972,7 @@ public class Language extends BasicThought {
 		memory.saveProperty("Language.splitParagraphs", String.valueOf(getSplitParagraphs()), true);
 		memory.saveProperty("Language.synthesizeResponse", String.valueOf(getSynthesizeResponse()), true);
 		memory.saveProperty("Language.fixFormulaCase", String.valueOf(getFixFormulaCase()), true);
+		memory.saveProperty("Language.reduceQuestions", String.valueOf(getReduceQuestions()), true);
 		
 		memory.save();
 	}
@@ -982,6 +1066,7 @@ public class Language extends BasicThought {
 			log("Processing", Level.FINER, vertex);
 			try {
 				if (vertex.instanceOf(Primitive.INPUT)) {
+					boolean command = false;
 					Vertex input = vertex;
 					List<Vertex> sentences = new ArrayList<Vertex>();
 					List<Vertex> responses = new ArrayList<Vertex>();
@@ -1001,7 +1086,15 @@ public class Language extends BasicThought {
 									sentences.add(sentence);
 								}
 							} else if (sentence.instanceOf(Primitive.PARAGRAPH)) {
-								sentences.addAll(sentence.orderedRelations(Primitive.SENTENCE));
+								if (getSplitParagraphs()) {
+									sentences.addAll(sentence.orderedRelations(Primitive.SENTENCE));
+								} else {
+									sentences.add(sentence);
+								}
+							} else {
+								// Process command.
+								command = true;
+								sentences.add(sentence);
 							}
 						}
 					}
@@ -1017,6 +1110,12 @@ public class Language extends BasicThought {
 					boolean correction = input.hasRelationship(Primitive.ASSOCIATED, Primitive.CORRECTION);
 					boolean offended = input.hasRelationship(Primitive.ASSOCIATED, Primitive.OFFENDED);
 					boolean newConversation = (inputValue != null) && (inputValue.is(Primitive.NULL));
+					// Track sentiment and confidence stats.
+					Relationship relationship = input.getRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
+					if (relationship != null) {
+						this.sentiment = relationship.getCorrectness();
+					}
+					this.confidence = 100;
 					LanguageState state = LanguageState.Answering;
 					Sense sense = null;
 					if (inputSense != null) {
@@ -1040,53 +1139,61 @@ public class Language extends BasicThought {
 								this.bot.mood().evaluateResponse(response, null);
 								this.bot.avatar().evaluateResponse(output, response, null, variables, network);
 								responses.add(response);
+								log("Greeting", Level.INFO, response, speaker, conversation);
 							}
 						} else {
 							for (Vertex sentence : sentences) {
-								checkQuestion(sentence, network);
-								if (PROCESS_HTTP) {
-									// TODO make this occur in discovery
-									//processHttp(sentence, network);
-								}
-								log("Processing sentence", Level.FINE, sentence, speaker, targets);
-								if (offended) {
-									// If offensive then remove the last sentence.
-									processOffensive(input, speaker, target, conversation, network);
-								}
-								if (correction) {
-									// If Correcting then this is a response to that previous question.
-									response = processCorrection(input, sentence, speaker, target, conversation, network);
-								} else if (state == LanguageState.Associate) {
-									// Associate the context selection with the sentence.
-									response = processAssociation(sentence, network);
-								} else if ((state == LanguageState.Listening) || (state == LanguageState.ListeningOnly)) {
-									processListening(input, sentence, speaker, conversation, targets, network, state);
-									// If target is self, then give an answer.
-									if ((state == LanguageState.Listening) && (target == self)) {
+								if (command) {
+									response = processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
+									if (response == null) {
+										response = network.createVertex("");
+									}
+								} else {
+									checkQuestion(sentence, network);
+									if (PROCESS_HTTP) {
+										// TODO make this occur in discovery
+										//processHttp(sentence, network);
+									}
+									log("Processing sentence", Level.FINE, sentence, speaker, targets);
+									if (offended) {
+										// If offensive then remove the last sentence.
+										processOffensive(input, speaker, target, conversation, network);
+									}
+									if (correction) {
+										// If Correcting then this is a response to that previous question.
+										response = processCorrection(input, sentence, speaker, target, conversation, network);
+									} else if (state == LanguageState.Associate) {
+										// Associate the context selection with the sentence.
+										response = processAssociation(sentence, network);
+									} else if ((state == LanguageState.Listening) || (state == LanguageState.ListeningOnly)) {
+										processListening(input, sentence, speaker, conversation, targets, network, state);
+										// If target is self, then give an answer.
+										if ((state == LanguageState.Listening) && (target == self)) {
+											response = processConversational(input, sentence, conversation, variables, network, state);
+										} else {
+											// Associate response, process understanding, but don't respond.
+											processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
+											return;
+										}
+									} else if (state == LanguageState.Discussion) {
+										processListening(input, sentence, speaker, conversation, targets, network, state);
+										// If target is self, then give an answer.
+										if (target == self) {
+											response = processConversational(input, sentence, conversation, variables, network, state);							
+										} else if ((targets == null) || targets.isEmpty() || (targets.size() > 1)) {
+											// Process anything to a group, or to no one as a discussion.
+											response = processDiscussion(input, sentence, conversation, variables, network);
+										} else {
+											processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
+											log("Discussion response to other", Level.FINE, targets);
+										}
+									} else if (state == LanguageState.Conversational) {
+										processListening(input, sentence, speaker, conversation, targets, network, state);
 										response = processConversational(input, sentence, conversation, variables, network, state);
-									} else {
-										// Associate response, process understanding, but don't respond.
-										processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
-										return;
+									} else if (state == LanguageState.Answering) {
+										processListening(input, sentence, speaker, conversation, targets, network, state);
+										response = processConversational(input, sentence, conversation, variables, network, state);
 									}
-								} else if (state == LanguageState.Discussion) {
-									processListening(input, sentence, speaker, conversation, targets, network, state);
-									// If target is self, then give an answer.
-									if (target == self) {
-										response = processConversational(input, sentence, conversation, variables, network, state);							
-									} else if ((targets == null) || targets.isEmpty() || (targets.size() > 1)) {
-										// Process anything to a group, or to no one as a discussion.
-										response = processDiscussion(input, sentence, conversation, variables, network);
-									} else {
-										processUnderstanding(input, sentence, this.conversationMatchPercentage, variables, network);
-										log("Discussion response to other", Level.FINE, targets);
-									}
-								} else if (state == LanguageState.Conversational) {
-									processListening(input, sentence, speaker, conversation, targets, network, state);
-									response = processConversational(input, sentence, conversation, variables, network, state);
-								} else if (state == LanguageState.Answering) {
-									processListening(input, sentence, speaker, conversation, targets, network, state);
-									response = processConversational(input, sentence, conversation, variables, network, state);
 								}
 								// Check for label
 								if ((response != null) && response.instanceOf(Primitive.LABEL)) {
@@ -1177,7 +1284,8 @@ public class Language extends BasicThought {
 								output.addRelationship(Primitive.MIMIC, input);
 							}
 							response = responses.get(0);
-							output.addRelationship(Primitive.INPUT, response);
+							Relationship relation = output.addRelationship(Primitive.INPUT, response);
+							relation.setCorrectness(Math.max(this.confidence, 1));
 						} else {
 							Vertex paragraph = network.createInstance(Primitive.PARAGRAPH);
 							index = 0;
@@ -1185,7 +1293,8 @@ public class Language extends BasicThought {
 								paragraph.addRelationship(Primitive.SENTENCE, each, index);
 								index++;
 							}
-							output.addRelationship(Primitive.INPUT, paragraph);	
+							Relationship relation =  output.addRelationship(Primitive.INPUT, paragraph);
+							relation.setCorrectness(Math.max(this.confidence, 1));
 						}
 						if (conversation != null) {
 							Language.addToConversation(output, conversation);
@@ -1198,7 +1307,12 @@ public class Language extends BasicThought {
 						getBot().awareness().output(output);
 					} catch (RuntimeException exception) {
 						if (sense != null) {
-							sense.notifyExceptionListeners(exception);						
+							sense.notifyExceptionListeners(exception);
+						}
+						throw exception;
+					} catch (Error exception) {
+						if (sense != null) {
+							sense.notifyExceptionListeners(exception);
 						}
 						throw exception;
 					}
@@ -1272,6 +1386,11 @@ public class Language extends BasicThought {
 			//sentence.addRelationship(Primitive.FORMULA, formula);
 			List<Vertex> relationships = formula.orderedRelations(Primitive.WORD);
 			if (relationships == null) {
+				// Allow empty/silence template.
+				if ((formula.getData() != null && formula.getData().equals("Template(\"\")"))
+						|| (formula.getName() != null && formula.getName().equals("Template(\"\")"))) {
+					return network.createVertex("");
+				}
 				return null;
 			}
 			List<Vertex> words = new ArrayList<Vertex>(relationships.size());
@@ -1425,8 +1544,17 @@ public class Language extends BasicThought {
 			sentence = network.createSentence(pattern.getDataValue());
 			elements = sentence.orderedRelations(Primitive.WORD);
 		}
-		if (elements == null || words == null) {
+		// Empty pattern should match empty input.
+		if (elements == null && words == null) {
+			return true;
+		}
+		if (elements == null) {
 			return false;
+		}
+		// If the input is empty pass in an empty string to allow match with ^
+		if (words == null) {
+			words = new ArrayList<Vertex>(1);
+			words.add(network.createVertex(""));
 		}
 		boolean result = evaluatePattern(pattern, sentence, variable, variables, network, elements, words, 0);
 		return result;
@@ -1688,13 +1816,17 @@ public class Language extends BasicThought {
 		} else if (star.size() == 1) {
 			return star.get(0);
 		}
-		Vertex starValue = network.createInstance(Primitive.FRAGMENT);
-		int index = 0;
+		String starValue = "";
+		boolean first = true;
 		for (Vertex word : star) {
-			starValue.addRelationship(Primitive.WORD, word, index);
-			index++;
+			if (first) {
+				first = false;
+			} else {
+				starValue = starValue + " ";
+			}
+			starValue = starValue + word.printString();
 		}
-		return starValue;
+		return network.createFragment(starValue);
 	}
 	
 	/**
@@ -1804,8 +1936,10 @@ public class Language extends BasicThought {
 			// First mark wrong in context, then mark wrong in general.
 			if ((relationship == null) || (relationship.getCorrectness() < 0.5)) {
 				originalQuestion.removeRelationship(Primitive.RESPONSE, quotient);
-				network.checkReduction(originalQuestion);
-				originalQuestion.inverseAssociateAll(Primitive.SYNONYM, quotient, Primitive.RESPONSE);
+				if (getReduceQuestions()) {
+					network.checkReduction(originalQuestion);
+					originalQuestion.inverseAssociateAll(Primitive.SYNONYM, quotient, Primitive.RESPONSE);
+				}
 			} else {
 				relationship.setCorrectness(relationship.getCorrectness() / 2);
 				// Dissociate previous question as meta info.
@@ -1857,8 +1991,10 @@ public class Language extends BasicThought {
 		}
 		wrongResponseInput.addRelationship(Primitive.ASSOCIATED, Primitive.OFFENSIVE);
 		wrongResponse.addRelationship(Primitive.ASSOCIATED, Primitive.OFFENSIVE);
-		network.checkReduction(wrongResponse);
-		wrongResponse.associateAll(Primitive.SYNONYM, network.createVertex(Primitive.OFFENSIVE), Primitive.ASSOCIATED);
+		if (getReduceQuestions()) {
+			network.checkReduction(wrongResponse);
+			wrongResponse.associateAll(Primitive.SYNONYM, network.createVertex(Primitive.OFFENSIVE), Primitive.ASSOCIATED);
+		}
 		// Check if last response was from understanding and correct state machine.
 		// Do not remove pinned quotients.
 		Vertex quotient = getLastQuotient(network);
@@ -2315,14 +2451,16 @@ public class Language extends BasicThought {
 			}
 		}
 		if (cascade) {
-			network.checkReduction(sentence);
-			Collection<Relationship> meanings = sentence.getRelationships(Primitive.SYNONYM);
-			if (meanings != null) {
-				for (Relationship meaning : meanings) {
-					bestResponse = bestResponse(percentage, input, meaning.getTarget(), question, previousResponse, false,
-							init, previousQuestion, questionWords, currentTopic, variables, network);
-					if (bestResponse != null) {
-						return bestResponse;
+			if (getReduceQuestions()) {
+				network.checkReduction(sentence);
+				Collection<Relationship> meanings = sentence.getRelationships(Primitive.SYNONYM);
+				if (meanings != null) {
+					for (Relationship meaning : meanings) {
+						bestResponse = bestResponse(percentage, input, meaning.getTarget(), question, previousResponse, false,
+								init, previousQuestion, questionWords, currentTopic, variables, network);
+						if (bestResponse != null) {
+							return bestResponse;
+						}
 					}
 				}
 			}
@@ -2425,6 +2563,8 @@ public class Language extends BasicThought {
 					} else {
 						this.wasMimic = true;
 						response = getDefaultResponse(defaultResponses, input, sentence, conversation, variables, network);
+						this.defaultResponses++;
+						this.confidence = 0;
 					}
 				}
 			}
@@ -2865,6 +3005,119 @@ public class Language extends BasicThought {
 	}
 	
 	/**
+	 * Attempt to import and learn new responses from a website.
+	 */
+	public List<Vertex> importHTML(String url, String xpath, String learningMode, Network network) {
+		log("IMPORT HTML", Level.INFO, url, xpath, learningMode);
+		List<Vertex> results = new ArrayList<Vertex>();
+		try {
+			if (learningMode.equals("Reflexive")) {
+				// For each "well formed" paragraph, make the paragraph a response and its own question (to match similar questions).
+				if (xpath.isEmpty()) {
+					xpath = "//p";
+				}
+				Vertex result = getBot().awareness().getSense(Http.class).requestHTML(url, xpath, "#array", "#text", network);
+				if (result != null) {
+					List<Vertex> elements = result.orderedRelations(Primitive.ELEMENT);
+					if (elements != null) {
+						for (Vertex element : elements) {
+							// Learn each sentence if it looks like something worth learning.
+							// Only learn proper sentences.
+							String text = element.printString().trim();
+							if ((text.length() > 10) && text.endsWith(".")) {
+								Vertex sentence = network.createSentence(text);
+								Collection<Relationship> words = sentence.getRelationships(Primitive.WORD);
+								if (words != null && words.size() > 3) {
+									Language.addResponse(sentence, sentence, network);
+									results.add(sentence);
+								}
+							}
+						}
+					}
+				}
+			} else if (learningMode.equals("Headers")) {
+				// For each header, make the header the question, and the header's first paragraph the response.
+				String html = Utils.httpGET(url);
+				TextStream stream = new TextStream(html);
+				while (!stream.atEnd()) {
+					stream.skipToAll("<h", true);
+					if (stream.atEnd() || !"123456789".contains(stream.next(1))) {
+						// Ignore non h1... tags
+						continue;
+					}
+					stream.skipToAll(">", true);
+					if (stream.atEnd()) {
+						break;
+					}
+					String header = stream.upToAll("</h").trim();
+					header = Utils.stripTags(header).trim();
+					stream.skipToAll(">", true);
+					if (stream.atEnd()) {
+						break;
+					}
+					stream.skipToAll("<p");
+					stream.skipToAll(">", true);
+					if (stream.atEnd()) {
+						break;
+					}
+					String p = stream.upToAll("</p>").trim();
+					if ((p.length() > 10) && p.endsWith(".")) {
+						Vertex question = network.createSentence(header);
+						Vertex response = network.createSentence(p);
+						Language.addResponse(question, response, network);
+						results.add(question);
+					}
+				}
+			} else if (learningMode.equals("Text")) {
+				if (xpath.isEmpty()) {
+					xpath = "//p";
+				}
+				Vertex result = getBot().awareness().getSense(Http.class).requestHTML(url, xpath, "#array", "#text", network);
+				if (result != null) {
+					List<Vertex> elements = result.orderedRelations(Primitive.ELEMENT);
+					if (elements != null) {
+						for (Vertex element : elements) {
+							results.add(element);
+						}
+					}
+				}
+			} else if (learningMode.equals("HTML")) {
+				if (xpath.isEmpty()) {
+					xpath = "//p";
+				}
+				Vertex result = getBot().awareness().getSense(Http.class).requestHTML(url, xpath, "#array", "#html", network);
+				if (result != null) {
+					List<Vertex> elements = result.orderedRelations(Primitive.ELEMENT);
+					if (elements != null) {
+						for (Vertex element : elements) {
+							results.add(element);
+						}
+					}
+				}
+			} else {
+				if (xpath.isEmpty()) {
+					xpath = "//p";
+				}
+				Vertex result = getBot().awareness().getSense(Http.class).requestHTML(url, xpath, "#array", null, network);
+				if (result != null) {
+					List<Vertex> elements = result.orderedRelations(Primitive.ELEMENT);
+					if (elements != null) {
+						for (Vertex element : elements) {
+							results.add(element);
+						}
+					}
+				}
+			}
+			network.save();
+			return results;
+		} catch (BotException exception) {
+			throw (BotException)exception;
+		} catch (Exception exception) {
+			throw new BotException(exception);
+		}
+	}
+	
+	/**
 	 * Return the last thing the speaker said in the conversation.
 	 */
 	public Vertex getLastInputInConversation(Vertex conversation, Vertex speaker, int last) {
@@ -2950,7 +3203,14 @@ public class Language extends BasicThought {
 	 */
 	public Vertex learn(Vertex source, Vertex question, Vertex response) {
 		log("learn", Level.FINE, question, response);
-		addResponse(question, response, source.getNetwork());
+		Network network = source.getNetwork();
+		if (question.is(Primitive.NULL) || response.is(Primitive.NULL)) {
+			return null;
+		}
+		if (!question.instanceOf(Primitive.PATTERN) && question.instanceOf(Primitive.SENTENCE)) {
+			question = network.createSentence(question.printString());
+		}
+		addResponse(question, response, network);
 		return source;
 	}
 
@@ -2993,6 +3253,35 @@ public class Language extends BasicThought {
 	public Vertex randomSynthesize(Vertex source) {
 		log("random synthesize", Level.FINE);
 		return synthesizeResponse(null, null, null, true, null, source.getNetwork());
+	}
+
+	/**
+	 * Self API to return an array of word indexes.
+	 */
+	public Vertex keywordIndexes(Vertex source, Vertex text, Vertex keywords) {
+		Network network = source.getNetwork();
+		Vertex array = network.createInstance(Primitive.ARRAY);
+		Vertex paragraph = network.createSentence(text.printString());
+		List<String> keywordList = new TextStream(keywords.printString()).allWords();
+		if (keywordList.isEmpty()) {
+			return null;
+		}
+		List<Vertex> words = paragraph.orderedRelations(Primitive.WORD);
+		if (words != null) {
+			int index = 0;
+			for (Vertex word : words) {
+				for (String keyword : keywordList) {
+					if ((word.getData() instanceof String)
+							&& (keyword.equalsIgnoreCase((String)word.getData())
+									|| (((String)word.getData()).toLowerCase().startsWith(keyword.toLowerCase()))
+										&&  ((String)word.getData()).length() <= (keyword.length() + 2))) {
+						array.appendRelationship(Primitive.ELEMENT, network.createVertex(index));
+					}
+				}
+				index++;
+			}
+		}
+		return array;
 	}
 
 	/**
@@ -3153,6 +3442,16 @@ public class Language extends BasicThought {
 		}
 		return result;
 	}
+
+	/**
+	 * Self API to create a paragraph.
+	 * Language.paragraph("hello. How are you?")
+	 * Parse the text into a paragraph object.
+	 */
+	public Vertex paragraph(Vertex source, Vertex text) {
+		Network network = source.getNetwork();
+		return network.createParagraph(text);
+	}
 	
 	/**
 	 * Self API to access last input of a speaker.
@@ -3271,8 +3570,10 @@ public class Language extends BasicThought {
 						relationship = getBot().mind().getThought(Comprehension.class).checkTemplate(input, network);
 						if (relationship == null) {
 							relationship = lastSentence.addWeakRelationship(Primitive.RESPONSE, sentence, value);
-							network.checkReduction(lastSentence);
-							lastSentence.weakAssociateAll(Primitive.SYNONYM, sentence, Primitive.RESPONSE, value);
+							if (getReduceQuestions()) {
+								network.checkReduction(lastSentence);
+								lastSentence.weakAssociateAll(Primitive.SYNONYM, sentence, Primitive.RESPONSE, value);
+							}
 						}
 					} else {
 						relationship = lastSentence.addWeakRelationship(Primitive.RESPONSE, sentence, value);
@@ -3487,6 +3788,9 @@ public class Language extends BasicThought {
 		List<Vertex> deferred = new ArrayList<Vertex>();
 		for (Relationship wordRelation : wordRelations) {
 			Vertex word = wordRelation.getTarget();
+			if (!(word.getData() instanceof String)) {
+				continue;
+			}
 			Vertex lowercase = invertWordCase(word, network);
 			Vertex uppercase = network.findByData(((String)word.getData()).toUpperCase());
 			if (keywords && (!word.instanceOf(Primitive.KEYWORD)
@@ -3658,14 +3962,18 @@ public class Language extends BasicThought {
 			log("No valid question match", Level.FINE);
 			return null;
 		}
+		int max = computeMaxSentenceValue(bestMatch.getKey(), bestMatch.getKey(), network);
+		// If % then ok.
+		double required = max * percentage * 0.8;
+		// Recompute value using all words, as some words may not store relation to sentence.
+		int matchValue = computeMaxSentenceValue(bestMatch.getKey(), sentence, network);
+
+		if (max != 0) {
+			this.confidence = matchValue / max;
+		}
 		if (keyWordsMatches.containsKey(bestMatch.getKey())) {
 			log("Question keyword match", Level.FINE);
 		} else {
-			int max = computeMaxSentenceValue(bestMatch.getKey(), bestMatch.getKey(), network);
-			// If % then ok.
-			double required = max * percentage * 0.8;
-			// Recompute value using all words, as some words may not store relation to sentence.
-			int matchValue = computeMaxSentenceValue(bestMatch.getKey(), sentence, network);
 			log("Question best match (score, max score, required score, question)", Level.FINE, matchValue, max, required, bestMatch.getKey());
 			if (matchValue < required) {
 				log("Question bad match, insufficient score (score, required score, question)", Level.FINE, matchValue, required, bestMatch.getKey());
@@ -3799,15 +4107,19 @@ public class Language extends BasicThought {
 				}
 				if (bestMatch == null) {
 					if (!evaluatePattern(entry.getKey(), sentence, Primitive.WILDCARD, variables, network)) {
+						log("Pattern does not match", Level.FINER, entry.getKey());
 						continue;
 					}
 					bestResponse = bestResponse(percentage, input, entry.getKey(), sentence, previousResponse,
 							false, false, previousQuestion, questionWords, currentTopic, variables, network);
 					if (bestResponse != null) {
+						log("Pattern match", Level.FINER, entry.getKey());
 						bestMatch = entry;
 						bestHasUnderscore = entry.getKey().hasRelationship(Primitive.WORD, Primitive.UNDERSCORE)
 									|| entry.getKey().hasRelationship(Primitive.WORD, Primitive.POUNDWILDCARD)
 									|| entry.getKey().hasRelationship(Primitive.TYPE, Primitive.PRECEDENCE);
+					} else {
+						log("Pattern response is not valid", Level.FINER, entry.getKey());
 					}
 				} else {
 					boolean hasUnderscore = entry.getKey().hasRelationship(Primitive.WORD, Primitive.UNDERSCORE)
@@ -3815,16 +4127,18 @@ public class Language extends BasicThought {
 								|| entry.getKey().hasRelationship(Primitive.TYPE, Primitive.PRECEDENCE);
 					if (entry.getValue() > bestMatch.getValue() || (hasUnderscore && ! bestHasUnderscore)) {
 						if (!evaluatePattern(entry.getKey(), sentence, Primitive.WILDCARD, variables, network)) {
+							log("Pattern does not match", Level.FINER, entry.getKey());
 							continue;
 						}
 						Relationship response = bestResponse(percentage, input, entry.getKey(), sentence, previousResponse,
 								false, false, previousQuestion, questionWords, currentTopic, variables, network);
 						if (response != null) {
+							log("Pattern match", Level.FINER, entry.getKey());
 							bestResponse = response;
-							if (bestResponse != null) {
-								bestMatch = entry;
-								bestHasUnderscore = hasUnderscore;
-							}
+							bestMatch = entry;
+							bestHasUnderscore = hasUnderscore;
+						} else {
+							log("Pattern response is not valid", Level.FINER, entry.getKey());
 						}
 					}
 				}
@@ -3842,27 +4156,27 @@ public class Language extends BasicThought {
 	 * Attempt to understand the sentence using state machines.
 	 */
 	public Vertex processUnderstanding(Vertex input, Vertex sentence, float correctnessRequired, Map<Vertex, Vertex> variables, Network network) {
-		if (!sentence.hasRelationship(Primitive.WORD)) {
-			return null;
-		}
+		List<Vertex> compoundWords = null;
+		Vertex compoundSentence = sentence;
 		// Lookup and apply language rules.
 		// Use read-only states to improve performance, as they will not be modified.
 		Network readOnlyMemory = getBot().memory().getLongTermMemory();
 		Vertex language = readOnlyMemory.createVertex(getPrimitive());
 		List<Vertex> states = language.orderedRelations(Primitive.STATE);
-		if (states == null || states.isEmpty()) {
-			return null;
-		}
-		List<Vertex> compoundWords = processCompoundWords(sentence.orderedRelationships(Primitive.WORD));
-		Vertex compoundSentence = sentence;
-		// Check if the input has compound words.
-		if (compoundWords != null) {
+		if (sentence.hasRelationship(Primitive.WORD)) {
+			if (states == null || states.isEmpty()) {
+				return null;
+			}
+			compoundWords = processCompoundWords(sentence.orderedRelationships(Primitive.WORD));
+			// Check if the input has compound words.
 			if (compoundWords != null) {
-				// Sentence had compound words, so need to create new sentence and switch input.
-				compoundSentence = network.createInstance(Primitive.SENTENCE);
-				for (int index = 0; index < compoundWords.size(); index++) {
-					Vertex word = compoundWords.get(index);
-					compoundSentence.addRelationship(Primitive.WORD, word, index);
+				if (compoundWords != null) {
+					// Sentence had compound words, so need to create new sentence and switch input.
+					compoundSentence = network.createInstance(Primitive.SENTENCE);
+					for (int index = 0; index < compoundWords.size(); index++) {
+						Vertex word = compoundWords.get(index);
+						compoundSentence.addRelationship(Primitive.WORD, word, index);
+					}
 				}
 			}
 		}
@@ -4020,7 +4334,7 @@ public class Language extends BasicThought {
 					Vertex decompiled = SelfDecompiler.getDecompiler().decompileState(state, state.getNetwork());
 					if (root == null) {
 						newRoot = state;
-						log("STATE MACHINE", Level.FINE, state, currentInput);
+						log("SCRIPT", Level.FINE, state, currentInput);
 						if (!this.loadedStates.contains(state.getId()) && (stateStack.size() == 1) && this.loadedStates.size() < 20) {
 							this.loadedStates.add(state.getId());
 							SelfCompiler.getCompiler().fastLoadChildren(state);
@@ -4054,6 +4368,7 @@ public class Language extends BasicThought {
 								Boolean match = false;
 								boolean anyOrNone = false;
 								boolean emptyMatch = false;
+								boolean poundstar = false;
 								if (pattern != null) {
 									log("PATTERN", Level.FINER, pattern, currentInput);
 									caseVariable = pattern;
@@ -4071,15 +4386,20 @@ public class Language extends BasicThought {
 										}
 									}
 									if (caseVariable != null) {
+										poundstar = caseVariable.getName() != null && (caseVariable.getName().equals("poundstar"));
 										anyOrNone = (caseVariable.getName() != null && (caseVariable.getName().equals("poundstar") || caseVariable.getName().equals("hatstar")))
 												|| ((caseVariable.instanceOf(Primitive.ARRAY) || caseVariable.instanceOf(Primitive.LIST))
 															&& !caseVariable.hasRelationship(Primitive.TYPE, Primitive.REQUIRED));
 									}
-									if (index >= inputs.size()) {
+									if (poundstar && !equation.hasRelationship(Primitive.GOTO, state)) {
+										emptyMatch = true;
+										match = Boolean.TRUE;
+										log("EMPTY CASE", Level.FINER, caseVariable, currentInput);
+									} else if (index >= inputs.size()) {
 										if (anyOrNone) {
 											emptyMatch = true;
 											match = Boolean.TRUE;
-											log("CASE", Level.FINER, caseVariable, currentInput);
+											log("EMPTY CASE", Level.FINER, caseVariable, currentInput);
 										} else {
 											continue;
 										}
@@ -4340,7 +4660,7 @@ public class Language extends BasicThought {
 				index++;
 				return null;
 			}
-		} catch (Exception failure) {
+		} catch (Throwable failure) {
 			log("Error occured in processing state", Level.WARNING, root, state);
 			log(failure);
 			return null;
@@ -4875,6 +5195,22 @@ public class Language extends BasicThought {
 		} catch (IOException exception) {
 			throw new SelfParseException("Parsing error occurred", exception);
 		}
+	}
+	
+	/**
+	 * Load, compile, and add the state machine from the Self source code.
+	 */
+	public void loadSelf(String text, boolean debug, boolean optimize) {
+		Network network = getBot().memory().newMemory();
+		Vertex language = network.createVertex(getPrimitive());
+		SelfCompiler compiler = SelfCompiler.getCompiler();
+		if (!optimize) {
+			compiler = new SelfCompiler();
+		}
+		Vertex stateMachine = compiler.parseStateMachine(text, debug, network);
+		SelfCompiler.getCompiler().pin(stateMachine);
+		language.addRelationship(Primitive.STATE, stateMachine);
+		network.save();
 	}
 	
 	/**

@@ -96,6 +96,17 @@ public abstract class Google extends Http {
 		}
 		this.refreshToken = ((JSONObject)root).getString("refresh_token");
 	}
+	
+	public String getGoogleAccountId() {
+		try {
+			String accessToken = newAccessToken();
+			String json = Utils.httpGET("https://www.googleapis.com/calendar/v3/calendars/primary?" + "&access_token=" + accessToken);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+	        return root.getString("id");
+		} catch (Exception exception) {
+			return null;
+		}
+	}
 
 	public String newAccessToken() {
 		try {
@@ -133,24 +144,24 @@ public abstract class Google extends Http {
 	 * Return the JSON data object from the URL.
 	 */
 	@Override
-	public Vertex requestJSON(String url, String attribute, Network network) {
+	public Vertex requestJSON(String url, String attribute, Map<String, String> headers, Network network) {
 		String accessToken = newAccessToken();
 		if (!url.contains("?")) {
 			url = url + "?";
 		}
-		return super.requestJSON(url + "&access_token=" + accessToken, attribute, network);
+		return super.requestJSON(url + "&access_token=" + accessToken, attribute, headers, network);
 	}
-
+	
 	/**
 	 * Return the JSON data object from the URL.
 	 */
 	@Override
-	public Vertex requestJSON(String url, Network network) {
+	public int countJSON(String url, String attribute, Network network) {
 		String accessToken = newAccessToken();
 		if (!url.contains("?")) {
 			url = url + "?";
 		}
-		return super.requestJSON(url + "&access_token=" + accessToken, network);
+		return super.countJSON(url + "&access_token=" + accessToken, attribute, network);
 	}
 
 	/**

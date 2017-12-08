@@ -59,6 +59,7 @@ public class Self4Decompiler extends SelfDecompiler {
 		BINARY_OPERATORS.put(Primitive.PLUS, "+");
 		BINARY_OPERATORS.put(Primitive.MULTIPLY, "*");
 		BINARY_OPERATORS.put(Primitive.DIVIDE, "/");
+		BINARY_OPERATORS.put(Primitive.INSTANCEOF, "instanceof");
 	}
 
 	/**
@@ -339,7 +340,7 @@ public class Self4Decompiler extends SelfDecompiler {
 		boolean first = true;
 		List<Vertex> words = formula.orderedRelations(Primitive.WORD);
 		if (words == null) {
-			writer.write("\"");
+			writer.write("\")");
 			return;
 		}
 		boolean inferWhitespace = !formula.hasRelationship(Primitive.TYPE, Primitive.SPACE) && !formula.hasRelationship(Primitive.WORD, Primitive.SPACE);
@@ -1329,15 +1330,16 @@ public class Self4Decompiler extends SelfDecompiler {
 			}
 		} else if (operator.is(Primitive.FOR)) {
 			writer.write(" (");
-			int index = 0;
-			while (arguments != null && (arguments.size() > index)) {
-				if (index > 0) {
-					writer.write(", ");
-				}
-				printElement(arguments.get(index++).getTarget(), writer, indent, functions, variables, elements, network);
+			if (arguments != null && (arguments.size() == 2)) {
+				printElement(arguments.get(0).getTarget(), writer, indent, functions, variables, elements, network);
 				writer.write(" in ");
-				printElement(arguments.get(index++).getTarget(), writer, indent, functions, variables, elements, network);
-				index = index + 2;
+				printElement(arguments.get(1).getTarget(), writer, indent, functions, variables, elements, network);
+			} else if (arguments != null && (arguments.size() == 3)) {
+				printElement(arguments.get(0).getTarget(), writer, indent, functions, variables, elements, network);
+				writer.write("; ");
+				printElement(arguments.get(1).getTarget(), writer, indent, functions, variables, elements, network);
+				writer.write("; ");
+				printElement(arguments.get(2).getTarget(), writer, indent, functions, variables, elements, network);
 			}
 			writer.write(") ");
 			// Print do.

@@ -183,7 +183,7 @@ public class DatabaseReadOnlyNetwork extends DatabaseNetwork {
 		if (data == null) {
 			return null;
 		}
-		Vertex vertex = this.verticiesByData.get(data);
+		Vertex vertex = this.verticesByData.get(data);
 		if (vertex != null) {
 			return vertex;
 		}
@@ -193,8 +193,8 @@ public class DatabaseReadOnlyNetwork extends DatabaseNetwork {
 		query.setParameter("type", BasicVertex.convertDataType(data));
 		try {
 			vertex = (Vertex)query.getSingleResult();
-			if (this.verticiesByData.size() < MAX_SIZE) {
-				this.verticiesByData.put(vertex.getData(), vertex);
+			if (this.verticesByData.size() < MAX_SIZE) {
+				this.verticesByData.put(vertex.getData(), vertex);
 			}
 			return vertex;
 		} catch (NoResultException notFound) {

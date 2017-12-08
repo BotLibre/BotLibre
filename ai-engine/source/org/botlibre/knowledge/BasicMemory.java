@@ -18,15 +18,18 @@
 package org.botlibre.knowledge;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Memory;
 import org.botlibre.api.knowledge.MemoryEventListener;
 import org.botlibre.api.knowledge.Network;
+import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 
 /**
@@ -173,7 +176,7 @@ public class BasicMemory implements Memory {
 	 */
 	public Network newMemory() {
 		BasicNetwork memory = new BasicNetwork(getLongTermMemory());
-		memory.setBot(getBot());
+		memory.setBot(this.bot);
 		return memory;
 	}
 
@@ -351,4 +354,116 @@ public class BasicMemory implements Memory {
 	}
 	
 	public void freeMemory() {	}
+
+	/**
+	 * Self API
+	 * Search what references the object by the relationship.
+	 * Memory.findReferencesBy(#conversation, #instantiation)
+	 */
+	public Vertex findReferencesBy(Vertex source, Vertex target, Vertex type) {
+		Network network = source.getNetwork();
+		Vertex result = network.createInstance(Primitive.ARRAY);
+		List<Relationship> relationships = network.findAllRelationshipsTo(target, type);
+		int count = 0;
+		for (Relationship relationship : relationships) {
+			if (!relationship.isInverse()) {
+				result.addRelationship(Primitive.ELEMENT, relationship.getSource(), Integer.MAX_VALUE);
+				count++;
+				if (count > 1000) {
+					break;
+				}
+			}
+		}
+		network.getBot().log(this, "Found references", Level.FINER, target, type, count);
+		return result;
+	}
+	
+	/**
+	 * Self API
+	 * Search what references the object.
+	 * Memory.findReferences(#cool)
+	 */
+	public Vertex findReferences(Vertex source, Vertex target) {
+		Network network = source.getNetwork();
+		Vertex result = network.createInstance(Primitive.ARRAY);
+		List<Relationship> relationships = network.findAllRelationshipsTo(target);
+		int count = 0;
+		for (Relationship relationship : relationships) {
+			if (!relationship.isInverse()) {
+				result.addRelationship(Primitive.ELEMENT, relationship.getSource(), Integer.MAX_VALUE);
+				count++;
+				if (count > 1000) {
+					break;
+				}
+			}
+		}
+		network.getBot().log(this, "Found references", Level.FINER, target, count);
+		return result;
+	}
+	
+	/**
+	 * Self API
+	 * Search all instances of the class type.
+	 * Memory.findInstances(type)
+	 */
+	public Vertex findInstances(Vertex source, Vertex type) {
+		Network network = source.getNetwork();
+		Vertex result = network.createInstance(Primitive.ARRAY);
+		List<Relationship> relationships = network.findAllRelationshipsTo(type, network.createVertex(Primitive.INSTANTIATION));
+		int count = 0;
+		for (Relationship relationship : relationships) {
+			if (!relationship.isInverse()) {
+				result.addRelationship(Primitive.ELEMENT, relationship.getSource(), Integer.MAX_VALUE);
+				count++;
+				if (count > 1000) {
+					break;
+				}
+			}
+		}
+		network.getBot().log(this, "Found references", Level.FINER, type, count);
+		return result;
+	}
+	
+	/**
+	 * Self API
+	 * Search all instances of the class type, created after the date.
+	 * Memory.findInstances(type, date)
+	 */
+	public Vertex findInstances(Vertex source, Vertex type, Vertex date) {
+		Network network = source.getNetwork();
+		Vertex result = network.createInstance(Primitive.ARRAY);
+		if (!(date.getData() instanceof Date)) {
+			return network.createVertex(Primitive.NULL);
+		}
+		List<Relationship> relationships = network.findAllRelationshipsTo(type, network.createVertex(Primitive.INSTANTIATION), (Date)date.getData());
+		int count = 0;
+		for (Relationship relationship : relationships) {
+			if (!relationship.isInverse()) {
+				result.addRelationship(Primitive.ELEMENT, relationship.getSource(), Integer.MAX_VALUE);
+				count++;
+				if (count > 1000) {
+					break;
+				}
+			}
+		}
+		network.getBot().log(this, "Found references", Level.FINER, type, count);
+		return result;
+	}
+	
+	/**
+	 * Self API
+	 * Lookup an object by id.
+	 * Memory.find(id)
+	 */
+	public Vertex find(Vertex source, Vertex id) {
+		Network network = source.getNetwork();
+		if (!(id.getData() instanceof Number)) {
+			return network.createVertex(Primitive.NULL);
+		}
+		Vertex object = network.findById(((Number)id.getData()).longValue());
+		if (object == null) {
+			return network.createVertex(Primitive.NULL);
+		}
+		return object;
+	}
 }

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.botlibre.api.knowledge.Data;
 
 public class TextData implements Serializable, Data {
+	
+	private static final long serialVersionUID = 1L;
 
 	protected long id;
 	

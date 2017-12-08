@@ -264,6 +264,26 @@ public class Bootstrap {
 		everything.addRelationship(instantiation, concept);
 		specialization.addRelationship(instantiation, relation);
 		instantiation.addRelationship(instantiation, relation);
+		
+		// Fix for bug in wildcard variables.
+		Vertex star = network.createVertex(Primitive.WILDCARD);
+		star.addRelationship(Primitive.INSTANTIATION, Primitive.VARIABLE);
+		star.setName("star");
+		Vertex underscore = network.createVertex(Primitive.UNDERSCORE);
+		underscore.addRelationship(Primitive.INSTANTIATION, Primitive.VARIABLE);
+		underscore.setName("underscore");
+		Vertex hatstar = network.createVertex(Primitive.HATWILDCARD);
+		hatstar.addRelationship(Primitive.INSTANTIATION, Primitive.VARIABLE);
+		hatstar.setName("hatstar");
+		Vertex poundstar = network.createVertex(Primitive.POUNDWILDCARD);
+		poundstar.addRelationship(Primitive.INSTANTIATION, Primitive.VARIABLE);
+		poundstar.setName("poundstar");
+		Vertex thatstar = network.createVertex(Primitive.THATWILDCARD);
+		thatstar.addRelationship(Primitive.INSTANTIATION, Primitive.VARIABLE);
+		thatstar.setName("thatstar");
+		Vertex topicstar = network.createVertex(Primitive.TOPICWILDCARD);
+		topicstar.addRelationship(Primitive.INSTANTIATION, Primitive.VARIABLE);
+		topicstar.setName("topicstar");
 	}
 
 

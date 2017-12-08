@@ -226,9 +226,9 @@ public class BasicAvatar implements Avatar {
 				}
 			} else if (command != null) {
 				output.addRelationship(Primitive.COMMAND, command);
-			} else if (getCommand() != null && !getCommand().isEmpty()) {
-				output.addRelationship(Primitive.COMMAND, network.createVertex(getCommand()));
 			}
+		} else if (getCommand() != null && !getCommand().isEmpty()) {
+			output.addRelationship(Primitive.COMMAND, network.createVertex(getCommand()));
 		}
 	}
 

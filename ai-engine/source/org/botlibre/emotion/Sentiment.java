@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2016 Paphus Solutions Inc.
+ *  Copyright 2017 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,13 +15,28 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-
-package org.botlibre.sense.slack;
+package org.botlibre.emotion;
 
 /**
- * Allows the Slack sense to output the message reply.
+ * Sentiment represents good vs bad feelings.
  */
-public class SlackListener {
-	public String reply;
-	public String conversation;
+
+public class Sentiment extends AbstractEmotion {
+	
+	@Override
+	public EmotionalState evaluate(float level) {
+		if (level < -0.6) {
+			return EmotionalState.TERRIBLE;
+		} else if (level < -0.1) {
+			return EmotionalState.BAD;
+		} else if (level > 0.6) {
+			return EmotionalState.GREAT;
+		} else if (level > 0.1) {
+			return EmotionalState.GOOD;
+		}
+		return EmotionalState.NONE;
+	}
+
+	
 }
+

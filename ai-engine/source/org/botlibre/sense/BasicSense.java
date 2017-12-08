@@ -32,8 +32,12 @@ import org.botlibre.api.sense.ExceptionEventListener;
 import org.botlibre.api.sense.Sense;
 import org.botlibre.emotion.EmotionalState;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.Utils;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * Defines an external interface.
@@ -80,6 +84,10 @@ public class BasicSense implements Sense {
 
 	protected List<ExceptionEventListener> listeners;
 	
+	public int conversations;
+	public int engaged;
+	protected ResponseListener responseListener;
+	
 	public BasicSense() {
 		this.name = getClass().getName();
 		this.isEnabled = true;
@@ -88,6 +96,24 @@ public class BasicSense implements Sense {
 		this.listeners = new ArrayList<ExceptionEventListener>();
 	}
 
+	public ResponseListener getResponseListener() {
+		return responseListener;
+	}
+
+	public void setResponseListener(ResponseListener responseListener) {
+		this.responseListener = responseListener;
+	}
+
+	/**
+	 * Record the engaged statistic if the conversation is engaged (over 3 messages).
+	 */
+	public void checkEngaged(Vertex conversation) {
+		int size = conversation.getRelationships(Primitive.INPUT).size();
+		if (size == 3 || size == 4) {
+			this.engaged++;
+		}
+	}
+	
 	/**
 	 * Return if the sense is enabled.
 	 */
@@ -329,6 +355,22 @@ public class BasicSense implements Sense {
 		input.addRelationship(Primitive.INPUT, sentence);
 		return input;
 	}
+	
+	/**
+	 * Create an input based on the sentence.
+	 */
+	protected Vertex createInputCommand(String json, Network network) {
+		JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
+		if (root == null) {
+			return null;
+		}
+		Vertex object = getBot().awareness().getSense(Http.class).convertElement(root, network);
+		Vertex input = network.createInstance(Primitive.INPUT);
+		input.setName(json);
+		input.addRelationship(Primitive.SENSE, getPrimitive());
+		input.addRelationship(Primitive.INPUT, object);
+		return input;
+	}
 
 	/**
 	 * Return the associated Bot instance.
@@ -406,7 +448,7 @@ public class BasicSense implements Sense {
 		return "";
 	}
 
-	public synchronized void notifyExceptionListeners(Exception exception) {
+	public synchronized void notifyExceptionListeners(Throwable exception) {
 		for (ExceptionEventListener listener : getListeners()) {
 			listener.notify(exception);
 		}

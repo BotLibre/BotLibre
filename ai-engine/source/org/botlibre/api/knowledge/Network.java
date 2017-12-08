@@ -18,6 +18,7 @@
 package org.botlibre.api.knowledge;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -193,6 +194,11 @@ public interface Network {
 	 * Find all relationships related to the vertex by the type.
 	 */
 	List<Relationship> findAllRelationshipsTo(Vertex vertex, Vertex type);
+
+	/**
+	 * Find all relationships related to the vertex by the type.
+	 */
+	List<Relationship> findAllRelationshipsTo(Vertex vertex, Vertex type, Date date);
 	
 	/**
 	 * Return the vertex with the given data.
@@ -357,6 +363,11 @@ public interface Network {
 	 * Find or create the speaker with the name.
 	 */
 	Vertex createSpeaker(String name);
+	
+	/**
+	 * Find or create the speaker from the unique id.
+	 */
+	Vertex createUniqueSpeaker(Primitive id, Primitive type, String name);
 	
 	/**
 	 * Find or create the speaker with the name.

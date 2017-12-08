@@ -23,9 +23,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
 
 import org.botlibre.api.knowledge.MemoryStorageException;
 import org.botlibre.api.knowledge.Network;
+import org.botlibre.api.knowledge.Relationship;
+import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.BasicMemory;
 import org.botlibre.knowledge.BasicNetwork;
 
@@ -36,39 +42,83 @@ import org.botlibre.knowledge.BasicNetwork;
  */
 
 public class SerializedMemory extends BasicMemory {
+
+	public static File storageDir = null;
+	public static String storageFileName = "memory.ser";
+
+	public static void reset() {
+		File file = new File(storageDir, storageFileName);
+		if (file.exists()) {
+			file.delete();
+		}
+	}
 	
-	public static String knowledgeBaseFileName = "memory.ser";
+	public static boolean checkExists() {
+		File file = new File(storageDir, storageFileName);
+		return (file.exists());
+	}
 	
-	public void save() throws MemoryStorageException {
-		super.save();
-		File file = new File(knowledgeBaseFileName);
+	@Override
+	public void shutdown() throws MemoryStorageException {
+		super.shutdown();
+		File file = new File(storageDir, storageFileName);
+		getBot().log(this, "Saving memory to file", Level.INFO, file);
 		try {
+			List<Vertex> vertices = new ArrayList<Vertex>(((BasicNetwork)getLongTermMemory()).getVertices());
+			// Flatten objects to avoid stack overflow.
+			List<Relationship> relationships = new ArrayList<Relationship>(vertices.size());
+			for (Vertex vertex : vertices) {
+				for (Iterator<Relationship> iterator = vertex.allRelationships(); iterator.hasNext(); ) {
+					relationships.add(iterator.next());
+				}
+			}
 			FileOutputStream fileStream = new FileOutputStream(file);
 			ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
-			objectStream.writeObject(getLongTermMemory());
+			objectStream.writeObject(vertices);
+			objectStream.writeObject(relationships);
 			objectStream.flush();
 			objectStream.close();
 			fileStream.flush();
 			fileStream.close();
+			getBot().log(this, "Memory saved", Level.INFO, getLongTermMemory().size(), file.length());
 		} catch (IOException exception) {
 			throw new MemoryStorageException(exception);
 		}
-		
 	}
-		
+
+	@Override
 	public void restore() throws MemoryStorageException {
-		File file = new File(knowledgeBaseFileName);
-		Network longTermMemory;
-		if (! file.exists()) {
-			longTermMemory = new BasicNetwork();
-			longTermMemory.setBot(getBot());
-		} else {
+		restore(storageFileName, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void restore(String database, boolean isSchema) throws MemoryStorageException {
+		if (database.isEmpty()) {
+			database = storageFileName;
+		}
+		File file = new File(storageDir, database);
+		getBot().log(this, "Restoring memory from file", Level.INFO, file.length());
+		Network longTermMemory = new BasicNetwork();
+		longTermMemory.setBot(getBot());
+		if (file.exists()) {
 			try {
 				FileInputStream fileStream = new FileInputStream(file);
 				ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-				longTermMemory = (Network) objectStream.readObject();
+				long start = System.currentTimeMillis();
+				System.out.println(start);
+				List<Vertex> vertices = (List<Vertex>) objectStream.readObject();
+				List<Relationship> relationships = (List<Relationship>) objectStream.readObject();
+				for (Vertex vertex : vertices) {
+					longTermMemory.addVertex(vertex);
+				}
+				for (Relationship relationship : relationships) {
+					relationship.getSource().addRelationship(relationship, true);
+					((BasicNetwork)longTermMemory).addRelationship(relationship);
+				}
 				objectStream.close();
 				fileStream.close();
+				getBot().log(this, "Memory restored file", Level.INFO, longTermMemory.size(), file.length());
 			} catch (Exception exception) {
 				throw new MemoryStorageException(exception);
 			}

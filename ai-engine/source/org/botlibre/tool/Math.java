@@ -42,6 +42,30 @@ public class Math extends BasicTool {
 	public Vertex minus(Vertex source, Vertex left, Vertex right) {
 		return subtract(source, left, right);
 	}
+	
+	public Vertex min(Vertex source, Vertex[] values) {
+		Vertex min = null;
+		double minValue = 0;
+		for (Vertex vertex : values) {
+			if ((vertex.getData() instanceof Number) && (min == null || ((Number)vertex.getData()).doubleValue() < minValue)) {
+				min = vertex;
+				minValue = ((Number)vertex.getData()).doubleValue();
+			}
+		}
+		return min;
+	}
+	
+	public Vertex max(Vertex source, Vertex[] values) {
+		Vertex max = null;
+		double maxValue = 0;
+		for (Vertex vertex : values) {
+			if ((vertex.getData() instanceof Number) && (max == null || ((Number)vertex.getData()).doubleValue() > maxValue)) {
+				max = vertex;
+				maxValue = ((Number)vertex.getData()).doubleValue();
+			}
+		}
+		return max;
+	}
 
 	public Vertex add(Vertex source, Vertex left, Vertex right) {
 		Object result = null;

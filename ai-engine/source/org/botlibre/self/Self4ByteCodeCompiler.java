@@ -433,28 +433,30 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 			stream.skip();
 			// Parse array.
 			Vertex array = network.createInstance(Primitive.ARRAY);
+			// Need to pin literals.
+			array.setPinned(true);
 			stream.skipWhitespace();
 			if (stream.peek() == ']') {
 				stream.skip();
-				array.addRelationship(Primitive.LENGTH, network.createVertex(0));
-				dataStream.writeLong(array.getId());
-				return array;
-			}
-			boolean more = true;
-			int index = 0;
-			while (more) {
-				Vertex value = parseElement(stream, elements, debug, network);
-				array.addRelationship(Primitive.ELEMENT, value, index);
-				index++;
-				stream.skipWhitespace();
-				if (stream.peek() == ',') {
-					stream.skip();
-				} else {
-					more = false;
+			} else {
+				boolean more = true;
+				int index = 0;
+				while (more) {
+					Vertex value = parseElement(stream, elements, debug, network);
+					// Need to pin literals.
+					value.setPinned(true);
+					array.addRelationship(Primitive.ELEMENT, value, index);
+					index++;
+					stream.skipWhitespace();
+					if (stream.peek() == ',') {
+						stream.skip();
+					} else {
+						more = false;
+					}
 				}
+				stream.skipWhitespace();
+				ensureNext(']', stream);
 			}
-			stream.skipWhitespace();
-			ensureNext(']', stream);
 			// Need to evaluate expressions inside the object.
 			dataStream.writeLong(network.createVertex(Primitive.EXPRESSION).getId());
 			Vertex operator = network.createVertex(new Primitive(EVALCOPY));
@@ -471,38 +473,41 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 			if (stream.peek() == '}') {
 				stream.skip();
 				object = network.createVertex();
-				dataStream.writeLong(object.getId());
-				return object;
-			}
-			boolean more = true;
-			while (more) {
-				String attribute = stream.nextWord();
-				if (attribute.equals("\"")) {
-					attribute = stream.nextWord();
-					ensureNext('"', stream);
-				}
-				ensureNext(':', stream);
-				Vertex attributeValue = parseElement(stream, elements, debug, network);
-				attributeValue.getRelationship(Primitive.NULL);
-				if (object == null) {
-					if (attribute.equals("#data")) {
-						object = attributeValue;
+			} else {
+				boolean more = true;
+				while (more) {
+					String attribute = stream.nextWord();
+					if (attribute.equals("\"")) {
+						attribute = stream.nextWord();
+						ensureNext('"', stream);
+					}
+					ensureNext(':', stream);
+					Vertex attributeValue = parseElement(stream, elements, debug, network);
+					// Need to pin literals.
+					attributeValue.setPinned(true);
+					attributeValue.getRelationship(Primitive.NULL);
+					if (object == null) {
+						if (attribute.equals("#data")) {
+							object = attributeValue;
+						} else {
+							object = network.createVertex();
+							object.addRelationship(new Primitive(attribute), attributeValue);
+						}
 					} else {
-						object = network.createVertex();
 						object.addRelationship(new Primitive(attribute), attributeValue);
 					}
-				} else {
-					object.addRelationship(new Primitive(attribute), attributeValue);
+					stream.skipWhitespace();
+					if (stream.peek() == ',') {
+						stream.skip();
+					} else {
+						more = false;
+					}
 				}
 				stream.skipWhitespace();
-				if (stream.peek() == ',') {
-					stream.skip();
-				} else {
-					more = false;
-				}
+				ensureNext('}', stream);
 			}
-			stream.skipWhitespace();
-			ensureNext('}', stream);
+			// Need to pin literals.
+			object.setPinned(true);
 			// Need to evaluate expressions inside the object.
 			dataStream.writeLong(network.createVertex(Primitive.EXPRESSION).getId());
 			Vertex operator = network.createVertex(new Primitive(EVALCOPY));
@@ -513,11 +518,11 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 			dataStream.writeLong(0l);
 		} else {
 			// Check if reference or data.
-			String token = stream.peekWord();
-			if (token == null) {
+			String tokenCase = stream.peekWord();
+			if (tokenCase == null) {
 				throw new SelfParseException("Unexpected end, element expected", stream);
 			}
-			token = token.toLowerCase();
+			String token = tokenCase.toLowerCase();
 			if (token.equals(VAR)) {
 				token = VARIABLE;
 			}
@@ -531,7 +536,7 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 				meaning.addRelationship(Primitive.INSTANTIATION, new Primitive(element.getName()));
 				element.addRelationship(Primitive.MEANING, meaning);
 				dataStream.writeLong(element.getId());
-			} else if (TYPES.contains(token)) {
+			} else if (TYPES.contains(tokenCase)) {
 				stream.nextWord();
 				if (token.equals(TEMPLATE)) {
 					stream.skipWhitespace();
@@ -726,9 +731,7 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 		char peek = stream.peek();
 		Vertex push = network.createVertex(Primitive.PUSH);
 		Vertex pop = network.createVertex(Primitive.POP);
-		while (".=!&|)[<>+-*/".indexOf(peek) != -1) {
-			String operator1 = stream.peek(1);
-			String operator = stream.peek(2);
+		while (".=!&|)[<>+-*/i".indexOf(peek) != -1) {
 			if (peek == ')') {
 				if (brackets > 0) {
 					brackets--;
@@ -861,11 +864,18 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 					dataStream.writeLong(0l);
 				}
 			} else {
+				String operator1 = stream.peek(1);
+				String operator = stream.peek(2);
 				element = null;
+				// Check for single character, double character, and word operators.
 				Primitive operation = BINARY_OPERATORS.get(operator);
 				Primitive operation1 = null;
 				if (operation == null) {
 					operation1 = BINARY_OPERATORS.get(operator1);
+					if (operation1 == null) {
+						operator1 = stream.peekWord();
+						operation1 = BINARY_OPERATORS.get(operator1);
+					}
 				}
 				if (operator.equals("//")) {
 					break;
@@ -900,7 +910,7 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 						}
 					}
 					if (operation == null) {
-						stream.skip();
+						stream.skip(operator1.length());
 						operator = operator1;
 						operation = operation1;
 					} else {
@@ -923,7 +933,7 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 					dataStream.writeLong(0l);
 					dataStream.writeLong(0l);
 				} else {
-					throw new SelfParseException("Invalid operator: " + operator, stream);				
+					break;				
 				}
 			}
 			stream.skipWhitespace();
@@ -1091,18 +1101,27 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 		} else if (last.equals(FOR)) {
 			stream.skipWhitespace();
 			ensureNext('(', stream);
-			boolean more = true;
 			dataStream.writeLong(network.createVertex(Primitive.ARGUMENT).getId());
-			while (more) {
+			stream.skipWhitespace();
+			if (stream.peek() == ';') {
+				dataStream.writeLong(network.createVertex(Primitive.NULL).getId());
+			} else {
 				parseElementByteCode(stream, dataStream, elements, debug, network);
+			}
+			stream.skipWhitespace();
+			String separator = stream.nextWord().toLowerCase();
+			boolean in = "in".equals(separator);
+			if (!in && !";".equals(separator)) {
+				throw SelfParseException.invalidWord(next, "in", stream);
+			}
+			parseElementByteCode(stream, dataStream, elements, debug, network);
+			if (!in) {
+				ensureNext(';', stream);
 				stream.skipWhitespace();
-				ensureNext("in", stream);
-				parseElementByteCode(stream, dataStream, elements, debug, network);
-				stream.skipWhitespace();
-				if (stream.peek() == ',') {
-					stream.skip();
+				if (stream.peek() == ')') {
+					dataStream.writeLong(network.createVertex(Primitive.NULL).getId());
 				} else {
-					more = false;
+					parseElementByteCode(stream, dataStream, elements, debug, network);
 				}
 			}
 			dataStream.writeLong(0l);

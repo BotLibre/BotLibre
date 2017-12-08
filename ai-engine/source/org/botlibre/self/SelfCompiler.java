@@ -311,15 +311,18 @@ public class SelfCompiler {
 	/**
 	 * Parse and evaluate the code.
 	 */
-	public Vertex evaluateExpression(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
-		return evaluateEquation(code, speaker, target, debug, network);
+	public Vertex evaluateExpression(String code, Vertex speaker, Vertex target, boolean pin, boolean debug, Network network) {
+		return evaluateEquation(code, speaker, target, pin, debug, network);
 	}
 	
 	/**
 	 * Parse and evaluate the code.
 	 */
-	public Vertex evaluateEquation(String code, Vertex speaker, Vertex target, boolean debug, Network network) {
+	public Vertex evaluateEquation(String code, Vertex speaker, Vertex target, boolean pin, boolean debug, Network network) {
 		Vertex equation = parseEquationForEvaluation(code, speaker, target, debug, network);
+		if (pin) {
+			SelfCompiler.getCompiler().pin(equation);
+		}
 		Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
 		return equation.applyQuotient(variables, network);
 	}
@@ -403,8 +406,11 @@ public class SelfCompiler {
 	}
 
 	public void pin(Vertex element) {
+		if (element == null) {
+			return;
+		}
 		Set<Vertex> processed = new HashSet<Vertex>();
-		pin(element, PINNED, element.getId(), processed);
+		pin(element, PINNED, element.getId() == null ? 0 : element.getId(), processed);
 	}
 	
 	public void pin(Vertex element, List<Primitive> relations, long groupId, Set<Vertex> processed) {
@@ -414,10 +420,15 @@ public class SelfCompiler {
 		processed.add(element);
 		element.setPinned(true);
 		element.setGroupId(groupId);
+		// Always pin one level deep.
+		for (Iterator<Relationship> iterator = element.allRelationships(); iterator.hasNext(); ) {
+			Relationship relationship = iterator.next();
+			relationship.setPinned(true);
+			relationship.getTarget().setPinned(true);
+		}
 		if (element.instanceOf(Primitive.VARIABLE)) {
 			for (Iterator<Relationship> iterator = element.allRelationships(); iterator.hasNext(); ) {
 				Vertex variable = iterator.next().getTarget();
-				variable.setPinned(true);
 				if (variable.instanceOf(Primitive.VARIABLE)) {
 					pin(element, relations, groupId, processed);
 				}
@@ -426,7 +437,6 @@ public class SelfCompiler {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
 			if (relationships != null) {
 				for (Relationship relationship : relationships) {
-					relationship.setPinned(true);
 					pin(relationship.getTarget(), relations, groupId, processed);
 				}
 			}
@@ -434,7 +444,6 @@ public class SelfCompiler {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
 			if (relationships != null) {
 				for (Relationship relationship : relationships) {
-					relationship.setPinned(true);
 					pin(relationship.getTarget(), relations, groupId, processed);
 				}
 			}

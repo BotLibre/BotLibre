@@ -4,11 +4,8 @@
  * If no loop is detected, null is returned to continue processing the next state.
  */
 state Loop {
-	// Consume the input so the answer is always evaluated.
-	case input goto Loop;
-	
 	// Always invoke the function to check for loops.
-	answer checkLoop();
+	case input answer checkLoop();
 	
 	function checkLoop() {
 		var last = (conversation.getLast(#input, 3)).input;

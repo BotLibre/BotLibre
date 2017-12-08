@@ -1,4 +1,20 @@
-// Copyright Paphus Solutions, all rights reserved.
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
 package org.botlibre.thought.language;
 
 import java.io.StringWriter;
@@ -269,8 +285,10 @@ public class Comprehension extends SubconsciousThought {
 				relationship = question.addRelationship(Primitive.RESPONSE, newQuotient);
 				question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
 			}
-			network.checkReduction(question);
-			question.associateAll(Primitive.SYNONYM, newQuotient, Primitive.RESPONSE);
+			if (getBot().mind().getThought(Language.class).getReduceQuestions()) {
+				network.checkReduction(question);
+				question.associateAll(Primitive.SYNONYM, newQuotient, Primitive.RESPONSE);
+			}
 			relationship.getTarget().addRelationship(Primitive.QUESTION, question);
 		}
 		return relationship;
@@ -393,7 +411,7 @@ public class Comprehension extends SubconsciousThought {
 					newState.setName("s" + newState.getId() + "_" + Utils.compress(pathWriter.toString(), MAX_IDENTIFIER));
 					pathWriter.write("_");
 					newCase.addRelationship(Primitive.GOTO, newState);
-					currentState.addRelationship(Primitive.DO, newCase, Integer.MAX_VALUE);
+					currentState.appendRelationship(Primitive.DO, newCase);
 					log("Adding new case", Level.FINER, currentWord, newCase, newState);
 					processState(
 							newState, words, index + 1, pathWriter.toString(), path, sentence,

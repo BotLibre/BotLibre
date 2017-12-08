@@ -58,7 +58,6 @@ import facebook4j.ResponseList;
 import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -96,6 +95,12 @@ public class Facebook extends BasicSense {
 	protected boolean replyToMessages = false;
 	protected boolean facebookMessenger = false;
 	protected String facebookMessengerAccessToken = "";
+	protected String buttonType = "auto";
+	protected boolean stripButtonText = false;
+	protected boolean trackMessageObjects = false;
+	protected String persistentMenu = "";
+	protected String getStartedButton = "";
+	protected String greetingText = "";
 	protected boolean autoPost = false;
 	protected int autoPostHours = 24;
 	protected String page = "";
@@ -128,6 +133,16 @@ public class Facebook extends BasicSense {
 		this(false);
 	}
 	
+	public boolean getTrackMessageObjects() {
+		initProperties();
+		return trackMessageObjects;
+	}
+
+	public void setTrackMessageObjects(boolean trackMessageObjects) {
+		initProperties();
+		this.trackMessageObjects = trackMessageObjects;
+	}
+	
 	public String getAppOauthKey() {
 		return appOauthKey;
 	}
@@ -150,6 +165,59 @@ public class Facebook extends BasicSense {
 
 	public void setPages(List<String> pages) {
 		this.pages = pages;
+	}
+
+	public boolean getStripButtonText() {
+		initProperties();
+		return stripButtonText;
+	}
+
+	public void setStripButtonText(boolean stripButtonText) {
+		initProperties();
+		this.stripButtonText = stripButtonText;
+	}
+
+	public String getButtonType() {
+		initProperties();
+		if (this.buttonType == null || this.buttonType.isEmpty()) {
+			this.buttonType = "auto";
+		}
+		return this.buttonType;
+	}
+
+	public void setButtonType(String buttonType) {
+		initProperties();
+		this.buttonType = buttonType;
+	}
+
+	public String getGetStartedButton() {
+		initProperties();
+		return getStartedButton;
+	}
+
+	public void setGetStartedButton(String getStartedButton) {
+		initProperties();
+		this.getStartedButton = getStartedButton;
+	}
+
+	public String getGreetingText() {
+		initProperties();
+		return greetingText;
+	}
+
+	public void setGreetingText(String greetingText) {
+		initProperties();
+		this.greetingText = greetingText;
+	}
+
+	public String getPersistentMenu() {
+		initProperties();
+		return persistentMenu;
+	}
+
+	public void setPersistentMenu(String persistentMenu) {
+		initProperties();
+		this.persistentMenu = persistentMenu;
 	}
 
 	public int getPosts() {
@@ -428,6 +496,7 @@ public class Facebook extends BasicSense {
 	 */
 	@Override
 	public void awake() {
+		super.awake();
 		this.userName = this.bot.memory().getProperty("Facebook.user");
 		if (this.userName == null) {
 			this.userName = "";
@@ -540,6 +609,30 @@ public class Facebook extends BasicSense {
 			property = this.bot.memory().getProperty("Facebook.facebookMessengerAccessToken");
 			if (property != null) {
 				this.facebookMessengerAccessToken = property;
+			}
+			property = this.bot.memory().getProperty("Facebook.buttonType");
+			if (property != null) {
+				this.buttonType = property;
+			}
+			property = this.bot.memory().getProperty("Facebook.stripButtonText");
+			if (property != null) {
+				this.stripButtonText = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.trackMessageObjects");
+			if (property != null) {
+				this.trackMessageObjects = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.persistentMenu");
+			if (property != null) {
+				this.persistentMenu = property;
+			}
+			property = this.bot.memory().getProperty("Facebook.getStartedButton");
+			if (property != null) {
+				this.getStartedButton = property;
+			}
+			property = this.bot.memory().getProperty("Facebook.greetingText");
+			if (property != null) {
+				this.greetingText = property;
 			}
 			property = this.bot.memory().getProperty("Facebook.autoPost");
 			if (property != null) {
@@ -780,6 +873,12 @@ public class Facebook extends BasicSense {
 		memory.saveProperty("Facebook.replyToMessages", String.valueOf(this.replyToMessages), false);
 		memory.saveProperty("Facebook.facebookMessenger", String.valueOf(this.facebookMessenger), false);
 		memory.saveProperty("Facebook.facebookMessengerAccessToken", String.valueOf(this.facebookMessengerAccessToken), false);
+		memory.saveProperty("Facebook.buttonType", String.valueOf(this.buttonType), false);
+		memory.saveProperty("Facebook.stripButtonText", String.valueOf(this.stripButtonText), false);
+		memory.saveProperty("Facebook.trackMessageObjects", String.valueOf(this.trackMessageObjects), false);
+		memory.saveProperty("Facebook.persistentMenu", String.valueOf(this.persistentMenu), false);
+		memory.saveProperty("Facebook.getStartedButton", String.valueOf(this.getStartedButton), false);
+		memory.saveProperty("Facebook.greetingText", String.valueOf(this.greetingText), false);
 		memory.saveProperty("Facebook.autoPost", String.valueOf(this.autoPost), false);
 		memory.saveProperty("Facebook.autoPostHours", String.valueOf(this.autoPostHours), false);
 
@@ -825,13 +924,209 @@ public class Facebook extends BasicSense {
 				if (post.instanceOf(Primitive.FORMULA)) {
 					SelfCompiler.getCompiler().pin(post);
 				}
-				post.addRelationship(Primitive.INSTANTIATION, Primitive.TWEET);
+				post.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
 				facebook.addRelationship(Primitive.AUTOPOSTS, post);
 			}
 		}
 
 		facebook.pinChildren();
 		memory.save();
+	}
+
+	/**
+	 * Set the "Persistent Menu" in the page's Facebook Messenger.
+	 */
+	public void updateThreadSettings(String persistentMenu, String getStartedButton, String greetingText) {
+		try {
+			if (getFacebookMessengerAccessToken() == null || getFacebookMessengerAccessToken().isEmpty()) {
+				return;
+			}
+			boolean newAPI = persistentMenu.contains("*");
+			String url = null;
+			if (newAPI) {
+				url = "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=";
+			} else {
+				url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token=";
+			}
+			url = url + getFacebookMessengerAccessToken();
+			
+			// Update Persistent Menu
+			persistentMenu = persistentMenu.trim();
+			if (persistentMenu.isEmpty()) {
+				// Delete menu.
+				log("DELETE", Level.INFO, url);
+				String json = null;
+				if (newAPI) {
+					json = "{ \"fields\":[ \"persistent_menu\" ] }";
+				} else {
+					json = "{ \"setting_type\" : \"call_to_actions\",\"thread_state\" : \"existing_thread\" }";
+				}
+				String response = Utils.httpDELETE(url, "application/json", json);
+				log("Response", Level.INFO, response);
+			} else {
+				String json = null;
+				if (persistentMenu.startsWith("{")) {
+					// Allow raw JSON
+					json = persistentMenu;
+				} else {
+					TextStream stream = new TextStream(persistentMenu);
+					if (stream.atEnd()) {
+						// Delete menu.
+						log("DELETE", Level.INFO, url);
+						json = "{ \"setting_type\" : \"call_to_actions\",\"thread_state\" : \"existing_thread\" }";
+						String response = Utils.httpDELETE(url, "application/json", json);
+						log("Response", Level.INFO, response);
+					} else {
+						if (newAPI) {
+							json = "{ \"persistent_menu\":[ { \"locale\":\"default\", \"call_to_actions\":[ ";
+						} else {
+							json = "{ \"setting_type\" : \"call_to_actions\",\"thread_state\" : \"existing_thread\", \"call_to_actions\" : [ ";
+						}
+						boolean first = true;
+						int nested = 0;
+						String nextLine = null;
+						String line = null;
+						while (!stream.atEnd() || (nextLine != null && !nextLine.isEmpty())) {
+							if (nextLine != null) {
+								line = nextLine;
+								nextLine = null;
+							} else {
+								line = stream.nextLine().trim();
+							}
+							nextLine = stream.nextLine().trim();
+							List<String> tokens = null;
+							if (line.startsWith("**")) {
+								tokens = Utils.csv(line.substring(2, line.length()));
+							} else if (line.startsWith("*")) {
+								tokens = Utils.csv(line.substring(1, line.length()));
+							} else {
+								tokens = Utils.csv(line);
+							}
+							if (tokens.isEmpty()) {
+								continue;
+							}
+							// Check for 2 level nested menus using * and **
+							if (nested == 0) {
+								if (nextLine.startsWith("*")) {
+									nested = 1;
+									String title = tokens.get(0);
+									if (!first) {
+										json = json + ", ";
+									}
+									json = json + "{ \"type\":\"nested\", \"title\":\"" + title + "\", \"call_to_actions\": [ ";
+									first = true;
+									continue;
+								}
+							} else if (nested == 1) {
+								if (nextLine.startsWith("**")) {
+									nested = 2;
+									String title = tokens.get(0);
+									if (!first) {
+										json = json + ", ";
+									}
+									json = json + "{ \"type\":\"nested\", \"title\":\"" + title + "\", \"call_to_actions\": [ ";
+									first = true;
+									continue;
+								}
+							}
+							if (nested == 1 && !line.startsWith("*")) {
+								json = json + " ] }";
+								nested = 0;
+							}
+							if (nested == 2 && !line.startsWith("**")) {
+								json = json + " ] }";
+								nested = 1;
+							}
+							String title = tokens.get(0).trim();
+							String payload = title;
+							if (tokens.size() > 1) {
+								payload = tokens.get(1).trim();
+							}
+							if (!first) {
+								json = json + ", ";
+							} else {
+								first = false;
+							}
+							if (payload.startsWith("http")) {
+								json = json + "{ \"type\":\"web_url\", \"title\":\"" + title + "\", \"url\":\"" + payload + "\"}";
+							} else {
+								json = json + "{ \"type\":\"postback\", \"title\":\"" + title + "\", \"payload\":\"" + payload + "\"}";
+							}
+						}
+						while (nested > 0) {
+							json = json + " ] }";
+							nested--;
+						}
+						json = json + " ] }";
+					}
+				}
+				log("POST", Level.INFO, url, json);
+				String response = Utils.httpPOST(url, "application/json", json);
+				log("Response", Level.INFO, response);
+			}
+			
+			// Update Get Started Button
+			getStartedButton = getStartedButton.trim();
+			if (getStartedButton.isEmpty()) {
+				// Delete menu.
+				log("DELETE", Level.INFO, url);
+				String json = null;
+				if (newAPI) {
+					json = "{ \"fields\":[ \"get_started\" ] }";
+				} else {
+					json = "{ \"setting_type\" : \"call_to_actions\",\"thread_state\" : \"new_thread\" }";
+				}
+				String response = Utils.httpDELETE(url, "application/json", json);
+				log("Response", Level.INFO, response);
+			} else {
+				String json = null;
+				if (getStartedButton.startsWith("{")) {
+					// Allow raw JSON
+					json = getStartedButton;
+				} else {
+					if (newAPI) {
+						json = "{ \"get_started\":{ \"payload\":\"" + getStartedButton + "\" }";
+					} else {
+						json = "{ \"setting_type\" : \"call_to_actions\",\"thread_state\" : \"new_thread\", \"call_to_actions\" : [ { \"payload\" : \"" + getStartedButton + "\" } ] }";
+					}
+				}
+				log("POST", Level.INFO, url, json);
+				String response = Utils.httpPOST(url, "application/json", json);
+				log("Response", Level.INFO, response);
+			}
+			
+			// Update Greeting Text
+			greetingText = greetingText.trim();
+			if (greetingText.isEmpty()) {
+				// Delete menu.
+				log("DELETE", Level.INFO, url);
+				String json = null;
+				if (newAPI) {
+					json = "{ \"fields\":[ \"greeting\" ] }";
+				} else {
+					json = "{ \"setting_type\" : \"greeting\" }";
+				}
+				String response = Utils.httpDELETE(url, "application/json", json);
+				log("Response", Level.INFO, response);
+			} else {
+				String json = null;
+				if (greetingText.startsWith("{")) {
+					// Allow raw JSON
+					json = greetingText;
+				} else {
+					if (newAPI) {
+						json = "{ \"greeting\":[ { \"locale\":\"default\", \"text\":\"" + greetingText + "\" } ] }";
+					} else {
+						json = "{ \"setting_type\" : \"greeting\", \"greeting\" : { \"text\" : \"" + greetingText + "\" } }";
+					}
+				}
+				log("POST", Level.INFO, url, json);
+				String response = Utils.httpPOST(url, "application/json", json);
+				log("Response", Level.INFO, response);
+			}
+		} catch (Exception exception) {
+			throw new BotException(exception);
+		}
 	}
 	
 	public void connect() throws FacebookException {
@@ -978,7 +1273,7 @@ public class Facebook extends BasicSense {
 					page++;
 				}
 				if ((timeline == null) || timeline.isEmpty()) {
-					log("Empty wall", Level.FINE);
+					log("No new wall posts", Level.FINE);
 					break;
 				}
 				log("Processing posts", Level.INFO, timeline.size());
@@ -1084,7 +1379,7 @@ public class Facebook extends BasicSense {
 				    		break;
 				    	}
 				    	Post post = timeline.get(index);
-						log("Processing post comments", Level.FINE, post.getId(), post.getCaption());
+						log("Processing post comments", Level.FINE, post.getId(), post.getCaption(), post.getDescription(), post.getMessage());
 				    	PagableList<Comment> comments = post.getComments();
 				    	if (comments != null && !comments.isEmpty()) {
 					    	for (Comment comment : comments) {
@@ -1457,7 +1752,7 @@ public class Facebook extends BasicSense {
 	}
 	
 	public boolean isPage() {
-		return this.page != null && !this.page.isEmpty();
+		return getPage() != null && !getPage().isEmpty();
 	}
 
 	/**
@@ -1594,16 +1889,32 @@ public class Facebook extends BasicSense {
 	public String format(String text) {
 		text = text.replace("\n", "");
 		text = text.replace("\r", "");
-		if ((text.indexOf('<') == -1) || (text.indexOf('>') == -1)) {
-			return text;
-		}
-		text = text.replace("<br/>", "\\n");
-		text = text.replace("<br>", "\\n");
-		text = text.replace("</br>", "");
-		text = text.replace("<li>", "\\n");
-		text = text.replace("</li>", "");
+		text = text.replace("\\", ""); // Facebook does not like this character for some reason.
 		text = Utils.stripTags(text);
+		// Strip tags changes <br> to \n
+		text = text.replace("\n", " \\n");
+		text = text.trim();
+		while (text.endsWith("\\n")) {
+			text = text.substring(0, text.length() - "\\n".length());
+		}
 		return text;
+	}
+
+	/**
+	 * Send a message to the user.
+	 */
+	public void sendMessage(Vertex source, Vertex message, Vertex conversationId) {
+		if (message.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(message.getNetwork().createInstance(Primitive.INPUT), null, message.getNetwork(), variables);
+			message = getBot().mind().getThought(Language.class).evaluateFormula(message, variables, message.getNetwork());
+			if (message == null) {
+				log("Invalid template formula", Level.WARNING, message);
+				return;
+			}
+		}
+		String text = getBot().mind().getThought(Language.class).getWord(message, message.getNetwork()).printString();
+		sendMessage(text, "", conversationId.printString());
 	}
 
 	/**
@@ -1630,7 +1941,12 @@ public class Facebook extends BasicSense {
 			if (isPage() && (!getPageId().isEmpty())) {
 				try {
 					String url = "https://graph.facebook.com/v2.6/" + getPageId() + "/messages?access_token=" + getFacebookMessengerAccessToken();
-					String strippedText = format(text);
+					// Check for HTML content and strip button elements.
+					String strippedText = text;
+					if (getStripButtonText()) {
+						strippedText = Utils.stripTag(strippedText, "button");
+					}
+					strippedText = format(strippedText);
 					String postText = null;
 					// Max size limit
 					if (strippedText.length() >= 320) {
@@ -1639,13 +1955,13 @@ public class Facebook extends BasicSense {
 							String message = stream.nextParagraph(320);
 							String json = null;
 							if (stream.atEnd()) {
-								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message) + "\"}}";
+								postText = message;
 							} else {
 								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message) + "\"}}";
-								
+								log("POST", Level.INFO, json);
+								Utils.httpPOST(url, "application/json", json);
+								Utils.sleep(500);
 							}
-							log("POST", Level.INFO, json);
-							Utils.httpPOST(url, "application/json", json);
 						}
 					} else {
 						postText = strippedText;
@@ -1671,6 +1987,7 @@ public class Facebook extends BasicSense {
 									}
 								}
 							}
+							// Check for <a> link tags.
 							NodeList nodes = root.getElementsByTagName("a");
 							List<String> extraButtons = new ArrayList<String>();
 							if (nodes.getLength() > 0) {
@@ -1731,6 +2048,7 @@ public class Facebook extends BasicSense {
 										json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText2) + "\"}}";
 										log("POST", Level.INFO, json);
 										Utils.httpPOST(url, "application/json", json);
+										Utils.sleep(500);
 										postText = null;
 										json = "{recipient:{id:\""
 												+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"generic\", elements:[{ image_url: \""
@@ -1738,11 +2056,41 @@ public class Facebook extends BasicSense {
 									}
 									log("POST", Level.INFO, json);
 									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
 									postText = null;
 								}
 							} else {
+								// Check for <button> tags.
 								nodes = root.getElementsByTagName("button");
-								if (nodes.getLength() > 0) {
+								boolean quickReply = getButtonType().equals("quickReply") || 
+										(getButtonType().equals("auto") && nodes.getLength() > 3 && nodes.getLength() <= 11);
+								if (image == null && quickReply) {
+									String buttonJSON = "";
+									String postText2 = postText;
+									for (int index = 0; index  < (Math.min(11, nodes.getLength())); index++) {
+										Element node = (Element)nodes.item(index);
+										String button = node.getTextContent().trim();
+										if (button != null && !button.isEmpty()) {
+											if (postText2 == null) {
+												postText2 = button;
+											}
+											if (!buttonJSON.isEmpty()) {
+												buttonJSON = buttonJSON + ", ";
+											}
+											button = Utils.escapeQuotesJS(button);
+											buttonJSON = buttonJSON + "{ content_type: \"text\", payload: \"" + button + "\", title: \"" + button + "\"}";
+											linkFound = true;
+										}
+									}
+									if (linkFound) {
+										String json = "{recipient:{id:\""
+													+ id + "\"}, message:{ text: \"" + Utils.escapeQuotesJS(postText2) + "\", quick_replies: [ " + buttonJSON + " ]}}";
+										log("POST", Level.INFO, json);
+										Utils.httpPOST(url, "application/json", json);
+										Utils.sleep(500);
+										postText = null;
+									}
+								} else if (nodes.getLength() > 0) {
 									String buttonJSON = "";
 									String postText2 = postText;
 									int count = 0;
@@ -1777,6 +2125,7 @@ public class Facebook extends BasicSense {
 											json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
 											log("POST", Level.INFO, json);
 											Utils.httpPOST(url, "application/json", json);
+											Utils.sleep(500);
 											postText = null;
 											json = "{recipient:{id:\""
 													+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"generic\", elements:[{ image_url: \""
@@ -1784,7 +2133,86 @@ public class Facebook extends BasicSense {
 										}
 										log("POST", Level.INFO, json);
 										Utils.httpPOST(url, "application/json", json);
+										Utils.sleep(500);
 										postText = null;
+									}
+								} else {
+									// Check for <select>/<option> tags.
+									nodes = root.getElementsByTagName("option");
+									quickReply = getButtonType().equals("quickReply") || 
+											(getButtonType().equals("auto") && nodes.getLength() > 3 && nodes.getLength() <= 11);
+									if (image == null && quickReply) {
+										String buttonJSON = "";
+										String postText2 = postText;
+										for (int index = 0; index  < (Math.min(11, nodes.getLength())); index++) {
+											Element node = (Element)nodes.item(index);
+											String button = node.getTextContent().trim();
+											if (button != null && !button.isEmpty()) {
+												if (postText2 == null) {
+													postText2 = button;
+												}
+												if (!buttonJSON.isEmpty()) {
+													buttonJSON = buttonJSON + ", ";
+												}
+												button = Utils.escapeQuotesJS(button);
+												buttonJSON = buttonJSON + "{ content_type: \"text\", payload: \"" + button + "\", title: \"" + button + "\"}";
+												linkFound = true;
+											}
+										}
+										if (linkFound) {
+											String json = "{recipient:{id:\""
+														+ id + "\"}, message:{ text: \"" + Utils.escapeQuotesJS(postText2) + "\", quick_replies: [ " + buttonJSON + " ]}}";
+											log("POST", Level.INFO, json);
+											Utils.httpPOST(url, "application/json", json);
+											Utils.sleep(500);
+											postText = null;
+										}
+									} else if (nodes.getLength() > 0) {
+										String buttonJSON = "";
+										String postText2 = postText;
+										int count = 0;
+										for (int index = 0; index  < nodes.getLength(); index++) {
+											Element node = (Element)nodes.item(index);
+											String button = node.getTextContent().trim();
+											if (button != null && !button.isEmpty()) {
+												if (postText2 == null) {
+													postText2 = button;
+												}
+												if (count < 3) {
+													if (!buttonJSON.isEmpty()) {
+														buttonJSON = buttonJSON + ", ";
+													}
+													button = Utils.escapeQuotesJS(button);
+													buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + button + "\", title: \"" + button + "\"}";
+													linkFound = true;
+												} else {
+													extraButtons.add(button);
+												}
+												count++;
+											}
+										}
+										if (linkFound) {
+											String json = null;
+											if (image == null) {
+												json = "{recipient:{id:\""
+														+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
+														+ Utils.escapeQuotesJS(postText2) + "\", buttons: [ " + buttonJSON + " ]}}}}";
+											} else {
+												// Generic template does not have text.
+												json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
+												log("POST", Level.INFO, json);
+												Utils.httpPOST(url, "application/json", json);
+												Utils.sleep(500);
+												postText = null;
+												json = "{recipient:{id:\""
+														+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"generic\", elements:[{ image_url: \""
+														+ image + "\", title: \"" + imageTitle+ "\", buttons: [ " + buttonJSON + " ]}]}}}}";
+											}
+											log("POST", Level.INFO, json);
+											Utils.httpPOST(url, "application/json", json);
+											Utils.sleep(500);
+											postText = null;
+										}
 									}
 								}
 							}
@@ -1803,6 +2231,7 @@ public class Facebook extends BasicSense {
 											+ "..." + "\", buttons: [ " + buttonJSON + " ]}}}}";
 									log("POST", Level.INFO, json);
 									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
 									buttonJSON = "";
 									count = 0;
 								}
@@ -1815,6 +2244,7 @@ public class Facebook extends BasicSense {
 						String json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
 						log("POST", Level.INFO, json);
 						Utils.httpPOST(url, "application/json", json);
+						Utils.sleep(500);
 					}
 					if (!linkFound && (text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
 						try {
@@ -1826,6 +2256,7 @@ public class Facebook extends BasicSense {
 									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"image\", payload: { url: \"" + src + "\"}}}}";
 									log("POST", Level.INFO, json);
 									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
 								}
 							}
 							nodes = root.getElementsByTagName("audio");
@@ -1836,6 +2267,7 @@ public class Facebook extends BasicSense {
 									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"audio\", payload: { url: \"" + src + "\"}}}}";
 									log("POST", Level.INFO, json);
 									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
 								}
 							}
 							nodes = root.getElementsByTagName("video");
@@ -1846,6 +2278,7 @@ public class Facebook extends BasicSense {
 									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"video\", payload: { url: \"" + src + "\"}}}}";
 									log("POST", Level.INFO, json);
 									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
 								}
 							}
 						} catch (Exception exception) {
@@ -1874,26 +2307,41 @@ public class Facebook extends BasicSense {
 				try {
 					String url = "https://graph.facebook.com/v2.6/" + getPageId() + "/messages?access_token=" + getFacebookMessengerAccessToken();
 					String strippedText = format(text);
+					String quickReply = createJSONQuickReply(command, id, strippedText);
 					// Max size limit
 					if (strippedText.length() >= 320) {
 						TextStream stream = new TextStream(strippedText);
 						while (!stream.atEnd()) {
 							String json = null;
 							String message = stream.nextParagraph(320);
-							if (stream.atEnd()) {
-								json = createButtonJSON(command, id, strippedText);
-							} else {
+							if (stream.atEnd() && quickReply.isEmpty()) {
 								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message) + "\"}}";
+							} else {
+								json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(message)
+										+ "\", quick_replies:" + quickReply + "}}";
 							}
+							log("POST", Level.INFO, json);
 							Utils.httpPOST(url, "application/json", json);
+							Utils.sleep(500);
 						}
-					} else {
-						String json = createButtonJSON(command, id, strippedText);
+					} else if (!strippedText.isEmpty()) {
+						String json = null;
+						if (quickReply.isEmpty()) {
+							json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(strippedText) + "\"}}";
+						} else {
+							json = "{recipient:{id:\"" + id + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(strippedText)
+									+ "\", quick_replies:" + quickReply + "}}";
+						}
+						log("POST", Level.INFO, json);
+						Utils.httpPOST(url, "application/json", json);
+						Utils.sleep(500);
+					}
+					String attachment = createJSONAttachment(command, id, strippedText);
+					if (!attachment.isEmpty()) {
+						String json = "{recipient:{id:\"" + id + "\"}, message:{attachment:" + attachment + "}}";
+						log("POST", Level.INFO, json);
 						Utils.httpPOST(url, "application/json", json);
 					}
-					
-					//String json = "{recipient:{id:\"" + id + "\"}, message:{ \"attachment\":{\"type\":\"template\",\"payload\":{ \"template_type\":\"button\", \"text\":"+ Utils.escapeQuotesJS(text) + ",\"buttons\":[" + "\"}}}}}";
-					//Utils.httpPOST(url, "application/json", json);
 				} catch (Exception exception) {
 					this.errors++;
 					log(exception);
@@ -2277,77 +2725,49 @@ public class Facebook extends BasicSense {
 		post(post, null);
 	}
 
-	private String createButtonJSON(String command, String id, String text) {
-		
-		command = command.substring(command.indexOf("{"), command.lastIndexOf("}"));
-		command = command + "}";
-		
-		JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
-
-		if(!root.getString("type").equals("button"))
-			return "";
-		
-		JSONObject json = new JSONObject();
-		
-		JSONObject recipient = new JSONObject();
-		recipient.put("id", id);
-		
-		JSONObject message = new JSONObject();
-		
-		JSONObject attachement = new JSONObject();
-		attachement.put("type", "template");
-		
-		JSONObject payload = new JSONObject();
-		payload.put("template_type", "button");
-		payload.put("text", text);
-		
-		JSONArray buttons = new JSONArray();
-		
-		int buttonIndex = 0;
-		while(root.optJSONObject("button" + buttonIndex) != null) {
-			JSONObject buttonJson = root.getJSONObject("button" + buttonIndex);
-			JSONObject newButton = new JSONObject();
-			
-			newButton.put("title", buttonJson.getString("caption"));
-			
-			if(buttonJson.opt("type")!=null) {
-				newButton.put("type", buttonJson.getString("type"));
-			} else {
-				newButton.put("type", "postback");
+	// Self API
+	public void postComment(Vertex source, Vertex sentence, Vertex postId) {
+		if (sentence.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(sentence.getNetwork().createInstance(Primitive.INPUT), null, sentence.getNetwork(), variables);
+			sentence = getBot().mind().getThought(Language.class).evaluateFormula(sentence, variables, sentence.getNetwork());
+			if (sentence == null) {
+				log("Invalid template formula", Level.WARNING, sentence);
+				return;
 			}
-			//newButton.put("type", "postback");
-
-			if(newButton.getString("type").equals("postback") || newButton.getString("type").equals("phone_number") )
-				newButton.put("payload", buttonJson.optString("chat"));
-			else if(newButton.getString("type").equals("web_url"))
-				newButton.put("url", buttonJson.optString("chat"));	
-			
-			buttons.add(newButton);
-			buttonIndex++;
 		}
-		
-		/*JSONObject button0 = new JSONObject();
-		button0.put("type", "web_url");
-		button0.put("url", "http://www.botlibre.com");
-		button0.put("title", "Bot Libre Website");
-		
-		JSONObject button1 = new JSONObject();
-		button1.put("type", "postback");
-		button1.put("title", "Chat");
-		button1.put("payload", "chat");
-		
-		buttons.add(button0);
-		buttons.add(button1);*/
-		
-		payload.put("buttons", buttons);
-		
-		attachement.put("payload", payload);
-		
-		message.put("attachment", attachement);
-		
-		json.put("recipient", recipient);
-		json.put("message", message);
-		
+		String post = getBot().mind().getThought(Language.class).getWord(sentence, sentence.getNetwork()).getDataValue();
+		getBot().stat("facebook.post");
+		post(post, postId.printString());
+	}
+
+	/**
+	 * Check the command JSON for a Facebook attachment object to append to a Facebook Messeneger message.
+	 */
+	public String createJSONAttachment(String command, String id, String text) {		
+		JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
+		if (!root.has("type") || !root.getString("type").equals("facebook")) {
+			return "";
+		}
+		JSONObject json = root.getJSONObject("attachment");
+		if (json == null) {
+			return "";
+		}
+		return json.toString();
+	}
+
+	/**
+	 * Check the command JSON for a Facebook attachment object to append to a Facebook Messeneger message.
+	 */
+	public String createJSONQuickReply(String command, String id, String text) {		
+		JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
+		if (!root.has("type") || !root.getString("type").equals("facebook")) {
+			return "";
+		}
+		Object json = root.get("quick_replies");
+		if (json == null) {
+			return "";
+		}
 		return json.toString();
 	}
 }

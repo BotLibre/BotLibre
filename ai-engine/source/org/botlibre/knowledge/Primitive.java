@@ -25,6 +25,7 @@ import org.botlibre.emotion.Fear;
 import org.botlibre.emotion.Happiness;
 import org.botlibre.emotion.Humor;
 import org.botlibre.emotion.Love;
+import org.botlibre.emotion.Sentiment;
 import org.botlibre.emotion.Surprise;
 
 /**
@@ -311,6 +312,7 @@ public class Primitive implements Serializable {
 	public static final Primitive ALL = new Primitive("all");
 	public static final Primitive APPEND = new Primitive("append");
 	public static final Primitive ASSIGN = new Primitive("assign");
+	public static final Primitive INSTANCEOF = new Primitive("instanceof");
 	public static final Primitive NEW = new Primitive("new");
 	public static final Primitive SOURCE = new Primitive("source");
 	public static final Primitive LINE_NUMBER = new Primitive("line-number");
@@ -456,6 +458,7 @@ public class Primitive implements Serializable {
 	public static final Primitive DIRECTMESSAGE = new Primitive("directmessage");
 	public static final Primitive SMS = new Primitive("sms");
 	public static final Primitive FACEBOOKMESSENGER = new Primitive("facebookmessenger");
+	public static final Primitive TELEGRAM = new Primitive("telegram");
 	public static final Primitive TREND = new Primitive("trend");
 	public static final Primitive LASTMENTION = new Primitive("lastmention");
 	public static final Primitive LASTSEARCH = new Primitive("lastsearch");
@@ -467,6 +470,8 @@ public class Primitive implements Serializable {
 	public static final Primitive LASTNEWSFEED = new Primitive("lastnewsfeed");
 	public static final Primitive LASTDIRECTMESSAGE = new Primitive("lastdirectmessage");
 	public static final Primitive ID = new Primitive("id");
+	public static final Primitive MESSAGE = new Primitive("message");
+	public static final Primitive GID = new Primitive("gid");
 	public static final Primitive CREATEDAT = new Primitive("createdat");
 	public static final Primitive USER = new Primitive("user");
 	public static final Primitive SECRET = new Primitive("secret");
@@ -510,6 +515,10 @@ public class Primitive implements Serializable {
 	public static final Primitive PROTOCOL = new Primitive("protocol");
 	public static final Primitive LASTMESSAGE = new Primitive("lastmessage");
 	
+	// Timers
+	public static final Primitive TIMER = new Primitive("timer");
+	public static final Primitive MESSAGES = new Primitive("messages");
+	
 	// Chat
 	public static final Primitive CHAT = new Primitive("chat");
 
@@ -521,6 +530,7 @@ public class Primitive implements Serializable {
 	public static final Primitive ANGER = new Primitive(Anger.class.getName());
 	public static final Primitive SURPRISE = new Primitive(Surprise.class.getName());
 	public static final Primitive HAPPINESS = new Primitive(Happiness.class.getName());
+	public static final Primitive SENTIMENT = new Primitive(Sentiment.class.getName());
 	public static final Primitive LOVE = new Primitive(Love.class.getName());
 	public static final Primitive FEAR = new Primitive(Fear.class.getName());
 	public static final Primitive HUMOR = new Primitive(Humor.class.getName());
@@ -539,7 +549,19 @@ public class Primitive implements Serializable {
 	//Slack
 	public static final Primitive SLACK = new Primitive("slack");
 	
+	//Skype
+	public static final Primitive SKYPE = new Primitive("skype");
+	
+	//WeChat
+	public static final Primitive WECHAT = new Primitive("wechat");
+	
+	//Kik
+	public static final Primitive KIK = new Primitive("kik");
+	
 	private String identity;
+	  
+	public Primitive() {
+	}
   
 	public Primitive(String identity) {
 		this.identity = identity;

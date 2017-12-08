@@ -17,8 +17,11 @@
  ******************************************************************************/
 package org.botlibre.sense.twitter;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +46,8 @@ import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import twitter4j.Paging;
 import twitter4j.Query;
@@ -93,6 +98,7 @@ public class Twitter extends BasicSense {
 	protected boolean tweetChats = true;
 	protected boolean replyToMentions = true;
 	protected boolean replyToMessages = true;
+	protected boolean ignoreReplies = true;
 	protected boolean autoTweet = false;
 	protected boolean learn = false;
 	protected boolean learnFromSelf = false;
@@ -252,6 +258,16 @@ public class Twitter extends BasicSense {
 		return network.createVertex(getPrimitive()).orderedRelations(Primitive.AUTOTWEETS);
 	}
 
+	public boolean getIgnoreReplies() {
+		initProperties();
+		return ignoreReplies;
+	}
+
+	public void setIgnoreReplies(boolean ignoreReplies) {
+		initProperties();
+		this.ignoreReplies = ignoreReplies;
+	}
+
 	public List<String> getStatusKeywords() {
 		initProperties();
 		return statusKeywords;
@@ -307,6 +323,7 @@ public class Twitter extends BasicSense {
 	 */
 	@Override
 	public void awake() {
+		super.awake();
 		String user = this.bot.memory().getProperty("Twitter.user");
 		if (user != null) {
 			this.userName = user;
@@ -577,6 +594,10 @@ public class Twitter extends BasicSense {
 			if (property != null) {
 				this.replyToMessages = Boolean.valueOf(property);
 			}
+			property = this.bot.memory().getProperty("Twitter.ignoreReplies");
+			if (property != null) {
+				this.ignoreReplies = Boolean.valueOf(property);
+			}
 			property = this.bot.memory().getProperty("Twitter.autoTweet");
 			if (property != null) {
 				this.autoTweet = Boolean.valueOf(property);
@@ -685,6 +706,7 @@ public class Twitter extends BasicSense {
 		memory.saveProperty("Twitter.learnFromSelf", String.valueOf(this.learnFromSelf), false);
 		memory.saveProperty("Twitter.replyToMentions", String.valueOf(this.replyToMentions), false);
 		memory.saveProperty("Twitter.replyToMessages", String.valueOf(this.replyToMessages), false);
+		memory.saveProperty("Twitter.ignoreReplies", String.valueOf(this.ignoreReplies), false);
 		memory.saveProperty("Twitter.autoTweet", String.valueOf(this.autoTweet), false);
 		memory.saveProperty("Twitter.autoTweetHours", String.valueOf(this.autoTweetHours), false);
 		
@@ -1260,28 +1282,28 @@ public class Twitter extends BasicSense {
 					    	}
 					    	boolean match = false;
 					    	// Exclude replies/mentions
-					    	if (tweet.getText().indexOf('@') != -1) {
-								log("Tweet is reply", Level.FINER, tweet.getText());
+					    	if (getIgnoreReplies() && tweet.getText().indexOf('@') != -1) {
+								log("Ignoring: Tweet is reply", Level.FINER, tweet.getText());
 					    		continue;
 					    	}
 					    	// Exclude retweets
 					    	if (tweet.isRetweet()) {
-								log("Tweet is retweet", Level.FINER, tweet.getText());
+								log("Ignoring: Tweet is retweet", Level.FINER, tweet.getText());
 					    		continue;
 					    	}
 					    	// Exclude protected
 					    	if (tweet.getUser().isProtected()) {
-								log("Tweet is protected", Level.FINER, tweet.getText());
+								log("Ignoring: Tweet is protected", Level.FINER, tweet.getText());
 					    		continue;
 					    	}
 					    	// Exclude self
 					    	if (tweet.getUser().getScreenName().equals(getUserName())) {
-								log("Tweet is from myself", Level.FINER, tweet.getText());
+								log("Ignoring: Tweet is from myself", Level.FINER, tweet.getText());
 					    		continue;
 					    	}
 					    	// Ignore profanity
 				    		if (Utils.checkProfanity(tweet.getText())) {
-								log("Tweet contains profanity", Level.FINER, tweet.getText());
+								log("Ignoring: Tweet contains profanity", Level.FINER, tweet.getText());
 				    			continue;
 				    		}
 				    		List<String> statusWords = new TextStream(tweet.getText().toLowerCase()).allWords();
@@ -1858,8 +1880,8 @@ public class Twitter extends BasicSense {
 	/**
 	 * Tweet.
 	 */
-	public void tweet(String text, Long reply) {
-		text = format(text);
+	public void tweet(String html, Long reply) {
+		String text = format(html);
 		if (text.length() > 140) {
 			int index =  text.indexOf("http://");
 			if (index == -1) {
@@ -1878,6 +1900,49 @@ public class Twitter extends BasicSense {
 			if (reply != null) {
 				update.setInReplyToStatusId(reply);
 			}
+			
+			// Check for linked media.
+			if ((html.indexOf('<') != -1) && (html.indexOf('>') != -1)) {
+				String media = null;
+				Element root = getBot().awareness().getSense(Http.class).parseHTML(html);
+				NodeList nodes = root.getElementsByTagName("img");
+				if (nodes.getLength() > 0) {
+					String src = ((Element)nodes.item(0)).getAttribute("src");
+					if (src != null && !src.isEmpty()) {
+						media = src;
+					}
+				}
+				if (media == null) {
+					nodes = root.getElementsByTagName("video");
+					if (nodes.getLength() > 0) {
+						String src = ((Element)nodes.item(0)).getAttribute("src");
+						if (src != null && !src.isEmpty()) {
+							media = src;
+						}
+					}
+				}
+				if (media == null) {
+					nodes = root.getElementsByTagName("audio");
+					if (nodes.getLength() > 0) {
+						String src = ((Element)nodes.item(0)).getAttribute("src");
+						if (src != null && !src.isEmpty()) {
+							media = src;
+						}
+					}
+				}
+				if (media != null) {
+					try {
+						URL url = new URL(media);
+						URLConnection urlConnection = url.openConnection();
+						InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
+						update.setMedia("image.png", stream);
+					} catch (Exception exception) {
+						log(exception);
+					}
+				}
+			}
+			
+			
 			getConnection().updateStatus(update);
 		} catch (Exception exception) {
 			this.errors++;
@@ -1889,8 +1954,15 @@ public class Twitter extends BasicSense {
 		text = text.replace("<br/>", "\n");
 		text = text.replace("<br>", "\n");
 		text = text.replace("</br>", "");
+		text = text.replace("<p/>", "\n");
+		text = text.replace("<p>", "\n");
+		text = text.replace("</p>", "");
 		text = text.replace("<li>", "\n");
 		text = text.replace("</li>", "");
+		text = text.replace("<ul>", "");
+		text = text.replace("</ul>", "\n");
+		text = text.replace("<ol>", "");
+		text = text.replace("</ol>", "\n");
 		text = Utils.stripTags(text);
 		return text;
 	}
@@ -1987,24 +2059,29 @@ public class Twitter extends BasicSense {
 		    	String text = tweet.getText().trim();
 		    	TextStream stream = new TextStream(text);
 		    	String firstWord = null;
-		    	if (stream.peek() == '@') {
-		    		stream.next();
-		    		String replyTo2 = stream.nextWord();
-		    		firstWord = stream.peekWord();
-		    		text = stream.upToEnd().trim();
-		    		if (!replyTo2.equals(replyTo)) {
-		    			log("Reply to does not match:", Bot.FINE, replyTo2, replyTo);
-		    		}
-		    		replyTo = replyTo2;
-		    		if (replyTo.equals(this.userName)) {
-				    	if ("follow".equals(firstWord)) {
-							log("Adding friend", Level.INFO, tweet.getUser().getScreenName());
-				    		getConnection().createFriendship(tweet.getUser().getId());
-				    	} else if ("unfollow".equals(firstWord)) {
-							log("Removing friend", Level.INFO, tweet.getUser().getScreenName());
-				    		getConnection().destroyFriendship(tweet.getUser().getId());
-					    }
-		    		}
+		    	if (getIgnoreReplies()) {
+			    	if (stream.peek() == '@') {
+			    		stream.next();
+			    		String replyTo2 = stream.nextWord();
+			    		firstWord = stream.peekWord();
+			    		text = stream.upToEnd().trim();
+			    		if (!replyTo2.equals(replyTo)) {
+			    			log("Reply to does not match:", Bot.FINE, replyTo2, replyTo);
+			    		}
+			    		replyTo = replyTo2;
+			    		if (replyTo.equals(this.userName) && getFollowMessages()) {
+					    	if ("follow".equals(firstWord)) {
+								log("Adding friend", Level.INFO, tweet.getUser().getScreenName());
+					    		getConnection().createFriendship(tweet.getUser().getId());
+					    	} else if ("unfollow".equals(firstWord)) {
+								log("Removing friend", Level.INFO, tweet.getUser().getScreenName());
+					    		getConnection().destroyFriendship(tweet.getUser().getId());
+						    }
+			    		}
+			    	}
+		    	} else {
+		    		// Ignore the reply user, force the bot to reply.
+		    		replyTo = null;
 		    	}
 	    		if (!tweet.isRetweet() && !tweet.getUser().isProtected()) {
 			    	stream.reset();
@@ -2043,6 +2120,10 @@ public class Twitter extends BasicSense {
 		output.addRelationship(Primitive.INSTANTIATION, Primitive.TWEET);
 		output.getNetwork().createVertex(Primitive.SELF).addRelationship(Primitive.TWEET, output);
 		String text = printInput(output);
+		// Don't send empty tweets.
+		if (text.isEmpty()) {
+			return;
+		}
 		Vertex target = output.mostConscious(Primitive.TARGET);
 		if (target != null) {
 			String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
@@ -2309,6 +2390,22 @@ public class Twitter extends BasicSense {
 		String tweet = getBot().mind().getThought(Language.class).getWord(sentence, sentence.getNetwork()).getDataValue();
 		getBot().stat("twitter.tweet");
 		tweet(tweet, 0L);
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void message(Vertex source, Vertex replyUser, Vertex text) {
+		sendMessage(text.printString(), replyUser.printString());
+	}
+
+	/**
+	 * Self API
+	 * Send a message to the user.
+	 */
+	public void sendMessage(Vertex source, Vertex text, Vertex replyUser) {
+		sendMessage(text.printString(), replyUser.printString());
 	}
 
 	// Self API

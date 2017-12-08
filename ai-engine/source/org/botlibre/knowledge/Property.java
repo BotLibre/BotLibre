@@ -3,6 +3,8 @@ package org.botlibre.knowledge;
 import java.io.Serializable;
 
 public class Property implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	protected String property;
 	

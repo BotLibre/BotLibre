@@ -17,6 +17,7 @@
  ******************************************************************************/
 package org.botlibre.knowledge;
 
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -52,7 +53,9 @@ import org.botlibre.util.Utils;
  * Basic implementation to allow subclasses to avoid defining some of the basic stuff.
  */
 
-public abstract class AbstractNetwork implements Network, Cloneable {
+public abstract class AbstractNetwork implements Network, Cloneable, Serializable  {
+
+	private static final long serialVersionUID = 1L;
 
 	/** Define max text size for data value. */
 	public static final int MAX_TEXT = 1000;
@@ -60,33 +63,43 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 	public static int MAX_SIZE = 500;
 	
 	protected static long nextId = 0;
+	protected static long nextRelationshipId = 0;
+	protected static long nextDataId = 0;
 
+	protected static long nextDataId() {
+		return nextDataId++;
+	}
+
+	protected static long nextRelationshipId() {
+		return nextRelationshipId++;
+	}
+	
 	protected static long nextId() {
 		return nextId++;
 	}
 	
 	protected boolean isShortTerm;
 	
-	protected Map<Object, Vertex> verticiesByData = null;
+	protected Map<Object, Vertex> verticesByData = null;
 	
 	/** Back reference to Bot instance. **/
-	protected Bot bot;
+	protected transient Bot bot;
 
 	public AbstractNetwork(boolean isShortTerm) {
 		this.isShortTerm = isShortTerm;
-		this.verticiesByData = new HashMap<Object, Vertex>();
+		this.verticesByData = new HashMap<Object, Vertex>();
 	}
 	
 	public boolean isReadOnly() {
 		return false;
 	}
 
-	protected Map<Object, Vertex> getVerticiesByData() {
-		return verticiesByData;
+	public Map<Object, Vertex> getVerticesByData() {
+		return verticesByData;
 	}
 
-	protected void setVerticiesByData(Map<Object, Vertex> verticiesByData) {
-		this.verticiesByData = verticiesByData;
+	protected void setVerticesByData(Map<Object, Vertex> verticesByData) {
+		this.verticesByData = verticesByData;
 	}
 
 	/**
@@ -372,8 +385,8 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		Vertex targetVertex = createVertex(sourceVertex);
 		if (targetVertex.getId() == null) {
 			// Don't assign id until merge so other networks can assign differently.
-			targetVertex.setId(new Long(nextId()));
-			sourceVertex.setId(new Long(nextId()));
+			targetVertex.setId(Long.valueOf(nextId()));
+			sourceVertex.setId(targetVertex.getId());
 		} else if (sourceVertex.getId() == null) {
 			// Must assign id, so source can be associated with target.
 			sourceVertex.setId(targetVertex.getId());
@@ -392,6 +405,10 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 					targetRelationship.setCorrectness(Math.min(targetRelationship.getCorrectness(), sourceRelationship.getCorrectness()));
 				}
 				targetRelationship.setIndex(sourceRelationship.getIndex());
+				if (sourceRelationship.hasMeta()) {
+					Vertex meta = createVertex(sourceRelationship.getMeta());
+					targetRelationship.setMeta(meta);
+				}
 				addRelationship(targetRelationship);
 				targetRelationships.add(targetRelationship);
 			}
@@ -1033,6 +1050,9 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 			String reduced = Utils.reduce(text);
 			if (!text.equals(reduced) && !reduced.isEmpty()) {
 				Vertex synonym = createSentence(reduced, true, true, false);
+				if (sentence.isPinned()) {
+					SelfCompiler.getCompiler().pin(synonym);
+				}
 				synonym.addRelationship(Primitive.TYPE, Primitive.SYNONYM);
 				sentence.addRelationship(Primitive.SYNONYM, synonym);
 			}
@@ -1118,20 +1138,22 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 			// Check for Twitter address
 			} else if ((wordText.length() >= 2) && wordText.charAt(0) == '@') {
 				try {
+					Vertex speaker = createSpeaker(wordText);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.TWITTERADDRESS);
-					word.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+					word.addRelationship(Primitive.INSTANTIATION, Primitive.NOUN);
 					word.addRelationship(Primitive.WORD, word);
-					word.addRelationship(Primitive.MEANING, word);
+					word.addRelationship(Primitive.MEANING, speaker);
 				} catch (Exception badURL) {
 					// Ignore.
 				}
 			// Check for email address
 			} else if ((wordText.length() > 4) && (wordText.indexOf('@') != -1) && (wordText.indexOf('.') != -1)) {
 				try {
+					Vertex speaker = createSpeaker(wordText);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.EMAILADDRESS);
-					word.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+					word.addRelationship(Primitive.INSTANTIATION, Primitive.NOUN);
 					word.addRelationship(Primitive.WORD, word);
-					word.addRelationship(Primitive.MEANING, word);
+					word.addRelationship(Primitive.MEANING, speaker);
 				} catch (Exception badURL) {
 					// Ignore.
 				}
@@ -1203,15 +1225,12 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 	 * Create the word, and a new meaning.
 	 */
 	public synchronized Vertex createNewObject(String name) {
-		Vertex meaningType = createVertex(Primitive.MEANING);
-		Vertex wordType = createVertex(Primitive.WORD);
-		
 		Vertex word = createWord(name);
 		Vertex meaning = createVertex();
 		meaning.setName(name);
 		log("Created meaning", Level.FINEST, word);
-		word.addRelationship(meaningType, meaning);
-		meaning.addRelationship(wordType, word);
+		word.addRelationship(Primitive.MEANING, meaning);
+		meaning.addRelationship(Primitive.WORD, word);
 		associateCaseInsensitivity(name, meaning);
 		return meaning;
 	}
@@ -1227,13 +1246,34 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		}
 		if (speaker == null) {
 			speaker = createNewObject(Utils.capitalize(name));
-			speaker.addRelationship(Primitive.NAME, createWord(Utils.capitalize(name)));
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-			if (name == TextEntry.DEFAULT_SPEAKER) {
+			if (!name.equals(TextEntry.DEFAULT_SPEAKER)) {
 				speaker.addRelationship(Primitive.NAME, createVertex(Utils.capitalize(name)));
 			}
-			associateCaseInsensitivity(name, speaker);
+		}
+		return speaker;
+	}
+	
+	/**
+	 * Find or create the speaker from the unique id.
+	 */
+	public synchronized Vertex createUniqueSpeaker(Primitive id, Primitive type, String name) {
+		Vertex speaker = findByData(id);
+		if (speaker != null) {
+			return speaker;
+		}
+		if (speaker == null) {
+			speaker = createVertex(id);
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+			speaker.addRelationship(Primitive.TYPE, type);
+			speaker.addRelationship(Primitive.ID, createVertex(id.getIdentity()));
+			speaker.addRelationship(Primitive.NAME, createWord(Utils.capitalize(name)));
+			Vertex word = createWord(name);
+			//word.addRelationship(Primitive.MEANING, speaker);
+			speaker.addRelationship(Primitive.WORD, word);
+			//associateCaseInsensitivity(name, speaker);
 		}
 		return speaker;
 	}
@@ -1248,9 +1288,9 @@ public abstract class AbstractNetwork implements Network, Cloneable {
 		speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 		speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		speaker.addRelationship(Primitive.ASSOCIATED, Primitive.ANONYMOUS);
-		word.addRelationship(Primitive.MEANING, speaker);
+		//word.addRelationship(Primitive.MEANING, speaker);
 		speaker.addRelationship(Primitive.WORD, word);
-		associateCaseInsensitivity(name, speaker);
+		//associateCaseInsensitivity(name, speaker);
 		return speaker;
 	}
 

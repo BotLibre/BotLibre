@@ -22,7 +22,6 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,8 @@ import org.botlibre.emotion.EmotionalState;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.BasicSense;
+import org.botlibre.sense.ResponseListener;
 import org.botlibre.sense.http.Http;
-import org.botlibre.sense.slack.SlackListener;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.TextStream;
@@ -75,8 +74,6 @@ public class Slack extends BasicSense {
 	
 	protected boolean initProperties;
 	
-	protected SlackListener listener;
-	
 	private boolean enableEmotions = true;
 	
 	public Slack(boolean enabled) {
@@ -93,6 +90,7 @@ public class Slack extends BasicSense {
 	 */
 	@Override
 	public void awake() {
+		super.awake();
 		this.token = this.bot.memory().getProperty("Slack.token");
 		if (this.token == null) {
 			this.token = "";
@@ -367,7 +365,7 @@ public class Slack extends BasicSense {
 				if (post.instanceOf(Primitive.FORMULA)) {
 					SelfCompiler.getCompiler().pin(post);
 				}
-				post.addRelationship(Primitive.INSTANTIATION, Primitive.TWEET);
+				post.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
 				slack.addRelationship(Primitive.AUTOPOSTS, post);
 			}
 		}
@@ -420,23 +418,23 @@ public class Slack extends BasicSense {
 		if(targetUsername.equals("everyone") || targetUsername.equals("here") || targetUsername.equals("channel"))
 			targetUsername = botUsername;
 		
-		this.listener = new SlackListener();
+		this.responseListener = new ResponseListener();
 		Network memory = bot.memory().newMemory();
 		this.messagesProcessed++;
 		inputSentence(message, from, targetUsername, id, memory);
 		memory.save();
 		String reply = null;
-		synchronized (this.listener) {
-			if (this.listener.reply == null) {
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
 				try {
-					this.listener.wait(MAX_WAIT);
+					this.responseListener.wait(MAX_WAIT);
 				} catch (Exception exception) {
 					log(exception);
 					return "";
 				}
 			}
-			reply = this.listener.reply;
-			this.listener = null;
+			reply = this.responseListener.reply;
+			this.responseListener = null;
 		}
 		
 		return reply;
@@ -456,10 +454,17 @@ public class Slack extends BasicSense {
 		} else if(!targetUsername.isEmpty()) {
 			input.addRelationship(Primitive.TARGET, network.createSpeaker(targetUsername));
 		}
-		
-		user.addRelationship(Primitive.INPUT, input);
-		
-		Vertex conversation = network.createVertex(id);
+
+		Vertex conversationId = network.createVertex(id);
+		Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(self);
+		Vertex conversation = today.getRelationship(conversationId);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(conversationId, conversation);
+			this.conversations++;
+		} else {
+			checkEngaged(conversation);
+		}
 		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
 		conversation.addRelationship(Primitive.TYPE, Primitive.SLACK);
 		conversation.addRelationship(Primitive.ID, network.createVertex(id));
@@ -499,29 +504,21 @@ public class Slack extends BasicSense {
 		}
 		String text = printInput(output);	
 		
-		if(this.enableEmotions) {
+		if (this.enableEmotions) {
 			text += addEmotion(output);
 		}
 		
-		if (this.listener == null) {
+		if (this.responseListener == null) {
 			return;
 		}
-		this.listener.reply = text;
+		this.responseListener.reply = text;
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		if (conversation != null) {
-			this.listener.conversation = conversation.getDataValue();
+			this.responseListener.conversation = conversation.getDataValue();
 		}
-		synchronized (this.listener) {
-			this.listener.notifyAll();
+		synchronized (this.responseListener) {
+			this.responseListener.notifyAll();
 		}
-	}
-	
-	public SlackListener getListener() {
-		return listener;
-	}
-
-	public void setListener(SlackListener listener) {
-		this.listener = listener;
 	}
 	
 	/**
@@ -798,8 +795,9 @@ public class Slack extends BasicSense {
 			
 			String reply = this.processMessage(user, channel, text, token);
 			
-			if(reply == null || reply.isEmpty())
+			if (reply == null || reply.isEmpty()) {
 				return;
+			}
 			
 			String data = "token=" + this.appToken;
 			data += "&channel=" + channel;
