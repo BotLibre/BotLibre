@@ -1,0 +1,3 @@
+This directory contains the 3rd party libraries used by Bot Libre.
+These libraries are all released under their own licenses, and are not covered by the Bot Libre EPL license.
+The licenses are included in the subdirectories, any that are missing can be found on the libraries websites.

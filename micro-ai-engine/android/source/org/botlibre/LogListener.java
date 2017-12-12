@@ -1,0 +1,43 @@
+/******************************************************************************
+ *
+ *  Copyright 2014 Paphus Solutions Inc.
+ *
+ *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+package org.botlibre;
+
+import java.util.logging.Level;
+
+/**
+ * Allows the logging event to be handled to output logging to a UI.
+ */
+
+public interface LogListener  {
+	
+	/**
+	 * Log the message if the debug level is greater or equal to the level.
+	 */
+	void log(Object source, String message, Level level, Object[] arguments);
+	
+	/**
+	 * Log the exception.
+	 */
+	void log(Throwable error);
+	
+	/**
+	 * Notify a logging level change.
+	 */
+	void logLevelChange(Level level);
+}
+

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="bot">
+		<xsd:annotation>
+			<xsd:documentation>Root element describing an bot instance</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="memory">
+					<xsd:annotation>
+						<xsd:documentation>Element describing configuration of memory</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="implementation-class" type="xsd:string"/>
+							<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="mind">
+					<xsd:annotation>
+						<xsd:documentation>Element describing configuration of mind</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="implementation-class" type="xsd:string"/>
+							<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element name="thoughts">
+								<xsd:annotation>
+									<xsd:documentation>Sequence of thoughts</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="thought" minOccurs="0" maxOccurs="unbounded">
+											<xsd:annotation>
+												<xsd:documentation>Element describing a thought</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="implementation-class" type="xsd:string"/>
+													<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="mood">
+					<xsd:annotation>
+						<xsd:documentation>Element describing configuration of mood</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="implementation-class" type="xsd:string"/>
+							<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element name="emotions">
+								<xsd:annotation>
+									<xsd:documentation>Sequence of emotions</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="emotion" minOccurs="0" maxOccurs="unbounded">
+											<xsd:annotation>
+												<xsd:documentation>Element describing an emotion</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="implementation-class" type="xsd:string"/>
+													<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>				
+				<xsd:element name="avatar">
+					<xsd:annotation>
+						<xsd:documentation>Element describing configuration of avatar</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="implementation-class" type="xsd:string"/>
+							<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="awareness">
+					<xsd:annotation>
+						<xsd:documentation>Element describing configuration of awareness</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="implementation-class" type="xsd:string"/>
+							<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element name="senses">
+								<xsd:annotation>
+									<xsd:documentation>Sequence of senses</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="sense" minOccurs="0" maxOccurs="unbounded">
+											<xsd:annotation>
+												<xsd:documentation>Element describing a sense</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="implementation-class" type="xsd:string"/>
+													<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="tools">
+								<xsd:annotation>
+									<xsd:documentation>Sequence of senses</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="tool" minOccurs="0" maxOccurs="unbounded">
+											<xsd:annotation>
+												<xsd:documentation>Element describing a tool</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="implementation-class" type="xsd:string"/>
+													<xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="property">
+		<xsd:attribute name="name" type="xsd:string"/>
+		<xsd:attribute name="value" type="xsd:string"/>
+	</xsd:complexType>		
+</xsd:schema>

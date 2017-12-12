@@ -1,0 +1,41 @@
+<project name="botlibre-micro-ai" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="source" location="source"/>
+	<property name="build" location="build"/>
+	<property name="lib"  location="lib"/>
+	
+	<target name="init" depends="clean">
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init"
+	        description="compile the source " >
+	    <!-- Compile the java code from ${source} into ${build} -->
+	    <javac srcdir="${source}" destdir="${build}" debug="on" target="1.6" source="1.6" encoding="utf8">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+		    <fileset dir="${source}"/>
+		</copy>
+	</target>
+	
+	<target name="dist" depends="compile"
+	        description="generate the distribution" >
+	    <!-- Put everything in ${build} into botlibre-micro-ai.jar file -->
+	    <jar jarfile="${lib}/botlibre-micro-ai.jar" basedir="${build}"/>
+	</target>
+	
+	<target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} directory -->
+	    <delete dir="${build}"/>
+	    <delete file="${lib}/botlibre-micro-ai.jar"/>
+	</target>
+
+</project>
