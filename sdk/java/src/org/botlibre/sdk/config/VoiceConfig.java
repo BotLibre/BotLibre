@@ -33,6 +33,7 @@ public class VoiceConfig extends Config {
 	public String language;	
 	public String pitch;
 	public String speechRate;
+	public String mod;
 	
 	public void parseXML(Element element) {
 		super.parseXML(element);
@@ -42,6 +43,7 @@ public class VoiceConfig extends Config {
 		this.language = element.getAttribute("language");
 		this.pitch = element.getAttribute("pitch");
 		this.speechRate = element.getAttribute("speechRate");
+		this.mod = element.getAttribute("mod");
 	}
 
 	
@@ -64,6 +66,9 @@ public class VoiceConfig extends Config {
 		}
 		if (this.speechRate != null) {
 			writer.write(" speechRate=\"" + this.speechRate + "\"");
+		}
+		if(this.mod != null){
+			writer.write(" mod=\"" + this.mod.toLowerCase() + "\"");
 		}
 		
 		writer.write("/>");

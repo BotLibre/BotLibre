@@ -31,6 +31,7 @@ import org.w3c.dom.Node;
 /**
  * DTO for XML web medium config.
  */
+
 public abstract class WebMediumConfig extends Config {
 	public String id;
 	public String name;
@@ -43,6 +44,8 @@ public abstract class WebMediumConfig extends Config {
 	public boolean isExternal;
 	public boolean isPaphus;
 	public boolean showAds = true;
+	public String forkAccessMode;
+	public String contentRating;
 	public String description;
 	public String details;
 	public String disclaimer;
@@ -57,6 +60,7 @@ public abstract class WebMediumConfig extends Config {
 	public String license;
 	public String avatar;
 	public String script;
+	public String graphic;
 	public int thumbsUp = 0;
 	public int thumbsDown = 0;
 	public String stars = "0";
@@ -120,6 +124,13 @@ public abstract class WebMediumConfig extends Config {
 		if (this.accessMode != null && !this.accessMode.equals("")) {
 			writer.write(" accessMode=\"" + this.accessMode + "\"");
 		}
+		if (this.contentRating != null && !this.contentRating.equals("")) {
+			writer.write(" contentRating=\"" + this.contentRating + "\"");
+		}
+		if (this.forkAccessMode != null && !this.forkAccessMode.equals("")) {
+			writer.write(" forkAccessMode=\"" + this.forkAccessMode + "\"");
+		}
+
 		if (this.stars != null && !this.stars.equals("")) {
 			writer.write(" stars=\"" + this.stars + "\"");
 		}
@@ -190,6 +201,8 @@ public abstract class WebMediumConfig extends Config {
 		this.isPrivate = Boolean.valueOf(element.getAttribute("isPrivate"));
 		this.isHidden = Boolean.valueOf(element.getAttribute("isHidden"));
 		this.accessMode = element.getAttribute("accessMode");
+		this.contentRating = element.getAttribute("contentRating");
+		this.forkAccessMode = element.getAttribute("forkAccessMode");
 		this.isAdmin = Boolean.valueOf(element.getAttribute("isAdmin"));
 		this.isAdult = Boolean.valueOf(element.getAttribute("isAdult"));
 		this.isFlagged = Boolean.valueOf(element.getAttribute("isFlagged"));
@@ -254,10 +267,6 @@ public abstract class WebMediumConfig extends Config {
 		node = element.getElementsByTagName("avatar").item(0);
 		if (node != null) {
 			this.avatar = node.getTextContent();
-		}
-		node = element.getElementsByTagName("script").item(0);
-		if (node != null) {
-			this.script = node.getTextContent();
 		}
 	}
 }

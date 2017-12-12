@@ -45,11 +45,11 @@ public class Config implements Cloneable {
 	
 	public void addCredentials(SDKConnection connection) {
 		this.application = connection.getCredentials().getApplicationId();
-		if (connection.getUser() != null) {
+		if (this.user == null && connection.getUser() != null) {
 			this.user = connection.getUser().user;
 			this.token = connection.getUser().token;
 		}
-		if (connection.getDomain() != null && this.domain == null) {
+		if (this.domain == null && connection.getDomain() != null) {
 			this.domain = connection.getDomain().id;
 		}
 	}

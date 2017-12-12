@@ -33,6 +33,7 @@ public class BrowseConfig extends Config {
 	public String sort;
 	public String restrict;
 	public String page;
+	public String contentRating;
 	
 	public String toXML() {
 		StringWriter writer = new StringWriter();
@@ -62,6 +63,9 @@ public class BrowseConfig extends Config {
 		}
 		if ((this.page != null) && !this.page.equals("")) {
 			writer.write(" page=\"" + this.page + "\"");
+		}
+		if (this.contentRating != null) {
+			writer.write(" contentRating=\"" + this.contentRating + "\"");
 		}
 		writer.write("/>");
 		return writer.toString();

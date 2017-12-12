@@ -21,8 +21,9 @@ import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-public class ScriptConfig extends WebMediumConfig{
+public class ScriptConfig extends WebMediumConfig {
 	public String language;
+	public String version;
 
 	public String getType() {
 		return "script";
@@ -40,6 +41,9 @@ public class ScriptConfig extends WebMediumConfig{
 		if (this.language != null && !this.language.equals("")){
 			writer.write(" language=\"" + this.language + "\"");
 		}
+		if (this.version != null && !this.version.equals("")){
+			writer.write(" version=\"" + this.version + "\"");
+		}
 		writeXML(writer);
 		writer.write("</script>");
 		
@@ -48,10 +52,8 @@ public class ScriptConfig extends WebMediumConfig{
 	
 	public void parseXML(Element element){
 		super.parseXML(element);
-		Node node = element.getElementsByTagName("language").item(0);
-		if (node != null) {
-			this.language = node.getTextContent();
-		}
+		this.language = element.getAttribute("language");
+		this.version = element.getAttribute("version");
 	}
 	
 	@Override 

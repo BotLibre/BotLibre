@@ -41,7 +41,6 @@ public String getNextVersion() { if (this.source == null) { return "0.1"; } Stri
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import android.util.Log;
 
 public class ScriptSourceConfig extends Config{
 	public String id;

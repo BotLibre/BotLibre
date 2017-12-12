@@ -26,9 +26,6 @@ import org.w3c.dom.Element;
  * DTO for XML avatar config.
  */
 public class AvatarConfig extends WebMediumConfig {
-	public String replyAccessMode;
-	public String postAccessMode;
-	public String posts;
 	
 	public String getType() {
 		return "avatar";

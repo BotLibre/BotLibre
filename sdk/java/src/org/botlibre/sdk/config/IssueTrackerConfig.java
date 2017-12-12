@@ -18,31 +18,46 @@
 
 package org.botlibre.sdk.config;
 
+import org.w3c.dom.Element;
+
 import java.io.StringWriter;
 
 /**
- * A speech object can be used to invoke server-side text-to-speech.
- * The object takes a message text, and a voice.
+ * DTO for XML issue tracker config.
  */
-public class Speech extends Config {
-	public String text;
-	public String voice;
-	public String mod;
+public class IssueTrackerConfig extends WebMediumConfig {
+	public String createAccessMode;
+	public String issues;
+	
+	public String getType() {
+		return "issuetracker";
+	}
+
+	@Override
+	public String stats() {
+		return this.issues + " issues";
+	}
+	
+	public WebMediumConfig credentials() {
+		IssueTrackerConfig config = new IssueTrackerConfig();
+		config.id = this.id;
+		return config;
+	}
 	
 	public String toXML() {
 		StringWriter writer = new StringWriter();
-		writer.write("<speech");
-		writeCredentials(writer);
-		if (this.text != null) {
-			writer.write(" text=\"" + this.text + "\"");
+		writer.write("<issue-tracker");
+		if (this.createAccessMode != null && !this.createAccessMode.equals("")) {
+			writer.write(" createAccessMode=\"" + this.createAccessMode + "\"");
 		}
-		if (this.voice != null) {
-			writer.write(" voice=\"" + this.voice + "\"");
-		}
-		if (this.mod != null) {
-			writer.write(" mod=\"" + this.mod.toLowerCase() + "\"");
-		}
-		writer.write("/>");
+		writeXML(writer);
+		writer.write("</issue-tracker>");
 		return writer.toString();
+	}
+	
+	public void parseXML(Element element) {
+		super.parseXML(element);
+		this.createAccessMode = element.getAttribute("createAccessMode");
+		this.issues = element.getAttribute("issues");
 	}
 }

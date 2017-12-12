@@ -44,6 +44,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.botlibre.sdk.config.IssueConfig;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -62,6 +63,7 @@ import org.botlibre.sdk.config.ConversationConfig;
 import org.botlibre.sdk.config.DomainConfig;
 import org.botlibre.sdk.config.ForumConfig;
 import org.botlibre.sdk.config.ForumPostConfig;
+import org.botlibre.sdk.config.GraphicConfig;
 import org.botlibre.sdk.config.InstanceConfig;
 import org.botlibre.sdk.config.LearningConfig;
 import org.botlibre.sdk.config.MediaConfig;
@@ -91,13 +93,14 @@ import org.botlibre.sdk.config.WebMediumConfig;
  * </ul>
  */
 public class SDKConnection {
-	protected static String[] types = new String[]{"Bots", "Forums", "Live Chat", "Domains", "Scripts"};
+	protected static String[] types = new String[]{"Bots", "Forums", "Graphics", "Live Chat", "Domains", "Scripts", "IssueTracker"};
 	protected static String[] channelTypes = new String[]{"ChatRoom", "OneOnOne"};
 	protected static String[] accessModes = new String[]{"Everyone", "Users", "Members", "Administrators"};
 	protected static String[] mediaAccessModes = new String[]{"Everyone", "Users", "Members", "Administrators", "Disabled"};
 	protected static String[] learningModes = new String[]{"Disabled", "Administrators", "Users", "Everyone"};
 	protected static String[] correctionModes = new String[]{"Disabled", "Administrators", "Users", "Everyone"};
 	protected static String[] botModes = new String[]{"ListenOnly", "AnswerOnly", "AnswerAndListen"};
+	protected static String[] priorities = new String[]{"Low", "Medium", "High", "Sever"};
 	
 	protected String url;
 	protected UserConfig user;
@@ -255,6 +258,26 @@ public class SDKConnection {
 			throw this.exception;
 		}
 	}
+
+	/**
+	 * Fetch the issue details for the issue id.
+	 */
+	public IssueConfig fetch(IssueConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/check-issue", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			IssueConfig issue = new IssueConfig();
+			issue.parseXML(root);
+			return issue;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
 	
 	/**
 	 * Create a new user.
@@ -299,11 +322,52 @@ public class SDKConnection {
 	}
 
 	/**
+	 * Create a new issue.
+	 * You must set the issue tracker id for the issue.
+	 */
+	public IssueConfig create(IssueConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/create-issue", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			IssueConfig issue = new IssueConfig();
+			issue.parseXML(root);
+			return issue;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
+
+	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
 	public MediaConfig createChannelFileAttachment(String file, MediaConfig config) {
 		config.addCredentials(this);
 		String xml = POSTFILE(this.url + "/create-channel-attachment", file, config.name, config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			MediaConfig media = new MediaConfig();
+			media.parseXML(root);
+			return media;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
+
+	/**
+	 * Create a new file/image/media attachment for an issue tracker.
+	 */
+	public MediaConfig createIssueTrackerFileAttachment(String file, MediaConfig config) {
+		config.addCredentials(this);
+		String xml = POSTFILE(this.url + "/create-issuetracker-attachment", file, config.name, config.toXML());
 		Element root = parse(xml);
 		if (root == null) {
 			return null;
@@ -433,6 +497,26 @@ public class SDKConnection {
 			throw this.exception;
 		}
 	}
+
+	/**
+	 * Update the issue.
+	 */
+	public IssueConfig update(IssueConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/update-issue", config.toXML());
+		Element root = parse(xml);
+		if (root == null) {
+			return null;
+		}
+		try {
+			config = new IssueConfig();
+			config.parseXML(root);
+			return config;
+		} catch (Exception exception) {
+			this.exception = SDKException.parseFailure(exception);
+			throw this.exception;
+		}
+	}
 	
 	/**
 	 * Create or update the response.
@@ -483,6 +567,9 @@ public class SDKConnection {
 	public void delete(WebMediumConfig config) {
 		config.addCredentials(this);
 		POST(this.url + "/delete-" + config.getType(), config.toXML());
+		if(this.domain!=null && this.domain.id.equals(config.id) && config.getType().equals("domain") ){
+			domain=null;
+		}
 	}
 	
 	/**
@@ -491,6 +578,14 @@ public class SDKConnection {
 	public void delete(ForumPostConfig config) {
 		config.addCredentials(this);
 		POST(this.url + "/delete-forum-post", config.toXML());
+	}
+
+	/**
+	 * Permanently delete the issue with the id.
+	 */
+	public void delete(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/delete-issue", config.toXML());
 	}
 	
 	/**
@@ -540,6 +635,14 @@ public class SDKConnection {
 		config.addCredentials(this);
 		POST(this.url + "/subscribe-post", config.toXML());
 	}
+
+	/**
+	 * Subscribe for email updates for the issue.
+	 */
+	public void subscribe(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/subscribe-issue", config.toXML());
+	}
 	
 	/**
 	 * Subscribe for email updates for the forum.
@@ -555,6 +658,14 @@ public class SDKConnection {
 	public void unsubscribe(ForumPostConfig config) {
 		config.addCredentials(this);
 		POST(this.url + "/unsubscribe-post", config.toXML());
+	}
+
+	/**
+	 * Unsubscribe from email updates for the issue.
+	 */
+	public void unsubscribe(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/unsubscribe-issue", config.toXML());
 	}
 	
 	/**
@@ -619,6 +730,38 @@ public class SDKConnection {
 	public void flag(ForumPostConfig config) {
 		config.addCredentials(this);
 		POST(this.url + "/flag-forum-post", config.toXML());
+	}
+
+	/**
+	 * Thumbs up the content.
+	 */
+	public void thumbsUp(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/thumbs-up-issue", config.toXML());
+	}
+
+	/**
+	 * Thumbs down the content.
+	 */
+	public void thumbsDown(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/thumbs-down-issue", config.toXML());
+	}
+
+	/**
+	 * Rate the content.
+	 */
+	public void star(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/star-issue", config.toXML());
+	}
+
+	/**
+	 * Flag the forum post as offensive, a reason is required.
+	 */
+	public void flag(IssueConfig config) {
+		config.addCredentials(this);
+		POST(this.url + "/flag-issue", config.toXML());
 	}
 	
 	/**
@@ -740,6 +883,25 @@ public class SDKConnection {
 		}
 		return instances;
 	}
+
+	/**
+	 * Return the list of issues for the issue tracker browse criteria.
+	 */
+	public List<IssueConfig> getIssues(BrowseConfig config) {
+		config.addCredentials(this);
+		String xml = POST(this.url + "/get-issues", config.toXML());
+		List<IssueConfig> instances = new ArrayList<IssueConfig>();
+		Element root = parse(xml);
+		if (root == null) {
+			return instances;
+		}
+		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
+			IssueConfig issue = new IssueConfig();
+			issue.parseXML((Element)root.getChildNodes().item(index));
+			instances.add(issue);
+		}
+		return instances;
+	}
 	
 	/**
 	 * Return the list of categories for the type, and domain.
@@ -779,20 +941,24 @@ public class SDKConnection {
 	}
 	
 	/**
-	 * Return the list of bot templates.
-	 */
-	public List<String> getTemplates() {
-		String xml = GET(this.url + "/get-all-templates");
-		List<String> instances = new ArrayList<String>();
-		Element root = parse(xml);
-		if (root == null) {
-			return instances;
-		}
-		for (int index = 0; index < root.getChildNodes().getLength(); index++) {
-			instances.add(((Element)root.getChildNodes().item(index)).getAttribute("name"));
-		}
-		return instances;
-	}
+	  * Return the list of bot templates.
+	  */
+	
+	//return the list of templates with the pictures.
+	 public List<InstanceConfig> getTemplates() {
+	  String xml = GET(this.url + "/get-all-templates");
+	  List<InstanceConfig> instances = new ArrayList<InstanceConfig>();
+	  Element root = parse(xml);
+	  if (root == null) {
+	   return instances;
+	  }
+	  for (int index = 0; index < root.getChildNodes().getLength(); index++) {
+	   InstanceConfig instance = new InstanceConfig();
+	   instance.parseXML((Element)root.getChildNodes().item(index));
+	   instances.add(instance);
+	  }
+	  return instances;
+	 }
 	
 	/**
 	 * Return the users for the content.
@@ -1112,6 +1278,8 @@ public class SDKConnection {
 				instance = new AvatarConfig();
 			} else if (config.type.equals("Script")) {
 				instance = new ScriptConfig();
+			}else if (config.type.equals("Graphic")) {
+				instance = new GraphicConfig();
 			}
 			instance.parseXML((Element)root.getChildNodes().item(index));
 			instances.add(instance);

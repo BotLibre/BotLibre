@@ -19,9 +19,9 @@
 package org.botlibre.sdk;
 
 /**
- * Credentials for use with hosted services on the Paphus Live Chat website,
- * a commercial live chat, chatroom, forum, and chat bot, hosting service.
- * http://www.paphuslivechat.com
+ * Credentials for use with hosted services on the Bot Libre for Business website,
+ * a commercial bot, live chat, chatroom, and forum hosting service.
+ * https://www.botlibre.biz
  */
 public class PaphusCredentials extends Credentials {
 	public static String DOMAIN = "www.botlibre.biz";

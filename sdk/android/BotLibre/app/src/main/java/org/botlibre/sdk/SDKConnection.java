@@ -969,7 +969,6 @@ public class SDKConnection {
 	/**
 	 * Return the list of categories for the type, and domain.
 	 */
-	
 	public List<ContentConfig> getCategories(ContentConfig config) {
 		config.addCredentials(this);
 		String xml = POST(this.url + "/get-categories", config.toXML());

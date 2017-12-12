@@ -18,6 +18,9 @@
 
 package org.botlibre.sdk.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.Calendar;
 import java.util.Collection;
@@ -61,9 +64,9 @@ public class Utils {
 			while (matcher.find()) {
 				String url = matcher.group();
 		    	if (url.indexOf(".png") != -1 || url.indexOf(".jpg") != -1 || url.indexOf(".jpeg") != -1 || url.indexOf(".gif") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><img src='" + url + "' height='50'></a>";
+		    		url = "<a href='" + url + "' target='_blank'><img src='" + url + "' height='300'></a>";
 		    	} else if (url.indexOf(".mp4") != -1 || url.indexOf(".webm") != -1 || url.indexOf(".ogg") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><video src='" + url + "' height='50'></a>";
+		    		url = "<a href='" + url + "' target='_blank'><video src='" + url + "' height='300'></a>";
 		    	} else if (url.indexOf(".wav") != -1 || url.indexOf(".mp3") != -1) {
 		    		url = "<a href='" + url + "' target='_blank'><audio src='" + url + "' controls>audio</a>";
 		    	} else {
@@ -446,6 +449,52 @@ public class Utils {
 			return null;
 		}
 		return list.get(random().nextInt(list.size()));
+	}
+	/**
+	 * Get the contents of the stream to a .self file and parse it.
+	 */
+	public static String loadTextFile(InputStream stream, String encoding, int maxSize, boolean finish) {
+		if (encoding.trim().isEmpty()) {
+			encoding = "UTF-8";
+		}
+
+	    // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
+	    String UTF8_BOM = "\uFEFF";
+	    
+		StringWriter writer = new StringWriter();
+		InputStreamReader reader = null;
+		try {
+			reader = new InputStreamReader(stream, encoding);
+			int size = 0;
+			int next = reader.read();
+			boolean first = true;
+			while (next >= 0) {
+				if (first && next == UTF8_BOM.charAt(0)) {
+					// skip
+				} else {
+					writer.write(next);
+				}
+				next = reader.read();
+				if (size > maxSize) {
+					throw new RuntimeException("File size limit exceeded: " + size + " > " + maxSize + " token: " + next);
+				}
+				size++;
+			}
+		} catch (IOException exception) {
+			throw new RuntimeException("IO Error: " + exception.getMessage(), exception);
+		} finally {
+			if (reader != null && finish) {
+				try {
+					reader.close();
+				} catch (IOException ignore) {}
+			}
+			if (stream != null && finish) {
+				try {
+					stream.close();
+				} catch (IOException ignore) {}
+			}
+		}
+		return writer.toString();
 	}
 	
 	public static <T> T random(Collection<T> collection) {
