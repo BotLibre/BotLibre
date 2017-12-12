@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuMyPosts"
+          android:title="@string/myPosts" />
+    
+    <item android:id="@+id/menuFeatured"
+          android:title="@string/browseFeatured" />
+    
+    <item android:id="@+id/menuSearch"
+          android:title="@string/search" />
+    
+    <item android:id="@+id/menuNewPost"
+          android:title="@string/newPost" />
+     
+</menu>

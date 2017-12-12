@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuAddResponse"
+          android:title="@string/addResponse" />
+    
+    <item android:id="@+id/menuAddGreeting"
+          android:title="@string/addGreeting" />
+    
+    <item android:id="@+id/menuAddDefaultResponse"
+          android:title="@string/addDefaultResponse" />
+    
+    <item android:id="@+id/menuImport"
+          android:title="@string/importResponses" />
+ 
+    <item android:id="@+id/menuEdit"
+          android:title="@string/edit" />
+ 
+    <item android:id="@+id/menuBrowse"
+          android:title="@string/browse" />
+ 
+    <item android:id="@+id/menuValidate"
+          android:title="@string/markValid" />
+ 
+    <item android:id="@+id/menuInvalidate"
+          android:title="@string/markInvalid" />
+ 
+    <item android:id="@+id/menuFlag"
+          android:title="@string/flagAsOffensive" />
+ 
+    <item android:id="@+id/menuUnflag"
+          android:title="@string/unflag" />
+ 
+    <item android:id="@+id/menuDelete"
+          android:title="@string/delete" />
+    
+</menu>

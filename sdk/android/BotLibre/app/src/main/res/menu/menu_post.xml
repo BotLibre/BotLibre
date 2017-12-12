@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuViewReply"
+          android:title="@string/viewReply" />
+    
+    <item android:id="@+id/menuViewParent"
+          android:title="@string/ViewPost" />
+    
+    <item android:id="@+id/menuViewNext"
+          android:title="@string/viewNext" />
+    
+    <item android:id="@+id/menuViewPrevious"
+          android:title="@string/viewPrevious" />
+    
+    <item android:id="@+id/menuViewUser"
+          android:title="@string/viewUser" />
+    
+    <item android:id="@+id/menuReply"
+          android:title="@string/reply" />
+ 
+    <item android:id="@+id/menuEdit"
+          android:title="@string/edit" />
+    
+    <item android:id="@+id/menuSubscribe"
+          android:title="@string/subscribe" />
+ 
+    <item android:id="@+id/menuUnsubscribe"
+          android:title="@string/unsubscribe" />
+ 
+    <item android:id="@+id/menuThumbsUp"
+          android:title="@string/thumbsUp" />
+ 
+    <item android:id="@+id/menuThumbsDown"
+          android:title="@string/thumbsDown" />
+ 
+    <item android:id="@+id/menuStar"
+          android:title="@string/rate" />
+ 
+    <item android:id="@+id/menuFlag"
+          android:title="@string/flag" />
+    
+    <item android:id="@+id/menuDelete"
+          android:title="@string/delete" />
+     
+</menu>

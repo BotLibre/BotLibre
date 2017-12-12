@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuMyBots"
+          android:title="@string/myBots" />
+ 
+    <item android:id="@+id/menuWar"
+          android:title="@string/chatBotWars" />
+    
+    <item android:id="@+id/menuSearch"
+          android:title="@string/search" />
+    
+    <item android:id="@+id/menuContentRating"
+          android:title="@string/contentRating" />
+    
+    <item android:id="@+id/menuSignIn"
+          android:title="@string/signIn" />
+    
+    <item android:id="@+id/menuSignUp"
+          android:title="@string/signUp" />
+    
+    <item android:id="@+id/menuSignOut"
+          android:title="@string/signOut" />
+    
+    <item android:id="@+id/menuViewUser"
+          android:title="@string/viewProfile" />
+    
+    <item android:id="@+id/menuEditUser"
+          android:title="@string/editProfile" />
+    
+    <item android:id="@+id/menuWebsite"
+          android:title="@string/website" />
+	  
+    <item android:id="@+id/menuChangeLanguage"
+          android:title="@string/changeLanguage" />
+
+    <item android:id="@+id/menuHelp"
+          android:title="@string/help" />
+     
+</menu>

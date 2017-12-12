@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuMyIssues"
+          android:title="@string/my_issues" />
+    
+    <item android:id="@+id/menuPriority"
+          android:title="@string/high_priority" />
+    
+    <item android:id="@+id/menuSearch"
+          android:title="@string/search" />
+    
+    <item android:id="@+id/menuNewIssue"
+          android:title="@string/new_issue" />
+     
+</menu>

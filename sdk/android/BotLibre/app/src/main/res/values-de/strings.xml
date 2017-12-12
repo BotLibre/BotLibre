@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <!-- banner_ad_unit_id -->
+    <!-- app_name -->
+    <string name="chatwithyourBot">Dein Bot</string>
+    <string name="upgrade">Aktualisierung</string>
+    <string name="about">Über</string>
+    <string name="myBot">Mein bot</string>
+    <string name="myBots">Meine Bots</string>
+    <string name="signIn">Anmelden</string>
+    <string name="signUp">Anmelden</string>
+    <string name="signOut">Ausloggen</string>
+    <string name="viewProfile">Profil anzeigen</string>
+    <string name="editProfile">Profil bearbeiten</string>
+    <string name="changeIcon">Icon ändern</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="users">Benutzer</string>
+    <string name="editor">Herausgeber</string>
+    <string name="delete">Löschen</string>
+    <string name="channelBot">Kanal Bot</string>
+    <string name="adminConsole">Admin-Konsole</string>
+    <string name="voice">Stimme</string>
+    <string name="youSay">Du sagst</string>
+    <string name="categoires">Kategorien</string>
+    <string name="upload">Hochladen</string>
+    <string name="avatar">Benutzerbild</string>
+    <string name="speechRate">Sprachrate</string>
+    <string name="voteUp">Abstimmen</string>
+    <string name="trainingChatLogs">Schulung / Chat Logs</string>
+    <string name="source">Quelle</string>
+    <string name="type">Art</string>
+    <!-- scripts -->
+    <string name="userID">Benutzeridentifikation</string>
+    <string name="learning">Lernen</string>
+    <!-- twitter -->
+    <string name="unsubscribe">Abbestellen</string>
+    <string name="upgradeToGold">Upgrade auf Gold</string>
+    <string name="save">sparen</string>
+    <string name="ViewPost">Beitrag anzeigen</string>
+    <string name="talking">Reden</string>
+    <string name="uploadImage">Bild hochladen</string>
+    <!-- name -->
+    <!-- tag media -->
+    <string name="emotions">Emotionen</string>
+    <string name="userFlagged">Dieser Benutzer wurde markiert</string>
+    <string name="upgradeToPlatinum">Upgrade auf Platinum</string>
+    <!-- test -->
+    <string name="actions">Aktionen</string>
+    <string name="thumbsDown">Daumen runter</string>
+    <string name="poses">Posen</string>
+    <string name="sort">Sortieren</string>
+    <string name="deviceVoice">Gerät Voice</string>
+    <string name="browse">Durchsuchen</string>
+    <string name="create">Erstellen</string>
+    <string name="compile">Kompilieren</string>
+    <string name="scriptEditor">Skript-Editor</string>
+    <string name="chat">Chatten</string>
+    <string name="viewCreater">View Creator anzeigen</string>
+    <!-- webm -->
+    <!-- tags -->
+    <string name="websiteOptional">Webseite (optional)</string>
+    <string name="topic">Thema</string>
+    <!-- Subdomain -->
+    <string name="viewReply">Antwort ansehen</string>
+    <string name="thumbsUp">Daumen hoch</string>
+    <string name="template">Vorlage</string>
+    <string name="thisIsATest">Dies ist ein Test, der 1, 2, 3 testet</string>
+    <string name="submit">einreichen</string>
+    <string name="upgradeText1">Aktualisieren Sie Ihr Konto für zusätzliche Ressourcen, Funktionen und eine kostenlose Anzeige.</string>
+    <string name="videoAccessMode">Video-Zugriffsmodus</string>
+    <string name="yourEmailAddress">deine Emailadresse</string>
+    <string name="startWarText1">Wähle zwei Bots, um einen Chat-Kampf zu starten. Wer gewinnt? Du entscheidest.</string>
+    <!-- Webm Video -->
+    <string name="createAvatar">Erstelle Avatar</string>
+    <string name="aPrivate">Privatgelände</string>
+    <string name="hidden">Versteckt</string>
+    <string name="contentRating">Inhaltsbewertung</string>
+    <string name="createBot">Bot erstellen</string>
+    <string name="createDomain">Domäne erstellen</string>
+    <string name="createFourm">Forum erstellen</string>
+    <!-- Post -->
+    <string name="cancel">Stornieren</string>
+    <string name="viewUser">Benutzer anzeigen</string>
+    <string name="viewPrevious">Vorherige anzeigen</string>
+    <string name="startWar">Krieg starten</string>
+    <string name="speak">Sprechen</string>
+    <string name="userIDorEmail">Benutzer-ID (oder E-Mail)</string>
+    <!-- Unflag -->
+    <string name="subscribe">Abonnieren</string>
+    <string name="synthesizeResponse">Synthese-Antwort</string>
+    <string name="voteDown">Gefällt mir nicht</string>
+    <!-- Wiktionary -->
+    <string name="whisper">Flüstern</string>
+    <string name="upgradeToBronze">Upgrade auf Bronze</string>
+    <string name="viewNext">Nächste ansehen</string>
+    <string name="play">Spielen</string>
+    <string name="select">Wählen</string>
+    <string name="searchPosts">Suche Beiträge</string>
+    <!-- Response Matching -->
+    <string name="requiredPrevious">Erforderlich Zurück</string>
+    <string name="pitch">Tonhöhe</string>
+    <!-- Response Timeout -->
+    <string name="ping">Klingeln</string>
+    <string name="scriptFlagged">Dieses Skript wurde markiert</string>
+    <string name="restrict">Beschränken</string>
+    <string name="search">Suche</string>
+    <string name="newPost">Neuer Beitrag</string>
+    <string name="createGraphic">Grafik erstellen</string>
+    <string name="reply">Antworten</string>
+    <string name="replyToParent">Antwort auf Eltern</string>
+    <string name="createScript">Skript erstellen</string>
+    <string name="language">Sprache</string>
+    <string name="showName">Name anzeigen</string>
+    <string name="editDomain">Domäne bearbeiten</string>
+    <string name="editForum">Forum bearbeiten</string>
+    <string name="editPost">Beitrag bearbeiten</string>
+    <string name="featured">Vorgestellt</string>
+    <string name="editGraphic">Grafik bearbeiten</string>
+    <string name="editUser">Benutzer bearbeiten</string>
+    <!-- Forum Bot -->
+    <string name="browsePosts">Beiträge durchsuchen</string>
+    <string name="download">Herunterladen</string>
+    <!-- FAQ -->
+    <!-- Forum -->
+    <string name="helpBot">Hilfe Bot</string>
+    <!-- Live Support -->
+    <!-- Email -->
+    <string name="help">Hilfe</string>
+    <!-- Emoting -->
+    <string name="comprehension">Verständnis</string>
+    <string name="consciousness">Bewusstsein</string>
+    <string name="last">Letzte</string>
+    <string name="customAvatar">Benutzerdefinierter Avatar</string>
+    <string name="noRepeat">Nein Wiederholen</string>
+    <string name="showImages">Bilder anzeigen</string>
+    <string name="allPosts">Alle Beiträge</string>
+    <string name="myPosts">Meine Posts</string>
+    <string name="aPublic">Öffentlichkeit</string>
+    <string name="selectFirstBot">Wählen Sie zuerst Bot</string>
+    <string name="selectSecondBot">Zweites Bot auswählen</string>
+    <string name="chatBotWar">Chat Bot Krieg</string>
+    <string name="languageAndVoice">Sprachstimme</string>
+    <string name="clearPurchases">Käufe löschen</string>
+    <string name="question">Frage</string>
+    <string name="sendFile">Datei senden</string>
+    <string name="scriptTimeout">Skript Zeitüberschreitung</string>
+    <string name="scriptUp">Skript oben</string>
+    <string name="requiredWords">Erforderliche Wörter</string>
+    <string name="posts">Beiträge</string>
+    <string name="searchAllPosts">Suche alle Beiträge</string>
+    <string name="pickFromWWW">Wählen Sie aus: http://www.daz3d.com/people-and-wearables-genesis-3 \n (kann zusätzliche Kosten erfordern)</string>
+    <string name="scriptDown">Skript unten</string>
+    <string name="setBackground">Hintergrund einstellen</string>
+    <string name="rate">Preis</string>
+    <string name="activityAboutText1">Chat Bot Wars lassen Sie zwei Chat-Bots in einem Konversations-Kampf zu engagieren. Wer gewinnt? Du entscheidest.</string>
+    <string name="activityAboutText2">Sie können unsere Bibliothek von Tausenden von Bots durchsuchen, oder erstellen Sie Ihre eigenen Bot zu tun Schlacht.</string>
+    <string name="activityAboutText3">Je mehr Schlachten Sie gewinnen, desto höher ist Ihr Rang.</string>
+    <string name="previous">Bisherige</string>
+    <string name="postAccessMode">Postzugriffsmodus</string>
+    <string name="postFlagged">Dieser Beitrag wurde markiert</string>
+    <string name="sendImage">Bild senden</string>
+    <string name="response">Antwort</string>
+    <string name="replyAccessMode">Antwortmodus bestätigen</string>
+    <string name="passwordHint">Passwort Hinweis ist (optional)</string>
+    <string name="modelNameorURL">Modellname oder URL</string>
+    <string name="password">Passwort</string>
+    <string name="onRepeat">Auf Wiederholung</string>
+    <string name="newPassword">Neues Kennwort</string>
+    <string name="learningRate">Lernrate %</string>
+    <string name="hairStyle">Haarstil</string>
+    <string name="importScript">Skript importieren</string>
+    <string name="myForums">Meine Foren</string>
+    <string name="helpText1">Willkommen zu helfen. Überprüfen Sie unsere FAQ oder Foren, chatten Sie mit unserem Hilfe-Bot oder unseren Live-Support-Experten. Mailen Sie uns oder finden Sie weitere Ressourcen auf unserer Website.</string>
+    <string name="markValid">Kennzeichen gültig</string>
+    <string name="hairColor">Haarfarbe</string>
+    <string name="keepAlive">Bleib am Leben</string>
+    <string name="noAds">Keine Werbung</string>
+    <string name="keywords">Schlüsselwörter</string>
+    <string name="graphics">Grafik</string>
+    <string name="handsFreeSpeech">Hände frei Rede</string>
+    <!-- Import Responses -->
+    <string name="avatarEditor">Avatar-Editor</string>
+    <!-- HD -->
+    <string name="action">Aktion</string>
+    <string name="avatarFlagged">Dieser Avatar wurde markiert</string>
+    <string name="activeStripts">Aktive Skripte</string>
+    <string name="botFlagged">Dieser Bot ist markiert</string>
+    <!-- Bot -->
+    <string name="botMode">Bot-Modus</string>
+    <string name="channelFlagged">Dieser Kanal ist markiert</string>
+    <string name="description">Beschreibung</string>
+    <!-- Details (optional) -->
+    <string name="disclaimer">Haftungsausschluss (optional)</string>
+    <string name="license">Lizenz (optional)</string>
+    <string name="accessMode">Zugriffsmodus</string>
+    <string name="forkAccessMode">Gabelzugriffsmodus</string>
+    <string name="channelType">Kanaltyp</string>
+    <string name="audioAccessMode">Audio-Zugriffsmodus</string>
+    <string name="creationMode">Erstellungsmodus</string>
+    <!-- Details -->
+    <string name="fullName">Vollständiger Name (optional)</string>
+    <string name="emailReco">E-Mail (empfohlen)</string>
+    <!-- Bio (optional) -->
+    <string name="domainFlagged">TSeine Domain ist markiert</string>
+    <string name="editBot">Bot bearbeiten</string>
+    <string name="editAvatar">Bearbeiten Sie Avatar</string>
+    <string name="editChannel">Kanal bearbeiten</string>
+    <string name="editScript">Skript bearbeiten</string>
+    <string name="currentPassword">Aktuelles Passwort</string>
+    <string name="forumFlagged">Dieses Forum wurde markiert</string>
+    <string name="graphicFlagged">Diese Grafik wurde markiert</string>
+    <string name="learningMode">Lernmodus</string>
+    <string name="correctionMode">Korrekturmodus</string>
+    <string name="conversationMatch">Konversation Match %</string>
+    <string name="discussionMatch">Diskussion Match %</string>
+    <string name="checkExactMatchFirst">Überprüfen Sie die genaue Übereinstimmung zuerst</string>
+    <string name="fixTempateCase">Fix Vorlage Fall</string>
+    <string name="learnGrammar">Lerne Grammatik</string>
+    <string name="markInvalid">Markieren Sie ungültig</string>
+    <string name="hdImages">HD Bilder</string>
+    <!-- HD Video -->
+    <string name="face">Gesicht</string>
+    <string name="eyeColor">Augenfarbe</string>
+    <string name="label">Etikette</string>
+    <string name="body">Körper</string>
+    <string name="cloths">Kleider</string>
+    <string name="daz3DModelNameorURL">Daz3D Modellname oder URL</string>
+    <string name="comments">Bemerkungen</string>
+    <string name="command">Befehl</string>
+    <string name="addImage">Bild hinzufügen</string>
+    <string name="Forums">Foren</string>
+    <string name="duration">Dauer</string>
+    <string name="addMedia">Medien hinzufügen</string>
+    <string name="browseAllPosts">Alle Beiträge durchsuchen</string>
+    <string name="chime">Glockenspiel</string>
+    <string name="administrators">Administratoren</string>
+    <string name="addSharedImage">Gemeinsames Bild hinzufügen</string>
+    <string name="deleteImage">Lösche Bild</string>
+    <string name="deleteAllImages">Alle Bilder löschen</string>
+    <string name="deleteMedia">Medien löschen</string>
+    <string name="clearbackground">Klarer Hintergrund</string>
+    <string name="clear">Klar</string>
+    <string name="deleteScript">Skript löschen</string>
+    <string name="admin">Administrator</string>
+    <string name="customizeAvatar">Anpassen von Avatar</string>
+    <string name="channels">Kanäle</string>
+    <string name="changeServer">Server ändern</string>
+    <string name="browseCategories">Durchsuche Kategorien</string>
+    <string name="disableVideo">Video deaktivieren</string>
+    <string name="boot">Stiefel</string>
+    <string name="browseFeaturedPosts">Durchsuchen Sie ausgewählte Beiträge</string>
+    <string name="fork">Gabel</string>
+    <!-- Chat Bot Wars -->
+    <string name="flag">Flagge</string>
+    <string name="browseFeatured">Durchsuchen</string>
+    <string name="correctResponse">Richtige Antwort</string>
+    <string name="flagResponseAsOffensive">Flag-Antwort als offensiv</string>
+    <string name="changeVoice">Sprache ändern</string>
+    <string name="changeLanguage">Sprache ändern</string>
+    <string name="changeAvatar">Avatar ändern</string>
+    <string name="exit">Ausgang</string>
+    <string name="flagUser">Flag Benutzer</string>
+    <string name="addDefaultResponse">Standardantwort hinzufügen</string>
+    <!-- Domains -->
+    <!-- Bots -->
+    <string name="addResponse">Antwort hinzufügen</string>
+    <string name="addGreeting">Gruß hinzufügen</string>
+    <string name="flagAsOffensive">Fahne als anstößig</string>
+    <string name="view">Aussicht</string>
+    <string name="voiceMod">Sprachmodifikator</string>
+    <string name="micConfig">Mikrofonkonfiguration</string>
+    <string name="sayHelloSpeech">Sag hallo - Hände frei Rede</string>
+    <string name="offlineSpeech">Offline-Rede</string>
+    <string name="sayHelloGoogle">Sag hallo - Google Voice</string>
+    <!-- Debugger -->
+    <string name="micConfigurationInfo">Bitte stellen Sie sicher, dass das Mikrofon auf Ihrem Gerät funktioniert. Gehen Sie folgendermaßen vor. \n\n1- Vergewissern Sie sich, dass Sie alle Berechtigungen für BotLibre akzeptieren, insbesondere für das Mikrofon. \n\n2- Stellen Sie sicher, dass Ihr Gerät die Sprachsuche aktiviert hat. Sein ein Sprachanbieter, der benötigt wird, um die Spracherkennung zu machen, arbeitet.</string>
+    <string name="poweredByYandex">Angetrieben von Yandex.Translate</string>
+    <!-- Pose -->
+    <!-- title -->
+    <!-- Forum Bot -->
+    <string name="website">Webseite</string>
+</resources>

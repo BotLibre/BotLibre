@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuUp"
+          android:title="@string/scriptUp" />
+    
+    <item android:id="@+id/menuDown"
+          android:title="@string/scriptDown" />
+    
+    <item android:id="@+id/menuAdd"
+          android:title="@string/createScript" />
+ 
+    <item android:id="@+id/menuEdit"
+          android:title="@string/editScript" />
+ 
+    <item android:id="@+id/menuImport"
+          android:title="@string/importScript" />
+ 
+    <item android:id="@+id/menuDelete"
+          android:title="@string/deleteScript" />
+ 
+</menu>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+    
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/editPost"
+		    android:textSize="18sp" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+             
+    <EditText
+        android:id="@+id/topicText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/topic"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+    
+    <EditText
+        android:id="@+id/detailsText"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:hint="@string/details"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+  		android:gravity="top"
+     	android:layout_weight="1"/>
+        
+    <AutoCompleteTextView
+        android:id="@+id/tagsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tags"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+
+    <CheckBox
+        android:id="@+id/featuredCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/featured" />
+        
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/ok_button"
+            android:onClick="save"
+            android:text="@string/save"
+            android:textColor="@color/lgrey" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/cancel_button"
+            android:onClick="cancel"
+            android:text="@string/cancel"
+            android:textColor="@color/dgrey" />
+        
+    </LinearLayout>
+
+</LinearLayout>

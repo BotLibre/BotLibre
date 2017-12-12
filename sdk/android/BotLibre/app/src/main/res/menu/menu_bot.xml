@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuAdmin"
+          android:title="@string/admin" />
+ 
+    <item android:id="@+id/menuFork"
+          android:title="@string/fork" />
+ 
+    <item android:id="@+id/menuWar"
+          android:title="@string/chatBotWars" />
+ 
+    <item android:id="@+id/menuCreator"
+          android:title="@string/viewCreater" />
+ 
+    <item android:id="@+id/menuFlag"
+          android:title="@string/flag" />
+ 
+    <item android:id="@+id/menuThumbsUp"
+          android:title="@string/voteUp" />
+ 
+    <item android:id="@+id/menuThumbsDown"
+          android:title="@string/voteDown" />
+ 
+    <item android:id="@+id/menuStar"
+          android:title="@string/rate" />
+ 
+    <item android:id="@+id/website"
+          android:title="@string/website" />
+     
+</menu>

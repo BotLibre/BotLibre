@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activityChat"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#FFFFFF"
+	android:gravity="fill_vertical"
+	android:orientation="vertical" >
+	
+	<LinearLayout
+	    android:id="@+id/chatToolBar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content"
+            android:textSize="18sp"
+	        android:layout_margin="8sp"
+			android:text=""/>
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
+	<!-- com.google.android.gms.ads.AdView
+		android:id="@+id/adView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		ads:adSize="SMART_BANNER"
+		ads:adUnitId="@string/banner_ad_unit_id">
+	</com.google.android.gms.ads.AdView-->
+	    
+	<TextView
+		android:id="@+id/yandex"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textSize="14sp"
+		android:layout_margin="8sp"
+		android:visibility="gone"
+		android:text="Powered by Yandex.Translate"/>
+    
+	<LinearLayout
+		android:id="@+id/avatarLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="0px"
+		android:layout_weight="3"
+		android:orientation="horizontal" >
+		
+	<ImageView
+		android:id="@+id/imageView"
+		android:layout_width="0px"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:adjustViewBounds="true"
+		android:contentDescription="bot"
+		android:src="@drawable/bot" />
+		
+	<RelativeLayout
+		android:id="@+id/videoLayout"
+		android:layout_width="0px"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:orientation="horizontal"
+		android:visibility="gone" >
+		
+	<VideoView
+		android:id="@+id/videoView"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+		android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+		android:contentDescription="avatar"
+		android:background="@android:color/transparent" />
+	
+	</RelativeLayout>
+	
+    <ListView
+        android:id="@+id/chatList"
+        android:layout_width="0px"
+        android:layout_height="fill_parent"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
+        
+    </LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/responseLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="0px"
+		android:layout_weight="1"
+		android:orientation="horizontal" >
+		
+		<LinearLayout
+			android:id="@+id/responseImageLayout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:orientation="vertical" >
+		
+			<ImageView
+				android:id="@+id/responseImageView"
+				android:layout_width="40sp"
+				android:layout_height="40sp"
+				android:adjustViewBounds="true"
+				android:contentDescription="bot"
+				android:src="@drawable/bot" />
+			
+			<TextView
+			    android:id="@+id/statusText"
+				android:layout_width="40sp"
+		        android:layout_height="wrap_content"
+	            android:textSize="10sp"
+				android:text=""
+	    		android:layout_margin="2sp"/>
+			
+		</LinearLayout>
+				
+		<ScrollView
+				android:id="@+id/responseScroll"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent">
+		    
+			<WebView
+				android:id="@+id/responseText"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		</ScrollView>
+		
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/chatCLayout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+
+	<EditText
+	    android:id="@+id/messageText"
+	    android:layout_width="0px"
+	    android:layout_height="match_parent"
+	    android:layout_weight="1"
+	    android:hint="@string/youSay"
+	    android:imeOptions="actionDone"
+	    android:inputType="text" >
+		  
+		</EditText>
+
+		<ImageButton
+		    android:id="@+id/speakButton"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="4dp"
+		    android:background="#FFFFFF"
+		    android:contentDescription="speak"
+		    android:src="@drawable/mic" />
+		
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="1dp"
+		android:background="@color/lgrey"
+		android:orientation="horizontal" />
+		
+	<LinearLayout
+	    android:id="@+id/menuMLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+		
+		<Button
+			android:id="@+id/menuButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/menu"
+			android:onClick="menu"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/langButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/language"
+			android:onClick="changeLanguage"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/soundButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/sound"
+			android:onClick="toggleSound"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/correctionButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/check2"
+			android:onClick="toggleCorrection"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/flagButton"
+			android:layout_width="42sp"
+			android:layout_height="42sp"
+			android:layout_margin="4dp"
+			android:background="@drawable/flag2"
+			android:onClick="toggleFlag"
+			android:text="" />
+		
+		<Spinner
+			android:id="@+id/emoteSpin"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuCorrection"
+          android:icon="@drawable/check"
+          android:title="@string/correctResponse" />
+    
+    <item android:id="@+id/menuFlag"
+          android:title="@string/flagResponseAsOffensive" />
+      
+    <item android:id="@+id/menuSound"
+          android:title="@string/speak"
+          android:checkable="true" />
+    
+    <item android:id="@+id/menuDeviceVoice"
+          android:title="@string/deviceVoice"
+          android:checkable="true" />
+    
+    <item android:id="@+id/menuHandsFreeSpeech"
+          android:title="@string/handsFreeSpeech"
+          android:checkable="true" />
+    
+    
+    <!--  <item android:id="@+id/menuChangeVoice"
+          android:title="@string/changeVoice" />-->
+    
+    <item android:id="@+id/MicConfig"
+          android:title="@string/micConfig" />
+    
+    <item android:id="@+id/menuChangeLanguage"
+          android:title="@string/changeLanguage" />
+    
+    <item android:id="@+id/menuChangeAvatar"
+          android:title="@string/changeAvatar" />
+    <item android:id="@+id/menuDisableVideo"
+          android:title="@string/disableVideo"
+          android:checkable="true" />
+    
+    <item android:id="@+id/menuWebm"
+          android:title="@string/webmVideo"
+          android:checkable="true" />
+    
+    <item android:id="@+id/menuHD"
+          android:title="@string/hdVideo"
+          android:checkable="true" />
+     
+</menu>

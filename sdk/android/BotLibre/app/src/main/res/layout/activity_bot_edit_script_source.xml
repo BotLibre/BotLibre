@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#eee"
+        android:gravity="fill_horizontal"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="32sp"
+            android:layout_height="32sp"
+            android:layout_margin="4sp"
+            android:background="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_margin="4sp"
+            android:layout_weight="1"
+            android:text="@string/scriptEditor"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/helpButton"
+            android:layout_width="32sp"
+            android:layout_height="32sp"
+            android:layout_margin="4sp"
+            android:background="@drawable/help"
+            android:onClick="help"
+            android:text="" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="#ddd" >
+    </View>
+
+    <EditText
+        android:id="@+id/scriptSource"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:hint=""
+        android:gravity="top"
+        android:textSize="10sp"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:imeOptions="actionDone" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/saveScriptButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:onClick="saveScript"
+            android:text="@string/compile"
+            android:textColor="@color/lgrey" />
+    </LinearLayout>
+
+</LinearLayout>

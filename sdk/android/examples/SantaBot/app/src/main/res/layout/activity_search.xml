@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/search"
+		    android:textSize="18sp" />
+			    
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+		android:background="#ddd">
+    </View>
+    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/publicRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/aPublic" />
+
+        <RadioButton
+            android:id="@+id/privateRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aPrivate" />
+
+        <RadioButton
+            android:id="@+id/personalRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/myBots" />
+        
+    </RadioGroup>
+    
+    <EditText
+        android:id="@+id/filterText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+    
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <AutoCompleteTextView
+        android:id="@+id/categoriesText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.40"
+        android:hint="@string/categoires"
+        android:imeOptions="actionDone"
+        android:inputType="text" >
+    </AutoCompleteTextView>
+
+    <ImageButton
+        android:id="@+id/btnCat"
+       style="?android:attr/buttonStyleSmall"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:layout_margin="4dp"
+            android:background="#FFFFFF"
+            android:scaleType="center"
+            android:src="@drawable/arrow_down_green"  />
+
+</LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <AutoCompleteTextView
+            android:id="@+id/tagsText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.65"
+            android:hint="@string/tags"
+            android:imeOptions="actionDone"
+            android:inputType="text" >
+        </AutoCompleteTextView>
+
+        <ImageButton
+            android:id="@+id/btnTag"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:layout_margin="4dp"
+            android:background="#FFFFFF"
+            android:scaleType="center"
+            android:src="@drawable/arrow_down_green" />
+
+    </LinearLayout>
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+	    <TextView
+	        android:id="@+id/restrictLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="5dp"
+	        android:text="@string/restrict" />
+	    
+	    <Spinner
+	        android:id="@+id/restrictSpin"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+	    <TextView
+	        android:id="@+id/sortLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="5dp"
+	        android:text="@string/sort" />
+	    
+	    <Spinner
+	        android:id="@+id/sortSpin"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+    <TextView
+        android:id="@+id/contentRatingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/contentRating" />
+    
+    <Spinner
+        android:id="@+id/ContentRatingSpin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/imagesCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="Show Images" />
+        
+    <View
+        android:id="@+id/filler"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+      	android:layout_weight="1"
+        android:text=""/>
+    
+    <Button
+        android:id="@+id/browseButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/ok_button"
+        android:onClick="browse"
+        android:text="@string/search"
+        android:textColor="@color/lgrey" />
+    
+	</LinearLayout>
+	
+	</ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/learning"
+		    android:textSize="18sp" />
+		
+		<Button
+			android:id="@+id/helpButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/help"
+			android:onClick="help"
+			android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
+    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+		        
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+    	
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+    <TextView
+        android:id="@+id/learningModeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/learningMode" />
+    
+    <Spinner
+        android:id="@+id/learningModeSpin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+        
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+    <TextView
+        android:id="@+id/correctionModeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/correctionMode" />
+    
+    <Spinner
+        android:id="@+id/correctionModeSpin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+    
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/learningRateLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/learningRate" />
+	    
+	    <EditText
+	        android:id="@+id/learningRateText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/scriptTimeoutLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/scriptTimeout" />
+	    
+	    <EditText
+	        android:id="@+id/scriptTimeoutText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/responseTimeoutLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/responseTimeout" />
+	    
+	    <EditText
+	        android:id="@+id/responseTimeoutText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/conversationMatchLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/conversationMatch" />
+	    
+	    <EditText
+	        android:id="@+id/conversationMatchText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	        android:id="@+id/discussionMatchLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/discussionMatch" />
+	    
+	    <EditText
+	        android:id="@+id/discussionMatchText"
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	      	android:layout_weight="1"
+	        android:inputType="number"
+	    	android:imeOptions="actionDone"/>
+    
+    </LinearLayout>
+    
+    <CheckBox
+        android:id="@+id/emotingCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emoting" />
+    
+    <CheckBox
+        android:id="@+id/emotionsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emotions" />
+    
+    <CheckBox
+        android:id="@+id/comprehensionCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comprehension" />
+    
+    <CheckBox
+        android:id="@+id/consciousnessCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/consciousness" />
+    
+    <CheckBox
+        android:id="@+id/wiktionaryCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wiktionary" />
+    
+    <CheckBox
+        android:id="@+id/responseMatchingCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/responseMatching" />
+    
+    <CheckBox
+        android:id="@+id/checkEactMatchFirstCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkExactMatchFirst" />
+    
+    <CheckBox
+        android:id="@+id/fixTemplateCaseCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fixTempateCase" />
+    
+    <CheckBox
+        android:id="@+id/learnGrammarCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/learnGrammar" />
+    
+    <CheckBox
+        android:id="@+id/synthsizeResponseCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/synthesizeResponse" />
+            
+    <TextView
+        android:id="@+id/filler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:text=""/>
+    
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/ok_button"
+        android:onClick="save"
+        android:text="@string/save"
+        android:textColor="@color/lgrey" />
+    
+    </LinearLayout>
+     
+    </ScrollView>
+
+</LinearLayout>

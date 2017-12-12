@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menuAttachCamera"
+        android:title="@string/take_picture" />
+
+    <item android:id="@+id/menuAttachImage"
+          android:title="@string/attach_image" />
+    
+    <item android:id="@+id/menuAttachFile"
+          android:title="@string/attach_file" />
+
+    <item android:id="@+id/menuH1"
+          android:title="@string/h1_header" />
+
+    <item android:id="@+id/menuH2"
+        android:title="@string/h2_header" />
+
+    <item android:id="@+id/menuH3"
+        android:title="@string/h3_header" />
+    
+    <item android:id="@+id/menuBullet"
+          android:title="@string/bulleted_list" />
+
+    <item android:id="@+id/menuNBullet"
+        android:title="@string/numbered_list" />
+
+    <item android:id="@+id/menuIndent"
+        android:title="@string/indent" />
+
+    <item android:id="@+id/menuPreview"
+        android:title="@string/preview" />
+     
+</menu>

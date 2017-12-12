@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#FFFFFF"
+	android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content" 
+            android:textSize="18sp"
+	        android:layout_margin="4sp"
+			android:text="@string/title"/>
+	
+		<Button
+			android:id="@+id/logoutButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/logout"
+			android:onClick="logout"
+			android:text="" />
+		
+		<Button
+			android:id="@+id/viewUserButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="#eee"
+			android:onClick="viewUser"
+			android:text="" />
+	
+		<Button
+			android:id="@+id/loginButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/login"
+			android:onClick="login"
+			android:text="" />
+	    
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+		android:background="#ddd">
+    </View>
+    
+	<ImageView
+		android:id="@+id/splash"
+		android:layout_width="fill_parent"
+		android:layout_height="0px"
+		android:layout_weight="1"
+		android:adjustViewBounds="true"
+		android:src="@drawable/logo" />
+
+	<Button
+	    android:id="@+id/chatButton"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="1sp"
+	    android:background="@drawable/ok_button"
+	    android:onClick="launch"
+	    android:text="@string/chat"
+	    android:textColor="@color/lgrey" />
+
+</LinearLayout>
