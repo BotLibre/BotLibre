@@ -1,0 +1,49 @@
+<project name="swingdroid" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="source" location="source"/>
+	<property name="build" location="build"/>
+	<property name="lib"  location="lib"/>
+	<property name="res" location="res"/>
+	<target name="init" depends="clean">
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init"
+	        description="compile the source " >
+	    <!-- Compile the java code from ${source} into ${build} -->
+	    <javac srcdir="${source}" destdir="${build}" debug="on" encoding="utf8">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+		    <fileset dir="${source}"/>
+		</copy>
+	</target>
+
+	<path id="build-classpath">
+		  <fileset dir="${lib}">
+			<include name="**/*.jar"/>
+		  </fileset>
+	</path>
+	<manifestclasspath property="lib.list" jarfile="swingdroid.jar">
+		<classpath refid="build-classpath"/>
+	</manifestclasspath>
+	
+	<target name="dist" depends="compile" description="generate the distribution" >
+	    <!-- Put everything in ${build} into swingdroid.jar file -->
+	    <jar jarfile="swingdroid.jar" basedir="${build}">
+		</jar>
+	</target>
+	
+	<target name="clean" description="clean up" >
+	    <!-- Delete the ${build} directory -->
+	    <delete dir="${build}"/>
+	    <delete file="swingdroid.jar"/>
+	</target>
+
+</project>
