@@ -193,6 +193,7 @@ public class MicroConnection extends SDKConnection implements TextListener {
 		if (exists) {
 			System.out.println("Bot exists.");
 			Bot bot = Bot.createInstance(Bot.CONFIG_FILE, instance, true);
+			bot.setFilterProfanity(false);
 			Language language = bot.mind().getThought(Language.class);
 			language.setLearningMode(LearningMode.Disabled);
 			language.setLearnGrammar(false);
@@ -211,6 +212,7 @@ public class MicroConnection extends SDKConnection implements TextListener {
 		System.out.println("Creating a new bot.");
 		DatabaseMemory.RECREATE_DATABASE = true;
 		Bot bot = Bot.createInstance(Bot.CONFIG_FILE,instance , true);
+		bot.setFilterProfanity(false);
 		if (this.debug) {
 			bot.setDebugLevel(Level.FINE);
 		}
@@ -268,6 +270,7 @@ public class MicroConnection extends SDKConnection implements TextListener {
 		bot.shutdown();
 		// Reload the bot from the file.
 		bot = Bot.createInstance(Bot.CONFIG_FILE,instance , true);
+		bot.setFilterProfanity(false);
 		language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		language.setLearnGrammar(false);
