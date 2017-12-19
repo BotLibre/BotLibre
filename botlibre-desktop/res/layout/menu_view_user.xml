@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuChangeIcon"
+          android:title="Change Icon" />
+    
+    <item android:id="@+id/menuEditUser"
+          android:title="Edit User" />
+    
+    <item android:id="@+id/menuFlag"
+          android:title="Flag User" />
+ 
+    <item android:id="@+id/menuBots"
+          android:title="Bots" />
+ 
+    <item android:id="@+id/menuChannels"
+          android:title="Channels" />
+ 
+    <item android:id="@+id/menuForums"
+          android:title="Forums" />
+ 
+    <item android:id="@+id/menuPosts"
+          android:title="Posts" />
+ 
+    <item android:id="@+id/menuDomains"
+          android:title="Domains" />
+ 
+    <item android:id="@+id/website"
+          android:title="Website" />
+     
+</menu>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/html/htmlcleaner2_1.jar"/>
+	<classpathentry kind="lib" path="lib/irc/chatengine.jar"/>
+	<classpathentry kind="lib" path="lib/jpa/eclipselink.jar" sourcepath="C:/Engineering/EclipseLink/eclipselink-2.2-src.zip"/>
+	<classpathentry kind="lib" path="lib/json/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/json/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/json/json-lib-2.3-jdk15.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/jpa/persistence.jar"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-core-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/mail/dsn-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/gimap-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/imap-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/javax.mail-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/javax.mail-api-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/mailapi-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/pop3-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/mail/smtp-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/encoder-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/guava.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/jsr305.jar"/>
+	<classpathentry kind="lib" path="lib/oswap/owasp-java-html-sanitizer.jar"/>
+	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.2.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-android-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-calibration-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-feature-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-geo-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-io-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-ip-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-jcodec-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-learning-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-openkinect-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-recognition-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-sfm-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-visualize-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-WebcamCapture-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/BoofCV-xuggler-0.23.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/core-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/ddogleg-0.9.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/dense64-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/equation-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/georegression-0.10.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/simple-0.29.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/xmlpull-1.1.3.1.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/xpp3_min-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="/Bot Libre - AI Engine/lib/boof/xstream-1.4.7.jar"/>
+	<classpathentry kind="lib" path="lib/jpa/derby.jar"/>
+	<classpathentry kind="lib" path="lib/autobahn/autobahn.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpclient-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpclient-cache-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpcore-4.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient/httpmime-4.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/json.org/org.json.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-en-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-cmu-rms-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-cmu-slt-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-dfki-poppy-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/botlibre-ai.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-de-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-fr-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-it-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-lb-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-ru-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-sv-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-te-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-lang-tr-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-bits1-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-bits3-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-cmu-bdl-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-cmu-nk-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-dfki-obadiah-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-dfki-ot-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-dfki-pavoque-neutral-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-dfki-prudence-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-dfki-spike-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-enst-camille-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-enst-dennys-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-istc-lucia-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-upmc-jessica-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/voice-upmc-pierre-hsmm-5.2.jar"/>
+	<classpathentry kind="lib" path="lib/marytts/marytts-runtime-5.2-jar-with-dependencies.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

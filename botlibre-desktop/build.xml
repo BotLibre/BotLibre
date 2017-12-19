@@ -1,0 +1,63 @@
+<project name="botlibre-desktop" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="source" location="source"/>
+	<property name="build" location="build"/>
+	<property name="lib"  location="lib"/>
+	<property name="res" location="res"/>
+	<target name="init" depends="clean">
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init"
+	        description="compile the source " >
+	    <!-- Compile the java code from ${source} into ${build} -->
+	    <javac srcdir="${source}" destdir="${build}" debug="on" encoding="utf8">
+			<classpath>
+			  <pathelement path="${classpath}"/>
+			  <fileset dir="${lib}">
+			    <include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<!--copy todir="${build}">
+		    <fileset dir="${source}"/>
+		</copy-->
+		<copy todir="${build}/org/botlibre/sdk/micro">
+			<fileset dir="${source}/org/botlibre/sdk/micro">
+				<include name="*.res"/>
+				<include name="*.aiml"/>
+				<include name="*.self"/>
+			</fileset>
+		</copy>
+		<copy todir="${build}/res">
+			<fileset dir="${res}"/>
+		</copy>
+	</target>
+
+	<path id="build-classpath">
+		  <fileset dir="${lib}">
+			<include name="**/*.jar"/>
+		  </fileset>
+	</path>
+	<manifestclasspath property="lib.list" jarfile="botlibre-desktop.jar">
+		<classpath refid="build-classpath"/>
+	</manifestclasspath>
+	
+	<target name="dist" depends="compile" description="generate the distribution" >
+	    <!-- Put everything in ${build} into botlibre-desktop.jar file -->
+	    <jar jarfile="botlibre-desktop.jar" basedir="${build}">
+			<manifest>
+			  <attribute name="Main-Class" value="org.botlibre.sdk.activity.MainActivity"/>
+			  <attribute name="Class-Path" value="${lib.list}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="clean" description="clean up" >
+	    <!-- Delete the ${build} directory -->
+	    <delete dir="${build}"/>
+	    <delete file="botlibre-desktop.jar"/>
+	</target>
+
+</project>

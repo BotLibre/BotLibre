@@ -1,0 +1,8 @@
+/build
+/javadoc
+/.metadata
+*.err.*
+*.log.*
+/bin/
+/Bot
+/cache

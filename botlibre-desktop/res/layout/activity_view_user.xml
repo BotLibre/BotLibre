@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content" 
+            android:textSize="16sp"
+	        android:layout_margin="4sp"
+			android:text=""/>
+	    
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bot" />
+
+	    <ScrollView
+	        android:layout_width="0px"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:fillViewport="true"
+	        android:scrollbars="vertical" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dip"
+            android:orientation="vertical"
+            android:padding="3dip" >
+
+	        <TextView
+	            android:id="@+id/userText"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="User"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/nameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/websiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="website"
+                android:autoLink="web"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/joinedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="joined"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/connectsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="connects"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/lastConnectText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="last"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/contentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="stats"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/statsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="stats"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/typeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="type"
+                android:textSize="12sp" />
+            
+        </LinearLayout>
+        
+        </ScrollView>
+        
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            
+            <WebView
+                android:id="@+id/bioText"
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+                android:text="bio"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/flaggedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This user has be flagged"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/red" />
+
+
+</LinearLayout>

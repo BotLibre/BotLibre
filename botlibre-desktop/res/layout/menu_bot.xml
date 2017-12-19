@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuAdmin"
+          android:title="Admin" />
+ 
+    <item android:id="@+id/menuFork"
+          android:title="Fork" />
+ 
+    <item android:id="@+id/menuCreator"
+          android:title="View Creator" />
+ 
+    <item android:id="@+id/menuFlag"
+          android:title="Flag" />
+ 
+    <item android:id="@+id/menuThumbsUp"
+          android:title="Vote Up" />
+ 
+    <item android:id="@+id/menuThumbsDown"
+          android:title="Vote Down" />
+ 
+    <item android:id="@+id/menuStar"
+          android:title="Rate" />
+ 
+    <item android:id="@+id/website"
+          android:title="Website" />
+     
+</menu>
