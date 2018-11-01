@@ -734,7 +734,22 @@ public class Http extends BasicSense {
 	 */
 	public Vertex postJSON(Vertex source, Vertex url, Vertex jsonObject) {
 		Network network = source.getNetwork();
-		return postJSON(url.printString(), jsonObject, network);
+		return postJSON(url.printString(), jsonObject, null, network);
+	}
+
+	/**
+	 * Self API.
+	 * POST the JSON object and return the JSON data from the URL.
+	 */
+	public Vertex postJSON(Vertex source, Vertex url, Vertex jsonObject, Vertex headerObject) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		return postJSON(url.printString(), jsonObject, headers, network);
 	}
 
 	/**
@@ -863,12 +878,12 @@ public class Http extends BasicSense {
 	/**
 	 * POST the JSON object and return the JSON data from the URL.
 	 */
-	public Vertex postJSON(String url, Vertex jsonObject, Network network) {
+	public Vertex postJSON(String url, Vertex jsonObject, Map<String, String> headers, Network network) {
 		log("POST JSON", Level.INFO, url);
 		try {
 			String data = convertToJSON(jsonObject);
 			log("POST JSON", Level.FINE, data);
-			String json = Utils.httpPOST(url, "application/json", data);
+			String json = Utils.httpPOST(url, "application/json", data, headers);
 			log("JSON", Level.FINE, json);
 			JSONObject root = (JSONObject)JSONSerializer.toJSON(json.trim());
 			if (root == null) {
@@ -1060,18 +1075,33 @@ public class Http extends BasicSense {
 	 */
 	public Vertex postHTML(Vertex source, Vertex url, Vertex paramsObject, Vertex xpath) {
 		Network network = source.getNetwork();
-		return postHTML(url.printString(), paramsObject, xpath.printString(), network);
+		return postHTML(url.printString(), paramsObject, xpath.printString(), null, network);
+	}
+
+	/**
+	 * Self API.
+	 * Post the HTML forms params and return the HTML data from the URL.
+	 */
+	public Vertex postHTML(Vertex source, Vertex url, Vertex paramsObject, Vertex xpath, Vertex headerObject) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		return postHTML(url.printString(), paramsObject, xpath.printString(), headers, network);
 	}
 
 	/**
 	 * Post the HTML forms params and return the HTML data from the URL.
 	 */
-	public Vertex postHTML(String url, Vertex paramsObject, String xpath, Network network) {
+	public Vertex postHTML(String url, Vertex paramsObject, String xpath, Map<String, String> headers, Network network) {
 		log("POST HTML", Level.INFO, url, xpath);
 		try {
 			Map<String, String> data = convertToMap(paramsObject);
 			log("POST params", Level.FINE, data);
-			String html = Utils.httpPOST(url, data);
+			String html = Utils.httpPOST(url, data, headers);
 			InputStream stream = new ByteArrayInputStream(html.getBytes("utf-8"));
 			StringReader reader = convertToXHTML(stream);
 			Element element = parseXHTML(reader);
@@ -1101,7 +1131,22 @@ public class Http extends BasicSense {
 	 */
 	public Vertex postXML(Vertex source, Vertex url, Vertex xmlObject, Vertex xpath) {
 		Network network = source.getNetwork();
-		return postXML(url.printString(), xmlObject, xpath.printString(), network);
+		return postXML(url.printString(), xmlObject, xpath.printString(), null, network);
+	}
+
+	/**
+	 * Self API.
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXML(Vertex source, Vertex url, Vertex xmlObject, Vertex xpath, Vertex headerObject) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		return postXML(url.printString(), xmlObject, xpath.printString(), headers, network);
 	}
 
 	/**
@@ -1163,12 +1208,12 @@ public class Http extends BasicSense {
 	/**
 	 * Post the XML document object and return the XML data from the URL.
 	 */
-	public Vertex postXML(String url, Vertex xmlObject, String xpath, Network network) {
+	public Vertex postXML(String url, Vertex xmlObject, String xpath, Map<String, String> headers, Network network) {
 		log("POST XML", Level.INFO, url, xpath);
 		try {
 			String data = convertToXML(xmlObject);
 			log("POST XML", Level.FINE, data);
-			String xml = Utils.httpPOST(url, "application/xml", data);
+			String xml = Utils.httpPOST(url, "application/xml", data, headers);
 			log("XML", Level.FINE, xml);
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
 			Element element = parseXML(stream);

@@ -33,6 +33,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.thought.language.Language;
 
 /**
  * Controls and manages the thought processing.
@@ -194,7 +195,7 @@ public class BasicMood implements Mood {
 						}
 					} else {
 						// Attempt to determine from words.
-						Collection<Relationship> words = sentence.getRelationships(Primitive.WORD);
+						List<Relationship> words = sentence.orderedRelationships(Primitive.WORD);
 						if (words != null) {
 							for (Relationship word : words) {
 								emotions = word.getTarget().getRelationships(Primitive.EMOTION);
@@ -210,10 +211,29 @@ public class BasicMood implements Mood {
 									}
 								}
 							}
+							// Check for compound word emotions as well.
+							List<Vertex> compoundWords = Language.processCompoundWords(words);
+							if (compoundWords != null) {
+								for (Vertex word : compoundWords) {
+									if (word.instanceOf(Primitive.COMPOUND_WORD)) {
+										emotions = word.getRelationships(Primitive.EMOTION);
+										if (emotions != null) {
+											for (Relationship emotionRelation : emotions) {
+												Relationship relationship = input.getRelationship(Primitive.EMOTION, emotionRelation.getTarget());
+												if (relationship == null) {
+													relationship = input.addRelationship(Primitive.EMOTION, emotionRelation.getTarget());
+													relationship.setCorrectness(emotionRelation.getCorrectness());
+												} else {
+													relationship.setCorrectness((relationship.getCorrectness() + emotionRelation.getCorrectness()) / 2);												
+												}
+											}
+										}
+									}
+								}
+							}
 							emotions = input.getRelationships(Primitive.EMOTION);
 						}
 					}
-					
 				}
 				if (emotions != null) {
 					// Increment or decrement each emotional state based on the input.
@@ -256,13 +276,25 @@ public class BasicMood implements Mood {
 		}
 		if (emotions == null) {
 			// Attempt to determine from words.
-			Collection<Relationship> words = response.getRelationships(Primitive.WORD);
+			List<Relationship> words = response.orderedRelationships(Primitive.WORD);
 			if (words != null) {
 				emotions = new ArrayList<Relationship>();
 				for (Relationship word : words) {
 					Collection<Relationship> wordEmotions = word.getTarget().getRelationships(Primitive.EMOTION);
 					if (wordEmotions != null) {
 						emotions.addAll(wordEmotions);
+					}
+				}
+				// Check for compound word emotions as well.
+				List<Vertex> compoundWords = Language.processCompoundWords(words);
+				if (compoundWords != null) {
+					for (Relationship word : words) {
+						if (word.getTarget().instanceOf(Primitive.COMPOUND_WORD)) {
+							Collection<Relationship> wordEmotions = word.getTarget().getRelationships(Primitive.EMOTION);
+							if (wordEmotions != null) {
+								emotions.addAll(wordEmotions);
+							}
+						}
 					}
 				}
 			}

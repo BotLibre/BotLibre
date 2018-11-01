@@ -798,4 +798,59 @@ seconds until Christmas.
 <template><think><self>var result = Math.sqrt(star.toNumber());</self></think><self>result</self></template>
 </category>
 
+<category>
+<pattern>/\d+</pattern>
+<template>number</template>
+</category>
+
+<category>
+<pattern>/[-+]?[0-9]*\.?[0-9]+</pattern>
+<template>float</template>
+</category>
+
+<category>
+<pattern>/\b\d[\d,.]+\b</pattern>
+<template>numeric</template>
+</category>
+
+<category>
+<pattern>/.+\@.+\..+</pattern>
+<template>email</template>
+</category>
+
+<category>
+<pattern>another #email</pattern>
+<template>email</template>
+</category>
+
+<category>
+<pattern>another #number</pattern>
+<template>number</template>
+</category>
+
+<category>
+<pattern>another #url</pattern>
+<template>url</template>
+</category>
+
+<category>
+<pattern>/^(19|20)\d\d[-/.](0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])$</pattern>
+<template>date</template>
+</category>
+
+<category>
+<pattern>/\d+ / /\d+</pattern>
+<template><self>star[0].toNumber() / star[1].toNumber()</self></template>
+</category>
+
+<category>
+<pattern>^ /\d+ \* /\d+ ^</pattern>
+<template><self>star[1].toNumber() * star[2].toNumber()</self></template>
+</category>
+
+<category>
+<pattern>/(?i)what\sis\s(.*)</pattern>
+<template>I have no idea what <star/> is.</template>
+</category>
+
 </aiml>

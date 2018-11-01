@@ -1,12 +1,12 @@
 /******************************************************************************
  *
- *  Copyright 2014 Paphus Solutions Inc.
+ *  Copyright 2013-2017 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -92,14 +92,21 @@ import org.xml.sax.InputSource;
  * Helper utility class.
  */
 public class Utils {
+	public static final int EVERYONE = 0;
+	public static final int TEEN = 1;
+	public static final int MATURE = 2;
+	
 	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
-	public static long MINUTE = 60 * 1000;
-	public static long HOUR = 60 * 60 * 1000;
-	public static long DAY = 24 * 60 * 60 * 1000;
+	public static long MINUTE = 60L * 1000L;
+	public static long HOUR = 60L * 60L * 1000L;
+	public static long DAY = 24L * 60L * 60L * 1000L;
+	public static long YEAR = 365L * 24L * 60l * 60L * 1000L;
 	public static int URL_TIMEOUT = 20000;
 	public static String KEY = "changethis";
 	
+	public static Map<String, String> profanityMapEveryone = new HashMap<String, String>();
 	public static Map<String, String> profanityMap = new HashMap<String, String>();
+	public static Map<String, String> profanityMapMature = new HashMap<String, String>();
 	
 	public static ThreadLocal<Random> random = new ThreadLocal<Random>();
 	
@@ -109,42 +116,37 @@ public class Utils {
 	public static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	
 	static {
-		profanityMap.put("fuck", "frig");
-		profanityMap.put("fuckk", "frig");
-		profanityMap.put("f***", "frig");
-		profanityMap.put("fucker", "hoser");
-		profanityMap.put("fucked", "frigged");
-		profanityMap.put("fuckin", "frigging");
-		profanityMap.put("fucking", "frigging");
-		profanityMap.put("fuking", "frigging");
-		profanityMap.put("motherfucking", "frigging");
-		profanityMap.put("motherfuckin", "frigging");
-		profanityMap.put("fuck's", "frigs");
-		profanityMap.put("fucks", "frigs");
-		profanityMap.put("fuc", "frig");
-		profanityMap.put("bitch", "girl");
-		profanityMap.put("b****", "girl");
+		profanityMapMature.put("fuck", "frig");
+		profanityMapMature.put("fuckk", "frig");
+		profanityMapMature.put("f***", "frig");
+		profanityMapMature.put("fucker", "hoser");
+		profanityMapMature.put("fucked", "frigged");
+		profanityMapMature.put("fuckin", "frigging");
+		profanityMapMature.put("fucking", "frigging");
+		profanityMapMature.put("fuking", "frigging");
+		profanityMapMature.put("motherfucking", "frigging");
+		profanityMapMature.put("motherfuckin", "frigging");
+		profanityMapMature.put("fuck's", "frigs");
+		profanityMapMature.put("fucks", "frigs");
+		profanityMapMature.put("fuc", "frig");
+		profanityMapMature.put("bitch", "girl");
+		profanityMapMature.put("cunt", "privates");
+		profanityMapMature.put("clit", "privates");
+		profanityMapMature.put("vagina", "privates");
+		profanityMapMature.put("dick", "privates");
+		profanityMapMature.put("cock", "privates");
+		profanityMapMature.put("whore", "harlot");
+		profanityMapMature.put("nigga", "african");
+		profanityMapMature.put("nigger", "african");
+		profanityMapMature.put("niggers", "africans");
+		profanityMapMature.put("cum", "come");
+		
+		profanityMap.putAll(profanityMapMature);
 		profanityMap.put("asshole", "bum");
 		profanityMap.put("dumbass", "idiot");
 		profanityMap.put("pussy", "kitty");
 		profanityMap.put("pussyy", "kitty");
-		profanityMap.put("cunt", "privates");
-		profanityMap.put("clit", "privates");
-		profanityMap.put("vagina", "privates");
-		//profanityMap.put("crotch", "privates");
-		profanityMap.put("dick", "privates");
-		profanityMap.put("cock", "privates");
 		profanityMap.put("penis", "privates");
-		//profanityMap.put("kiss", "smooch");
-		//profanityMap.put("kisses", "smooches");
-		profanityMap.put("boobs", "privates");
-		profanityMap.put("titties", "privates");
-		profanityMap.put("nipples", "privates");
-		profanityMap.put("nipple", "privates");
-		profanityMap.put("titts", "privates");
-		profanityMap.put("tits", "privates");
-		profanityMap.put("tit", "privates");
-		profanityMap.put("whore", "harlot");
 		profanityMap.put("shit", "poop");
 		profanityMap.put("holyshit", "poop");
 		profanityMap.put("crap", "poop");
@@ -152,16 +154,24 @@ public class Utils {
 		profanityMap.put("bullshit", "bull poop");
 		profanityMap.put("dammit", "darnit");
 		profanityMap.put("damnit", "darnit");
-		profanityMap.put("nigga", "african");
-		profanityMap.put("nigger", "african");
-		profanityMap.put("niggers", "africans");
-		profanityMap.put("cum", "come");
 		profanityMap.put("horny", "happy");
 		profanityMap.put("masterbate", "play");
 		profanityMap.put("masterbated", "played");
 		profanityMap.put("masterbating", "playing");
 		profanityMap.put("testicles", "privates");
 		profanityMap.put("testicle", "privates");
+		profanityMap.put("titties", "privates");
+		profanityMap.put("nipples", "privates");
+		profanityMap.put("nipple", "privates");
+		profanityMap.put("titts", "privates");
+		profanityMap.put("tits", "privates");
+		profanityMap.put("tit", "privates");
+		profanityMap.put("b****", "girl");
+		
+		profanityMapEveryone.putAll(profanityMap);
+		profanityMapEveryone.put("sex", "gender");
+		profanityMapEveryone.put("bastard", "idiot");
+		profanityMapEveryone.put("boobs", "privates");
 	}
 	
 	public static Pattern httpRegex = Pattern.compile("\\b(?:https?|ftp|file):\\/\\/[a-z0-9-+&@#\\/%?=~_|!:,.;]*[a-z0-9-+&@#\\/%=~_|]", Pattern.CASE_INSENSITIVE);
@@ -196,7 +206,7 @@ public class Utils {
 				.allowAttributes("loop").globally()
 				.allowAttributes("poster").globally()
 				.allowUrlProtocols("http", "https", "mailto", "chat").allowElements("a")
-			    .allowAttributes("href").onElements("a").requireRelNofollowOnLinks()
+				.allowAttributes("href").onElements("a").requireRelNofollowOnLinks()
 				.toFactory();
 			sanitizer = sanitizer.and(html);
 		}
@@ -243,7 +253,7 @@ public class Utils {
 			return URLDecoder.decode(url, "UTF-8");
 		} catch (Exception exception) {
 			return "";
-		}		
+		}
 	}
 	
 	public static int random(int max) {
@@ -402,6 +412,7 @@ public class Utils {
 		while (!stream.atEnd()) {
 			String text = stream.upToAll(start);
 			if (stream.atEnd()) {
+				writer.write(text);
 				break;
 			}
 			stream.skip(start.length());
@@ -422,7 +433,7 @@ public class Utils {
 				String end = "</" + tag + ">";
 				stream.skipToAll(end, true);
 			} else {
-				stream.setPosition(position + start.length());
+				stream.setPosition(position);
 				writer.write(start);
 			}
 		}
@@ -460,10 +471,10 @@ public class Utils {
 				request.setHeader(header.getKey(), header.getValue());
 			}
 		}
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		HttpResponse response = client.execute(request, new BasicHttpContext());
 		return fetchResponse(response);
@@ -471,10 +482,10 @@ public class Utils {
 
 	public static String httpDELETE(String url) throws Exception {
 		HttpDelete request = new HttpDelete(url);
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		HttpResponse response = client.execute(request, new BasicHttpContext());
 		return fetchResponse(response);
@@ -482,71 +493,90 @@ public class Utils {
 	
 	public static String httpAuthGET(String url, String user, String password) throws Exception {		
 		HttpGet request = new HttpGet(url);
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		client.getCredentialsProvider().setCredentials(
-                new AuthScope(AuthScope.ANY),
-                new UsernamePasswordCredentials(user, password));
-        HttpResponse response = client.execute(request);
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpAuthGET(String url, String user, String password, String agent) throws Exception {		
 		HttpGet request = new HttpGet(url);
-        request.setHeader("User-Agent", agent);
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		request.setHeader("User-Agent", agent);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		client.getCredentialsProvider().setCredentials(
-                new AuthScope(AuthScope.ANY),
-                new UsernamePasswordCredentials(user, password));
-        HttpResponse response = client.execute(request);
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpAuthPOST(String url, String user, String password, String type, String data) throws Exception {
-        HttpPost request = new HttpPost(url);
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        StringEntity params = new StringEntity(data, "utf-8");
-        request.addHeader("content-type", type);
-        request.setEntity(params);
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		HttpPost request = new HttpPost(url);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		client.getCredentialsProvider().setCredentials(
-                new AuthScope(AuthScope.ANY),
-                new UsernamePasswordCredentials(user, password));
-        HttpResponse response = client.execute(request);
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpAuthPOST(String url, String user, String password, String agent, String type, String data) throws Exception {
-        HttpPost request = new HttpPost(url);
-        request.setHeader("User-Agent", agent);
-        StringEntity params = new StringEntity(data, "utf-8");
-        request.addHeader("content-type", type);
-        request.setEntity(params);
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		HttpPost request = new HttpPost(url);
+		request.setHeader("User-Agent", agent);
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		client.getCredentialsProvider().setCredentials(
-                new AuthScope(AuthScope.ANY),
-                new UsernamePasswordCredentials(user, password));
-        HttpResponse response = client.execute(request);
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpPOST(String url, String type, String data) throws Exception {
-        return httpPOST(url, type, data, null);
+		return httpPOST(url, type, data, null);
 	}
 	
 	public static String httpPOST(String url, String type, String data, Map<String, String> headers) throws Exception {
+		HttpPost request = new HttpPost(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static HttpResponse httpPOSTReturnResponse(String url, String type, String data, Map<String, String> headers) throws Exception {
         HttpPost request = new HttpPost(url);
 		if (headers != null) {
 			for (Entry<String, String> header : headers.entrySet()) {
@@ -562,84 +592,84 @@ public class Utils {
         HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
         HttpResponse response = client.execute(request);
-		return fetchResponse(response);
+		return response;
 	}
 	
 	public static String httpDELETE(String url, String type, String data) throws Exception {
-        HttpDeleteWithBody request = new HttpDeleteWithBody(url);
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        StringEntity params = new StringEntity(data, "utf-8");
-        request.addHeader("content-type", type);
-        request.setEntity(params);
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		HttpDeleteWithBody request = new HttpDeleteWithBody(url);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
-        HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpPUT(String url, String type, String data) throws Exception {
 		HttpPut request = new HttpPut(url);
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        StringEntity params = new StringEntity(data, "utf-8");
-        request.addHeader("content-type", type);
-        request.setEntity(params);
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
-        HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpAuthPOST(String url, String user, String password, Map<String, String> formParams) throws Exception {		
-        HttpPost request = new HttpPost(url);
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		HttpPost request = new HttpPost(url);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		for (Map.Entry<String, String> entry : formParams.entrySet()) {
 			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 		}
 		request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		client.getCredentialsProvider().setCredentials(
-                new AuthScope(AuthScope.ANY),
-                new UsernamePasswordCredentials(user, password));
-        HttpResponse response = client.execute(request);
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String httpPOST(String url, Map<String, String> formParams) throws Exception {		
-        return httpPOST(url, formParams, null);
+		return httpPOST(url, formParams, null);
 	}
 	
 	public static String httpPOST(String url, Map<String, String> formParams, Map<String, String> headers) throws Exception {		
-        HttpPost request = new HttpPost(url);
+		HttpPost request = new HttpPost(url);
 		if (headers != null) {
 			for (Entry<String, String> header : headers.entrySet()) {
 				request.setHeader(header.getKey(), header.getValue());
 			}
 		}
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		for (Map.Entry<String, String> entry : formParams.entrySet()) {
 			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 		}
 		request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
-        HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static String fetchResponse(HttpResponse response) throws Exception {
-        HttpEntity entity = response.getEntity();
-        String result = "";
+		HttpEntity entity = response.getEntity();
+		String result = "";
 		if (entity != null) {
 			InputStream stream = entity.getContent();
 			result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
@@ -699,26 +729,34 @@ public class Utils {
 	/**
 	 * If the word is profanity, map it to something less offensive.
 	 */
-	public static boolean checkProfanity(String text) {
+	public static boolean checkProfanity(String text, int type) {
 		if ((text == null) || text.isEmpty()) {
 			return false;
 		}
+		Map<String, String> map = profanityMap;
+		if (type == EVERYONE) {
+			map = profanityMapEveryone;
+		} else if (type == MATURE) {
+			map = profanityMapMature;
+		}
 		String lowerText = text.toLowerCase();
-		for (String profanity : profanityMap.keySet()) {
-			if (lowerText.indexOf(profanity) != -1) {
-				TextStream stream = new TextStream(lowerText);
-				while (!stream.atEnd()) {
-					String word = stream.nextWord();
-					if (word != null) {
-						if (profanityMap.containsKey(word)) {
-							return true;
-						}
-					}
+		TextStream stream = new TextStream(lowerText);
+		while (!stream.atEnd()) {
+			String word = stream.nextWord();
+			if (word != null) {
+				if (map.containsKey(word)) {
+					return true;
 				}
-				return false;
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * If the word is profanity, map it to something less offensive.
+	 */
+	public static boolean checkProfanity(String text) {
+		return checkProfanity(text, TEEN);
 	}
 	
 	/**
@@ -804,18 +842,18 @@ public class Utils {
 			StringBuffer sb = new StringBuffer();
 			while (matcher.find()) {
 				String url = matcher.group();
-		    	if (url.indexOf(".png") != -1 || url.indexOf(".jpg") != -1 || url.indexOf(".jpeg") != -1 || url.indexOf(".gif") != -1
-		    			|| url.indexOf(".PNG") != -1 || url.indexOf(".JPG") != -1 || url.indexOf(".JPEG") != -1 || url.indexOf(".GIF") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><img src='" + url + "' style='max-height:300;'></a>";
-		    	} else if (url.indexOf(".mp4") != -1 || url.indexOf(".webm") != -1 || url.indexOf(".ogg") != -1
-		    			|| url.indexOf(".MP4") != -1 || url.indexOf(".WEBM") != -1 || url.indexOf(".OGG") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><video src='" + url + "' style='max-height:300;'></a>";
-		    	} else if (url.indexOf(".wav") != -1 || url.indexOf(".mp3") != -1
-		    			|| url.indexOf(".WAV") != -1 || url.indexOf(".MP3") != -1) {
-		    		url = "<a href='" + url + "' target='_blank'><audio src='" + url + "' controls>audio</a>";
-		    	} else {
-		    		url = "<a href='" + url + "' target='_blank'>" + url + "</a>";
-		    	}
+				if (url.indexOf(".png") != -1 || url.indexOf(".jpg") != -1 || url.indexOf(".jpeg") != -1 || url.indexOf(".gif") != -1
+						|| url.indexOf(".PNG") != -1 || url.indexOf(".JPG") != -1 || url.indexOf(".JPEG") != -1 || url.indexOf(".GIF") != -1) {
+					url = "<a href='" + url + "' target='_blank'><img src='" + url + "' style='max-height:300;'></a>";
+				} else if (url.indexOf(".mp4") != -1 || url.indexOf(".webm") != -1 || url.indexOf(".ogg") != -1
+						|| url.indexOf(".MP4") != -1 || url.indexOf(".WEBM") != -1 || url.indexOf(".OGG") != -1) {
+					url = "<a href='" + url + "' target='_blank'><video src='" + url + "' style='max-height:300;'></a>";
+				} else if (url.indexOf(".wav") != -1 || url.indexOf(".mp3") != -1
+						|| url.indexOf(".WAV") != -1 || url.indexOf(".MP3") != -1) {
+					url = "<a href='" + url + "' target='_blank'><audio src='" + url + "' controls>audio</a>";
+				} else {
+					url = "<a href='" + url + "' target='_blank'>" + url + "</a>";
+				}
 				matcher.appendReplacement(sb, url);
 			}
 			matcher.appendTail(sb);
@@ -830,14 +868,14 @@ public class Utils {
 			matcher.appendTail(sb);
 			text = sb.toString();
 		}
-	    
-	    // http://, https://, ftp://
-	    //var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+		
+		// http://, https://, ftp://
+		//var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
 
-	    // www. 
-	    // var wwwPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+		// www. 
+		// var wwwPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
-	    // name@domain.com
+		// name@domain.com
 		if (email) {
 			Matcher matcher = emailRegex.matcher(text);
 			StringBuffer sb = new StringBuffer();
@@ -912,18 +950,18 @@ public class Utils {
 		return Helper.timestampFromString(value);
 	}
 
-    public static String buildZeroPrefixAndTruncTrailZeros(int number, int totalDigits) {
-        String zeros = "000000000";
-        String numbString = Integer.toString(number);
-        numbString = zeros.substring(0, (totalDigits - numbString.length())) + numbString;
-        char[] numbChar = new char[numbString.length()];
-        numbString.getChars(0, numbString.length(), numbChar, 0);
-        int truncIndex = totalDigits - 1;
-        while (numbChar[truncIndex] == '0') {
-            truncIndex--;
-        }
-        return new String(numbChar, 0, truncIndex + 1);
-    }
+	public static String buildZeroPrefixAndTruncTrailZeros(int number, int totalDigits) {
+		String zeros = "000000000";
+		String numbString = Integer.toString(number);
+		numbString = zeros.substring(0, (totalDigits - numbString.length())) + numbString;
+		char[] numbChar = new char[numbString.length()];
+		numbString.getChars(0, numbString.length(), numbChar, 0);
+		int truncIndex = totalDigits - 1;
+		while (numbChar[truncIndex] == '0') {
+			truncIndex--;
+		}
+		return new String(numbChar, 0, truncIndex + 1);
+	}
 	
 	/**
 	 * Parse the date of the format.
@@ -985,6 +1023,16 @@ public class Utils {
 		}
 		return Helper.printTimestamp(new Timestamp(date.getTime()));
 	}
+
+	/**
+	 * Print the date in the form, "yyyy-MM-dd".
+	 */
+	public static String printSQLDate(Date date) {
+		if (date == null) {
+			return "";
+		}
+		return Helper.printDate(new java.sql.Date(date.getTime()));
+	}
 	
 	public static void sleep(int millis) {
 		try {
@@ -1039,9 +1087,9 @@ public class Utils {
 			encoding = "UTF-8";
 		}
 
-	    // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
-	    String UTF8_BOM = "\uFEFF";
-	    
+		// FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
+		String UTF8_BOM = "\uFEFF";
+		
 		StringWriter writer = new StringWriter();
 		InputStreamReader reader = null;
 		try {
@@ -1227,7 +1275,7 @@ public class Utils {
 			return bytesToHex(ciphertext);
 		} catch (Exception failed) {
 			return null;
-		}		
+		}
 	}
 	
 	public static String decrypt(String key, String ciphertext) {
@@ -1249,23 +1297,23 @@ public class Utils {
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 	
 	public static String bytesToHex(byte[] bytes) {
-	    char[] hexChars = new char[bytes.length * 2];
-	    for ( int j = 0; j < bytes.length; j++ ) {
-	        int v = bytes[j] & 0xFF;
-	        hexChars[j * 2] = hexArray[v >>> 4];
-	        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-	    }
-	    return new String(hexChars);
+		char[] hexChars = new char[bytes.length * 2];
+		for ( int j = 0; j < bytes.length; j++ ) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = hexArray[v >>> 4];
+			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+		}
+		return new String(hexChars);
 	}
 	
 	public static byte[] hexToBytes(String s) {
-	    int len = s.length();
-	    byte[] data = new byte[len / 2];
-	    for (int i = 0; i < len; i += 2) {
-	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-	                             + Character.digit(s.charAt(i+1), 16));
-	    }
-	    return data;
+		int len = s.length();
+		byte[] data = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+								 + Character.digit(s.charAt(i+1), 16));
+		}
+		return data;
 	}
 	
 	private final static char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
@@ -1273,67 +1321,67 @@ public class Utils {
 	private static int[]  toInt   = new int[128];
 	
 	static {
-	    for(int i=0; i< ALPHABET.length; i++){
-	        toInt[ALPHABET[i]]= i;
-	    }
+		for(int i=0; i< ALPHABET.length; i++){
+			toInt[ALPHABET[i]]= i;
+		}
 	}
 	
 	public static String encodeBase64(byte[] buf){
-	    int size = buf.length;
-	    char[] ar = new char[((size + 2) / 3) * 4];
-	    int a = 0;
-	    int i=0;
-	    while(i < size){
-	        byte b0 = buf[i++];
-	        byte b1 = (i < size) ? buf[i++] : 0;
-	        byte b2 = (i < size) ? buf[i++] : 0;
+		int size = buf.length;
+		char[] ar = new char[((size + 2) / 3) * 4];
+		int a = 0;
+		int i=0;
+		while(i < size){
+			byte b0 = buf[i++];
+			byte b1 = (i < size) ? buf[i++] : 0;
+			byte b2 = (i < size) ? buf[i++] : 0;
 	
-	        int mask = 0x3F;
-	        ar[a++] = ALPHABET[(b0 >> 2) & mask];
-	        ar[a++] = ALPHABET[((b0 << 4) | ((b1 & 0xFF) >> 4)) & mask];
-	        ar[a++] = ALPHABET[((b1 << 2) | ((b2 & 0xFF) >> 6)) & mask];
-	        ar[a++] = ALPHABET[b2 & mask];
-	    }
-	    switch(size % 3){
-	        case 1: ar[--a]  = '=';
-	        case 2: ar[--a]  = '=';
-	    }
-	    return new String(ar);
+			int mask = 0x3F;
+			ar[a++] = ALPHABET[(b0 >> 2) & mask];
+			ar[a++] = ALPHABET[((b0 << 4) | ((b1 & 0xFF) >> 4)) & mask];
+			ar[a++] = ALPHABET[((b1 << 2) | ((b2 & 0xFF) >> 6)) & mask];
+			ar[a++] = ALPHABET[b2 & mask];
+		}
+		switch(size % 3){
+			case 1: ar[--a]  = '=';
+			case 2: ar[--a]  = '=';
+		}
+		return new String(ar);
 	}
 	
    public static byte[] decodeBase64(String s){
-        int delta = s.endsWith( "==" ) ? 2 : s.endsWith( "=" ) ? 1 : 0;
-        byte[] buffer = new byte[s.length()*3/4 - delta];
-        int mask = 0xFF;
-        int index = 0;
-        for(int i=0; i< s.length(); i+=4){
-            int c0 = toInt[s.charAt( i )];
-            int c1 = toInt[s.charAt( i + 1)];
-            buffer[index++]= (byte)(((c0 << 2) | (c1 >> 4)) & mask);
-            if(index >= buffer.length){
-                return buffer;
-            }
-            int c2 = toInt[s.charAt( i + 2)];
-            buffer[index++]= (byte)(((c1 << 4) | (c2 >> 2)) & mask);
-            if(index >= buffer.length){
-                return buffer;
-            }
-            int c3 = toInt[s.charAt( i + 3 )];
-            buffer[index++]= (byte)(((c2 << 6) | c3) & mask);
-        }
-        return buffer;
-    }
+		int delta = s.endsWith( "==" ) ? 2 : s.endsWith( "=" ) ? 1 : 0;
+		byte[] buffer = new byte[s.length()*3/4 - delta];
+		int mask = 0xFF;
+		int index = 0;
+		for(int i=0; i< s.length(); i+=4){
+			int c0 = toInt[s.charAt( i )];
+			int c1 = toInt[s.charAt( i + 1)];
+			buffer[index++]= (byte)(((c0 << 2) | (c1 >> 4)) & mask);
+			if(index >= buffer.length){
+				return buffer;
+			}
+			int c2 = toInt[s.charAt( i + 2)];
+			buffer[index++]= (byte)(((c1 << 4) | (c2 >> 2)) & mask);
+			if(index >= buffer.length){
+				return buffer;
+			}
+			int c3 = toInt[s.charAt( i + 3 )];
+			buffer[index++]= (byte)(((c2 << 6) | c3) & mask);
+		}
+		return buffer;
+	}
 	
 	public static InputStream openStream(URL url) throws IOException {
-	    return openStream(url, URL_TIMEOUT);
+		return openStream(url, URL_TIMEOUT);
 	}
 	
 	public static InputStream openStream(URL url, int timeout) throws IOException {
-	    URLConnection connection = url.openConnection();
-	    connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-	    connection.setConnectTimeout(timeout);
-	    connection.setReadTimeout(timeout);
-	    return connection.getInputStream();
+		URLConnection connection = url.openConnection();
+		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		connection.setConnectTimeout(timeout);
+		connection.setReadTimeout(timeout);
+		return connection.getInputStream();
 	}
 	
 	public static byte[] createThumb(byte[] image, int size) {
@@ -1370,7 +1418,7 @@ public class Utils {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			ImageIO.write(thumb, "jpg", output);
 			return output.toByteArray();
-		} catch (IOException exception) {
+		} catch (Throwable exception) {
 			exception.printStackTrace();
 			return null;
 		}

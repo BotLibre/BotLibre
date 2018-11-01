@@ -122,6 +122,12 @@
 				<implementation-class>org.botlibre.sense.kik.Kik</implementation-class>
 			</sense>
 			<sense>
+				<implementation-class>org.botlibre.sense.alexa.Alexa</implementation-class>
+			</sense>
+			<sense>
+				<implementation-class>org.botlibre.sense.google.GoogleAssistant</implementation-class>
+			</sense>
+			<sense>
 				<implementation-class>org.botlibre.sense.vision.Vision</implementation-class>
 			</sense>
 			<sense>

@@ -160,6 +160,21 @@ public class TestUnderstanding extends TextTest {
 		response = waitForOutput(output);
 		assertFalse(response);
 		assertKeyword(response, "a cat");
+		
+		text.input("are you a dog");
+		response = waitForOutput(output);
+		assertFalse(response);
+		assertKeyword(response, "I am not a dog");
+		
+		text.input("you are a dog");
+		response = waitForOutput(output);
+		assertKnown(response);
+		assertKeyword(response, "I am a dog");
+		
+		text.input("are you a dog");
+		response = waitForOutput(output);
+		assertTrue(response);
+		assertKeyword(response, "I am a dog");
 
 		bot.shutdown();
 	}
@@ -180,43 +195,43 @@ public class TestUnderstanding extends TextTest {
 		String response = waitForOutput(output);
 		assertKnown(response);
 		
-		text.input("is the grass very very green?");
+		text.input("is the grass very green?");
 		response = waitForOutput(output);
 		assertUncertain(response);
-		assertKeyword(response, "very very green");
+		assertKeyword(response, "very green");
 		
-		text.input("the grass is very very green");
+		text.input("the grass is very green");
 		response = waitForOutput(output);
 		assertKnown(response);
-		assertKeyword(response, "very very green");
+		assertKeyword(response, "very green");
 		
-		text.input("is the grass very very green?");
+		text.input("is the grass very green?");
 		response = waitForOutput(output);
 		assertTrue(response);
-		assertKeyword(response, "the grass is very very green");
+		assertKeyword(response, "the grass is very green");
 		
-		text.input("what is very very green?");
-		response = waitForOutput(output);
-		assertKeyword(response, "grass is very very green");
+		//text.input("what is very green?");
+		//response = waitForOutput(output);
+		//assertKeyword(response, "grass is very green");
 		
-		text.input("grass is not very very green");
-		response = waitForOutput(output);
-		assertKnown(response);
-		assertKeyword(response, "grass is not very very green");
-		
-		text.input("what is very very green?");
-		response = waitForOutput(output);
-		assertUnknown(response);
-		
-		text.input("I am a very nice human");
+		text.input("grass is not very green");
 		response = waitForOutput(output);
 		assertKnown(response);
-		assertKeyword(response, "a very nice human");
+		assertKeyword(response, "grass is not very green");
 		
-		text.input("am I a very nice human?");
+		//text.input("what is very green?");
+		//response = waitForOutput(output);
+		//assertUnknown(response);
+		
+		text.input("I am a nice human");
 		response = waitForOutput(output);
-		assertTrue(response);
-		assertKeyword(response, "a very nice human");
+		assertKnown(response);
+		assertKeyword(response, "a nice human");
+		
+		//text.input("am I a nice human?");
+		//response = waitForOutput(output);
+		//assertTrue(response);
+		//assertKeyword(response, "a nice human");
 		
 		text.input("am I a human?");
 		response = waitForOutput(output);

@@ -1035,6 +1035,98 @@ public class TestAIML2 extends TextTest {
 		bot.shutdown();		
 	}
 
+	/**
+	 * Test regular expression patterns.
+	 */
+	@org.junit.Test
+	public void testRegex() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		bot.setDebugLevel(Level.FINER);
+		
+		// Chatlogs do not support full patterns.
+		if (!isChatLog()) {
+			text.input("1234");
+			String response = waitForOutput(output);
+			checkResponse(response, "number");
+	
+			text.input("9");
+			response = waitForOutput(output);
+			checkResponse(response, "number");
+	
+			text.input("3.14");
+			response = waitForOutput(output);
+			checkResponse(response, "float");
+	
+			text.input("-100");
+			response = waitForOutput(output);
+			checkResponse(response, "float");
+	
+			text.input("1,000,000");
+			response = waitForOutput(output);
+			checkResponse(response, "numeric");
+	
+			text.input("1,235.55");
+			response = waitForOutput(output);
+			checkResponse(response, "numeric");
+	
+			text.input("foo@email.com");
+			response = waitForOutput(output);
+			checkResponse(response, "email");
+		}
+
+		text.input("another foo@email.com");
+		String response = waitForOutput(output);
+		checkResponse(response, "email");
+
+		text.input("another 3.14");
+		response = waitForOutput(output);
+		checkResponse(response, "number");
+
+		text.input("another http://www.email.com");
+		response = waitForOutput(output);
+		checkResponse(response, "url");
+
+		text.input("12 / 6");
+		response = waitForOutput(output);
+		checkResponse(response, "2");
+
+		text.input("10 / 2");
+		response = waitForOutput(output);
+		checkResponse(response, "5");
+
+		text.input("10 * 2");
+		response = waitForOutput(output);
+		checkResponse(response, "20");
+
+		text.input("what is 4 * 2");
+		response = waitForOutput(output);
+		checkResponse(response, "8");
+
+		text.input("4 * 2 is how much?");
+		response = waitForOutput(output);
+		checkResponse(response, "8");
+
+		text.input("tell me 4 * 2 is how much?");
+		response = waitForOutput(output);
+		checkResponse(response, "8");
+
+		if (!isChatLog()) {
+			text.input("what is a horse");
+			response = waitForOutput(output);
+			checkResponse(response, "I have no idea what a horse is.");
+	
+			text.input("What is a horse?");
+			response = waitForOutput(output);
+			checkResponse(response, "I have no idea what a horse is.");
+		}
+		
+		bot.shutdown();
+	}
+
 	@AfterClass
 	public static void tearDown() throws Exception {
 		shutdown();

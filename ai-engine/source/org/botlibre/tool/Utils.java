@@ -19,6 +19,8 @@ package org.botlibre.tool;
 
 import java.io.StringWriter;
 import java.math.BigInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Vertex;
@@ -57,6 +59,43 @@ public class Utils extends BasicTool {
 
 	public Vertex lowercase(Vertex source, Vertex text) {
 		return text.getNetwork().createVertex(text.printString().toLowerCase());
+	}
+
+	/**
+	 * Convert the pattern to a regex and return if the text matches the expression.
+	 */
+	public Vertex matches(Vertex source, Vertex text, Vertex pattern) {
+		if (pattern.isPrimitive()) {
+			pattern = pattern.getRelationship(Primitive.REGEX);
+			if (pattern == null) {
+				return null;
+			}
+		}
+		if (text.printString().matches(pattern.printString())) {
+			return source.getNetwork().createVertex(Primitive.TRUE);
+		} else {
+			return source.getNetwork().createVertex(Primitive.FALSE);
+		}
+	}
+
+	/**
+	 * Convert the pattern to a regex and extra the first match from the text.
+	 */
+	public Vertex extract(Vertex source, Vertex text, Vertex pattern) {
+		try {
+			if (pattern.isPrimitive()) {
+				pattern = pattern.getRelationship(Primitive.REGEX);
+				if (pattern == null) {
+					return null;
+				}
+			}
+			Pattern p = Pattern.compile(pattern.printString());
+			Matcher m = p.matcher(text.printString());
+			if (m.find()) {
+				return source.getNetwork().createVertex(m.group());
+			}
+		} catch (Exception exception) { }
+		return null;
 	}
 
 	public Vertex sentence(Vertex source, Vertex text) {

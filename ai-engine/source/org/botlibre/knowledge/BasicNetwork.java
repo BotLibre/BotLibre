@@ -37,6 +37,7 @@ import org.botlibre.api.knowledge.Data;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.thought.consciousness.Consciousness;
 
 /**
  * An interconnected set of vertices,
@@ -82,7 +83,11 @@ public class BasicNetwork extends AbstractNetwork {
 	}
 	
 	public void resume() {
-		getBot().log(this, "Resuming", Bot.FINE, this);
+		this.bot.log(this, "Resuming", Bot.FINE, this);
+		if (!this.bot.mind().getThought(Consciousness.class).isEnabled()) {
+			clear();
+			return;
+		}
 		Set<Vertex> newVertices = new HashSet<Vertex>(Math.max(this.vertices.size(), MAX_SIZE));
 		// Shrink to fixed size.
 		int level = 1;

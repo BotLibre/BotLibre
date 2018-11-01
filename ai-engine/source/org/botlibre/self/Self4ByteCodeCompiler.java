@@ -484,7 +484,7 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 					ensureNext(':', stream);
 					Vertex attributeValue = parseElement(stream, elements, debug, network);
 					// Need to pin literals.
-					attributeValue.setPinned(true);
+					pin(attributeValue);
 					attributeValue.getRelationship(Primitive.NULL);
 					if (object == null) {
 						if (attribute.equals("#data")) {
@@ -1302,7 +1302,20 @@ public class Self4ByteCodeCompiler extends Self4Compiler {
 			dataStream.writeLong(0l);
 		} else if (next.equals(TEMPLATE) || next.equals(ANSWER)) {
 			dataStream.writeLong(network.createVertex(Primitive.TEMPLATE).getId());
-			parseElementByteCode(stream, dataStream, elements, debug, network);
+			stream.skipWhitespace();
+			if (stream.peek() == '"') {
+				stream.skip();
+				String string = stream.nextStringWithBracketsDoubleQuotes();
+				if (string.contains("{") && string.contains("}")) {
+					// Auto create template if contains code.
+					Vertex template = network.createTemplate("Template(\"" + string + "\")");
+					dataStream.writeLong(template.getId());
+				} else {
+					dataStream.writeLong(network.createVertex(string).getId());
+				}
+			} else {
+				parseElementByteCode(stream, dataStream, elements, debug, network);
+			}
 		} else {
 			stream.setPosition(stream.getPosition() - next.length());
 			throw new SelfParseException("expected one of GOTO, TEMPLATE, RETURN, THAT, TOPIC, found: " + next, stream);

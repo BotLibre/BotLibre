@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -295,27 +295,27 @@ public class Twitter extends BasicSense {
 	public RequestToken authorizeAccount() throws TwitterException {
 		twitter4j.Twitter twitter = new TwitterFactory().getInstance();
 		twitter.setOAuthConsumer(getOauthKey(), getOauthSecret());
-	    RequestToken requestToken = twitter.getOAuthRequestToken();
-	    setConnection(twitter);
-	    return requestToken;
+		RequestToken requestToken = twitter.getOAuthRequestToken();
+		setConnection(twitter);
+		return requestToken;
 	}
 	
 	/**
 	 * Authorise a new account to be accessible by Bot.
 	 */
 	public void authorizeComplete() throws TwitterException {
-	    AccessToken token = getConnection().getOAuthAccessToken();
-	    setToken(token.getToken());
-	    setTokenSecret(token.getTokenSecret());
+		AccessToken token = getConnection().getOAuthAccessToken();
+		setToken(token.getToken());
+		setTokenSecret(token.getTokenSecret());
 	}
 	
 	/**
 	 * Authorise a new account to be accessible by Bot.
 	 */
 	public void authorizeComplete(String pin) throws TwitterException {
-	    AccessToken token = getConnection().getOAuthAccessToken(pin);
-	    setToken(token.getToken());
-	    setTokenSecret(token.getTokenSecret());
+		AccessToken token = getConnection().getOAuthAccessToken(pin);
+		setToken(token.getToken());
+		setTokenSecret(token.getTokenSecret());
 	}
 	
 	/**
@@ -341,7 +341,7 @@ public class Twitter extends BasicSense {
 					this.tokenSecret = Utils.decrypt(Utils.KEY, data.substring(2, data.length()));
 				} catch (Exception exception) {
 					this.tokenSecret = data;
-				}				
+				}
 			} else {
 				this.tokenSecret = data;
 			}
@@ -786,7 +786,7 @@ public class Twitter extends BasicSense {
 		//twitter4j.Twitter twitter = new TwitterFactory().getInstance(accessToken);
 		//twitter4j.Twitter twitter = new TwitterFactory().getInstance(getOauthKey(), getOauthSecret(), accessToken);
 		//twitter4j.Twitter twitter = new TwitterFactory().getInstance(getUsername(), getPassword());
-        setConnection(twitter);
+		setConnection(twitter);
 	}
 
 	/**
@@ -874,91 +874,91 @@ public class Twitter extends BasicSense {
 					break;
 				}
 				log("Processing status", Level.INFO, timeline.size());
-			    for (int index = timeline.size() - 1; index >= 0; index--) {
-				    if (count >= this.maxStatus) {
-				    	break;
-				    }
-			    	if (this.errors > this.maxErrors) {
-			    		break;
-			    	}
-			    	Status status = timeline.get(index);
-			    	String name = status.getUser().getScreenName();
-			    	if (!name.equals(this.userName)) {
-			    		long statusTime = status.getCreatedAt().getTime();
-			    		long statusId = status.getId();
-				    	if (statusId > max) {
-				    		max = statusId;
-				    	}
-				    	if ((System.currentTimeMillis() - statusTime) > DAY) {
+				for (int index = timeline.size() - 1; index >= 0; index--) {
+					if (count >= this.maxStatus) {
+						break;
+					}
+					if (this.errors > this.maxErrors) {
+						break;
+					}
+					Status status = timeline.get(index);
+					String name = status.getUser().getScreenName();
+					if (!name.equals(this.userName)) {
+						long statusTime = status.getCreatedAt().getTime();
+						long statusId = status.getId();
+						if (statusId > max) {
+							max = statusId;
+						}
+						if ((System.currentTimeMillis() - statusTime) > DAY) {
 							log("Day old status", Level.INFO, statusId, statusTime);
-				    		more = false;
-				    		continue;
-				    	}
-				    	if (statusId > last) {
-				    		if (Utils.checkProfanity(status.getText())) {
-				    			continue;
-				    		}
-					    	boolean match = false;
-				    		List<String> statusWords = new TextStream(status.getText().toLowerCase()).allWords();
-					    	if (getListenStatus()) {
-					    		this.languageState = LanguageState.Listening;
-				    			match = true;
-					    	} else {
-						    	for (String text : getStatusKeywords()) {
-						    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-						    		if (!keywords.isEmpty() && statusWords.containsAll(keywords)) {
-						    			match = true;
-						    			break;
-						    		}
-						    	}
-					    	}
-					    	if (getLearn()) {
-					    		learnTweet(status, true, true, memory);
-					    	}
-					    	if (match) {
-					    		count++;
-							    input(status);
-							    Utils.sleep(500);
-					    	} else {
+							more = false;
+							continue;
+						}
+						if (statusId > last) {
+							if (Utils.checkProfanity(status.getText())) {
+								continue;
+							}
+							boolean match = false;
+							List<String> statusWords = new TextStream(status.getText().toLowerCase()).allWords();
+							if (getListenStatus()) {
+								this.languageState = LanguageState.Listening;
+								match = true;
+							} else {
+								for (String text : getStatusKeywords()) {
+									List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+									if (!keywords.isEmpty() && statusWords.containsAll(keywords)) {
+										match = true;
+										break;
+									}
+								}
+							}
+							if (getLearn()) {
+								learnTweet(status, true, true, memory);
+							}
+							if (match) {
+								count++;
+								input(status);
+								Utils.sleep(500);
+							} else {
 								log("Skipping status, missing keywords", Level.FINE, status.getText());
-					    		if (!status.isRetweet() && !status.getUser().isProtected() && !status.isRetweetedByMe()) {
-					    			boolean retweeted = false;
+								if (!status.isRetweet() && !status.getUser().isProtected() && !status.isRetweetedByMe()) {
+									boolean retweeted = false;
 									// Check retweet.
-						    		for (String keywords : getRetweet()) {
+									for (String keywords : getRetweet()) {
 										List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
-								    	if (!keyWords.isEmpty()) {
-								    		if (statusWords.containsAll(keyWords)) {
-								    			retweeted = true;
-									    		count++;
-								    			retweet(status);
-											    Utils.sleep(500);
-								    			break;
-								    		}
-								    	}
-						    		}
-						    		if (!retweeted) {
-										log("Skipping rewteet, missing keywords", Level.FINE, status.getText());						    			
-						    		}
-					    		} else if (!getRetweet().isEmpty()) {
-					    			if (status.isRetweet()) {
+										if (!keyWords.isEmpty()) {
+											if (statusWords.containsAll(keyWords)) {
+												retweeted = true;
+												count++;
+												retweet(status);
+												Utils.sleep(500);
+												break;
+											}
+										}
+									}
+									if (!retweeted) {
+										log("Skipping rewteet, missing keywords", Level.FINE, status.getText());										
+									}
+								} else if (!getRetweet().isEmpty()) {
+									if (status.isRetweet()) {
 										log("Skipping rewteet", Level.FINE, status.getText());
-					    			} else if (status.getUser().isProtected()) {
+									} else if (status.getUser().isProtected()) {
 										log("Skipping protected user", Level.FINE, status.getText());
-					    			} else if (status.isRetweetedByMe()) {
+									} else if (status.isRetweetedByMe()) {
 										log("Skipping already retweeted", Level.FINE, status.getText());
-					    			}
-					    		}
-					    	}
-				    	} else {
-							log("Old status", Level.INFO, statusId, statusTime);				    		
-				    	}
-			    	}
-			    }
+									}
+								}
+							}
+						} else {
+							log("Old status", Level.INFO, statusId, statusTime);							
+						}
+					}
+				}
 			}
-		    if (max != 0) {
+			if (max != 0) {
 				twitter.setRelationship(Primitive.LASTTIMELINE, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -984,40 +984,40 @@ public class Twitter extends BasicSense {
 			SearchResource search = getConnection().search();
 			QueryResult result = search.search(query);
 			List<Status> tweets = result.getTweets();
-		    if (tweets != null) {
+			if (tweets != null) {
 				log("Processing search results", Level.INFO, tweets.size(), tweetSearch);
-			    for (Status tweet : tweets) {
-			    	if (count > maxSearch) {
+				for (Status tweet : tweets) {
+					if (count > maxSearch) {
 						log("Max search results processed", Level.INFO, maxSearch);
-			    		break;
-			    	}
-			    	if (!processed.contains(tweet.getId())) {
+						break;
+					}
+					if (!processed.contains(tweet.getId())) {
 						log("Processing search result", Level.INFO, tweet.getUser().getScreenName(), tweetSearch, tweet.getText());
-			    		processed.add(tweet.getId());
-			    		learnTweet(tweet, processTweets, processReplies, memory);
+						processed.add(tweet.getId());
+						learnTweet(tweet, processTweets, processReplies, memory);
 						count++;
-			    	}
-			    }
-		    	memory.save();
+					}
+				}
+				memory.save();
 			}
-		    // Search only returns 7 days, search for users as well.
-		    TextStream stream = new TextStream(tweetSearch);
-		    while (!stream.atEnd()) {
-		    	stream.skipToAll("from:", true);
-		    	if (stream.atEnd()) {
-		    		break;
-		    	}
-	    		String user = stream.nextWord();
-    			String arg[] = new String[1];
-    			arg[0] = user;
-    			ResponseList<User> users = getConnection().lookupUsers(arg);
-    			if (!users.isEmpty()) {
-    				long id = users.get(0).getId();
-    				boolean more = true;
-    				int page = 1;
-    				while (more) {
-	    				Paging pageing = new Paging(page);
-	    				ResponseList<Status> timeline = getConnection().getUserTimeline(id, pageing);
+			// Search only returns 7 days, search for users as well.
+			TextStream stream = new TextStream(tweetSearch);
+			while (!stream.atEnd()) {
+				stream.skipToAll("from:", true);
+				if (stream.atEnd()) {
+					break;
+				}
+				String user = stream.nextWord();
+				String arg[] = new String[1];
+				arg[0] = user;
+				ResponseList<User> users = getConnection().lookupUsers(arg);
+				if (!users.isEmpty()) {
+					long id = users.get(0).getId();
+					boolean more = true;
+					int page = 1;
+					while (more) {
+						Paging pageing = new Paging(page);
+						ResponseList<Status> timeline = getConnection().getUserTimeline(id, pageing);
 						if ((timeline == null) || (timeline.size() < 20)) {
 							more = false;
 						}
@@ -1027,27 +1027,27 @@ public class Twitter extends BasicSense {
 							break;
 						}
 						log("Processing user timeline", Level.INFO, user, timeline.size());
-					    for (int index = timeline.size() - 1; index >= 0; index--) {
-						    if (count >= maxSearch) {
+						for (int index = timeline.size() - 1; index >= 0; index--) {
+							if (count >= maxSearch) {
 								more = false;
-						    	break;
-						    }
-					    	Status tweet = timeline.get(index);
-					    	if (!processed.contains(tweet.getId())) {
+								break;
+							}
+							Status tweet = timeline.get(index);
+							if (!processed.contains(tweet.getId())) {
 								log("Processing user timeline result", Level.INFO, tweet.getUser().getScreenName(), tweet.getText());
-					    		processed.add(tweet.getId());
-					    		learnTweet(tweet, processTweets, processReplies, memory);
+								processed.add(tweet.getId());
+								learnTweet(tweet, processTweets, processReplies, memory);
 								count++;
-					    	}
-		    			}
-				    	memory.save();
-    				}
-				    if (count >= maxSearch) {
+							}
+						}
+						memory.save();
+					}
+					if (count >= maxSearch) {
 						log("Max search results processed", Level.INFO, maxSearch);
-				    	break;
-				    }
-		    	}
-		    }
+						break;
+					}
+				}
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1075,27 +1075,27 @@ public class Twitter extends BasicSense {
 				return;
 			}
 			log("Processing status", Level.INFO, timeline.size());
-		    for (int index = timeline.size() - 1; index >= 0; index--) {
-		    	Status tweet = timeline.get(index);
-	    		long statusTime = tweet.getCreatedAt().getTime();
-	    		long statusId = tweet.getId();
-		    	if (statusId > max) {
-		    		max = statusId;
-		    	}
-		    	if ((System.currentTimeMillis() - statusTime) > DAY) {
+			for (int index = timeline.size() - 1; index >= 0; index--) {
+				Status tweet = timeline.get(index);
+				long statusTime = tweet.getCreatedAt().getTime();
+				long statusId = tweet.getId();
+				if (statusId > max) {
+					max = statusId;
+				}
+				if ((System.currentTimeMillis() - statusTime) > DAY) {
 					log("Day old status", Level.INFO, statusId, statusTime);
-		    		continue;
-		    	}
-		    	if (statusId > last) {
-		    		learnTweet(tweet, true, true, memory);
-		    	} else {
-					log("Old status", Level.INFO, statusId, statusTime);				    		
-		    	}
-		    }
-		    if (max != 0) {
+					continue;
+				}
+				if (statusId > last) {
+					learnTweet(tweet, true, true, memory);
+				} else {
+					log("Old status", Level.INFO, statusId, statusTime);							
+				}
+			}
+			if (max != 0) {
 				twitter.setRelationship(Primitive.LASTTIMELINE, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1103,23 +1103,23 @@ public class Twitter extends BasicSense {
 	
 	public void learnTweet(Status tweet, boolean processTweets, boolean processReplies, Network memory) throws Exception {
 		String text = tweet.getText();
-    	// Exclude retweets
-    	if (tweet.isRetweet()) {
+		// Exclude retweets
+		if (tweet.isRetweet()) {
 			log("Tweet is retweet", Level.FINER, tweet.getText());
 			return;
-    	}
+		}
 		if (Utils.checkProfanity(text)) {
 			log("Ignoring profanity", Level.INFO, text);
 			return;
 		}
-    	// Exclude protected
-    	if (tweet.getUser().isProtected() && !tweet.getUser().getScreenName().equals(getUserName())) {
+		// Exclude protected
+		if (tweet.getUser().isProtected() && !tweet.getUser().getScreenName().equals(getUserName())) {
 			log("Tweet is protected", Level.FINER, tweet.getText());
-    		return;
-    	}
+			return;
+		}
 		log("Learning status", Level.INFO, text);
-    	// Exclude replies/mentions
-    	if (tweet.getText().indexOf('@') != -1) {
+		// Exclude replies/mentions
+		if (tweet.getText().indexOf('@') != -1) {
 			log("Tweet is reply", Level.FINER, tweet.getText());
 			if (!processReplies) {
 				return;
@@ -1150,8 +1150,8 @@ public class Twitter extends BasicSense {
 				}
 				
 			}
-    		return;
-    	}
+			return;
+		}
 		if (!processTweets) {
 			return;
 		}
@@ -1201,35 +1201,35 @@ public class Twitter extends BasicSense {
 					break;
 				}
 				log("Processing mentions", Level.FINE, mentions.size());
-			    for (int index = mentions.size() - 1; index >= 0; index--) {
-			    	Status tweet = mentions.get(index);
-		    		long statusTime = tweet.getCreatedAt().getTime();
-			    	long statusId = tweet.getId();
-			    	if (statusId > max) {
-			    		max = statusId;
-			    	}
-			    	if ((System.currentTimeMillis() - statusTime) > DAY) {
+				for (int index = mentions.size() - 1; index >= 0; index--) {
+					Status tweet = mentions.get(index);
+					long statusTime = tweet.getCreatedAt().getTime();
+					long statusId = tweet.getId();
+					if (statusId > max) {
+						max = statusId;
+					}
+					if ((System.currentTimeMillis() - statusTime) > DAY) {
 						log("Day old mention", Level.INFO, statusId, statusTime);
-			    		more = false;
-			    		continue;
-			    	}
-			    	// Exclude self
-			    	if (tweet.getUser().getScreenName().equals(getUserName())) {
-			    		continue;
-			    	}
-			    	if (statusId > last) {
+						more = false;
+						continue;
+					}
+					// Exclude self
+					if (tweet.getUser().getScreenName().equals(getUserName())) {
+						continue;
+					}
+					if (statusId > last) {
 						log("Processing mention", Level.INFO, tweet.getText(), tweet.getUser().getScreenName());
-					    input(tweet);
-					    Utils.sleep(100);
-			    	} else {
-						log("Old mention", Level.INFO, statusId, statusTime);				    		
-			    	}
-			    }
+						input(tweet);
+						Utils.sleep(100);
+					} else {
+						log("Old mention", Level.INFO, statusId, statusTime);							
+					}
+				}
 			}
-		    if (max != 0) {
+			if (max != 0) {
 				twitter.setRelationship(Primitive.LASTMENTION, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1269,98 +1269,98 @@ public class Twitter extends BasicSense {
 				SearchResource search = getConnection().search();
 				QueryResult result = search.search(query);
 				List<Status> tweets = result.getTweets();
-			    if (tweets != null) {
+				if (tweets != null) {
 					log("Processing search results", Level.FINE, tweets.size(), tweetSearch);
-				    for (Status tweet : tweets) {
-				    	if (count > this.maxSearch) {
+					for (Status tweet : tweets) {
+						if (count > this.maxSearch) {
 							log("Max search results processed", Level.FINE, this.maxSearch);
-				    		break;
-				    	}
-				    	if (tweet.getId() > last  && !processed.contains(tweet.getId())) {
-					    	if (tweet.getId() > max) {
-					    		max = tweet.getId();
-					    	}
-					    	boolean match = false;
-					    	// Exclude replies/mentions
-					    	if (getIgnoreReplies() && tweet.getText().indexOf('@') != -1) {
+							break;
+						}
+						if (tweet.getId() > last  && !processed.contains(tweet.getId())) {
+							if (tweet.getId() > max) {
+								max = tweet.getId();
+							}
+							boolean match = false;
+							// Exclude replies/mentions
+							if (getIgnoreReplies() && tweet.getText().indexOf('@') != -1) {
 								log("Ignoring: Tweet is reply", Level.FINER, tweet.getText());
-					    		continue;
-					    	}
-					    	// Exclude retweets
-					    	if (tweet.isRetweet()) {
+								continue;
+							}
+							// Exclude retweets
+							if (tweet.isRetweet()) {
 								log("Ignoring: Tweet is retweet", Level.FINER, tweet.getText());
-					    		continue;
-					    	}
-					    	// Exclude protected
-					    	if (tweet.getUser().isProtected()) {
+								continue;
+							}
+							// Exclude protected
+							if (tweet.getUser().isProtected()) {
 								log("Ignoring: Tweet is protected", Level.FINER, tweet.getText());
-					    		continue;
-					    	}
-					    	// Exclude self
-					    	if (tweet.getUser().getScreenName().equals(getUserName())) {
+								continue;
+							}
+							// Exclude self
+							if (tweet.getUser().getScreenName().equals(getUserName())) {
 								log("Ignoring: Tweet is from myself", Level.FINER, tweet.getText());
-					    		continue;
-					    	}
-					    	// Ignore profanity
-				    		if (Utils.checkProfanity(tweet.getText())) {
+								continue;
+							}
+							// Ignore profanity
+							if (Utils.checkProfanity(tweet.getText())) {
 								log("Ignoring: Tweet contains profanity", Level.FINER, tweet.getText());
-				    			continue;
-				    		}
-				    		List<String> statusWords = new TextStream(tweet.getText().toLowerCase()).allWords();
-					    	for (String text : getStatusKeywords()) {
-					    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-					    		if (statusWords.containsAll(keywords)) {
-					    			match = true;
-					    			break;
-					    		}
-					    	}
-					    	if (getLearn()) {
-					    		learnTweet(tweet, true, true, memory);
-					    	}
-					    	if (match) {
-					    		processed.add(tweet.getId());
+								continue;
+							}
+							List<String> statusWords = new TextStream(tweet.getText().toLowerCase()).allWords();
+							for (String text : getStatusKeywords()) {
+								List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+								if (statusWords.containsAll(keywords)) {
+									match = true;
+									break;
+								}
+							}
+							if (getLearn()) {
+								learnTweet(tweet, true, true, memory);
+							}
+							if (match) {
+								processed.add(tweet.getId());
 								log("Processing search", Level.INFO, tweet.getUser().getScreenName(), tweetSearch, tweet.getText());
 								input(tweet);
-						    	Utils.sleep(500);
+								Utils.sleep(500);
 								count++;
-					    	} else {
-					    		if (!tweet.isRetweetedByMe()) {
-					    			boolean found = false;
+							} else {
+								if (!tweet.isRetweetedByMe()) {
+									boolean found = false;
 									// Check retweet.
-						    		for (String keywords : getRetweet()) {
+									for (String keywords : getRetweet()) {
 										List<String> keyWords = new TextStream(keywords).allWords();
-								    	if (!keyWords.isEmpty()) {
-								    		if (statusWords.containsAll(keyWords)) {
-								    			found = true;
-									    		processed.add(tweet.getId());
+										if (!keyWords.isEmpty()) {
+											if (statusWords.containsAll(keyWords)) {
+												found = true;
+												processed.add(tweet.getId());
 												count++;
-								    			retweet(tweet);
-										    	Utils.sleep(500);
-								    			break;
-								    		}
-								    	}
-						    		}
-						    		if (!found) {
-						    			log("Missing keywords", Level.FINER, tweet.getText());
-						    		}
-					    		} else {
+												retweet(tweet);
+												Utils.sleep(500);
+												break;
+											}
+										}
+									}
+									if (!found) {
+										log("Missing keywords", Level.FINER, tweet.getText());
+									}
+								} else {
 									log("Already retweeted", Level.FINER, tweet.getText());
-					    		}
-					    	}
-				    	}
-				    }
-			    }
-		    	if (count > this.maxSearch) {
-		    		break;
-		    	}
-		    	if (this.errors > this.maxErrors) {
-		    		break;
-		    	}
+								}
+							}
+						}
+					}
+				}
+				if (count > this.maxSearch) {
+					break;
+				}
+				if (this.errors > this.maxErrors) {
+					break;
+				}
 			}
-		    if (max != 0) {
+			if (max != 0) {
 				twitter.setRelationship(Primitive.LASTSEARCH, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1397,35 +1397,35 @@ public class Twitter extends BasicSense {
 				SearchResource search = getConnection().search();
 				QueryResult result = search.search(query);
 				List<Status> tweets = result.getTweets();
-			    if (tweets != null) {
-				    for (Status tweet : tweets) {
-				    	if (count > this.maxSearch) {
-				    		break;
-				    	}
-				    	if (tweet.getId() > last) {
+				if (tweets != null) {
+					for (Status tweet : tweets) {
+						if (count > this.maxSearch) {
+							break;
+						}
+						if (tweet.getId() > last) {
 							log("Autofollow search", Level.FINE, tweet.getText(), tweet.getUser().getScreenName(), followSearch);
-					    	if (checkFriendship(tweet.getUser().getId(), false)) {
+							if (checkFriendship(tweet.getUser().getId(), false)) {
 								friendCount++;
-							    if (friendCount >= getMaxFriends()) {
+								if (friendCount >= getMaxFriends()) {
 									log("Max friend limit", Level.FINE, getMaxFriends());
-							    	return;
-							    }
-					    	}
+									return;
+								}
+							}
 							count++;
-					    	if (tweet.getId() > max) {
-					    		max = tweet.getId();
-					    	}
-				    	}
-				    }
-			    }
-		    	if (count > this.maxSearch) {
-		    		break;
-		    	}
+							if (tweet.getId() > max) {
+								max = tweet.getId();
+							}
+						}
+					}
+				}
+				if (count > this.maxSearch) {
+					break;
+				}
 			}
-		    if (max != 0) {
+			if (max != 0) {
 				twitter.setRelationship(Primitive.LASTAUTOFOLLOWSEARCH, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1449,11 +1449,11 @@ public class Twitter extends BasicSense {
 			}
 			int rssIndex = 0;
 			String keywordsText = "";
-    		List<String> keywords = new ArrayList<String>();
+			List<String> keywords = new ArrayList<String>();
 			for (String rss : getTweetRSS()) {
 				if (rssIndex < getRssKeywords().size()) {
 					keywordsText = getRssKeywords().get(rssIndex);
-		    		keywords = new TextStream(keywordsText.toLowerCase()).allWords();				
+					keywords = new TextStream(keywordsText.toLowerCase()).allWords();				
 				}
 				rssIndex++;
 				TextStream stream = new TextStream(rss);
@@ -1465,49 +1465,49 @@ public class Twitter extends BasicSense {
 				String url = stream.nextWord();
 				String postfix = " " + stream.upToEnd().trim();
 				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(new URL(url), last);
-			    if (feed != null) {
+				if (feed != null) {
 					long max = 0;
 					int count = 0;
 					this.errors = 0;
 					log("Processing RSS feed", Level.FINE, feed.size(), rss);
-				    for (int index = feed.size() - 1; index >= 0; index--) {
-				    	Map<String, Object> entry = feed.get(index);
-				    	long time = (Long)entry.get("published");
-				    	if ((System.currentTimeMillis() - time) > DAY) {
-				    		continue;
-				    	}
-				    	if (time > last) {
-					    	if (count > this.maxFeed) {
-					    		break;
-					    	}
-					    	if (this.errors > this.maxErrors) {
-					    		break;
-					    	}
+					for (int index = feed.size() - 1; index >= 0; index--) {
+						Map<String, Object> entry = feed.get(index);
+						long time = (Long)entry.get("published");
+						if ((System.currentTimeMillis() - time) > DAY) {
+							continue;
+						}
+						if (time > last) {
+							if (count > this.maxFeed) {
+								break;
+							}
+							if (this.errors > this.maxErrors) {
+								break;
+							}
 							String text = (String)entry.get("title");
 							if (!keywords.isEmpty()) {
-					    		if (!new TextStream(text.toLowerCase()).allWords().containsAll(keywords)) {
+								if (!new TextStream(text.toLowerCase()).allWords().containsAll(keywords)) {
 									log("Skipping RSS, missing keywords", Level.FINE, keywords, text);
-						    		continue;
-					    		}
+									continue;
+								}
 							}
 							log("Tweeting RSS", Level.FINE, entry.get("title"));
-				    		text = prefix + text + postfix;
+							text = prefix + text + postfix;
 							if (text.length() > 120) {
 								text = text.substring(0, 120);
 							}
 							tweet(text + " " + entry.get("link"), 0L);
-					    	Utils.sleep(500);
+							Utils.sleep(500);
 							count++;
-					    	if (time > max) {
-					    		max = time;
-					    	}
-				    	}
-				    }
-				    if (max != 0) {
+							if (time > max) {
+								max = time;
+							}
+						}
+					}
+					if (max != 0) {
 						twitter.setRelationship(Primitive.LASTRSS, memory.createVertex(max));
-				    	memory.save();
-				    }
-			    }
+						memory.save();
+					}
+				}
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -1560,9 +1560,9 @@ public class Twitter extends BasicSense {
 				if (text != null) {
 					log("Autotweeting", Level.INFO, tweet);
 					tweet(text, 0L);
-			    	Utils.sleep(100);
+					Utils.sleep(100);
 					twitter.setRelationship(Primitive.LASTTWEET, memory.createTimestamp());
-			    	memory.save();
+					memory.save();
 				}
 			}
 		} catch (Exception exception) {
@@ -1589,17 +1589,17 @@ public class Twitter extends BasicSense {
 					lookup = Arrays.copyOf(ids, MAX_LOOKUP);
 				}
 				index = index + MAX_LOOKUP;
-			    ResponseList<User> users = getConnection().lookupUsers(lookup);
-			    for (User user : users) {
-			    	followers.add(user.getScreenName());
-			    }
-			    // Only return first 100.
-			    break;
+				ResponseList<User> users = getConnection().lookupUsers(lookup);
+				for (User user : users) {
+					followers.add(user.getScreenName());
+				}
+				// Only return first 100.
+				break;
 			}
 		} catch (Exception exception) {
 			log(exception);
 		}
-	    return followers;
+		return followers;
 	}
 
 	/**
@@ -1608,15 +1608,15 @@ public class Twitter extends BasicSense {
 	public List<String> getTimeline() {
 		List<String> timeline = new ArrayList<String>();
 		try {
-		    ResponseList<Status> statuses = getConnection().getHomeTimeline();
-		    for (Status status : statuses) {
-		    	timeline.add(status.getCreatedAt() + " - <b>" + status.getUser().getScreenName() + "</b>:  " + status.getText());
-		    }
+			ResponseList<Status> statuses = getConnection().getHomeTimeline();
+			for (Status status : statuses) {
+				timeline.add(status.getCreatedAt() + " - <b>" + status.getUser().getScreenName() + "</b>:  " + status.getText());
+			}
 		} catch (Exception exception) {
 			log(exception);
 			throw new BotException(exception);
 		}
-	    return timeline;
+		return timeline;
 	}
 
 	/**
@@ -1659,17 +1659,17 @@ public class Twitter extends BasicSense {
 					lookup = Arrays.copyOf(friendIds, MAX_LOOKUP);
 				}
 				index = index + MAX_LOOKUP;
-			    ResponseList<User> users = getConnection().lookupUsers(lookup);
-			    for (User user : users) {
-			    	friends.add(user.getScreenName());
-			    }
-			    // Only return first 100.
-			    break;
+				ResponseList<User> users = getConnection().lookupUsers(lookup);
+				for (User user : users) {
+					friends.add(user.getScreenName());
+				}
+				// Only return first 100.
+				break;
 			}
 		} catch (Exception exception) {
 			log(exception);
 		}
-	    return friends;
+		return friends;
 	}
 
 	/**
@@ -1681,91 +1681,91 @@ public class Twitter extends BasicSense {
 		}
 		try {
 			log("Checking followers", Level.FINE);
-		    long[] followerIds = getConnection().getFollowersIDs(-1).getIDs(); //max 5000
-		    long[] friends = getConnection().getFriendsIDs(-1).getIDs();
-		    int friendCount = friends.length;
-		    int count = 0;
-		    boolean welcomeOnly = false;
-		    if (friendCount >= getMaxFriends()) {
-			    if (!getWelcomeMessage().isEmpty()) {
-			    	welcomeOnly = true;
-			    } else {
+			long[] followerIds = getConnection().getFollowersIDs(-1).getIDs(); //max 5000
+			long[] friends = getConnection().getFriendsIDs(-1).getIDs();
+			int friendCount = friends.length;
+			int count = 0;
+			boolean welcomeOnly = false;
+			if (friendCount >= getMaxFriends()) {
+				if (!getWelcomeMessage().isEmpty()) {
+					welcomeOnly = true;
+				} else {
 					log("Max friend limit", Level.FINE, getMaxFriends());
-			    	return;
-			    }
-		    }
-		    for (int index = 0; index < followerIds.length; index++) {
-		    	boolean found = false;
-		    	long followerId = followerIds[index];
-			    for (long friend : friends) {
-			    	if (followerId == friend) {
-			    		found = true;
-			    		break;
-			    	}
-			    }
-		    	if (!found) {
+					return;
+				}
+			}
+			for (int index = 0; index < followerIds.length; index++) {
+				boolean found = false;
+				long followerId = followerIds[index];
+				for (long friend : friends) {
+					if (followerId == friend) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
 					log("Checking new follower", Level.FINE, followerId);
-			    	boolean isNewFriend = checkFriendship(followerId, welcomeOnly);
-			    	if (!isNewFriend) {
-			    		// Followers are ordered, so if already followed ignore the rest.
-			    		break;
-			    	}
+					boolean isNewFriend = checkFriendship(followerId, welcomeOnly);
+					if (!isNewFriend) {
+						// Followers are ordered, so if already followed ignore the rest.
+						break;
+					}
 					friendCount++;
-				    if (friendCount >= getMaxFriends()) {
-					    if (!getWelcomeMessage().isEmpty()) {
-					    	welcomeOnly = true;
-					    } else {
-					    	return;
-					    }
-				    }
+					if (friendCount >= getMaxFriends()) {
+						if (!getWelcomeMessage().isEmpty()) {
+							welcomeOnly = true;
+						} else {
+							return;
+						}
+					}
 					count++;
-				    if (count >= this.maxFriendsPerCycle) {
-					    if (!getWelcomeMessage().isEmpty() && count < this.maxWelcomesPerCycle) {
-					    	welcomeOnly = true;
-					    } else {
+					if (count >= this.maxFriendsPerCycle) {
+						if (!getWelcomeMessage().isEmpty() && count < this.maxWelcomesPerCycle) {
+							welcomeOnly = true;
+						} else {
 							log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
-					    	return;
-					    }
-				    }
+							return;
+						}
+					}
 					if (!welcomeOnly && getAutoFollowFriendsFriends()) {
 						log("Checking friends friends", Level.FINE, followerId);
 						long[] friendsFriends = getConnection().getFriendsIDs(followerId, -1).getIDs();
-					    for (long friendsFriend : friendsFriends) {
-					    	if (checkFriendship(friendsFriend, welcomeOnly)) {
+						for (long friendsFriend : friendsFriends) {
+							if (checkFriendship(friendsFriend, welcomeOnly)) {
 								friendCount++;
-							    if (friendCount >= getMaxFriends()) {
+								if (friendCount >= getMaxFriends()) {
 									log("Max friend limit", Level.FINE, getMaxFriends());
-							    	return;
-							    }
+									return;
+								}
 								count++;
-							    if (count >= this.maxFriendsPerCycle) {
+								if (count >= this.maxFriendsPerCycle) {
 									log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
-							    	return;
-							    }
-					    	}
-					    }
+									return;
+								}
+							}
+						}
 					}
 					if (!welcomeOnly && getAutoFollowFriendsFollowers()) {
 						log("Checking friends followers", Level.FINE, followerId);
 						long[] friendsFollowers = getConnection().getFollowersIDs(followerId, -1).getIDs();
-					    for (long friendsFollower : friendsFollowers) {
-					    	if (checkFriendship(friendsFollower, welcomeOnly)) {
+						for (long friendsFollower : friendsFollowers) {
+							if (checkFriendship(friendsFollower, welcomeOnly)) {
 								friendCount++;
-							    if (friendCount >= getMaxFriends()) {
+								if (friendCount >= getMaxFriends()) {
 									log("Max friend limit", Level.FINE, getMaxFriends());
-							    	return;
-							    }
+									return;
+								}
 								count++;
-							    if (count >= this.maxFriendsPerCycle) {
+								if (count >= this.maxFriendsPerCycle) {
 									log("Max friend per cycle limit", Level.FINE, this.maxFriendsPerCycle);
-							    	return;
-							    }
-					    	}
-					    }
+									return;
+								}
+							}
+						}
 					}
-		    	}
-		    }
-		    checkAutoFollowSearch(friendCount);
+				}
+			}
+			checkAutoFollowSearch(friendCount);
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1790,31 +1790,31 @@ public class Twitter extends BasicSense {
 			writer.write(friend.getLang().toLowerCase());
 			writer.write(" ");
 			writer.write(friend.getName().toLowerCase());
-	    	boolean match = false;
-	    	for (String text : getAutoFollowKeywords()) {
-	    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-	    		if (new TextStream(writer.toString()).allWords().containsAll(keywords)) {
-	    			match = true;
-	    			break;
-	    		}
-	    	}
-	    	if (!match) {
+			boolean match = false;
+			for (String text : getAutoFollowKeywords()) {
+				List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+				if (new TextStream(writer.toString()).allWords().containsAll(keywords)) {
+					match = true;
+					break;
+				}
+			}
+			if (!match) {
 				log("Autofollow skipping friend, does not match keywords", Level.FINE, friend.getScreenName());
-	    		return false;
-	    	}
+				return false;
+			}
 		}
 		Network memory = getBot().memory().newMemory();
-    	Vertex speaker = memory.createSpeaker(friend.getScreenName());
-    	speaker.setPinned(true);
-    	// Only try to follow a user once.
-    	if (!speaker.hasRelationship(Primitive.FOLLOWED)) {
-	    	speaker.addRelationship(Primitive.FOLLOWED, memory.createTimestamp());
-	    	memory.save();
-	    	if (!welcomeOnly && getAutoFollow()) {
+		Vertex speaker = memory.createSpeaker(friend.getScreenName());
+		speaker.setPinned(true);
+		// Only try to follow a user once.
+		if (!speaker.hasRelationship(Primitive.FOLLOWED)) {
+			speaker.addRelationship(Primitive.FOLLOWED, memory.createTimestamp());
+			memory.save();
+			if (!welcomeOnly && getAutoFollow()) {
 				log("Adding autofollow friend.", Level.INFO, friend.getScreenName());
-	    		getConnection().createFriendship(friendId);
+				getConnection().createFriendship(friendId);
 				Utils.sleep(1000);
-	    	}
+			}
 			if (!getWelcomeMessage().isEmpty()) {
 				log("Sending welcome message.", Level.INFO, friend.getScreenName());
 				sendMessage(getWelcomeMessage(), friend.getScreenName());
@@ -1824,9 +1824,9 @@ public class Twitter extends BasicSense {
 				return false;
 			}
 			return true;
-    	}
+		}
 		log("Autofollow skipping friend, already followed once", Level.FINE, friend.getScreenName());
-    	return false;
+		return false;
 	}
 	
 	public void log(TwitterException exception) {
@@ -1839,39 +1839,39 @@ public class Twitter extends BasicSense {
 	public void checkTrends() {
 		try {
 			Network network = getBot().memory().newMemory();
-		    if ((this.lastTrendsCheck == 0)
-		    		|| ((System.currentTimeMillis() - this.lastTrendsCheck) > TREND_CHECK)) {
-		    	Vertex twitter = network.createVertex(getPrimitive());
-		    	Vertex lastCheck = twitter.getRelationship(Primitive.TREND);
-		    	if (lastCheck == null) {
-		    		twitter.addRelationship(Primitive.TREND, network.createTimestamp());
-		    	} else {
-		    		long lastCheckTime = ((Timestamp)lastCheck.getData()).getTime();
-		    		if ((System.currentTimeMillis() - lastCheckTime) < TREND_CHECK) { // 1 hours.
-		    			return;
-		    		}
-		    	}
+			if ((this.lastTrendsCheck == 0)
+					|| ((System.currentTimeMillis() - this.lastTrendsCheck) > TREND_CHECK)) {
+				Vertex twitter = network.createVertex(getPrimitive());
+				Vertex lastCheck = twitter.getRelationship(Primitive.TREND);
+				if (lastCheck == null) {
+					twitter.addRelationship(Primitive.TREND, network.createTimestamp());
+				} else {
+					long lastCheckTime = ((Timestamp)lastCheck.getData()).getTime();
+					if ((System.currentTimeMillis() - lastCheckTime) < TREND_CHECK) { // 1 hours.
+						return;
+					}
+				}
 				log("Checking trends", Bot.FINE);
-	    		twitter.setRelationship(Primitive.TREND, network.createTimestamp());
-			    /**List<Trends> dailyTrends = getConnection().getDailyTrends();
-			    List<String> trendNames = new ArrayList<String>();
-			    if (dailyTrends.size() > 0) {
-				    for (Trend trend : dailyTrends.get(0).getTrends()) {
-				    	trendNames.add(trend.getName());
-				    }
-			    }
-			    for (String text : trendNames) {
-			    	if (text.charAt(0) == '#') {
-			    		text = text.substring(1, text.length());
-			    	}
+				twitter.setRelationship(Primitive.TREND, network.createTimestamp());
+				/**List<Trends> dailyTrends = getConnection().getDailyTrends();
+				List<String> trendNames = new ArrayList<String>();
+				if (dailyTrends.size() > 0) {
+					for (Trend trend : dailyTrends.get(0).getTrends()) {
+						trendNames.add(trend.getName());
+					}
+				}
+				for (String text : trendNames) {
+					if (text.charAt(0) == '#') {
+						text = text.substring(1, text.length());
+					}
 					log("Trend:", Bot.FINE, text);
-			    	Vertex word = network.createWord(text);
-			    	
-			    	network.save();
-			    	getBot().memory().addActiveMemory(word);
-			    }*/
-			    this.lastTrendsCheck = System.currentTimeMillis();
-		    }
+					Vertex word = network.createWord(text);
+					
+					network.save();
+					getBot().memory().addActiveMemory(word);
+				}*/
+				this.lastTrendsCheck = System.currentTimeMillis();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -2023,7 +2023,6 @@ public class Twitter extends BasicSense {
 		output.addRelationship(Primitive.SENSE, getPrimitive());
 		output.addRelationship(Primitive.SPEAKER, Primitive.SELF);
 		output.addRelationship(Primitive.INSTANTIATION, Primitive.TWEET);
-		network.createVertex(Primitive.SELF).addRelationship(Primitive.TWEET, output);
 		Vertex target = output.mostConscious(Primitive.TARGET);
 		if (target != null) {
 			String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
@@ -2042,60 +2041,60 @@ public class Twitter extends BasicSense {
 			return;
 		}
 		try {
-			if (input instanceof Status) {	    		
+			if (input instanceof Status) {				
 				Status tweet = (Status)input;
-    			log("Processing status", Bot.FINE, tweet.getText(), tweet.getId());
-		    	if ((System.currentTimeMillis() - tweet.getCreatedAt().getTime()) > DAY) {
-	    			log("Day old status", Bot.FINE, tweet.getId(), tweet.getCreatedAt().getTime());
-		    		return;
-		    	}
-		    	if (this.processedTweets.contains(tweet.getId())) {
-	    			log("Already processed status", Bot.FINE, tweet.getText(), tweet.getId());
-		    		return;
-		    	}
-	    		this.processedTweets.add(tweet.getId());
-		    	String name = tweet.getUser().getScreenName();
-		    	String replyTo = tweet.getInReplyToScreenName();
-		    	String text = tweet.getText().trim();
-		    	TextStream stream = new TextStream(text);
-		    	String firstWord = null;
-		    	if (getIgnoreReplies()) {
-			    	if (stream.peek() == '@') {
-			    		stream.next();
-			    		String replyTo2 = stream.nextWord();
-			    		firstWord = stream.peekWord();
-			    		text = stream.upToEnd().trim();
-			    		if (!replyTo2.equals(replyTo)) {
-			    			log("Reply to does not match:", Bot.FINE, replyTo2, replyTo);
-			    		}
-			    		replyTo = replyTo2;
-			    		if (replyTo.equals(this.userName) && getFollowMessages()) {
-					    	if ("follow".equals(firstWord)) {
+				log("Processing status", Bot.FINE, tweet.getText(), tweet.getId());
+				if ((System.currentTimeMillis() - tweet.getCreatedAt().getTime()) > DAY) {
+					log("Day old status", Bot.FINE, tweet.getId(), tweet.getCreatedAt().getTime());
+					return;
+				}
+				if (this.processedTweets.contains(tweet.getId())) {
+					log("Already processed status", Bot.FINE, tweet.getText(), tweet.getId());
+					return;
+				}
+				this.processedTweets.add(tweet.getId());
+				String name = tweet.getUser().getScreenName();
+				String replyTo = tweet.getInReplyToScreenName();
+				String text = tweet.getText().trim();
+				TextStream stream = new TextStream(text);
+				String firstWord = null;
+				if (getIgnoreReplies()) {
+					if (stream.peek() == '@') {
+						stream.next();
+						String replyTo2 = stream.nextWord();
+						firstWord = stream.peekWord();
+						text = stream.upToEnd().trim();
+						if (!replyTo2.equals(replyTo)) {
+							log("Reply to does not match:", Bot.FINE, replyTo2, replyTo);
+						}
+						replyTo = replyTo2;
+						if (replyTo.equals(this.userName) && getFollowMessages()) {
+							if ("follow".equals(firstWord)) {
 								log("Adding friend", Level.INFO, tweet.getUser().getScreenName());
-					    		getConnection().createFriendship(tweet.getUser().getId());
-					    	} else if ("unfollow".equals(firstWord)) {
+								getConnection().createFriendship(tweet.getUser().getId());
+							} else if ("unfollow".equals(firstWord)) {
 								log("Removing friend", Level.INFO, tweet.getUser().getScreenName());
-					    		getConnection().destroyFriendship(tweet.getUser().getId());
-						    }
-			    		}
-			    	}
-		    	} else {
-		    		// Ignore the reply user, force the bot to reply.
-		    		replyTo = null;
-		    	}
-	    		if (!tweet.isRetweet() && !tweet.getUser().isProtected()) {
-			    	stream.reset();
-		    		List<String> words = stream.allWords();
-		    		for (String keywords : getRetweet()) {
+								getConnection().destroyFriendship(tweet.getUser().getId());
+							}
+						}
+					}
+				} else {
+					// Ignore the reply user, force the bot to reply.
+					replyTo = null;
+				}
+				if (!tweet.isRetweet() && !tweet.getUser().isProtected()) {
+					stream.reset();
+					List<String> words = stream.allWords();
+					for (String keywords : getRetweet()) {
 						List<String> keyWords = new TextStream(keywords).allWords();
-				    	if (!keyWords.isEmpty()) {
-				    		if (words.containsAll(keyWords)) {
-				    			retweet(tweet);
-				    			break;
-				    		}
-				    	}
-		    		}
-	    		}
+						if (!keyWords.isEmpty()) {
+							if (words.containsAll(keyWords)) {
+								retweet(tweet);
+								break;
+							}
+						}
+					}
+				}
 				log("Input status", Level.FINE, tweet.getText(), name, replyTo);
 				this.tweetsProcessed++;
 				inputSentence(text, name, replyTo, tweet, network);
@@ -2118,7 +2117,6 @@ public class Twitter extends BasicSense {
 			return;
 		}
 		output.addRelationship(Primitive.INSTANTIATION, Primitive.TWEET);
-		output.getNetwork().createVertex(Primitive.SELF).addRelationship(Primitive.TWEET, output);
 		String text = printInput(output);
 		// Don't send empty tweets.
 		if (text.isEmpty()) {
@@ -2178,9 +2176,7 @@ public class Twitter extends BasicSense {
 			}
 			input.addRelationship(Primitive.TARGET, targetUser);
 			conversation.addRelationship(Primitive.SPEAKER, targetUser);
-		}		
-		
-		user.addRelationship(Primitive.TWEET, input);
+		}
 		
 		network.save();
 		getBot().memory().addActiveMemory(input);

@@ -64,7 +64,7 @@ public class GoogleCalendar extends Google {
 			url = url + "sendNotifications=true";
 		}
 		log("POST insert event", Level.INFO, url);
-		return postJSON(url, event, network);
+		return postJSON(url, event, null, network);
 	}
     
 	/**

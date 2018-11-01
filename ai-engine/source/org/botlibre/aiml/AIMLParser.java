@@ -58,7 +58,7 @@ import org.xml.sax.InputSource;
 
 /**
  * This parses AIML 2 XML file or text and converts to Self code, and loads into the bot's memory.
- * This can parse AIML is two ways:
+ * This can parse AIML in two ways:
  * <ul>
  * <li> Convert AIML into a Self state machine script, and store in bot's memory and executed as a script.
  * <li> Load each AIML category independently as a pattern/response in the bot's memory for heuristic access.
@@ -284,7 +284,7 @@ public class AIMLParser {
 	
 	public boolean isPattern(String text) {
 		return (text.indexOf('*') != -1 || text.indexOf('_') != -1 || text.indexOf('^') != -1 || text.indexOf('#') != -1 || text.indexOf('$') != -1
-				|| text.indexOf('{') != -1 || text.indexOf('}') != -1 || text.indexOf('[') != -1 || text.indexOf(']') != -1);
+				|| text.indexOf('{') != -1 || text.indexOf('}') != -1 || text.indexOf('[') != -1 || text.indexOf(']') != -1 || text.indexOf('/') != -1);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -335,15 +335,15 @@ public class AIMLParser {
 			} else if (starIndex != -1) {
 				if ((text.indexOf('*', starIndex + 1) != -1) || underscoreIndex != -1 || poundIndex != -1 || hatIndex != -1)  {
 					multiStar = true;
-				}				
+				}
 			} else if (poundIndex != -1) {
 				if ((text.indexOf('#', poundIndex + 1) != -1) || underscoreIndex != -1 || starIndex != -1 || hatIndex != -1)  {
 					multiStar = true;
-				}				
+				}
 			} else if (hatIndex != -1) {
 				if ((text.indexOf('^', hatIndex + 1) != -1) || underscoreIndex != -1 || starIndex != -1 || poundIndex != -1)  {
 					multiStar = true;
-				}				
+				}
 			}
 			if (text.startsWith("*")) {
 				isStarStartPattern = true;
@@ -465,15 +465,27 @@ public class AIMLParser {
 					state.addRelationship(Primitive.DO, equation, 1);
 				} else {
 					if (isDollarPattern) {
-						state.addRelationship(Primitive.DO, equation, 2);					
+						state.addRelationship(Primitive.DO, equation, 2);
 					} else if (is_Pattern) {
-						state.addRelationship(Primitive.DO, equation, 3);					
+						state.addRelationship(Primitive.DO, equation, 3);
 					} else if (isStarStartPattern) {
 						state.addRelationship(Primitive.DO, equation, 8);
 					} else if (isStarEndPattern) {
 						state.addRelationship(Primitive.DO, equation, 7);
 					} else {
-						state.addRelationship(Primitive.DO, equation, 6);					
+						state.addRelationship(Primitive.DO, equation, 6);
+					}
+				}
+				Collection<Relationship> words = question.getRelationships(Primitive.WORD);
+				// Check for single regex pattern and add the entire pattern to the sentence.
+				if (words.size() == 1) {
+					Vertex element = words.iterator().next().getTarget();
+					if (element.instanceOf(Primitive.REGEX)) {
+						Vertex regex = element.getRelationship(Primitive.REGEX);
+						if (regex != null && regex.getData() instanceof String) {
+							state = createState(network.createPattern("*"), sentenceState, network);
+							state.addRelationship(Primitive.DO, equation, 7);
+						}
 					}
 				}
 			} else {
@@ -565,7 +577,7 @@ public class AIMLParser {
 						if (data != null) {
 							data.setCache(null);
 						}
-					}					
+					}
 					caseMatch = network.createInstance(Primitive.CASE);
 					caseMatch.setName("c" + caseMatch.getId() + "_" + value.printString());
 					caseMatch.addRelationship(Primitive.CASE, value);
@@ -587,7 +599,7 @@ public class AIMLParser {
 						} else if (word.getTarget().instanceOf(Primitive.ARRAY)) {
 							currentState.addRelationship(Primitive.DO, caseMatch, 5);
 						} else {
-							currentState.addRelationship(Primitive.DO, caseMatch, 4);							
+							currentState.addRelationship(Primitive.DO, caseMatch, 4);
 						}
 					}
 					currentState = newState;
@@ -596,7 +608,7 @@ public class AIMLParser {
 					if (state == null) {
 						state = network.createInstance(Primitive.STATE);
 						state.setName("s" + state.getId() + Utils.compress(pathWriter.toString(), MAX_IDENTIFIER));
-						caseMatch.addRelationship(Primitive.GOTO, state);						
+						caseMatch.addRelationship(Primitive.GOTO, state);
 					}
 					currentState = state;
 				}

@@ -31,7 +31,7 @@ public class TextStream {
 	public static final String WHITESPACE =" \t\n\r\f";
 	public static final String HTTP =" \t\n\r\f\"{}<>";
 	public static final String TOKENS =" \t\n\r\f.,:;!()?[]{}+=^&*\"`~|/\\<>";
-	public static final String TERMINATORS =".?!。";
+	public static final String TERMINATORS =".?!。？！";
 	public static Set<String> ABBREVIATIONS = new HashSet<String>(Arrays.asList(new String[]{"mr","ms", "mrs", "dr", "inc", "sr", "jr", "st", "vs", "mt", "ltd", "co"}));
 	public static Set<String> IGNORABLE = new HashSet<String>(Arrays.asList(new String[]{"'","`", "\"", ","}));
 	
@@ -63,7 +63,7 @@ public class TextStream {
 	
 	public char current() {
 		if (atEnd()) {
-			return (char)-1;
+			this.text.charAt(this.text.length() - 1);
 		}
 		if (this.index <= 0) {
 			return (char)0;

@@ -46,14 +46,14 @@ public enum EmotionalState {
 		
 		if (this == EmotionalState.LOVE) {
 			vertex.addRelationship(Primitive.EMOTION, Primitive.LOVE);
-			vertex.addRelationship(Primitive.EMOTION, Primitive.LOVE);			
+			vertex.addRelationship(Primitive.EMOTION, Primitive.LOVE);
 		} else if (this == EmotionalState.LIKE) {
-			vertex.addRelationship(Primitive.EMOTION, Primitive.LOVE);			
+			vertex.addRelationship(Primitive.EMOTION, Primitive.LOVE);
 		} else if (this == EmotionalState.DISLIKE) {
 			vertex.removeRelationship(Primitive.EMOTION, Primitive.LOVE);
 		} else if (this == EmotionalState.HATE) {
 			vertex.removeRelationship(Primitive.EMOTION, Primitive.LOVE);
-			vertex.removeRelationship(Primitive.EMOTION, Primitive.LOVE);			
+			vertex.removeRelationship(Primitive.EMOTION, Primitive.LOVE);
 		}
 		
 		else if (this == EmotionalState.RAGE) {
@@ -115,6 +115,15 @@ public enum EmotionalState {
 			vertex.removeRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
 			vertex.removeRelationship(Primitive.EMOTION, Primitive.SENTIMENT);
 		}
+	}
+	
+	public boolean isSentiment() {
+		if (this == EmotionalState.GREAT  || this == EmotionalState.GOOD || this == EmotionalState.BAD || this == EmotionalState.TERRIBLE) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 }
 

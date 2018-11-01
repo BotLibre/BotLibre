@@ -437,12 +437,12 @@ public class Facebook extends BasicSense {
 		}
 		this.connection.setOAuthAppId(key, secret);
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-			this.connection.setOAuthPermissions("user_posts,manage_pages,publish_pages,publish_actions,read_page_mailboxes");
+			this.connection.setOAuthPermissions("manage_pages,publish_pages");
 		} else {
-			this.connection.setOAuthPermissions("user_posts,manage_pages,publish_pages,publish_actions,read_page_mailboxes");
+			this.connection.setOAuthPermissions("manage_pages,publish_pages");
 		}
 		//this.connection.setOAuthPermissions("read_stream, manage_pages, publish_pages, publish_actions, read_mailbox, read_page_mailboxes");
-	    return this.connection.getOAuthAuthorizationURL(callbackURL);
+		return this.connection.getOAuthAuthorizationURL(callbackURL);
 	}
 	
 	/**
@@ -2390,7 +2390,6 @@ public class Facebook extends BasicSense {
 		output.addRelationship(Primitive.SENSE, getPrimitive());
 		output.addRelationship(Primitive.SPEAKER, Primitive.SELF);
 		output.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
-		network.createVertex(Primitive.SELF).addRelationship(Primitive.POST, output);
 		Vertex target = output.mostConscious(Primitive.TARGET);
 		if (target != null) {
 			String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
@@ -2510,7 +2509,6 @@ public class Facebook extends BasicSense {
 			return;
 		}
 		output.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
-		output.getNetwork().createVertex(Primitive.SELF).addRelationship(Primitive.POST, output);
 		String text = printInput(output);
 		Vertex question = output.getRelationship(Primitive.QUESTION);
 		String reply = null;
@@ -2561,9 +2559,7 @@ public class Facebook extends BasicSense {
 			}
 			input.addRelationship(Primitive.TARGET, targetUser);
 			conversation.addRelationship(Primitive.SPEAKER, targetUser);
-		}		
-		
-		user.addRelationship(Primitive.POST, input);
+		}
 		
 		network.save();
 		getBot().memory().addActiveMemory(input);

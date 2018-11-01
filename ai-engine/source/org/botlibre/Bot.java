@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2014-2017 Paphus Solutions Inc.
+ *  Copyright 2014-2018 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -62,12 +62,16 @@ import org.w3c.dom.NodeList;
  */
 public class Bot {	
 	public static String PROGRAM = "Bot";
-	public static String VERSION = "6.1.0-2017-12-08";
+	public static String VERSION = "7.0.0-2018-07-16";
 	
 	public static final Level FINE = Level.FINE;
 	public static final Level WARNING = Level.WARNING;
 	public static Level DEFAULT_DEBUG_LEVEL = Level.INFO;
 	public static final Level[] LEVELS = {Level.OFF, Level.SEVERE, Level.WARNING, Level.INFO, Level.CONFIG, Level.FINE, Level.FINER, Level.FINEST, Level.ALL};
+
+	public static final int EVERYONE = Utils.EVERYONE;
+	public static final int TEEN = Utils.TEEN;
+	public static final int MATURE = Utils.MATURE;
 	
 	public static String CONFIG_FILE = "config.xml";
 	public static int MAX_CACHE = 100000;
@@ -86,6 +90,7 @@ public class Bot {
 	private Avatar avatar;
 	private Awareness awareness;
 	private boolean filterProfanity = true;
+	private int contentRating = Utils.TEEN;
 	private String name;
 	private ActiveState state = ActiveState.INIT;
 	public enum ActiveState {INIT, ACTIVE, POOLED, SHUTDOWN}
@@ -240,6 +245,14 @@ public class Bot {
 		this.filterProfanity = filterProfanity;
 	}
 	
+	public int getContentRating() {
+		return contentRating;
+	}
+
+	public void setContentRating(int contentRating) {
+		this.contentRating = contentRating;
+	}
+
 	/**
 	 * Return the debugging level.
 	 */

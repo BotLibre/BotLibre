@@ -53,14 +53,9 @@ public class JSON extends BasicTool {
 	 * Convert the object to a JSON string.
 	 */
 	public Vertex stringify(Vertex source, Vertex jsonObject) {
-		try {
-			Network network = source.getNetwork();
-			String data = getBot().awareness().getSense(Http.class).convertToJSON(jsonObject);
-			return network.createVertex(data);
-		} catch (Exception exception) {
-			log(exception);
-			return null;
-		}
+		Network network = source.getNetwork();
+		String data = getBot().awareness().getSense(Http.class).convertToJSON(jsonObject);
+		return network.createVertex(data);
 	}
 	
 }

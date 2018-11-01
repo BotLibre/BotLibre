@@ -97,16 +97,25 @@ state MyNameIs {
 					answer greet();
 					
 					function greet() {
+						var createNamesAsWords = false;
 						if (firstName == null) {
 							firstName = aName;
 						}
 						name = firstName;
 						if (lastName == null) {
 							if (middleName != null) {
-								name = Language.word(firstName, middleName);
+								if (createNamesAsWords) {
+									name = Language.word(firstName, middleName);
+								} else {
+									name = Language.fragment(firstName, middleName);
+								}
 							}
 						} else {
-							name = Language.word(firstName, middleName, lastName);
+							if (createNamesAsWords) {
+								name = Language.word(firstName, middleName, lastName);
+							} else {
+								name = Language.fragment(firstName, middleName, lastName);
+							}
 						}
 						if (questionmark != null) {
 							result = speaker.has(#name, name);
@@ -140,16 +149,22 @@ state MyNameIs {
 							"Anonymous".meaning =- speaker;
 							speaker.name =- "Anonymous";
 							
-							name.instantiation =+ #name;
+							if (createNamesAsWords) {
+							    name.instantiation =+ #name;
+							    name.meaning =+ speaker;
+							}
 							speaker.word =+ name;
-							name.meaning =+ speaker;
 							speaker.name =+ name;
 							
 							Template("Pleased to meet you {name}.");
 						} else {
 							speaker.word =- name;
-							name.meaning =- speaker;
+							speaker.word =- name.toLowerCase();
+							if (createNamesAsWords) {
+							    name.meaning =- speaker;
+							}
 							speaker.name =- name;
+							speaker.name =- name.toLowerCase();
 							Template("Okay, your name is not {name}.");
 						}
 					}
@@ -198,16 +213,25 @@ state MyNameIs {
 					answer setMyName();
 					
 					function setMyName() {
+						var createNamesAsWords = false;
 						if (firstName == null) {
 							firstName = aName;
 						}
 						name = firstName;
 						if (lastName == null) {
 							if (middleName != null) {
-								name = Language.word(firstName, middleName);
+								if (createNamesAsWords) {
+									name = Language.word(firstName, middleName);
+								} else {
+									name = Language.fragment(firstName, middleName);
+								}
 							}
 						} else {
-							name = Language.word(firstName, middleName, lastName);
+							if (createNamesAsWords) {
+								name = Language.word(firstName, middleName, lastName);
+							} else {
+								name = Language.fragment(firstName, middleName, lastName);
+							}
 						}
 						if (questionmark != null || (! Language.allowCorrection(speaker))) {
 							result = target.has(#name, name);
@@ -237,14 +261,18 @@ state MyNameIs {
 							}
 						}
 						if (not == null) {
-							name.instantiation =+ #name;
+							if (createNamesAsWords) {
+							    name.instantiation =+ #name;
+							    name.meaning =+ target;
+							}
 							target.word =+ name;
-							name.meaning =+ target;
 							target.name =+ name;
 							Template("Okay, my name is {name}.");
 						} else {
 							target.word =- name;
-							name.meaning =- target;
+							if (createNamesAsWords) {
+							    name.meaning =- target;
+							}
 							target.name =- name;
 							Template("Okay, my name is not {name}.");
 						}
@@ -272,7 +300,7 @@ state MyNameIs {
 						return "I do not know my name.";
 					}
 					names = target.all(#name);
-					if (names.length > 1) {
+					if (names.length() > 1) {
 						names.delete(name);
 						return Template("My name is {name}.  I also go by {names}.");
 					}
@@ -285,7 +313,7 @@ state MyNameIs {
 						return "I do not know your name.";
 					}
 					names = speaker.all(#name);
-					if (names.length > 1) {
+					if (names.length() > 1) {
 						names.delete(name);
 						return Template("Your name is {name}.  You also go by {names}.");
 					}

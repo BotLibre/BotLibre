@@ -61,7 +61,7 @@ public class Telegram extends BasicSense {
 	protected String token = "";
 	
 	protected boolean initProperties;
-	public static int MAX_WAIT = 60 * 1000; // 1 minute
+	public static int MAX_WAIT = 1000; // 1 second, otherwise Telegram will timeout.
 	protected int maxErrors = 5;
 	protected int maxMessages = 200;
 	protected int maxFeed = 20;
@@ -517,18 +517,24 @@ public class Telegram extends BasicSense {
 	 */
 	public long checkMessage(JSONObject message, long last, long max, Network network) {
     	String id = message.getString("message_id");
+    	if (message.get("chat") == null) {
+    		notifyResponseListener();
+    		return max;
+		}
     	JSONObject chat = message.getJSONObject("chat");
     	String chatId = chat.getString("id");
     	String chatType = chat.getString("type");
     	boolean group = "group".equals(chatType) || "supergroup".equals(chatType);
     	if (group && getGroupMode() == LanguageState.Ignore) {
     		// Ignore messages sent to a group.
+    		notifyResponseListener();
     		return max;
     	}
     	String date = message.getString("date");
 	    Date createdTime = new Date(((long)Integer.parseInt(date)) * 1000L);
     	if ((System.currentTimeMillis() - createdTime.getTime()) > DAY) {
 			log("Day old message", Level.FINE, createdTime, id, date);
+			notifyResponseListener();
     		return max;
     	}
     	if (createdTime.getTime() > last) {
@@ -563,15 +569,19 @@ public class Telegram extends BasicSense {
 			    	messageId = message.getString("message_id");
 			    }
 			    String text = "";
+			    boolean join = false;
 		    	if (message.get("text") != null) {
 					text = message.getString("text").trim();
 		    	} else if (message.get("new_chat_participant") != null) {
 		    		text = "join";
+		    		join = true;
 	    		} else if (message.get("left_chat_participant") != null) {
 		    		text = "leave";
+		    		join = true;
 	    		}
-		    	if (!getTrackMessageObjects() && (text == null || text.isEmpty())) {
+		    	if (!getTrackMessageObjects() && (join || (text == null || text.isEmpty()))) {
 	    			log("Ignoring empty message", Level.INFO, fromUser, createdTime, chatId);
+		    		notifyResponseListener();
 		    	} else {
 					log("Processing message", Level.INFO, fromUser, createdTime, chatId, text);
 					this.messagesProcessed++;
@@ -585,6 +595,9 @@ public class Telegram extends BasicSense {
 					if (conversation == null) {
 						conversation = network.createVertex();
 						today.setRelationship(conversationId, conversation);
+						if (group) {
+							conversation.addRelationship(Primitive.TYPE, Primitive.GROUP);
+						}
 						this.conversations++;
 					} else {
 						checkEngaged(conversation);
@@ -610,7 +623,10 @@ public class Telegram extends BasicSense {
 		    	}
 		    } else {
 				log("Ignoring own message", Level.FINE, createdTime, chatId);
+	    		notifyResponseListener();
 		    }
+    	} else {
+    		notifyResponseListener();
     	}
     	return max;
 	}
@@ -762,31 +778,49 @@ public class Telegram extends BasicSense {
 	@Override
 	public void output(Vertex output) {
 		if (!isEnabled()) {
+			notifyResponseListener();
 			return;
 		}
 		Vertex sense = output.mostConscious(Primitive.SENSE);
 		// If not output to twitter, ignore.
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
+			notifyResponseListener();
 			return;
 		}
 		String text = printInput(output);
 		Vertex target = output.mostConscious(Primitive.TARGET);
-		String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
+		String replyTo = null;
+		if (target != null) {
+			Vertex user = target.mostConscious(new Primitive("username"));
+			if (user == null) {
+				user = target.mostConscious(Primitive.WORD);
+			}
+			if (user == null || user.getData() == null) {
+				replyTo = user.getId().toString();
+			} else {
+				replyTo = user.getData().toString();
+			}
+		}
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		Vertex id = conversation.getRelationship(Primitive.ID);
 		String conversationId = id.printString();
 
+		if (this.responseListener != null) {
+			this.responseListener.reply = text;
+		}
+		notifyResponseListener();
+		
 		// Don't send empty messages.
 		if (text.isEmpty()) {
 			return;
-		}
-		if (this.responseListener != null) {
-			this.responseListener.reply = text;
 		}
 		Vertex command = output.mostConscious(Primitive.COMMAND);
 		String json = null;
 		if (command != null) {
 			json = command.printString();
+		}
+		if (conversation.hasRelationship(Primitive.TYPE, Primitive.GROUP)) {
+			text = "@" + replyTo + " " + text;
 		}
 		sendMessage(text, replyTo, conversationId, json);
 	}
@@ -971,6 +1005,7 @@ public class Telegram extends BasicSense {
 						}
 					} catch (Exception exception) {
 						log(exception);
+						exception.printStackTrace();
 					}
 				}
 			}
@@ -981,6 +1016,7 @@ public class Telegram extends BasicSense {
 		} catch (Exception exception) {
 			this.errors++;
 			log(exception);
+			exception.printStackTrace();
 		}
 	}
 
@@ -1027,11 +1063,13 @@ public class Telegram extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, Vertex user, String targetUserName, Vertex conversation, String messageId, boolean group, JSONObject message, Network network) {
+	public void inputSentence(String text, Vertex user, String botUserName, Vertex conversation, String messageId, boolean group, JSONObject message, Network network) {
 		String target = null;
 		if (text.startsWith("@")) {
 			TextStream stream = new TextStream(text);
+			stream.skip();
 			target = stream.nextWord();
+			stream.skip();
 			text = stream.upToEnd();
 		}
 		Vertex input = createInput(text.trim(), network);
@@ -1044,7 +1082,7 @@ public class Telegram extends BasicSense {
 		input.addRelationship(Primitive.SPEAKER, user);
 		if (group) {
 			this.languageState = getGroupMode();
-			if (targetUserName.equals(target)) {
+			if (botUserName.equals(target)) {
 				input.addRelationship(Primitive.TARGET, Primitive.SELF);
 			} else if (target != null) {
 				input.addRelationship(Primitive.TARGET, network.createSpeaker(target));

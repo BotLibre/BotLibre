@@ -58,13 +58,16 @@ default: Or maybe I'll come in through a window...
 require previous: I should get there tonight, wait for my knock on the door.
 
 default: What is your biggest fear?
-no repeat:
+no repeat: true
 
 default: Do you believe in Satan?
-no repeat:
+no repeat: true
 
 default: Death is coming for you soon.
 
 default: Are you scared of the dark?
-no repeat:
+no repeat: true
+
+tonight
+I will see you tonight, when its dark.
 

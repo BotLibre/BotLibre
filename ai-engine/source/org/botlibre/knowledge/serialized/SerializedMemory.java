@@ -36,11 +36,11 @@ import org.botlibre.knowledge.BasicMemory;
 import org.botlibre.knowledge.BasicNetwork;
 
 /**
- * Defines a set of networks that make up a knowledge base.
- * Defines long term, short term and flash networks.
- * Basic implementation using serialization for persistence.
+ * SerializedMemory stores the memory to a binary file using Java object serialization.
+ * The entire memory is loaded into memory.
+ * This memory is fast and good for embedded environments such as Android, but does not scale to large memory sizes.
+ * SerializedMemory is much slower than MicroMemory.
  */
-
 public class SerializedMemory extends BasicMemory {
 
 	public static File storageDir = null;
@@ -51,20 +51,24 @@ public class SerializedMemory extends BasicMemory {
 		if (file.exists()) {
 			file.delete();
 		}
+		file = new File(storageDir, storageFileName + "x");
+		if (file.exists()) {
+			file.delete();
+		}
 	}
-	
+
 	public static boolean checkExists() {
 		File file = new File(storageDir, storageFileName);
 		return (file.exists());
 	}
 	
-	@Override
 	public void shutdown() throws MemoryStorageException {
 		super.shutdown();
+		long start = System.currentTimeMillis();
 		File file = new File(storageDir, storageFileName);
 		getBot().log(this, "Saving memory to file", Level.INFO, file);
 		try {
-			List<Vertex> vertices = new ArrayList<Vertex>(((BasicNetwork)getLongTermMemory()).getVertices());
+			List<Vertex> vertices = new ArrayList<Vertex>(((BasicNetwork)getLongTermMemory()).getVerticesById().values());
 			// Flatten objects to avoid stack overflow.
 			List<Relationship> relationships = new ArrayList<Relationship>(vertices.size());
 			for (Vertex vertex : vertices) {
@@ -80,7 +84,8 @@ public class SerializedMemory extends BasicMemory {
 			objectStream.close();
 			fileStream.flush();
 			fileStream.close();
-			getBot().log(this, "Memory saved", Level.INFO, getLongTermMemory().size(), file.length());
+			long time = System.currentTimeMillis() - start;
+			getBot().log(this, "Memory saved", Level.INFO, getLongTermMemory().size(), file.length(), time);
 		} catch (IOException exception) {
 			throw new MemoryStorageException(exception);
 		}
@@ -90,9 +95,8 @@ public class SerializedMemory extends BasicMemory {
 	public void restore() throws MemoryStorageException {
 		restore(storageFileName, true);
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	@Override
 	public void restore(String database, boolean isSchema) throws MemoryStorageException {
 		if (database.isEmpty()) {
 			database = storageFileName;
@@ -103,10 +107,10 @@ public class SerializedMemory extends BasicMemory {
 		longTermMemory.setBot(getBot());
 		if (file.exists()) {
 			try {
+				long start = System.currentTimeMillis();
 				FileInputStream fileStream = new FileInputStream(file);
 				ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-				long start = System.currentTimeMillis();
-				System.out.println(start);
+				//System.out.println(start);
 				List<Vertex> vertices = (List<Vertex>) objectStream.readObject();
 				List<Relationship> relationships = (List<Relationship>) objectStream.readObject();
 				for (Vertex vertex : vertices) {
@@ -118,13 +122,12 @@ public class SerializedMemory extends BasicMemory {
 				}
 				objectStream.close();
 				fileStream.close();
-				getBot().log(this, "Memory restored file", Level.INFO, longTermMemory.size(), file.length());
+				long time = System.currentTimeMillis() - start;
+				getBot().log(this, "Memory restored file", Level.INFO, longTermMemory.size(), file.length(), time);
 			} catch (Exception exception) {
 				throw new MemoryStorageException(exception);
 			}
 		}
 		setLongTermMemory(longTermMemory);
 	}
-		
 }
-

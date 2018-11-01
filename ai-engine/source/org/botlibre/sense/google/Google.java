@@ -168,12 +168,12 @@ public abstract class Google extends Http {
 	 * POST the JSON object and return the JSON data from the URL.
 	 */
 	@Override
-	public Vertex postJSON(String url, Vertex jsonObject, Network network) {
+	public Vertex postJSON(String url, Vertex jsonObject, Map<String, String> headers, Network network) {
 		String accessToken = newAccessToken();
 		if (!url.contains("?")) {
 			url = url + "?";
 		}
-		return super.postJSON(url + "&access_token=" + accessToken, jsonObject, network);
+		return super.postJSON(url + "&access_token=" + accessToken, jsonObject, headers, network);
 	}
 
 	/**

@@ -48,7 +48,7 @@ public class Forgetfulness extends BasicThought {
 	public static long EXPIRY = 7;
 	public static int MAX_SIZE = 100000;
 	public static int MAX_RELATIONSHIPS = 150;
-	public static long TIME_TO_LIVE = (10 * Utils.MINUTE);
+	public static long TIME_TO_LIVE = (10L * Utils.MINUTE);
 	
 	/** Min number of days to keep conversation and context data for. */
 	public long expiry = EXPIRY;

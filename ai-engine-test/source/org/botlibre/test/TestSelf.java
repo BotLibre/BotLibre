@@ -73,6 +73,100 @@ public class TestSelf extends TextTest {
 		}
 	}
 
+	/**
+	 * Test regular expression patterns.
+	 */
+	@org.junit.Test
+	public void testRegex() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("1234");
+		String response = waitForOutput(output);
+		checkResponse(response, "number");
+
+		text.input("9");
+		response = waitForOutput(output);
+		checkResponse(response, "number");
+
+		text.input("3.14");
+		response = waitForOutput(output);
+		checkResponse(response, "float");
+
+		text.input("-100");
+		response = waitForOutput(output);
+		checkResponse(response, "float");
+
+		text.input("1,000,000");
+		response = waitForOutput(output);
+		checkResponse(response, "numeric");
+
+		text.input("1,235.55");
+		response = waitForOutput(output);
+		checkResponse(response, "numeric");
+
+		text.input("foo@email.com");
+		response = waitForOutput(output);
+		checkResponse(response, "email");
+
+		text.input("another foo@email.com");
+		response = waitForOutput(output);
+		checkResponse(response, "email");
+
+		text.input("another 3.14");
+		response = waitForOutput(output);
+		checkResponse(response, "number");
+
+		text.input("another http://www.email.com");
+		response = waitForOutput(output);
+		checkResponse(response, "url");
+
+		text.input("2000-01-01");
+		response = waitForOutput(output);
+		checkResponse(response, "date");
+
+		text.input("x 2000-01-01");
+		response = waitForOutput(output);
+		checkResponse(response, "x 2000-01-01");
+
+		text.input("12 / 6");
+		response = waitForOutput(output);
+		checkResponse(response, "2");
+
+		text.input("10 / 2");
+		response = waitForOutput(output);
+		checkResponse(response, "5");
+
+		text.input("10 * 2");
+		response = waitForOutput(output);
+		checkResponse(response, "20");
+
+		text.input("what is 4 * 2");
+		response = waitForOutput(output);
+		checkResponse(response, "8");
+
+		text.input("4 * 2 is how much?");
+		response = waitForOutput(output);
+		checkResponse(response, "8");
+
+		text.input("tell me 4 * 2 is how much?");
+		response = waitForOutput(output);
+		checkResponse(response, "8");
+
+		text.input("what is a horse");
+		response = waitForOutput(output);
+		checkResponse(response, "I have no idea what a horse is.");
+
+		text.input("What is a horse?");
+		response = waitForOutput(output);
+		checkResponse(response, "I have no idea what a horse is.");
+		
+		bot.shutdown();
+	}
+
 	@org.junit.Test
 	public void testDate() {
 		Bot bot = Bot.createInstance();
@@ -237,6 +331,26 @@ public class TestSelf extends TextTest {
 			response = waitForOutput(output);
 			checkResponse(response, "");
 			
+			text.input("test hello world equals hello world");
+			response = waitForOutput(output);
+			checkResponse(response, "hello world");
+			
+			text.input("test hello equals hello world");
+			response = waitForOutput(output);
+			checkResponse(response, "fail");
+			
+			text.input("test hello equals hello");
+			response = waitForOutput(output);
+			checkResponse(response, "Hello hello");
+			
+			text.input("test hello equals bye");
+			response = waitForOutput(output);
+			checkResponse(response, "fail");
+			
+			text.input("test how are you equals how are you");
+			response = waitForOutput(output);
+			checkResponse(response, "How are you how are you");
+			
 		} finally {
 			bot.shutdown();
 		}
@@ -255,6 +369,25 @@ public class TestSelf extends TextTest {
 			text.input("test arrays");
 			String response = waitForOutput(output);
 			checkResponse(response, "ok");
+			
+		} finally {
+			bot.shutdown();
+		}
+	}
+
+	@org.junit.Test
+	public void testJSON() {
+		Bot bot = Bot.createInstance();
+		try {
+			//bot.setDebugLevel(Level.FINE);
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			List<String> output = registerForOutput(text);
+
+			text.input("test nested json");
+			String response = waitForOutput(output);
+			checkResponse(response, "123 Main Street");
 			
 		} finally {
 			bot.shutdown();
@@ -361,7 +494,7 @@ public class TestSelf extends TextTest {
 
 			text.input("html list 1 https://botlibre.com //h3/text()");
 			response = waitForOutput(output);
-			checkResponse(response, "Sitemap");
+			checkResponse(response, "Browse");
 			
 			text.input("html xml https://botlibre.com head/meta[2]");
 			response = waitForOutput(output);
@@ -374,7 +507,7 @@ public class TestSelf extends TextTest {
 
 			text.input("postHTML ping " + applicationId);
 			response = waitForOutput(output);
-			checkResponse(response, "ping");
+			checkResponse(response, "Brain Bot");
 
 			text.input("json https://botlibre.com/rest/json/form-chat?application=" + applicationId + "&instance=165&message=ping");
 			response = waitForOutput(output);

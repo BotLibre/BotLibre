@@ -55,6 +55,7 @@ public class Comprehension extends SubconsciousThought {
 		
 	public Comprehension() {
 		this.delay = 1000;
+		this.isEnabled = false;
 	}
 
 	@Override
@@ -287,7 +288,7 @@ public class Comprehension extends SubconsciousThought {
 			}
 			if (getBot().mind().getThought(Language.class).getReduceQuestions()) {
 				network.checkReduction(question);
-				question.associateAll(Primitive.SYNONYM, newQuotient, Primitive.RESPONSE);
+				question.associateAll(Primitive.REDUCTION, newQuotient, Primitive.RESPONSE);
 			}
 			relationship.getTarget().addRelationship(Primitive.QUESTION, question);
 		}

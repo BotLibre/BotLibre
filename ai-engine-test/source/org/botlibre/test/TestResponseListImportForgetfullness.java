@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
+import org.botlibre.parsing.ResponseListParser;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.forgetfulness.Forgetfulness;
 import org.botlibre.util.Utils;
@@ -42,7 +43,7 @@ public class TestResponseListImportForgetfullness extends TestResponseListImport
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		URL url = TestAIML.class.getResource("test.res");
 		File file = new File(url.toURI());
-		bot.awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, true);
+		ResponseListParser.parser().loadChatFile(file, "Response List", "", false, true, bot);
 		List<String> output = registerForOutput(text);
 		text.input("this is a very complicated sentence the dog barks all night this is a good reply to that");
 		waitForOutput(output);

@@ -62,9 +62,9 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	
 	public static int MAX_SIZE = 500;
 	
-	protected static long nextId = 0;
-	protected static long nextRelationshipId = 0;
-	protected static long nextDataId = 0;
+	protected static long nextId = 1;
+	protected static long nextRelationshipId = 1;
+	protected static long nextDataId = 1;
 
 	protected static long nextDataId() {
 		return nextDataId++;
@@ -562,7 +562,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	 * Create the word as a name.
 	 */
 	public synchronized Vertex createName(String text) {
-		Vertex name = createWord(text);
+		Vertex name = createFragment(text);
 		name.addRelationship(Primitive.INSTANTIATION, Primitive.NAME);
 		return name;
 	}
@@ -808,14 +808,14 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	}
 	
 	/**
-	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
+	 * Tokenize the sentence pattern into its words and wildcards, and create a vertex representation.
 	 */
 	public Vertex createPattern(String text) {
 		return createPattern(text, SelfCompiler.getCompiler());
 	}
 	
 	/**
-	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
+	 * Tokenize the sentence pattern into its words and wildcards, and create a vertex representation.
 	 */
 	public Vertex createPattern(String text, SelfCompiler compiler) {
 		if (text.indexOf('"') != -1) {
@@ -843,7 +843,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 		pattern.addRelationship(Primitive.INSTANTIATION, Primitive.PATTERN);
 		int index = 0;
 		TextStream stream = new TextStream(text);
-		String special = "*_#^$[]{}";
+		String special = "*_#^$[]{}/";
 		Vertex list = null;
 		int listindex = 0;
 		boolean precedence = false;
@@ -853,6 +853,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			if (word != null) {
 				Vertex element = null;
 				if (word.equals("\\")) {
+					// Escape next char
 					String escape = stream.nextWord();
 					if (escape != null && (special.indexOf(escape) != -1)) {
 						word = escape;
@@ -882,6 +883,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 				} else if (word.equals("^")) {
 					element = createVertex(Primitive.HATWILDCARD);
 				} else if (word.startsWith("#")) {
+					// Primitives, pound wildcard
 					if (word.length() > 1) {
 						String name = word.substring(1, word.length());
 						element = createVertex(new Primitive(name));
@@ -889,6 +891,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 						element = createVertex(Primitive.POUNDWILDCARD);
 					}
 				} else if (word.equals("[") || word.equals("(")) {
+					// Lists
 					element = createInstance(Primitive.ARRAY);
 					if (word.equals("[")) {
 						element.addRelationship(Primitive.TYPE, Primitive.REQUIRED);
@@ -899,12 +902,19 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 					list = null;
 					continue;
 				} else if (word.equals("{")) {
+					// Self code
 					if (elements == null) {
 						elements = compiler.buildElementsMap(this);
 					}
 					element = compiler.parseElement(stream, elements, false, this);
 					stream.skipWhitespace();
 					compiler.ensureNext('}', stream);
+				} else if (word.equals("/") && stream.peek() != ' ') {
+					// Regex
+					String expression = stream.upTo(' ');
+					element = createInstance(Primitive.REGEX);
+					element.setName(expression);
+					element.addRelationship(Primitive.REGEX, createVertex(expression));
 				} else {
 					element = createWord(word);
 					element.addRelationship(Primitive.PATTERN, pattern);
@@ -1046,15 +1056,15 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			return;
 		}
 		String text = (String)sentence.getData();
-		if (!sentence.hasRelationship(Primitive.SYNONYM)) {
+		if (!sentence.hasRelationship(Primitive.REDUCTION) && !sentence.hasRelationship(Primitive.TYPE, Primitive.REDUCTION)) {
 			String reduced = Utils.reduce(text);
 			if (!text.equals(reduced) && !reduced.isEmpty()) {
-				Vertex synonym = createSentence(reduced, true, true, false);
+				Vertex reduction = createSentence(reduced, true, true, false);
 				if (sentence.isPinned()) {
-					SelfCompiler.getCompiler().pin(synonym);
+					SelfCompiler.getCompiler().pin(reduction);
 				}
-				synonym.addRelationship(Primitive.TYPE, Primitive.SYNONYM);
-				sentence.addRelationship(Primitive.SYNONYM, synonym);
+				reduction.addRelationship(Primitive.TYPE, Primitive.REDUCTION);
+				sentence.addRelationship(Primitive.REDUCTION, reduction);
 			}
 		}
 	}
@@ -1138,7 +1148,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			// Check for Twitter address
 			} else if ((wordText.length() >= 2) && wordText.charAt(0) == '@') {
 				try {
-					Vertex speaker = createSpeaker(wordText);
+					Vertex speaker = createWord(wordText);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.TWITTERADDRESS);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.NOUN);
 					word.addRelationship(Primitive.WORD, word);
@@ -1149,7 +1159,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			// Check for email address
 			} else if ((wordText.length() > 4) && (wordText.indexOf('@') != -1) && (wordText.indexOf('.') != -1)) {
 				try {
-					Vertex speaker = createSpeaker(wordText);
+					Vertex speaker = createWord(wordText);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.EMAILADDRESS);
 					word.addRelationship(Primitive.INSTANTIATION, Primitive.NOUN);
 					word.addRelationship(Primitive.WORD, word);
@@ -1225,13 +1235,13 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	 * Create the word, and a new meaning.
 	 */
 	public synchronized Vertex createNewObject(String name) {
-		Vertex word = createWord(name);
+		Vertex word = createFragment(name);
 		Vertex meaning = createVertex();
 		meaning.setName(name);
 		log("Created meaning", Level.FINEST, word);
-		word.addRelationship(Primitive.MEANING, meaning);
+		//word.addRelationship(Primitive.MEANING, meaning);
 		meaning.addRelationship(Primitive.WORD, word);
-		associateCaseInsensitivity(name, meaning);
+		//associateCaseInsensitivity(name, meaning);
 		return meaning;
 	}
 	
@@ -1258,6 +1268,24 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	/**
 	 * Find or create the speaker from the unique id.
 	 */
+	public synchronized Vertex createUniqueSpeaker(Primitive id, Primitive type) {
+		Vertex speaker = findByData(id);
+		if (speaker != null) {
+			return speaker;
+		}
+		if (speaker == null) {
+			speaker = createVertex(id);
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+			speaker.addRelationship(Primitive.TYPE, type);
+			speaker.addRelationship(Primitive.ID, createVertex(id.getIdentity()));
+		}
+		return speaker;
+	}
+	
+	/**
+	 * Find or create the speaker from the unique id.
+	 */
 	public synchronized Vertex createUniqueSpeaker(Primitive id, Primitive type, String name) {
 		Vertex speaker = findByData(id);
 		if (speaker != null) {
@@ -1269,8 +1297,8 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			speaker.addRelationship(Primitive.TYPE, type);
 			speaker.addRelationship(Primitive.ID, createVertex(id.getIdentity()));
-			speaker.addRelationship(Primitive.NAME, createWord(Utils.capitalize(name)));
-			Vertex word = createWord(name);
+			speaker.addRelationship(Primitive.NAME, createFragment(Utils.capitalize(name)));
+			Vertex word = createFragment(name);
 			//word.addRelationship(Primitive.MEANING, speaker);
 			speaker.addRelationship(Primitive.WORD, word);
 			//associateCaseInsensitivity(name, speaker);

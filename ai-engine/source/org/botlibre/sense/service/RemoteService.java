@@ -339,7 +339,7 @@ public class RemoteService extends BasicSense {
 			String url = server + "/api?input=" + Utils.encodeURL(message);
 			log("PANNOUS", Level.INFO, url);
 			InputStream stream = Utils.openStream(new URL(url));
-			String result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
+			String result = Utils.loadTextFile(stream, "UTF-8", 1000000);
 			log("Response", Level.INFO, result);
 			JSONObject json = (JSONObject)JSONSerializer.toJSON(result);
 			if (json == null || json.isNullObject()) {

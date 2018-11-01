@@ -170,14 +170,16 @@ public abstract class TextTest {
 
 	public static void checkResponse(String response, String... expected) {
 		boolean found = false;
-		for (String match : expected) {
-			if (response.equals(match)) {
-				found = true;
-				break;
+		if (response != null) {
+			for (String match : expected) {
+				if (response.equals(match)) {
+					found = true;
+					break;
+				}
 			}
 		}
 		if (!found) {
-			fail("Incorrect response: '" + response + "' was expecting one of " + Arrays.asList(expected));			
+			fail("Incorrect response: '" + String.valueOf(response) + "' was expecting one of " + Arrays.asList(expected));			
 		}
 	}
 

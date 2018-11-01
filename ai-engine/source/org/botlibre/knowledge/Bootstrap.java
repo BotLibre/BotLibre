@@ -106,7 +106,7 @@ public class Bootstrap {
 				}
 			}
 			
-			memory.save();			
+			memory.save();
 		}
 		
 		//TextEntry text = memory.getBot().awareness().getSense(TextEntry.class);
@@ -193,14 +193,14 @@ public class Bootstrap {
 	 */
 	public void writeBootstrapXML() {
 		// Basic
-		Network network = new BasicNetwork();		
+		Network network = new BasicNetwork();
 		bootstrapNetwork(network);
 		File file = new File("bootstrap.xml");
 		NetworkXMLParser.instance().toXML(network, file);
 
 		// Language
-		network = new BasicNetwork();		
-		languageNetwork(network);		
+		network = new BasicNetwork();
+		languageNetwork(network);
 		englishNetwork(network);
 		file = new File("language.xml");
 		NetworkXMLParser.instance().toXML(network, file);
@@ -313,10 +313,6 @@ public class Bootstrap {
 		compiler.pin(stateMachine);
 
 		stateMachine = compiler.parseStateMachine(getClass().getResource("Topic.self"), "", debug, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		compiler.pin(stateMachine);
-
-		stateMachine = compiler.parseStateMachine(getClass().getResource("Vision.self"), "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
@@ -447,7 +443,24 @@ public class Bootstrap {
 		Vertex conversation = network.createInstance(Primitive.VARIABLE);
 		conversation.setPinned(true);
 		conversation.setName(Primitive.CONVERSATION.getIdentity());
-		input.addRelationship(Primitive.CONVERSATION, conversation);		
+		input.addRelationship(Primitive.CONVERSATION, conversation);
+
+		// Add some regex primitives.
+		Vertex email = network.createVertex(Primitive.EMAIL);
+		email.addRelationship(Primitive.INSTANTIATION, Primitive.REGEX);
+		email.addRelationship(Primitive.REGEX, network.createVertex("\\b([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})\\b"));
+		
+		Vertex number = network.createVertex(Primitive.NUMBER);
+		number.addRelationship(Primitive.INSTANTIATION, Primitive.REGEX);
+		number.addRelationship(Primitive.REGEX, network.createVertex("\\b[-+]?\\d*\\.?\\d+\\b"));
+		
+		Vertex url = network.createVertex(Primitive.URL);
+		url.addRelationship(Primitive.INSTANTIATION, Primitive.REGEX);
+		url.addRelationship(Primitive.REGEX, network.createVertex("\\b(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w\\.\\&\\=\\?-]*)*\\/?\\b"));
+		
+		Vertex date = network.createVertex(Primitive.DATE);
+		date.addRelationship(Primitive.INSTANTIATION, Primitive.REGEX);
+		date.addRelationship(Primitive.REGEX, network.createVertex("\\b\\d+[-/.](0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])\\b"));
 	}
 	
 	public static void checkInputVariable(Vertex input, Network network) {
@@ -520,6 +533,10 @@ public class Bootstrap {
 		// Questions.
 		Vertex question = createQuestion("?", Primitive.QUESTION_MARK, network);
 		question.addRelationship(Primitive.INSTANTIATION, Primitive.PUNCTUATION);
+		Relationship relationship = network.createVertex(Primitive.QUESTION_MARK).addRelationship(Primitive.WORD, question);
+		relationship.setCorrectness(2.0f); // Enforce.
+		Vertex question2 = createQuestion("？", Primitive.QUESTION_MARK, network);
+		question2.addRelationship(Primitive.INSTANTIATION, Primitive.PUNCTUATION);
 		createQuestion("who", Primitive.WHO, network);
 		createQuestion("what", Primitive.WHAT, network);
 		createQuestion("when", Primitive.WHEN, network);
@@ -566,9 +583,11 @@ public class Bootstrap {
 		Vertex comma = network.createVertex(Primitive.COMMA);
 		createPunctuation(",", comma, network);
 		Vertex period = network.createVertex(Primitive.PERIOD);
-		createPunctuation(".", period, network);
+		createWord(".", period, true, network, Primitive.PUNCTUATION, null, null, null, null);
+		createPunctuation("。", period, network);
 		Vertex exclamation = network.createVertex(Primitive.EXCLAMATION);
-		createPunctuation("!", exclamation, network);
+		createWord("!", exclamation, true, network, Primitive.PUNCTUATION, null, null, null, null);
+		createPunctuation("！", exclamation, network);
 		createPunctuation(";", network.createVertex(), network);
 		createPunctuation(":", network.createVertex(), network);
 		createPunctuation("'", network.createVertex(Primitive.QUOTE), network);

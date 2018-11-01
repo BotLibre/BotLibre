@@ -43,7 +43,7 @@ import net.sf.json.JSONSerializer;
  */
 public class FacebookMessaging extends Facebook {
 
-	public static int MAX_WAIT = 60 * 1000; // 1 minute
+	public static int MAX_WAIT = 1000; // 1 second, otherwise Facebook will timeout.
 	
 	public FacebookMessaging() {
 		this.languageState = LanguageState.Answering;
@@ -249,39 +249,42 @@ public class FacebookMessaging extends Facebook {
 	 * Process the text sentence.
 	 */
 	public String inputFacebookMessengerMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
-		String senderName = null;
-		try {
-			if (getConnection() == null) {
-				connect();
-			}
-			String url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getFacebookMessengerAccessToken();
-			String json = Utils.httpGET(url);
-			net.sf.json.JSONObject user = (net.sf.json.JSONObject)JSONSerializer.toJSON(json);
-			if (user != null) {
-				Object firstName = user.get("first_name");
-				Object lastName = user.get("last_name");
-				if (firstName instanceof String) {
-					senderName = (String)firstName;
+		Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.FACEBOOKMESSENGER);
+		if (!user.hasRelationship(Primitive.NAME)) {
+			String senderName = null;
+			try {
+				if (getConnection() == null) {
+					connect();
 				}
-				if (lastName instanceof String) {
-					if (senderName == null) {
-						senderName = "";
+				String url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getFacebookMessengerAccessToken();
+				String json = Utils.httpGET(url);
+				net.sf.json.JSONObject userJSON = (net.sf.json.JSONObject)JSONSerializer.toJSON(json);
+				if (userJSON != null) {
+					Object firstName = userJSON.get("first_name");
+					Object lastName = userJSON.get("last_name");
+					if (firstName instanceof String) {
+						senderName = (String)firstName;
 					}
-					senderName = senderName + " " + (String)lastName;
+					if (lastName instanceof String) {
+						if (senderName == null) {
+							senderName = "";
+						}
+						senderName = senderName + " " + (String)lastName;
+					}
 				}
+			} catch (Exception exception) {
+				String url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getFacebookMessengerAccessToken();
+				log(url, Level.INFO);
+				url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getToken();
+				log(url, Level.INFO);
+				log(exception);
 			}
-		} catch (Exception exception) {
-			String url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getFacebookMessengerAccessToken();
-			log(url, Level.INFO);
-			url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getToken();
-			log(url, Level.INFO);
-			log(exception);
-		}
-		if (senderName == null || senderName.isEmpty()) {
-			senderName = senderId;
+			if (senderName == null || senderName.isEmpty()) {
+				senderName = senderId;
+			}
+			user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.FACEBOOKMESSENGER, senderName);
 		}
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.FACEBOOKMESSENGER, senderName);
 		Vertex self = network.createVertex(Primitive.SELF);
 		input.addRelationship(Primitive.SPEAKER, user);		
 		input.addRelationship(Primitive.TARGET, self);
@@ -328,28 +331,36 @@ public class FacebookMessaging extends Facebook {
 	@Override
 	public void output(Vertex output) {
 		if (!isEnabled()) {
+			notifyResponseListener();
 			return;
 		}
 		Vertex sense = output.mostConscious(Primitive.SENSE);
 		// If not output to twitter, ignore.
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
+			notifyResponseListener();
 			return;
 		}
 		String text = printInput(output);
-		Vertex target = output.mostConscious(Primitive.TARGET);
-		String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		Vertex id = conversation.getRelationship(Primitive.ID);
 		String conversationId = id.printString();
 		
+		Vertex target = output.mostConscious(Primitive.TARGET);
+		String replyTo = conversationId;
+		if (target != null && target.hasRelationship(Primitive.WORD)) {
+			replyTo = target.mostConscious(Primitive.WORD).printString();
+		}
+		
 		Vertex command = output.mostConscious(Primitive.COMMAND);
+
+		if (this.responseListener != null) {
+			this.responseListener.reply = text;
+			notifyResponseListener();
+		}
 		
 		// If the response is empty, do not send it.
 		if (command == null && text.isEmpty()) {
 			return;
-		}
-		if (this.responseListener != null) {
-			this.responseListener.reply = text;
 		}
 		if (conversation.hasRelationship(Primitive.TYPE, Primitive.FACEBOOKMESSENGER)) {
 			if (command == null) {

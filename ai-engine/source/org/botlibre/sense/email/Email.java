@@ -561,6 +561,16 @@ public class Email extends BasicSense {
 	 * Send the email reply.
 	 */
 	public void sendEmail(String text, String subject, String replyTo) {
+		try {
+			sendEmail(text, subject, replyTo, false);
+		} catch (MessagingException exception) { }
+	}
+	
+	/**
+	 * Send the email reply.
+	 * @throws MessagingException 
+	 */
+	public void sendEmail(String text, String subject, String replyTo, boolean throwException) throws MessagingException {
 		log("Sending email:", Level.INFO, replyTo, subject, text);
 		initProperties();
 		try {
@@ -592,6 +602,7 @@ public class Email extends BasicSense {
 		    Transport.send(message);
 		} catch (MessagingException exception) {
 			log(new BotException("Failed to send email: " + exception.getMessage(), exception));
+			if (throwException) { throw exception; }
 		}
 	}
 
@@ -936,7 +947,7 @@ public class Email extends BasicSense {
 	 */
 	public void inputSentence(String text, String subject, String userName, String targetUserName, Message message, Network network) throws MessagingException {
 		Vertex input = createInputParagraph(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.EMAIL);
 		user.addRelationship(Primitive.EMAIL, network.createVertex(userName));
 		input.addRelationship(Primitive.INSTANTIATION, Primitive.EMAIL);
 		input.getRelationship(Primitive.INPUT).addRelationship(Primitive.INSTANTIATION, Primitive.EMAIL);

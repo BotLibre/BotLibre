@@ -7661,12 +7661,6 @@ my name is jenny
 lastname?
 keywords: name 
 
-better is the debut single by brooke fraser from her multi-platinum and award-winning album what to do with daylight
-okay then
-
-"Better" is the debut single by Brooke Fraser from her multi-platinum and award-winning album What to Do with Daylight.
-okay then
-
 i m from montreal canada
 alright
 

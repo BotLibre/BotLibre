@@ -71,21 +71,9 @@ public class TestSRAIX extends TextTest {
 		List<String> output = registerForOutput(text);
 		//bot.setDebugLevel(Level.FINER);
 		
-		text.input("sraix what is love");
-		String response = waitForOutput(output);
-		if (response.indexOf("Sometimes I think love is just a biological urge. Other times LOVE seems like a spiritual quality. Love, unlike energy or matter, seems limitless.") == -1) {
-			fail("Incorrect response: " + response);
-		}
-		
 		text.input("sraixkey 2+2");
-		response = waitForOutput(output);
+		String response = waitForOutput(output);
 		if (!response.equals("4") && !response.equals("Uh, Four.")) {
-			fail("Incorrect response: " + response);
-		}
-		
-		text.input("sraixlimit what is love");
-		response = waitForOutput(output);
-		if (!response.equals("Sometimes I think love is just a biological urge.")) {
 			fail("Incorrect response: " + response);
 		}
 		
@@ -134,6 +122,18 @@ public class TestSRAIX extends TextTest {
 		text.input("sraixbrainbot5 " + applicationId + " 2+2");
 		response = waitForOutput(output);
 		if (!response.equals("2 + 2 = 4")) {
+			fail("Incorrect response: " + response);
+		}
+		
+		text.input("sraix what is love");
+		response = waitForOutput(output);
+		if (response.indexOf("Sometimes I think love is just a biological urge. Other times LOVE seems like a spiritual quality. Love, unlike energy or matter, seems limitless.") == -1) {
+			fail("Incorrect response: " + response);
+		}
+		
+		text.input("sraixlimit what is love");
+		response = waitForOutput(output);
+		if (!response.equals("Sometimes I think love is just a biological urge.")) {
 			fail("Incorrect response: " + response);
 		}
 		

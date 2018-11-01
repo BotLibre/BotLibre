@@ -45,7 +45,18 @@ public class TestUtils extends TextTest {
 		if (next != null) {
 			fail("Expecting null.");
 		}
-		
+		stream = new TextStream("\"text\";");
+		stream.next();
+		next = stream.nextQuotes();
+		checkResponse(next, "text");
+		stream = new TextStream("\"text\"");
+		stream.next();
+		next = stream.nextQuotes();
+		checkResponse(next, "text");
+		stream = new TextStream("\'text\'");
+		stream.next();
+		next = stream.nextStringQuotes();
+		checkResponse(next, "text");
 	}
 
 	@org.junit.Test
@@ -83,6 +94,45 @@ public class TestUtils extends TextTest {
 		text = Utils.stripTagClass(test, "nospeech");
 		if (!text.equals(result)) {
 			fail(text);
+		}
+		
+		test = "Do not say <p >hello</p>";
+		result = "Do not say <p >hello</p>";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "Do not say <button>hello</button>";
+		result = "Do not say <button>hello</button>";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "Do not say <p>hello</p>";
+		result = "Do not say <p>hello</p>";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+		
+		test = "Do not say <p>hello <p class=\"nospeech\">world yo</p></p>";
+		result = "Do not say <p>hello </p>";
+		text = Utils.stripTagClass(test, "nospeech");
+		if (!text.equals(result)) {
+			fail(text);
+		}
+
+		test = "<p>Take a look <a href=\"http://www.test.com/foobar\" target=\"_blank\">Click here</a>.</p>";
+		result = "Take a look Click here.";
+		String strippedText = Utils.stripTag(test, "button");
+		strippedText = Utils.stripTag(test, "select");
+		strippedText = Utils.stripTag(test, "script");
+		strippedText = Utils.stripTagClass(test, "nospeech");
+		strippedText = Utils.stripTags(strippedText);
+		if (!strippedText.trim().equals(result)) {
+			fail(strippedText);
 		}
 		
 	}

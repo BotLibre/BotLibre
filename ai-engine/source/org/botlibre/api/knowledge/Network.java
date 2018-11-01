@@ -294,12 +294,12 @@ public interface Network {
 	Vertex createSentence(String text);
 	
 	/**
-	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
+	 * Tokenize the sentence pattern into its words and wildcards, and create a vertex representation.
 	 */
 	Vertex createPattern(String text, SelfCompiler compiler);
 	
 	/**
-	 * Tokenize the sentence pattern into its words and wildcrads, and create a vertex representation.
+	 * Tokenize the sentence pattern into its words and wildcards, and create a vertex representation.
 	 */
 	Vertex createPattern(String text);
 	
@@ -363,6 +363,11 @@ public interface Network {
 	 * Find or create the speaker with the name.
 	 */
 	Vertex createSpeaker(String name);
+	
+	/**
+	 * Find or create the speaker from the unique id.
+	 */
+	Vertex createUniqueSpeaker(Primitive id, Primitive type);
 	
 	/**
 	 * Find or create the speaker from the unique id.

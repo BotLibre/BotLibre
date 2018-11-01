@@ -35,8 +35,8 @@ import org.botlibre.api.thought.Thought;
  */
 
 public class BasicMind implements Mind {
-	public static long UNACTIVE_TO_ASLEEP = 10 * 60 * 1000; // 10 minutes.
-	public static long UNACTIVE_TO_BORED = 1 * 60 * 1000; // 1 minute.
+	public static long UNACTIVE_TO_ASLEEP = 10L * 60L * 1000L; // 10 minutes.
+	public static long UNACTIVE_TO_BORED = 1L * 60L * 1000L; // 1 minute.
 	
 	public static ExecutorService threadPool = Executors.newCachedThreadPool();
 	

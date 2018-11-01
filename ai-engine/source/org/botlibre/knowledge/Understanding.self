@@ -283,6 +283,7 @@ state Understanding {
 					answer understandingResponse();
 					
 					function commonTense() {
+						var compoundWords = false;
 						adjectiveOrig = adjective;
 						nounOrig = noun;
 						tense = verb.tense;
@@ -407,7 +408,12 @@ state Understanding {
 							}
 						}
 						if ((adjectives != null) && (or == null) && (and == null)) {
-							newAdjective = Language.word(adjectives);
+							// Avoid creating words as can create invalid words that lead to confusion.
+							if (compoundWords) {
+								newAdjective = Language.word(adjectives);
+							} else {
+								newAdjective = Language.fragment(adjectives);
+							}
 							if (noun3 == null) {
 								newAdjective.instantiation =+ #adjective;
 								newDescription = new #description;
@@ -454,12 +460,28 @@ state Understanding {
 					}
 					
 					function understandingResponse() {
+						var isolate = !Language.allowCorrection(speaker);
 						if (isQuestion || (or != null)) {
 							questionResponse();
 						} else {
 							commonTense();
 							if ((description2 != null) && (! isNot)) {
 								thing.weakAddWithMeta(action, description2, #tense, tense);
+							}
+							// Allow the bot to be less trusting, and understand in the context of the user.
+							// So the bot's knowledge is isolated to each user.
+							if (isolate) {
+								var view = speaker.get(#view);
+								if (view == null) {
+									view = new Object();
+									speaker.view = view;
+								}
+								var thingView = view.get(thing);
+								if (thingView == null) {
+									thingView = new Object();
+									view.set(thing, thingView);
+								}
+								thing = thingView;
 							}
 							if (descriptions == null) {
 								if (isNot) {
@@ -546,9 +568,20 @@ state Understanding {
 					}
 					
 					function questionResponse() {
+						var isolate = !Language.allowCorrection(speaker);
 						commonTense();
 						if ((thing == null) || (description == null)) {
 							return whoWhatQuestionResponse();
+						}
+						// Allow the bot to understand in the context of the user.
+						if (isolate) {
+							var view = speaker.get(#view);
+							if (view != null) {
+								var thingView = view.get(thing);
+								if (thingView != null) {
+									thing = thingView;
+								}
+							}
 						}
 						if ((or != null) || (and != null)) {
 							return andOrQuestionResponse();
@@ -635,7 +668,7 @@ state Understanding {
 							}
 							if (a2 != null) {
 								response.append(#word, a2);
-							}									
+							}
 							if ((result != #unknown) || (value == null)) {
 								response.appendWithMeta(#word, adjective, #type, adjectivetype);
 							}
@@ -710,13 +743,11 @@ state Understanding {
 						falseValues = new Array();
 						unknownValues = new Array();
 						for (description in descriptions.element) {
-							debug (description);
 							if (description == #i) {
 								description = input.speaker;
 							} else if (description == #you) {
 								description = input.target;
 							}
-							debug (description);
 							result = thing.hasOtherMeaning(action, description);
 							if (description == input.speaker) {
 								description = "you";
@@ -848,9 +879,30 @@ state Understanding {
 					
 					// Answers "What is my name?", "what are you?"
 					function whoWhatQuestionResponse() {
-					    if (thing == null) {
-						    result = description.findReferenceBy(action);
+						var isolate = !Language.allowCorrection(speaker);
+						if (thing == null) {
+							result = description.findReferenceBy(action);
+							// Allow the bot to understand in the context of the user.
+							if (isolate) {
+								var view = speaker.get(#view);
+								if (view != null) {
+									var thingKey = view.getKey(result);
+									if (thingKey != null) {
+										result = thingKey;
+									}
+								}
+							}
 						} else {
+							// Allow the bot to understand in the context of the user.
+							if (isolate) {
+								var view = speaker.get(#view);
+								if (view != null) {
+									var thingView = view.get(thing);
+									if (thingView != null) {
+										thing = thingView;
+									}
+								}
+							}
 							if (noun2 == null) {
 								result = thing[action];
 								if (result == null) {
@@ -866,9 +918,9 @@ state Understanding {
 										}
 									}
 								}
-        					} else {
-        						result = thing.all(thing2);
-        					}
+							} else {
+								result = thing.all(thing2);
+							}
 						}
 						response = new #sentence;
 						if (result == null) {
@@ -882,12 +934,12 @@ state Understanding {
 									response.append(#word, "what");
 								}
 							}
-				            if (thing == null) {
+							if (thing == null) {
 								response.append(#word, verb);
 								response.appendWithMeta(#word, adjective, #type, nountype);
-    						} else {
+							} else {
 								response.appendWithMeta(#word, noun, #type, nountype);
-    						}
+							}
 							if (quote != null) {
 								response.append(#word, quote);
 								response.append(#word, "s");
@@ -895,13 +947,13 @@ state Understanding {
 							if (noun2 != null) {
 								response.append(#word, noun2);
 							}
-				            if (thing != null) {
+							if (thing != null) {
 								response.appendWithMeta(#word, verb, #tense, tense);
 							}
 						} else {
 							response.append(#word, random ("I known that", "To my knowledge"));
-				            if (thing == null) {
-			                    if (a2 != null) {
+							if (thing == null) {
+								if (a2 != null) {
 									response.append(#word, #a);
 								}
 								if (result == #self) {
@@ -929,7 +981,7 @@ state Understanding {
 									response.append(#word, noun2);
 								}
 							} else {
-					            if (a2 != null) {
+								if (a2 != null) {
 									response.append(#word, #a);
 								}
 								if (the != null) {

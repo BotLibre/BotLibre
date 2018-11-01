@@ -81,12 +81,54 @@ state TestSelf {
 	
 	pattern "test conversation" template testConversation();
 	
+	pattern "test * equals hello world" template testStarEqualHelloWorld();
+	
+	pattern "test * equals *" template testStarEquals();
+	
 	pattern "^" topic "empty" template "success";
+	
+	pattern "test nested json" template testNestedJSON();
+	
+	pattern "/\d+" template "number";
+	
+	pattern "/[-+]?[0-9]*\.?[0-9]+" template "float";
+	
+	pattern "another #number" template "number";
+	
+	pattern "/\b\d[\d,.]+\b" template "numeric";
+	
+	pattern "/.+\@.+\..+" template "email";
+	
+	pattern "another #email" template "email";
+	
+	pattern "another #url" template "url";
+	
+	pattern "/^(19|20)\d\d[-/.](0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])$" template "date";
+		
+	pattern "/\d+ / /\d+" template "{star[0].toNumber() / star[1].toNumber()}";
+	
+	pattern "^ /\d+ \* /\d+ ^" template "{star[1].toNumber() * star[2].toNumber()}";
+	
+	pattern "/(?i)what\sis\s(.*)" template "I have no idea what {star} is.";
 	
 	// test comment
 	var foo {
 		// test comment
 		name : "foo";
+	}
+	
+	function testStarEqualHelloWorld() {
+		if (star == "hello world") {
+			return star;
+		}
+		return "fail";
+	}
+	
+	function testStarEquals() {
+		if (star[0] == star[1]) {
+			return star;
+		}
+		return "fail";
 	}
 	
 	function testEmpty() {
@@ -98,19 +140,19 @@ state TestSelf {
 		// test comment
 		x = 123;
 		if ("hello 123" != Template("hello {x}")) {
-			return "fail";
+			return "fail1";
 		}
 		learn ({pattern: "email-template", template: Template("hello {x}")});
 		if ((srai "email-template") != "hello 123") {
-			return "fail";
+			return "fail2";
 		}
 		x = 456;
 		if ((srai "email-template") != "hello 456") {
-			return "fail";
+			return "fail3";
 		}
 		Language.learn("email-template2", "hello world");
 		if ((srai "email-template2") != "hello world") {
-			return "fail";
+			return "fail4";
 		}
 		
 		var indexes = Language.keywordIndexes("a hot hello world grass green b x loves hats", "a hat love hello");
@@ -125,7 +167,7 @@ state TestSelf {
 			return indexes[3];
 		}
 		if (Language.sentence("hello world").word == null) {
-			return "fail";
+			return "fail5";
 		} else {
 			// test comment
 		}
@@ -300,6 +342,62 @@ state TestSelf {
 		}
 		#date.toString();
 		#email.toString();
+		
+		if (Utils.lowercase("HEllo") != "hello") {
+			return "fail lowercase";
+		}
+		
+		if (!Utils.matches("hello", "hello")) {
+			return "fail matches 1";
+		}
+		
+		if (Utils.matches("hello", "\d")) {
+			return "fail matches 2";
+		}
+		
+		if (!Utils.matches("12345", "\d+")) {
+			return "fail matches 3";
+		}
+		
+		if ("\d".test("hello")) {
+			return "fail matches 4";
+		}
+		
+		if (!"\d".test("hello 123")) {
+			return "fail matches 5";
+		}
+		
+		if ("\d+".exec("hello 123") != "123") {
+			return "fail matches 6";
+		}
+		result = "hello 123".match("\d+");
+		if (result[0] != "123") {
+			return "fail matches 7";
+		}
+		result = "hello 123 456".match("\d+");
+		if (result[1] != "456") {
+			return "fail matches 8";
+		}
+		
+		if (Utils.extract("that will cost $12345", "\d+") != "12345") {
+			return "fail extract 1";
+		}
+		
+		if (Utils.extract("my birthday is 1970-01-01", #date) != "1970-01-01") {
+			return "fail extract 2";
+		}
+		
+		if (Utils.extract("my email is joe@foo.com.au.", #email) != "joe@foo.com.au") {
+			return "fail extract 3";
+		}
+		
+		if (Utils.extract("check out http://www.foo.com.au it is a cool website", #url) != "http://www.foo.com.au") {
+			return "fail extract 4";
+		}
+		
+		debug("debug: 1");
+		debug(#self, "debug: 1", conversation, conversation.topic);
+		debug(#warning, "error: 1", conversation, conversation.topic);
 		return "pass";
 	}
 	
@@ -346,6 +444,12 @@ state TestSelf {
 		if (Math.max(3, 5, 7, 2, 9) != 9) {
 			return "fail";
 		}
+		if (Math.add("3".toNumber(), "4".toNumber()) != 7) {
+			return "fail";
+		}
+		if (Math.add("3.2".toNumber(), "4.1".toNumber()) != 7.3) {
+			return "fail";
+		}
 		
 		return "pass";
 	}
@@ -381,10 +485,6 @@ state TestSelf {
 		}
 		timestamp = Date.timestamp("2014-01-01");
 		date = Date.date(timestamp);
-		debug(timestamp.instantiation);
-		debug(timestamp.getId());
-		debug(date.instantiation);
-		debug(date.getId());
 		if (timestamp == date) {
 			return "fail4";
 		}
@@ -392,6 +492,18 @@ state TestSelf {
 		date2 = Date.date(date);
 		if (date2 != date) {
 			return "fail5";
+		}
+		date = Date.timestamp();
+		date2 = Date.add(date, #second, 5);
+		diff = Date.difference(date, date2, #millisecond);
+		if (diff != 5000) {
+			return "fail6";
+		}
+		date = "2017-10-11";
+		date2 = "2017-11-21";
+		diff = Date.interval("days", date, date2, "yyyy-MM-dd");
+		if (diff != 41) {
+			return "fail7";
 		}
 		
 		return "pass";
@@ -520,12 +632,12 @@ state TestSelf {
 	}
 	
 	function postHTML() {
-		var url = "http://www.botlibre.com/chat";
+		var url = "https://www.botlibre.com/browse";
 		var params = new Object();
 		params.application = star[1];
 		params.id = "165";
 		params.message = star[0];
-		var value = Http.postHTML(url, params, "//p[@id='response']");
+		var value = Http.postHTML(url, params, "//h1/span");
 		return value;
 	}
 	
@@ -566,6 +678,11 @@ state TestSelf {
 	function csv() {
 		var root = Http.requestCSV(star);
 		return Language.details(root);
+	}
+	
+	function testNestedJSON() {
+		var json  = { name: "Joe", age: 44, contactinfo: { phone: "123-4567", address: { city: "Ottawa", street: "123" + " " + "Main Street" } } };
+		return json.contactinfo.address.street;
 	}
 
 }

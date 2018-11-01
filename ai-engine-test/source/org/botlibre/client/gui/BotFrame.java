@@ -41,7 +41,7 @@ import javax.swing.WindowConstants;
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
 import org.botlibre.knowledge.database.DatabaseMemory;
-import org.botlibre.sense.text.TextEntry;
+import org.botlibre.parsing.ResponseListParser;
 import org.botlibre.test.TextTest;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
@@ -148,11 +148,11 @@ public class BotFrame extends JFrame {
 						language.loadAIMLFileAsLog(file, "", false);
 					}				
 				} else if (file.getName().contains(".log")) {
-					getBot().awareness().getSense(TextEntry.class).loadChatFile(file, "Chat Log", "", true, false);
+					ResponseListParser.parser().loadChatFile(file, "Chat Log", "", true, false, getBot());
 				} else if (file.getName().contains(".csv")) {
-					getBot().awareness().getSense(TextEntry.class).loadChatFile(file, "CSV List", "", false, false);
+					ResponseListParser.parser().loadChatFile(file, "CSV List", "", false, false, getBot());
 				} else {
-					getBot().awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, false);
+					ResponseListParser.parser().loadChatFile(file, "Response List", "", false, false, getBot());
 				}
 			} catch (Exception failed) {
 				failed.printStackTrace();

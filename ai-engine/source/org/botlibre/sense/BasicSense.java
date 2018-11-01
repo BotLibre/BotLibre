@@ -49,12 +49,11 @@ import net.sf.json.JSONSerializer;
  */
 
 public class BasicSense implements Sense {
-	public static long MINUTE = 1000 * 60;
-	public static long HOUR = 1000 * 60 * 60;
-	public static long DAY = 1000 * 60 * 60 * 24;
+	public static long MINUTE = 1000L * 60L;
+	public static long HOUR = 1000L * 60L * 60L;
+	public static long DAY = 1000L * 60L * 60L * 24L;
 	/** Number of attempt to retry sensory input on failure. */
 	public static int RETRY = 3;
-	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
 	
 	/** Default user if none specified. */
 	public static String DEFAULT_SPEAKER = "Anonymous";
@@ -95,6 +94,17 @@ public class BasicSense implements Sense {
 		this.emotionalState = EmotionalState.NONE;
 		this.listeners = new ArrayList<ExceptionEventListener>();
 	}
+	
+	public void notifyResponseListener() {
+		if (this.responseListener != null) {
+			if (this.responseListener.reply == null) {
+				this.responseListener.reply = "";
+			}
+			synchronized (this.responseListener) {
+				this.responseListener.notifyAll();
+			}
+		}
+	}
 
 	public ResponseListener getResponseListener() {
 		return responseListener;
@@ -108,7 +118,11 @@ public class BasicSense implements Sense {
 	 * Record the engaged statistic if the conversation is engaged (over 3 messages).
 	 */
 	public void checkEngaged(Vertex conversation) {
-		int size = conversation.getRelationships(Primitive.INPUT).size();
+		Collection<Relationship> relationships = conversation.getRelationships(Primitive.INPUT);
+		if (relationships == null) {
+			return;
+		}
+		int size = relationships.size();
 		if (size == 3 || size == 4) {
 			this.engaged++;
 		}
@@ -311,7 +325,7 @@ public class BasicSense implements Sense {
 	 */
 	protected Vertex createInputParagraph(String text, Network network) {
 		if (getBot().getFilterProfanity()) {
-			if (Utils.checkProfanity(text)) {
+			if (Utils.checkProfanity(text, getBot().getContentRating())) {
 				throw BotException.offensive();
 			}
 		}
@@ -338,9 +352,9 @@ public class BasicSense implements Sense {
 	/**
 	 * Create an input based on the sentence.
 	 */
-	protected Vertex createInputSentence(String text, Network network) {
+	public Vertex createInputSentence(String text, Network network) {
 		if (getBot().getFilterProfanity()) {
-			if (Utils.checkProfanity(text)) {
+			if (Utils.checkProfanity(text, getBot().getContentRating())) {
 				throw BotException.offensive();
 			}
 		}

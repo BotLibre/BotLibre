@@ -830,11 +830,11 @@ public class Wikidata extends Http { //implements DiscoverySense {
 						result = processSearch(keywords, cascade, fork, filter, vertex.getNetwork(), new HashMap<String, Vertex>());
 					}
 					if (result != null) {
-						compoundWord = vertex.getNetwork().createWord(keywords);
+						compoundWord = vertex.getNetwork().createFragment(keywords);
 						compoundWord.addRelationship(Primitive.MEANING, result);
-						compoundWord = vertex.getNetwork().createWord(keywords.toLowerCase());
+						compoundWord = vertex.getNetwork().createFragment(keywords.toLowerCase());
 						compoundWord.addRelationship(Primitive.MEANING, result);
-						compoundWord = vertex.getNetwork().createWord(keywordscaps);
+						compoundWord = vertex.getNetwork().createFragment(keywordscaps);
 						compoundWord.addRelationship(Primitive.MEANING, result);
 					}
 					return result;

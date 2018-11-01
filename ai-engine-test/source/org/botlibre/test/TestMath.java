@@ -25,6 +25,7 @@ import org.botlibre.Bot;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.consciousness.Consciousness;
 import org.botlibre.thought.language.Language;
+import org.botlibre.thought.language.Language.CorrectionMode;
 import org.botlibre.thought.language.Language.LearningMode;
 
 /**
@@ -233,17 +234,17 @@ public class TestMath extends TextTest {
 		}
 		text.input("3 / 4?");
 		response = waitForOutput(output);
-		if (!response.equals("3 / 4 = 0.75")) {
+		if (!response.equals("3 / 4 = 0.75") && !response.equals("3 ÷ 4 = 0.75")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("0 / 4?");
 		response = waitForOutput(output);
-		if (!response.equals("0 / 4 = 0")) {
+		if (!response.equals("0 / 4 = 0") && !response.equals("0 ÷ 4 = 0")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("4 * 0?");
 		response = waitForOutput(output);
-		if (!response.equals("4 * 0 = 0")) {
+		if (!response.equals("4 × 0 = 0")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("4 × 2 ÷ 2?");
@@ -258,28 +259,28 @@ public class TestMath extends TextTest {
 		}
 		text.input("13 - 4 / 2?");
 		response = waitForOutput(output);
-		if (!response.equals("13 - 4 / 2 <br/> = 13 - 2 <br/> = 11")) {
-			fail("incorrect:" + response);			
+		if (!response.equals("13 - 4 ÷ 2 <br/> = 13 - 2 <br/> = 11")) {
+			fail("incorrect:" + response);
 		}
 		text.input("13 - 454 * 2 / 3 - 2 + 2?");
 		response = waitForOutput(output);
-		if (!response.equals("13 - 454 * 2 ÷ 3 - 2 + 2 <br/> = 13 - 908 / 3 - 2 + 2 <br/> = 13 - 302.6666666667 - 2 + 2 <br/> = -289.6666666667")) {
-			fail("incorrect:" + response);			
+		if (!response.equals("13 - 454 × 2 ÷ 3 - 2 + 2 <br/> = 13 - 908 ÷ 3 - 2 + 2 <br/> = 13 - 302.6666666667 - 2 + 2 <br/> = -289.6666666667")) {
+			fail("incorrect:" + response);
 		}
 		text.input("what is 7 * 7 - 1 / 2 + 6.6?");
 		response = waitForOutput(output);
-		if (!response.equals("7 * 7 - 1 / 2 + 6.6 <br/> = 49 - 0.5 + 6.6 <br/> = 55.1")) {
-			fail("incorrect:" + response);			
+		if (!response.equals("7 × 7 - 1 ÷ 2 + 6.6 <br/> = 49 - 0.5 + 6.6 <br/> = 55.1")) {
+			fail("incorrect:" + response);
 		}
 		text.input("what is 2^2 + 2 / 2 * 2 - 2 + 6.6?");
 		response = waitForOutput(output);
-		if (!response.equals("2^2 + 2 / 2 * 2 - 2 + 6.6 <br/> = 4 + 1 * 2 - 2 + 6.6 <br/> = 4 + 2 - 2 + 6.6 <br/> = 10.6")) {
-			fail("incorrect:" + response);			
+		if (!response.equals("2^2 + 2 ÷ 2 × 2 - 2 + 6.6 <br/> = 4 + 1 × 2 - 2 + 6.6 <br/> = 4 + 2 - 2 + 6.6 <br/> = 10.6")) {
+			fail("incorrect:" + response);
 		}
 		text.input("what is 2 * 2^3 + 2 / 2^2^2 * 2 - 2 + 6.6?");
 		response = waitForOutput(output);
-		if (!response.equals("2 * 2^3 + 2 / 2^2^2 * 2 - 2 + 6.6 <br/> = 2 * 8 + 2 / 2^2^2 * 2 - 2 + 6.6 <br/> = 16 + 2 / 4^2 * 2 - 2 + 6.6 <br/> = 16 + 2 / 16 * 2 - 2 + 6.6 <br/> = 16 + 0.125 * 2 - 2 + 6.6 <br/> = 16 + 0.25 - 2 + 6.6 <br/> = 20.85")) {
-			fail("incorrect:" + response);			
+		if (!response.equals("2 × 2^3 + 2 ÷ 2^2^2 × 2 - 2 + 6.6 <br/> = 2 × 8 + 2 ÷ 2^2^2 × 2 - 2 + 6.6 <br/> = 16 + 2 ÷ 4^2 × 2 - 2 + 6.6 <br/> = 16 + 2 ÷ 16 × 2 - 2 + 6.6 <br/> = 16 + 0.125 × 2 - 2 + 6.6 <br/> = 16 + 0.25 - 2 + 6.6 <br/> = 20.85")) {
+			fail("incorrect:" + response);
 		}
 		bot.shutdown();
 	}
@@ -305,12 +306,13 @@ public class TestMath extends TextTest {
 		text.input("(0 / 4) + 2?");
 		response = waitForOutput(output);
 		if (!response.equals("(0 / 4) + 2 <br/> = 0 + 2 <br/> = 2")
-				&& !response.equals("(0 / 4) + 2 <br/> = 0 + 2 <br/> = two")) {
+				&& !response.equals("(0 / 4) + 2 <br/> = 0 + 2 <br/> = two")
+				&& !response.equals("(0 ÷ 4) + 2 <br/> = 0 + 2 <br/> = 2")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("2 * (4 * 0)?");
 		response = waitForOutput(output);
-		if (!response.equals("2 * (4 * 0) <br/> = 2 * 0 <br/> = 0")) {
+		if (!response.equals("2 × (4 × 0) <br/> = 2 × 0 <br/> = 0")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("4 + (12 - 2)?");
@@ -320,22 +322,22 @@ public class TestMath extends TextTest {
 		}
 		text.input("(13 - 4) / 2?");
 		response = waitForOutput(output);
-		if (!response.equals("(13 - 4) / 2 <br/> = 9 / 2 <br/> = 4.5")) {
+		if (!response.equals("(13 - 4) ÷ 2 <br/> = 9 ÷ 2 <br/> = 4.5")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("((13 - 454) * 2) / 3 - (2 + 2)?");
 		response = waitForOutput(output);
-		if (!response.equals("((13 - 454) * 2) / 3 - (2 + 2) <br/> = (-441 * 2) / 3 - (2 + 2) <br/> = -882 / 3 - (2 + 2) <br/> = -294 - 4 <br/> = -298")) {
+		if (!response.equals("((13 - 454) × 2) ÷ 3 - (2 + 2) <br/> = (-441 × 2) ÷ 3 - (2 + 2) <br/> = -882 ÷ 3 - (2 + 2) <br/> = -294 - 4 <br/> = -298")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("what is 7 * (((7 - 1) / 2) + 6.6)?");
 		response = waitForOutput(output);
-		if (!response.equals("7 * (((7 - 1) / 2) + 6.6) <br/> = 7 * ((6 / 2) + 6.6) <br/> = 7 * (3 + 6.6) <br/> = 7 * 9.6 <br/> = 67.2")) {
+		if (!response.equals("7 × (((7 - 1) ÷ 2) + 6.6) <br/> = 7 × ((6 ÷ 2) + 6.6) <br/> = 7 × (3 + 6.6) <br/> = 7 × 9.6 <br/> = 67.2")) {
 			fail("incorrect:" + response);
 		}
 		text.input("what is 2^(2 + 2) / 2 * (2 - 2) + 6.6?");
 		response = waitForOutput(output);
-		if (!response.equals("2^(2 + 2) / 2 * (2 - 2) + 6.6 <br/> = 2^4 / 2 * (2 - 2) + 6.6 <br/> = 8 * 0 + 6.6 <br/> = 6.6")) {
+		if (!response.equals("2^(2 + 2) ÷ 2 × (2 - 2) + 6.6 <br/> = 2^4 ÷ 2 × (2 - 2) + 6.6 <br/> = 8 × 0 + 6.6 <br/> = 6.6")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("(2) + (2)");
@@ -351,7 +353,7 @@ public class TestMath extends TextTest {
 		text.input("what is (2 * (2^(3 + 2))) / 2^2^2 * (2 - 2 + 6.6)?");
 		response = waitForOutput(output);
 		if (!response.equals("(2 * (2^(3 + 2))) / 2^2^2 * (2 - 2 + 6.6) <br/> = (2 * (2^5)) / 2^2^2 * (2 - 2 + 6.6) <br/> = (2 * 32) / 2^2^2 * (2 - 2 + 6.6) <br/> = 64 / 2^2^2 * (2 - 2 + 6.6) <br/> = 64 / 4^2 * (2 - 2 + 6.6) <br/> = 64 ÷ 16 * (2 - 2 + 6.6) <br/> = 4 * 6.6 <br/> = 26.4")
-				&& !response.equals("(2 * (2^(3 + 2))) / 2^2^2 * (2 - 2 + 6.6) <br/> = (2 * (2^5)) / 2^2^2 * (2 - 2 + 6.6) <br/> = (2 * 32) / 2^2^2 * (2 - 2 + 6.6) <br/> = 64 / 2^2^2 * (2 - 2 + 6.6) <br/> = 64 / 4^2 * (2 - 2 + 6.6) <br/> = 64 / 16 * (2 - 2 + 6.6) <br/> = 4 * 6.6 <br/> = 26.4")) {
+				&& !response.equals("(2 × (2^(3 + 2))) ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = (2 × (2^5)) ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = (2 × 32) ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = 64 ÷ 2^2^2 × (2 - 2 + 6.6) <br/> = 64 ÷ 4^2 × (2 - 2 + 6.6) <br/> = 64 ÷ 16 × (2 - 2 + 6.6) <br/> = 4 × 6.6 <br/> = 26.4")) {
 			fail("incorrect:" + response);			
 		}
 		text.input("4 - 2^(2+2)");

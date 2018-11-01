@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.botlibre.Bot;
 import org.botlibre.knowledge.Bootstrap;
+import org.botlibre.parsing.ResponseListParser;
 import org.botlibre.sense.http.Wiktionary;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.consciousness.Consciousness;
@@ -48,7 +49,7 @@ public class TestALMLALICE extends TextTest {
 
 		url = TestAIML.class.getResource("alice.res");
 		file = new File(url.toURI());
-		bot.awareness().getSense(TextEntry.class).loadChatFile(file, "Response List", "", false, true);
+		ResponseListParser.parser().loadChatFile(file, "Response List", "", false, true, bot);
 		
 		bot.shutdown();
 		long end = System.currentTimeMillis();
@@ -66,6 +67,31 @@ public class TestALMLALICE extends TextTest {
 		// 2016-02-18 - Self4 - 38421
 		// 2016-02-19 - expression byte-code - 36918
 		// 2016-02-29 -  new computer - 36969
+	}
+
+	@org.junit.Test
+	public void testPickup() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearnGrammar(false);
+		language.setLearningMode(LearningMode.Disabled);
+		Consciousness consciousness = bot.mind().getThought(Consciousness.class);
+		consciousness.setEnabled(false);
+		Wiktionary wiktionary = bot.awareness().getSense(Wiktionary.class);
+		wiktionary.setIsEnabled(false);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+
+		String response = "";
+
+		text.input("x");
+		response = waitForOutput(output);
+
+		text.input("AGE INQUIRY");
+		response = waitForOutput(output);
+
+		text.input("x");
+		response = waitForOutput(output);
 	}
 
 	@org.junit.Test

@@ -39,10 +39,11 @@ public class WeChat extends BasicSense {
 	
 	protected String appId = "";
 	protected String appPassword = "";
-	protected String token = "";	//Wechat Access Token
+	protected String token = "";		//Wechat Access Token
 	protected Date tokenExpiry;
-	protected boolean international; //International Account or China Account
-	protected String userToken = ""; //User supplied token
+	protected boolean international; 	//International Account or China Account
+	protected String userToken = ""; 	//User supplied token
+	protected String menu = "";			//User defined menu
 	
 	protected boolean initProperties;
 	
@@ -85,6 +86,10 @@ public class WeChat extends BasicSense {
 		if (this.userToken == null) {
 			this.userToken = "";
 		}
+		this.menu = this.bot.memory().getProperty("WeChat.menu");
+		if (this.menu == null) {
+			this.menu = "";
+		}
 		this.international = Boolean.valueOf(this.bot.memory().getProperty("WeChat.international"));
 		
 		if (!this.userToken.isEmpty()) {
@@ -118,6 +123,14 @@ public class WeChat extends BasicSense {
 
 	public void setAppPassword(String appPassword) {
 		this.appPassword = appPassword;
+	}
+	
+	public String getMenu() {
+		return menu;
+	}
+
+	public void setMenu(String menu) {
+		this.menu = menu;
 	}
 	
 	public Boolean getInternational() {
@@ -169,6 +182,10 @@ public class WeChat extends BasicSense {
 			if (property != null) {
 				this.userToken = property;
 			}
+			property = this.bot.memory().getProperty("WeChat.menu");
+			if (property != null) {
+				this.menu = property;
+			}
 			this.international = Boolean.valueOf(this.bot.memory().getProperty("WeChat.international"));
 			
 			this.initProperties = true;
@@ -182,6 +199,7 @@ public class WeChat extends BasicSense {
 		memory.saveProperty("WeChat.appPassword", this.appPassword, true);
 		memory.saveProperty("WeChat.international", String.valueOf(this.international), true);
 		memory.saveProperty("WeChat.userToken", this.userToken, true);
+		memory.saveProperty("WeChat.menu", this.menu, true);
 		
 		if (this.tokenExpiry == null) {
 			memory.removeProperty("WeChat.tokenExpiry");
@@ -306,14 +324,18 @@ public class WeChat extends BasicSense {
 		}
 		String text = printInput(output);	
 		
-		//Strip html tags from response (but keep link tags)
+		//Strip html tags from response (but keep link and image tags)
 		text = text.replace("<a", "[[[a");
 		text = text.replace("</a", "[/[[a");
+		
+		text = text.replace("<img", "[[[img");
 		
 		text = Utils.stripTags(text);
 			
 		text = text.replace("[[[a", "<a");
 		text = text.replace("[/[[a", "</a");
+		
+		text = text.replace("[[[img", "<img");
 				
 		if (this.responseListener == null) {
 			return;
@@ -323,15 +345,7 @@ public class WeChat extends BasicSense {
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		if (conversation != null) {
 			this.responseListener.conversation = conversation.getDataValue();
-		}
-		
-		Vertex command = output.mostConscious(Primitive.COMMAND);
-		
-		// If the response is empty, do not send it.
-		if (command == null && text.isEmpty()) {
-			return;
-		}
-		
+		}		
 		synchronized (this.responseListener) {
 			this.responseListener.notifyAll();
 		}
@@ -370,5 +384,30 @@ public class WeChat extends BasicSense {
 		}
 		
 		saveProperties();
+	}
+	
+	/**
+	 * Updates user-defined menu
+	 */
+	public void updateMenu(String newMenu) {
+		
+		try {
+			if(this.getToken() == null || this.getToken().trim().isEmpty()) {
+				getAccessToken();
+			}
+		
+			String url = "https://";
+			url = url.concat( this.international ? INTERNATIONAL_API : CHINA_API );
+			url = url.concat("/cgi-bin/menu/create");
+		
+			String data = "?access_token=" + this.getToken();
+			url = url.concat(data);
+		
+			String response = Utils.httpPOST(url, "application/json", newMenu);
+			log("WeChat menu creation response", Level.INFO, response);
+		} catch (Exception e) {
+			log("WeChat menu creation exception", Level.INFO);
+		}
+		
 	}
 }

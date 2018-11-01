@@ -785,6 +785,11 @@ public interface Vertex {
 	boolean isArray();
 	
 	/**
+	 * Return if the vertex is for a meta relationship.
+	 */
+	public boolean isMeta();
+	
+	/**
 	 * Return if the vertex is an equation.
 	 */
 	boolean isEquation();
@@ -823,7 +828,12 @@ public interface Vertex {
 	 * Return if the vertex has any relationship of the type.
 	 */
 	boolean hasRelationship(Vertex type);
-	
+
+	/**
+	 * Return the type of the first relationship to the target.
+	 */
+	public Vertex getRelationshipType(Vertex target);
+
 	/**
 	 * Return if the vertex has any relationship to any target.
 	 */
@@ -838,6 +848,11 @@ public interface Vertex {
 	 * Return the most conscious target the vertex has any relationship to that is an instantiation of the classification.
 	 */
 	Vertex mostConsciousTargetOfType(Vertex classification);
+	
+	/**
+	 * Return if the vertex has each of the related values in the correct order.
+	 */
+	boolean hasAll(Primitive type, List<Vertex> values, boolean ordered);
 	
 	/**
 	 * Return if the vertex has an inverse/negative relationship of the type to the target.

@@ -293,13 +293,6 @@ public class Kik extends BasicSense {
 			this.responseListener.conversation = conversation.getDataValue();
 		}
 		
-		Vertex command = output.mostConscious(Primitive.COMMAND);
-		
-		// If the response is empty, do not send it.
-		if (command == null && text.isEmpty()) {
-			return;
-		}
-		
 		synchronized (this.responseListener) {
 			this.responseListener.notifyAll();
 		}

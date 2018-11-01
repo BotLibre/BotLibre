@@ -309,44 +309,102 @@ public class Date extends BasicTool {
 		Timestamp date = Utils.parseTimestamp(value.printString());
 		return source.getNetwork().createVertex(date);
 	}
-
+	
+	/**
+	 * Return the difference between the two date string in the part measurement.
+	 * First parse the string to dates using the default local date format.
+	 */
 	public Vertex interval(Vertex source, Vertex style, Vertex from, Vertex to) throws Exception {
 		SimpleDateFormat formater = new SimpleDateFormat();
 		return interval(source, style, from, to, formater);
 	}
-
+	
+	/**
+	 * Return the difference between the two date string in the part measurement.
+	 * First parse the string to dates using the date format.
+	 */
 	public Vertex interval(Vertex source, Vertex style, Vertex from, Vertex to, Vertex format) throws Exception {
 		SimpleDateFormat formater = new SimpleDateFormat(format.getDataValue());
 		return interval(source, style, from, to, formater);
 	}
-
-	public Vertex interval(Vertex source, Vertex style, Vertex from, Vertex to, SimpleDateFormat formater) throws Exception {
+	
+	/**
+	 * Return the difference between the two date string in the part measurement.
+	 * First parse the string to dates using the date format.
+	 */
+	public Vertex interval(Vertex source, Vertex part, Vertex from, Vertex to, SimpleDateFormat formater) throws Exception {
 		Calendar fromDate = Calendar.getInstance();
 		fromDate.setTime(formater.parse(from.getDataValue()));
 		Calendar toDate = Calendar.getInstance();
 		toDate.setTime(formater.parse(to.getDataValue()));
-		String styleText = style.getDataValue();
+		long value = interval(part.printString(), fromDate, toDate);
+		return source.getNetwork().createVertex(value);
+	}
+	
+	/**
+	 * Return the difference between the two date string in the part measurement.
+	 * First parse the string to dates using the date format.
+	 */
+	public Vertex difference(Vertex source, Vertex from, Vertex to, Vertex part) throws Exception {
+		if (!(from.getData() instanceof java.util.Date)) {
+			throw new BotException("Expected date object not " + from.printString());
+		}
+		if (!(to.getData() instanceof java.util.Date)) {
+			throw new BotException("Expected date object not " + to.printString());
+		}
+		Calendar fromDate = Calendar.getInstance();
+		fromDate.setTime(((java.util.Date)from.getData()));
+		Calendar toDate = Calendar.getInstance();
+		toDate.setTime(((java.util.Date)to.getData()));
+		String partText = "days";
+		if (part.is(Primitive.DAY)) {
+			partText = "days";
+		} else if (part.is(Primitive.WEEK)) {
+			partText = "days";
+		} else if (part.is(Primitive.MONTH)) {
+			partText = "months";
+		} else if (part.is(Primitive.YEAR)) {
+			partText = "years";
+		} else if (part.is(Primitive.HOUR)) {
+			partText = "hours";
+		} else if (part.is(Primitive.MINUTE)) {
+			partText = "minutes";
+		} else if (part.is(Primitive.SECOND)) {
+			partText = "seconds";
+		} else if (part.is(Primitive.MILLISECOND)) {
+			partText = "milliseconds";
+		}
+		long value = interval(partText, fromDate, toDate);
+		return source.getNetwork().createVertex(value);
+	}
+	
+	/**
+	 * Return the difference between the two dates in the part measurement.
+	 */
+	public long interval(String part, Calendar fromDate, Calendar toDate) throws Exception {
 		long value = 0;
-		if (styleText.equals("years")) {
+		if (part.equals("years")) {
 			value = toDate.get(Calendar.YEAR) - fromDate.get(Calendar.YEAR);
-		} else if (styleText.equals("months")) {
+		} else if (part.equals("months")) {
 			value = (toDate.get(Calendar.YEAR) * 12 + toDate.get(Calendar.MONTH)) - (fromDate.get(Calendar.YEAR) * 12 + fromDate.get(Calendar.MONTH));
-		} else if (styleText.equals("weeks")) {
+		} else if (part.equals("weeks")) {
 			value = (toDate.get(Calendar.YEAR) * 52 + toDate.get(Calendar.WEEK_OF_YEAR)) - (fromDate.get(Calendar.YEAR) * 52 + fromDate.get(Calendar.WEEK_OF_YEAR)) - 1;
-		} else if (styleText.equals("days")) {
+		} else if (part.equals("days")) {
 			value = (toDate.get(Calendar.YEAR) * 365 + toDate.get(Calendar.DAY_OF_YEAR)) - (fromDate.get(Calendar.YEAR) * 365 + fromDate.get(Calendar.DAY_OF_YEAR));
-		} else if (styleText.equals("hours")) {
+		} else if (part.equals("hours")) {
 			value = ((toDate.get(Calendar.YEAR) * 365 + toDate.get(Calendar.DAY_OF_YEAR)) * 24 + toDate.get(Calendar.HOUR_OF_DAY))
 					- ((fromDate.get(Calendar.YEAR) * 365 + fromDate.get(Calendar.DAY_OF_YEAR)) * 24 + fromDate.get(Calendar.HOUR_OF_DAY));
-		} else if (styleText.equals("minutes")) {
+		} else if (part.equals("minutes")) {
 			long toMinutes = (((toDate.get(Calendar.YEAR) * 365 + toDate.get(Calendar.DAY_OF_YEAR)) * 24 + toDate.get(Calendar.HOUR_OF_DAY)) * 60) + toDate.get(Calendar.MINUTE);
 			long fromMintues = (((fromDate.get(Calendar.YEAR) * 365 + fromDate.get(Calendar.DAY_OF_YEAR)) * 24 + fromDate.get(Calendar.HOUR_OF_DAY)) * 60) + fromDate.get(Calendar.MINUTE);
 			value = toMinutes - fromMintues;
-		} else if (styleText.equals("seconds")) {
+		} else if (part.equals("seconds")) {
 			value = (((((toDate.get(Calendar.YEAR) * 365 + toDate.get(Calendar.DAY_OF_YEAR)) * 24 + toDate.get(Calendar.HOUR_OF_DAY)) * 60) + toDate.get(Calendar.MINUTE)) * 60 + toDate.get(Calendar.SECOND))
 					- (((((fromDate.get(Calendar.YEAR) * 365 + fromDate.get(Calendar.DAY_OF_YEAR)) * 24 + fromDate.get(Calendar.HOUR_OF_DAY)) * 60) + fromDate.get(Calendar.MINUTE)) * 60 + fromDate.get(Calendar.SECOND));
+		} else if (part.equals("milliseconds")) {
+			value = toDate.getTimeInMillis() - fromDate.getTimeInMillis();
 		}
-		return source.getNetwork().createVertex(value);
+		return value;
 	}
 
 	public Vertex add(Vertex source, Vertex date, Vertex part, Vertex time) throws Exception {
@@ -378,6 +436,9 @@ public class Date extends BasicTool {
 		} else if (part.is(Primitive.SECOND)) {
 			calendar.add(Calendar.SECOND, ((Number)time.getData()).intValue());
 			timePart = true;
+		} else if (part.is(Primitive.MILLISECOND)) {
+			calendar.add(Calendar.MILLISECOND, ((Number)time.getData()).intValue());
+			timePart = true;
 		}
 		if (date.getData() instanceof java.sql.Date && datePart) {
 			return source.getNetwork().createVertex(new java.sql.Date(calendar.getTimeInMillis()));
@@ -402,6 +463,8 @@ public class Date extends BasicTool {
 			calendar.set(Calendar.MINUTE, ((Number)value.getData()).intValue());
 		} else if (part.is(Primitive.SECOND)) {
 			calendar.set(Calendar.SECOND, ((Number)value.getData()).intValue());
+		} else if (part.is(Primitive.MILLISECOND)) {
+			calendar.set(Calendar.MILLISECOND, ((Number)value.getData()).intValue());
 		}
 		if (date.getData() instanceof java.sql.Date) {
 			return source.getNetwork().createVertex(new java.sql.Date(calendar.getTimeInMillis()));
@@ -431,6 +494,8 @@ public class Date extends BasicTool {
 			value = calendar.get(Calendar.MINUTE);
 		} else if (part.is(Primitive.SECOND)) {
 			value = calendar.get(Calendar.SECOND);
+		} else if (part.is(Primitive.MILLISECOND)) {
+			value = calendar.get(Calendar.MILLISECOND);
 		}
 		return source.getNetwork().createVertex(value);
 	}

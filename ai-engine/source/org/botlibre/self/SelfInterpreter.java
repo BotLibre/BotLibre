@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.botlibre.aiml.AIMLParser;
 import org.botlibre.api.knowledge.Network;
@@ -38,6 +40,7 @@ import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.sense.http.Http;
 import org.botlibre.sense.service.RemoteService;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.Utils;
@@ -392,7 +395,7 @@ public class SelfInterpreter {
 		boolean condition = true;
 		List<Relationship> doEquations = expression.orderedRelationships(Primitive.DO);
 		Vertex result = network.createVertex(Primitive.NULL);
-		while (condition && depth < Language.MAX_STACK)  {
+		while (condition && depth < Language.MAX_LOOP)  {
 			Vertex first = evaluateExpression(arguments.get(0).getTarget(), variables, network, startTime, maxTime, stack);
 			if (arguments.size() == 1) {
 				condition = first.is(Primitive.TRUE);
@@ -411,8 +414,8 @@ public class SelfInterpreter {
 			}
 			depth++;
 		}
-		if (depth >= Language.MAX_STACK) {
-			network.getBot().log(this, "Max stack exceeded on while loop", Level.WARNING, Language.MAX_STACK);
+		if (depth >= Language.MAX_LOOP) {
+			network.getBot().log(this, "Max loop exceeded on while loop", Level.WARNING, Language.MAX_LOOP);
 		}
 		return result;
 	}
@@ -1595,19 +1598,53 @@ public class SelfInterpreter {
 	 * Log the arguments to the log.
 	 */
 	public Vertex evaluateDEBUG(Vertex expression, List<Relationship> arguments, Map<Vertex, Vertex> variables, Network network, long startTime, long maxTime, int stack) {
-		if (network.getBot().isDebugFine()) {
-			StringWriter writer = new StringWriter();
-			boolean first = true;
-			for (Relationship argument : arguments) {
-				if (!first) {
-					writer.write(" : ");
-				}
+		StringWriter writer = new StringWriter();
+		boolean first = true;
+		Level level = null;
+		for (Relationship argument : arguments) {
+			if (first) {
 				first = false;
-				Vertex value = evaluateExpression(argument.getTarget(), variables, network, startTime, maxTime, stack);
-				writer.write(value.printString());
+				if (argument.getTarget().isPrimitive()) {
+					// Allow log level to be set as first parameter.
+					if (argument.getTarget().is(Primitive.FINEST)) {
+						level = Level.FINEST;
+						if (!network.getBot().isDebugFine()) {
+							return network.createVertex(Primitive.NULL);
+						}
+					} else if (argument.getTarget().is(Primitive.FINER)) {
+						level = Level.FINER;
+						if (!network.getBot().isDebugFine()) {
+							return network.createVertex(Primitive.NULL);
+						}
+					} else if (argument.getTarget().is(Primitive.FINE)) {
+						level = Level.FINE;
+						if (!network.getBot().isDebugFine()) {
+							return network.createVertex(Primitive.NULL);
+						}
+					} else if (argument.getTarget().is(Primitive.INFO)) {
+						level = Level.INFO;
+					} else if (argument.getTarget().is(Primitive.WARNING)) {
+						level = Level.WARNING;
+					} else if (argument.getTarget().is(Primitive.SEVERE)) {
+						level = Level.SEVERE;
+					}
+					if (level != null) {
+						continue;
+					}
+					if (!network.getBot().isDebugFine()) {
+						return network.createVertex(Primitive.NULL);
+					}
+				}
+			} else{
+				writer.write(" : ");
 			}
-			network.getBot().log("DEBUG", writer.toString(), Level.FINE);
+			Vertex value = evaluateExpression(argument.getTarget(), variables, network, startTime, maxTime, stack);
+			writer.write(value.printString());
 		}
+		if (level == null) {
+			level = Level.FINE;
+		}
+		network.getBot().log("DEBUG", writer.toString(), level);
 		return network.createVertex(Primitive.NULL);
 	}
 
@@ -1925,7 +1962,6 @@ public class SelfInterpreter {
 			all.addRelationship(Primitive.ELEMENT, value, index);
 			index++;
 		}
-		all.addRelationship(Primitive.LENGTH, source.getNetwork().createVertex(source.getRelationships().keySet().size()));
 		return all;
 	}
 	
@@ -1994,6 +2030,10 @@ public class SelfInterpreter {
 		return source.getNetwork().createVertex(source.isPrimitive());
 	}
 	
+	public Vertex isSymbol(Vertex source) {
+		return source.getNetwork().createVertex(source.isPrimitive());
+	}
+	
 	public Vertex isArray(Vertex source) {
 		return source.getNetwork().createVertex(source.isArray());
 	}
@@ -2028,6 +2068,14 @@ public class SelfInterpreter {
 	
 	public Vertex getName(Vertex source) {
 		return source.getNetwork().createVertex(source.getName());
+	}
+	
+	public Vertex getKey(Vertex source, Vertex target) {
+		Vertex value = source.getRelationshipType(target);
+		if (value == null) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		}
+		return value;
 	}
 	
 	public Vertex get(Vertex source, Vertex type) {
@@ -2191,6 +2239,16 @@ public class SelfInterpreter {
 			return source.getNetwork().createVertex(0F);
 		} else {
 			return source.getNetwork().createVertex(relationship.getCorrectness());
+		}
+	}
+	
+	public Vertex setCorrectness(Vertex source, Vertex type, Vertex target, Vertex correctness) {
+		Relationship relationship = source.getRelationship(type, target);
+		if (relationship == null || !(correctness.getData() instanceof Number)) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		} else {
+			relationship.setCorrectness(((Number)correctness.getData()).floatValue());
+			return source;
 		}
 	}
 	
@@ -2362,6 +2420,18 @@ public class SelfInterpreter {
 		return vertex.getNetwork().createVertex(vertex.printString());
 	}
 
+	public Vertex toJSON(Vertex source) {
+		Network network = source.getNetwork();
+		String data = network.getBot().awareness().getSense(Http.class).convertToJSON(source);
+		return network.createVertex(data);
+	}
+
+	public Vertex toXML(Vertex source) {
+		Network network = source.getNetwork();
+		String data = network.getBot().awareness().getSense(Http.class).convertToXML(source);
+		return network.createVertex(data);
+	}
+
 	public Vertex toSymbol(Vertex vertex) {
 		return vertex.getNetwork().createVertex(new Primitive(vertex.printString().trim()));
 	}
@@ -2374,6 +2444,74 @@ public class SelfInterpreter {
 
 	public Vertex trim(Vertex text) {
 		return text.getNetwork().createVertex(text.printString().trim());
+	}
+	
+	/**
+	 * Convert the pattern to a regex and test if the text matches the pattern.
+	 */
+	public Vertex test(Vertex pattern, Vertex text) {
+		try {
+			if (pattern.isPrimitive()) {
+				pattern = pattern.getRelationship(Primitive.REGEX);
+				if (pattern == null) {
+					return null;
+				}
+			}
+			Pattern p = Pattern.compile(pattern.printString());
+			Matcher m = p.matcher(text.printString());
+			if (m.find()) {
+				return pattern.getNetwork().createVertex(Primitive.TRUE);
+			} else {
+				return pattern.getNetwork().createVertex(Primitive.FALSE);
+			}
+		} catch (Exception exception) { }
+		return null;
+	}
+	
+	/**
+	 * Convert the pattern to a regex and test if the text matches the pattern.
+	 */
+	public Vertex exec(Vertex pattern, Vertex text) {
+		try {
+			if (pattern.isPrimitive()) {
+				pattern = pattern.getRelationship(Primitive.REGEX);
+				if (pattern == null) {
+					return null;
+				}
+			}
+			Pattern p = Pattern.compile(pattern.printString());
+			Matcher m = p.matcher(text.printString());
+			if (m.find()) {
+				return pattern.getNetwork().createVertex(m.group());
+			}
+		} catch (Exception exception) { }
+		return null;
+	}
+	
+	/**
+	 * Convert the pattern to a regex and extract all values from the text that match.
+	 */
+	public Vertex match(Vertex text, Vertex pattern) {
+		try {
+			if (pattern.isPrimitive()) {
+				pattern = pattern.getRelationship(Primitive.REGEX);
+				if (pattern == null) {
+					return null;
+				}
+			}
+			Pattern p = Pattern.compile(pattern.printString());
+			Matcher m = p.matcher(text.printString());
+			if (!m.find()) {
+				return null;
+			}
+			Vertex result = pattern.getNetwork().createInstance(Primitive.ARRAY);
+			result.appendRelationship(Primitive.ELEMENT, pattern.getNetwork().createVertex(m.group()));
+			while (m.find()) {
+				result.appendRelationship(Primitive.ELEMENT, pattern.getNetwork().createVertex(m.group()));
+			}
+			return result;
+		} catch (Exception exception) { }
+		return null;
 	}
 
 	public Vertex concat(Vertex source, Vertex argument) {
@@ -2507,7 +2645,7 @@ public class SelfInterpreter {
 	public Vertex toNumber(Vertex text) {
 		try {
 			String value = text.printString();
-			if (value.indexOf('.') == -1) {
+			if (value.indexOf('.') != -1) {
 				return text.getNetwork().createVertex(new BigDecimal(value));
 			} else {
 				return text.getNetwork().createVertex(new BigInteger(value));

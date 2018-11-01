@@ -217,14 +217,15 @@ public class Skype extends BasicSense {
 	
 	public String processMessage(String json) {
 		SkypeActivity input = new SkypeActivity(json);
-		
-		if(input.type.equals("message")) {
+		if (input.type.equals("message")) {
 			try {
 				String message = processMessage(input.fromName, input.recipientName, input.text, input.conversationId);
-				return sendResponse(input, message);
-			} catch (Exception e) {
-				log("Skype send response exception", Level.INFO, e.toString());
-				e.printStackTrace();
+				if (message != null && !message.isEmpty()) {
+					return sendResponse(input, message);
+				}
+			} catch (Exception exception) {
+				log("Skype send response exception", Level.INFO, exception.toString());
+				exception.printStackTrace();
 				return null;
 			}
 		}
@@ -310,11 +311,13 @@ public class Skype extends BasicSense {
 	@Override
 	public void output(Vertex output) {
 		if (!isEnabled()) {
+			notifyResponseListener();
 			return;
 		}
 		Vertex sense = output.mostConscious(Primitive.SENSE);
 		// If not output to skype, ignore.
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
+			notifyResponseListener();
 			return;
 		}
 		String text = printInput(output);	
@@ -331,17 +334,7 @@ public class Skype extends BasicSense {
 		if (conversation != null) {
 			this.responseListener.conversation = conversation.getDataValue();
 		}
-		
-		Vertex command = output.mostConscious(Primitive.COMMAND);
-		
-		// If the response is empty, do not send it.
-		if (command == null && text.isEmpty()) {
-			return;
-		}
-		
-		synchronized (this.responseListener) {
-			this.responseListener.notifyAll();
-		}
+		notifyResponseListener();
 	}
 	
 	/**
