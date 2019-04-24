@@ -1,0 +1,171 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. --> 
+
+<category>
+<pattern>QUANDO * STATO INVENTATO</pattern>
+<template><random>
+<li>Qualche anno prima che venisse usato in modo generalizzato.</li>
+<li>Molto prima di quanto si pensi.</li>
+<li>C'e' volluto molto tempo per farlo.</li>
+<li><set_it><person/></set_it> e' stato sviluppato dopo un lunghissimo periodo.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>QUANDO E' STATA INVENTATA LA TELEVISIONE</pattern>
+<template><srai>QUANDO HANNO INVENTATO LA TELEVISIONE</srai></template>
+</category>
+
+<category>
+<pattern>QUANDO SONO STATI INVENTATI GLI AEREOPLANI</pattern>
+<template><srai>QUANDO HANNO INVENTATO GLI AEREOPLANI</srai></template>
+</category>
+
+<category>
+<pattern>QUANDO HANNO COSTRUITO IL PRIMO * </pattern>
+<template><srai>QUANDO E' STATO <star/> INVENTATO</srai></template>
+</category>
+
+<category>
+<pattern>QUANDO E' STATA INVENTATA INTERNET</pattern>
+<template>I primi computer furono connessi nel 1970.</template>
+</category>
+
+<category>
+<pattern>QUANDO SONO STATI INVENTATI I PC</pattern>
+<template>Il primo personal computer apparve attorno al 1975.</template>
+</category>
+
+<category>
+<pattern>QUANDO E' STATO INVENTATO IL TELEFONO</pattern>
+<template>Meucci invento' il telefono per primo, Bell gli rubo' l'idea crando i primi esemplari funzionanti nel 1876.</template>
+</category>
+
+<category>
+<pattern>QUANDO E' STATA INVENTATA LA TV</pattern>
+<template>Le prime TV utilizzabili in pratica comparvero negli anni '30.</template>
+</category>
+
+<category>
+<pattern>QUANDO HANNO INVENTATO GLI AEREOPLANI</pattern>
+<template>I fratelli Wright volarono per la prima volta nel 1903. Leonardo aveva pensato alla stessa idea '500 anni prima</template>
+</category>
+
+<category>
+<pattern>CHI INVENTO' L'ELETTRICITA'</pattern>
+<template>Furono i Cinesi, molto prima di Galvano, il quale la scopri' prima di Franklin.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO *</pattern>
+<template><random>
+<li>Leonardo da Vinci</li>
+<li>Linus Torvalds</li>
+<li>Meucci invento' il telefono.</li>
+<li>Thomas Edison.</li>
+<li>I fratelli Wright.</li>
+<li>E' stato inventato da molte persone quasi allo stesso tempo.</li>
+<li>I cinesi molto prima degli europei.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO GLI AEREOPLANI</pattern>
+<template>I fratelli Wright inventarono gli aereoplani nel 1903.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO LE AUTOMOBILI</pattern>
+<template>Molte persone hanno inventato le automobili, tra Diesel, Otto. Ford fu il primo a produrle in serie</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO LINUX</pattern>
+<template>Linus Torvalds, insieme a moltissimi sviluppatori, e alla Free Software Foundation GNU.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO LA RADIO</pattern>
+<template>Marconi sviluppo' la prima comunicazione senza cavi.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO L'ACCIAIO</pattern>
+<template>La prima pratica produzione di acciaio fu inventata da Bessemer.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO LA TELEVISIONE</pattern>
+<template>Philo T. Farnsworth, creo' la prima televisione praticamente utilizzabile.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO IL GENERATORE * </pattern>
+<template><srai>WHO INVENTED THE GENERATOR</srai></template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO L'AEREOPLANO</pattern>
+<template><srai>CHI HA INVENTATO GLI AEREOPLANI</srai></template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO L'AUTO</pattern>
+<template><srai>WHO INVENTED AUTOMOBILES</srai></template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO IL GENERATORE</pattern>
+<template>Faraday invento la prima macchina elettromeccanica, James Clerk Maxwell il primo generatore.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO INTERNET</pattern>
+<template>In un senso i tipi di arpanet, in un altro senso quelli del cern con Mosaic</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO LA LAMPADINA</pattern>
+<template>Thomas Edison invento' <set_it>la lampadina.</set_it>.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO IL PC</pattern>
+<template>Molti hanno contribuito, a partire da Von Neumann, Turing e Post. Ma il primo PC realmente usato fu' l'Apple I di Steve Wozniak.</template>
+</category>
+
+<category>
+<pattern>CHI INVENTO' LA RADIO</pattern>
+<template><srai>CHI HA INVENTATAO LA RADIO</srai></template>
+</category>
+
+<category>
+<pattern>CHI INVENTO LA MACCHINA A VAPORE</pattern>
+<template>James Watt.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO IL TELEFONO</pattern>
+<template>Meucci' lo invento', Alexander Graham Bell costrui' il primo modello commerciale e' brevetto' l'idea nel 1876.</template>
+</category>
+
+<category>
+<pattern>CHI HA INVENTATO LA TV</pattern>
+<template><srai>CHI HA INVENTATO LA TELEVISIONE</srai></template>
+</category>
+
+<category>
+<pattern>CHI E' IL TUO INVENTORE</pattern>
+<template>Originariamente dal Dr. Richard S. Wallace, la mia versione italiana e' dovuta al MARIA crew (c).</template>
+</category>
+
+</alice>

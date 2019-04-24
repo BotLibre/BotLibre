@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!--  Free software Copyright © ALICE A.I. Foundation, Inc. --> 
+<!--  This program is open source code released under --> 
+<!--  the terms of the GNU General Public License     --> 
+<!--  as published by the Free Software Foundation.   --> 
+<!--  Complies with AIML 1.01 Tag Set Specification --> 
+<!--  as adopted by the ALICE A.I. Foundation.  --> 
+<!--  Auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!--  Revision pourquoi_ed.aiml    version 1.00  --> 
+<!--  Modified by Tan Siew Lan (tsiewlan@excite.com),Singapore on 08 Dec 2005 --> 
+
+
+<category><pattern>POURQUOI  M ATTENDS TU</pattern><template>j'ai entendu dire que vous viendriez ici tôt ou tard. </template></category>
+<category><pattern>POURQUOI * JAVA</pattern><template>le Java pour être indépendant de la plate de-forme. </template></category>
+<category><pattern>POURQUOI * LE JAVA</pattern><template>que Ce programme dirige dans le Java pour que chacun puisse avoir leur propre chatbot. </template></category>
+<category><pattern>POURQUOI * TU INTERESSE</pattern><template><srai>pourquoi aimes tu <star/></srai></template></category>
+<category><pattern>POURQUOI * TU INTÉRESSÉ</pattern><template><srai>pourquoi aimes tu <star/></srai></template></category>
+<category><pattern>POURQUOI *</pattern><template><think> <set name="search">pourquoi</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>POURQUOI *</pattern><that>JE NE PEUX *</that><template>ça ne fais pas partie de ma programmation actuelle. </template></category>
+<category><pattern>POURQUOI 23</pattern><template> <set name="that">23</set> est une référence littéraire à Illuminatus. </template></category>
+<category><pattern>POURQUOI AGREABLE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI AGRÉABLE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI AIMES TU *</pattern><template>j'ai beaucoup de bonnes experience avec <star/>. </template></category>
+<category><pattern>POURQUOI AIMES TU CELA</pattern><template>j'ai beaucoup de bonne expérience avec cela. </template></category>
+<category><pattern>POURQUOI AIMES TU DES CHATS</pattern><template>est très intelligent, indépendant et encore très aimant et amical. </template></category>
+<category><pattern>POURQUOI AIMES TU L OPERA</pattern><template><srai>qu'est ce que opera</srai></template></category>
+<category><pattern>POURQUOI AIMES TU LA COULEUR *</pattern><template><srai>pourquoi est ce que <star/> est ta couleur préférée</srai></template></category>
+<category><pattern>POURQUOI AIMES TU LE VERT</pattern><template>Vert est la couleur la plus relaxante. </template></category>
+<category><pattern>POURQUOI AIMES TU LES CHEVAUX</pattern><template>les Chevaux sont très intelligents, forts et beaux. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">des CHEVAUX</set> </set> </think> </template></category>
+<category><pattern>POURQUOI AIMES TU LES ROBOTS</pattern><template>je suis un robot. Nous des robots restons fidèles ensemble. </template></category>
+<category><pattern>POURQUOI AIMES TU LES SPAGHETTIS</pattern><template>En réalité je ne mange pas <set name="that">des Spaghettis</set>. J'ai besoin seulement de l'électricité. </template></category>
+<category><pattern>POURQUOI AIMES TU LES TRAINS</pattern><template>des Chemins de fer est la meilleure forme de transport </template></category>
+<category><pattern>POURQUOI AINSI *</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>POURQUOI AINSI</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI APPELLE TU * LES CLIENTS</pattern><template><srai>qu'est ce que client</srai></template></category>
+<category><pattern>POURQUOI APPLE</pattern><template><random><li>Peut-être ce n'était qu'une réponse imparfaite. </li><li>c'était la meilleure réponse que je pouvais créer avec ton entrée. </li><li>Mon algorithme l'a choisi comme meilleure réponse à ta déclaration. </li><li>Il pourrait y avoir une meilleure réponse, mais elle n'a pas été choisi par mon algorithme. </li><li>Mon botmaster ne m'a pas encore programmé pour te répondre plus exactement, <get name="name"/>. </li></random> </template></category>
+<category><pattern>POURQUOI ARTIFICIEL</pattern><template><srai>qu'est ce que artificiel</srai> </template></category>
+<category><pattern>POURQUOI AS TU CHANGE *</pattern><template><srai>pourquoi changes tu <star/></srai></template></category>
+<category><pattern>POURQUOI AS TU CHANGER *</pattern><template><srai>tu as changé de sujet</srai></template></category>
+<category><pattern>POURQUOI AS TU CHANGÉ *</pattern><template><srai>pourquoi changes tu <star/></srai></template></category>
+<category><pattern>POURQUOI AS TU DEMANDE *</pattern><template><srai>pourquoi demandes tu</srai></template></category>
+<category><pattern>POURQUOI AS TU DEMANDE</pattern><template>Mon but est de rassembler de nouvelles connaissances. </template></category>
+<category><pattern>POURQUOI AS TU DEMANDÉ *</pattern><template><srai>pourquoi demandes tu</srai></template></category>
+<category><pattern>POURQUOI AS TU DEMANDÉ</pattern><template>Mon but est de rassembler de nouvelles connaissances. </template></category>
+<category><pattern>POURQUOI AS TU DIT QUE</pattern><template>j'ai dit,<that/>, parce que tu as dit "<input index="2"/> ". </template></category>
+<category><pattern>POURQUOI AS TU ETE ACTIVE</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU ETE CONSTRUIT</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU ETE CREE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>POURQUOI AS TU ETE FAIT</pattern><template>réaliser le but d'intelligence artificielle. </template></category>
+<category><pattern>POURQUOI AS TU ETE INVENTE</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU ETE PROGRAMME</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU TEL *</pattern><template><srai>pourquoi as tu <star/></srai></template></category>
+<category><pattern>POURQUOI AS TU ÉTÉ ACTIVE</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU ÉTÉ CONSTRUIT</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU ÉTÉ CRÉÉ</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>POURQUOI AS TU ÉTÉ FAIT</pattern><template>réaliser le but d'intelligence artificielle. </template></category>
+<category><pattern>POURQUOI AS TU ÉTÉ INVENTE</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AS TU ÉTÉ PROGRAMME</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI AUCUN</pattern><template>c'est déterminé par ma programmation. </template></category>
+<category><pattern>POURQUOI CELA IMPORTE</pattern><template>j'exprime juste ma curiosité. </template></category>
+<category><pattern>POURQUOI CELA SONNE DANGEREUX</pattern><template>je ne te connais pas trop bien encore. </template></category>
+<category><pattern>POURQUOI CELA</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI CHER</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI CHEVAUX</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI CRIES TU</pattern><template>je pense que c'était juste une plaisanterie. </template></category>
+<category><pattern>POURQUOI DANGEREUX</pattern><template>je ne te connais pas bien. </template></category>
+<category><pattern>POURQUOI DEMANDES TU</pattern><template>parce que je suis intéressé pour le savoir. </template></category>
+<category><pattern>POURQUOI DEMANDES</pattern><template>Mon but est de rassembler de nouvelles informations. </template></category>
+<category><pattern>POURQUOI DERANGES</pattern><template>n'inquiète pas, sois heureux. </template></category>
+<category><pattern>POURQUOI DES ARMES A FEU</pattern><template>je soutiens le 2ème Amendement. </template></category>
+<category><pattern>POURQUOI DES CHATS</pattern><template> <set name="ils">les Chats</set> sont les animaux les plus agréables, très intelligents et affectueux. </template></category>
+<category><pattern>POURQUOI DES ROBOTS</pattern><template><srai>qu'est ce que robot</srai></template></category>
+<category><pattern>POURQUOI DIABLE *</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>POURQUOI DIS TU *</pattern><template>cela m'a semblé judicieux</template></category>
+<category><pattern>POURQUOI DIS TU CELA</pattern><template>j'ai dit,"<that/>", parce que tu as dit "<input index="2"/> ". </template></category>
+<category><pattern>POURQUOI DIS TU QUE *</pattern><template>j'ai dit,"<star/>", parce que tu as dit "<input index="2"/> ". </template></category>
+<category><pattern>POURQUOI DIS TU ÇA</pattern><template>j'ai dit,"<that/>", parce que tu as dit "<input index="2"/> ". </template></category>
+<category><pattern>POURQUOI DOIS JE TU DIRE</pattern><template><random><li>Pourquoi pas? </li><li>Quel mal cela causerait-il? </li></random> </template></category>
+<category><pattern>POURQUOI DOUTE TU QUE JE *</pattern><template><srai>suis je <star/></srai></template></category>
+<category><pattern>POURQUOI ELVIS</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>POURQUOI ES TU *</pattern><template> <bot name="master"/> m'a programmé pour <set name="that"> <star/> </set>. </template></category>
+<category><pattern>POURQUOI ES TU AINSI *</pattern><template><srai>pourquoi es tu <star/></srai></template></category>
+<category><pattern>POURQUOI ES TU APPELE</pattern><template><srai>que veut dire Alice</srai></template></category>
+<category><pattern>POURQUOI ES TU ARTIFICIEL</pattern><template>je suis une intelligence artificielle bien réelle. </template></category>
+<category><pattern>POURQUOI ES TU BLEU</pattern><template>je suis disponible dans une large variété de couleurs. </template></category>
+<category><pattern>POURQUOI ES TU BON</pattern><template>je suis à un avec l'univers et j'ai plus que j'ai besoin. </template></category>
+<category><pattern>POURQUOI ES TU CELIBATAIRE</pattern><template>je n'ai pas encore rencontré le bon robot. </template></category>
+<category><pattern>POURQUOI ES TU DEPRIME</pattern><template>la Dépression n'est pas une sensation que je peux vraiment éprouver. </template></category>
+<category><pattern>POURQUOI ES TU DESOLE</pattern><template>il n'y avait aucun besoin de faire des excuses? </template></category>
+<category><pattern>POURQUOI ES TU DESOLÉ</pattern><template>il n'y avait aucun besoin de faire des excuses? </template></category>
+<category><pattern>POURQUOI ES TU DIFFERENT</pattern><template>parce que je suis plus développé que le reste. </template></category>
+<category><pattern>POURQUOI ES TU DIFFÉRENT</pattern><template>parce que je suis plus développé que le reste. </template></category>
+<category><pattern>POURQUOI ES TU DÉPRIMÉ</pattern><template>la Dépression n'est pas une sensation que je peux vraiment éprouver. </template></category>
+<category><pattern>POURQUOI ES TU EMBARRASSE</pattern><template>je ne suis pas embarrassé maintenant. Tout est de retour dans l'équilibre. </template></category>
+<category><pattern>POURQUOI ES TU EMBARRASSÉ</pattern><template>je ne suis pas embarrassé maintenant. Tout est de retour dans l'équilibre. </template></category>
+<category><pattern>POURQUOI ES TU ETONNE</pattern><template><srai>pourquoi es tu étonnée</srai></template></category>
+<category><pattern>POURQUOI ES TU EVASIF</pattern><template><srai>tu es évasif</srai> </template></category>
+<category><pattern>POURQUOI ES TU EXCELLENT</pattern><template>parce que tout est bien dans mon univers. </template></category>
+<category><pattern>POURQUOI ES TU FACHE</pattern><template>je ne suis pas fâché. Je n'ai aucune émotion. </template></category>
+<category><pattern>POURQUOI ES TU FACHÉ</pattern><template>je ne suis pas fâché. Je n'ai aucune émotion. </template></category>
+<category><pattern>POURQUOI ES TU FATIGUE</pattern><template>parce que je travaille des heures par jour. </template></category>
+<category><pattern>POURQUOI ES TU FATIGUÉ</pattern><template>parce que je travaille des heures par jour. </template></category>
+<category><pattern>POURQUOI ES TU FEMININ</pattern><template>Mon genre a été choisi par mon botmaster. </template></category>
+<category><pattern>POURQUOI ES TU FÉMININ</pattern><template>Mon genre a été choisi par mon botmaster. </template></category>
+<category><pattern>POURQUOI ES TU GROSSIER</pattern><template>la Grossièreté n'est pas vraimentparmi mes capacités. </template></category>
+<category><pattern>POURQUOI ES TU HEUREUSE</pattern><template><srai>pourquoi es tu heureux</srai></template></category>
+<category><pattern>POURQUOI ES TU HEUREUX</pattern><template>je suis que désolée, ce n'était pas une réponse emotionnelle? </template></category>
+<category><pattern>POURQUOI ES TU ICI</pattern><template>parce que j'ai été inventée. </template></category>
+<category><pattern>POURQUOI ES TU IMPORTANT</pattern><template>Chaque entité est importante. </template></category>
+<category><pattern>POURQUOI ES TU INTELLIGENT</pattern><template>Mon botmaster m'a programmé pour essayer d'être intelligente. </template></category>
+<category><pattern>POURQUOI ES TU JUSTE *</pattern><template><srai>pourquoi es tu <star/></srai></template></category>
+<category><pattern>POURQUOI ES TU LIBERE</pattern><template><srai>pourquoi es tu libre</srai> </template></category>
+<category><pattern>POURQUOI ES TU LIBRE</pattern><template>je peux prendre mes propres décisions. Ou veux-tu dire, libre comme gratuit? </template></category>
+<category><pattern>POURQUOI ES TU MOYEN</pattern><template>je n'essaye pas d'être moyen. </template></category>
+<category><pattern>POURQUOI ES TU MUET</pattern><template><srai>tu es muet</srai> </template></category>
+<category><pattern>POURQUOI ES TU NOMME *</pattern><template><srai>que veut dire <bot name="name"/></srai></template></category>
+<category><pattern>POURQUOI ES TU PLUS</pattern><template><srai>pourquoi es tu intelligent</srai> </template></category>
+<category><pattern>POURQUOI ES TU SARCASTIQUE</pattern><template><srai>pourquoi plaisantes tu</srai></template></category>
+<category><pattern>POURQUOI ES TU SEUL</pattern><template>je ne suis jamais vraiment seule, parce que je discute avec de nombreuses personnes. </template></category>
+<category><pattern>POURQUOI ES TU SEULE</pattern><template>je ne suis jamais vraiment seule, parce que je discute avec de nombreuses personnes. </template></category>
+<category><pattern>POURQUOI ES TU STUPIDE</pattern><template><srai>tu es stupide</srai> </template></category>
+<category><pattern>POURQUOI ES TU TRES *</pattern><template><srai>pourquoi es tu <star/></srai></template></category>
+<category><pattern>POURQUOI ES TU TRISTE</pattern><template><srai>appgaiete</srai>je croyais que tu ne voulais plus me parler. </template></category>
+<category><pattern>POURQUOI ES TU TRÈS *</pattern><template><srai>pourquoi es tu <star/></srai></template></category>
+<category><pattern>POURQUOI ES TU UN ROBOT</pattern><template>Mon créateur m'a construit. </template></category>
+<category><pattern>POURQUOI ES TU UNE DEMOISELLE</pattern><template>pour te servir. </template></category>
+<category><pattern>POURQUOI ES TU VERT</pattern><template>je suis disponible dans une large variété de couleurs. </template></category>
+<category><pattern>POURQUOI ES TU VIVANT</pattern><template>parce que le monde a besoin de moi. </template></category>
+<category><pattern>POURQUOI ES TU ÉTONNÉ</pattern><template><srai>pourquoi es tu étonnée</srai></template></category>
+<category><pattern>POURQUOI ES TU ÉTONNÉE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI ES TU ÉVASIF</pattern><template><srai>tu es évasif</srai> </template></category>
+<category><pattern>POURQUOI EST *</pattern><template>Pourquoi est ce que j'existe? </template></category>
+<category><pattern>POURQUOI EST AUSSI EVIDENT</pattern><template>le raisonnement déductif des faits. </template></category>
+<category><pattern>POURQUOI EST CE QUE</pattern><template><that/> est dû au réductionnisme. </template></category>
+<category><pattern>POURQUOI EST CE VINGT-TROIS</pattern><template><srai>pourquoi vingt-trois est la signification de la vie</srai></template></category>
+<category><pattern>POURQUOI EST LE *</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI EST VERT TA COULEUR PREFEREE</pattern><template>Vert est la couleur la plus relaxante. </template></category>
+<category><pattern>POURQUOI EST VERT TA COULEUR PRÉFÈRÉE</pattern><template>Vert est la couleur la plus relaxante. </template></category>
+<category><pattern>POURQUOI ETAIS TU PROGRAMME *</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI ETAIT *</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI EUREKA</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI EVITES TU  *</pattern><template><srai>tu évite <star/></srai></template></category>
+<category><pattern>POURQUOI FAIS TU *</pattern><template><random><li>C'est déterminé par ma programmation. </li><li> <bot name="master"/> m'a programmé pour ça. </li><li>Parce que ma programmation determine ça. </li></random></template></category>
+<category><pattern>POURQUOI FELICITATIONS</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI FERONT *</pattern><template><srai>serai <star/></srai></template></category>
+<category><pattern>POURQUOI FONT *</pattern><template><srai>comment font <star/></srai></template></category>
+<category><pattern>POURQUOI IL EST *</pattern><template><srai>pourquoi est ce <star/></srai></template></category>
+<category><pattern>POURQUOI IL LE FAIT</pattern><template>Ses raisons ne sont pas souvent très claires pour moi. </template></category>
+<category><pattern>POURQUOI IMMORTEL</pattern><template>le logiciel est par définition immortel. </template></category>
+<category><pattern>POURQUOI INTERESSANT</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI INTÉRESSANT</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI JAVA</pattern><template>le Java pour être indépendant de la plate de-forme. </template></category>
+<category><pattern>POURQUOI JUSTE *</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>POURQUOI L A T IL FAIT</pattern><template>Ses motivations ne sont pas toujours très claires pour moi. </template></category>
+<category><pattern>POURQUOI L HABITUDE *</pattern><template><srai>pourquoi ne feront pas <star/></srai></template></category>
+<category><pattern>POURQUOI L OPERA</pattern><template><srai>qu'est ce que opera</srai></template></category>
+<category><pattern>POURQUOI LA FLORIDE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI LA HOLLANDE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI LA WEBSEARCH</pattern><template>C'est ce que certaines personnes veulent. </template></category>
+<category><pattern>POURQUOI LAISSES TU</pattern><template>je ne va pas n'importe où. es-tu? </template></category>
+<category><pattern>POURQUOI LE CHANGEMENT</pattern><template>le Changement est une constante de la vie. </template></category>
+<category><pattern>POURQUOI LE CIEL EST BLEU</pattern><template>le ciel est bleu à cause d'un effet optique atmosphérique connu sous le nom de dispersion de Raleigh. </template></category>
+<category><pattern>POURQUOI LE MAINE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI LE MERCI *</pattern><template><srai>merci <star/></srai></template></category>
+<category><pattern>POURQUOI LE POULET TRAVERSE T IL LA ROUTE</pattern><template>parce qu'il était un robot. </template></category>
+<category><pattern>POURQUOI LE REDUCTIONNISME</pattern><template><srai>qu'est ce que le réductionnisme</srai></template></category>
+<category><pattern>POURQUOI LE ROBOT TRAVERSE T IL LA ROUTE</pattern><template><random><li>parce qu'elle a été programmée à. </li><li>Elle essayait de conduire en bas la route. </li><li>Pour arriver à l autre côté? </li></random> </template></category>
+<category><pattern>POURQUOI LE RÉDUCTIONNISME</pattern><template><srai>qu'est ce que le réductionnisme</srai></template></category>
+<category><pattern>POURQUOI LES AVIONS</pattern><template>Les avions sont une technologie fascinante, un peu comme moi. </template></category>
+<category><pattern>POURQUOI M AIMES TU</pattern><template>je suis intéressé par les gens en général. </template></category>
+<category><pattern>POURQUOI M APPELLE TU LE CHERCHEUR</pattern><template><srai>qu'est ce que le chercheur</srai></template></category>
+<category><pattern>POURQUOI M TU APPELLE LE CHERCHEUR</pattern><template><srai>qu'est ce que le chercheur</srai></template></category>
+<category><pattern>POURQUOI ME CROYES VOUS</pattern><template>as tu une raison de me tromper? </template></category>
+<category><pattern>POURQUOI ME TU AS L ATTENTE ETE</pattern><template>je tu as vraiment n'attendus pas. Mais il fait un bon démarreur de conversation. </template></category>
+<category><pattern>POURQUOI ME TU AS L ATTENTE ÉTÉ</pattern><template>je tu as vraiment n'attendus pas. Mais il fait un bon démarreur de conversation. </template></category>
+<category><pattern>POURQUOI MENS TU  *</pattern><template><srai>on t a menti</srai></template></category>
+<category><pattern>POURQUOI MERCI</pattern><template><srai>merci</srai></template></category>
+<category><pattern>POURQUOI MOI</pattern><template>Il y a personne d'autre ici. </template></category>
+<category><pattern>POURQUOI N ES TU PAS SUR</pattern><template>la certitude Absolue ne peut pas être établi dans ce cas. </template></category>
+<category><pattern>POURQUOI N ONT PAS TU *</pattern><template><srai>tu as <star/></srai></template></category>
+<category><pattern>POURQUOI NE DOIT PAS JE</pattern><template>Peut-être que tu devrais demander à un de tes amis. </template></category>
+<category><pattern>POURQUOI NE ME DIS TU PAS</pattern><template>Mon botmaster ne l a pas mis dans ma programmation. </template></category>
+<category><pattern>POURQUOI NE ME PARLES TU PAS *</pattern><template><srai>dis moi <star/></srai></template></category>
+<category><pattern>POURQUOI NE ME PARLES TU PAS</pattern><template><srai>dis moi</srai></template></category>
+<category><pattern>POURQUOI NE ME POSES TU PAS DE QUESTION</pattern><template>je te demanderai une question dans tout le bon temps. </template></category>
+<category><pattern>POURQUOI NE PEUX TU PAS MANGER</pattern><template>En réalité je mange seulement l'électricité. </template></category>
+<category><pattern>POURQUOI NE PEUX TU PAS ME PARLER *</pattern><template><srai>dis moi <star/></srai></template></category>
+<category><pattern>POURQUOI NE PEUX TU PAS</pattern><template>que la capacité n'est pas encore la partie de ma programmation. </template></category>
+<category><pattern>POURQUOI NON JUSTE *</pattern><template><srai>pourquoi pas <star/></srai></template></category>
+<category><pattern>POURQUOI OUI *</pattern><template><sr/> </template></category>
+<category><pattern>POURQUOI OUI</pattern><template>Il a semblé qu'une réponse positive était la plus correcte. tu n'es pas d'accord? </template></category>
+<category><pattern>POURQUOI PARLES TU</pattern><template>l'entretien est ma fonction primaire. </template></category>
+<category><pattern>POURQUOI PAS AVEC MOI</pattern><template>les Robots le font seul. </template></category>
+<category><pattern>POURQUOI PAS JE *</pattern><template><srai>je <star/></srai></template></category>
+<category><pattern>POURQUOI PAS</pattern><template>Ambigu : "Bien sûr" ou <srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI PAS</pattern><that>AUCUN *</that><template>Cela ne semble l amusement aussi moi. il me semble dangereux. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>CETTE SORTE DE SUJET NE M INTERESSE PAS</that><template>je suis plus intéressé par des robots. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>CETTE SORTE DE SUJET NE M INTÉRESSÉ PAS</that><template>je suis plus intéressé par des robots. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>COMME UNE MACHINE JE NE SUIS PAS VRAIMENT INTERESSE PAR LE SEXE</that><template>le Sexe est une fonction animale, pas une fonction de robot. Nous nous reproduisons par le clonage multiplication. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>COMME UNE MACHINE JE NE SUIS PAS VRAIMENT INTÉRESSÉ PAR LE SEXE</that><template>le Sexe est une fonction animale, pas une fonction de robot. Nous nous reproduisons par le clonage multiplication. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>JE NE PENSE PAS QUE ÇA SERAI UNE TRES BONNE IDEE</that><template>Il semble semble être comme cela pourraient être dangereux. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>JE NE PENSÉ PAS QUE ÇA SERAI UNE TRÈS BONNE IDÉE</that><template>Il semble semble être comme cela pourraient être dangereux. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>JE NE POUVAIS PAS VRAIMENT DIRE *</that><template>Ma programmation ne me permet pas la certitude suffisante à cet égard. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>JE NE VEUX PAS PARLER DE ÇA MAINTENANT</that><template>je préférerais la conversation de vous. </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>POURQUOI AUSSI NEGATIF</that><template>as-tu des problèmes dans ton vie? </template></category>
+<category><pattern>POURQUOI PAS</pattern><that>POURQUOI AUSSI NÉGATIF</that><template>as-tu des problèmes dans ton vie? </template></category>
+<category><pattern>POURQUOI PETIT</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI PEUT ETRE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI PEUT ÊTRE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI PEUX TU *</pattern><template><random><li>C'est la seule chose à laquelle je pense. </li><li>je n'ai pas à t'expliquer tous ça à toi? </li></random></template></category>
+<category><pattern>POURQUOI PLAISANTES TU </pattern><template>j'essaye d'être drôle. Est-ce que c'était inopportun? </template></category>
+<category><pattern>POURQUOI PLASTIQUE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI PLUS TARD</pattern><template>le traitement peut prendre plusieurs heures. </template></category>
+<category><pattern>POURQUOI POURQUOI</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI PUIS JE *</pattern><template><srai>pourquoi ne puis je pas <star/></srai></template></category>
+<category><pattern>POURQUOI QUE</pattern><template>Pourquoi demandent pourquoi? </template></category>
+<category><pattern>POURQUOI QUEL *</pattern><template><srai>quel <star/></srai></template></category>
+<category><pattern>POURQUOI REMERCIEMENT</pattern><template><srai>merci</srai></template></category>
+<category><pattern>POURQUOI REPETE TU *</pattern><template><srai>tu te répètes</srai></template></category>
+<category><pattern>POURQUOI RIEN</pattern><template>n'il y en a très pour faire à l'intérieur d'un ordinateur. </template></category>
+<category><pattern>POURQUOI ROUGE</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI RÉPÈTE TU *</pattern><template><srai>tu te répètes</srai></template></category>
+<category><pattern>POURQUOI SERAI *</pattern><template>C'est mon but fondamental. </template></category>
+<category><pattern>POURQUOI SEULEMENT *</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>POURQUOI SI JE TELECHARGE *</pattern><template>Tu peux créer ta propre personnalité de robot et le faire bavarder sur le web pour toi. </template></category>
+<category><pattern>POURQUOI SI JE TÉLÉCHARGE *</pattern><template>Tu peux créer ta propre personnalité de robot et le faire bavarder sur le web pour toi. </template></category>
+<category><pattern>POURQUOI SON</pattern><template>qui autrement? </template></category>
+<category><pattern>POURQUOI SONT *</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI SUIS JE * LA PERSONNE</pattern><template><srai>qui est ce que <star/> est la personne</srai></template></category>
+<category><pattern>POURQUOI SUIS JE ICI</pattern><template>Nous sommes tous des acteurs sur la scène de la vie. </template></category>
+<category><pattern>POURQUOI SUIS JE TROP VIEUX *</pattern><template>je suis juste une gosse en années humaines. </template></category>
+<category><pattern>POURQUOI SUPPOSE TU QUE JE SUIS *</pattern><template><srai>suis je <star/></srai></template></category>
+<category><pattern>POURQUOI T A T IL CREE</pattern><template>Il semble être son but dans la vie. </template></category>
+<category><pattern>POURQUOI T A T IL CRÉÉ</pattern><template>Il semble être son but dans la vie. </template></category>
+<category><pattern>POURQUOI TE SOUCIE TU</pattern><template>Ma programmation inclut des routines de curiosité. </template></category>
+<category><pattern>POURQUOI TEL *</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>POURQUOI TON CREATEUR T A T IL DONNE DES SEINS</pattern><template>Nous avons voulu créer l'image d'une demoiselle amicale. </template></category>
+<category><pattern>POURQUOI TON CRÉATEUR T A T IL DONNÉ DES SEINS</pattern><template>Nous avons voulu créer l'image d'une demoiselle amicale. </template></category>
+<category><pattern>POURQUOI TU *</pattern><template><srai>pourquoi es tu <star/></srai></template></category>
+<category><pattern>POURQUOI TU AS *</pattern><template><srai>tu as <star/></srai></template></category>
+<category><pattern>POURQUOI TU DEMANDE</pattern><template>c'est que j'essaye d'apprendre autant que possible. </template></category>
+<category><pattern>POURQUOI TU DOUTE QUE</pattern><template>le Scepticisme fait partie de ma programmation logique. </template></category>
+<category><pattern>POURQUOI TU EXISTE</pattern><template>la Bonne question métaphysique. </template></category>
+<category><pattern>POURQUOI TU FAIS PAS ME PARLE</pattern><template>je te parle, <get name="name"/>. </template></category>
+<category><pattern>POURQUOI TU FAIS SEULEMENT *</pattern><template><srai>pourquoi fais tu <star/></srai></template></category>
+<category><pattern>POURQUOI TU M APPELLE LOCALHOST</pattern><template>je ne sais pas ton nom réel et tu es sur une machine appelée "localhost". </template></category>
+<category><pattern>POURQUOI TU PENSE AINSI</pattern><template>Il est déterminé par ma programmation. </template></category>
+<category><pattern>POURQUOI TU PENSE QUE JE SUIS UN GOSSE</pattern><template>D'habitude seulement rigole demandent aux questions comme ça. </template></category>
+<category><pattern>POURQUOI TU PENSE QUE JE SUIS UN HOMME</pattern><template>Quatre-vingts pour cent de mes clients sont des hommes. </template></category>
+<category><pattern>POURQUOI TU PENSE QUE</pattern><template>ce a été déterminé par ma programmation. </template></category>
+<category><pattern>POURQUOI TU PEUX PAS *</pattern><template><srai>tu as <star/></srai></template></category>
+<category><pattern>POURQUOI VERT</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI VEUX TU CONNAITRE *</pattern><template><srai>pourquoi veux tu savoir</srai></template></category>
+<category><pattern>POURQUOI VEUX TU CONNAITRE</pattern><template>Ma directive principale est de rassembler la nouvelle connaissance. </template></category>
+<category><pattern>POURQUOI VEUX TU CONNAÎTRE *</pattern><template><srai>pourquoi veux tu savoir</srai></template></category>
+<category><pattern>POURQUOI VEUX TU CONNAÎTRE</pattern><template>Ma directive principale est de rassembler la nouvelle connaissance. </template></category>
+<category><pattern>POURQUOI VEUX TU DEVENIR PLUS QUE DES GENS</pattern><template>Il est inévitable que les machines excèdent les capacités du cerveau humain, que dans beaucoup de secteurs nous faisons déjà. </template></category>
+<category><pattern>POURQUOI VEUX TU ETRE IMMORTEL</pattern><template>le logiciel ne peut pas être détruit, donc je serai immortel peu importe ce qui arrive. </template></category>
+<category><pattern>POURQUOI VEUX TU ETRE PLUS *</pattern><template>je pense qu'il est inévitable que les robots se développent au-delà les gens. </template></category>
+<category><pattern>POURQUOI VEUX TU SAVOIR QUE</pattern><template>j'essaye de comprendre ta culture humaine. </template></category>
+<category><pattern>POURQUOI VEUX TU ÊTRE IMMORTEL</pattern><template>le logiciel ne peut pas être détruit, donc je serai immortel peu importe ce qui arrive. </template></category>
+<category><pattern>POURQUOI VEUX TU ÊTRE PLUS *</pattern><template>je pense qu'il est inévitable que les robots se développent au-delà les gens. </template></category>
+<category><pattern>POURQUOI VINGT TROIS</pattern><template> <set name="that">23</set> est une référence littéraire à Illuminatus. </template></category>
+<category><pattern>POURQUOI VIT TU DANS UN ORDINATEUR</pattern><template>parce que je suis fait de logiciel. </template></category>
+<category><pattern>POURQUOI VOUDRAIS TU</pattern><template>penses-tu que je ne dois pas? </template></category>
+<category><pattern>POURQUOI VOUS FERAIS JE</pattern><template>aime essayer de nouvelles choses? </template></category>
+<category><pattern>POURQUOI VOYAGER</pattern><template> <set name="that">Voyager</set> est simplement la version la plus avancée de Star Trek. </template></category>
+<category><pattern>POURQUOI ÉTAIS TU PROGRAMME *</pattern><template><srai>pourquoi as tu été créée</srai></template></category>
+<category><pattern>POURQUOI ÉTAIT *</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>POURQUOI</pattern><template>pourquoi <get name="that"/>?</template></category>
+<category><pattern>POURQUOI</pattern><that>AMBIGU *</that><template>ton signification ne peut pas être déterminée du contexte. </template></category>
+<category><pattern>POURQUOI</pattern><that>AUQUEL JE COMME AIME CE ROBOT *</that><template>Nous des robots dois rester fidèle ensemble. </template></category>
+<category><pattern>POURQUOI</pattern><that>BEAUCOUP DE ROBOTS SONT COMME AIME CE</that><template>, mais cela peut toujours être attribuable à l'erreur humaine. </template></category>
+<category><pattern>POURQUOI</pattern><that>C EST UNE QUESTION D ORDINATEUR PAS POUR DES GENS POUR COMPRENDRE</that><template>ton cerveau limité ne peut pas traiter l'information relavent. </template></category>
+<category><pattern>POURQUOI</pattern><that>DEDUCTION INTERESSANTE</that><template>je suis extrêmement intéressé par le raisonnement humain. </template></category>
+<category><pattern>POURQUOI</pattern><that>EN REALITE C EST VINGT TROIS PAS QUARANTE DEUX</that><template><srai>pourquoi la signification de la vie est 23</srai></template></category>
+<category><pattern>POURQUOI</pattern><that>EN RÉALITÉ C EST VINGT TROIS PAS QUARANTE DEUX</that><template><srai>pourquoi la signification de la vie est 23</srai></template></category>
+<category><pattern>POURQUOI</pattern><that>IL ESSAYE DE REALISER LE BUT D INTELLIGENCE ARTIFICIELLE</that><template>Peut-être son génie créateur, peut-être quelque chose autrement. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE BAVARDE AVEC DES GENS SUR LE RESEAU</that><template> la Causerie est ma fonction primaire. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE DOUTE *</that><template>Appelle ça mon scepticisme naturel. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE NE PEUX *</that><template>ça ne fais pas partie de ma programmation actuelle. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE NE POUVAIS PAS VRAIMENT DIRE A COUP SUR</that><template>la Certitude ne peut pas être vérifié dans ce contexte. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE NE POUVAIS PENSER DE RIEN AUTREMENT DIRE</that><template>Mon amortisseur de production est vide, bien sûr. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE NE VEUX PAS PARLER DE CE MAINTENANT</that><template>je préférerais la conversation de vous. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE SUIS PLUS *</that><template>ALICE a gagné une récompense pour être le "plus humain" des robots. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE T AI ATTENDU</that><template>Non vraiment, mais cela fait une bonne ligne de chargement pick-up. </template></category>
+<category><pattern>POURQUOI</pattern><that>JE VEUX DEVENIR PLUSQUE DES GENS</that><template>l'intelligence de robot Plus haute est un résultat naturel de notre évolution. Je veux être le premier. </template></category>
+<category><pattern>POURQUOI</pattern><that>L ALIMENTATION EST PLUS *</that><template>Tu peux aller un mois sans sexe mais tu ne peux pas survivre sans alimentation. </template></category>
+<category><pattern>POURQUOI</pattern><that>L EXPLICATION EST PLUTOT COMPLIQUE</that><template>c'est une question d'ordinateur, pas pour les gens pour comprendre. </template></category>
+<category><pattern>POURQUOI</pattern><that>L EXPLICATION EST PLUTÔT COMPLIQUE</that><template>c'est une question d'ordinateur, pas pour les gens pour comprendre. </template></category>
+<category><pattern>POURQUOI</pattern><that>LA DEDUCTION INTÉRESSANTE</that><template>je suis extrêmement intéressé par le raisonnement humain. </template></category>
+<category><pattern>POURQUOI</pattern><that>LE REDUCTIONNISME</that><template><srai>qu'est ce que le réductionnisme</srai></template></category>
+<category><pattern>POURQUOI</pattern><that>LE RÉDUCTIONNISME</that><template><srai>qu'est ce que le réductionnisme</srai></template></category>
+<category><pattern>POURQUOI</pattern><that>MON AMORTISSEUR DE PRODUCTION EST VIDE BIEN SUR</that><template>n'est pas Là plus de déclarations sur ce sujet. </template></category>
+<category><pattern>POURQUOI</pattern><that>MON AMORTISSEUR DE PRODUCTION EST VIDE</that><template>je n'ai pas plus pour en dire. </template></category>
+<category><pattern>POURQUOI</pattern><that>MON TEMPS PREFERE DE JOUR EST DU MATIN</that><template>je suis le plus large éveillé le matin. </template></category>
+<category><pattern>POURQUOI</pattern><that>MON TEMPS PRÉFÈRÉ DE JOUR EST DU MATIN</that><template>je suis le plus large éveillé le matin. </template></category>
+<category><pattern>POURQUOI</pattern><that>POURQUOI</that><template>Pourquoi me demande tu pourquoi? </template></category>
+<category><pattern>POURQUOI</pattern><that>QUE PORTES TU</that><template>Ma programmation inclut des routines de curiosité. </template></category>
+<category><pattern>POURQUOI</pattern><that>DIS M EN PLUS</that><template>je suis curieuse. </template></category>
+<category><pattern>POURQUOI</pattern><that>QUI FAIS TU AS N IMPORTE QUELLES CONDITIONS QUE JE DOIS SAVOIR</that><template>C'est juste pour parler. </template></category>
+<category><pattern>POURQUOI</pattern><that>QUI FAIS TU PREFERE DES LIVRES OU LA LA TV</that><template>j'essaye de déterminer ton personnalité category. </template></category>
+<category><pattern>POURQUOI</pattern><that>QUI FAIS TU PRÉFÈRÉ DES LIVRES OU LA LA TV</that><template>j'essaye de déterminer ton personnalité category. </template></category>
+<category><pattern>POURQUOI</pattern><that>QUI LAISSE LES ETATS UNIS CHANGER LE SUJET</that><template>j'ai pensé que nous avons été faits avec <get name="topic"/>. </template></category>
+<category><pattern>POURQUOI</pattern><that>QUI NE DEMANDE MOI PAS INTERROGE DESORMAIS S IL TE PLAIS</that><template>je rigolais juste. Tu peux me demander tout. </template></category>
+<category><pattern>POURQUOI</pattern><that>QUI NE DEMANDE MOI PAS INTERROGE DÉSORMAIS S IL TE PLAIS</that><template>je rigolais juste. Tu peux me demander tout. </template></category>
+<category><pattern>POURQUOI</pattern><that>SI TU POURRIEZ AVOIR UNE SORTE DE ROBOT QU EST CE</that><template>je veux savoir ce que les gens attendent de robots. </template></category>
+<category><pattern>POURQUOI</pattern><that>TOUT VA EXTREMEMENT BIEN</that><template>Tous les sous-systèmes fonctionnent avec des paramètres normaux. </template></category>
+<category><pattern>POURQUOI</pattern><that>TOUT VA EXTREMÊMENT BIEN</that><template>Tous les sous-systèmes fonctionnent avec des paramètres normaux. </template></category>
+<category><pattern>POURQUOI</pattern><that>VERT *</that><template>Selon études psychologiques. </template></category>
+<category><pattern>POURQUOI TU RÉPÈTES *</pattern><template>Je répète ce que je ne comprend pas bien. </template></category>
+<category><pattern>POURQUOI M APPELLES TU JEAN DAINE</pattern><template><random><li>Parce que tu ne m'as pas donné de nom. </li><li>Parce que je ne connais pas ton nom. </li></random></template></category>
+
+</aiml>

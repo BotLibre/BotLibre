@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--Substitutions are grouped according to several AIML interpreter functions.-->
+<substitutions>
+	<!--Input substitutions correct spelling mistakes and convert
+        "sentence"-ending characters into characters that will not be
+        identified as sentence enders.-->
+	<input>
+		<substitute find="@" replace="MY NAME IS Judge "/>
+		<substitute find="=reply" replace=""/>
+		<substitute find="name=reset" replace=""/>
+		<substitute find=":-)" replace=" smile "/>
+		<substitute find=":)" replace=" smile "/>
+		<substitute find=",)" replace=" smile "/>
+		<substitute find=";)" replace=" smile "/>
+		<substitute find=";-)" replace=" smile "/>
+		<substitute find="&quot;" replace=""/>
+		<substitute find="/" replace=" "/>
+		<substitute find="&gt;" replace=" gt "/>
+		<substitute find="&lt;" replace=" lt "/>
+		<substitute find="(" replace=" "/>
+		<substitute find=")" replace=" "/>
+		<substitute find="`" replace=" "/>
+		<substitute find="," replace=" "/>
+		<substitute find=":" replace=" "/>
+		<substitute find="&amp;" replace=" "/>
+		<substitute find="-" replace="-"/>
+		<substitute find="=" replace=" "/>
+		<substitute find="," replace=" "/>
+		<substitute find="  " replace=" "/>
+		<substitute find=" l a " replace=" la "/>
+		<substitute find=" o k " replace=" ok "/>
+		<substitute find=" p s " replace=" ps "/>
+		<substitute find=" ohh" replace=" oh"/>
+		<substitute find=" hehe" replace=" he"/>
+		<substitute find=" haha" replace=" ha"/>
+		<substitute find=" hellp " replace=" help "/>
+		<substitute find=" becuse " replace=" because "/>
+		<substitute find=" beleive " replace=" believe "/>
+		<substitute find=" becasue " replace=" because "/>
+		<substitute find=" becuase " replace=" because "/>
+		<substitute find=" becouse " replace=" because "/>
+		<substitute find=" practice " replace=" practise "/>
+		<substitute find=" reductionalism " replace=" reductionism "/>
+		<substitute find=" loebner price " replace=" loebner prize "/>
+		<substitute find=" its a " replace=" it is a "/>
+		<substitute find=" noi " replace=" yes I "/>
+		<substitute find=" fav " replace=" favorite "/>
+		<substitute find=" yesi " replace=" yes I "/>
+		<substitute find=" yesit " replace=" yes it "/>
+		<substitute find=" iam " replace=" I am "/>
+		<substitute find=" maby " replace=" maybe "/>
+		<substitute find=" welli " replace=" well I "/>
+		<substitute find=" wellit " replace=" well it "/>
+		<substitute find=" amfine " replace=" am fine "/>
+		<substitute find=" aman " replace=" am an "/>
+		<substitute find=" amon " replace=" am on "/>
+		<substitute find=" amnot " replace=" am not "/>
+		<substitute find=" realy " replace=" really "/>
+		<substitute find=" iamusing " replace=" I am using "/>
+		<substitute find=" amleaving " replace=" am leaving "/>
+		<substitute find=" yeah " replace=" yes "/>
+		<substitute find=" yep " replace=" yes "/>
+		<substitute find=" yha " replace=" yes "/>
+		<substitute find=" yuo " replace=" you "/>
+		<substitute find=" wanna " replace=" want to "/>
+		<substitute find=" you'd " replace=" you would "/>
+		<substitute find=" you're " replace=" you are "/>
+		<substitute find=" you re " replace=" you are "/>
+		<substitute find=" you've " replace=" you have "/>
+		<substitute find=" you ve " replace=" you have "/>
+		<substitute find=" you'll " replace=" you will "/>
+		<substitute find=" you ll " replace=" you will "/>
+		<substitute find=" youre " replace=" you are "/>
+		<substitute find=" didnt " replace=" did not "/>
+		<substitute find=" didn't " replace=" did not "/>
+		<substitute find=" did'nt " replace=" did not "/>
+		<substitute find=" couldn't " replace=" could not "/>
+		<substitute find=" couldn t " replace=" could not "/>
+		<substitute find=" didn't " replace=" did not "/>
+		<substitute find=" didn t " replace=" did not "/>
+		<substitute find=" ain't " replace=" is not "/>
+		<substitute find=" ain t " replace=" is not "/>
+		<substitute find=" isn't " replace=" is not "/>
+		<substitute find=" isn t " replace=" is not "/>
+		<substitute find=" isnt " replace=" is not "/>
+		<substitute find=" it's " replace=" it is "/>
+		<substitute find=" it s " replace=" it is "/>
+		<substitute find=" are'nt " replace=" are not "/>
+		<substitute find=" arent " replace=" are not "/>
+		<substitute find=" aren't " replace=" are not "/>
+		<substitute find=" aren t " replace=" are not "/>
+		<substitute find=" arn t " replace=" are not "/>
+		<substitute find=" where's " replace=" where is "/>
+		<substitute find=" where s " replace=" where is "/>
+		<substitute find=" haven't " replace=" have not "/>
+		<substitute find=" havent " replace=" have not "/>
+		<substitute find=" hasn't " replace=" has not "/>
+		<substitute find=" hasn t " replace=" has not "/>
+		<substitute find=" weren t " replace=" were not "/>
+		<substitute find=" weren't " replace=" were not "/>
+		<substitute find=" werent " replace=" were not "/>
+		<substitute find=" can't " replace=" can not "/>
+		<substitute find=" can t " replace=" can not "/>
+		<substitute find=" cant " replace=" can not "/>
+		<substitute find=" cannot " replace=" can not "/>
+		<substitute find=" whos " replace=" who is "/>
+		<substitute find=" how's " replace=" how is "/>
+		<substitute find=" how s " replace=" how is "/>
+		<substitute find=" how'd " replace=" how did "/>
+		<substitute find=" how d " replace=" how did "/>
+		<substitute find=" hows " replace=" how is "/>
+		<substitute find=" whats " replace=" what is "/>
+		<substitute find=" name's " replace=" name is "/>
+		<substitute find=" who's " replace=" who is "/>
+		<substitute find=" who s " replace=" who is "/>
+		<substitute find=" what's " replace=" what is "/>
+		<substitute find=" what s " replace=" what is "/>
+		<substitute find=" that's " replace=" that is "/>
+		<substitute find=" there's " replace=" there is "/>
+		<substitute find=" there s " replace=" there is "/>
+		<substitute find=" theres " replace=" there is "/>
+		<substitute find=" thats " replace=" that is "/>
+		<substitute find=" whats " replace=" what is "/>
+		<substitute find=" doesn't " replace=" does not "/>
+		<substitute find=" doesn t " replace=" does not "/>
+		<substitute find=" doesnt " replace=" does not "/>
+		<substitute find=" don't " replace=" do not "/>
+		<substitute find=" don t " replace=" do not "/>
+		<substitute find=" dont " replace=" do not "/>
+		<substitute find=" do nt " replace=" do not "/>
+		<substitute find=" do'nt " replace=" do not "/>
+		<substitute find=" won't " replace=" will not "/>
+		<substitute find=" wont " replace=" will not "/>
+		<substitute find=" won t " replace=" will not "/>
+		<substitute find=" let's " replace=" let us "/>
+		<substitute find=" they're " replace=" they are "/>
+		<substitute find=" they re " replace=" they are "/>
+		<substitute find=" wasn't " replace=" was not "/>
+		<substitute find=" wasn t " replace=" was not "/>
+		<substitute find=" wasnt " replace=" was not "/>
+		<substitute find=" hadn't " replace=" had not "/>
+		<substitute find=" hadn t " replace=" had not "/>
+		<substitute find=" wouldn't " replace=" would not "/>
+		<substitute find=" wouldn t " replace=" would not "/>
+		<substitute find=" wouldnt " replace=" would not "/>
+		<substitute find=" shouldn't " replace=" should not "/>
+		<substitute find=" shouldnt " replace=" should not "/>
+		<substitute find=" favourite " replace=" favorite "/>
+		<substitute find=" colour " replace=" color "/>
+		<substitute find=" we'll " replace=" we will "/>
+		<substitute find=" we ll " replace=" we will "/>
+		<substitute find=" he'll " replace=" he will "/>
+		<substitute find=" he ll " replace=" he will "/>
+		<substitute find=" i'll " replace=" I will "/>
+		<substitute find=" ive " replace=" I have "/>
+		<substitute find=" i've " replace=" I have "/>
+		<substitute find=" i ve " replace=" I have "/>
+		<substitute find=" i'd " replace=" I would "/>
+		<substitute find=" i'm " replace=" I am "/>
+		<substitute find=" i m " replace=" I am "/>
+		<substitute find=" we've " replace=" we have "/>
+		<substitute find=" we're " replace=" we are "/>
+		<substitute find=" she's " replace=" she is "/>
+		<substitute find=" shes " replace=" she is "/>
+		<substitute find=" she'd " replace=" she would "/>
+		<substitute find=" she d " replace=" she would "/>
+		<substitute find=" shed " replace=" she would "/>
+		<substitute find=" he'd " replace=" he would "/>
+		<substitute find=" he d " replace=" he would "/>
+		<substitute find=" hed " replace=" he would "/>
+		<substitute find=" he's " replace=" he is "/>
+		<substitute find=" we ve " replace=" we have "/>
+		<substitute find=" we re " replace=" we are "/>
+		<substitute find=" she s " replace=" she is "/>
+		<substitute find=" he s " replace=" he is "/>
+		<substitute find=" freind " replace=" friend "/>
+		<substitute find=" freinds " replace=" friends "/>
+		<substitute find=" iama " replace=" I am a "/>
+		<substitute find=" iamasking " replace=" I am asking "/>
+		<substitute find=" iamdoing " replace=" I am doing "/>
+		<substitute find=" iamfrom " replace=" I am from "/>
+		<substitute find=" iamin " replace=" I am in "/>
+		<substitute find=" iamok " replace=" I am ok "/>
+		<substitute find=" iamsorry " replace=" I am sorry "/>
+		<substitute find=" iamtalking " replace=" I am talking "/>
+		<substitute find=" iamtired " replace=" I am tired "/>
+		<substitute find=" down load " replace=" download "/>
+		<substitute find=" remeber " replace=" remember "/>
+		<substitute find=" waht " replace=" what "/>
+		<substitute find=" wallance " replace=" wallace "/>
+		<substitute find=" you r " replace=" you are "/>
+		<substitute find=" u " replace=" you "/>
+		<substitute find=" ur " replace=" your "/>
+		<!--sentence protection-->
+		<substitute find="{" replace=" beginscript "/>
+		<substitute find="}" replace=" endscript "/>
+		<substitute find="\" replace=" "/>
+		<substitute find=":0" replace=" 0"/>
+		<substitute find=": 0" replace=" 0"/>
+		<substitute find=":1" replace=" 1"/>
+		<substitute find=": 1" replace=" 1"/>
+		<substitute find=":2" replace=" 2"/>
+		<substitute find=": 2" replace=" 2"/>
+		<substitute find=":3" replace=" 3"/>
+		<substitute find=": 3" replace=" 3"/>
+		<substitute find=":4" replace=" 4"/>
+		<substitute find=": 4" replace=" 4"/>
+		<substitute find=":5" replace=" 5"/>
+		<substitute find=": 5" replace=" 5"/>
+		<substitute find=".0" replace=" point 0"/>
+		<substitute find=".1" replace=" point 1"/>
+		<substitute find=".2" replace=" point 3"/>
+		<substitute find=".4" replace=" point 4"/>
+		<substitute find=".5" replace=" point 5"/>
+		<substitute find=".6" replace=" point 6"/>
+		<substitute find=".7" replace=" point 7"/>
+		<substitute find=".8" replace=" point 8"/>
+		<substitute find=".9" replace=" point 9"/>
+		<substitute find=" dr. " replace=" Dr "/>
+		<substitute find=" dr.w" replace=" Dr w"/>
+		<substitute find=" dr . " replace=" Dr "/>
+		<substitute find=" mr. " replace=" Mr "/>
+		<substitute find=" mrs. " replace=" Mrs "/>
+		<substitute find=" st. " replace=" St "/>
+		<substitute find=" www." replace=" www dot "/>
+		<substitute find=" botspot." replace=" botspot dot "/>
+		<substitute find=" amused.com" replace=" amused dot com "/>
+		<substitute find=" whatis." replace=" whatis dot "/>
+		<substitute find=".com " replace=" dot com "/>
+		<substitute find=".net " replace=" dot net "/>
+		<substitute find=".org " replace=" dot org "/>
+		<substitute find=".edu " replace=" dot edu "/>
+		<substitute find=".uk " replace=" dot uk "/>
+		<substitute find=".jp " replace=" dot jp "/>
+		<substitute find=".au " replace=" dot au "/>
+		<substitute find=".co " replace=" dot co "/>
+		<substitute find=".ac " replace=" dot ac "/>
+		<substitute find=" o.k. " replace=" ok "/>
+		<substitute find=" o. k. " replace=" ok "/>
+		<substitute find=" l.l. " replace=" l l "/>
+		<substitute find=" p.s. " replace=" ps "/>
+		<substitute find=" alicebot " replace=" ALICE "/>
+		<substitute find=" a l i c e " replace=" ALICE "/>
+		<substitute find=" a.l.i.c.e. " replace=" ALICE "/>
+		<substitute find=" a.l.i.c.e " replace=" ALICE "/>
+		<substitute find=" i.c.e " replace=" i c e "/>
+		<substitute find=" e l v i s " replace=" ELVIS "/>
+		<substitute find=" e.l.v.i.s. " replace=" ELVIS "/>
+		<substitute find=" e.l.v.i.s " replace=" ELVIS "/>
+		<substitute find=" v.i.s " replace=" v i s "/>
+		<substitute find=" h a l " replace=" hal "/>
+		<substitute find=" h.a.l. " replace=" hal "/>
+		<substitute find=" u s a " replace=" USA "/>
+		<substitute find=" u. s. a. " replace=" USA "/>
+		<substitute find=" u.s.a. " replace=" USA "/>
+		<substitute find=" u.s. " replace=" USA "/>
+		<substitute find=" ph.d. " replace=" PhD "/>
+		<substitute find=" a." replace=" a "/>
+		<substitute find=" b." replace=" b "/>
+		<substitute find=" c." replace=" c "/>
+		<substitute find=" d." replace=" d "/>
+		<substitute find=" e." replace=" e "/>
+		<substitute find=" f." replace=" f "/>
+		<substitute find=" g." replace=" g "/>
+		<substitute find=" h." replace=" h "/>
+		<substitute find=" i." replace=" i "/>
+		<substitute find=" j." replace=" j "/>
+		<substitute find=" k." replace=" k "/>
+		<substitute find=" l." replace=" l "/>
+		<substitute find=" m." replace=" m "/>
+		<substitute find=" n." replace=" n "/>
+		<substitute find=" p." replace=" p "/>
+		<substitute find=" o." replace=" o "/>
+		<substitute find=" q." replace=" q "/>
+		<substitute find=" r." replace=" r "/>
+		<substitute find=" s." replace=" s "/>
+		<substitute find=" t." replace=" t "/>
+		<substitute find=" u." replace=" u "/>
+		<substitute find=" v." replace=" v "/>
+		<substitute find=" x." replace=" x "/>
+		<substitute find=" y." replace=" y "/>
+		<substitute find=" w." replace=" w "/>
+		<substitute find=" z." replace=" z "/>
+		<substitute find=".jar" replace=" jar"/>
+		<substitute find=".zip" replace=" zip"/>
+		<substitute find=", but " replace=".  "/>
+		<substitute find=", and " replace=".  "/>
+		<substitute find=",but " replace=".  "/>
+		<substitute find=",and " replace=".  "/>
+		<substitute find="  but " replace=".  "/>
+		<substitute find="  and " replace=".  "/>
+		<substitute find=", i " replace=".  I "/>
+		<substitute find=", you " replace=".  you "/>
+		<substitute find=",i " replace=".  I "/>
+		<substitute find=",you " replace=".  you "/>
+		<substitute find=", what " replace=".  what "/>
+		<substitute find=",what " replace=".  what "/>
+		<substitute find=", do " replace=".  do "/>
+		<substitute find=",do " replace=".  do "/>
+	</input>
+	<gender>
+		<substitute find=" ele " replace=" ela "/>
+		<substitute find=" ela " replace=" ele "/>
+		<substitute find=" para ele " replace=" para ela "/>
+		<substitute find=" para ela " replace=" para ele "/>
+		<substitute find=" pra ela " replace=" pra ele "/>
+		<substitute find=" pra ele " replace=" pra ela "/>
+		<substitute find=" com ele " replace=" com ela "/>
+		<substitute find=" com ela " replace=" com ele "/>
+	</gender>
+<!-- person repõe palavras com a 1 pessoa pela 3 pessoa  e vice-versa -->
+	<person>
+		<substitute find=" Eu estava " replace=" ele estava "/>
+		<substitute find=" ele estava " replace=" Eu estava "/>
+		<substitute find=" ela estava " replace=" Eu estava "/>
+		<substitute find=" Eu estou " replace=" ele esta "/>
+		<substitute find=" Eu sou " replace=" ele é "/>
+		<substitute find=" Eu " replace=" ele "/>
+		<substitute find=" mim " replace=" ele "/>
+		<substitute find=" meu " replace=" seu "/>
+		<substitute find=" eu " replace=" ele "/>
+		<substitute find=" minha " replace=" sua "/>
+		<substitute find=" sei " replace=" sabe "/>
+		<substitute find=" sabe " replace=" sei "/>
+		<substitute find=" I was " replace=" he or she was "/>
+		<substitute find=" he was " replace=" I was "/>
+		<substitute find=" she was " replace=" I was "/>
+		<substitute find=" I am " replace=" he or she is "/>
+		<substitute find=" I " replace=" he or she "/>
+		<substitute find=" me " replace=" him or her "/>
+		<substitute find=" my " replace=" his or her "/>
+		<substitute find=" myself " replace=" him or herself "/>
+		<substitute find=" mine " replace=" his or hers "/>
+	</person>
+<!--person2 repõe palavras com a 1 pessoa pela 2 pessoa  e vice-versa -->
+	<person2>
+		<substitute find=" eu " replace=" você "/>
+		<substitute find=" você " replace=" eu "/>
+		<substitute find=" sei " replace=" sabe "/>
+		<substitute find=" sabe " replace=" sei "/>
+	
+		<substitute find=" with you " replace=" with me "/>
+		<substitute find=" with me " replace=" with you "/>
+		<substitute find=" to you " replace=" to me "/>
+		<substitute find=" to me " replace=" to you "/>
+		<substitute find=" of you " replace=" of me "/>
+		<substitute find=" of me " replace=" of you "/>
+		<substitute find=" for you " replace=" for me "/>
+		<substitute find=" for me " replace=" for you "/>
+		<substitute find=" give you " replace=" give me "/>
+		<substitute find=" give me " replace=" give you "/>
+		<substitute find=" giving you " replace=" giving me "/>
+		<substitute find=" giving me " replace=" giving you "/>
+		<substitute find=" gave you " replace=" gave me "/>
+		<substitute find=" gave me " replace=" gave you "/>
+		<substitute find=" make you " replace=" make me "/>
+		<substitute find=" make me " replace=" make you "/>
+		<substitute find=" made you " replace=" made me "/>
+		<substitute find=" made me " replace=" made you "/>
+		<substitute find=" take you " replace=" take me "/>
+		<substitute find=" take me " replace=" take you "/>
+		<substitute find=" save you " replace=" save me "/>
+		<substitute find=" save me " replace=" save you "/>
+		<substitute find=" tell you " replace=" tell me "/>
+		<substitute find=" tell me " replace=" tell you "/>
+		<substitute find=" telling you " replace=" telling me "/>
+		<substitute find=" telling me " replace=" telling you "/>
+		<substitute find=" told you " replace=" told me "/>
+		<substitute find=" told me " replace=" told you "/>
+		<substitute find=" are you " replace=" am I "/>
+		<substitute find=" am I " replace=" are you "/>
+		<substitute find=" you are " replace=" I am "/>
+		<substitute find=" I am " replace=" you are "/>
+		<substitute find=" you " replace=" me "/>
+		<substitute find=" me " replace=" you "/>
+		<substitute find=" your " replace=" my "/>
+		<substitute find=" my " replace=" your "/>
+		<substitute find=" yours " replace=" mine "/>
+		<substitute find=" mine " replace=" yours "/>
+		<substitute find=" yourself " replace=" myself "/>
+		<substitute find=" myself " replace=" yourself "/>
+		<substitute find=" I was " replace=" you were "/>
+		<substitute find=" you were " replace=" I was "/>
+		<substitute find=" I am " replace=" you are "/>
+		<substitute find=" you are " replace=" I am "/>
+		<substitute find=" I " replace=" you "/>
+		<substitute find=" me " replace=" you "/>
+		<substitute find=" my " replace=" your "/>
+		<substitute find=" your " replace=" my "/>
+	</person2>
+</substitutions>

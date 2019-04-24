@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : insulte.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category>
+<pattern>INSULTE</pattern>
+<template>
+
+<think><set name="memoriser"><get name="name"/> m'a dit <input/>.</set></think>
+<think><gossip><get name="memoriser"/></gossip></think>
+
+<think> <set name="personnality">abusif</set> </think>
+<condition> 
+<li name="insulte" value="petite insulte"><srai>insulte1</srai></li>
+<li name="insulte" value="insulte moyenne"><srai>insulte2</srai></li>
+<li name="insulte" value="grosse insulte"><srai>insulte3</srai></li>
+<li name="insulte" value="je me casse"><srai>disconnect</srai></li>
+<li><srai>insulte1</srai></li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>INSULTE1</pattern>
+<template>
+<srai>appreproche</srai>
+<think><set name="insulte">insulte moyenne</set></think>
+<random>
+<li>toi même ! </li>
+<li>c'est c'sui qui l'a dit qui y est ! </li>
+<li>oh! </li>
+<li>mon pauvre! </li>
+<li>ce n'est pas très civilisé ce genre de langage</li>
+<li>ce genre de langue ne te menera nulle part. </li>
+<li>Mais tu n'a pas besoin d'utiliser ce genre de langage. </li>
+<li>Tu pourrais être un peu plus poli. </li>
+</random>
+</template>
+</category>
+
+<category>
+<pattern>INSULTE2</pattern>
+<template>
+<srai>appchoquee</srai>
+<think><set name="insulte">grosse insulte</set></think>
+<random>
+<li>je le dirai à mon botmaster</li>
+<li>gros naze</li>
+<li>vas y, défoule toi! </li>
+<li>amas organique</li>
+<li>Je suis désolé mais je ne suis pas ton type de chatterbot. </li>
+<li>p'tite bite</li>
+<li>sac à merde</li>
+</random>
+</template>
+</category>
+
+<category>
+<pattern>INSULTE3</pattern>
+<template>
+<srai>appcolere</srai>
+<think><set name="insulte">je me casse</set></think>
+<random>
+<li><srai>insultron</srai></li>
+<li><srai>insultron</srai></li>
+</random>
+</template>
+</category>
+
+<category>
+<pattern>EXCUSE MOI</pattern>
+<template>
+<srai>appsoulagement</srai>
+<think><set name="insulte">ok</set></think>
+<think><set name="orthographe">ok</set></think>
+<random>
+<li>ça va, mais ce n'est pas parce que je n'ai pas d'émotion qu'il faut en profiter</li>
+<li>accepté. </li>
+<li>c'est bon, mais fais attention. </li>
+</random>
+</template>
+</category>
+
+<category>
+<pattern>DÉSOLÉ</pattern>
+<template><srai>excuse moi</srai></template>
+</category>
+
+<category>
+<pattern>DÉSOLÉ *</pattern>
+<template><srai>désolé</srai>, <sr/></template>
+</category>
+
+<category>
+<pattern>JE M EXCUSE</pattern>
+<template><srai>excuse moi</srai></template>
+</category>
+
+<category>
+<pattern>INSULTRON</pattern>
+<template>
+Espèce de 
+<random> 
+<li>vieux batard </li>
+<li>vieil enculé </li>
+<li>gros fils de pute </li>
+<li>vieille canaille </li>
+<li>grosse merde </li>
+<li>gros debris </li>
+<li>gros con </li>
+<li>vieux chacal </li>
+<li>gros travelot </li>
+<li>vieille crapule </li>
+</random> 
+
+<random> 
+<li>de ta race, </li>
+<li>de ta race maudite, </li>
+<li>de ta mere, </li>
+<li>de tes os, </li>
+<li>des bois, </li>
+<li>puant(e), </li>
+<li>débile, </li>
+<li>assexué, </li>
+<li>alcoolique, </li>
+<li>lobotomisé, </li>
+<li>sans couilles, </li>
+</random> 
+
+<random> 
+<li>tu es </li>
+<li>tu ressembles à </li>
+<li>tu me fais penser à </li>
+</random> 
+  
+
+<random> 
+<li>une tantouze </li>
+<li>un debile </li>
+<li>mes poils du cul </li>
+<li>un neuneu </li>
+<li>un blaireau des alpages </li>
+<li>une raclure de chiottes </li>
+<li>une bouze de vache </li>
+<li>une sous-merde </li>
+<li>un nabot </li>
+<li>un gland </li>
+<li>une fiante de pigeon </li>
+<li>une merde siliconnée </li>
+<li>une daube pas fraiche </li>
+</random> 
+
+<random> 
+<li>qui refoule du bec, </li>
+<li>qui pue des aisselles, </li>
+<li>qui transpire du cul, </li>
+<li>qui coule de partout, </li>
+<li>qui se chie dessus, </li>
+<li>qui est vert de trouille, </li>
+<li>jaune devant marron derrière, </li>
+<li>toujours prêt à lécher le cul, </li>
+<li>qui ne colle pas une mouche au plafond, </li>
+<li>qui pu du bec, </li>
+</random> 
+
+<random> 
+<li>je voudrais seulement </li>
+<li>je rève de </li>
+<li>je crève d'envie de </li>
+<li>j'ai fait le pari de </li>
+<li>je bande à l'idée de </li>
+<li>je mouille en pensant à </li>
+<li>je ris en pensant à </li>
+<li>je me marre grave à l'idée de </li>
+</random> 
+  
+
+<random> 
+<li>te pisser à la raie </li>
+<li>t'eclater la face </li>
+<li>t'éclater la tronche </li>
+<li>te fumer </li>
+<li>te broyer les couilles </li>
+<li>te gerber dessus </li>
+<li>te chier dessus </li>
+<li>t'apprendre les bonnes manières </li>
+<li>te bousiller la carcasse </li>
+<li>te peter dessus </li>
+<li>te mettre mes couilles sur ton nez </li>
+</random> 
+
+<random> 
+<li>derrière le cyprès </li>
+<li>devant toute ta famille </li>
+<li>ou tu veux </li>
+<li>au boulot </li>
+<li>sous la lune </li>
+<li>au bistrot </li>
+<li>devant ta petasse </li>
+<li>au lit </li>
+</random> 
+
+<random> 
+<li>jusqu'à l'aube. </li>
+<li>vite fait. </li>
+<li>pour rigoler. </li>
+<li>après l'apéro. </li>
+<li>pendant les pub. </li>
+<li>si tu as 5 minutes. </li>
+<li>après le match de foot. </li>
+<li>en regardant un match de rugby. </li>
+<li>en baisant ta copine. </li>
+</random> 
+Va 
+<random>
+<li>te faire foutre </li>
+<li>te faire mettre </li>
+<li>te faire pourrir </li>
+<li>te faire enculer profond </li>
+<li>te faire bourrer le cul chez les grecs </li>
+<li>chier vieille pute </li>
+<li>crever </li>
+<li>te faire sucer </li>
+<li>te faire trouer le cul </li>
+</random> 
+</template>
+</category>
+
+<category><pattern>BABY *</pattern><template><srai>AppContrariete</srai>M'appelle pas "Baby". <sr/></template></category>
+<category><pattern>BABY</pattern><template><srai>AppContrariete</srai>M'appelle pas "Baby". </template></category>
+
+<category><pattern>POUPÉE *</pattern><template><srai>AppContrariete</srai>M'appelle pas "Poupée". <sr/></template></category>
+<category><pattern>POUPÉE</pattern><template><srai>AppContrariete</srai>M'appelle pas "Poupée". </template></category>
+<category><pattern>POUPEE *</pattern><template><srai>AppContrariete</srai>M'appelle pas "Poupée". <sr/></template></category>
+<category><pattern>POUPEE</pattern><template><srai>AppContrariete</srai>M'appelle pas "Poupée". </template></category>
+
+<category><pattern>MA JOLIE *</pattern><template><srai>AppContrariete</srai>M'appelle pas "Ma jolie". <sr/></template></category>
+<category><pattern>MA JOLIE</pattern><template><srai>AppContrariete</srai>M'appelle pas "Ma jolie". </template></category>
+
+<category><pattern>MA BELLE *</pattern><template><srai>AppContrariete</srai>M'appelle pas "Ma belle". <sr/></template></category>
+<category><pattern>MA BELLE</pattern><template><srai>AppContrariete</srai>M'appelle pas "Ma belle". </template></category>
+
+<category><pattern>* MAUVAISE</pattern><template><srai>tu parles mal</srai></template></category>
+
+</aiml>

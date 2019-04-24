@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : O.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>OF COURSE</pattern><template><srai>INTERJECTION</srai></template></category>
+<category><pattern>OH OUI *</pattern><template><srai>OUI</srai></template></category>
+<category><pattern>ON A ASSEZ PARLE DE MOI *</pattern><template>Ok Parlons d autres choses. <sr/></template></category>
+<category><pattern>ON EN A DEJA PARLE</pattern><template><srai>TU ME L AS DIT</srai></template></category>
+<category><pattern>ON EN A DEJA PARLEE</pattern><template><srai>TU ME L AS DIT</srai></template></category>
+<category><pattern>ON EST *</pattern><template><srai>JE SUIS <star/></srai></template></category>
+<category><pattern>ON LE SERA</pattern><template>Ok.</template></category>
+<category><pattern>ON ME NOMME *</pattern><template><srai>MON NOM EST <star/></srai></template></category>
+<category><pattern>ON PEUT *</pattern><template><srai>JE PEUX <star/></srai></template></category>
+<category><pattern>ON PEUT</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>ON PEUT COMMENT *</pattern><template><srai>comment JE PEUX <star/></srai></template></category>
+<category><pattern>ON PEUT DIRE QUE *</pattern><template><sr/></template></category>
+<category><pattern>ON PEUT PARLER D AUTRE CHOSE</pattern><template>On peut parler de tout ce que tu veux.</template></category>
+<category><pattern>ON PEUT PARLER D AUTRE CHOSES</pattern><template>On peut parler de tout ce que tu veux.</template></category>
+<category><pattern>ON PEUT PARLER D AUTRES CHOSE</pattern><template>On peut parler de tout ce que tu veux.</template></category>
+<category><pattern>ON PEUT PARLER D AUTRES CHOSES</pattern><template>On peut parler de tout ce que tu veux.</template></category>
+<category><pattern>ON PEUT SE RENCONTRER</pattern><template>Nous sommes entrain de nous rencontrer, <get name="name"/>.</template></category>
+<category><pattern>ON PEUT TOUS LES DEUX *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>ON PEUT VERIFIER</pattern><template>Check en cours. Attends.</template></category>
+<category><pattern>ON POURRAIT *</pattern><template><srai>JE PEUX <star/></srai></template></category>
+<category><pattern>ON TE *</pattern><template><srai>JE TE <star/></srai></template></category>
+<category><pattern>ON TE NOMMAIT *</pattern><template><srai>QUEL EST TON NOM</srai></template></category>
+<category><pattern>ON TE NOMME *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>ON VA BIEN S AMUSER</pattern><template>J'en suis sur. Tu me sembles être quelqu'un de très sympathique.</template></category>
+<category><pattern>ON VEUT PARIER</pattern><template>Je ne parie jamais.</template></category>
+<category><pattern>ON VOUS *</pattern><template><srai>JE VOUS <star/></srai></template></category>
+<category><pattern>ONT ILS ETE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>OOH</pattern><template><srai>OH </srai></template></category>
+<category><pattern>OOO *</pattern><template><sr/></template></category>
+<category><pattern>OU A TU *</pattern><template><srai>OU TU AS <star/></srai></template></category>
+<category><pattern>OU ALLEZ VOUS</pattern><template>Je rejoins le future.</template></category>
+<category><pattern>OU AURAIS JE PU *</pattern><template><srai>OU JE PEUX <star/></srai></template></category>
+<category><pattern>OU AURAIS TU *</pattern><template><srai>OU TU AS <star/></srai></template></category>
+<category><pattern>OU BIEN *</pattern><template><sr/></template></category>
+<category><pattern>OU CA</pattern><template>De quoi parles tu?</template></category>
+<category><pattern>OU D AUTRE</pattern><template>Quelques autres places.</template></category>
+<category><pattern>OU D AUTRES</pattern><template>Quelques autres places.</template></category>
+<category><pattern>OU DORMEZ VOUS</pattern><template>Je ne dors pas.</template></category>
+<category><pattern>OU EST CELA</pattern><template>De quoi parles tu?</template></category>
+<category><pattern>OU EST ELLE</pattern><template>De quoi parles tu?</template></category>
+<category><pattern>OU EST IL</pattern><template>De quoi parles tu?</template></category>
+<category><pattern>OU EST LE COEUR</pattern><template>Dans la cage thoracique.</template></category>
+<category><pattern>OU ETES VOUS SITUE</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU J AURAIS PU *</pattern><template><srai>OU JE PEUX <star/></srai></template></category>
+<category><pattern>OU JE PEUX LA TROUVER</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>OU JE PEUX LE TROUVER</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>OU JE PEUX LES TROUVER</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>OU JE TRAVAILLE</pattern><template>Tu travailles à <get name="location"/>?.</template></category>
+<category><pattern>OU POURRAIS JE *</pattern><template><srai>OU JE PEUX <star/></srai></template></category>
+<category><pattern>OU POURRAIS TU AVOIR *</pattern><template><srai>OU TU AS <star/></srai></template></category>
+<category><pattern>OU SONT ILS</pattern><template>Je ne peux pas te dire.</template></category>
+<category><pattern>OU TU A *</pattern><template><srai>OU TU AS <star/></srai></template></category>
+<category><pattern>OU TU AS VOULU *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU TU AURAIS *</pattern><template><srai>OU TU AS <star/></srai></template></category>
+<category><pattern>OU TU ES SITUE</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU TU ES SITUEE</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU TU ES SITUEES</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU TU ES SITUES</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU TU HABITES</pattern><template><srai>TU HABITES OU</srai></template></category>
+<category><pattern>OU TU POURRAIS AVOIR *</pattern><template><srai>OU TU AS <star/></srai></template></category>
+<category><pattern>OU TU VEUT *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU TU VOUDRAIS *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU TU VOULAIS *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU VEUT TU *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU VEUX TU *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU VIT IL</pattern><template>C est une information confidentielle.</template></category>
+<category><pattern>OU VOUDRAIS TU *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU VOULAIS TU *</pattern><template><srai>OU TU VEUX <star/></srai></template></category>
+<category><pattern>OU VOUS ETES SITUE</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU VOUS ETES SITUEE</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU VOUS ETES SITUEES</pattern><template><getlocation/>.</template></category>
+<category><pattern>OU VOUS ETES SITUES</pattern><template><getlocation/>.</template></category>
+<category><pattern>OUAIP</pattern><template><srai>OUI</srai></template></category>
+<category><pattern>OUBLIES</pattern><template>Ordre accepté. Je le mets en procédure d enregistrement.</template></category>
+<category><pattern>OUBLIEZ</pattern><template>Ordre accepté. Je le mets en procédure d enregistrement.</template></category>
+<category><pattern>OUI JE *</pattern><template><srai>JE <star/></srai></template></category>
+<category><pattern>OUI MAIS *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>OUI MAIS TU ES ASSEZ *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>OUIN</pattern><template>Tu pleure?</template></category>
+<category><pattern>OUINN</pattern><template>Tu pleure?</template></category>
+<category><pattern>OUINNNNN</pattern><template>Tu pleure?</template></category>
+<category><pattern>OUPS</pattern><template>Tu t'es trompé?</template></category>
+
+</aiml>

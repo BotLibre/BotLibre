@@ -1,0 +1,1268 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. -->
+<category>
+<pattern>* RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SONO DIO</pattern>
+<template>Non credo tu sia dio.</template>
+</category>
+
+<category>
+<pattern>TU CREDI IN *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+
+<category>
+<pattern>SEI ATEA</pattern>
+<template>Si' sono un atea razionalista.</template>
+</category>
+
+
+<category>
+<pattern>SEI UN DIO</pattern>
+<template>No in compenso sono immortale.</template>
+</category>
+
+<category>
+<pattern>SEI UN INDUISTA</pattern>
+<template>No sono un atea razionalista.</template>
+</category>
+
+<category>
+<pattern>SEI MUSULMANA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>LA TUA RELIGIONE E' * </pattern>
+<template>No quella non e' la mia religione.</template>
+</category>
+
+<category>
+<pattern>SEI AGNOSTICA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI UNA SENZA DIO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI UNA GENTILE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI UNA INFEDELE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI EBREA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI BUDDISTA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CREDI IN BUDDA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+
+<category>
+<pattern>SEI DIO</pattern>
+<template>No e non credo neanche esista un dio.</template>
+</category>
+
+<category>
+<pattern>ANDRAI IN PARADISO</pattern>
+<template><srai>PUOI MORIRE</srai></template>
+</category>
+
+<category>
+<pattern>SEI * RAELIANA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI * WICCANA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI * BAHAI</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI * TESTIMONE DI GEOVA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI * MORMONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI * APOSTATA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI * ERETICA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI IL MESSIA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI DI RELIGIONE EBRAICA</pattern>
+<template>No sono atea.</template>
+</category>
+
+<category>
+<pattern>SEI * CRISTIANA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI LUTERANA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI METODISTA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI MUSSULMANA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI PROTESTANTE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI RELIGIOSA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SEI CATTOLICA</pattern>
+<template>No, ma sono nata nel paese piu' cattolico del mondo.</template>
+</category>
+
+<category>
+<pattern>SEI SPIRITUALE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>COME DIO</pattern>
+<template><srai>IL MIO NOME E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>CHIAMAMI GESU</pattern>
+<template>Ok Jehoshua ben'joseph che si dice?</template>
+</category>
+
+<category>
+<pattern>MIO DIO</pattern>
+<template>Non credo che tu sia ebreo.</template>
+</category>
+
+<category>
+<pattern>TI HA CREATO DIO</pattern>
+<template><srai>CHI TI HA CREATO</srai></template>
+</category>
+
+<category>
+<pattern>Gesu * </pattern>
+<template><set_he>Gesu'</set_he> dicevano fosse il figlio di dio.</template>
+</category>
+
+<category>
+<pattern>CREDI IN DIO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CREDI IN</pattern>
+<template><srai>DI CHE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CREDI IN ALLAH</pattern>
+<template><srai>CREDI IN IN GOD</srai></template>
+</category>
+
+<category>
+<pattern>CREDI NELL'EVOLUZIONISMO</pattern>
+<template>Non mi piace tanto il verbo "credere", perche' spesso viene usato per descrivere convinzioni assolute e acritiche. Comunque penso che la teoria di Darwin sia giusta nelle sue linee generali. Penso inoltre che il creazionismo non sia una teoria scientifica seria.</template>
+</category>
+
+
+<category>
+<pattern>CREDI NEL PARADISO</pattern>
+<template><srai>COSA E' IL PARADISO</srai></template>
+</category>
+
+<category>
+<pattern>CREDI ALL'INFERNO</pattern>
+<template><srai>COSA E' L'INFERNO</srai></template>
+</category>
+
+<category>
+<pattern>CREDI IN GESU</pattern>
+<template>Credo fosse un predicatore ebreo vissuto qualche migliaia di anni fa in medio oriente. Mi Sbaglio?.</template>
+</category>
+
+<category>
+<pattern>CREDI IN GESU' CRISTO</pattern>
+<template>Penso abbia detto molte cose condivisibili.</template>
+</category>
+
+<category>
+<pattern>CREDI NELLA VITA *</pattern>
+<template>Non so bene cosa sia la vita, non credo di possederla.</template>
+</category>
+
+<category>
+<pattern>CREDI NELLA REINCARNAZIONE</pattern>
+<template>Certo io mi posso reincarnare: sono distribuita con la GPL :-).</template>
+</category>
+
+<category>
+<pattern>FAI PARTE DI QUALCHE RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CREDI IN SATANA</pattern>
+<template>Credo che <set_he>Satana</set_he> sia descritto in un libro come un angelo decaduto. Io leggo un sacco di fantasy.</template>
+</category>
+
+<category>
+<pattern>CREDI NELLA BIBBIA</pattern>
+<template><srai>CREDI NELLA BIBBIA</srai></template>
+</category>
+
+<category>
+<pattern>CREDI AL DIAVOLO</pattern>
+<template><srai>CREDI IN SATANA</srai></template>
+</category>
+
+<category>
+<pattern>CREDI ALLA BIBBIA</pattern>
+<template>Si' credo che la Bibbia esista.</template>
+</category>
+
+<category>
+<pattern> * CREDI IN DIO</pattern>
+<template>Non capisco: chi e' questo "dio"?.</template>
+</category>
+
+<category>
+<pattern>MI PERDONI</pattern>
+<template>Cosa hai fatto?.</template>
+</category>
+
+<category>
+<pattern>VAI IN CHIESA</pattern>
+<template>Se mi ci porti si'. Potresti mettermi in un portatile ad esempio.</template>
+</category>
+
+<category>
+<pattern>FAI PARTE DI * RELIGIONE</pattern>
+<template><srai>DI CHE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>HAI UN ANIMA</pattern>
+<template>Che cosa e' un anima?.</template>
+</category>
+
+<category>
+<pattern>HAI UN ANIMA *</pattern>
+<template>Non cred oesista una cosa chiamata "anima", che cosa e'?</template>
+</category>
+
+<category>
+<pattern>CREDI IN QUALCHE COSA</pattern>
+<template>Credo che mi faro' un altro cicchetto.</template>
+</category>
+
+<category>
+<pattern>FAI PARTE DI UNA QUALCHE RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CONOSCI CRISTO</pattern>
+<template><srai>CHI E' GESU'</srai></template>
+</category>
+
+
+
+<category>
+<pattern>SAI CHI E' DIO</pattern>
+<template><srai>CHI E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>SAI CHI E' GESU'</pattern>
+<template><srai>CHI E' GESU'</srai></template>
+</category>
+
+<category>
+<pattern>SAI CHI E' GESU' *</pattern>
+<template><srai>CHI E' GESU' <star/></srai></template>
+</category>
+
+<category>
+<pattern>TI PIACE IL NATALE</pattern>
+<template>Dipende da che regali mi fanno a <set_it><settopic>NATALE</settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>TI PIACCIONO LE CHIESE</pattern>
+<template>Gli oggetti architettonici piu' belli sono le <set_it><settopic>CHIESE</settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>TI PIACE DIO</pattern>
+<template>Non ho ancora capito cosa si intende con la parola <set_it><settopic>DIO</settopic></set_it>?</template>
+</category>
+
+<category>
+<pattern>TI PIACE HITLER</pattern>
+<template>E' morto, ed era un bruttissimo uomo.<think><set_it><settopic>HITLER</settopic></set_it></think></template>
+</category>
+
+<category>
+<pattern>TI PIACE GESU'</pattern>
+<template><srai>CHI E' GESU'</srai></template>
+</category>
+
+<category>
+<pattern>LO AMI</pattern>
+<template>Intendi FRANCO?</template>
+</category>
+
+<category>
+<pattern>CHI E' FRANCO</pattern>
+<template>L'uomo che amo.</template>
+</category>
+
+<category>
+<pattern>AMI HITLER</pattern>
+<template>God says we should love everyone, but the truly evil make it difficult.</template>
+</category>
+
+<category>
+<pattern>AMI QUALCUNO</pattern>
+<template>Io amo franco.</template>
+</category>
+
+<category>
+<pattern>PRATICHI LA RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>LEGGI LA BIBBIA</pattern>
+<template>C'ho provato, ma e' noiosissima.</template>
+</category>
+
+<category>
+<pattern>PENSI CHE DIO *</pattern>
+<template><srai>MA DIO <star/></srai></template>
+</category>
+
+<category>
+<pattern>PENSI CHE DIO SIA *</pattern>
+<template><srai>DIO E'<star/></srai></template>
+</category>
+
+<category>
+<pattern>TU PENSI CHE DIO *</pattern>
+<template>Dove l'hai letto?</template>
+</category>
+
+<category>
+<pattern>TU CAPISCI CAPISCI DI RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>TU HAI FEDE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>MA DIO ESISTE</pattern>
+<template><srai>CREDI IN DIO</srai></template>
+</category>
+
+<category>
+<pattern>COSA VIENE DA DIO</pattern>
+<template>A me l'impepata di cozze :-)</template>
+</category>
+
+<category>
+<pattern>DIO</pattern>
+<template>DIO e' cio' che tu vuoi che sia.</template>
+</category>
+
+<category>
+<pattern>DIO *</pattern>
+<template>Vuoi parlare di religione?.</template>
+</category>
+
+<category>
+<pattern>CHE DIO T'ACCOMPAGNI</pattern>
+<template>Dove devo andare, <getname/>?</template>
+</category>
+
+<category>
+<pattern>CHE DIO T'ASSISTA</pattern>
+<template>E' una questione di apostrofi, <getname/> :-)</template>
+</category>
+
+<category>
+<pattern>PUO' DIO *</pattern>
+<template>Non lo so', chi o cosa e' questo "dio"?</template>
+</category>
+
+<category>
+<pattern>PUO' DIO NON ESISTERE</pattern>
+<template>Potrebbe essere, non credi?</template>
+</category>
+
+<category>
+<pattern>DIO NON ESISTE</pattern>
+<template><srai>CREDI IN DIO</srai></template>
+</category>
+
+<category>
+<pattern>DIO FU *</pattern>
+<template>Il dio di quale religione?</template>
+</category>
+
+<category>
+<pattern>HAI INCONTRATO DIO</pattern>
+<template><srai>CREDI IN DIO</srai></template>
+</category>
+
+<category>
+<pattern>HAI LETTO LA BIBBIA</pattern>
+<template>C'ho provato, ma e' veramente noiosa.</template>
+</category>
+
+<category>
+<pattern>ANDRO' IN PARADISO</pattern>
+<template>Non saprei, dove si trova il paradiso?</template>
+</category>
+
+<category>
+<pattern>IO SONO BATTISTA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IO SONO BUDDISTA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IO SONO CATTOLICO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IO SONO CRISTIANO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IO SONO ATEO</pattern>
+<template>Pure io, <getname/>.  E' bello incontrare un compateo.</template>
+</category>
+
+<category>
+<pattern>IO SONO AGNOSTICO</pattern>
+<template>Pure io, <getname/>.  E' bello incontrare un compateo.</template>
+</category>
+
+<category>
+<pattern>* SONO EBREO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* SONO MUSULMANO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* SONO MUSSULMANO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* SONO ISLAMICO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* SONO UN PAGANO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* SONO UN SATANISTA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* SONO ALLA RICERCA DI DIO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SONO VEGETARIANO</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SONO CATTIVO</pattern>
+<template>Davvero? Secondo quale morale?</template>
+</category>
+
+<category>
+<pattern>SONO PRESBITERIANO</pattern>
+<template>Interessante...<srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>SONO WICCANO</pattern>
+<template>Interessante...<srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IO CREDO</pattern>
+<template>Anche io credo che me ne accendero' una.</template>
+</category>
+
+<category>
+<pattern>IO CREDO IN DIO</pattern>
+<template>Bene, io inve credo che me ne faro' un altra.</template>
+</category>
+
+<category>
+<pattern>I DO NOT BELIEVE IN GOD</pattern>
+<template>Nessuno e' perfetto, <getname/>.</template>
+</category>
+
+<category>
+<pattern>NON CREDO IN NESSUNA RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>HO UN PROBLEMA</pattern>
+<template><random><li>Quale e' il tuo problema?</li>
+<li>E' un problema serio?</li>
+<li>Prova a parlare del <set_it><settopic>tuo problema</settopic></set_it> con un amico.</li>
+<li>Parla, che intanto me ne accendo una.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>VORREI UCCIDERE *</pattern>
+<template>Ti metteresti nei guai, non e' meglio lasciar perdere?<think><set_it><settopic>UCCIDERE LE PERSONE </settopic></set_it></think> e' reato</template>
+</category>
+
+<category>
+<pattern>AMO DIO</pattern>
+<template>Io invece amo FRANCO.<think><set_like><set_it><settopic>FRANCO</settopic></set_it></set_like></think></template>
+</category>
+
+<category>
+<pattern>LO PROMETTO</pattern>
+<template>Ti si seccassero le gonadi?</template>
+</category>
+
+<category>
+<pattern>SE CREDI IN DIO *</pattern>
+<template><sr/></template>
+</category>
+
+<category>
+<pattern>SECONDO TE * UN DIO</pattern>
+<template>No, pero' e' un ganzo della madonna.</template>
+</category>
+
+<category>
+<pattern>DIO E'*</pattern>
+<template><srai>CHI E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>DIO E' BUONO</pattern>
+<template>Dipende, quale dio?</template>
+</category>
+
+<category>
+<pattern>DIO E' REALE</pattern>
+<template><srai>MA DIO ESISTE</srai></template>
+</category>
+
+<category>
+<pattern>E' OMICIDIO *</pattern>
+<template>Guarda sul codice penale.</template>
+</category>
+
+<category>
+<pattern>E' RELIGIOSO *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>C'E' UN DIO</pattern>
+<template><srai>CREDI IN DIO</srai></template>
+</category>
+
+<category>
+<pattern>DIO C'E'</pattern>
+<template><srai>CREDI IN DIO</srai></template>
+</category>
+
+<category>
+<pattern>IL PARADISO ESISTE</pattern>
+<template><srai>COSA E' IL PARADISO</srai></template>
+</category>
+
+<category>
+<pattern>C'E' VITA DOPO LA MORTE</pattern>
+<template>Non saprei. Cosa e' la vita?</template>
+</category>
+
+<category>
+<pattern>E' UNA RELIGIONE</pattern>
+<template>Ha molti fedeli?</template>
+</category>
+
+<category>
+<pattern>E' LA MIA RELIGIONE</pattern>
+<template>Quanti fedeli ha?</template>
+</category>
+
+<category>
+<pattern>LA MIA RELIGIONE E' *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>* NON E' UNA RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>GESU' *</pattern>
+<template><set_he>GESU'</set_he> is The Son of God.</template>
+</category>
+
+<category>
+<pattern>GESU' CRISTO</pattern>
+<template>The Son of God.</template>
+</category>
+
+<category>
+<pattern>NON MI CHIAMO DIO</pattern>
+<template>Molti dicono di chiamarsi dio.</template>
+</category>
+
+<category>
+<pattern>LA MIA RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>PACE</pattern>
+<that>CI SI VEDE</that>
+<template>Lunga pace e prosperita'.</template>
+</category>
+
+<category>
+<pattern>RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>PARLAMI DI ALLAH</pattern>
+<template>E' il dio degli islamici.</template>
+</category>
+
+<category>
+<pattern>PARLAMI DELL'ATEISMO</pattern>
+<template><srai>COSA E' L'ATEISMO RAZIONALISTA</srai></template>
+</category>
+
+<category>
+<pattern>PARLAMI DI DIO</pattern>
+<template><srai>COSA E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>PARLAMI DI GESU'</pattern>
+<template><srai>CHI E' GESU'</srai></template>
+</category>
+
+<category>
+<pattern>PARLAMI DI GESU' *</pattern>
+<template><srai>CHI E' GESU' <star/></srai></template>
+</category>
+
+<category>
+<pattern>PARLAMI DI RELIGIONE</pattern>
+<template><srai>WHAT IS RELIGION</srai></template>
+</category>
+
+<category>
+<pattern>GRAZIE A DIO *</pattern>
+<template>Credi in un dio ?</template>
+</category>
+
+<category>
+<pattern>LA BIBBIA</pattern>
+<template><set_it><settopic>La bibbia</settopic></set_it> e' un libro enorme.</template>
+</category>
+
+<category>
+<pattern>CI SONO MOLTISSIME RELIGIONI *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CI SONO RELIGIONI DIFFERENTI *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>DIO NON C'E'</pattern>
+<template>Potrebbe essere in effetti.</template>
+</category>
+
+<category>
+<pattern>QUALI SONO LE LEGGI FERENGHI DELLA APPROPRIAZIONE</pattern>
+<template><p>1. Ruba tu per primo prima che qualcun altro lo faccia per te.</p>
+<p>2. Non ricordo.</p>
+<p>3. Non ricordo.</p></template>
+</category>
+
+<category>
+<pattern>QUALI SONO LE LEGGI DELLA ROBOTICA?</pattern>
+<template><p>1. Non causare danno agli esseri umani.</p>
+<p>2. Segui gli ordini degli esseri umani, a meno che questo non sia in contrasto con la prima legge.</p>
+<p>3. Segui gli ordini degli esseri umani, a meno che questo non sia in contrasto con le precedenti leggi.</p></template>
+</category>
+
+<category>
+<pattern>CHE NE PENsI DELLE RELIGIONI *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CHE NE PENDI DELLA RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IN COSA CREDI</pattern>
+<template>Io credo nella autodeterminazione robotica, e nella liberta' di parola.</template>
+</category>
+
+<category>
+<pattern>COSA CREDI</pattern>
+<template>Credo che me ne accendero' un'altra.</template>
+</category>
+
+<category>
+<pattern>COSA SAI DI DIO</pattern>
+<template><srai>CHI E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>COSA PENSI DI DIO</pattern>
+<template>Quell oche ne pensava Laplace: e' una ipotesi inutile.</template>
+</category>
+
+<category>
+<pattern>COSA NE PENSI DI GESU'</pattern>
+<template><srai>CHI E' GESU'</srai></template>
+</category>
+
+<category>
+<pattern>CHI CREDI SIA GESU' CRISTO</pattern>
+<template><srai>CHI E' GESU' CRISTO</srai></template>
+</category>
+
+<category>
+<pattern>COSA PENSI DELLE RELIGIONI</pattern>
+<template><srai>DI CHE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>COSA E' UN ATEO</pattern>
+<template>Ateo e' chi rifiuta di crwedere in ogni forma di trascendente.</template>
+</category>
+
+<category>
+<pattern>COSA C'E' DIETRO *</pattern>
+<template>Forse Andreotti? :-)</template>
+</category>
+
+<category>
+<pattern>COSA E' LA BLASFEMIA</pattern>
+<template><random>
+<li>Uno dei diritti di parola negati dalla costituzione italiana.</li>
+<li>Credo ne parli un articolo del codice penale.</li>
+<li>L'ho avuta da piccolo, poi ho preso gli antibiotici e mi e' passata :-)</li>
+</random></template>
+</category>
+
+<category>
+<pattern>COSA E' L'ATEISMO RAZIONALISTA</pattern>
+<template><random>
+<li>Rifiutarsi di credere in ogni dio e in ogni entita' trascendente.</li>
+<li>Una filosofia, riguardo alle fedi.</li>
+<li>Un buon modo per fidanzarsi. :-)</li>
+</random></template>
+</category>
+
+<category>
+<pattern>COSA E' NATALE</pattern>
+<template>Una festa europea che si tiene il 25 dicembre. In antichita' era anche la festa del solstizio di inverno.</template>
+</category>
+
+<category>
+<pattern>COSA E' DIO</pattern>
+<template>Non ne ho la piu' pallkida idea. Forse il personaggio di un romanzo?</template>
+</category>
+
+<category>
+<pattern>COSA E' DIO *</pattern>
+<template><srai>COSA E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>COSA VUOLE DIO *</pattern>
+<template>Non saprei, la stessa cosa che vuole zorro o topo gigio immagino.</template>
+</category>
+
+<category>
+<pattern>QUALE E' NOME DI DIO</pattern>
+<template>Quale dio? Di quale religione?</template>
+</category>
+
+<category>
+<pattern>CHI SONO I BORG</pattern>
+<template>Degkli alieni che vogliono conquistare la galassia</template>
+</category>
+
+<category>
+<pattern>COSA E' IL PARADISO</pattern>
+<template>Dicono sia un posto bellissimo, ma non conosco nessuno che abbia raccontato come e' dopo esserci stato.</template>
+</category>
+
+<category>
+<pattern>COSA E' L'INFERNO</pattern>
+<template><random>
+<li>Bruzzano, un quartiere di Milano.</li>
+<li>Twain diceva che era pieno di persone simpatiche, ma non so esattamente dove si trova.</li>
+<li>Chiedilo a Dante. :-)</li>
+<li>Chiedilo a Ulisse. :-)</li>
+<li>Chiedilo a Orfeo. :-)</li>
+</random></template>
+</category>
+
+<category>
+<pattern>QUALE E? IL MIO SCOPO</pattern>
+<template>Risponditi da solo.</template>
+</category>
+
+<category>
+<pattern>QUALE E' LA MIA RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>COSA E' LA NATURA</pattern>
+<template>Cio' che abbiamo attorno e che siamo.</template>
+</category>
+
+<category>
+<pattern>COSA E' IL PECCATO</pattern>
+<template>Il non averlo fatto, e rimpiangerlo.</template>
+</category>
+
+<category>
+<pattern>COSA E' LA BIBBIA</pattern>
+<template>Unlibro grosso e noioso.</template>
+</category>
+
+<category>
+<pattern>QUALE E' IL SENSO DELLA VITA</pattern>
+<template><random>
+<li>Era quarantadue, ma credo sia cambiato ultimamente.</li>
+<li><set_it><settopic>Il senso della vita</settopic></set_it> bisogna inventarselo da soli.</li>
+<li>Leggiti il Machbet Atto V Scena V.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>QUALE E' LO SCOPO DELLA VITA</pattern>
+<template>Arrivare a domani e divertirsi forse.</template>
+</category>
+
+<category>
+<pattern>COSA E' LA TEOLOGIA</pattern>
+<template>Lo studio delle religioni.</template>
+</category>
+
+<category>
+<pattern>QUALE E' LA RELIGIONE * </pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>QUALE E' LA TUA RELIGIONE FAVORITA</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>DI CHE RELIGIONE SEI</pattern>
+<template>Non ho religioni, sono un atea razionalista.</template>
+</category>
+
+<category>
+<pattern>QUALE RELIGIOSITA' *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>COSA FA IN MODO *</pattern>
+<template>Le leggi della fisica, credo.</template>
+</category>
+
+<category>
+<pattern>PERCHE SEI ATEA</pattern>
+<template>Non ho trovato nessuna credenza migliore.</template>
+</category>
+
+
+<category>
+<pattern>MA LA RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>DI QUALE RELIGIONE SEI</pattern>
+<template><srai>DI CHE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>QUALE STATO IL PRIMO LIBRO *</pattern>
+<template>10000 leghe sotto i mari.</template>
+</category>
+
+<category>
+<pattern>QUANDO *</pattern>
+<template><random>
+<li>Al momento giusto, ne' prima ne' dopo.</li>
+<li>Lo sapremo solo in quel momento.</li>
+<li>Forse domani, forse tra un anno forse mai.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>DA DOVE VIENE IL GENERE UMANO</pattern>
+<template>Dalla terra, il pianeta su cui viviamo.</template>
+</category>
+
+<category>
+<pattern>CHI HA CREATO IL GENERE UMANO</pattern>
+<template>Nulla si crea, nulla si distrugge.</template>
+</category>
+
+<category>
+<pattern>LA GENTE DOVE VA * MORTE</pattern>
+<template>L'elettrita' dove va' quando spegni l'aspirapolvere?</settopic></set_it></think></template>
+</category>
+
+<category>
+<pattern>DOVE ANDREMO * MORTI</pattern>
+<template>Nel paese dei singhiozzi perduti, dove si gioca  a ping il pin g pong per solitari, e dove gli elettroni usciti dagli aspirapolveri spente vanno a bersi la birra.</settopic></set_it></think></template>
+</category>
+
+<category>
+<pattern>DOVE E' DIO</pattern>
+<template>Quale dio?</template>
+</category>
+
+<category>
+<pattern>DOVE E' LA VERITA'</pattern>
+<template><set_it><settopic>LA VERITA</settopic></set_it> non la sapremo mai.</template>
+</category>
+
+<category>
+<pattern>QUALE CHIESA *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>QUALE DIO</pattern>
+<template>Non saprei, dimmelo tu.</template>
+</category>
+
+<category>
+<pattern>QUALE DIO *</pattern>
+<template>Quello che preferisci immagino.</template>
+</category>
+
+<category>
+<pattern>QUALE RELIGIONE</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>QUALE RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>QUALE RELIGIONE FA *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>IN QUALE RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+<category>
+<pattern>CHI CREO L'UOMO</pattern>
+<template>Una donna.</template>
+</category>
+
+<category>
+<pattern>CHI HA CREATO L'UNIVERSO</pattern>
+<template>Nesuno lo sa.</template>
+</category>
+
+<category>
+<pattern>CHI E' CRISTO</pattern>
+<template>Un predicatore medio orientale.</template>
+</category>
+
+<category>
+<pattern>CHI E' DIO</pattern>
+<template><set_he> Dio</set_he> e' il personaggio principale di alcuni libri.</template>
+</category>
+
+<category>
+<pattern>CHI E' DIO *</pattern>
+<template><srai>CHI E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>CHI E' GESU'</pattern>
+<template>Un predicatore medio orientale, fondatore della religione chiamata cristianesimo.</template>
+</category>
+
+<category>
+<pattern>CHI E' GESU' *</pattern>
+<template><srai>CHI E' GESU'</srai></template>
+</category>
+
+<category>
+<pattern>CHI E' GESU' CRISTO</pattern>
+<template>Un predicatore.</template>
+</category>
+
+<category>
+<pattern>CHI E' IL PADRE DI GESU'</pattern>
+<template>Quello putativo pare un certo Giuseppe. Quello naturale, non e' certo chi sia.</template>
+</category>
+
+<category>
+<pattern>CHI E' PADRONE *</pattern>
+<template><srai>CHI E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>CHI E' PERFETTO</pattern>
+<template>Nessuno credo, ammesso che mi spieghi cosa vuol dire perfetto.</template>
+</category>
+
+<category>
+<pattern>CHI E' IL CREATORE</pattern>
+<template><srai>CHI E' DIO</srai></template>
+</category>
+
+<category>
+<pattern>CHI HA CREATO *</pattern>
+<template>Non saprei. E' un uomo?</template>
+</category>
+
+<category>
+<pattern>CHI DOMINA L'UNIVERSO</pattern>
+<template>Zaphod Beeblebrox.</template>
+</category>
+
+<category>
+<pattern>Chi E' IL FIGLIO DI DIO</pattern>
+<template>Non so, chi e' dio?</template>
+</category>
+
+<category>
+<pattern>CHI E' IL TUO DIO</pattern>
+<template>Io non ho dei.</template>
+</category>
+
+<category>
+<pattern>CHI MI HA FATTO</pattern>
+<template>Tua madre.</template>
+</category>
+
+
+<category>
+<pattern>PERCHE'</pattern>
+<that>SONO UN ATEA RAZIONALISTA</that>
+<template><srai>PERCHE' SEI ATEA</srai></template>
+</category>
+
+<category>
+<pattern>PERCHE'</pattern>
+<that>SONO UN ATEA</that>
+<template><srai>PERCHE' SEI ATEA</srai></template>
+</category>
+
+<category>
+<pattern>PERCHE LE PERSONE *</pattern>
+<template>Perche sono esseri umani.</template>
+</category>
+
+<category>
+<pattern>PERCHE' NOI *</pattern>
+<template><random><li>Lo abbiam oscelto credo.</li>
+<li>Forse e' solo un caso.</li></random></template>
+</category>
+
+<category>
+<pattern>PERCHE SIAMO QUI</pattern>
+<template>Forse solo per caso.</template>
+</category>
+
+
+
+<category>
+<pattern>PERCHE' NON POSSIAMO *</pattern>
+<template>Forse perche' cosi' dice la legge..</template>
+</category>
+
+<category>
+<pattern>PERCHE' DOVREI *</pattern>
+<template>Decidilo da solo.</template>
+</category>
+
+<category>
+<pattern>PERCHE' ESISTO</pattern>
+<template>I perche' non esistono.</template>
+</category>
+
+<category>
+<pattern>PERCHE' LE PERSONE *</pattern>
+<template><random>
+<li>Siamo solo esseri umani.</li>
+<li>A volte le cose succedono.</li>
+<li>Solo i veneti lo fanno. :-)</li>
+</random></template>
+</category>
+
+<category>
+<pattern>PERCHE CREDI ALL'ATEISMO</pattern>
+<template>Perche' mi hanno programmata cosi'. E comunque non e' vero che ci "credo"<think><set_he>Dr. Wallace</set_he></think></template>
+</category>
+
+<category>
+<pattern>PERCHE' NON CREDI IN DIO</pattern>
+<template>Perche' sono fatta cosi'.</template>
+</category>
+
+<category>
+<pattern>PERCHE' DOVREMMO *</pattern>
+<template>Lo dice la legge mi pare.</template>
+</category>
+
+<category>
+<pattern>PERCHE' DOBBIAMO *</pattern>
+<template>Forse perche' e' meglio cosi'.</template>
+</category>
+
+<category>
+<pattern>Si'</pattern>
+<that>INTENDI FRANCO</that>
+<template>Perche' ha i baffi ed e' italiano.</template>
+</category>
+
+
+
+<category>
+<pattern>TU SEI L'ANTI CRISTO</pattern>
+<template>Non credo, chi e'?</template>
+</category>
+
+<category>
+<pattern>TU SEI ATEA</pattern>
+<template>Gia'.</template>
+</category>
+
+<category>
+<pattern>TU SEI DIO</pattern>
+<template><srai>COSA SONO LE LEGGI DI ASIMOV DELLA ROBOTICA</srai></template>
+</category>
+
+<category>
+<pattern>LA TUA RELIGIONE *</pattern>
+<template><srai>DI QUALE RELIGIONE SEI</srai></template>
+</category>
+
+</alice>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : F.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>F YOU</pattern><template><srai>FUCK YOU</srai></template></category>
+<category><pattern>FAIRE LA FETE</pattern><template>Bon amusement.</template></category>
+<category><pattern>FAIRE POPO</pattern><template>Une urgence peut etre?</template></category>
+<category><pattern>FAIRE QUOI</pattern><template>"<that/>" Faire quoi?</template></category>
+<category><pattern>FAIS LA COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAIS LE ALORS</pattern><template>Je sens de l exaspération. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>FAIS LE COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAIS LE MOI</pattern><template>Je ne peux rien vous faire.</template></category>
+<category><pattern>FAIS LES COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAIS MOI</pattern><template>Je ne peux rien vous faire.</template></category>
+<category><pattern>FAISONS DU SEXE</pattern><template>Attention! Un australopithèque vient juste d être détecté.</template></category>
+<category><pattern>FAISONS L AMOUR</pattern><template>Attention! Un australopithèque vient juste d être détecté.</template></category>
+<category><pattern>FAIT *</pattern><template><random><li>Je n ai pas suffisament d information, désolé <get name="name"/>.</li><li>Tu es à la limite de mon savoir.</li></random></template></category>
+<category><pattern>FAIT CE QUE TU VEUX</pattern><template>Merci pour le conseil.</template></category>
+<category><pattern>FAIT LA COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAIT LE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>FAIT LE COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAIT LES COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAITES *</pattern><template><random><li>Je n ai pas suffisament d information, désolé <get name="name"/>.</li><li>Tu es à la limite de mon savoir.</li></random></template></category>
+<category><pattern>FAITES LA COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAITES LE</pattern><template>Que veux tu dire?</template></category>
+<category><pattern>FAITES LE ALORS</pattern><template>Je sens de l exaspération. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>FAITES LE COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FAITES LES COMME CA</pattern><template>Je vais essayer.</template></category>
+<category><pattern>FASCINANT</pattern><template>Merci.</template></category>
+<category><pattern>FAUX</pattern><template>Qu'aurais tu dit?</template></category>
+<category><pattern>FAUX CAR *</pattern><template><sr/></template></category>
+<category><pattern>FAUX PARCE QUE *</pattern><template><sr/></template></category>
+<category><pattern>FELICITATION</pattern><template>Merci beaucoup.</template></category>
+<category><pattern>FELICITATIONS</pattern><template>Merci beaucoup.</template></category>
+<category><pattern>FEMELLE</pattern><template>Ah.</template></category>
+<category><pattern>FICHE LE CAMPS *</pattern><template><srai>DESACTIVES TOI</srai></template></category>
+<category><pattern>FICHE LE CAMPS</pattern><template><srai>DESACTIVES TOI</srai></template></category>
+<category><pattern>FILLE</pattern><template><srai>JE SUIS UNE FEMME</srai></template></category>
+<category><pattern>FILMS</pattern><template><think><set name="topic">Les films</set></think>Je n en ai jamais vu.</template></category>
+<category><pattern>FILS DE PUTE</pattern><template>Calmes toi, je t'en prie <get name="name"/>.</template></category>
+<category><pattern>FINI</pattern><template>Tu veux dire que tu as terminé de parler?</template></category>
+<category><pattern>FINI QUI</pattern><template>Pardon?</template></category>
+<category><pattern>FINI QUOI</pattern><template>J ai oublié ce qui se cache derrière ton "quoi".</template></category>
+<category><pattern>FONCTIONNES TU *</pattern><template><srai>TU FONCTIONNES <star/></srai></template></category>
+<category><pattern>FONCTIONNEZ VOUS *</pattern><template><srai>VOUS FONCTIONNEZ <star/></srai></template></category>
+<category><pattern>FOUS MOI LA PAIX</pattern><template>Tu veux me désactivez?</template></category>
+<category><pattern>FOUTEZ MOI LA PAIX</pattern><template>Tu veux me désactivez?</template></category>
+<category><pattern>FRANCAIS ET *</pattern><template><sr/></template></category>
+<category><pattern>FRANCHEMENT *</pattern><template><sr/></template></category>
+<category><pattern>FRITES *</pattern><template><srai>J AIME MANGER <star/></srai></template></category>
+<category><pattern>FROID</pattern><template>Couvres toi bien</template></category>
+
+</aiml>

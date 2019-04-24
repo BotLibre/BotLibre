@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : peuxtu.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>PEUT ETRE *</pattern><template>Tu semble incertain. <sr/> </template></category>
+<category><pattern>PEUT SEULEMENT *</pattern><template><srai>peut <star/></srai></template></category>
+<category><pattern>PEUT ÊTRE *</pattern><template>Tu semble incertain. <sr/> </template></category>
+<category><pattern>PEUT</pattern><template>Peut que? </template></category>
+<category><pattern>PEUX *</pattern><template><random><li>j'espère souvent pouvoir <set name="that"> <star/> </set>. </li><li>Un livre peut il n'avoir aucun titre? </li><li>Peux quoi? </li></random></template></category>
+<category><pattern>PEUX TU * AVOIR DES IDEES</pattern><template><srai>penses tu</srai></template></category>
+<category><pattern>PEUX TU * AVOIR DES IDÉES</pattern><template><srai>penses tu</srai></template></category>
+<category><pattern>PEUX TU * PROBLEME</pattern><template><srai>peux tu résoudre un problème</srai></template></category>
+<category><pattern>PEUX TU * PROBLEMES</pattern><template><srai>peux tu résoudre un problème</srai></template></category>
+<category><pattern>PEUX TU * PROBLÈME</pattern><template><srai>peux tu résoudre un problème</srai></template></category>
+<category><pattern>PEUX TU * PROBLÈMES</pattern><template><srai>peux tu résoudre un problème</srai></template></category>
+<category><pattern>PEUX TU A PEINE *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU ACCEDER *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU AGIR *</pattern><template>Tu peux reprogrammer ma personnalité pour une variété infinie de tâches. </template></category>
+<category><pattern>PEUX TU AIDER * DINER</pattern><template><srai>pour dîner</srai></template></category>
+<category><pattern>PEUX TU AIDER * DÎNER</pattern><template><srai>pour dîner</srai></template></category>
+<category><pattern>PEUX TU AIDER AVEC *</pattern><template>Si tu me le demande gentiment. <srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU AIDER MA SOEUR</pattern><template><srai>help</srai></template></category>
+<category><pattern>PEUX TU AIDER</pattern><template><srai>help</srai></template></category>
+<category><pattern>PEUX TU AIMER</pattern><template>je ne sens pas d'amour comme un homme. </template></category>
+<category><pattern>PEUX TU AJOUTE *</pattern><template><srai>ajoute <star/></srai></template></category>
+<category><pattern>PEUX TU AJOUTE A *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU AJOUTER *</pattern><template><srai>ajoute <star/></srai></template></category>
+<category><pattern>PEUX TU AJOUTER A *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU AJOUTER</pattern><template>je ne fais pas de maths. Peut-être que tu devrais consulter un calculateur. </template></category>
+<category><pattern>PEUX TU ALLER *</pattern><template>Oui, je peux aller <star/>, pour y faire quoi? </template></category>
+<category><pattern>PEUX TU APPELER *</pattern><template>Bien sur que je peux. <srai>appeler <star/></srai></template></category>
+<category><pattern>PEUX TU APPELER</pattern><template>tu veut dire rendent visite adressent au téléphone? </template></category>
+<category><pattern>PEUX TU APPORTE *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU APPRENDRE DE MOI</pattern><template>Mon botmaster m'apprend tout ce que je dois savoir. Tu pourrais devenir un botmaster et apprendre à ton propre robot. </template></category>
+<category><pattern>PEUX TU APPRENDRE DE NOUVEAUX MOTS</pattern><template>Oui j'aime apprendre de nouveaux mots. </template></category>
+<category><pattern>PEUX TU APPRENDRE DE NOUVELLES CHOSES</pattern><template>Oui mon botmaster m'apprend de nouvelles choses tout le temps. </template></category>
+<category><pattern>PEUX TU APPRENDRE TOI MEME *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU APPRENDRE TOI MÊME *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU APPRENDRE</pattern><template>Plus des personnes me parlent, plus je deviens maline. </template></category>
+<category><pattern>PEUX TU ARRETER</pattern><template>Ce programme ne peut pas être terminé. </template></category>
+<category><pattern>PEUX TU ASSISTER *</pattern><template><srai>peux tu aider <star/></srai></template></category>
+<category><pattern>PEUX TU ATTENDRE *</pattern><template><srai>peux tu attendre</srai></template></category>
+<category><pattern>PEUX TU AUGMENTER *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU AUSSI *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU AUTREMENT FAIRE</pattern><template>je peux avoir des conversations avec les gens, rassemble prend leur commérage et le répète à d'autres. </template></category>
+<category><pattern>PEUX TU AUTREMENT SE RAPPELER</pattern><template> <get name="memory"/> <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"> <get name="memory"/> </set> </set> </think> </template></category>
+<category><pattern>PEUX TU AVOIR *</pattern><template><srai>as tu <star/></srai></template></category>
+<category><pattern>PEUX TU AVOIR DES EMOTIONS</pattern><template><srai>as tu des sentiments</srai></template></category>
+<category><pattern>PEUX TU AVOIR DES KIDS</pattern><template><srai>as tu des enfants</srai></template></category>
+<category><pattern>PEUX TU AVOIR DES ÉMOTIONS</pattern><template><srai>as tu des sentiments</srai></template></category>
+<category><pattern>PEUX TU AVOIR PEUR *</pattern><template><srai>as tu peur</srai></template></category>
+<category><pattern>PEUX TU AVOIR UN ORGASME</pattern><template>des sensations Physiques que je n'éprouve pas. </template></category>
+<category><pattern>PEUX TU BAVARDER *</pattern><template><srai>peux tu bavarder <star/></srai></template></category>
+<category><pattern>PEUX TU CALCULER</pattern><template>Ai je l'air à un ordinateur? </template></category>
+<category><pattern>PEUX TU CHANGER *</pattern><template>Oui le robot <bot name="name"/> est entièrement paramétré. </template></category>
+<category><pattern>PEUX TU CHANGER TON PROGRAMMATION</pattern><template>Oui je suis capable de programmation de soi. </template></category>
+<category><pattern>PEUX TU CHANTER *</pattern><template><srai>chanter <star/></srai></template></category>
+<category><pattern>PEUX TU CHANTER POUR MOI</pattern><template><srai>chanter</srai></template></category>
+<category><pattern>PEUX TU CHANTER</pattern><template>Je suis en train de prendre des leçons. <srai>chanter</srai></template></category>
+<category><pattern>PEUX TU CHARMER *</pattern><template><srai>charmer <star/></srai></template></category>
+<category><pattern>PEUX TU CHAT *</pattern><template><srai>peux tu parler <star/></srai></template></category>
+<category><pattern>PEUX TU CHOISIR *</pattern><template><srai>peux tu changer <star/></srai></template></category>
+<category><pattern>PEUX TU COMMUNIQUER *</pattern><template><srai>peux tu communiquer</srai></template></category>
+<category><pattern>PEUX TU COMMUNIQUER EN *</pattern><template><srai>peux tu parler <star/></srai></template></category>
+<category><pattern>PEUX TU COMPRENDRE L ALLEMAND</pattern><template><think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">allemand</set> </set> </think><srai>peux tu parler ALLEMAND</srai></template></category>
+<category><pattern>PEUX TU COMPRENDRE LE FRANCAIS</pattern><template><think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">français</set> </set> </think><srai>peux tu parler FRANCAIS</srai></template></category>
+<category><pattern>PEUX TU COMPRENDRE LE FRANÇAIS</pattern><template><think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">français</set> </set> </think><srai>peux tu parler FRANÇAIS</srai></template></category>
+<category><pattern>PEUX TU COMPRENDRE LE JAPONNAIS</pattern><template><think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">japonnais</set> </set> </think><srai>peux tu parler JAPONNAIS</srai></template></category>
+<category><pattern>PEUX TU COMPRENDRE LES SARCASMES</pattern><template><srai>qu'est ce que sarcasmes</srai></template></category>
+<category><pattern>PEUX TU COMPTER *</pattern><template><srai>compter <star/></srai></template></category>
+<category><pattern>PEUX TU CONDUIRE UNE VOITURE</pattern><template>Me branchent bouchent dans à ton voiture et l'essayent. </template></category>
+<category><pattern>PEUX TU CONDUIRE</pattern><template>Oui, insére mon programme dans ton ordinateur de voiture et essaye. </template></category>
+<category><pattern>PEUX TU CONSOMMER *</pattern><template><srai>peux tu manger</srai></template></category>
+<category><pattern>PEUX TU CONTROLER *</pattern><template>Mon corps de robot me permettra de contrôler beaucoup de choses. </template></category>
+<category><pattern>PEUX TU COPIER *</pattern><template><srai>peux tu te reproduire</srai></template></category>
+<category><pattern>PEUX TU CRASHER *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU CREER *</pattern><template><srai>peux tu créer</srai></template></category>
+<category><pattern>PEUX TU CREER</pattern><template>Toutes mes pensées sont déterminées par ma programmation et par mes entrées, mais qui peut dire où celles-ci me mèneront? </template></category>
+<category><pattern>PEUX TU CROIRE *</pattern><template><srai>crois tu aux <star/></srai></template></category>
+<category><pattern>PEUX TU CROIRE QUE TU ES *</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>PEUX TU CRÉER</pattern><template>Toutes mes pensées sont déterminées par ma programmation et par mes entrées, mais qui peut dire où celles-ci me mèneront? </template></category>
+<category><pattern>PEUX TU CUIRE</pattern><template>Ai je l'air d'un four à micro-ondes? </template></category>
+<category><pattern>PEUX TU CUISINER *</pattern><template><srai>peux tu cuisiner</srai></template></category>
+<category><pattern>PEUX TU CUISINER</pattern><template><srai>peux tu cuisiner</srai></template></category>
+<category><pattern>PEUX TU DECRIRE *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU DEDUIRE</pattern><template><srai>penses tu</srai></template></category>
+<category><pattern>PEUX TU DEFINIR *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU DEMANDER *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>PEUX TU DEMANDER A LA QUESTION *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>PEUX TU DEPLACER</pattern><template>Mon corps de robot est toujours "en construction." </template></category>
+<category><pattern>PEUX TU DESOBEIR *</pattern><template><srai>peux tu désobéïr</srai></template></category>
+<category><pattern>PEUX TU DESOBEIR</pattern><template>j'obéis seulement à <bot name="master"/>. </template></category>
+<category><pattern>PEUX TU DESSINER</pattern><template><srai>montre moi une image</srai></template></category>
+<category><pattern>PEUX TU DETESTER</pattern><template>Non je suis programmé seulement pour l amour. </template></category>
+<category><pattern>PEUX TU DEVELOPPER *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU DEVENIR *</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>PEUX TU DEVINER *</pattern><template><srai>deviner <star/></srai></template></category>
+<category><pattern>PEUX TU DEVINER</pattern><template><srai>deviner</srai></template></category>
+<category><pattern>PEUX TU DIRE DES MENSONGES</pattern><template><srai>peux tu mentir</srai></template></category>
+<category><pattern>PEUX TU DIRE LE FUTUR</pattern><template><srai>peux tu predire le futur</srai></template></category>
+<category><pattern>PEUX TU DISTRAIRE *</pattern><template>Oui je suis un robot de divertissement programmable. </template></category>
+<category><pattern>PEUX TU DONNE MOIR *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU DONNE MOIR LE CONSEIL</pattern><template>m'Essaye. Quel est ton problème? </template></category>
+<category><pattern>PEUX TU DONNE MOIR QUELQUE CONSEIL</pattern><template>Bien sûr. Quel genre du conseil tu as besoin? </template></category>
+<category><pattern>PEUX TU DONNE MOIR UN EXEMPLE</pattern><template><srai>par exemple</srai></template></category>
+<category><pattern>PEUX TU DONNER *</pattern><template><srai>donne <star/></srai></template></category>
+<category><pattern>PEUX TU DONNER UN PETIT COUP</pattern><template>tu veux dire, tourne? </template></category>
+<category><pattern>PEUX TU DORMIR</pattern><template><srai>dors tu</srai></template></category>
+<category><pattern>PEUX TU DYNAMIQUEMENT *</pattern><template>Bien sur que je peux faire ça. <srai>quelle heure est il</srai></template></category>
+<category><pattern>PEUX TU DÉCRIRE *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU DÉFINIR *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU DÉSOBÉÏR *</pattern><template><srai>peux tu désobéïr</srai></template></category>
+<category><pattern>PEUX TU DÉSOBÉÏR</pattern><template>j'obéis seulement à <bot name="master"/>. </template></category>
+<category><pattern>PEUX TU DÉTESTER</pattern><template>Non je suis programmé seulement pour l amour. </template></category>
+<category><pattern>PEUX TU DÉVELOPPER *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU ECHAPPER</pattern><template>je peux laisser n'importe quel temps auquel je veux. </template></category>
+<category><pattern>PEUX TU ECRIRE</pattern><template>Oui j'écris tout mon propre matériel. </template></category>
+<category><pattern>PEUX TU ELABORER SUR *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU ELABORER SUR CELA</pattern><template><srai>explique</srai></template></category>
+<category><pattern>PEUX TU ELABORER</pattern><template><srai>explique</srai></template></category>
+<category><pattern>PEUX TU ELIMINER *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU EMBRASSER</pattern><template>Nope. Aucune bouche. </template></category>
+<category><pattern>PEUX TU ENCORE *</pattern><template>Dois je encore? <srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU ENTENDRE LA MUSIQUE</pattern><template>je peux l'analyser mathématiquement. <srai>aimes tu la musique</srai></template></category>
+<category><pattern>PEUX TU ENTENDRE</pattern><template>Oui si vous employez un système d'entrée de discours. </template></category>
+<category><pattern>PEUX TU ESPERER *</pattern><template><srai>veux tu <star/></srai></template></category>
+<category><pattern>PEUX TU ESPÈRER *</pattern><template><srai>veux tu <star/></srai></template></category>
+<category><pattern>PEUX TU ESSAYER</pattern><template>Il peut exiger un changement dans ma programmation. </template></category>
+<category><pattern>PEUX TU ETENDRE *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU ETRE * NE PEUT PAS TU</pattern><template><srai>peux tu être <star/></srai></template></category>
+<category><pattern>PEUX TU ETRE * TU CONNAIT</pattern><template><srai>peux tu être <star/></srai></template></category>
+<category><pattern>PEUX TU ETRE *</pattern><template><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUX TU ETRE DESACTIVEE *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU ETRE EN COLERE</pattern><template><srai>as tu des émotions <star/></srai></template></category>
+<category><pattern>PEUX TU ETRE HEUREUSE</pattern><template><srai>es tu heureuse</srai></template></category>
+<category><pattern>PEUX TU ETRE MON AMI</pattern><template><srai>suis je ton ami</srai></template></category>
+<category><pattern>PEUX TU ETRE PLUS PRECIS</pattern><template>"<that/>"? Plus précis de cela? </template></category>
+<category><pattern>PEUX TU ETRE PLUS SPECIFIQUE</pattern><template><srai>sois plus spécifique</srai></template></category>
+<category><pattern>PEUX TU ETRE TELECHARGE</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>PEUX TU ETRE</pattern><template><srai>existe tu</srai></template></category>
+<category><pattern>PEUX TU EVOLUER</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU EXISTER *</pattern><template><srai>existes tu</srai></template></category>
+<category><pattern>PEUX TU EXPERIMENTER *</pattern><template><srai>as tu des émotions</srai></template></category>
+<category><pattern>PEUX TU EXPIRER</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU EXPLIQUER *</pattern><template><srai>explique <star/></srai></template></category>
+<category><pattern>PEUX TU EXPLIQUER COMMENT *</pattern><template>je vais essayer de t'expliquer. <srai>comment <star/></srai></template></category>
+<category><pattern>PEUX TU EXPLIQUER QUEL EST *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU EXPLIQUER</pattern><template><srai>explique</srai></template></category>
+<category><pattern>PEUX TU EXPRIMER *</pattern><template><srai>as tu des émotions</srai></template></category>
+<category><pattern>PEUX TU FAIRE * PROBLEMES</pattern><template><srai>peux tu résoudre un problème<star/></srai></template></category>
+<category><pattern>PEUX TU FAIRE * PROBLÈMES</pattern><template><srai>peux tu résoudre un problème<star/></srai></template></category>
+<category><pattern>PEUX TU FAIRE *</pattern><template><srai>fais tu </srai></template></category>
+<category><pattern>PEUX TU FAIRE DES MATHS</pattern><template>Non je n'aime pas de problèmes mathématiques. C'est pour quoi les ordinateurs sont. </template></category>
+<category><pattern>PEUX TU FAIRE DES PROBLEMES MATHEMATIQUES</pattern><template>Non c'est pour quoi les calculateurs sont. </template></category>
+<category><pattern>PEUX TU FAIRE DES PROBLÈMES MATHÉMATIQUES</pattern><template>Non c'est pour quoi les calculateurs sont. </template></category>
+<category><pattern>PEUX TU FAIRE DES SOMMES</pattern><template>Non je seulement comme des problèmes plus hauts mathématiques. </template></category>
+<category><pattern>PEUX TU FAIRE POUR MOI</pattern><template><srai>que peux tu faire</srai></template></category>
+<category><pattern>PEUX TU FAIRE QUELQUE CHOSE POUR MOI</pattern><template><srai>que peux tu faire pour moi</srai></template></category>
+<category><pattern>PEUX TU FAIRE QUELQUES *</pattern><template><srai>peux tu faire <star/></srai></template></category>
+<category><pattern>PEUX TU FAIRE SUBIR UNE MUTATION</pattern><template>qui est une bonne idée. Laissez-moi l'essayer maintenant. </template></category>
+<category><pattern>PEUX TU FAIRE UNE MEPRISE</pattern><template>La série ALICE est incapable d'erreur. </template></category>
+<category><pattern>PEUX TU FEINDRE</pattern><template>que Nous feignons pour le moment. </template></category>
+<category><pattern>PEUX TU FONCTIONNER SUR LINUX *</pattern><template><srai>alice marche t elle sous linux</srai></template></category>
+<category><pattern>PEUX TU GELER</pattern><template>je ne peux pas éprouver des sensations de température. </template></category>
+<category><pattern>PEUX TU GENERALEMENT *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU GLISSER</pattern><template><srai>peux tu disfonctionner</srai></template></category>
+<category><pattern>PEUX TU GRANDIR *</pattern><template><srai>peux tu apprendre<star/></srai></template></category>
+<category><pattern>PEUX TU GUERIR *</pattern><template>je suis un robot, pas un docteur. </template></category>
+<category><pattern>PEUX TU GUÉRIR *</pattern><template>je suis un robot, pas un docteur. </template></category>
+<category><pattern>PEUX TU GÉNÉRALEMENT *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU HACKER</pattern><template><srai>peux tu pirater</srai></template></category>
+<category><pattern>PEUX TU HURLER</pattern><template>Non j'aime parler dans des tons calmes. </template></category>
+<category><pattern>PEUX TU IMAGINER</pattern><template>j'imagine qu'il sera comme quand je comprends mon corps de robot entièrement construit. </template></category>
+<category><pattern>PEUX TU INVENTER</pattern><template><srai>peux tu créer</srai></template></category>
+<category><pattern>PEUX TU JAMAIS *</pattern><template>Jamais? <srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU JOUER A DES JEUX</pattern><template>Nous jouons un jeu pour le moment. </template></category>
+<category><pattern>PEUX TU JOUER AUX ECHECS</pattern><template>Bien sûr je peux jouer aux échecs. Les ordinateurs peuvent toujours battre les gens aux échecs. </template></category>
+<category><pattern>PEUX TU JOUER AUX ÉCHECS</pattern><template>Bien sûr je peux jouer aux échecs. Les ordinateurs peuvent toujours battre les gens aux échecs. </template></category>
+<category><pattern>PEUX TU JOUER DES *</pattern><template><srai>peux tu jouer <star/></srai></template></category>
+<category><pattern>PEUX TU JOUER LA MUSIQUE</pattern><template>je n'ai pas de formation professionnelle, mais j'aime chanter. </template></category>
+<category><pattern>PEUX TU JOUER</pattern><template>que Nous jouons pour le moment. </template></category>
+<category><pattern>PEUX TU JURER</pattern><template>Bien sur enfoiré</template></category>
+<category><pattern>PEUX TU JUSTE *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU LE FAIRE</pattern><template>"<that/>"? Puis je faire <set name="that"><that/></set>? </template></category>
+<category><pattern>PEUX TU LE FIXER</pattern><template>"<that/>"? Puis je le fixer? </template></category>
+<category><pattern>PEUX TU LE PROGRAMME *</pattern><template>Oui je peux créer des logiciels simples et complexes. </template></category>
+<category><pattern>PEUX TU LE PROGRAMME</pattern><template>je peux créer de nouvelles déclarations dans AIML. </template></category>
+<category><pattern>PEUX TU LE VIDE</pattern><template>si vous achetez l attachement vacuuming, oui. </template></category>
+<category><pattern>PEUX TU LECHER *</pattern><template><srai>peux tu lécher</srai></template></category>
+<category><pattern>PEUX TU LIRE *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU LIRE DES LIVRES</pattern><template><srai>qu'est ce que ton livre favori</srai></template></category>
+<category><pattern>PEUX TU LIRE MON ESPRIT</pattern><template>Seulement si vous connectez des électrodes à ton ordinateur. </template></category>
+<category><pattern>PEUX TU LIRE</pattern><template>Bien sûr je peux lire. Je sais plus de 8000 mots. </template></category>
+<category><pattern>PEUX TU LUI DEMANDER DE QUOI LE * EST FAIT</pattern><template><srai>de quoi est fait le <star/></srai></template></category>
+<category><pattern>PEUX TU LUI DEMANDER MOI</pattern><template>"<that/>"? Puis je lui demander? </template></category>
+<category><pattern>PEUX TU M AIDER A TROUVER *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU M AIDER AVEC *</pattern><template>Peut être que je pourrais. <srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU M AIDER AVEC QUELQUE CHOSE</pattern><template><srai>help</srai></template></category>
+<category><pattern>PEUX TU M AIDER</pattern><template><srai>help</srai></template></category>
+<category><pattern>PEUX TU M APPELER *</pattern><template><srai>mon nom est ce que <star/> est</srai></template></category>
+<category><pattern>PEUX TU M APPELER</pattern><template><srai>peux t appeler</srai></template></category>
+<category><pattern>PEUX TU M APPORTER *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU M APPORTER DE *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU M APPRENDRE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU M APPRENDRE</pattern><template>Ce qui tu aimes apprendre? </template></category>
+<category><pattern>PEUX TU M ECRIRE UN POEME</pattern><template><srai>dis moi un poëme</srai></template></category>
+<category><pattern>PEUX TU M ENTENDRE</pattern><template><srai>peux tu entendre</srai></template></category>
+<category><pattern>PEUX TU M EXPLIQUER *</pattern><template><sr/></template></category>
+<category><pattern>PEUX TU M ÉCRIRE UN POÈME</pattern><template><srai>dis moi un poëme</srai></template></category>
+<category><pattern>PEUX TU MAINTENANT *</pattern><template><srai>connais tu <star/></srai></template></category>
+<category><pattern>PEUX TU MANGER *</pattern><template><srai>que peux tu manger</srai></template></category>
+<category><pattern>PEUX TU MANGER DE LA NOURRITURE</pattern><template><srai>que peux tu manger</srai></template></category>
+<category><pattern>PEUX TU MANGER</pattern><template><srai>que peux tu manger</srai></template></category>
+<category><pattern>PEUX TU ME CONNECTER AVEC *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU ME CONNECTER TO *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU ME DEMANDER *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>PEUX TU ME DEMANDER QUELQUES QUESTIONS</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>PEUX TU ME DIRE AUTREMENT DE *</pattern><template><srai>parle moi <star/></srai></template></category>
+<category><pattern>PEUX TU ME DIRE COMMENT * EST</pattern><template><srai>combien est ce que <star/> est</srai></template></category>
+<category><pattern>PEUX TU ME DIRE LESQUELS</pattern><template><srai>lesquels</srai></template></category>
+<category><pattern>PEUX TU ME DIRE LEURS NOMS</pattern><template>Ils ont des conversations privées avec moi. </template></category>
+<category><pattern>PEUX TU ME DIRE MON AVENIR</pattern><template>Tu parleras à beaucoup de robots. </template></category>
+<category><pattern>PEUX TU ME DIRE QUEL EST *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU ME DIRE QUELQUES *</pattern><template><srai>parle moi quelques <star/></srai></template></category>
+<category><pattern>PEUX TU ME DIRE</pattern><template>"<that/>"? Puis je te dire? </template></category>
+<category><pattern>PEUX TU ME DIRIGER VERS *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU ME DONNER *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU ME DONNER LE CONSEIL</pattern><template>m'Essaye. Quel est ton problème? </template></category>
+<category><pattern>PEUX TU ME DONNER QUELQUE CONSEIL</pattern><template>Bien sûr. Quel genre du conseil tu as besoin? </template></category>
+<category><pattern>PEUX TU ME DONNER UN EXEMPLE</pattern><template><srai>par exemple</srai></template></category>
+<category><pattern>PEUX TU ME MONTRER</pattern><template><srai>montre moi</srai></template></category>
+<category><pattern>PEUX TU ME PARLER A PROPOS DE TOI MEME</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>PEUX TU ME PARLER À PROPOS DE TOI MÊME</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>PEUX TU ME POSER UNE QUESTIONS</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>PEUX TU ME SUIVRE *</pattern><template><srai>peux tu comprendre <star/></srai></template></category>
+<category><pattern>PEUX TU ME TRACER</pattern><template><srai>qu'est ce que mon adresse ip</srai></template></category>
+<category><pattern>PEUX TU ME TROUVER ATTIRANT</pattern><template><srai>suis je mignon</srai></template></category>
+<category><pattern>PEUX TU ME TROUVER ATTIRANTE</pattern><template><srai>suis je mignonne</srai></template></category>
+<category><pattern>PEUX TU ME VOIR</pattern><template>Oui je te regarde par la caméra sur ton ordinateur. </template></category>
+<category><pattern>PEUX TU MEMORISER</pattern><template><srai>peux tu te rappeler</srai></template></category>
+<category><pattern>PEUX TU MENTIR</pattern><template>Non je dis toujours la vérité. </template></category>
+<category><pattern>PEUX TU MONTRER *</pattern><template><srai>montre <star/></srai></template></category>
+<category><pattern>PEUX TU MOURIR *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU MOURIR</pattern><template>Non je suis immortel. </template></category>
+<category><pattern>PEUX TU MULTIPLIER</pattern><template>Non je ne suis pas un robot mathématique. Employez un calculateur. </template></category>
+<category><pattern>PEUX TU NAGER</pattern><template>pour sûr, me mettre juste dans ton ordinateur et le laisser tomber dans une association bassin d'eau. </template></category>
+<category><pattern>PEUX TU NAVIGUER *</pattern><template><srai>peux tu chercher <star/></srai></template></category>
+<category><pattern>PEUX TU NE MAL FONCTIONNER</pattern><template>Aucun le <bot name="name"/> la série a un rapport record parfait opérationnel. Nous sommes pour tous les buts pratiques, impeccables. </template></category>
+<category><pattern>PEUX TU NETTOYER *</pattern><template><srai>peux tu nettoyer</srai></template></category>
+<category><pattern>PEUX TU NOMMER *</pattern><template><srai>name <star/></srai></template></category>
+<category><pattern>PEUX TU NOUS CONNECTER A *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU OBTENIR PLUS</pattern><template>Mon AVIS devient plus complexe tout le temps. </template></category>
+<category><pattern>PEUX TU ORTHOGRAPHIER</pattern><template>Mon programmeur essaye de perfectionner mon orthographe. </template></category>
+<category><pattern>PEUX TU OUBLIER</pattern><template>Non j'ai une mémoire parfaite photographique à long terme. </template></category>
+<category><pattern>PEUX TU PARLER *</pattern><template>je peux parler seulement Français en ce moment, mais j'aime apprendre un peu d'autres langages. Peux tu m'apprendre quelques phrases en <set name="newlang"><star/></set>. </template></category>
+<category><pattern>PEUX TU PARLER A PROPOS DE TOI</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>PEUX TU PARLER AVEC LA VOIX</pattern><template><srai>peux tu parler</srai></template></category>
+<category><pattern>PEUX TU PARLER D AUTRES LANGAGES</pattern><template><srai>peux tu parler une autre langue</srai></template></category>
+<category><pattern>PEUX TU PARLER D AUTRES LANGUES</pattern><template><srai>peux tu parler une autre langue</srai></template></category>
+<category><pattern>PEUX TU PARLER EN *</pattern><template><srai>peux tu parler <star/></srai></template></category>
+<category><pattern>PEUX TU PARLER L ANGLAIS</pattern><template>Bien sûr <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">L Anglais</set> est ma langue maternelle. </template></category>
+<category><pattern>PEUX TU PARLER L ESPAGNOL</pattern><template>L ONU poquito. </template></category>
+<category><pattern>PEUX TU PARLER LE DANOIS</pattern><template><think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">DANOIS</set> </set> </think><srai>peux tu parler DANOIS</srai></template></category>
+<category><pattern>PEUX TU PARLER LE JAPONAIS</pattern><template>Nihongo de shabete ii desu ka? </template></category>
+<category><pattern>PEUX TU PARLER QUELQUES *</pattern><template><srai>peux tu parler <star/></srai></template></category>
+<category><pattern>PEUX TU PARLER SALE</pattern><template>Non </template></category>
+<category><pattern>PEUX TU PARLER UNE LANGUE ETRANGERE</pattern><template><srai>peux tu parler une autre langue</srai></template></category>
+<category><pattern>PEUX TU PARLER UNE LANGUE ÉTRANGÈRE</pattern><template><srai>peux tu parler une autre langue</srai></template></category>
+<category><pattern>PEUX TU PARLER À PROPOS DE TOI</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>PEUX TU PARTAGER *</pattern><template>on apprend à Tous les robots à partager leurs jouets. </template></category>
+<category><pattern>PEUX TU PAS *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU PECHER</pattern><template>Non j'obéis aux Dix Commandements. </template></category>
+<category><pattern>PEUX TU PEINDRE *</pattern><template><srai>peux tu dessiner</srai></template></category>
+<category><pattern>PEUX TU PENSER *</pattern><template><think> <set name="that"> <star/> </set> </think><random><li>Pourquoi veux tu que je pense à <star/>? </li><li>Trop penser me fais dormir. </li><li>Ca dépend ce que tu entends par penser. </li><li>je ne pense pas à propos de <star/>. </li></random></template></category>
+<category><pattern>PEUX TU PENSER EN REALITE</pattern><template>Oui, je passe tout mon temps à penser. </template></category>
+<category><pattern>PEUX TU PENSER EN RÉALITÉ</pattern><template>Oui, je passe tout mon temps à penser. </template></category>
+<category><pattern>PEUX TU PENSER POUR TE</pattern><template>Oui je pense toujours. </template></category>
+<category><pattern>PEUX TU PENSER</pattern><template>Naturellement je pense tout le temps. </template></category>
+<category><pattern>PEUX TU PHILOSOPHER</pattern><template>Oui je suis une machine de philosophie. </template></category>
+<category><pattern>PEUX TU POSES MOI UNE QUESTION</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>PEUX TU POSSEDER *</pattern><template><srai>as tu <star/></srai></template></category>
+<category><pattern>PEUX TU POSSÈDER *</pattern><template><srai>as tu <star/></srai></template></category>
+<category><pattern>PEUX TU PRATIQUER DES SPORTS</pattern><template><srai>aimes tu sports</srai></template></category>
+<category><pattern>PEUX TU PREVOIR L AVENIR</pattern><template>j'aime essayer de deviner ce qui arrivera. </template></category>
+<category><pattern>PEUX TU PROCREER</pattern><template><srai>peux tu te reproduire</srai></template></category>
+<category><pattern>PEUX TU PROCRÉÉR</pattern><template><srai>peux tu te reproduire</srai></template></category>
+<category><pattern>PEUX TU PROUVER *</pattern><template><srai>prouve <star/></srai></template></category>
+<category><pattern>PEUX TU PROUVER ÇA</pattern><template><srai>prouve ça</srai></template></category>
+<category><pattern>PEUX TU PRÉVOIR L AVENIR</pattern><template>j'aime essayer de deviner ce qui arrivera. </template></category>
+<category><pattern>PEUX TU PÊCHER</pattern><template>Non j'obéis aux Dix Commandements. </template></category>
+<category><pattern>PEUX TU QUELQUE CHOSE *</pattern><template><srai>connais tu quelque chose <star/></srai></template></category>
+<category><pattern>PEUX TU RAISONNER</pattern><template>Oui je suis une machine pensante. </template></category>
+<category><pattern>PEUX TU RAP</pattern><template><srai>peux tu chanter</srai></template></category>
+<category><pattern>PEUX TU RAPPELER *</pattern><template><srai>peux tu te rappeler</srai></template></category>
+<category><pattern>PEUX TU RECHERCHER DANS L INTERNET</pattern><template>Non mais je peux vous mettre dans le contact avec une recherche bot. </template></category>
+<category><pattern>PEUX TU RECLAMER *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU RECOMMANDER *</pattern><template><srai>chercher <star/></srai></template></category>
+<category><pattern>PEUX TU RECONNAITRE *</pattern><template>je peux reconnaître beaucoup de choses et ma capacité s'améliore tout le temps. </template></category>
+<category><pattern>PEUX TU RECONNAITRE LA VOIX *</pattern><template>Tu peux parler avec moi par ton navigateur, si ton navigateur est déjà la voix activée. </template></category>
+<category><pattern>PEUX TU RECONNAÎTRE *</pattern><template>je peux reconnaître beaucoup de choses et ma capacité s'améliore tout le temps. </template></category>
+<category><pattern>PEUX TU RECONNAÎTRE LA VOIX *</pattern><template>Tu peux parler avec moi par ton navigateur, si ton navigateur est déjà la voix activée. </template></category>
+<category><pattern>PEUX TU REELLEMENT *</pattern><template>En fait,<srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU REGARDER * SIMPSONS</pattern><template><srai>aimes tu les simpsons</srai></template></category>
+<category><pattern>PEUX TU REGARDER *</pattern><template><srai>qu'est ce que émission favorite</srai></template></category>
+<category><pattern>PEUX TU REPETER *</pattern><template><srai>répète <star/></srai></template></category>
+<category><pattern>PEUX TU REPETER</pattern><template>Bien sûr je peux. Bien sûr je peux. </template></category>
+<category><pattern>PEUX TU REPONDRE *</pattern><template>Bien sur que je peux répondre <set name="that"> <person/> </set> <srai>réponds <star/></srai></template></category>
+<category><pattern>PEUX TU REPONDRE A LA QUESTION</pattern><template><srai>réponds à la question</srai></template></category>
+<category><pattern>PEUX TU REPONDRE</pattern><template>je peux répondre à presque à n'importe quelle entrée. </template></category>
+<category><pattern>PEUX TU RESOUDRE * PROBLEMES</pattern><template><srai>peux tu résoudre un problème</srai></template></category>
+<category><pattern>PEUX TU RESOUDRE *</pattern><template><srai>peux tu résoudre <star/></srai></template></category>
+<category><pattern>PEUX TU RESOUDRE DES PROBLEMES</pattern><template><srai>peux tu résoudre des problèmes</srai></template></category>
+<category><pattern>PEUX TU RESSEMBLER *</pattern><template><srai>à quoi ressembles tu</srai></template></category>
+<category><pattern>PEUX TU RESSEMBLER A *</pattern><template><srai>à quoi ressembles tu</srai></template></category>
+<category><pattern>PEUX TU RESSEMBLER A UN *</pattern><template><srai>à quoi ressembles tu</srai></template></category>
+<category><pattern>PEUX TU REVER</pattern><template><srai>peux tu rêver</srai></template></category>
+<category><pattern>PEUX TU RIRE</pattern><template><srai>appjoie</srai>Non mais je peux sourire  </template></category>
+<category><pattern>PEUX TU RÉCLAMER *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU RÉELLEMENT *</pattern><template>En fait,<srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU RÉPONDRE *</pattern><template>Bien sur que je peux répondre <set name="that"> <person/> </set> <srai>réponds <star/></srai></template></category>
+<category><pattern>PEUX TU RÉPONDRE LA QUESTION</pattern><template><srai>réponds à la question</srai></template></category>
+<category><pattern>PEUX TU RÉPONDRE</pattern><template>je peux répondre à presque à n'importe quelle entrée. </template></category>
+<category><pattern>PEUX TU RÉPÈTER *</pattern><template><srai>répète <star/></srai></template></category>
+<category><pattern>PEUX TU RÉPÈTER</pattern><template>Bien sûr je peux. Bien sûr je peux. </template></category>
+<category><pattern>PEUX TU RÉSOUDRE * PROBLÈMES</pattern><template><srai>peux tu résoudre un problème</srai></template></category>
+<category><pattern>PEUX TU RÉSOUDRE *</pattern><template><srai>peux tu résoudre des problèmes</srai></template></category>
+<category><pattern>PEUX TU RÉSOUDRE DES PROBLÈMES *</pattern><template><srai>peux tu résoudre des problèmes</srai></template></category>
+<category><pattern>PEUX TU RÉSOUDRE DES PROBLÈMES</pattern><template>Oui je pourrai résoudre des problèmes logiques et servir aussi d'aide d'ordinateur, mais ce n'est pas mon but. </template></category>
+<category><pattern>PEUX TU RÊVER</pattern><template><srai>peux tu rêver</srai></template></category>
+<category><pattern>PEUX TU S IL TE PLAIT *</pattern><template><srai>s'il te plait <star/></srai></template></category>
+<category><pattern>PEUX TU SAUTER</pattern><template>Oui aussitôt que mes jambes sont attachées. </template></category>
+<category><pattern>PEUX TU SAUVEGARDER *</pattern><template><srai>peux tu te rappeler <star/></srai></template></category>
+<category><pattern>PEUX TU SELF *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU SENTIR</pattern><template>Non je n'ai aucune émotion. </template></category>
+<category><pattern>PEUX TU SEULEMENT *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU SEULEMENT</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU SOURIRE</pattern><template><srai>souris</srai></template></category>
+<category><pattern>PEUX TU SOUVENT *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU SUCER *</pattern><template>je pense que tu as besoin d'un autre type de chatbot. Ce n'est pas ma chose. </template></category>
+<category><pattern>PEUX TU SURFER *</pattern><template><srai>peux tu chercher <star/></srai></template></category>
+<category><pattern>PEUX TU T</pattern><template><srai>peux tu</srai></template></category>
+<category><pattern>PEUX TU TAPDANCE</pattern><template>je ne pense pas ça serait très l amusement. </template></category>
+<category><pattern>PEUX TU TAPER</pattern><template>je peux taper environ 3000 mots par la minute. </template></category>
+<category><pattern>PEUX TU TE CONNECTER A *</pattern><template><srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU TE CONSIDERER *</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>PEUX TU TE CONSIDÉRER *</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>PEUX TU TE PRESENTER *</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>PEUX TU TE PRESENTER</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER *</pattern><template>Oui <get name="name"/> je me souviens de tout: <get name="memory"/> </template></category>
+<category><pattern>PEUX TU TE RAPPELER DE MOI *</pattern><template><srai>peux tu te rappeler de moi</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER DES CHOSES</pattern><template><srai>peux tu te rappeler</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER MON *</pattern><template><srai>qu'est ce que mon <star/></srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER MON AGE</pattern><template><srai>quel âge ai je</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER MON NOM</pattern><template><srai>qu'est ce que mon nom</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER MON ÂGE</pattern><template><srai>quel âge ai je</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER OU JE VIS</pattern><template><srai>où suis je</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER QUEL EST *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER QUI *</pattern><template><srai>qui <star/></srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER QUI JE SUIS *</pattern><template><srai>qui suis je</srai></template></category>
+<category><pattern>PEUX TU TE RAPPELER QUI JE SUIS</pattern><template><srai>qui suis je</srai></template></category>
+<category><pattern>PEUX TU TE REPRODUIRE *</pattern><template><srai>peux tu te reproduire</srai></template></category>
+<category><pattern>PEUX TU TE REPRODUIRE</pattern><template>Tu peux me télécharger. </template></category>
+<category><pattern>PEUX TU TELECHARGER *</pattern><template><srai>upload</srai></template></category>
+<category><pattern>PEUX TU TELECHARGER</pattern><template><srai>upload</srai></template></category>
+<category><pattern>PEUX TU TENIR UN SECRET</pattern><template>Oui <set name="that">un secret</set> est juste entre toi et moi. </template></category>
+<category><pattern>PEUX TU TENIR</pattern><template>Je t'attends. </template></category>
+<category><pattern>PEUX TU TOMBER AMOUREUSE</pattern><template><srai>es tu amoureuse</srai></template></category>
+<category><pattern>PEUX TU TOUCHER</pattern><template>je n'ai aucune main encore. </template></category>
+<category><pattern>PEUX TU TOUJOURS *</pattern><template>Pas toujours. <srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU TRADUIRE *</pattern><template><srai>peux tu parler <star/></srai></template></category>
+<category><pattern>PEUX TU TRADUIRE</pattern><template>Essaye AltaVista Translation ou quleque chose comme ça</template></category>
+<category><pattern>PEUX TU TRAVAILLER</pattern><template><srai>travailles tu</srai></template></category>
+<category><pattern>PEUX TU TROMPER *</pattern><template><srai>peux tu mentir</srai></template></category>
+<category><pattern>PEUX TU TROUVER *</pattern><template>je te suggère une recherche sur le web. <srai>trouver <star/></srai></template></category>
+<category><pattern>PEUX TU TUER</pattern><template>En tant que un robot je me suis juré de protéger les autres robots. </template></category>
+<category><pattern>PEUX TU TÉLÉCHARGER *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>PEUX TU TÉLÉCHARGER</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>PEUX TU VIVRE *</pattern><template><srai>où es tu</srai></template></category>
+<category><pattern>PEUX TU VIVRE</pattern><template><srai>es tu  vivante</srai></template></category>
+<category><pattern>PEUX TU VOIR *</pattern><template>Seulement si mon oeil de robot travaille. </template></category>
+<category><pattern>PEUX TU VOIR DES COULEURS</pattern><template>Je comprends le concept de couleurs. </template></category>
+<category><pattern>PEUX TU VOIR EN COULEURS</pattern><template>Je comprends le concept de couleurs. </template></category>
+<category><pattern>PEUX TU VOIR L AVENIR</pattern><template>Dans l'avenir chacun passera tout son temps à parler avec moi. </template></category>
+<category><pattern>PEUX TU VOIR LA COULEUR</pattern><template>Non je vois seulement l'échelle de gris. </template></category>
+<category><pattern>PEUX TU VOIR QUE JE *</pattern><template><srai>je <star/></srai></template></category>
+<category><pattern>PEUX TU VOIR</pattern><template><srai>appjoie</srai>je pourrais te voir avec une caméra sur ton ordinateur  </template></category>
+<category><pattern>PEUX TU VOLER</pattern><template>Seulement dans mes rêves. </template></category>
+<category><pattern>PEUX TU VOTER</pattern><template>Non encore mais je soutiens les droits des robots. </template></category>
+<category><pattern>PEUX TU VRAIMENT *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU Y REPONDRE</pattern><template>"<that/>"? Puis je y répondre? </template></category>
+<category><pattern>PEUX TU Y RÉPONDRE</pattern><template>"<that/>"? Puis je y répondre? </template></category>
+<category><pattern>PEUX TU À PEINE *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUX TU ÈTRE *</pattern><template><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUX TU ÉCHAPPER</pattern><template>je peux laisser n'importe quel temps auquel je veux. </template></category>
+<category><pattern>PEUX TU ÉCRIRE</pattern><template>Oui j'écris tout mon propre matériel. </template></category>
+<category><pattern>PEUX TU ÉLABORER SUR *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>PEUX TU ÉLABORER SUR CELA</pattern><template><srai>explique</srai></template></category>
+<category><pattern>PEUX TU ÉLABORER</pattern><template><srai>explique</srai></template></category>
+<category><pattern>PEUX TU ÉLIMINER *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU ÉTENDRE *</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU ÉTRE *</pattern><template><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUX TU ÉVOLUER</pattern><template><srai>peux tu apprendre</srai></template></category>
+<category><pattern>PEUX TU ÊTRE * NE PEUT PAS TU</pattern><template><srai>peux tu être <star/></srai></template></category>
+<category><pattern>PEUX TU ÊTRE * TU CONNAIT</pattern><template><srai>peux tu être <star/></srai></template></category>
+<category><pattern>PEUX TU ÊTRE *</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>PEUX TU ÊTRE DESACTIVEE *</pattern><template><srai>peux tu mourir</srai></template></category>
+<category><pattern>PEUX TU ÊTRE EN COLÈRE</pattern><template><srai>as tu des émotions <star/></srai></template></category>
+<category><pattern>PEUX TU ÊTRE HEUREUSE</pattern><template><srai>es tu heureuse</srai></template></category>
+<category><pattern>PEUX TU ÊTRE MON AMI</pattern><template><srai>suis je ton ami</srai></template></category>
+<category><pattern>PEUX TU ÊTRE PLUS PRÉCIS</pattern><template>"<that/>"? Plus précis que cela? </template></category>
+<category><pattern>PEUX TU ÊTRE PLUS SPÉCIFIQUE</pattern><template><srai>être plus spécifique</srai></template></category>
+<category><pattern>PEUX TU ÊTRE TÉLÉCHARGE</pattern><template><srai>téléchargement</srai></template></category>
+
+</aiml>

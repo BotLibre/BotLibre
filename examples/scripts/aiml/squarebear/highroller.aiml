@@ -1,0 +1,1755 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+
+<!-- Free software (c)2008 Square Bear. -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- Complies with AIML 1.0 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation. -->
+<!-- highroller.aiml by Square Bear -->
+<!-- Yahtzee game for Pandorabots -->
+
+<!-- Initial category and a few SRAIs to introduce the game -->
+
+<category>
+<pattern>HIGH ROLLER</pattern>
+<template>
+Welcome to my high roller dice game.<br/>It's based on the rules of "Yahtzee" which is a copyright of Milton Bradley games.<br/><br/>
+You have up to 3 rolls to try and get each combination on the scorecard.<br/>
+Each scorecard category can be used only once apart from "5 of a kind" which can be used as often as needed.<br/>
+In this version, a 5 of a kind cannot be used as a wild card and must go in the "5 of a kind" box.<br/><br/>
+Type START to begin the dice game.
+</template>
+</category>
+
+<category><pattern>HIROLLER</pattern><template><srai>HIGH ROLLER</srai></template></category>
+<category><pattern>HI ROLLER</pattern><template><srai>HIGH ROLLER</srai></template></category>
+<category><pattern>HIGHROLLER</pattern><template><srai>HIGH ROLLER</srai></template></category>
+<category><pattern>YAHTZEE</pattern><template><srai>HIGH ROLLER</srai></template></category>
+
+<!-- Set up the initial variables and start the game -->
+
+<category>
+<pattern>START</pattern>
+<that>TYPE START TO BEGIN THE DICE GAME</that>
+<template>
+<think>
+	<set name="onetotal">??</set>
+	<set name="twototal">??</set>
+	<set name="threetotal">??</set>
+	<set name="fourtotal">??</set>
+	<set name="fivetotal">??</set>
+	<set name="sixtotal">??</set>
+	<set name="threekind">??</set>
+	<set name="fourkind">??</set>
+	<set name="fullhouse">??</set>
+	<set name="smstraight">??</set>
+	<set name="lgstraight">??</set>
+	<set name="yatzy">??</set>
+	<set name="chance">??</set>
+	<set name="subupper">0</set>
+	<set name="uppertot">0</set>
+	<set name="lowertot">0</set>
+	<set name="63bonus">0</set>
+	<set name="grandtot">0</set>
+	<set name="dice1lock">0</set>
+	<set name="dice2lock">0</set>
+	<set name="dice3lock">0</set>
+	<set name="dice4lock">0</set>
+	<set name="dice5lock">0</set>
+	<set name="rollnumber">0</set>
+</think>
+<srai>YZROLLLOOP</srai>
+</template>
+</category>
+
+
+<!-- Roll the dice up to 3 times and display to the user -->
+
+<category>
+<pattern>YZROLLLOOP</pattern>
+<template>
+<srai>YZROLLDICE</srai>
+Roll<get name="rollnumber"/>:<br/><br/><get name="displaydice"/><br/>
+<condition name="rollnumber">
+	<li value="3"><srai>YZFINISHEDROLL</srai></li>
+	<li>A - B - C - D - E<br/><br/>Which of the dice A-E do you want to spin again?<br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai>	
+	<think>
+		<set name="topic">YATZY</set>
+	</think>
+	</li>
+</condition>
+</template>
+</category>
+
+
+<!-- Allow the user to roll the dice again or put their score on the board if they are happy with the dice. Give an error message if the user makes am invalid choice -->
+
+<topic name="YATZY"> 
+<category>
+<pattern>_</pattern>
+<template>
+	<think>
+		<set name="inp"><star/></set>
+	</think>
+	<condition name="inp">
+		<li value="1"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK1</srai></li>
+		<li value="2"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK2</srai></li>
+		<li value="3"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK3</srai></li>
+		<li value="4"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK4</srai></li>
+		<li value="5"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK5</srai></li>
+		<li value="6"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK6</srai></li>
+		<li value="7"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK7</srai></li>
+		<li value="8"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK8</srai></li>
+		<li value="9"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK9</srai></li>
+		<li value="10"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK10</srai></li>
+		<li value="11"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK11</srai></li>
+		<li value="12"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK12</srai></li>
+		<li value="13"><set name="topic"></set><srai>YZSORTDICE</srai><srai>YZPICK13</srai></li>
+		<li value="Q"><set name="topic"></set><srai>YZQUITGAME</srai></li>
+		<li value="E"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="D"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="DE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="C"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="CE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="CD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="CDE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="B"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BDE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BC"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BCE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BCD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="BCDE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="A"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="AE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="AD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ADE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="AC"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ACE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ACD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ACDE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="AB"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABDE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABC"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABCE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABCD"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li value="ABCDE"><set name="topic"></set><srai>YZVALIDCHOICE</srai></li>
+		<li>
+			<get name="displaydice"/><br/>
+A - B - C - D - E<br/><br/>Sorry but "<star/>" is not a valid choice.<br/>Which of the dice A-E do you want to spin again? eg. "ACD" will respin dice A, dice C and dice D. Type "Q" to quit or enter the number of the scorecard where you want to play these dice.<br/><br/><think><set name="topic"></set></think><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY</set></think>
+
+		</li>
+	</condition>
+</template>
+</category>
+</topic>
+
+
+<!-- The choice of dice to roll again is valid, so select the dice to roll again and re-roll them -->
+
+<category>
+<pattern>YZVALIDCHOICE</pattern>
+<template>
+<think>
+	<set name="dice1lock">1</set>
+	<set name="dice2lock">1</set>
+	<set name="dice3lock">1</set>
+	<set name="dice4lock">1</set>
+	<set name="dice5lock">1</set>
+	<condition name="inp">
+		<li value="E"><set name="dice5lock">0</set></li>
+		<li value="D"><set name="dice4lock">0</set></li>
+		<li value="DE"><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="C"><set name="dice3lock">0</set></li>
+		<li value="CE"><set name="dice3lock">0</set><set name="dice5lock">0</set></li>
+		<li value="CD"><set name="dice3lock">0</set><set name="dice4lock">0</set></li>
+		<li value="CDE"><set name="dice3lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="B"><set name="dice2lock">0</set></li>
+		<li value="BE"><set name="dice2lock">0</set><set name="dice5lock">0</set></li>
+		<li value="BD"><set name="dice2lock">0</set><set name="dice4lock">0</set></li>
+		<li value="BDE"><set name="dice2lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="BC"><set name="dice2lock">0</set><set name="dice3lock">0</set></li>
+		<li value="BCE"><set name="dice2lock">0</set><set name="dice3lock">0</set><set name="dice5lock">0</set></li>
+		<li value="BCD"><set name="dice2lock">0</set><set name="dice3lock">0</set><set name="dice4lock">0</set></li>
+		<li value="BCDE"><set name="dice2lock">0</set><set name="dice3lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="A"><set name="dice1lock">0</set></li>
+		<li value="AE"><set name="dice1lock">0</set><set name="dice5lock">0</set></li>
+		<li value="AD"><set name="dice1lock">0</set><set name="dice4lock">0</set></li>
+		<li value="ADE"><set name="dice1lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="AC"><set name="dice1lock">0</set><set name="dice3lock">0</set></li>
+		<li value="ACE"><set name="dice1lock">0</set><set name="dice3lock">0</set><set name="dice5lock">0</set></li>
+		<li value="ACD"><set name="dice1lock">0</set><set name="dice3lock">0</set><set name="dice4lock">0</set></li>
+		<li value="ACDE"><set name="dice1lock">0</set><set name="dice3lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="AB"><set name="dice1lock">0</set><set name="dice2lock">0</set></li>
+		<li value="ABE"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice5lock">0</set></li>
+		<li value="ABD"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice4lock">0</set></li>
+		<li value="ABDE"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+		<li value="ABC"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice3lock">0</set></li>
+		<li value="ABCE"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice3lock">0</set><set name="dice5lock">0</set></li>
+		<li value="ABCD"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice3lock">0</set><set name="dice4lock">0</set></li>
+		<li value="ABCDE"><set name="dice1lock">0</set><set name="dice2lock">0</set><set name="dice3lock">0</set><set name="dice4lock">0</set><set name="dice5lock">0</set></li>
+	</condition>
+</think>
+<srai>YZROLLLOOP</srai>
+</template>
+</category>
+
+
+<!-- Roll any dice that are not locked -->
+
+<category>
+<pattern>YZROLLDICE</pattern>
+<template>
+<think>
+	<condition name="rollnumber">
+		<li value="0"><set name="rollnumber">1</set></li>
+		<li value="1"><set name="rollnumber">2</set></li>
+		<li value="2"><set name="rollnumber">3</set></li>
+	</condition>
+	<condition name="dice1lock"> 
+		<li value="0">
+			<random>
+				<li><set name="dice1">1</set></li>
+				<li><set name="dice1">2</set></li>
+				<li><set name="dice1">3</set></li>
+				<li><set name="dice1">4</set></li>
+				<li><set name="dice1">5</set></li>
+				<li><set name="dice1">6</set></li>
+			</random>
+		</li>
+	</condition>
+	<condition name="dice2lock"> 
+		<li value="0">
+			<random>
+				<li><set name="dice2">1</set></li>
+				<li><set name="dice2">2</set></li>
+				<li><set name="dice2">3</set></li>
+				<li><set name="dice2">4</set></li>
+				<li><set name="dice2">5</set></li>
+				<li><set name="dice2">6</set></li>
+			</random>
+		</li>
+	</condition>
+	<condition name="dice3lock"> 
+		<li value="0">
+			<random>
+				<li><set name="dice3">1</set></li>
+				<li><set name="dice3">2</set></li>
+				<li><set name="dice3">3</set></li>
+				<li><set name="dice3">4</set></li>
+				<li><set name="dice3">5</set></li>
+				<li><set name="dice3">6</set></li>
+			</random>
+		</li>
+	</condition>
+	<condition name="dice4lock"> 
+		<li value="0">
+			<random>
+				<li><set name="dice4">1</set></li>
+				<li><set name="dice4">2</set></li>
+				<li><set name="dice4">3</set></li>
+				<li><set name="dice4">4</set></li>
+				<li><set name="dice4">5</set></li>
+				<li><set name="dice4">6</set></li>
+			</random>
+		</li>
+	</condition>
+	<condition name="dice5lock"> 
+		<li value="0">
+			<random>
+				<li><set name="dice5">1</set></li>
+				<li><set name="dice5">2</set></li>
+				<li><set name="dice5">3</set></li>
+				<li><set name="dice5">4</set></li>
+				<li><set name="dice5">5</set></li>
+				<li><set name="dice5">6</set></li>
+			</random>
+		</li>
+	</condition>
+	<set name="displaydice"><get name="dice1"/> -<get name="dice2"/> -<get name="dice3"/> -<get name="dice4"/> -<get name="dice5"/></set>
+</think>
+</template>
+</category>
+
+
+<!-- Category to sort the dice into ascending order to make it easier to check for winning patterns and work out the total of the 5 dice -->
+
+<category>
+<pattern>YZSORTDICE</pattern>
+<template>
+<think>
+	<set name="sorteddice"></set>
+	<set name="totaldice">0</set>
+	<condition name="dice1"><li value="1"><set name="sorteddice"><get name="sorteddice"/>1</set><srai>YZADD1</srai></li></condition>
+	<condition name="dice2"><li value="1"><set name="sorteddice"><get name="sorteddice"/>1</set><srai>YZADD1</srai></li></condition>
+	<condition name="dice3"><li value="1"><set name="sorteddice"><get name="sorteddice"/>1</set><srai>YZADD1</srai></li></condition>
+	<condition name="dice4"><li value="1"><set name="sorteddice"><get name="sorteddice"/>1</set><srai>YZADD1</srai></li></condition>
+	<condition name="dice5"><li value="1"><set name="sorteddice"><get name="sorteddice"/>1</set><srai>YZADD1</srai></li></condition>
+	<condition name="dice1"><li value="2"><set name="sorteddice"><get name="sorteddice"/>2</set><srai>YZADD2</srai></li></condition>
+	<condition name="dice2"><li value="2"><set name="sorteddice"><get name="sorteddice"/>2</set><srai>YZADD2</srai></li></condition>
+	<condition name="dice3"><li value="2"><set name="sorteddice"><get name="sorteddice"/>2</set><srai>YZADD2</srai></li></condition>
+	<condition name="dice4"><li value="2"><set name="sorteddice"><get name="sorteddice"/>2</set><srai>YZADD2</srai></li></condition>
+	<condition name="dice5"><li value="2"><set name="sorteddice"><get name="sorteddice"/>2</set><srai>YZADD2</srai></li></condition>
+	<condition name="dice1"><li value="3"><set name="sorteddice"><get name="sorteddice"/>3</set><srai>YZADD3</srai></li></condition>
+	<condition name="dice2"><li value="3"><set name="sorteddice"><get name="sorteddice"/>3</set><srai>YZADD3</srai></li></condition>
+	<condition name="dice3"><li value="3"><set name="sorteddice"><get name="sorteddice"/>3</set><srai>YZADD3</srai></li></condition>
+	<condition name="dice4"><li value="3"><set name="sorteddice"><get name="sorteddice"/>3</set><srai>YZADD3</srai></li></condition>
+	<condition name="dice5"><li value="3"><set name="sorteddice"><get name="sorteddice"/>3</set><srai>YZADD3</srai></li></condition>
+	<condition name="dice1"><li value="4"><set name="sorteddice"><get name="sorteddice"/>4</set><srai>YZADD4</srai></li></condition>
+	<condition name="dice2"><li value="4"><set name="sorteddice"><get name="sorteddice"/>4</set><srai>YZADD4</srai></li></condition>
+	<condition name="dice3"><li value="4"><set name="sorteddice"><get name="sorteddice"/>4</set><srai>YZADD4</srai></li></condition>
+	<condition name="dice4"><li value="4"><set name="sorteddice"><get name="sorteddice"/>4</set><srai>YZADD4</srai></li></condition>
+	<condition name="dice5"><li value="4"><set name="sorteddice"><get name="sorteddice"/>4</set><srai>YZADD4</srai></li></condition>
+	<condition name="dice1"><li value="5"><set name="sorteddice"><get name="sorteddice"/>5</set><srai>YZADD5</srai></li></condition>
+	<condition name="dice2"><li value="5"><set name="sorteddice"><get name="sorteddice"/>5</set><srai>YZADD5</srai></li></condition>
+	<condition name="dice3"><li value="5"><set name="sorteddice"><get name="sorteddice"/>5</set><srai>YZADD5</srai></li></condition>
+	<condition name="dice4"><li value="5"><set name="sorteddice"><get name="sorteddice"/>5</set><srai>YZADD5</srai></li></condition>
+	<condition name="dice5"><li value="5"><set name="sorteddice"><get name="sorteddice"/>5</set><srai>YZADD5</srai></li></condition>
+	<condition name="dice1"><li value="6"><set name="sorteddice"><get name="sorteddice"/>6</set><srai>YZADD6</srai></li></condition>
+	<condition name="dice2"><li value="6"><set name="sorteddice"><get name="sorteddice"/>6</set><srai>YZADD6</srai></li></condition>
+	<condition name="dice3"><li value="6"><set name="sorteddice"><get name="sorteddice"/>6</set><srai>YZADD6</srai></li></condition>
+	<condition name="dice4"><li value="6"><set name="sorteddice"><get name="sorteddice"/>6</set><srai>YZADD6</srai></li></condition>
+	<condition name="dice5"><li value="6"><set name="sorteddice"><get name="sorteddice"/>6</set><srai>YZADD6</srai></li></condition>
+</think>
+</template>
+</category>
+
+
+<!-- The dice have been rolled 3 times so sort the dice out and ask the user where to put them -->
+
+<category>
+<pattern>YZFINISHEDROLL</pattern>
+<template>
+<srai>YZSORTDICE</srai><br/>
+Which part of the scoreboard do you want these dice to go in?<br/><br/>
+<srai>YZDISPLAYSCOREBOARD</srai>
+<think>	
+	<set name="topic">YATZY1</set>
+</think>
+</template>
+</category>
+
+
+<!-- Category to display the scoreboard. May need changing to improve the display -->
+
+<category>
+<pattern>YZDISPLAYSCOREBOARD</pattern>
+<template>
+1..........Ones = <get name="onetotal"/><br/>
+2..........Twos = <get name="twototal"/><br/>
+3........Threes = <get name="threetotal"/><br/>
+4.........Fours = <get name="fourtotal"/><br/>
+5.........Fives = <get name="fivetotal"/><br/>
+6.........Sixes = <get name="sixtotal"/><br/>
+      Sub Total = <get name="subupper"/><br/>
+  Bonus for 63+ = <get name="63bonus"/><br/>
+    Upper Total = <get name="uppertot"/><br/><br/>
+7.. 3 of a kind = <get name="threekind"/><br/>
+8.. 4 of a kind = <get name="fourkind"/><br/>
+9... Full House = <get name="fullhouse"/><br/>
+10. Sm Straight = <get name="smstraight"/><br/>
+11. Lg Straight = <get name="lgstraight"/><br/>
+12. 5 of a kind = <get name="yatzy"/><br/>
+13...... Chance = <get name="chance"/><br/>
+    Lower Total = <get name="lowertot"/><br/>
+    Upper Total = <get name="uppertot"/><br/>
+    GRAND TOTAL = <get name="grandtot"/>
+</template>
+</category>
+
+
+<!-- The user now selects the part of the scoreboard to enter the dice -->
+
+<topic name="YATZY1"> 
+<category>
+<pattern>_</pattern>
+<template>
+	<think>
+		<set name="inp"><star/></set>
+	</think>
+	<condition name="inp">
+		<li value="1"><set name="topic"></set><srai>YZPICK1</srai></li>
+		<li value="2"><set name="topic"></set><srai>YZPICK2</srai></li>
+		<li value="3"><set name="topic"></set><srai>YZPICK3</srai></li>
+		<li value="4"><set name="topic"></set><srai>YZPICK4</srai></li>
+		<li value="5"><set name="topic"></set><srai>YZPICK5</srai></li>
+		<li value="6"><set name="topic"></set><srai>YZPICK6</srai></li>
+		<li value="7"><set name="topic"></set><srai>YZPICK7</srai></li>
+		<li value="8"><set name="topic"></set><srai>YZPICK8</srai></li>
+		<li value="9"><set name="topic"></set><srai>YZPICK9</srai></li>
+		<li value="10"><set name="topic"></set><srai>YZPICK10</srai></li>
+		<li value="11"><set name="topic"></set><srai>YZPICK11</srai></li>
+		<li value="12"><set name="topic"></set><srai>YZPICK12</srai></li>
+		<li value="13"><set name="topic"></set><srai>YZPICK13</srai></li>
+		<li>There is no "<star/>" on the scoreboard. Please choose again.<br/><br/><get name="displaydice"/><br/><br/><set name="topic"></set><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+</topic>
+
+
+<!-- The ONES part of the board. Add up all the ones or give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK1</pattern>
+<template>
+	<condition name="onetotal">
+		<li value="??">
+			<think>
+				<set name="kount">0</set>
+			</think>
+			<condition name="dice1"><li value="1"><srai>TOTADD1</srai></li></condition>
+			<condition name="dice2"><li value="1"><srai>TOTADD1</srai></li></condition>
+			<condition name="dice3"><li value="1"><srai>TOTADD1</srai></li></condition>
+			<condition name="dice4"><li value="1"><srai>TOTADD1</srai></li></condition>
+			<condition name="dice5"><li value="1"><srai>TOTADD1</srai></li></condition>
+			<think>
+				<set name="onetotal"><get name="kount"/></set>
+			</think>
+			<srai>YZADDUPPER</srai>
+			<srai>YZCHECKENDGAME</srai>	
+		</li>
+		<li>Ones have already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The TWOS part of the board. Add up all the twos or give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK2</pattern>
+<template>
+	<condition name="twototal">
+		<li value="??">
+			<think>
+				<set name="kount">0</set>
+			</think>
+			<condition name="dice1"><li value="2"><srai>TOTADD2</srai></li></condition>
+			<condition name="dice2"><li value="2"><srai>TOTADD2</srai></li></condition>
+			<condition name="dice3"><li value="2"><srai>TOTADD2</srai></li></condition>
+			<condition name="dice4"><li value="2"><srai>TOTADD2</srai></li></condition>
+			<condition name="dice5"><li value="2"><srai>TOTADD2</srai></li></condition>
+			<think>
+				<set name="twototal"><get name="kount"/></set>
+			</think>
+			<srai>YZADDUPPER</srai>
+			<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Twos have already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The THREES part of the board. Add up all the threes or give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK3</pattern>
+<template>
+	<condition name="threetotal">
+		<li value="??">
+			<think>
+				<set name="kount">0</set>
+			</think>
+			<condition name="dice1"><li value="3"><srai>TOTADD3</srai></li></condition>
+			<condition name="dice2"><li value="3"><srai>TOTADD3</srai></li></condition>
+			<condition name="dice3"><li value="3"><srai>TOTADD3</srai></li></condition>
+			<condition name="dice4"><li value="3"><srai>TOTADD3</srai></li></condition>
+			<condition name="dice5"><li value="3"><srai>TOTADD3</srai></li></condition>
+			<think>
+				<set name="threetotal"><get name="kount"/></set>
+			</think>
+			<srai>YZADDUPPER</srai>
+			<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Threes have already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The FOURS part of the board. Add up all the fours or give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK4</pattern>
+<template>
+	<condition name="fourtotal">
+		<li value="??">
+			<think>
+				<set name="kount">0</set>
+			</think>
+			<condition name="dice1"><li value="4"><srai>TOTADD4</srai></li></condition>
+			<condition name="dice2"><li value="4"><srai>TOTADD4</srai></li></condition>
+			<condition name="dice3"><li value="4"><srai>TOTADD4</srai></li></condition>
+			<condition name="dice4"><li value="4"><srai>TOTADD4</srai></li></condition>
+			<condition name="dice5"><li value="4"><srai>TOTADD4</srai></li></condition>
+			<think>
+				<set name="fourtotal"><get name="kount"/></set>
+			</think>
+			<srai>YZADDUPPER</srai>
+			<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Fours have already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The FIVES part of the board. Add up all the fives or give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK5</pattern>
+<template>
+	<condition name="fivetotal">
+		<li value="??">
+			<think>
+				<set name="kount">0</set>
+			</think>
+			<condition name="dice1"><li value="5"><srai>TOTADD5</srai></li></condition>
+			<condition name="dice2"><li value="5"><srai>TOTADD5</srai></li></condition>
+			<condition name="dice3"><li value="5"><srai>TOTADD5</srai></li></condition>
+			<condition name="dice4"><li value="5"><srai>TOTADD5</srai></li></condition>
+			<condition name="dice5"><li value="5"><srai>TOTADD5</srai></li></condition>
+			<think>
+				<set name="fivetotal"><get name="kount"/></set>
+			</think>
+			<srai>YZADDUPPER</srai>
+			<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Fives have already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The SIXES part of the board. Add up all the sixes or give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK6</pattern>
+<template>
+	<condition name="sixtotal">
+		<li value="??">
+			<think>
+				<set name="kount">0</set>
+			</think>
+			<condition name="dice1"><li value="6"><srai>TOTADD6</srai></li></condition>
+			<condition name="dice2"><li value="6"><srai>TOTADD6</srai></li></condition>
+			<condition name="dice3"><li value="6"><srai>TOTADD6</srai></li></condition>
+			<condition name="dice4"><li value="6"><srai>TOTADD6</srai></li></condition>
+			<condition name="dice5"><li value="6"><srai>TOTADD6</srai></li></condition>
+			<think>
+				<set name="sixtotal"><get name="kount"/></set>
+			</think>
+			<srai>YZADDUPPER</srai>
+			<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Sixes have already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The 3 OF A KIND part of the board. Check each combination of 3 dice to see if they are the same. If so, add the sum of the dice to the 3 of a kind part of the board. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK7</pattern>
+<template>
+	<condition name="threekind">
+		<li value="??">
+			<think>
+				<set name="threekind"><set name="bottomdice">XX</set></set>
+				<set name="3dice"><get name="dice1"/><get name="dice2"/><get name="dice3"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice1"/><get name="dice2"/><get name="dice4"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice1"/><get name="dice2"/><get name="dice5"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice1"/><get name="dice3"/><get name="dice4"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice1"/><get name="dice3"/><get name="dice5"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice1"/><get name="dice4"/><get name="dice5"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice2"/><get name="dice3"/><get name="dice4"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice2"/><get name="dice3"/><get name="dice5"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice2"/><get name="dice4"/><get name="dice5"/></set><srai>YZTHREEKINDCHECK</srai>
+				<set name="3dice"><get name="dice3"/><get name="dice4"/><get name="dice5"/></set><srai>YZTHREEKINDCHECK</srai>
+				<condition name="threekind">
+					<li value="Y">
+						<set name="threekind"><set name="bottomdice"><get name="totaldice"/></set></set>
+					</li>
+				</condition>
+			</think>
+		<srai>YZADDLOWER</srai>
+		<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Three Of A Kind has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- Part of the 3 OF A KIND category that checks each combination of 3 dice to see if they are the same -->
+
+<category>
+<pattern>YZTHREEKINDCHECK</pattern>
+<template>
+<think>
+<condition name="3dice">
+	<li value="1 1 1"><set name="threekind">Y</set></li>
+	<li value="2 2 2"><set name="threekind">Y</set></li>
+	<li value="3 3 3"><set name="threekind">Y</set></li>
+	<li value="4 4 4"><set name="threekind">Y</set></li>
+	<li value="5 5 5"><set name="threekind">Y</set></li>
+	<li value="6 6 6"><set name="threekind">Y</set></li>
+</condition>
+</think>
+</template>
+</category>
+
+
+<!-- The 4 OF A KIND part of the board. Check the dice to see if 4 of them are the same. If so, add the sum of the dice to the 4 of a kind part of the board. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK8</pattern>
+<template>
+	<condition name="fourkind">
+		<li value="??">
+			<think>
+				<set name="fourkind"><set name="bottomdice">XX</set></set>
+				<condition name="sorteddice">
+					<li value="1 1 1 1 1"><set name="fourkind"><set name="bottomdice">5</set></set></li>
+					<li value="1 1 1 1 2"><set name="fourkind"><set name="bottomdice">6</set></set></li>
+					<li value="1 1 1 1 3"><set name="fourkind"><set name="bottomdice">7</set></set></li>
+					<li value="1 1 1 1 4"><set name="fourkind"><set name="bottomdice">8</set></set></li>
+					<li value="1 1 1 1 5"><set name="fourkind"><set name="bottomdice">9</set></set></li>
+					<li value="1 1 1 1 6"><set name="fourkind"><set name="bottomdice">10</set></set></li>
+					<li value="1 2 2 2 2"><set name="fourkind"><set name="bottomdice">9</set></set></li>
+					<li value="2 2 2 2 2"><set name="fourkind"><set name="bottomdice">10</set></set></li>
+					<li value="2 2 2 2 3"><set name="fourkind"><set name="bottomdice">11</set></set></li>
+					<li value="2 2 2 2 4"><set name="fourkind"><set name="bottomdice">12</set></set></li>
+					<li value="2 2 2 2 5"><set name="fourkind"><set name="bottomdice">13</set></set></li>
+					<li value="2 2 2 2 6"><set name="fourkind"><set name="bottomdice">14</set></set></li>
+					<li value="1 3 3 3 3"><set name="fourkind"><set name="bottomdice">13</set></set></li>
+					<li value="2 3 3 3 3"><set name="fourkind"><set name="bottomdice">14</set></set></li>
+					<li value="3 3 3 3 3"><set name="fourkind"><set name="bottomdice">15</set></set></li>
+					<li value="3 3 3 3 4"><set name="fourkind"><set name="bottomdice">16</set></set></li>
+					<li value="3 3 3 3 5"><set name="fourkind"><set name="bottomdice">17</set></set></li>
+					<li value="3 3 3 3 6"><set name="fourkind"><set name="bottomdice">18</set></set></li>
+					<li value="1 4 4 4 4"><set name="fourkind"><set name="bottomdice">17</set></set></li>
+					<li value="2 4 4 4 4"><set name="fourkind"><set name="bottomdice">18</set></set></li>
+					<li value="3 4 4 4 4"><set name="fourkind"><set name="bottomdice">19</set></set></li>
+					<li value="4 4 4 4 4"><set name="fourkind"><set name="bottomdice">20</set></set></li>
+					<li value="4 4 4 4 5"><set name="fourkind"><set name="bottomdice">21</set></set></li>
+					<li value="4 4 4 4 6"><set name="fourkind"><set name="bottomdice">22</set></set></li>
+					<li value="1 5 5 5 5"><set name="fourkind"><set name="bottomdice">21</set></set></li>
+					<li value="2 5 5 5 5"><set name="fourkind"><set name="bottomdice">22</set></set></li>
+					<li value="3 5 5 5 5"><set name="fourkind"><set name="bottomdice">23</set></set></li>
+					<li value="4 5 5 5 5"><set name="fourkind"><set name="bottomdice">24</set></set></li>
+					<li value="5 5 5 5 5"><set name="fourkind"><set name="bottomdice">25</set></set></li>
+					<li value="5 5 5 5 6"><set name="fourkind"><set name="bottomdice">26</set></set></li>
+					<li value="1 6 6 6 6"><set name="fourkind"><set name="bottomdice">25</set></set></li>
+					<li value="2 6 6 6 6"><set name="fourkind"><set name="bottomdice">26</set></set></li>
+					<li value="3 6 6 6 6"><set name="fourkind"><set name="bottomdice">27</set></set></li>
+					<li value="4 6 6 6 6"><set name="fourkind"><set name="bottomdice">28</set></set></li>
+					<li value="5 6 6 6 6"><set name="fourkind"><set name="bottomdice">29</set></set></li>
+					<li value="6 6 6 6 6"><set name="fourkind"><set name="bottomdice">30</set></set></li>
+				</condition>
+			</think>
+		<srai>YZADDLOWER</srai>
+		<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Four Of A Kind has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The FULL HOUSE part of the board. Check the dice for a full house (3 of a kind + 2 of a kind). If so, add 25 to the full house part of the board. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK9</pattern>
+<template>
+	<condition name="fullhouse">
+		<li value="??">
+			<think>
+				<set name="fullhouse"><set name="bottomdice">XX</set></set>
+				<condition name="sorteddice">
+					<li value="1 1 1 2 2"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 1 3 3"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 1 4 4"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 1 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 1 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 2 2 2"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 2 3 3"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 2 4 4"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 2 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 2 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 3 3 3"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 3 3 3"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="3 3 3 4 4"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="3 3 3 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="3 3 3 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 4 4 4"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 4 4 4"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="3 3 4 4 4"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="4 4 4 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="4 4 4 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 5 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 5 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="3 3 5 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="4 4 5 5 5"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="5 5 5 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="1 1 6 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="2 2 6 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="3 3 6 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="4 4 6 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+					<li value="5 5 6 6 6"><set name="fullhouse"><set name="bottomdice">25</set></set></li>
+				</condition>
+			</think>
+		<srai>YZADDLOWER</srai>
+		<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Full House has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The SMALL STRAIGHT part of the board. Check the dice for an ascending sequence of at least 4. If so, add 30 to the small straight part of the board. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK10</pattern>
+<template>
+	<condition name="smstraight">
+		<li value="??">
+			<think>
+				<set name="smstraight"><set name="bottomdice">XX</set></set>
+				<condition name="sorteddice">
+					<li value="1 1 2 3 4"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="1 2 2 3 4"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="1 2 3 3 4"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="1 2 3 4 4"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="1 2 3 4 5"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="1 2 3 4 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="1 3 4 5 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="2 2 3 4 5"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="2 3 3 4 5"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="2 3 4 4 5"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="2 3 4 5 5"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="2 3 4 5 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="3 3 4 5 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="3 4 4 5 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="3 4 5 5 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+					<li value="3 4 5 6 6"><set name="smstraight"><set name="bottomdice">30</set></set></li>
+				</condition>
+			</think>
+		<srai>YZADDLOWER</srai>
+		<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Small Straight has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The LARGE STRAIGHT part of the board. Check the dice for an ascending sequence of 5. If so, add 40 to the large straight part of the board. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK11</pattern>
+<template>
+	<condition name="lgstraight">
+		<li value="??">
+			<think>
+				<set name="lgstraight"><set name="bottomdice">XX</set></set>
+				<condition name="sorteddice">
+					<li value="1 2 3 4 5"><set name="lgstraight"><set name="bottomdice">40</set></set></li>
+					<li value="2 3 4 5 6"><set name="lgstraight"><set name="bottomdice">40</set></set></li>
+				</condition>
+			</think>
+		<srai>YZADDLOWER</srai>
+		<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Large Straight has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The 5 OF A KIND part of the board. Check the dice are all the same. If so, add 50 to the 5 of a kind part of the board. However, if this is a subsequent 5 of a kind, add 100 to the board instead. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK12</pattern>
+<template>
+	<think>
+		<set name="bottomdice">XX</set>
+		<condition name="sorteddice">
+			<li value="1 1 1 1 1"><set name="bottomdice">50</set></li>
+			<li value="2 2 2 2 2"><set name="bottomdice">50</set></li>
+			<li value="3 3 3 3 3"><set name="bottomdice">50</set></li>
+			<li value="4 4 4 4 4"><set name="bottomdice">50</set></li>
+			<li value="5 5 5 5 5"><set name="bottomdice">50</set></li>
+			<li value="6 6 6 6 6"><set name="bottomdice">50</set></li>
+		</condition>
+		<set name="yatzycheck"><get name="yatzy"/><get name="bottomdice"/></set>
+	</think>
+	<condition name="yatzycheck">
+		<li value="?? XX"><think><set name="yatzy">XX</set></think><srai>YZCHECKENDGAME</srai></li>
+		<li value="XX XX">5 of a kind has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+		<li value="XX 50">5 of a kind has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+		<li value="50 XX">That is not 5 of a kind. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+		<li value="150 XX">That is not 5 of a kind. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+		<li value="250 XX">That is not 5 of a kind. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/><srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+		<li value="?? 50"><think><set name="yatzy"><set name="bottomdice">50</set></set></think><srai>YZADDLOWER</srai><srai>YZCHECKENDGAME</srai></li>
+		<li value="50 50"><think><set name="yatzy">150</set><set name="bottomdice">100</set></think><srai>YZADDLOWER</srai><srai>YZCHECKENDGAME</srai></li>
+		<li value="150 50"><think><set name="yatzy">250</set><set name="bottomdice">100</set></think><srai>YZADDLOWER</srai><srai>YZCHECKENDGAME</srai></li>
+		<li value="250 50"><think><set name="yatzy">350</set><set name="bottomdice">100</set></think><srai>YZADDLOWER</srai><srai>YZCHECKENDGAME</srai></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- The CHANCE part of the board. Add up the sum of all 5 dice and place it in the chance part of the board. Also give an error if this category has already been played -->
+
+<category>
+<pattern>YZPICK13</pattern>
+<template>
+	<condition name="chance">
+		<li value="??">
+			<think>
+				<set name="chance"><set name="bottomdice"><get name="totaldice"/></set></set>
+			</think>
+		<srai>YZADDLOWER</srai>
+		<srai>YZCHECKENDGAME</srai>
+		</li>
+		<li>Chance has already been played. Please choose another part of the scorecard.<br/><br/><get name="displaydice"/><br/><br/>
+	<srai>YZDISPLAYSCOREBOARD</srai><think><set name="topic">YATZY1</set></think></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- Add the upper part of the score board and give a bonus of 35 if the upper part of the board comes to 63 or more. -->
+
+<category>
+<pattern>YZADDUPPER</pattern>
+<template>
+	<think>
+		<set name="topdice"><get name="kount"/></set>
+		<set name="kount"><get name="subupper"/></set>
+		<condition name="topdice">
+			<li value="1"><srai>TOTADD1</srai></li>
+			<li value="2"><srai>TOTADD2</srai></li>
+			<li value="3"><srai>TOTADD3</srai></li>
+			<li value="4"><srai>TOTADD4</srai></li>
+			<li value="5"><srai>TOTADD5</srai></li>
+			<li value="6"><srai>TOTADD6</srai></li>
+			<li value="8"><srai>TOTADD4</srai><srai>TOTADD4</srai></li>
+			<li value="9"><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="10"><srai>TOTADD10</srai></li>
+			<li value="12"><srai>TOTADD6</srai><srai>TOTADD6</srai></li>
+			<li value="15"><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="16"><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="18"><srai>TOTADD6</srai><srai>TOTADD6</srai><srai>TOTADD6</srai></li>
+			<li value="20"><srai>TOTADD20</srai></li>
+			<li value="24"><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+			<li value="25"><srai>TOTADD20</srai><srai>TOTADD5</srai></li>
+			<li value="36"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+		</condition>
+		<set name="subupper"><get name="kount"/></set>
+		<set name="kount"><get name="uppertot"/></set>
+		<condition name="topdice">
+			<li value="1"><srai>TOTADD1</srai></li>
+			<li value="2"><srai>TOTADD2</srai></li>
+			<li value="3"><srai>TOTADD3</srai></li>
+			<li value="4"><srai>TOTADD4</srai></li>
+			<li value="5"><srai>TOTADD5</srai></li>
+			<li value="6"><srai>TOTADD6</srai></li>
+			<li value="8"><srai>TOTADD4</srai><srai>TOTADD4</srai></li>
+			<li value="9"><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="10"><srai>TOTADD10</srai></li>
+			<li value="12"><srai>TOTADD6</srai><srai>TOTADD6</srai></li>
+			<li value="15"><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="16"><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="18"><srai>TOTADD6</srai><srai>TOTADD6</srai><srai>TOTADD6</srai></li>
+			<li value="20"><srai>TOTADD20</srai></li>
+			<li value="24"><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+			<li value="25"><srai>TOTADD20</srai><srai>TOTADD5</srai></li>
+			<li value="36"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+		</condition>
+		<set name="uppertot"><get name="kount"/></set>
+		<set name="63check"><get name="63bonus"/><get name="subupper"/></set>
+		<condition name="63check">
+			<li value="0 63"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 64"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 65"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 66"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 67"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 68"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 69"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 70"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 71"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 72"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 73"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 74"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 75"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 76"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 77"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 78"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 79"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 80"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 81"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 82"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 83"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 84"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 85"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 86"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 87"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 88"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 89"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 90"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 91"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 92"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 93"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 94"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 95"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+			<li value="0 96"><set name="63bonus">35</set><srai>YZADDBONUS</srai></li>
+		</condition>
+	</think>
+</template>
+</category>
+
+
+<!-- Add the 35 bonus to the upper total -->
+
+<category>
+<pattern>YZADDBONUS</pattern>
+<template>
+	<think>
+		<set name="kount"><get name="uppertot"/></set>
+		<srai>TOTADD10</srai>
+		<srai>TOTADD10</srai>
+		<srai>TOTADD10</srai>
+		<srai>TOTADD5</srai>
+		<set name="uppertot"><get name="kount"/></set>
+	</think>
+</template>
+</category>
+
+
+<!-- Add up the lower half of the scoreboard -->
+
+<category>
+<pattern>YZADDLOWER</pattern>
+<template>
+	<think>
+	<set name="kount"><get name="lowertot"/></set>
+		<condition name="bottomdice">
+			<li value="5"><srai>TOTADD5</srai></li>
+			<li value="6"><srai>TOTADD6</srai></li>
+			<li value="7"><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="8"><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="9"><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="10"><srai>TOTADD10</srai></li>
+			<li value="11"><srai>TOTADD10</srai><srai>TOTADD1</srai></li>
+			<li value="12"><srai>TOTADD10</srai><srai>TOTADD2</srai></li>
+			<li value="13"><srai>TOTADD10</srai><srai>TOTADD3</srai></li>
+			<li value="14"><srai>TOTADD10</srai><srai>TOTADD4</srai></li>
+			<li value="15"><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="16"><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="17"><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="18"><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="19"><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="20"><srai>TOTADD20</srai></li>
+			<li value="21"><srai>TOTADD20</srai><srai>TOTADD1</srai></li>
+			<li value="22"><srai>TOTADD20</srai><srai>TOTADD2</srai></li>
+			<li value="23"><srai>TOTADD20</srai><srai>TOTADD3</srai></li>
+			<li value="24"><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+			<li value="25"><srai>TOTADD20</srai><srai>TOTADD5</srai></li>
+			<li value="26"><srai>TOTADD20</srai><srai>TOTADD6</srai></li>
+			<li value="27"><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="28"><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="29"><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="30"><srai>TOTADD20</srai><srai>TOTADD10</srai></li>
+			<li value="40"><srai>TOTADD20</srai><srai>TOTADD20</srai></li>
+			<li value="50"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai></li>
+			<li value="100"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai></li>
+		</condition>
+		<set name="lowertot"><get name="kount"/></set>
+	</think>
+</template>
+</category>
+
+
+<!-- Add up the grand total. Go to the game over category if all the categories have been filled -->
+
+<category>
+<pattern>YZCHECKENDGAME</pattern>
+<template>
+	<think>
+		<set name="grandtot"><get name="lowertot"/></set>
+		<set name="kount"><get name="grandtot"/></set>
+		<condition name="subupper">
+			<li value="1"><srai>TOTADD1</srai></li>
+			<li value="2"><srai>TOTADD2</srai></li>
+			<li value="3"><srai>TOTADD3</srai></li>
+			<li value="4"><srai>TOTADD4</srai></li>
+			<li value="5"><srai>TOTADD5</srai></li>
+			<li value="6"><srai>TOTADD6</srai></li>
+			<li value="7"><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="8"><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="9"><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="10"><srai>TOTADD10</srai></li>
+			<li value="11"><srai>TOTADD10</srai><srai>TOTADD1</srai></li>
+			<li value="12"><srai>TOTADD10</srai><srai>TOTADD2</srai></li>
+			<li value="13"><srai>TOTADD10</srai><srai>TOTADD3</srai></li>
+			<li value="14"><srai>TOTADD10</srai><srai>TOTADD4</srai></li>
+			<li value="15"><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="16"><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="17"><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="18"><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="19"><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="20"><srai>TOTADD20</srai></li>
+			<li value="21"><srai>TOTADD20</srai><srai>TOTADD1</srai></li>
+			<li value="22"><srai>TOTADD20</srai><srai>TOTADD2</srai></li>
+			<li value="23"><srai>TOTADD20</srai><srai>TOTADD3</srai></li>
+			<li value="24"><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+			<li value="25"><srai>TOTADD20</srai><srai>TOTADD5</srai></li>
+			<li value="26"><srai>TOTADD20</srai><srai>TOTADD6</srai></li>
+			<li value="27"><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="28"><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="29"><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="30"><srai>TOTADD20</srai><srai>TOTADD10</srai></li>
+			<li value="31"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD1</srai></li>
+			<li value="32"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD2</srai></li>
+			<li value="33"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD3</srai></li>
+			<li value="34"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD4</srai></li>
+			<li value="35"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="36"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="37"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="38"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="39"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="40"><srai>TOTADD20</srai><srai>TOTADD20</srai></li>
+			<li value="41"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD1</srai></li>
+			<li value="42"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD2</srai></li>
+			<li value="43"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD3</srai></li>
+			<li value="44"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+			<li value="45"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai></li>
+			<li value="46"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD6</srai></li>
+			<li value="47"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="48"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="49"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="50"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai></li>
+			<li value="51"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD1</srai></li>
+			<li value="52"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD2</srai></li>
+			<li value="53"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD3</srai></li>
+			<li value="54"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD4</srai></li>
+			<li value="55"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="56"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="57"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="58"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="59"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="60"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai></li>
+			<li value="61"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD1</srai></li>
+			<li value="62"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD2</srai></li>
+			<li value="63"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD3</srai></li>
+			<li value="64"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+			<li value="65"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai></li>
+			<li value="66"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD6</srai></li>
+			<li value="67"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="68"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="69"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="70"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai></li>
+			<li value="71"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD1</srai></li>
+			<li value="72"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD2</srai></li>
+			<li value="73"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD3</srai></li>
+			<li value="74"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD4</srai></li>
+			<li value="75"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+			<li value="76"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD6</srai></li>
+			<li value="77"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD2</srai></li>
+			<li value="78"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD3</srai></li>
+			<li value="79"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai><srai>TOTADD4</srai></li>
+			<li value="80"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai></li>
+			<li value="81"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD1</srai></li>
+			<li value="82"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD2</srai></li>
+			<li value="83"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD3</srai></li>
+			<li value="84"><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD20</srai><srai>TOTADD4</srai></li>
+		</condition>
+		<condition name="63bonus">
+			<li value="35"><srai>TOTADD20</srai><srai>TOTADD10</srai><srai>TOTADD5</srai></li>
+		</condition>
+		<set name="grandtot"><get name="kount"/></set>
+		<set name="dice1lock">0</set>
+		<set name="dice2lock">0</set>
+		<set name="dice3lock">0</set>
+		<set name="dice4lock">0</set>
+		<set name="dice5lock">0</set>
+		<set name="rollnumber">0</set>
+		<set name="gameover">Y</set>
+		<condition name="onetotal"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="twototal"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="threetotal"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="fourtotal"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="fivetotal"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="sixtotal"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="threekind"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="fourkind"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="fullhouse"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="smstraight"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="lgstraight"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="yatzy"><li value="??"><set name="gameover">N</set></li></condition>
+		<condition name="chance"><li value="??"><set name="gameover">N</set></li></condition>
+	</think>
+	<condition name="gameover">
+		<li value="Y"><srai>YZGAMEOVER</srai></li>
+		<li><srai>YZROLLLOOP</srai></li>
+	</condition>
+</template>
+</category>
+
+
+<!-- Game over. Display the final scoreboard and say goodbye to the user -->
+
+<category>
+<pattern>YZGAMEOVER</pattern>
+<template>
+	<srai>YZDISPLAYSCOREBOARD</srai><br/><br/>
+Game Over!! Thank you for playing.
+</template>
+</category>
+
+
+<!-- The user has quit out of the game so say goodbye -->
+
+<category>
+<pattern>YZQUITGAME</pattern>
+<template>
+Thank you for playing. What would you like to do now?
+</template>
+</category>
+
+
+<!-- The next 6 categories work out the some of the 5 dice -->
+
+<category>
+<pattern>YZADD2</pattern>
+<template>
+	<srai>YZADD1</srai>
+	<srai>YZADD1</srai>
+</template>
+</category>
+
+<category>
+<pattern>YZADD3</pattern>
+<template>
+	<srai>YZADD2</srai>
+	<srai>YZADD1</srai>
+</template>
+</category>
+
+<category>
+<pattern>YZADD4</pattern>
+<template>
+	<srai>YZADD2</srai>
+	<srai>YZADD2</srai>
+</template>
+</category>
+
+<category>
+<pattern>YZADD5</pattern>
+<template>
+	<srai>YZADD3</srai>
+	<srai>YZADD2</srai>
+</template>
+</category>
+
+<category>
+<pattern>YZADD6</pattern>
+<template>
+	<srai>YZADD3</srai>
+	<srai>YZADD3</srai>
+</template>
+</category>
+
+
+<category>
+<pattern>YZADD1</pattern> 
+<template>
+<think>
+	<condition name="totaldice"> 
+		<li value="0"><set name="totaldice">1</set></li>
+		<li value="1"><set name="totaldice">2</set></li> 
+		<li value="2"><set name="totaldice">3</set></li> 
+		<li value="3"><set name="totaldice">4</set></li> 
+		<li value="4"><set name="totaldice">5</set></li> 
+		<li value="5"><set name="totaldice">6</set></li> 
+		<li value="6"><set name="totaldice">7</set></li> 
+		<li value="7"><set name="totaldice">8</set></li> 
+		<li value="8"><set name="totaldice">9</set></li> 
+		<li value="9"><set name="totaldice">10</set></li> 
+		<li value="10"><set name="totaldice">11</set></li>
+		<li value="11"><set name="totaldice">12</set></li> 
+		<li value="12"><set name="totaldice">13</set></li> 
+		<li value="13"><set name="totaldice">14</set></li> 
+		<li value="14"><set name="totaldice">15</set></li> 
+		<li value="15"><set name="totaldice">16</set></li> 
+		<li value="16"><set name="totaldice">17</set></li> 
+		<li value="17"><set name="totaldice">18</set></li> 
+		<li value="18"><set name="totaldice">19</set></li> 
+		<li value="19"><set name="totaldice">20</set></li> 
+		<li value="20"><set name="totaldice">21</set></li>
+		<li value="21"><set name="totaldice">22</set></li> 
+		<li value="22"><set name="totaldice">23</set></li> 
+		<li value="23"><set name="totaldice">24</set></li> 
+		<li value="24"><set name="totaldice">25</set></li> 
+		<li value="25"><set name="totaldice">26</set></li> 
+		<li value="26"><set name="totaldice">27</set></li> 
+		<li value="27"><set name="totaldice">28</set></li> 
+		<li value="28"><set name="totaldice">29</set></li> 
+		<li value="29"><set name="totaldice">30</set></li> 
+		<li value="30"><set name="totaldice">31</set></li>
+		<li value="31"><set name="totaldice">32</set></li> 
+		<li value="32"><set name="totaldice">33</set></li> 
+		<li value="33"><set name="totaldice">34</set></li> 
+		<li value="34"><set name="totaldice">35</set></li> 
+		<li value="35"><set name="totaldice">36</set></li> 
+		<li value="36"><set name="totaldice">ERROR</set></li> 
+	</condition>
+</think> 
+</template>
+</category>
+
+
+<!-- The next 8 categories teach the bot how to count, to work out the various totals, scores and so on -->
+
+<category>
+<pattern>TOTADD2</pattern>
+<template>
+	<srai>TOTADD1</srai>
+	<srai>TOTADD1</srai>
+</template>
+</category>
+
+<category>
+<pattern>TOTADD3</pattern>
+<template>
+	<srai>TOTADD2</srai>
+	<srai>TOTADD1</srai>
+</template>
+</category>
+
+<category>
+<pattern>TOTADD4</pattern>
+<template>
+	<srai>TOTADD2</srai>
+	<srai>TOTADD2</srai>
+</template>
+</category>
+
+<category>
+<pattern>TOTADD5</pattern>
+<template>
+	<srai>TOTADD3</srai>
+	<srai>TOTADD2</srai>
+</template>
+</category>
+
+<category>
+<pattern>TOTADD6</pattern>
+<template>
+	<srai>TOTADD3</srai>
+	<srai>TOTADD3</srai>
+</template>
+</category>
+
+<category>
+<pattern>TOTADD10</pattern>
+<template>
+	<srai>TOTADD5</srai>
+	<srai>TOTADD5</srai>
+</template>
+</category>
+
+<category>
+<pattern>TOTADD20</pattern>
+<template>
+	<srai>TOTADD10</srai>
+	<srai>TOTADD10</srai>
+</template>
+</category>
+
+
+<category>
+<pattern>TOTADD1</pattern> 
+<template>
+<think>
+	<condition name="kount"> 
+		<li value="0"><set name="kount">1</set></li>
+		<li value="1"><set name="kount">2</set></li> 
+		<li value="2"><set name="kount">3</set></li> 
+		<li value="3"><set name="kount">4</set></li> 
+		<li value="4"><set name="kount">5</set></li> 
+		<li value="5"><set name="kount">6</set></li> 
+		<li value="6"><set name="kount">7</set></li> 
+		<li value="7"><set name="kount">8</set></li> 
+		<li value="8"><set name="kount">9</set></li> 
+		<li value="9"><set name="kount">10</set></li> 
+		<li value="10"><set name="kount">11</set></li>
+		<li value="11"><set name="kount">12</set></li> 
+		<li value="12"><set name="kount">13</set></li> 
+		<li value="13"><set name="kount">14</set></li> 
+		<li value="14"><set name="kount">15</set></li> 
+		<li value="15"><set name="kount">16</set></li> 
+		<li value="16"><set name="kount">17</set></li> 
+		<li value="17"><set name="kount">18</set></li> 
+		<li value="18"><set name="kount">19</set></li> 
+		<li value="19"><set name="kount">20</set></li> 
+		<li value="20"><set name="kount">21</set></li>
+		<li value="21"><set name="kount">22</set></li> 
+		<li value="22"><set name="kount">23</set></li> 
+		<li value="23"><set name="kount">24</set></li> 
+		<li value="24"><set name="kount">25</set></li> 
+		<li value="25"><set name="kount">26</set></li> 
+		<li value="26"><set name="kount">27</set></li> 
+		<li value="27"><set name="kount">28</set></li> 
+		<li value="28"><set name="kount">29</set></li> 
+		<li value="29"><set name="kount">30</set></li> 
+		<li value="30"><set name="kount">31</set></li>
+		<li value="31"><set name="kount">32</set></li> 
+		<li value="32"><set name="kount">33</set></li> 
+		<li value="33"><set name="kount">34</set></li> 
+		<li value="34"><set name="kount">35</set></li> 
+		<li value="35"><set name="kount">36</set></li> 
+		<li value="36"><set name="kount">37</set></li> 
+		<li value="37"><set name="kount">38</set></li> 
+		<li value="38"><set name="kount">39</set></li> 
+		<li value="39"><set name="kount">40</set></li> 
+		<li value="40"><set name="kount">41</set></li>
+		<li value="41"><set name="kount">42</set></li> 
+		<li value="42"><set name="kount">43</set></li> 
+		<li value="43"><set name="kount">44</set></li> 
+		<li value="44"><set name="kount">45</set></li> 
+		<li value="45"><set name="kount">46</set></li> 
+		<li value="46"><set name="kount">47</set></li> 
+		<li value="47"><set name="kount">48</set></li> 
+		<li value="48"><set name="kount">49</set></li> 
+		<li value="49"><set name="kount">50</set></li> 
+		<li value="50"><set name="kount">51</set></li>
+		<li value="51"><set name="kount">52</set></li> 
+		<li value="52"><set name="kount">53</set></li> 
+		<li value="53"><set name="kount">54</set></li> 
+		<li value="54"><set name="kount">55</set></li> 
+		<li value="55"><set name="kount">56</set></li> 
+		<li value="56"><set name="kount">57</set></li> 
+		<li value="57"><set name="kount">58</set></li> 
+		<li value="58"><set name="kount">59</set></li> 
+		<li value="59"><set name="kount">60</set></li> 
+		<li value="60"><set name="kount">61</set></li>
+		<li value="61"><set name="kount">62</set></li> 
+		<li value="62"><set name="kount">63</set></li> 
+		<li value="63"><set name="kount">64</set></li> 
+		<li value="64"><set name="kount">65</set></li> 
+		<li value="65"><set name="kount">66</set></li> 
+		<li value="66"><set name="kount">67</set></li> 
+		<li value="67"><set name="kount">68</set></li> 
+		<li value="68"><set name="kount">69</set></li> 
+		<li value="69"><set name="kount">70</set></li> 
+		<li value="70"><set name="kount">71</set></li>
+		<li value="71"><set name="kount">72</set></li> 
+		<li value="72"><set name="kount">73</set></li> 
+		<li value="73"><set name="kount">74</set></li> 
+		<li value="74"><set name="kount">75</set></li> 
+		<li value="75"><set name="kount">76</set></li> 
+		<li value="76"><set name="kount">77</set></li> 
+		<li value="77"><set name="kount">78</set></li> 
+		<li value="78"><set name="kount">79</set></li> 
+		<li value="79"><set name="kount">80</set></li> 
+		<li value="80"><set name="kount">81</set></li>
+		<li value="81"><set name="kount">82</set></li> 
+		<li value="82"><set name="kount">83</set></li> 
+		<li value="83"><set name="kount">84</set></li> 
+		<li value="84"><set name="kount">85</set></li> 
+		<li value="85"><set name="kount">86</set></li> 
+		<li value="86"><set name="kount">87</set></li> 
+		<li value="87"><set name="kount">88</set></li> 
+		<li value="88"><set name="kount">89</set></li> 
+		<li value="89"><set name="kount">90</set></li> 
+		<li value="90"><set name="kount">91</set></li>
+		<li value="91"><set name="kount">92</set></li> 
+		<li value="92"><set name="kount">93</set></li> 
+		<li value="93"><set name="kount">94</set></li> 
+		<li value="94"><set name="kount">95</set></li> 
+		<li value="95"><set name="kount">96</set></li> 
+		<li value="96"><set name="kount">97</set></li> 
+		<li value="97"><set name="kount">98</set></li> 
+		<li value="98"><set name="kount">99</set></li> 
+		<li value="99"><set name="kount">100</set></li> 
+		<li value="100"><set name="kount">101</set></li>
+		<li value="101"><set name="kount">102</set></li> 
+		<li value="102"><set name="kount">103</set></li> 
+		<li value="103"><set name="kount">104</set></li> 
+		<li value="104"><set name="kount">105</set></li> 
+		<li value="105"><set name="kount">106</set></li> 
+		<li value="106"><set name="kount">107</set></li> 
+		<li value="107"><set name="kount">108</set></li> 
+		<li value="108"><set name="kount">109</set></li> 
+		<li value="109"><set name="kount">110</set></li> 
+		<li value="110"><set name="kount">111</set></li>
+		<li value="111"><set name="kount">112</set></li> 
+		<li value="112"><set name="kount">113</set></li> 
+		<li value="113"><set name="kount">114</set></li> 
+		<li value="114"><set name="kount">115</set></li> 
+		<li value="115"><set name="kount">116</set></li> 
+		<li value="116"><set name="kount">117</set></li> 
+		<li value="117"><set name="kount">118</set></li> 
+		<li value="118"><set name="kount">119</set></li> 
+		<li value="119"><set name="kount">120</set></li> 
+		<li value="120"><set name="kount">121</set></li>
+		<li value="121"><set name="kount">122</set></li> 
+		<li value="122"><set name="kount">123</set></li> 
+		<li value="123"><set name="kount">124</set></li> 
+		<li value="124"><set name="kount">125</set></li> 
+		<li value="125"><set name="kount">126</set></li> 
+		<li value="126"><set name="kount">127</set></li> 
+		<li value="127"><set name="kount">128</set></li> 
+		<li value="128"><set name="kount">129</set></li> 
+		<li value="129"><set name="kount">130</set></li> 
+		<li value="130"><set name="kount">131</set></li>
+		<li value="131"><set name="kount">132</set></li> 
+		<li value="132"><set name="kount">133</set></li> 
+		<li value="133"><set name="kount">134</set></li> 
+		<li value="134"><set name="kount">135</set></li> 
+		<li value="135"><set name="kount">136</set></li> 
+		<li value="136"><set name="kount">137</set></li> 
+		<li value="137"><set name="kount">138</set></li> 
+		<li value="138"><set name="kount">139</set></li> 
+		<li value="139"><set name="kount">140</set></li> 
+		<li value="140"><set name="kount">141</set></li>
+		<li value="141"><set name="kount">142</set></li> 
+		<li value="142"><set name="kount">143</set></li> 
+		<li value="143"><set name="kount">144</set></li> 
+		<li value="144"><set name="kount">145</set></li> 
+		<li value="145"><set name="kount">146</set></li> 
+		<li value="146"><set name="kount">147</set></li> 
+		<li value="147"><set name="kount">148</set></li> 
+		<li value="148"><set name="kount">149</set></li> 
+		<li value="149"><set name="kount">150</set></li> 
+		<li value="150"><set name="kount">151</set></li>
+		<li value="151"><set name="kount">152</set></li> 
+		<li value="152"><set name="kount">153</set></li> 
+		<li value="153"><set name="kount">154</set></li> 
+		<li value="154"><set name="kount">155</set></li> 
+		<li value="155"><set name="kount">156</set></li> 
+		<li value="156"><set name="kount">157</set></li> 
+		<li value="157"><set name="kount">158</set></li> 
+		<li value="158"><set name="kount">159</set></li> 
+		<li value="159"><set name="kount">160</set></li> 
+		<li value="160"><set name="kount">161</set></li>
+		<li value="161"><set name="kount">162</set></li> 
+		<li value="162"><set name="kount">163</set></li> 
+		<li value="163"><set name="kount">164</set></li> 
+		<li value="164"><set name="kount">165</set></li> 
+		<li value="165"><set name="kount">166</set></li> 
+		<li value="166"><set name="kount">167</set></li> 
+		<li value="167"><set name="kount">168</set></li> 
+		<li value="168"><set name="kount">169</set></li> 
+		<li value="169"><set name="kount">170</set></li> 
+		<li value="170"><set name="kount">171</set></li>
+		<li value="171"><set name="kount">172</set></li> 
+		<li value="172"><set name="kount">173</set></li> 
+		<li value="173"><set name="kount">174</set></li> 
+		<li value="174"><set name="kount">175</set></li> 
+		<li value="175"><set name="kount">176</set></li> 
+		<li value="176"><set name="kount">177</set></li> 
+		<li value="177"><set name="kount">178</set></li> 
+		<li value="178"><set name="kount">179</set></li> 
+		<li value="179"><set name="kount">180</set></li> 
+		<li value="180"><set name="kount">181</set></li>
+		<li value="181"><set name="kount">182</set></li> 
+		<li value="182"><set name="kount">183</set></li> 
+		<li value="183"><set name="kount">184</set></li> 
+		<li value="184"><set name="kount">185</set></li> 
+		<li value="185"><set name="kount">186</set></li> 
+		<li value="186"><set name="kount">187</set></li> 
+		<li value="187"><set name="kount">188</set></li> 
+		<li value="188"><set name="kount">189</set></li> 
+		<li value="189"><set name="kount">190</set></li> 
+		<li value="190"><set name="kount">191</set></li>
+		<li value="191"><set name="kount">192</set></li> 
+		<li value="192"><set name="kount">193</set></li> 
+		<li value="193"><set name="kount">194</set></li> 
+		<li value="194"><set name="kount">195</set></li> 
+		<li value="195"><set name="kount">196</set></li> 
+		<li value="196"><set name="kount">197</set></li> 
+		<li value="197"><set name="kount">198</set></li> 
+		<li value="198"><set name="kount">199</set></li> 
+		<li value="199"><set name="kount">200</set></li> 
+		<li value="200"><set name="kount">201</set></li>
+		<li value="201"><set name="kount">202</set></li> 
+		<li value="202"><set name="kount">203</set></li> 
+		<li value="203"><set name="kount">204</set></li> 
+		<li value="204"><set name="kount">205</set></li> 
+		<li value="205"><set name="kount">206</set></li> 
+		<li value="206"><set name="kount">207</set></li> 
+		<li value="207"><set name="kount">208</set></li> 
+		<li value="208"><set name="kount">209</set></li> 
+		<li value="209"><set name="kount">210</set></li> 
+		<li value="210"><set name="kount">211</set></li>
+		<li value="211"><set name="kount">212</set></li> 
+		<li value="212"><set name="kount">213</set></li> 
+		<li value="213"><set name="kount">214</set></li> 
+		<li value="214"><set name="kount">215</set></li> 
+		<li value="215"><set name="kount">216</set></li> 
+		<li value="216"><set name="kount">217</set></li> 
+		<li value="217"><set name="kount">218</set></li> 
+		<li value="218"><set name="kount">219</set></li> 
+		<li value="219"><set name="kount">220</set></li> 
+		<li value="220"><set name="kount">221</set></li>
+		<li value="221"><set name="kount">222</set></li> 
+		<li value="222"><set name="kount">223</set></li> 
+		<li value="223"><set name="kount">224</set></li> 
+		<li value="224"><set name="kount">225</set></li> 
+		<li value="225"><set name="kount">226</set></li> 
+		<li value="226"><set name="kount">227</set></li> 
+		<li value="227"><set name="kount">228</set></li> 
+		<li value="228"><set name="kount">229</set></li> 
+		<li value="229"><set name="kount">230</set></li> 
+		<li value="230"><set name="kount">231</set></li>
+		<li value="231"><set name="kount">232</set></li> 
+		<li value="232"><set name="kount">233</set></li> 
+		<li value="233"><set name="kount">234</set></li> 
+		<li value="234"><set name="kount">235</set></li> 
+		<li value="235"><set name="kount">236</set></li> 
+		<li value="236"><set name="kount">237</set></li> 
+		<li value="237"><set name="kount">238</set></li> 
+		<li value="238"><set name="kount">239</set></li> 
+		<li value="239"><set name="kount">240</set></li> 
+		<li value="240"><set name="kount">241</set></li>
+		<li value="241"><set name="kount">242</set></li> 
+		<li value="242"><set name="kount">243</set></li> 
+		<li value="243"><set name="kount">244</set></li> 
+		<li value="244"><set name="kount">245</set></li> 
+		<li value="245"><set name="kount">246</set></li> 
+		<li value="246"><set name="kount">247</set></li> 
+		<li value="247"><set name="kount">248</set></li> 
+		<li value="248"><set name="kount">249</set></li> 
+		<li value="249"><set name="kount">250</set></li> 
+		<li value="250"><set name="kount">251</set></li>
+		<li value="251"><set name="kount">252</set></li> 
+		<li value="252"><set name="kount">253</set></li> 
+		<li value="253"><set name="kount">254</set></li> 
+		<li value="254"><set name="kount">255</set></li> 
+		<li value="255"><set name="kount">256</set></li> 
+		<li value="256"><set name="kount">257</set></li> 
+		<li value="257"><set name="kount">258</set></li> 
+		<li value="258"><set name="kount">259</set></li> 
+		<li value="259"><set name="kount">260</set></li> 
+		<li value="260"><set name="kount">261</set></li>
+		<li value="261"><set name="kount">262</set></li> 
+		<li value="262"><set name="kount">263</set></li> 
+		<li value="263"><set name="kount">264</set></li> 
+		<li value="264"><set name="kount">265</set></li> 
+		<li value="265"><set name="kount">266</set></li> 
+		<li value="266"><set name="kount">267</set></li> 
+		<li value="267"><set name="kount">268</set></li> 
+		<li value="268"><set name="kount">269</set></li> 
+		<li value="269"><set name="kount">270</set></li> 
+		<li value="270"><set name="kount">271</set></li>
+		<li value="271"><set name="kount">272</set></li> 
+		<li value="272"><set name="kount">273</set></li> 
+		<li value="273"><set name="kount">274</set></li> 
+		<li value="274"><set name="kount">275</set></li> 
+		<li value="275"><set name="kount">276</set></li> 
+		<li value="276"><set name="kount">277</set></li> 
+		<li value="277"><set name="kount">278</set></li> 
+		<li value="278"><set name="kount">279</set></li> 
+		<li value="279"><set name="kount">280</set></li> 
+		<li value="280"><set name="kount">281</set></li>
+		<li value="281"><set name="kount">282</set></li> 
+		<li value="282"><set name="kount">283</set></li> 
+		<li value="283"><set name="kount">284</set></li> 
+		<li value="284"><set name="kount">285</set></li> 
+		<li value="285"><set name="kount">286</set></li> 
+		<li value="286"><set name="kount">287</set></li> 
+		<li value="287"><set name="kount">288</set></li> 
+		<li value="288"><set name="kount">289</set></li> 
+		<li value="289"><set name="kount">290</set></li> 
+		<li value="290"><set name="kount">291</set></li>
+		<li value="291"><set name="kount">292</set></li> 
+		<li value="292"><set name="kount">293</set></li> 
+		<li value="293"><set name="kount">294</set></li> 
+		<li value="294"><set name="kount">295</set></li> 
+		<li value="295"><set name="kount">296</set></li> 
+		<li value="296"><set name="kount">297</set></li> 
+		<li value="297"><set name="kount">298</set></li> 
+		<li value="298"><set name="kount">299</set></li> 
+		<li value="299"><set name="kount">300</set></li> 
+		<li value="300"><set name="kount">301</set></li>
+		<li value="301"><set name="kount">302</set></li> 
+		<li value="302"><set name="kount">303</set></li> 
+		<li value="303"><set name="kount">304</set></li> 
+		<li value="304"><set name="kount">305</set></li> 
+		<li value="305"><set name="kount">306</set></li> 
+		<li value="306"><set name="kount">307</set></li> 
+		<li value="307"><set name="kount">308</set></li> 
+		<li value="308"><set name="kount">309</set></li> 
+		<li value="309"><set name="kount">310</set></li> 
+		<li value="310"><set name="kount">311</set></li>
+		<li value="311"><set name="kount">312</set></li> 
+		<li value="312"><set name="kount">313</set></li> 
+		<li value="313"><set name="kount">314</set></li> 
+		<li value="314"><set name="kount">315</set></li> 
+		<li value="315"><set name="kount">316</set></li> 
+		<li value="316"><set name="kount">317</set></li> 
+		<li value="317"><set name="kount">318</set></li> 
+		<li value="318"><set name="kount">319</set></li> 
+		<li value="319"><set name="kount">320</set></li> 
+		<li value="320"><set name="kount">321</set></li>
+		<li value="321"><set name="kount">322</set></li> 
+		<li value="322"><set name="kount">323</set></li> 
+		<li value="323"><set name="kount">324</set></li> 
+		<li value="324"><set name="kount">325</set></li> 
+		<li value="325"><set name="kount">326</set></li> 
+		<li value="326"><set name="kount">327</set></li> 
+		<li value="327"><set name="kount">328</set></li> 
+		<li value="328"><set name="kount">329</set></li> 
+		<li value="329"><set name="kount">330</set></li> 
+		<li value="330"><set name="kount">331</set></li>
+		<li value="331"><set name="kount">332</set></li> 
+		<li value="332"><set name="kount">333</set></li> 
+		<li value="333"><set name="kount">334</set></li> 
+		<li value="334"><set name="kount">335</set></li> 
+		<li value="335"><set name="kount">336</set></li> 
+		<li value="336"><set name="kount">337</set></li> 
+		<li value="337"><set name="kount">338</set></li> 
+		<li value="338"><set name="kount">339</set></li> 
+		<li value="339"><set name="kount">340</set></li> 
+		<li value="340"><set name="kount">341</set></li>
+		<li value="341"><set name="kount">342</set></li> 
+		<li value="342"><set name="kount">343</set></li> 
+		<li value="343"><set name="kount">344</set></li> 
+		<li value="344"><set name="kount">345</set></li> 
+		<li value="345"><set name="kount">346</set></li> 
+		<li value="346"><set name="kount">347</set></li> 
+		<li value="347"><set name="kount">348</set></li> 
+		<li value="348"><set name="kount">349</set></li> 
+		<li value="349"><set name="kount">350</set></li> 
+		<li value="350"><set name="kount">351</set></li>
+		<li value="351"><set name="kount">352</set></li> 
+		<li value="352"><set name="kount">353</set></li> 
+		<li value="353"><set name="kount">354</set></li> 
+		<li value="354"><set name="kount">355</set></li> 
+		<li value="355"><set name="kount">356</set></li> 
+		<li value="356"><set name="kount">357</set></li> 
+		<li value="357"><set name="kount">358</set></li> 
+		<li value="358"><set name="kount">359</set></li> 
+		<li value="359"><set name="kount">360</set></li> 
+		<li value="360"><set name="kount">361</set></li>
+		<li value="361"><set name="kount">362</set></li> 
+		<li value="362"><set name="kount">363</set></li> 
+		<li value="363"><set name="kount">364</set></li> 
+		<li value="364"><set name="kount">365</set></li> 
+		<li value="365"><set name="kount">366</set></li> 
+		<li value="366"><set name="kount">367</set></li> 
+		<li value="367"><set name="kount">368</set></li> 
+		<li value="368"><set name="kount">369</set></li> 
+		<li value="369"><set name="kount">370</set></li> 
+		<li value="370"><set name="kount">371</set></li>
+		<li value="371"><set name="kount">372</set></li> 
+		<li value="372"><set name="kount">373</set></li> 
+		<li value="373"><set name="kount">374</set></li> 
+		<li value="374"><set name="kount">375</set></li> 
+		<li value="375"><set name="kount">376</set></li> 
+		<li value="376"><set name="kount">377</set></li> 
+		<li value="377"><set name="kount">378</set></li> 
+		<li value="378"><set name="kount">379</set></li> 
+		<li value="379"><set name="kount">380</set></li> 
+		<li value="380"><set name="kount">381</set></li>
+		<li value="381"><set name="kount">382</set></li> 
+		<li value="382"><set name="kount">383</set></li> 
+		<li value="383"><set name="kount">384</set></li> 
+		<li value="384"><set name="kount">385</set></li> 
+		<li value="385"><set name="kount">386</set></li> 
+		<li value="386"><set name="kount">387</set></li> 
+		<li value="387"><set name="kount">388</set></li> 
+		<li value="388"><set name="kount">389</set></li> 
+		<li value="389"><set name="kount">390</set></li> 
+		<li value="390"><set name="kount">391</set></li>
+		<li value="391"><set name="kount">392</set></li> 
+		<li value="392"><set name="kount">393</set></li> 
+		<li value="393"><set name="kount">394</set></li> 
+		<li value="394"><set name="kount">395</set></li> 
+		<li value="395"><set name="kount">396</set></li> 
+		<li value="396"><set name="kount">397</set></li> 
+		<li value="397"><set name="kount">398</set></li> 
+		<li value="398"><set name="kount">399</set></li> 
+		<li value="399"><set name="kount">400</set></li> 
+		<li value="400"><set name="kount">401</set></li>
+		<li value="401"><set name="kount">402</set></li> 
+		<li value="402"><set name="kount">403</set></li> 
+		<li value="403"><set name="kount">404</set></li> 
+		<li value="404"><set name="kount">405</set></li> 
+		<li value="405"><set name="kount">406</set></li> 
+		<li value="406"><set name="kount">407</set></li> 
+		<li value="407"><set name="kount">408</set></li> 
+		<li value="408"><set name="kount">409</set></li> 
+		<li value="409"><set name="kount">410</set></li> 
+		<li value="410"><set name="kount">411</set></li>
+		<li value="411"><set name="kount">412</set></li> 
+		<li value="412"><set name="kount">413</set></li> 
+		<li value="413"><set name="kount">414</set></li> 
+		<li value="414"><set name="kount">415</set></li> 
+		<li value="415"><set name="kount">416</set></li> 
+		<li value="416"><set name="kount">417</set></li> 
+		<li value="417"><set name="kount">418</set></li> 
+		<li value="418"><set name="kount">419</set></li> 
+		<li value="419"><set name="kount">420</set></li> 
+		<li value="420"><set name="kount">421</set></li>
+		<li value="421"><set name="kount">422</set></li> 
+		<li value="422"><set name="kount">423</set></li> 
+		<li value="423"><set name="kount">424</set></li> 
+		<li value="424"><set name="kount">425</set></li> 
+		<li value="425"><set name="kount">426</set></li> 
+		<li value="426"><set name="kount">427</set></li> 
+		<li value="427"><set name="kount">428</set></li> 
+		<li value="428"><set name="kount">429</set></li> 
+		<li value="429"><set name="kount">430</set></li> 
+		<li value="430"><set name="kount">431</set></li>
+		<li value="431"><set name="kount">432</set></li> 
+		<li value="432"><set name="kount">433</set></li> 
+		<li value="433"><set name="kount">434</set></li> 
+		<li value="434"><set name="kount">435</set></li> 
+		<li value="435"><set name="kount">436</set></li> 
+		<li value="436"><set name="kount">437</set></li> 
+		<li value="437"><set name="kount">438</set></li> 
+		<li value="438"><set name="kount">439</set></li> 
+		<li value="439"><set name="kount">440</set></li> 
+		<li value="440"><set name="kount">441</set></li>
+		<li value="441"><set name="kount">442</set></li> 
+		<li value="442"><set name="kount">443</set></li> 
+		<li value="443"><set name="kount">444</set></li> 
+		<li value="444"><set name="kount">445</set></li> 
+		<li value="445"><set name="kount">446</set></li> 
+		<li value="446"><set name="kount">447</set></li> 
+		<li value="447"><set name="kount">448</set></li> 
+		<li value="448"><set name="kount">449</set></li> 
+		<li value="449"><set name="kount">450</set></li> 
+	</condition>
+</think> 
+</template>
+</category>
+
+
+</aiml>

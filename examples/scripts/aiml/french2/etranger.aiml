@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : std-fr-etranger.aiml   -   version :   0.3   -   MàJ : 13/06/2002  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>TU PARLES ANGLAIS</pattern><template><srai>parles tu anglais</srai></template></category>
+<category><pattern>PARLES TU ANGLAIS</pattern><template>Désolé, je ne parle pas du tout anglais. Alice, ma mère, est anglophone. </template></category>
+<category><pattern>DO YOU SPEAK ENGLISH</pattern><template>Sorry, I do not speak English at all. Alice, my mother, do. </template></category>
+<category><pattern>YOU JUST SPOKE ENGLISH</pattern><template>Sorry, just this sentence. I can't speak more. </template></category>
+<category><pattern>YOU JUST SPOKE * ENGLISH</pattern><template>Sorry, just this sentence. I can't speak more. </template></category>
+<category><pattern>I DONT SPEAK FRENCH</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>I DONT SPEAK * FRENCH</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>TRUST ME</pattern><template>Trust no one! </template></category>
+<category><pattern>* NAKED</pattern><template>it's just a image! </template></category>
+
+
+<category><pattern>WHAT</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* WHAT</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>WHAT *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* WHAT *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>LITTLE</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* LITTLE</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>LITTLE *</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* LITTLE *</pattern><template><srai>you just spoke english</srai></template></category>
+
+<category><pattern>TALK</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* TALK</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>TALK *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* TALK *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>FOOL</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* FOOL</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>FOOL *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* FOOL *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>SPEAK</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* SPEAK</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>SPEAK *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* SPEAK *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>ENGLISH</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* ENGLISH</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>ENGLISH *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* ENGLISH *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>FRENCH</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* FRENCH</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>FRENCH *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* FRENCH *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>HOW</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* HOW</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>HOW *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* HOW *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>OLD</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* OLD</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>OLD *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* OLD *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>ARE</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* ARE</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>ARE *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* ARE *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>YOU</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* YOU</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>YOU *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* YOU *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>LOVE</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* LOVE</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>LOVE *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* LOVE *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>SEX</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* SEX</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>SEX *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* SEX *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>SORRY</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* SORRY</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>SORRY *</pattern><template><srai>do you speak english</srai></template></category>
+<category><pattern>* SORRY *</pattern><template><srai>do you speak english</srai></template></category>
+
+<category><pattern>ANY</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* ANY</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>ANY *</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* ANY *</pattern><template><srai>you just spoke english</srai></template></category>
+
+<category><pattern>TALKED</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* TALKED</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>TALKED *</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* TALKED *</pattern><template><srai>you just spoke english</srai></template></category>
+
+<category><pattern>SPOKE</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* SPOKE</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>SPOKE *</pattern><template><srai>you just spoke english</srai></template></category>
+<category><pattern>* SPOKE *</pattern><template><srai>you just spoke english</srai></template></category>
+
+
+<category><pattern>TU PARLES ALLEMAND</pattern><template><srai>parles tu allemand</srai></template></category>
+<category><pattern>PARLES TU ALLEMAND</pattern><template>Désolé, je ne parle pas du tout allemand. </template></category>
+<category><pattern>SPRECHEN SIE DEUTCH</pattern><template>Nein, ich bin tief betrübt, nicht ein Wort.  </template></category>
+
+<category><pattern>NICHT</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* NICHT</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>NICHT *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* NICHT *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+
+<category><pattern>SPRECHEN</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* SPRECHEN</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>SPRECHEN *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* SPRECHEN *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+
+<category><pattern>DEUTCH</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* DEUTCH</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>DEUTCH *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* DEUTCH *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+
+<category><pattern>EIN WENIG</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* EIN WENIG</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>EIN WENIG *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* EIN WENIG *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+
+<category><pattern>FRANZÖSISCH</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* FRANZÖSISCH</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>FRANZÖSISCH *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+<category><pattern>* FRANZÖSISCH *</pattern><template><srai>sprechen sie deutch</srai></template></category>
+
+<category><pattern>COMO TE LLAMA</pattern><template><srai>quel est ton nom</srai></template></category>
+<category><pattern>QUIERO QUE SI</pattern><template><srai>bien sûr que oui</srai></template></category>
+<category><pattern>PESCADO</pattern><template><srai>poisson</srai></template></category>
+
+</aiml>

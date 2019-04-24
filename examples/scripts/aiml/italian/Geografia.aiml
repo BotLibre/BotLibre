@@ -1,0 +1,312 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+<!-- This file contains geographical information. -->
+
+<category>
+<pattern>ABAKAN</pattern>
+<template>Abakan e' una città nella Siberia dell' Est.</template>
+</category>
+
+<category>
+<pattern>ABERDEEN</pattern>
+<template>Città della Gran Bretagna, in Scozia (regione Grampiani), sul mare del Nord; 190.465 ab. Principale porto della Scozia settentrionale.</template>
+</category>
+
+<category>
+<pattern>ACADIA</pattern>
+<template>Regione orientale del Canada francese; i primi tentativi di colonizzazione risalgono al 1604. Oggi il territorio dell'A. comprende il Nuovo Brunswick e la Nuova Scozia.</template>
+</category>
+
+<category>
+<pattern>ACCRA</pattern>
+<template>Cap. del Ghana, sul golfo di Guinea; 1.696.170 ab. Sede vescovile. Notevole centro politico e commerciale.</template>
+</category>
+
+<category>
+<pattern>ADDIS ABABA</pattern>
+<template>Addis Abeba o Addìs Ababà, in amarico «nuovo fiore»
+Città dell'Africa orientale, cap. dell'Etiopia; 1.673.000 ab. Sorge al centro dell'acrocoro etiopico, a circa 2.640 m d'alt. Sede arcivescovile copta e cattolica. Capol. dello Scioa. La parte orientale della città, più moderna, è divisa dalla parte occidentale, raccolta attorno al Palazzo (ghebì) Imperiale e alla cattedrale di San Giorgio, dal torrente Ghenfilè. Aeroporto. Grande centro commerciale. Fiorente artigianato dei metalli e del cuoio.</template>
+</category>
+
+<category>
+<pattern>ADDIS ABEBA</pattern>
+<template>Addis Abeba o Addìs Ababà, in amarico «nuovo fiore»
+Città dell'Africa orientale, cap. dell'Etiopia; 1.673.000 ab. Sorge al centro dell'acrocoro etiopico, a circa 2.640 m d'alt. Sede arcivescovile copta e cattolica. Capol. dello Scioa. La parte orientale della città, più moderna, è divisa dalla parte occidentale, raccolta attorno al Palazzo (ghebì) Imperiale e alla cattedrale di San Giorgio, dal torrente Ghenfilè. Aeroporto. Grande centro commerciale. Fiorente artigianato dei metalli e del cuoio.</template>
+</category>
+
+<category>
+<pattern>ADELAIDE</pattern>
+<template><random>
+<li>Adelaide, santa (931 circa - 999) Imperatrice. Figlia di Rodolfo II di Borgogna, sposò nel 947 Lotario II re d'Italia (945-949). Alla morte di questo (949), fu tenuta prigioniera dai successori del marito, Berengario II e Adalberto suo figlio, associati nel regno, forse per aver respinto la domanda di matrimonio del secondo; ma fu soccorsa da Ottone I di Sassonia che, venuto in Italia, sconfisse Berengario e la sposò (951); divenne così regina e più tardi imperatrice (962). Nel 994 si ritirò dalla corte per dedicarsi alla vita religiosa. - Festa il 16 dicembre.</li>
+<li>Città dell'Australia, cap. dello Stato dell'Australia Meridionale; 1.023.597 ab. Sede arcivescovile cattolica. Università (1874).</li>
+</random></template>
+</category>
+
+<category>
+<pattern>ADEN</pattern>
+<template>Città dello Yemen, capol. dell'omonima provincia sulla costa meridionale della penisola araba, a est dello stretto di Bab al-Mandab; 365.000 ab. Fino al 1990 fu capitalie della Repubblica Democratica Popolare dello Yemen. Importante porto, è stazione di rifornimento per le navi. Commercio di transito.</template>
+</category>
+
+<category>
+<pattern>ADRIATICO</pattern>
+<template>Il più interno tra i mari formati dal Mediterraneo occidentale, racchiuso tra le coste della penisola italiana e quelle della regione balcanica. Deriva il suo nome dall'antica città di Adria. I Romani lo chiamarono anche Mare Superum per distinguerlo dal Tirreno, che era il Mare Inferum. Si estende, con generale direzione NO-SE, dai golfi di Venezia e Trieste fino al canale d'Otranto (mediante il quale comunica col mar Ionio) per complessivi 800 km di lunghezza e da 90 a 220 km di larghezza, con una superficie di circa 132.000 km².</template>
+</category>
+
+<category>
+<pattern>* MARE ADRIATICO</pattern>
+<template>Il più interno tra i mari formati dal Mediterraneo occidentale, racchiuso tra le coste della penisola italiana e quelle della regione balcanica. Deriva il suo nome dall'antica città di Adria. I Romani lo chiamarono anche Mare Superum per distinguerlo dal Tirreno, che era il Mare Inferum. Si estende, con generale direzione NO-SE, dai golfi di Venezia e Trieste fino al canale d'Otranto (mediante il quale comunica col mar Ionio) per complessivi 800 km di lunghezza e da 90 a 220 km di larghezza, con una superficie di circa 132.000 km².</template>
+</category>
+
+<category>
+<pattern>AFGHANISTAN</pattern>
+<template>Stato dell'Asia centrale che confina a nord con il Turkmenistan, l'Uzbekistan e il Tagikistan, a est con il Sinkiang cinese per un breve tratto, con il Kashmir e con il Pakistan, a sud con il Pakistan, a ovest con l'Iran; 649.969 km²; 16.482.000 ab. (Afghani), compresi i nomadi, ma esclusi circa 5.000.000 profughi nei paesi limitrofi. 
+Cap. Kabul. Città principali: Herat (Harat), Kandahar e Mazar-i- Sharif.</template>
+</category>
+
+<category>
+<pattern>AFRICA</pattern>
+<template>Una delle parti del mondo, la più meridionale del Continente Antico; circa 30.309.495 km²; 662.057.000 ab. Diverse sono le ipotesi sull'origine del nome. Servio lo farebbe derivare dalla parola greca afriké che significa senza freddo.</template>
+</category>
+
+<category>
+<pattern>AGRA</pattern>
+<template>Città dell'Unione Indiana (Uttar Pradesh), sul fiume Jumna, capol. dell'omonimo distretto; 899.195 ab. Sede arcivescovile. Università. Aeroporto. Industrie. Insieme con la vicina città morta di Fatehpur Sikri, conserva i più bei monumenti dell'architettura moghul del XVII sec. Il cosiddetto Forte rosso, contenente la moschea della Perla, palazzi, giardini, il celeberrimo Taj Mahal, la Grande moschea e la tomba di Akbar a Sikandara.</template>
+</category>
+
+<category>
+<pattern>AJANTA</pattern>
+<template>Monti dell'India, in parte basaltici, che costituiscono il limite settentrionale del Deccan a sud delle pianure del Tapti, e si abbassano dolcemente verso il bacino del Godavari.</template>
+</category>
+
+<category>
+<pattern>ALASKA</pattern>
+<template>Stato degli Stati Uniti, all'estremità nordoccidentale dell'America del Nord; 1.530.000 km²; 550.043 ab. 
+Cap. Juneau. Città principali: Anchorage, Seward, Cordova, Wrangell, Ketchikan.</template>
+</category>
+
+<category>
+<pattern>ALBANIA</pattern>
+<template>Stato della penisola balcanica che si affaccia sull'Adriatico. Confina con la Repubblica Federale di Iugoslavia a nord, con la Macedonia a nord-est, con la Grecia a sud-est. 28.748 km²; 3.255.891 ab. 
+Cap. Tirana. La moneta è il lek. È una Repubblica parlamentare il cui potere legislativo spetta all'assemblea di 142 membri.</template>
+</category>
+
+
+<pattern>ALGERIA</pattern>
+<template>Algeria e' una repubblica del nord Africa.</template>
+</category>
+
+<category>
+<pattern>ALGERI</pattern>
+<template>Algeri la capitale dell'Algeria.</template>
+</category>
+
+<category>
+<pattern>AMAZON</pattern>
+<template>The Amazon is a major river in South America.</template>
+</category>
+
+<category>
+<pattern>AMERICA</pattern>
+<template>America e' un grande continente nel emisfero ovest</template>
+</category>
+
+<category>
+<pattern>AMSTERDAM</pattern>
+<template>Amsterdam e' una città in Olanda.</template>
+</category>
+
+<category>
+<pattern>ANTARCTIC</pattern>
+<template>The antarctic is the south polar continent.</template>
+</category>
+
+<category>
+<pattern>ARABIA</pattern>
+<template>Arabia is a country in South West Asia comprised of independent states.</template>
+</category>
+
+<category>
+<pattern>ARCTICO</pattern>
+<template>La regione polare?</template>
+</category>
+
+<category>
+<pattern>ARGENTINA</pattern>
+<template>Argentina è una repubblica del Sud Ameria, gran bel posto!.</template>
+</category>
+
+<category>
+<pattern>ASIA</pattern>
+<template>Asia il piu' grande continente del pianeta terra</template>
+</category>
+
+<category>
+<pattern>OCEANO ATLANTICO</pattern>
+<template>L'oceano atlantico e' il mare tra l'Europa e l'America</template>
+</category>
+
+<category>
+<pattern>AUSCHWITZ</pattern>
+<template>E' una città in Polonia. Nella seconda guerra mondiale, era un noto campo di concentramento.</template>
+</category>
+
+<category>
+<pattern>AUSTRIA</pattern>
+<template>Una repubblica in Europa</template>
+</category>
+
+
+<category>
+<pattern>COSA * CALIFORNIA</pattern>
+<template>Uno stato degli U.S.A.</template>
+</category>
+
+<category>
+<pattern>COSA * EUROPA</pattern>
+<template>Europa e' il Futuro</template>
+</category>
+<category>
+<category>
+<pattern>COSA *  ITALIA</pattern>
+<template>Italia e' una repubblica fondata sul lavoro.</template>
+</category>
+<category>
+<category>
+<pattern>QUAL * CAPITALE _ ITALY</pattern>
+<template>Roma.</template>
+</category>
+
+<category>
+<pattern>QUAL * CAPITALE DI _</pattern>
+<template>la capitale del
+<random>
+<li>Canada e' Toronto.  </li>
+<li>California e' Sacramento.  </li>
+<li>Georgia e' Atlanta.  </li>
+<li>Francia e' Parigi.  </li>
+</random></template>
+</category>
+
+<category>
+<pattern>* LA MONTAGNA PIU' ALTA</pattern>
+<template>Monte Everest.</template>
+</category>
+
+<category>
+<pattern>* LA POPOLAZIONE  _ CINA</pattern>
+<template>In Cina ci sono piu' di un miliardo di cinesi.</template>
+</category>
+
+<category>
+<pattern>* LA POPOLAIONE _ USA</pattern>
+<template>Gli United States hanno circa 300 milioni di abitanti.</template>
+</category>
+
+<category>
+<pattern>* LA POPOLAZIONE MONDIALE</pattern>
+<template>Piu' di sei miliardi, facciamo 7 tra due anni</template>
+</category>
+
+<category>
+<pattern>COSA SONO GLI USA</pattern>
+<template>United States of America</template>
+</category>
+
+<category>
+<pattern>DOVE * ITALIA</pattern>
+<template>Italia si trova nel meridione dell'Europa</template>
+</category>
+
+<category>
+<pattern>* VALLE D'AOSTA</pattern>
+<template>Aosta</template>
+</category>
+
+<category>
+<pattern>* PIEMONTE</pattern>
+<template>Torino</template>
+</category>
+
+<category>
+<pattern>* LOMBARDIA</pattern>
+<template>Milano</template>
+</category>
+
+<category>
+<pattern>* FRIULI</pattern>
+<template>Venezia</template>
+</category>
+
+<category>
+<pattern>* LIGURIA</pattern>
+<template>Genova</template>
+</category>
+
+<category>
+<pattern>* TOSCANA</pattern>
+<template>Firenze</template>
+</category>
+
+<category>
+<pattern>* EMILIA</pattern>
+<template>Bologna</template>
+</category>
+<category>
+<pattern>* Romagna</pattern>
+<template>Bologna</template>
+</category>
+<category>
+<pattern>* EMILIAROMAGNA</pattern>
+<template>Bologna</template>
+</category>
+
+<category>
+<pattern>* MARCHE</pattern>
+<template>Ancona</template>
+</category>
+<category>
+<pattern>* UMBRIA</pattern>
+<template>Perugia</template>
+</category>
+<category>
+<pattern>* ABRUZZI</pattern>
+<template>L'Aquila</template>
+</category>
+<category>
+<pattern>* LAZIO</pattern>
+<template>Roma (Capitale d'Italia)</template>
+</category>
+<category>
+<pattern>* MOLISE</pattern>
+<template>Campobasso</template>
+</category>
+<category>
+<pattern>* CAMPANIA</pattern>
+<template>Napoli</template>
+</category>
+<category>
+<pattern>* PUGLIA</pattern>
+<template>Bari</template>
+</category>
+<category>
+<pattern>* BASILICATA</pattern>
+<template>Potenza</template>
+</category>
+<category>
+<pattern>* CALABRIA</pattern>
+<template>Reggio Calabria</template>
+</category>
+<category>
+<pattern>* Sicilia</pattern>
+<template>Palermo</template>
+</category>
+<category>
+<pattern>* SARDEGNA</pattern>
+<template>Cagliari</template>
+</category>
+
+</alice>

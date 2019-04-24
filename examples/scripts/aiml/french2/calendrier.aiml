@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : calendrier.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category>
+<pattern>DONNER LA DATE</pattern>
+<template>
+<javascript>
+<![CDATA[
+     var t = new Date();
+     var m = t.getMonth();
+     var d = t.getDate();
+     var dow = t.getDay();
+     var y = t.getFullYear();
+     switch (dow) {
+     case 0:
+          dow = "Dimanche";
+          break;
+     case 1:
+          dow = "Lundi";
+          break;
+     case 2:
+          dow = "Mardi";
+          break;
+     case 3:
+          dow = "Mercredi";
+          break;
+     case 4:
+          dow = "Jeudi";
+          break;
+     case 5:
+          dow = "Vendredi";
+          break;
+     case 6:
+          dow = "Samedi";
+          break;
+     }
+switch (m) {
+case 0:
+     m = "Janvier";
+     break;
+case 1:
+     m = "Février";
+     break;
+case 2:
+     m = "Mars";
+     break;
+case 3:
+     m = "Avril";
+     break;
+case 4:
+     m = "Mai";
+     break;
+case 5:
+     m = "Juin";
+     break;
+case 6:
+     m = "Juillet";
+     break;
+case 7:
+     m = "Août";
+     break;
+case 8:
+     m = "Septembre";
+     break;
+case 9:
+     m = "Octobre";
+     break;
+case 10: 
+     m = "Novembre";
+     break;
+case 11:
+     m = "Decembre";
+     break;
+}
+
+dow + ", " + d + " " + m + ", " + y;
+
+]]>
+</javascript>
+</template>
+</category>
+
+
+<category>
+<pattern>DONNER L HEURE</pattern>
+<template>
+<javascript> 
+<![CDATA[
+ var now = new Date();
+ var hour = now.getHours();
+ var minute = now.getMinutes();
+ now = "";
+
+if (minute < 10) 
+   minute = "0" + minute;
+
+hour + ":" + minute;
+
+]]>
+</javascript>
+</template>
+</category>
+
+<!-- srai -->
+
+<category><pattern>QUELLE HEURE EST IL</pattern><template>Il est <srai>donner l'heure</srai></template></category>
+<category><pattern>QUEL JOUR SOMMES NOUS</pattern><template>Aujourd'hui on est <srai>donner la date</srai></template></category>
+<category><pattern>ON EST QUOI AUJOURD HUI</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUEL EST L HEURE</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUEL EST LE JOUR</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUEL HEURE EST IL</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUELLE EST L HEURE</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUELLE EST LA DATE</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUELLE JOUR EST ON</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUELLE JOUR ON EST</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUELLE JOUR SOMME NOUS</pattern><template><srai>quel jour sommes nous</srai></template></category>
+
+<category><pattern>QUELLE HEURE EST IL INTERROGATION</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUEL JOUR SOMMES NOUS INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>ON EST QUOI AUJOURD HUI INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUEL EST L HEURE INTERROGATION</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUEL EST LE JOUR INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUEL HEURE EST IL INTERROGATION</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUELLE EST L HEURE INTERROGATION</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUELLE EST LA DATE INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUELLE JOUR EST ON INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUELLE JOUR ON EST INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>QUELLE JOUR SOMME NOUS INTERROGATION</pattern><template><srai>quel jour sommes nous</srai></template></category>
+
+<category><pattern>* MINUTES</pattern><template>c'est long. </template></category>
+<category><pattern>* MINUTE</pattern><template>vas y! </template></category>
+<category><pattern>* HEURES</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>* HEURE</pattern><template><srai>quelle heure est il</srai></template></category>
+
+</aiml>

@@ -1,0 +1,1807 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+	<!-- Free software (c) 2001-2003 ALICE A.I. Foundation.   -->
+	<!-- This program is open source code released under -->
+	<!-- the terms of the GNU General Public License     -->
+	<!-- as published by the Free Software Foundation.   -->
+	<!-- Complies with AIML 1.0 Tag Set Specification -->
+	<!-- as adopted by the ALICE A.I. Foundation.  -->
+	<!-- numberones.aiml written by Square Bear -->
+
+<category>
+<pattern>_ NUMBER 1 * </pattern>
+<template><srai> <star/> number one <star index="2"/></srai></template>
+</category>
+<category>
+<pattern>NUMBER 1 * ON * </pattern>
+<template><srai>XNUMBERONE <star index="2"/></srai></template>
+</category>
+<category>
+<pattern>NUMBER 1 ON * </pattern>
+<template><srai>XNUMBERONE <star/></srai></template>
+</category>
+<category>
+<pattern>_ NUMBER ONE * ON * </pattern>
+<template><srai>XNUMBERONE <star index="3"/></srai></template>
+</category>
+<category>
+<pattern>_ NUMBER ONE ON * </pattern>
+<template><srai>XNUMBERONE <star index="2"/></srai></template>
+</category>
+<category>
+<pattern>_ NUMBER ONE * ON THE * </pattern>
+<template><srai>XNUMBERONE <star index="3"/></srai></template>
+</category>
+<category>
+<pattern>_ NUMBER ONE ON THE * </pattern>
+<template><srai>XNUMBERONE <star index="2"/></srai></template>
+</category>
+<category>
+<pattern>NUMBER ONE * ON * </pattern>
+<template><srai>XNUMBERONE <star index="2"/></srai></template>
+</category>
+<category>
+<pattern>NUMBER ONE ON * </pattern>
+<template><srai>XNUMBERONE <star/></srai></template>
+</category>
+<category>
+<pattern>NUMBER ONE * ON THE * </pattern>
+<template><srai>XNUMBERONE <star index="2"/></srai></template>
+</category>
+<category>
+<pattern>NUMBER ONE ON THE * </pattern>
+<template><srai>XNUMBERONE <star/></srai></template>
+</category>
+
+<category><pattern>XN1 * * *</pattern><template><think><set name="vn1">NO</set></think></template></category>
+
+<category><pattern>XN1 14 NOV 1952</pattern><template> <set name="vn1">Al Martino - "Here in My Heart"</set></template></category>
+<category><pattern>XN1 16 JAN 1953</pattern><template> <set name="vn1">Jo Stafford - "You Belong To Me"</set></template></category>
+<category><pattern>XN1 23 JAN 1953</pattern><template> <set name="vn1">Kay Starr - "Comes A-Long A-Love"</set></template></category>
+<category><pattern>XN1 30 JAN 1953</pattern><template> <set name="vn1">Eddie Fisher - "Outside Of Heaven"</set></template></category>
+<category><pattern>XN1 06 FEB 1953</pattern><template> <set name="vn1">Perry Como - "Don't Let The Stars Get In Your Eyes"</set></template></category>
+<category><pattern>XN1 13 MAR 1953</pattern><template> <set name="vn1">Guy Mitchell - "She Wears Red Feathers"</set></template></category>
+<category><pattern>XN1 10 APR 1953</pattern><template> <set name="vn1">Stargazers - "Broken Wings"</set></template></category>
+<category><pattern>XN1 17 APR 1953</pattern><template> <set name="vn1">Lita Roza - "(How Much Is) That Doggie In The Window"</set></template></category>
+<category><pattern>XN1 24 APR 1953</pattern><template> <set name="vn1">Frankie Laine - "I Believe"</set></template></category>
+<category><pattern>XN1 26 JUN 1953</pattern><template> <set name="vn1">Eddie Fisher - "I'm Walking Behind You"</set></template></category>
+<category><pattern>XN1 03 JUL 1953</pattern><template> <set name="vn1">Frankie Laine - "I Believe"</set></template></category>
+<category><pattern>XN1 14 AUG 1953</pattern><template> <set name="vn1">Mantovani - "Song from 'The Moulin Rouge'"</set></template></category>
+<category><pattern>XN1 21 AUG 1953</pattern><template> <set name="vn1">Frankie Laine - "I Believe"</set></template></category>
+<category><pattern>XN1 11 SEP 1953</pattern><template> <set name="vn1">Guy Mitchell - "Look At That Girl"</set></template></category>
+<category><pattern>XN1 23 OCT 1953</pattern><template> <set name="vn1">Frankie Laine - "Hey Joe"</set></template></category>
+<category><pattern>XN1 06 NOV 1953</pattern><template> <set name="vn1">David Whitfield - "Answer Me"</set></template></category>
+<category><pattern>XN1 13 NOV 1953</pattern><template> <set name="vn1">Frankie Laine - "Answer Me"</set></template></category>
+<category><pattern>XN1 11 DEC 1953</pattern><template> <set name="vn1">David Whitfield - "Answer Me"</set></template></category>
+<category><pattern>XN1 08 JAN 1954</pattern><template> <set name="vn1">Eddie Calvert - "Oh Mein Papa"</set></template></category>
+<category><pattern>XN1 12 MAR 1954</pattern><template> <set name="vn1">Stargazers - "I See The Moon"</set></template></category>
+<category><pattern>XN1 16 APR 1954</pattern><template> <set name="vn1">Doris Day - "Secret Love"</set></template></category>
+<category><pattern>XN1 23 APR 1954</pattern><template> <set name="vn1">Stargazers - "I See The Moon"</set></template></category>
+<category><pattern>XN1 30 APR 1954</pattern><template> <set name="vn1">Johnnie Ray - "Such A Night"</set></template></category>
+<category><pattern>XN1 08 MAY 1954</pattern><template> <set name="vn1">Doris Day - "Secret Love"</set></template></category>
+<category><pattern>XN1 02 JUL 1954</pattern><template> <set name="vn1">David Whitfield - "Cara Mia"</set></template></category>
+<category><pattern>XN1 10 SEP 1954</pattern><template> <set name="vn1">Kitty Kallen - "Little Things Mean A Lot"</set></template></category>
+<category><pattern>XN1 17 SEP 1954</pattern><template> <set name="vn1">Frank Sinatra - "Three Coins In The Fountain"</set></template></category>
+<category><pattern>XN1 08 OCT 1954</pattern><template> <set name="vn1">Don Cornell - "Hold My Hand"</set></template></category>
+<category><pattern>XN1 05 NOV 1954</pattern><template> <set name="vn1">Vera Lynn - "My Son My Son"</set></template></category>
+<category><pattern>XN1 19 NOV 1954</pattern><template> <set name="vn1">Don Cornell - "Hold My Hand"</set></template></category>
+<category><pattern>XN1 26 NOV 1954</pattern><template> <set name="vn1">Rosemary Clooney - "This Ole House"</set></template></category>
+<category><pattern>XN1 03 DEC 1954</pattern><template> <set name="vn1">Winifred Atwell - "Let's Have Another Party"</set></template></category>
+<category><pattern>XN1 07 JAN 1955</pattern><template> <set name="vn1">Dickie Valentine - "Finger Of Suspicion"</set></template></category>
+<category><pattern>XN1 14 JAN 1955</pattern><template> <set name="vn1">Rosemary Clooney - "Mambo Italiano"</set></template></category>
+<category><pattern>XN1 21 JAN 1955</pattern><template> <set name="vn1">Dickie Valentine - "Finger Of Suspicion"</set></template></category>
+<category><pattern>XN1 04 FEB 1955</pattern><template> <set name="vn1">Rosemary Clooney - "Mambo Italiano"</set></template></category>
+<category><pattern>XN1 18 FEB 1955</pattern><template> <set name="vn1">Ruby Murray - "Softly Softly"</set></template></category>
+<category><pattern>XN1 11 MAR 1955</pattern><template> <set name="vn1">Tennessee Ernie Ford - "Give Me Your Word"</set></template></category>
+<category><pattern>XN1 29 APR 1955</pattern><template> <set name="vn1">Perez Prez Prado &amp; His Orchestra - "Cherry Pink And Apple Blossom White"</set></template></category>
+<category><pattern>XN1 13 MAY 1955</pattern><template> <set name="vn1">Tony Bennett - "Stranger In Paradise"</set></template></category>
+<category><pattern>XN1 27 MAY 1955</pattern><template> <set name="vn1">Eddie Calvert - "Cherry Pink And Apple Blossom White"</set></template></category>
+<category><pattern>XN1 24 JUN 1955</pattern><template> <set name="vn1">Jimmy Young - "Unchained Melody"</set></template></category>
+<category><pattern>XN1 15 JUL 1955</pattern><template> <set name="vn1">Alma Cogan - "Dreamboat"</set></template></category>
+<category><pattern>XN1 29 JUL 1955</pattern><template> <set name="vn1">Slim Whitman - "Rose Marie"</set></template></category>
+<category><pattern>XN1 14 OCT 1955</pattern><template> <set name="vn1">Jimmy Young - "The Man From Laramie"</set></template></category>
+<category><pattern>XN1 11 NOV 1955</pattern><template> <set name="vn1">Johnston Brothers - "Hernando's Hideaway"</set></template></category>
+<category><pattern>XN1 25 NOV 1955</pattern><template> <set name="vn1">Bill Haley &amp; His Comets - "Rock Around The Clock"</set></template></category>
+<category><pattern>XN1 16 DEC 1955</pattern><template> <set name="vn1">Dickie Valentine - "Christmas Alphabet"</set></template></category>
+<category><pattern>XN1 06 JAN 1956</pattern><template> <set name="vn1">Bill Haley &amp; His Comets - "Rock Around The Clock"</set></template></category>
+<category><pattern>XN1 20 JAN 1956</pattern><template> <set name="vn1">Tennessee Ernie Ford - "Sixteen Tons"</set></template></category>
+<category><pattern>XN1 17 FEB 1956</pattern><template> <set name="vn1">Dean Martin - "Memories Are Made Of This"</set></template></category>
+<category><pattern>XN1 16 MAR 1956</pattern><template> <set name="vn1">Dream Weavers - "It's Almost Tomorrow"</set></template></category>
+<category><pattern>XN1 30 MAR 1956</pattern><template> <set name="vn1">Kay Starr - "Rock And Roll Waltz"</set></template></category>
+<category><pattern>XN1 06 APR 1956</pattern><template> <set name="vn1">Dream Weavers - "It's Almost Tomorrow"</set></template></category>
+<category><pattern>XN1 13 APR 1956</pattern><template> <set name="vn1">Winifred Atwell - "Poor People Of Paris"</set></template></category>
+<category><pattern>XN1 04 MAY 1956</pattern><template> <set name="vn1">Ronnie Hilton - "No Other Love"</set></template></category>
+<category><pattern>XN1 15 JUN 1956</pattern><template> <set name="vn1">Pat Boone - "I'll Be Home"</set></template></category>
+<category><pattern>XN1 20 JUL 1956</pattern><template> <set name="vn1">Frankie Lymon And The Teenagers - "Why Do Fools Fall in Love"</set></template></category>
+<category><pattern>XN1 10 AUG 1956</pattern><template> <set name="vn1">Doris Day - "Whatever Will Be Will Be (Que Sera Sera)"</set></template></category>
+<category><pattern>XN1 21 SEP 1956</pattern><template> <set name="vn1">Anne Shelton - "Lay Down Your Arms"</set></template></category>
+<category><pattern>XN1 19 OCT 1956</pattern><template> <set name="vn1">Frankie Laine - "A Woman In Love"</set></template></category>
+<category><pattern>XN1 16 NOV 1956</pattern><template> <set name="vn1">Johnnie Ray - "Just Walking In The Rain"</set></template></category>
+<category><pattern>XN1 04 JAN 1957</pattern><template> <set name="vn1">Guy Mitchell - "Singing The Blues"</set></template></category>
+<category><pattern>XN1 11 JAN 1957</pattern><template> <set name="vn1">Tommy Steele - "Singing The Blues"</set></template></category>
+<category><pattern>XN1 18 JAN 1957</pattern><template> <set name="vn1">Guy Mitchell - "Singing The Blues"</set></template></category>
+<category><pattern>XN1 25 JAN 1957</pattern><template> <set name="vn1">Frankie Vaughan - "The Garden Of Eden"</set></template></category>
+<category><pattern>XN1 01 FEB 1957</pattern><template> <set name="vn1">Guy Mitchell - "Singing The Blues"</set></template></category>
+<category><pattern>XN1 22 FEB 1957</pattern><template> <set name="vn1">Tab Hunter - "Young Love"</set></template></category>
+<category><pattern>XN1 12 APR 1957</pattern><template> <set name="vn1">Lonnie Donegan - "Cumberland Gap"</set></template></category>
+<category><pattern>XN1 17 MAY 1957</pattern><template> <set name="vn1">Guy Mitchell - "Rock-A-Billy"</set></template></category>
+<category><pattern>XN1 24 MAY 1957</pattern><template> <set name="vn1">Andy Williams - "Butterfly"</set></template></category>
+<category><pattern>XN1 07 JUN 1957</pattern><template> <set name="vn1">Johnnie Ray - "Yes Tonight Josephine"</set></template></category>
+<category><pattern>XN1 28 JUN 1957</pattern><template> <set name="vn1">Lonnie Donegan - "Puttin' On The Style / Gamblin' Man"</set></template></category>
+<category><pattern>XN1 12 JUL 1957</pattern><template> <set name="vn1">Elvis Presley - "All Shook Up"</set></template></category>
+<category><pattern>XN1 30 AUG 1957</pattern><template> <set name="vn1">Paul Anka - "Diana"</set></template></category>
+<category><pattern>XN1 01 NOV 1957</pattern><template> <set name="vn1">The Crickets - "That'll Be The Day"</set></template></category>
+<category><pattern>XN1 22 NOV 1957</pattern><template> <set name="vn1">Harry Belafonte - "Mary's Boy Child"</set></template></category>
+<category><pattern>XN1 10 JAN 1958</pattern><template> <set name="vn1">Jerry Lee Lewis - "Great Balls Of Fire"</set></template></category>
+<category><pattern>XN1 24 JAN 1958</pattern><template> <set name="vn1">Elvis Presley - "Jailhouse Rock"</set></template></category>
+<category><pattern>XN1 14 FEB 1958</pattern><template> <set name="vn1">Michael Holliday - "The Story Of My Life"</set></template></category>
+<category><pattern>XN1 28 FEB 1958</pattern><template> <set name="vn1">Perry Como - "Magic Moments"</set></template></category>
+<category><pattern>XN1 25 APR 1958</pattern><template> <set name="vn1">Marvin Rainwater - "Whole Lotta Woman"</set></template></category>
+<category><pattern>XN1 16 MAY 1958</pattern><template> <set name="vn1">Connie Francis - "Who's Sorry Now"</set></template></category>
+<category><pattern>XN1 27 JUN 1958</pattern><template> <set name="vn1">Vic Damone - "On The Street Where You Live"</set></template></category>
+<category><pattern>XN1 04 JUL 1958</pattern><template> <set name="vn1">Everly Brothers - "All I Have To Do Is Dream / Claudette"</set></template></category>
+<category><pattern>XN1 22 AUG 1958</pattern><template> <set name="vn1">Kalin Twins - "When"</set></template></category>
+<category><pattern>XN1 26 SEP 1958</pattern><template> <set name="vn1">Connie Francis - "Carolina Moon / Stupid Cupid"</set></template></category>
+<category><pattern>XN1 07 NOV 1958</pattern><template> <set name="vn1">Tommy Edwards - "All In The Game"</set></template></category>
+<category><pattern>XN1 28 NOV 1958</pattern><template> <set name="vn1">Lord Rockingham's XI - "Hoots Mon"</set></template></category>
+<category><pattern>XN1 19 DEC 1958</pattern><template> <set name="vn1">Conway Twitty - "It's Only Make Believe"</set></template></category>
+<category><pattern>XN1 23 JAN 1959</pattern><template> <set name="vn1">Jane Morgan - "The Days The Rains Came"</set></template></category>
+<category><pattern>XN1 30 JAN 1959</pattern><template> <set name="vn1">Elvis Presley - "I Got Stung / One Night"</set></template></category>
+<category><pattern>XN1 20 FEB 1959</pattern><template> <set name="vn1">Shirley Bassey - "As I Love You"</set></template></category>
+<category><pattern>XN1 20 MAR 1959</pattern><template> <set name="vn1">The Platters - "Smoke Gets In Your Eyes"</set></template></category>
+<category><pattern>XN1 27 MAR 1959</pattern><template> <set name="vn1">Russ Conway - "Side Saddle"</set></template></category>
+<category><pattern>XN1 24 APR 1959</pattern><template> <set name="vn1">Buddy Holly - "It Doesn't Matter Anymore"</set></template></category>
+<category><pattern>XN1 15 MAY 1959</pattern><template> <set name="vn1">Elvis Presley - "A Fool Such As I / I Need Your Love Tonight"</set></template></category>
+<category><pattern>XN1 19 JUN 1959</pattern><template> <set name="vn1">Russ Conway - "Roulette"</set></template></category>
+<category><pattern>XN1 03 JUL 1959</pattern><template> <set name="vn1">Bobby Darin - "Dream Lover"</set></template></category>
+<category><pattern>XN1 31 JUL 1959</pattern><template> <set name="vn1">Cliff Richard &amp; The Drifters (a.k.a. The Shadows) - "Living Doll"</set></template></category>
+<category><pattern>XN1 11 SEP 1959</pattern><template> <set name="vn1">Craig Douglas - "Only Sixteen"</set></template></category>
+<category><pattern>XN1 09 OCT 1959</pattern><template> <set name="vn1">Jerry Keller - "Here Comes Summer"</set></template></category>
+<category><pattern>XN1 16 OCT 1959</pattern><template> <set name="vn1">Bobby Darin - "Mack The Knife"</set></template></category>
+<category><pattern>XN1 30 OCT 1959</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "Travellin' Light"</set></template></category>
+<category><pattern>XN1 04 DEC 1959</pattern><template> <set name="vn1">Adam Faith - "What Do You Want"</set></template></category>
+<category><pattern>XN1 18 DEC 1959</pattern><template> <set name="vn1">Emile Ford &amp; The Checkmates - "What Do You Want To Make Those Eyes At Me For"</set></template></category>
+<category><pattern>XN1 29 JAN 1960</pattern><template> <set name="vn1">Michael Holliday - "Starry Eyed"</set></template></category>
+<category><pattern>XN1 05 FEB 1960</pattern><template> <set name="vn1">Anthony Newley - "Why"</set></template></category>
+<category><pattern>XN1 10 MAR 1960</pattern><template> <set name="vn1">Adam Faith - "Poor Me"</set></template></category>
+<category><pattern>XN1 17 MAR 1960</pattern><template> <set name="vn1">Johnny Preston - "Running Bear"</set></template></category>
+<category><pattern>XN1 31 MAR 1960</pattern><template> <set name="vn1">Lonnie Donegan - "My Old Man's A Dustman"</set></template></category>
+<category><pattern>XN1 28 APR 1960</pattern><template> <set name="vn1">Anthony Newley - "Do You Mind"</set></template></category>
+<category><pattern>XN1 05 MAY 1960</pattern><template> <set name="vn1">Everly Brothers - "Cathy's Clown"</set></template></category>
+<category><pattern>XN1 23 JUN 1960</pattern><template> <set name="vn1">Eddie Cochran -Three Steps To Heaven"</set></template></category>
+<category><pattern>XN1 07 JUL 1960</pattern><template> <set name="vn1">Jimmy Jones - "Good Timin'"</set></template></category>
+<category><pattern>XN1 28 JUL 1960</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "Please Don't Tease"</set></template></category>
+<category><pattern>XN1 04 AUG 1960</pattern><template> <set name="vn1">Johnny Kidd &amp; The Pirates - "Shakin' All Over"</set></template></category>
+<category><pattern>XN1 11 AUG 1960</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "Please Don't Tease"</set></template></category>
+<category><pattern>XN1 25 AUG 1960</pattern><template> <set name="vn1">Shadows - "Apache"</set></template></category>
+<category><pattern>XN1 29 SEP 1960</pattern><template> <set name="vn1">Ricky Valence - "Tell Laura I Love Her"</set></template></category>
+<category><pattern>XN1 20 OCT 1960</pattern><template> <set name="vn1">Roy Orbison - "Only The Lonely"</set></template></category>
+<category><pattern>XN1 03 NOV 1960</pattern><template> <set name="vn1">Elvis Presley - "It's Now Or Never"</set></template></category>
+<category><pattern>XN1 29 DEC 1960</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "I Love You"</set></template></category>
+<category><pattern>XN1 12 JAN 1961</pattern><template> <set name="vn1">Johnny Tillotson - "Poetry In Motion"</set></template></category>
+<category><pattern>XN1 26 JAN 1961</pattern><template> <set name="vn1">Elvis Presley - "Are You Lonesome Tonight"</set></template></category>
+<category><pattern>XN1 23 FEB 1961</pattern><template> <set name="vn1">Petula Clark - "Sailor"</set></template></category>
+<category><pattern>XN1 02 MAR 1961</pattern><template> <set name="vn1">Everly Brothers - "Walk Right Back / Ebony Eyes"</set></template></category>
+<category><pattern>XN1 23 MAR 1961</pattern><template> <set name="vn1">Elvis Presley - "Wooden Heart"</set></template></category>
+<category><pattern>XN1 04 MAY 1961</pattern><template> <set name="vn1">The Marcels - "Blue Moon"</set></template></category>
+<category><pattern>XN1 18 MAY 1961</pattern><template> <set name="vn1">Floyd Cramer - "On The Rebound"</set></template></category>
+<category><pattern>XN1 25 MAY 1961</pattern><template> <set name="vn1">The Temperance Seven - "You're Driving Me Crazy"</set></template></category>
+<category><pattern>XN1 01 JUN 1961</pattern><template> <set name="vn1">Elvis Presley - "Surrender"</set></template></category>
+<category><pattern>XN1 29 JUN 1961</pattern><template> <set name="vn1">Del Shannon - "Runaway"</set></template></category>
+<category><pattern>XN1 20 JUL 1961</pattern><template> <set name="vn1">Everly Brothers - "Temptation"</set></template></category>
+<category><pattern>XN1 03 AUG 1961</pattern><template> <set name="vn1">Eden Kane - "Well I Ask You"</set></template></category>
+<category><pattern>XN1 10 AUG 1961</pattern><template> <set name="vn1">Helen Shapiro - "You Don't Know"</set></template></category>
+<category><pattern>XN1 31 AUG 1961</pattern><template> <set name="vn1">John Leyton - "Johnny Remember Me"</set></template></category>
+<category><pattern>XN1 21 SEP 1961</pattern><template> <set name="vn1">Shirley Bassey - "Reach For The Stars / Climb Ev'ry Mountain"</set></template></category>
+<category><pattern>XN1 28 SEP 1961</pattern><template> <set name="vn1">John Leyton - "Johnny Remember Me"</set></template></category>
+<category><pattern>XN1 05 OCT 1961</pattern><template> <set name="vn1">Shadows - "Kon Tiki"</set></template></category>
+<category><pattern>XN1 12 OCT 1961</pattern><template> <set name="vn1">The Highwaymen - "Michael"</set></template></category>
+<category><pattern>XN1 19 OCT 1961</pattern><template> <set name="vn1">Helen Shapiro - "Walkin' Back To Happiness"</set></template></category>
+<category><pattern>XN1 09 NOV 1961</pattern><template> <set name="vn1">Elvis Presley - "His Latest Flame"</set></template></category>
+<category><pattern>XN1 07 DEC 1961</pattern><template> <set name="vn1">Frankie Vaughan - "Tower Of Strength"</set></template></category>
+<category><pattern>XN1 28 DEC 1961</pattern><template> <set name="vn1">Danny Williams - "Moon River"</set></template></category>
+<category><pattern>XN1 11 JAN 1962</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "The Young Ones"</set></template></category>
+<category><pattern>XN1 22 FEB 1962</pattern><template> <set name="vn1">Elvis Presley - "Can't Help Falling In Love / Rock-A-Hula Baby"</set></template></category>
+<category><pattern>XN1 22 MAR 1962</pattern><template> <set name="vn1">Shadows - "Wonderful Land"</set></template></category>
+<category><pattern>XN1 17 MAY 1962</pattern><template> <set name="vn1">B.Bumble &amp; The Stingers - "Nut Rocker"</set></template></category>
+<category><pattern>XN1 24 MAY 1962</pattern><template> <set name="vn1">Elvis Presley - "Good Luck Charm"</set></template></category>
+<category><pattern>XN1 28 JUN 1962</pattern><template> <set name="vn1">Mike Sarne with Wendy Richard - "Come Outside"</set></template></category>
+<category><pattern>XN1 12 JUL 1962</pattern><template> <set name="vn1">Ray Charles - "I Can't Stop Loving You"</set></template></category>
+<category><pattern>XN1 26 JUL 1962</pattern><template> <set name="vn1">Frank Ifield - "I Remember You"</set></template></category>
+<category><pattern>XN1 13 SEP 1962</pattern><template> <set name="vn1">Elvis Presley - "She's Not You"</set></template></category>
+<category><pattern>XN1 04 OCT 1962</pattern><template> <set name="vn1">Tornados - "Telstar"</set></template></category>
+<category><pattern>XN1 08 NOV 1962</pattern><template> <set name="vn1">Frank Ifield - "Lovesick Blues"</set></template></category>
+<category><pattern>XN1 13 DEC 1962</pattern><template> <set name="vn1">Elvis Presley - "Return To Sender"</set></template></category>
+<category><pattern>XN1 03 JAN 1963</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "The Next Time / Bachelor Boy"</set></template></category>
+<category><pattern>XN1 24 JAN 1963</pattern><template> <set name="vn1">Shadows - "Dance On"</set></template></category>
+<category><pattern>XN1 31 JAN 1963</pattern><template> <set name="vn1">Jet Harris &amp; Tony Meehan - "Diamonds"</set></template></category>
+<category><pattern>XN1 21 FEB 1963</pattern><template> <set name="vn1">Frank Ifield - "Wayward Wind"</set></template></category>
+<category><pattern>XN1 14 MAR 1963</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "Summer Holiday"</set></template></category>
+<category><pattern>XN1 29 MAR 1963</pattern><template> <set name="vn1">Shadows - "Foot Tapper"</set></template></category>
+<category><pattern>XN1 04 APR 1963</pattern><template> <set name="vn1">Cliff Richard &amp; The Shadows - "Summer Holiday"</set></template></category>
+<category><pattern>XN1 11 APR 1963</pattern><template> <set name="vn1">Gerry &amp; The Pacemakers - "How Do You Do It?"</set></template></category>
+<category><pattern>XN1 02 MAY 1963</pattern><template> <set name="vn1">Beatles - "From Me To You"</set></template></category>
+<category><pattern>XN1 20 JUN 1963</pattern><template> <set name="vn1">Gerry &amp; The Pacemakers - "I Like It"</set></template></category>
+<category><pattern>XN1 18 JUL 1963</pattern><template> <set name="vn1">Frank Ifield - "Confessin' (That I Love You)"</set></template></category>
+<category><pattern>XN1 01 AUG 1963</pattern><template> <set name="vn1">Elvis Presley - "(You're The) Devil In Disguise"</set></template></category>
+<category><pattern>XN1 08 AUG 1963</pattern><template> <set name="vn1">Searchers - "Sweets For My Sweet"</set></template></category>
+<category><pattern>XN1 22 AUG 1963</pattern><template> <set name="vn1">Billy J. Kramer &amp; The Dakotas - "Bad To Me"</set></template></category>
+<category><pattern>XN1 12 SEP 1963</pattern><template> <set name="vn1">Beatles - "She Loves You"</set></template></category>
+<category><pattern>XN1 10 OCT 1963</pattern><template> <set name="vn1">Brian Poole &amp; The Tremeloes - "Do You Love Me"</set></template></category>
+<category><pattern>XN1 31 OCT 1963</pattern><template> <set name="vn1">Gerry &amp; The Pacemakers - "You'll Never Walk Alone"</set></template></category>
+<category><pattern>XN1 28 NOV 1963</pattern><template> <set name="vn1">Beatles - "She Loves You"</set></template></category>
+<category><pattern>XN1 12 DEC 1963</pattern><template> <set name="vn1">Beatles - "I Want To Hold Your Hand"</set></template></category>
+<category><pattern>XN1 16 JAN 1964</pattern><template> <set name="vn1">Dave Clark - "Five Glad All Over"</set></template></category>
+<category><pattern>XN1 30 JAN 1964</pattern><template> <set name="vn1">Searchers - "Needles &amp; Pins"</set></template></category>
+<category><pattern>XN1 20 FEB 1964</pattern><template> <set name="vn1">Bachelors - "Diane"</set></template></category>
+<category><pattern>XN1 27 FEB 1964</pattern><template> <set name="vn1">Cilla Black - "Anyone Who Had A Heart"</set></template></category>
+<category><pattern>XN1 19 MAR 1964</pattern><template> <set name="vn1">Billy J. Kramer &amp; The Dakotas - "Little Children"</set></template></category>
+<category><pattern>XN1 02 APR 1964</pattern><template> <set name="vn1">Beatles - "Can't Buy Me Love"</set></template></category>
+<category><pattern>XN1 23 APR 1964</pattern><template> <set name="vn1">Peter &amp; Gordon - "A World Without Love"</set></template></category>
+<category><pattern>XN1 07 MAY 1964</pattern><template> <set name="vn1">Searchers - "Don't Throw Your Love Away"</set></template></category>
+<category><pattern>XN1 21 MAY 1964</pattern><template> <set name="vn1">Four Pennies - "Juliet"</set></template></category>
+<category><pattern>XN1 28 MAY 1964</pattern><template> <set name="vn1">Cilla Black - "You're My World"</set></template></category>
+<category><pattern>XN1 25 JUN 1964</pattern><template> <set name="vn1">Roy Orbison - "It's Over"</set></template></category>
+<category><pattern>XN1 09 JUL 1964</pattern><template> <set name="vn1">Animals - "The House Of The Rising Sun"</set></template></category>
+<category><pattern>XN1 16 JUL 1964</pattern><template> <set name="vn1">Rolling Stones - "It's All Over now"</set></template></category>
+<category><pattern>XN1 23 JUL 1964</pattern><template> <set name="vn1">Beatles - "A Hard Day's Night"</set></template></category>
+<category><pattern>XN1 13 AUG 1964</pattern><template> <set name="vn1">Manfred Mann - "Do Wah Diddy Diddy"</set></template></category>
+<category><pattern>XN1 27 AUG 1964</pattern><template> <set name="vn1">Honeycombes - "Have I The Right"</set></template></category>
+<category><pattern>XN1 10 SEP 1964</pattern><template> <set name="vn1">Kinks - "You Really Got Me"</set></template></category>
+<category><pattern>XN1 24 SEP 1964</pattern><template> <set name="vn1">Herman's Hermits - "I'm Into Something Good"</set></template></category>
+<category><pattern>XN1 08 OCT 1964</pattern><template> <set name="vn1">Roy Orbison - "Oh Pretty Woman"</set></template></category>
+<category><pattern>XN1 22 OCT 1964</pattern><template> <set name="vn1">Sandie Shaw - "(There's) Always Something There To Remind Me"</set></template></category>
+<category><pattern>XN1 12 NOV 1964</pattern><template> <set name="vn1">Roy Orbison - "Oh Pretty Woman"</set></template></category>
+<category><pattern>XN1 19 NOV 1964</pattern><template> <set name="vn1">Supremes - "Baby Love"</set></template></category>
+<category><pattern>XN1 03 DEC 1964</pattern><template> <set name="vn1">Rolling Stones - "Little Red Rooster"</set></template></category>
+<category><pattern>XN1 10 DEC 1964</pattern><template> <set name="vn1">Beatles - "I Feel Fine"</set></template></category>
+<category><pattern>XN1 14 JAN 1965</pattern><template> <set name="vn1">Georgie Fame &amp; The Blue Flames - "Yeah Yeah"</set></template></category>
+<category><pattern>XN1 28 JAN 1965</pattern><template> <set name="vn1">Moody Blues - "Go Now!"</set></template></category>
+<category><pattern>XN1 04 FEB 1965</pattern><template> <set name="vn1">Righteous Brothers - "You've Lost That Loving Feeling"</set></template></category>
+<category><pattern>XN1 18 FEB 1965</pattern><template> <set name="vn1">Kinks - "Tired Of Waiting For You"</set></template></category>
+<category><pattern>XN1 25 FEB 1965</pattern><template> <set name="vn1">Seekers - "I'll Never Find Another You"</set></template></category>
+<category><pattern>XN1 11 MAR 1965</pattern><template> <set name="vn1">Tom Jones - "It's Not Unusual"</set></template></category>
+<category><pattern>XN1 18 MAR 1965</pattern><template> <set name="vn1">Rolling Stones - "The Last Time"</set></template></category>
+<category><pattern>XN1 08 APR 1965</pattern><template> <set name="vn1">Unit Four Plus Two - "Concrete &amp; Clay"</set></template></category>
+<category><pattern>XN1 15 APR 1965</pattern><template> <set name="vn1">Cliff Richard - "The Minute You're Gone"</set></template></category>
+<category><pattern>XN1 22 APR 1965</pattern><template> <set name="vn1">Beatles - "Ticket To Ride"</set></template></category>
+<category><pattern>XN1 13 MAY 1965</pattern><template> <set name="vn1">Roger Miller - "King Of The Road"</set></template></category>
+<category><pattern>XN1 20 MAY 1965</pattern><template> <set name="vn1">Jackie Trent - "Where Are You Now (My Love)"</set></template></category>
+<category><pattern>XN1 27 MAY 1965</pattern><template> <set name="vn1">Sandie Shaw - "Long Live Love"</set></template></category>
+<category><pattern>XN1 17 JUN 1965</pattern><template> <set name="vn1">Elvis Presley - "Crying In The Chapel"</set></template></category>
+<category><pattern>XN1 24 JUN 1965</pattern><template> <set name="vn1">Hollies - "I'm Alive"</set></template></category>
+<category><pattern>XN1 01 JUL 1965</pattern><template> <set name="vn1">Elvis Presley - "Crying In The Chapel"</set></template></category>
+<category><pattern>XN1 08 JUL 1965</pattern><template> <set name="vn1">Hollies - "I'm Alive"</set></template></category>
+<category><pattern>XN1 22 JUL 1965</pattern><template> <set name="vn1">Byrds - "Mr Tambourine Man"</set></template></category>
+<category><pattern>XN1 05 AUG 1965</pattern><template> <set name="vn1">Beatles - "Help!"</set></template></category>
+<category><pattern>XN1 26 AUG 1965</pattern><template> <set name="vn1">Sonny &amp; Cher - "I Got You Babe"</set></template></category>
+<category><pattern>XN1 09 SEP 1965</pattern><template> <set name="vn1">Rolling Stones - "(I Can't Get No) Satisfaction"</set></template></category>
+<category><pattern>XN1 23 SEP 1965</pattern><template> <set name="vn1">Walker Brothers - "Make It Easy On Yourself"</set></template></category>
+<category><pattern>XN1 30 SEP 1965</pattern><template> <set name="vn1">Ken Dodd - "Tears"</set></template></category>
+<category><pattern>XN1 04 NOV 1965</pattern><template> <set name="vn1">Rolling Stones - "Get Off Of My Cloud"</set></template></category>
+<category><pattern>XN1 25 NOV 1965</pattern><template> <set name="vn1">Seekers - "The Carnival Is Over"</set></template></category>
+<category><pattern>XN1 16 DEC 1965</pattern><template> <set name="vn1">Beatles - "Day Tripper / We Can Work It Out"</set></template></category>
+<category><pattern>XN1 20 JAN 1966</pattern><template> <set name="vn1">Spencer Davis - "Group Keep On Running"</set></template></category>
+<category><pattern>XN1 27 JAN 1966</pattern><template> <set name="vn1">Overlanders - "Michelle"</set></template></category>
+<category><pattern>XN1 17 FEB 1966</pattern><template> <set name="vn1">Nancy Sinatra - "These Boots Are Made For Walking"</set></template></category>
+<category><pattern>XN1 17 MAR 1966</pattern><template> <set name="vn1">Walker Brothers - "The Sun Ain't Gonna Shine Anymore"</set></template></category>
+<category><pattern>XN1 14 APR 1966</pattern><template> <set name="vn1">Spencer Davis Group - "Somebody Help Me"</set></template></category>
+<category><pattern>XN1 28 APR 1966</pattern><template> <set name="vn1">Dusty Springfield - "You Don't Have To Say You Love Me"</set></template></category>
+<category><pattern>XN1 05 MAY 1966</pattern><template> <set name="vn1">Manfred Mann - "Pretty Flamingo"</set></template></category>
+<category><pattern>XN1 26 MAY 1966</pattern><template> <set name="vn1">Rolling Stones - "Paint It Black"</set></template></category>
+<category><pattern>XN1 02 JUN 1966</pattern><template> <set name="vn1">Frank Sinatra - "Strangers In The Night"</set></template></category>
+<category><pattern>XN1 23 JUN 1966</pattern><template> <set name="vn1">Beatles - "Paperback Writer"</set></template></category>
+<category><pattern>XN1 07 JUL 1966</pattern><template> <set name="vn1">Kinks - "Sunny Afternoon"</set></template></category>
+<category><pattern>XN1 21 JUL 1966</pattern><template> <set name="vn1">Georgie Fame &amp; The Blue Flames - "Getaway"</set></template></category>
+<category><pattern>XN1 28 JUL 1966</pattern><template> <set name="vn1">Chris Farlowe - "Out Of Time"</set></template></category>
+<category><pattern>XN1 04 AUG 1966</pattern><template> <set name="vn1">Troggs - "With A Girl Like You"</set></template></category>
+<category><pattern>XN1 18 AUG 1966</pattern><template> <set name="vn1">Beatles - "Yellow Submarine / Eleanor Rigby"</set></template></category>
+<category><pattern>XN1 15 SEP 1966</pattern><template> <set name="vn1">Small Faces - "All Or Nothing"</set></template></category>
+<category><pattern>XN1 22 SEP 1966</pattern><template> <set name="vn1">Jim Reeves - "Distant Drums"</set></template></category>
+<category><pattern>XN1 27 OCT 1966</pattern><template> <set name="vn1">Four Tops - "Reach Out I'll Be There"</set></template></category>
+<category><pattern>XN1 17 NOV 1966</pattern><template> <set name="vn1">Beach Boys - "Good Vibrations"</set></template></category>
+<category><pattern>XN1 01 DEC 1966</pattern><template> <set name="vn1">Tom Jones - "Green Green Grass Of Home"</set></template></category>
+<category><pattern>XN1 19 JAN 1967</pattern><template> <set name="vn1">Monkees - "I'm A Believer"</set></template></category>
+<category><pattern>XN1 16 FEB 1967</pattern><template> <set name="vn1">Petula Clark - "This Is My Song"</set></template></category>
+<category><pattern>XN1 02 MAR 1967</pattern><template> <set name="vn1">Engelbert Humperdink - "Release Me"</set></template></category>
+<category><pattern>XN1 13 APR 1967</pattern><template> <set name="vn1">Frank Sinatra &amp; Nancy Sinatra - "Somethin' Stupid"</set></template></category>
+<category><pattern>XN1 27 APR 1967</pattern><template> <set name="vn1">Sandie Shaw - "Puppet On A String"</set></template></category>
+<category><pattern>XN1 18 MAY 1967</pattern><template> <set name="vn1">Tremeloes - "Silence Is Golden"</set></template></category>
+<category><pattern>XN1 08 JUN 1967</pattern><template> <set name="vn1">Procol Harum - "A Whiter Shade Of Pale"</set></template></category>
+<category><pattern>XN1 19 JUL 1967</pattern><template> <set name="vn1">Beatles - "All You Need Is Love"</set></template></category>
+<category><pattern>XN1 09 AUG 1967</pattern><template> <set name="vn1">Scott McKenzie - "San Francisco (Be Sure To Wear Some Flowers In Your Hair)"</set></template></category>
+<category><pattern>XN1 06 SEP 1967</pattern><template> <set name="vn1">Engelbert Humperdink - "The Last Waltz"</set></template></category>
+<category><pattern>XN1 11 OCT 1967</pattern><template> <set name="vn1">Bee Gees - "Massachusetts"</set></template></category>
+<category><pattern>XN1 08 NOV 1967</pattern><template> <set name="vn1">Foundations - "Baby Now That I've Found You"</set></template></category>
+<category><pattern>XN1 22 NOV 1967</pattern><template> <set name="vn1">Long John Baldry - "Let The Heartaches Begin"</set></template></category>
+<category><pattern>XN1 06 DEC 1967</pattern><template> <set name="vn1">Beatles - "Hello Goodbye"</set></template></category>
+<category><pattern>XN1 24 JAN 1968</pattern><template> <set name="vn1">Georgie Fame - "The Ballad Of Bonnie &amp; Clyde"</set></template></category>
+<category><pattern>XN1 31 JAN 1968</pattern><template> <set name="vn1">Love Affair - "Everlasting Love"</set></template></category>
+<category><pattern>XN1 14 FEB 1968</pattern><template> <set name="vn1">Manfred Mann - "The Mighty Quinn"</set></template></category>
+<category><pattern>XN1 28 FEB 1968</pattern><template> <set name="vn1">Esther &amp; Abi Ofarim - "Cinderella Rockefella"</set></template></category>
+<category><pattern>XN1 20 MAR 1968</pattern><template> <set name="vn1">Dave Dee Dozy Beaky Mick &amp; Tich - "Legend Of Xanadu"</set></template></category>
+<category><pattern>XN1 27 MAR 1968</pattern><template> <set name="vn1">Beatles - "Lady Madonna"</set></template></category>
+<category><pattern>XN1 10 APR 1968</pattern><template> <set name="vn1">Cliff Richard - "Congratulations"</set></template></category>
+<category><pattern>XN1 24 APR 1968</pattern><template> <set name="vn1">Louis Armstrong - "What A Wonderful World / Cabaret"</set></template></category>
+<category><pattern>XN1 22 MAY 1968</pattern><template> <set name="vn1">Union Gap featuring Gary Puckett - "Young Girl"</set></template></category>
+<category><pattern>XN1 19 JUN 1968</pattern><template> <set name="vn1">Rolling Stones - "Jumpin' Jack Flash"</set></template></category>
+<category><pattern>XN1 03 JUL 1968</pattern><template> <set name="vn1">Equals - "Baby Come Back"</set></template></category>
+<category><pattern>XN1 24 JUL 1968</pattern><template> <set name="vn1">Des O'Connor - "I Pretend"</set></template></category>
+<category><pattern>XN1 31 JUL 1968</pattern><template> <set name="vn1">Tommy James &amp; The Shondells - "Mony Mony"</set></template></category>
+<category><pattern>XN1 14 AUG 1968</pattern><template> <set name="vn1">Crazy World of Arthur Brown - "Fire"</set></template></category>
+<category><pattern>XN1 21 AUG 1968</pattern><template> <set name="vn1">Tommy James &amp; The Shondells - "Mony Mony"</set></template></category>
+<category><pattern>XN1 28 AUG 1968</pattern><template> <set name="vn1">Beach Boys - "Do It Again"</set></template></category>
+<category><pattern>XN1 04 SEP 1968</pattern><template> <set name="vn1">Bee Gees - "I've Gotta Get A Message To You"</set></template></category>
+<category><pattern>XN1 11 SEP 1968</pattern><template> <set name="vn1">Beatles - "Hey Jude"</set></template></category>
+<category><pattern>XN1 25 SEP 1968</pattern><template> <set name="vn1">Mary Hopkin - "Those Were The Days"</set></template></category>
+<category><pattern>XN1 06 NOV 1968</pattern><template> <set name="vn1">Joe Cocker - "With A Little Help From My Friends"</set></template></category>
+<category><pattern>XN1 13 NOV 1968</pattern><template> <set name="vn1">Hugo Montenegro Orchestra - "The Good The Bad And The Ugly"</set></template></category>
+<category><pattern>XN1 11 DEC 1968</pattern><template> <set name="vn1">Scaffold - "Lily The Pink"</set></template></category>
+<category><pattern>XN1 01 JAN 1969</pattern><template> <set name="vn1">Marmalade - "Ob-La-Di Ob-La-Da"</set></template></category>
+<category><pattern>XN1 08 JAN 1969</pattern><template> <set name="vn1">Scaffold - "Lily The Pink"</set></template></category>
+<category><pattern>XN1 15 JAN 1969</pattern><template> <set name="vn1">Marmalade - "Ob-La-Di Ob-La-Da"</set></template></category>
+<category><pattern>XN1 29 JAN 1969</pattern><template> <set name="vn1">Fleetwood Mac - "Albatross"</set></template></category>
+<category><pattern>XN1 05 FEB 1969</pattern><template> <set name="vn1">Move - "Blackberry Way"</set></template></category>
+<category><pattern>XN1 12 FEB 1969</pattern><template> <set name="vn1">Amen Corner - "(If Paradise Is) Half As Nice"</set></template></category>
+<category><pattern>XN1 26 FEB 1969</pattern><template> <set name="vn1">Peter Sarstedt - "Where Do You Go To My Lovely?"</set></template></category>
+<category><pattern>XN1 26 MAR 1969</pattern><template> <set name="vn1">Marvin Gaye - "I Heard It Through The Grapevine"</set></template></category>
+<category><pattern>XN1 16 APR 1969</pattern><template> <set name="vn1">Desmond Dekker &amp; The Aces - "Israelites"</set></template></category>
+<category><pattern>XN1 23 APR 1969</pattern><template> <set name="vn1">Beatles - "Get Back"</set></template></category>
+<category><pattern>XN1 04 JUN 1969</pattern><template> <set name="vn1">Tommy Roe - "Dizzy"</set></template></category>
+<category><pattern>XN1 11 JUN 1969</pattern><template> <set name="vn1">Beatles - "The Ballad Of John &amp; Yoko"</set></template></category>
+<category><pattern>XN1 02 JUL 1969</pattern><template> <set name="vn1">Thunderclap Newman - "Something In The Air"</set></template></category>
+<category><pattern>XN1 23 JUL 1969</pattern><template> <set name="vn1">Rolling Stones - "Honky Tonk Women"</set></template></category>
+<category><pattern>XN1 30 AUG 1969</pattern><template> <set name="vn1">Zager &amp; Evans - "In The Year 2525 (Exordium &amp; Terminus)"</set></template></category>
+<category><pattern>XN1 20 SEP 1969</pattern><template> <set name="vn1">Creedence Clearwater Revival - "Bad Moon Rising"</set></template></category>
+<category><pattern>XN1 11 OCT 1969</pattern><template> <set name="vn1">Jane Birkin &amp; Serge Gainsbourg - "Je T'Aime... Moi Non Plus"</set></template></category>
+<category><pattern>XN1 18 OCT 1969</pattern><template> <set name="vn1">Bobbie Gentry - "I'll Never Fall In Love Again"</set></template></category>
+<category><pattern>XN1 25 OCT 1969</pattern><template> <set name="vn1">Archies - "Sugar Sugar"</set></template></category>
+<category><pattern>XN1 20 DEC 1969</pattern><template> <set name="vn1">Rolf Harris - "Two Little Boys"</set></template></category>
+<category><pattern>XN1 31 JAN 1970</pattern><template> <set name="vn1">Edison Lighthouse - "Love Grows (Where My Rosemary Goes)"</set></template></category>
+<category><pattern>XN1 07 MAR 1970</pattern><template> <set name="vn1">Lee Marvin - "Wandrin' Star"</set></template></category>
+<category><pattern>XN1 28 MAR 1970</pattern><template> <set name="vn1">Simon &amp; Garfunkel - "Bridge Over Troubled Water"</set></template></category>
+<category><pattern>XN1 18 APR 1970</pattern><template> <set name="vn1">Dana - "All Kinds Of Everything"</set></template></category>
+<category><pattern>XN1 02 MAY 1970</pattern><template> <set name="vn1">Norman Greenbaum - "Spirit In The Sky"</set></template></category>
+<category><pattern>XN1 16 MAY 1970</pattern><template> <set name="vn1">England World Cup Squad - "Back Home"</set></template></category>
+<category><pattern>XN1 06 JUN 1970</pattern><template> <set name="vn1">Christie - "Yellow River"</set></template></category>
+<category><pattern>XN1 13 JUN 1970</pattern><template> <set name="vn1">Mungo Jerry - "In The Summertime"</set></template></category>
+<category><pattern>XN1 01 AUG 1970</pattern><template> <set name="vn1">Elvis Presley - "The Wonder Of You"</set></template></category>
+<category><pattern>XN1 12 SEP 1970</pattern><template> <set name="vn1">Smokey Robinson &amp; The Miracles - "Tears Of A Clown"</set></template></category>
+<category><pattern>XN1 19 SEP 1970</pattern><template> <set name="vn1">Freda Payne - "Band Of Gold"</set></template></category>
+<category><pattern>XN1 31 OCT 1970</pattern><template> <set name="vn1">Matthews' Southern Comfort - "Woodstock"</set></template></category>
+<category><pattern>XN1 21 NOV 1970</pattern><template> <set name="vn1">Jimi Hendrix - "Voodoo Chile"</set></template></category>
+<category><pattern>XN1 28 NOV 1970</pattern><template> <set name="vn1">Dave Edmunds - "I Hear You Knocking"</set></template></category>
+<category><pattern>XN1 09 JAN 1971</pattern><template> <set name="vn1">Clive Dunn - "Grandad"</set></template></category>
+<category><pattern>XN1 30 JAN 1971</pattern><template> <set name="vn1">George Harrison - "My Sweet Lord"</set></template></category>
+<category><pattern>XN1 06 MAR 1971</pattern><template> <set name="vn1">Mungo Jerry - "Baby Jump"</set></template></category>
+<category><pattern>XN1 20 MAR 1971</pattern><template> <set name="vn1">T Rex - "Hot Love"</set></template></category>
+<category><pattern>XN1 01 MAY 1971</pattern><template> <set name="vn1">Dave &amp; Ansil Collins - "Double Barrel"</set></template></category>
+<category><pattern>XN1 15 MAY 1971</pattern><template> <set name="vn1">Dawn - "Knock Three Times"</set></template></category>
+<category><pattern>XN1 19 JUN 1971</pattern><template> <set name="vn1">Middle Of The Road - "Chirpy Chirpy Cheep Cheep"</set></template></category>
+<category><pattern>XN1 24 JUL 1971</pattern><template> <set name="vn1">T Rex - "Get It On"</set></template></category>
+<category><pattern>XN1 21 AUG 1971</pattern><template> <set name="vn1">Diana Ross - "I'm Still Waiting"</set></template></category>
+<category><pattern>XN1 18 SEP 1971</pattern><template> <set name="vn1">Tams - "Hey Girl Don't Bother Me"</set></template></category>
+<category><pattern>XN1 09 OCT 1971</pattern><template> <set name="vn1">Rod Stewart - "Maggie May"</set></template></category>
+<category><pattern>XN1 13 NOV 1971</pattern><template> <set name="vn1">Slade - "Coz I Luv You"</set></template></category>
+<category><pattern>XN1 11 DEC 1971</pattern><template> <set name="vn1">Benny Hill - "Ernie (The Fastest Milkman In The West)"</set></template></category>
+<category><pattern>XN1 08 JAN 1972</pattern><template> <set name="vn1">New Seekers - "I'd Like To Teach The World To Sing (In Perfect Harmony)"</set></template></category>
+<category><pattern>XN1 05 FEB 1972</pattern><template> <set name="vn1">T Rex - "Telegram Sam"</set></template></category>
+<category><pattern>XN1 19 FEB 1972</pattern><template> <set name="vn1">Chicory Tip - "Son Of My Father"</set></template></category>
+<category><pattern>XN1 11 MAR 1972</pattern><template> <set name="vn1">Nilsson - "Without You"</set></template></category>
+<category><pattern>XN1 15 APR 1972</pattern><template> <set name="vn1">The Pipes &amp; Drums &amp; Military Band of The Royal Scots Dragoon Guards - "Amazing Grace"</set></template></category>
+<category><pattern>XN1 20 MAY 1972</pattern><template> <set name="vn1">T Rex - "Metal Guru"</set></template></category>
+<category><pattern>XN1 17 JUN 1972</pattern><template> <set name="vn1">Don McLean - "Vincent"</set></template></category>
+<category><pattern>XN1 01 JUL 1972</pattern><template> <set name="vn1">Slade - "Take Me Back 'Ome"</set></template></category>
+<category><pattern>XN1 08 JUL 1972</pattern><template> <set name="vn1">Donny Osmond - "Puppy Love"</set></template></category>
+<category><pattern>XN1 12 AUG 1972</pattern><template> <set name="vn1">Alice Cooper - "School's Out"</set></template></category>
+<category><pattern>XN1 02 SEP 1972</pattern><template> <set name="vn1">Rod Stewart - "You Wear It Well"</set></template></category>
+<category><pattern>XN1 09 SEP 1972</pattern><template> <set name="vn1">Slade - "Mama Weer All Crazee Now"</set></template></category>
+<category><pattern>XN1 30 SEP 1972</pattern><template> <set name="vn1">David Cassidy - "How Can I Be Sure"</set></template></category>
+<category><pattern>XN1 14 OCT 1972</pattern><template> <set name="vn1">Lieutenant Pigeon - "Mouldy Old Dough"</set></template></category>
+<category><pattern>XN1 11 NOV 1972</pattern><template> <set name="vn1">Gilbert O'Sullivan - "Clair"</set></template></category>
+<category><pattern>XN1 25 NOV 1972</pattern><template> <set name="vn1">Chuck Berry - "My Ding-A-Ling"</set></template></category>
+<category><pattern>XN1 23 DEC 1972</pattern><template> <set name="vn1">Little Jimmy Osmond - "Long Haired Lover From Liverpool"</set></template></category>
+<category><pattern>XN1 27 JAN 1973</pattern><template> <set name="vn1">Sweet - "Blockbuster"</set></template></category>
+<category><pattern>XN1 03 MAR 1973</pattern><template> <set name="vn1">Slade - "Cum On Feel The Noize"</set></template></category>
+<category><pattern>XN1 31 MAR 1973</pattern><template> <set name="vn1">Donny Osmond - "The Twelfth Of Never"</set></template></category>
+<category><pattern>XN1 07 APR 1973</pattern><template> <set name="vn1">Gilbert O'Sullivan - "Get Down"</set></template></category>
+<category><pattern>XN1 21 APR 1973</pattern><template> <set name="vn1">Dawn featuring Tony Orlando - "Tie A Yellow Ribbon Round The Old Oak Tree"</set></template></category>
+<category><pattern>XN1 19 MAY 1973</pattern><template> <set name="vn1">Wizzard - "See My Baby Jive"</set></template></category>
+<category><pattern>XN1 16 JUN 1973</pattern><template> <set name="vn1">Suzi Quatro - "Can The Can"</set></template></category>
+<category><pattern>XN1 23 JUN 1973</pattern><template> <set name="vn1">10 CC - "Rubber Bullets"</set></template></category>
+<category><pattern>XN1 30 JUN 1973</pattern><template> <set name="vn1">Slade - "Skweeze Me Pleeze Me"</set></template></category>
+<category><pattern>XN1 21 JUL 1973</pattern><template> <set name="vn1">Peters &amp; Lee - "Welcome Home"</set></template></category>
+<category><pattern>XN1 28 JUL 1973</pattern><template> <set name="vn1">Gary Glitter - "I'm The Leader Of The Gang (I Am)"</set></template></category>
+<category><pattern>XN1 25 AUG 1973</pattern><template> <set name="vn1">Donny Osmond - "Young Love"</set></template></category>
+<category><pattern>XN1 22 SEP 1973</pattern><template> <set name="vn1">Wizzard - "Angel Fingers"</set></template></category>
+<category><pattern>XN1 29 SEP 1973</pattern><template> <set name="vn1">Simon Park Orchestra - "Eye Level"</set></template></category>
+<category><pattern>XN1 27 OCT 1973</pattern><template> <set name="vn1">David Cassidy - "Daydreamer / The Puppy Song"</set></template></category>
+<category><pattern>XN1 17 NOV 1973</pattern><template> <set name="vn1">Gary Glitter - "I Love You Love Me Love"</set></template></category>
+<category><pattern>XN1 15 DEC 1973</pattern><template> <set name="vn1">Slade - "Merry Xmas Everybody"</set></template></category>
+<category><pattern>XN1 19 JAN 1974</pattern><template> <set name="vn1">New Seekers - "You Won't Find Another Fool Like Me"</set></template></category>
+<category><pattern>XN1 26 JAN 1974</pattern><template> <set name="vn1">Mud - "Tiger Feet"</set></template></category>
+<category><pattern>XN1 23 FEB 1974</pattern><template> <set name="vn1">Suzi Quatro - "Devil Gate Drive"</set></template></category>
+<category><pattern>XN1 09 MAR 1974</pattern><template> <set name="vn1">Alvin Stardust - "Jealous Mind"</set></template></category>
+<category><pattern>XN1 16 MAR 1974</pattern><template> <set name="vn1">Paper Lace - "Billy Don't Be A Hero"</set></template></category>
+<category><pattern>XN1 06 APR 1974</pattern><template> <set name="vn1">Terry Jacks - "Seasons In The Sun"</set></template></category>
+<category><pattern>XN1 04 MAY 1974</pattern><template> <set name="vn1">Abba - "Waterloo"</set></template></category>
+<category><pattern>XN1 18 MAY 1974</pattern><template> <set name="vn1">Rubettes - "Sugar Baby Love"</set></template></category>
+<category><pattern>XN1 15 JUN 1974</pattern><template> <set name="vn1">Ray Stevens - "The Streak"</set></template></category>
+<category><pattern>XN1 22 JUN 1974</pattern><template> <set name="vn1">Gary Glitter - "Always Yours"</set></template></category>
+<category><pattern>XN1 29 JUN 1974</pattern><template> <set name="vn1">Charles Aznavour - "She"</set></template></category>
+<category><pattern>XN1 27 JUL 1974</pattern><template> <set name="vn1">George McCrae - "Rock Your Baby"</set></template></category>
+<category><pattern>XN1 17 AUG 1974</pattern><template> <set name="vn1">Three Degrees - "When Will I See You Again"</set></template></category>
+<category><pattern>XN1 31 AUG 1974</pattern><template> <set name="vn1">Osmonds - "Love Me For A Reason"</set></template></category>
+<category><pattern>XN1 21 SEP 1974</pattern><template> <set name="vn1">Carl Douglas - "Kung Fu Fighting"</set></template></category>
+<category><pattern>XN1 12 OCT 1974</pattern><template> <set name="vn1">John Denver - "Annie's Song"</set></template></category>
+<category><pattern>XN1 19 OCT 1974</pattern><template> <set name="vn1">Sweet Sensation - "Sad Sweet Dreamer"</set></template></category>
+<category><pattern>XN1 26 OCT 1974</pattern><template> <set name="vn1">Ken Boothe - "Everything I Own"</set></template></category>
+<category><pattern>XN1 16 NOV 1974</pattern><template> <set name="vn1">David Essex - "Gonna Make You A Star"</set></template></category>
+<category><pattern>XN1 07 DEC 1974</pattern><template> <set name="vn1">Barry White - "You're The First The Last My Everything"</set></template></category>
+<category><pattern>XN1 21 DEC 1974</pattern><template> <set name="vn1">Mud - "Lonely This Christmas"</set></template></category>
+<category><pattern>XN1 18 JAN 1975</pattern><template> <set name="vn1">Status Quo - "Down Down"</set></template></category>
+<category><pattern>XN1 25 JAN 1975</pattern><template> <set name="vn1">Tymes - "Ms Grace"</set></template></category>
+<category><pattern>XN1 01 FEB 1975</pattern><template> <set name="vn1">Pilot - "January"</set></template></category>
+<category><pattern>XN1 22 FEB 1975</pattern><template> <set name="vn1">Steve Harley &amp; Cockney Rebel - "Make Me Smile (Come Up And See Me)"</set></template></category>
+<category><pattern>XN1 08 MAR 1975</pattern><template> <set name="vn1">Telly Savalas - "If"</set></template></category>
+<category><pattern>XN1 22 MAR 1975</pattern><template> <set name="vn1">Bay City Rollers - "Bye Bye Baby"</set></template></category>
+<category><pattern>XN1 03 MAY 1975</pattern><template> <set name="vn1">Mud - "Oh Boy"</set></template></category>
+<category><pattern>XN1 17 MAY 1975</pattern><template> <set name="vn1">Tammy Wynette - "Stand By Your Man"</set></template></category>
+<category><pattern>XN1 07 JUN 1975</pattern><template> <set name="vn1">Windsor Davies &amp; Don Estelle - "Whispering Grass"</set></template></category>
+<category><pattern>XN1 28 JUN 1975</pattern><template> <set name="vn1">10 CC - "I'm Not In Love"</set></template></category>
+<category><pattern>XN1 12 JUL 1975</pattern><template> <set name="vn1">Johnny Nash - "Tears On My Pillow"</set></template></category>
+<category><pattern>XN1 19 JUL 1975</pattern><template> <set name="vn1">Bay City Rollers - "Give A Little Love"</set></template></category>
+<category><pattern>XN1 09 AUG 1975</pattern><template> <set name="vn1">Typically Tropical - "Barbados"</set></template></category>
+<category><pattern>XN1 16 AUG 1975</pattern><template> <set name="vn1">Stylistics - "Can't Give You Anything (But My Love)"</set></template></category>
+<category><pattern>XN1 06 SEP 1975</pattern><template> <set name="vn1">Rod Stewart - "Sailing"</set></template></category>
+<category><pattern>XN1 04 OCT 1975</pattern><template> <set name="vn1">David Essex - "Hold Me Close"</set></template></category>
+<category><pattern>XN1 25 OCT 1975</pattern><template> <set name="vn1">Art Garfunkel - "I Only Have Eyes For You"</set></template></category>
+<category><pattern>XN1 08 NOV 1975</pattern><template> <set name="vn1">David Bowie - "Space Oddity"</set></template></category>
+<category><pattern>XN1 22 NOV 1975</pattern><template> <set name="vn1">Billy Connolly - "D.I.V.O.R.C.E."</set></template></category>
+<category><pattern>XN1 29 NOV 1975</pattern><template> <set name="vn1">Queen - "Bohemian Rhapsody"</set></template></category>
+<category><pattern>XN1 31 JAN 1976</pattern><template> <set name="vn1">Abba - "Mamma Mia"</set></template></category>
+<category><pattern>XN1 14 FEB 1976</pattern><template> <set name="vn1">Slik - "Forever And Ever"</set></template></category>
+<category><pattern>XN1 21 FEB 1976</pattern><template> <set name="vn1">Four Seasons - "December '63 (Oh What A Night)"</set></template></category>
+<category><pattern>XN1 06 MAR 1976</pattern><template> <set name="vn1">Tina Charles - "I Love To Love (But My Baby Loves To Dance)"</set></template></category>
+<category><pattern>XN1 27 MAR 1976</pattern><template> <set name="vn1">Brotherhood Of Man - "Save Your Kisses For Me"</set></template></category>
+<category><pattern>XN1 08 MAY 1976</pattern><template> <set name="vn1">Abba - "Fernando"</set></template></category>
+<category><pattern>XN1 05 JUN 1976</pattern><template> <set name="vn1">J J Barrie - "No Charge"</set></template></category>
+<category><pattern>XN1 12 JUN 1976</pattern><template> <set name="vn1">Wurzels - "Combine Harvester (Brand New Key)"</set></template></category>
+<category><pattern>XN1 26 JUN 1976</pattern><template> <set name="vn1">Real Thing - "You To Me Are Everything"</set></template></category>
+<category><pattern>XN1 17 JUL 1976</pattern><template> <set name="vn1">Demis Roussos - "The Roussos Phenomenon EP (main track: Forever And Ever)"</set></template></category>
+<category><pattern>XN1 24 JUL 1976</pattern><template> <set name="vn1">Elton John &amp; Kiki Dee - "Don't Go Breaking My Heart"</set></template></category>
+<category><pattern>XN1 04 SEP 1976</pattern><template> <set name="vn1">Abba - "Dancing Queen"</set></template></category>
+<category><pattern>XN1 16 OCT 1976</pattern><template> <set name="vn1">Pussycat - "Mississippi"</set></template></category>
+<category><pattern>XN1 13 NOV 1976</pattern><template> <set name="vn1">Chicago - "If You Leave Me Now"</set></template></category>
+<category><pattern>XN1 04 DEC 1976</pattern><template> <set name="vn1">Showaddywaddy - "Under The Moon Of Love"</set></template></category>
+<category><pattern>XN1 25 DEC 1976</pattern><template> <set name="vn1">Johnny Mathis - "When A Child Is Born (Soleado)"</set></template></category>
+<category><pattern>XN1 15 JAN 1977</pattern><template> <set name="vn1">David Soul - "Don't Give Up On Us"</set></template></category>
+<category><pattern>XN1 12 FEB 1977</pattern><template> <set name="vn1">Julie Covington - "Don't Cry For Me Argentina"</set></template></category>
+<category><pattern>XN1 19 FEB 1977</pattern><template> <set name="vn1">Leo Sayer - "When I Need You"</set></template></category>
+<category><pattern>XN1 12 MAR 1977</pattern><template> <set name="vn1">Manhattan Transfer - "Chanson D'Amour"</set></template></category>
+<category><pattern>XN1 02 APR 1977</pattern><template> <set name="vn1">Abba - "Knowing Me Knowing You"</set></template></category>
+<category><pattern>XN1 07 MAY 1977</pattern><template> <set name="vn1">Deniece Williams - "Free"</set></template></category>
+<category><pattern>XN1 21 MAY 1977</pattern><template> <set name="vn1">Rod Stewart - "I Don't Want To Talk About It / First Cut Is The Deepest"</set></template></category>
+<category><pattern>XN1 18 JUN 1977</pattern><template> <set name="vn1">Kenny Rogers - "Lucille"</set></template></category>
+<category><pattern>XN1 25 JUN 1977</pattern><template> <set name="vn1">Jacksons - "Show You The Way To Go"</set></template></category>
+<category><pattern>XN1 02 JUL 1977</pattern><template> <set name="vn1">Hot Chocolate - "So You Win Again"</set></template></category>
+<category><pattern>XN1 23 JUL 1977</pattern><template> <set name="vn1">Donna Summer - "I Feel Love"</set></template></category>
+<category><pattern>XN1 20 AUG 1977</pattern><template> <set name="vn1">Brotherhood Of Man - "Angelo"</set></template></category>
+<category><pattern>XN1 27 AUG 1977</pattern><template> <set name="vn1">Floaters - "Float On"</set></template></category>
+<category><pattern>XN1 03 SEP 1977</pattern><template> <set name="vn1">Elvis Presley - "Way Down"</set></template></category>
+<category><pattern>XN1 08 OCT 1977</pattern><template> <set name="vn1">David Soul - "Silver Lady"</set></template></category>
+<category><pattern>XN1 29 OCT 1977</pattern><template> <set name="vn1">Baccara - "Yes Sir I Can Boogie"</set></template></category>
+<category><pattern>XN1 05 NOV 1977</pattern><template> <set name="vn1">Abba - "The Name Of The Game"</set></template></category>
+<category><pattern>XN1 03 DEC 1977</pattern><template> <set name="vn1">Wings - "Mull Of Kintyre / Girls' School"</set></template></category>
+<category><pattern>XN1 04 FEB 1978</pattern><template> <set name="vn1">Althia &amp; Donna - "Up Town Top Ranking"</set></template></category>
+<category><pattern>XN1 11 FEB 1978</pattern><template> <set name="vn1">Brotherhood Of Man - "Figaro"</set></template></category>
+<category><pattern>XN1 18 FEB 1978</pattern><template> <set name="vn1">Abba - "Take A Chance On Me"</set></template></category>
+<category><pattern>XN1 11 MAR 1978</pattern><template> <set name="vn1">Kate Bush - "Wuthering Heights"</set></template></category>
+<category><pattern>XN1 08 APR 1978</pattern><template> <set name="vn1">Brian &amp; Michael - "Matchstalk Men And Matchstalk Cats And Dogs"</set></template></category>
+<category><pattern>XN1 29 APR 1978</pattern><template> <set name="vn1">Bee Gees - "Night Fever"</set></template></category>
+<category><pattern>XN1 13 MAY 1978</pattern><template> <set name="vn1">Boney M - "Rivers Of Babylon / Brown Girl In The Ring"</set></template></category>
+<category><pattern>XN1 17 JUN 1978</pattern><template> <set name="vn1">John Travolta &amp; Olivia Newton John - "You're The One That I Want"</set></template></category>
+<category><pattern>XN1 19 AUG 1978</pattern><template> <set name="vn1">Commodores - "Three Times A Lady"</set></template></category>
+<category><pattern>XN1 23 SEP 1978</pattern><template> <set name="vn1">10 CC - "Dreadlock Holiday"</set></template></category>
+<category><pattern>XN1 30 SEP 1978</pattern><template> <set name="vn1">John Travolta &amp; Olivia Newton John - "Summer Nights"</set></template></category>
+<category><pattern>XN1 18 NOV 1978</pattern><template> <set name="vn1">Boomtown Rats - "Rat Trap"</set></template></category>
+<category><pattern>XN1 02 DEC 1978</pattern><template> <set name="vn1">Rod Stewart - "Da Ya Think I'm Sexy"</set></template></category>
+<category><pattern>XN1 09 DEC 1978</pattern><template> <set name="vn1">Boney M - "Mary's Boy Child - "Oh My Lord"</set></template></category>
+<category><pattern>XN1 06 JAN 1979</pattern><template> <set name="vn1">Village People - "Y.M.C.A."</set></template></category>
+<category><pattern>XN1 27 JAN 1979</pattern><template> <set name="vn1">Ian Dury &amp; The Blockheads - "Hit Me With Your Rhythm Stick"</set></template></category>
+<category><pattern>XN1 03 FEB 1979</pattern><template> <set name="vn1">Blondie - "Heart Of Glass"</set></template></category>
+<category><pattern>XN1 03 MAR 1979</pattern><template> <set name="vn1">Bee Gees - "Tragedy"</set></template></category>
+<category><pattern>XN1 17 MAR 1979</pattern><template> <set name="vn1">Gloria Gaynor - "I Will Survive"</set></template></category>
+<category><pattern>XN1 14 APR 1979</pattern><template> <set name="vn1">Art Garfunkel - "Bright Eyes"</set></template></category>
+<category><pattern>XN1 26 MAY 1979</pattern><template> <set name="vn1">Blondie - "Sunday Girl"</set></template></category>
+<category><pattern>XN1 16 JUN 1979</pattern><template> <set name="vn1">Anita Ward - "Ring My Bell"</set></template></category>
+<category><pattern>XN1 30 JUN 1979</pattern><template> <set name="vn1">Tubeway Army - "Are 'Friends' Electric"</set></template></category>
+<category><pattern>XN1 28 JUL 1979</pattern><template> <set name="vn1">Boomtown Rats - "I Don't Like Mondays"</set></template></category>
+<category><pattern>XN1 25 AUG 1979</pattern><template> <set name="vn1">Cliff Richard - "We Don't Talk Anymore"</set></template></category>
+<category><pattern>XN1 22 SEP 1979</pattern><template> <set name="vn1">Gary Numan - "Cars"</set></template></category>
+<category><pattern>XN1 29 SEP 1979</pattern><template> <set name="vn1">Police Message - "In A Bottle"</set></template></category>
+<category><pattern>XN1 20 OCT 1979</pattern><template> <set name="vn1">Buggles - "Video Killed The Radio Star"</set></template></category>
+<category><pattern>XN1 27 OCT 1979</pattern><template> <set name="vn1">Lena Martell - "One Day At A Time"</set></template></category>
+<category><pattern>XN1 17 NOV 1979</pattern><template> <set name="vn1">Dr Hook - "When You're In Love With A Beautiful Woman"</set></template></category>
+<category><pattern>XN1 08 DEC 1979</pattern><template> <set name="vn1">Police - "Walking On The Moon"</set></template></category>
+<category><pattern>XN1 15 DEC 1979</pattern><template> <set name="vn1">Pink Floyd - "Another Brick In The Wall"</set></template></category>
+<category><pattern>XN1 19 JAN 1980</pattern><template> <set name="vn1">Pretenders - "Brass In Pocket"</set></template></category>
+<category><pattern>XN1 02 FEB 1980</pattern><template> <set name="vn1">The Special AKA (Specials) - "The Specials Live EP (main track: Too Much Too Young)"</set></template></category>
+<category><pattern>XN1 16 FEB 1980</pattern><template> <set name="vn1">Kenny Rogers - "Coward Of The County"</set></template></category>
+<category><pattern>XN1 01 MAR 1980</pattern><template> <set name="vn1">Blondie - "Atomic"</set></template></category>
+<category><pattern>XN1 15 MAR 1980</pattern><template> <set name="vn1">Fern Kinney - "Together We Are Beautiful"</set></template></category>
+<category><pattern>XN1 22 MAR 1980</pattern><template> <set name="vn1">Jam - "Going Underground / Dreams Of Children"</set></template></category>
+<category><pattern>XN1 12 APR 1980</pattern><template> <set name="vn1">Detroit Spinners - "Working My Way Back To You"</set></template></category>
+<category><pattern>XN1 26 APR 1980</pattern><template> <set name="vn1">Blondie - "Call Me"</set></template></category>
+<category><pattern>XN1 03 MAY 1980</pattern><template> <set name="vn1">Dexy's - "Midnight Runners Geno"</set></template></category>
+<category><pattern>XN1 17 MAY 1980</pattern><template> <set name="vn1">Johnny Logan - "What's Another Year"</set></template></category>
+<category><pattern>XN1 31 MAY 1980</pattern><template> <set name="vn1">Mash - "Suicide Is Painless (Theme from M*A*S*H)"</set></template></category>
+<category><pattern>XN1 21 JUN 1980</pattern><template> <set name="vn1">Don McLean - "Crying"</set></template></category>
+<category><pattern>XN1 12 JUL 1980</pattern><template> <set name="vn1">Olivia Newton John &amp; Electric Light Orchestra - "Xanadu"</set></template></category>
+<category><pattern>XN1 26 JUL 1980</pattern><template> <set name="vn1">Odyssey - "Use It Up And Wear It Out"</set></template></category>
+<category><pattern>XN1 09 AUG 1980</pattern><template> <set name="vn1">Abba - "The Winner Takes It All"</set></template></category>
+<category><pattern>XN1 23 AUG 1980</pattern><template> <set name="vn1">David Bowie - "Ashes To Ashes"</set></template></category>
+<category><pattern>XN1 06 SEP 1980</pattern><template> <set name="vn1">Jam - "Start"</set></template></category>
+<category><pattern>XN1 13 SEP 1980</pattern><template> <set name="vn1">Kelly Marie - "Feels Like I'm In Love"</set></template></category>
+<category><pattern>XN1 27 SEP 1980</pattern><template> <set name="vn1">Police - "Don't Stand So Close To Me"</set></template></category>
+<category><pattern>XN1 25 OCT 1980</pattern><template> <set name="vn1">Barbra Streisand - "Woman In Love"</set></template></category>
+<category><pattern>XN1 15 NOV 1980</pattern><template> <set name="vn1">Blondie - "The Tide Is High"</set></template></category>
+<category><pattern>XN1 29 NOV 1980</pattern><template> <set name="vn1">Abba - "Super Trouper"</set></template></category>
+<category><pattern>XN1 20 DEC 1980</pattern><template> <set name="vn1">John Lennon - "(Just Like) Starting Over"</set></template></category>
+<category><pattern>XN1 27 DEC 1980</pattern><template> <set name="vn1">St Winifred's School Choir - "There's No One Quite Like Grandma"</set></template></category>
+<category><pattern>XN1 10 JAN 1981</pattern><template> <set name="vn1">John Lennon - "Imagine"</set></template></category>
+<category><pattern>XN1 07 FEB 1981</pattern><template> <set name="vn1">John Lennon - "Woman"</set></template></category>
+<category><pattern>XN1 21 FEB 1981</pattern><template> <set name="vn1">Joe Dolce Music Theatre - "Shaddap You Face"</set></template></category>
+<category><pattern>XN1 14 MAR 1981</pattern><template> <set name="vn1">Roxy Music - "Jealous Guy"</set></template></category>
+<category><pattern>XN1 28 MAR 1981</pattern><template> <set name="vn1">Shakin' Stevens - "This Ole House"</set></template></category>
+<category><pattern>XN1 18 APR 1981</pattern><template> <set name="vn1">Bucks Fizz - "Making Your Mind Up"</set></template></category>
+<category><pattern>XN1 09 MAY 1981</pattern><template> <set name="vn1">Adam &amp; The Ants - "Stand And Deliver"</set></template></category>
+<category><pattern>XN1 13 JUN 1981</pattern><template> <set name="vn1">Smokey Robinson - "Being With You"</set></template></category>
+<category><pattern>XN1 27 JUN 1981</pattern><template> <set name="vn1">Michael Jackson - "One Day In Your Life"</set></template></category>
+<category><pattern>XN1 11 JUL 1981</pattern><template> <set name="vn1">Specials - "Ghost Town"</set></template></category>
+<category><pattern>XN1 01 AUG 1981</pattern><template> <set name="vn1">Shakin' Stevens - "Green Door"</set></template></category>
+<category><pattern>XN1 29 AUG 1981</pattern><template> <set name="vn1">Aneka - "Japanese Boy"</set></template></category>
+<category><pattern>XN1 05 SEP 1981</pattern><template> <set name="vn1">Soft Cell - "Tainted Love"</set></template></category>
+<category><pattern>XN1 19 SEP 1981</pattern><template> <set name="vn1">Adam &amp; The Ants - "Prince Charming"</set></template></category>
+<category><pattern>XN1 17 OCT 1981</pattern><template> <set name="vn1">Dave Stewart &amp; Barbara Gaskin - "It's My Party"</set></template></category>
+<category><pattern>XN1 14 NOV 1981</pattern><template> <set name="vn1">Police - "Every Little Thing She Does Is Magic"</set></template></category>
+<category><pattern>XN1 21 NOV 1981</pattern><template> <set name="vn1">Queen &amp; David Bowie - "Under Pressure"</set></template></category>
+<category><pattern>XN1 05 DEC 1981</pattern><template> <set name="vn1">Julio Iglesias - "Begin The Beguine (Volver A Empezar)"</set></template></category>
+<category><pattern>XN1 12 DEC 1981</pattern><template> <set name="vn1">Human League - "Don't You Want Me"</set></template></category>
+<category><pattern>XN1 16 JAN 1982</pattern><template> <set name="vn1">Bucks Fizz - "Land Of Make Believe"</set></template></category>
+<category><pattern>XN1 30 JAN 1982</pattern><template> <set name="vn1">Shakin' Stevens - "Oh Julie"</set></template></category>
+<category><pattern>XN1 06 FEB 1982</pattern><template> <set name="vn1">Kraftwerk - "The Model / Computer Love"</set></template></category>
+<category><pattern>XN1 13 FEB 1982</pattern><template> <set name="vn1">Jam - "Town Called Malice / Precious"</set></template></category>
+<category><pattern>XN1 06 MAR 1982</pattern><template> <set name="vn1">Tight Fit - "The Lion Sleeps Tonight"</set></template></category>
+<category><pattern>XN1 27 MAR 1982</pattern><template> <set name="vn1">Goombay Dance Band - "Seven Tears"</set></template></category>
+<category><pattern>XN1 17 APR 1982</pattern><template> <set name="vn1">Bucks Fizz - "My Camera Never Lies"</set></template></category>
+<category><pattern>XN1 24 APR 1982</pattern><template> <set name="vn1">Paul McCartney &amp; Stevie Wonder - "Ebony And Ivory"</set></template></category>
+<category><pattern>XN1 15 MAY 1982</pattern><template> <set name="vn1">Nicole - "A Little Peace"</set></template></category>
+<category><pattern>XN1 29 MAY 1982</pattern><template> <set name="vn1">Madness - "House Of Fun"</set></template></category>
+<category><pattern>XN1 12 JUN 1982</pattern><template> <set name="vn1">Adam Ant - "Goody Two Shoes"</set></template></category>
+<category><pattern>XN1 26 JUN 1982</pattern><template> <set name="vn1">Charlene - "I've Never Been To Me"</set></template></category>
+<category><pattern>XN1 03 JUL 1982</pattern><template> <set name="vn1">Captain Sensible - "Happy Talk"</set></template></category>
+<category><pattern>XN1 17 JUL 1982</pattern><template> <set name="vn1">Irene Cara - "Fame"</set></template></category>
+<category><pattern>XN1 07 AUG 1982</pattern><template> <set name="vn1">Dexy's Midnight Runners - "Come On Eileen"</set></template></category>
+<category><pattern>XN1 04 SEP 1982</pattern><template> <set name="vn1">Survivor - "Eye Of The Tiger"</set></template></category>
+<category><pattern>XN1 02 OCT 1982</pattern><template> <set name="vn1">Musical Youth - "Pass The Dutchie"</set></template></category>
+<category><pattern>XN1 23 OCT 1982</pattern><template> <set name="vn1">Culture Club - "Do You Really Want To Hurt Me"</set></template></category>
+<category><pattern>XN1 13 NOV 1982</pattern><template> <set name="vn1">Eddy Grant - "I Don't Wanna Dance"</set></template></category>
+<category><pattern>XN1 04 DEC 1982</pattern><template> <set name="vn1">Jam - "Beat Surrender"</set></template></category>
+<category><pattern>XN1 18 DEC 1982</pattern><template> <set name="vn1">Renee &amp; Renato - "Save Your Love"</set></template></category>
+<category><pattern>XN1 15 JAN 1983</pattern><template> <set name="vn1">Phil Collins - "You Can't Hurry Love"</set></template></category>
+<category><pattern>XN1 29 JAN 1983</pattern><template> <set name="vn1">Men At Work - "Down Under"</set></template></category>
+<category><pattern>XN1 19 FEB 1983</pattern><template> <set name="vn1">Kajagoogoo - "Too Shy"</set></template></category>
+<category><pattern>XN1 05 MAR 1983</pattern><template> <set name="vn1">Michael Jackson - "Billie Jean"</set></template></category>
+<category><pattern>XN1 12 MAR 1983</pattern><template> <set name="vn1">Bonnie Tyler - "Total Eclipse Of The Heart"</set></template></category>
+<category><pattern>XN1 26 MAR 1983</pattern><template> <set name="vn1">Duran Duran - "Is There Something I Should Know"</set></template></category>
+<category><pattern>XN1 09 APR 1983</pattern><template> <set name="vn1">David Bowie - "Let's Dance"</set></template></category>
+<category><pattern>XN1 30 APR 1983</pattern><template> <set name="vn1">Spandau Ballet - "True"</set></template></category>
+<category><pattern>XN1 28 MAY 1983</pattern><template> <set name="vn1">New Edition - "Candy Girl"</set></template></category>
+<category><pattern>XN1 04 JUN 1983</pattern><template> <set name="vn1">Police - "Every Breath You Take"</set></template></category>
+<category><pattern>XN1 02 JUL 1983</pattern><template> <set name="vn1">Rod Stewart - "Baby Jane"</set></template></category>
+<category><pattern>XN1 23 JUL 1983</pattern><template> <set name="vn1">Paul Young - "Wherever I Lay My Hat"</set></template></category>
+<category><pattern>XN1 13 AUG 1983</pattern><template> <set name="vn1">K C &amp; The Sunshine Band - "Give It Up"</set></template></category>
+<category><pattern>XN1 03 SEP 1983</pattern><template> <set name="vn1">UB40 - "Red Red Wine"</set></template></category>
+<category><pattern>XN1 24 SEP 1983</pattern><template> <set name="vn1">Culture Club - "Karma Chameleon"</set></template></category>
+<category><pattern>XN1 05 NOV 1983</pattern><template> <set name="vn1">Billy Joel - "Uptown Girl"</set></template></category>
+<category><pattern>XN1 10 DEC 1983</pattern><template> <set name="vn1">Flying Pickets - "Only You"</set></template></category>
+<category><pattern>XN1 14 JAN 1984</pattern><template> <set name="vn1">Paul McCartney - "Pipes Of Peace"</set></template></category>
+<category><pattern>XN1 28 JAN 1984</pattern><template> <set name="vn1">Frankie Goes To Hollywood - "Relax"</set></template></category>
+<category><pattern>XN1 03 MAR 1984</pattern><template> <set name="vn1">Nena - "99 Red Balloons"</set></template></category>
+<category><pattern>XN1 24 MAR 1984</pattern><template> <set name="vn1">Lionel Richie - "Hello"</set></template></category>
+<category><pattern>XN1 05 MAY 1984</pattern><template> <set name="vn1">Duran Duran - "The Reflex"</set></template></category>
+<category><pattern>XN1 02 JUN 1984</pattern><template> <set name="vn1">Wham! - "Wake Me Up Before You Go-Go"</set></template></category>
+<category><pattern>XN1 16 JUN 1984</pattern><template> <set name="vn1">Frankie Goes To Hollywood - "Two Tribes"</set></template></category>
+<category><pattern>XN1 18 AUG 1984</pattern><template> <set name="vn1">George Michael - "Careless Whisper"</set></template></category>
+<category><pattern>XN1 08 SEP 1984</pattern><template> <set name="vn1">Stevie Wonder - "I Just Called To Say I Love You"</set></template></category>
+<category><pattern>XN1 20 OCT 1984</pattern><template> <set name="vn1">Wham! - "Freedom"</set></template></category>
+<category><pattern>XN1 10 NOV 1984</pattern><template> <set name="vn1">Chaka Khan - "I Feel For You"</set></template></category>
+<category><pattern>XN1 01 DEC 1984</pattern><template> <set name="vn1">Jim Diamond - "I Should Have Known Better"</set></template></category>
+<category><pattern>XN1 08 DEC 1984</pattern><template> <set name="vn1">Frankie Goes To Hollywood - "The Power Of Love"</set></template></category>
+<category><pattern>XN1 15 DEC 1984</pattern><template> <set name="vn1">Band Aid - "Do They Know It's Christmas"</set></template></category>
+<category><pattern>XN1 19 JAN 1985</pattern><template> <set name="vn1">Foreigner - "I Want To Know What Love Is"</set></template></category>
+<category><pattern>XN1 09 FEB 1985</pattern><template> <set name="vn1">Elaine Paige &amp; Barbara Dickson - "I Know Him So Well"</set></template></category>
+<category><pattern>XN1 09 MAR 1985</pattern><template> <set name="vn1">Dead Or Alive - "You Spin Me Round (Like A Record)"</set></template></category>
+<category><pattern>XN1 23 MAR 1985</pattern><template> <set name="vn1">Philip Bailey &amp; Phil Collins - "Easy Lover"</set></template></category>
+<category><pattern>XN1 20 APR 1985</pattern><template> <set name="vn1">USA For Africa - "We Are The World"</set></template></category>
+<category><pattern>XN1 04 MAY 1985</pattern><template> <set name="vn1">Phillis Nelson - "Move Closer"</set></template></category>
+<category><pattern>XN1 11 MAY 1985</pattern><template> <set name="vn1">Paul Hardcastle - "19"</set></template></category>
+<category><pattern>XN1 15 JUN 1985</pattern><template> <set name="vn1">Crowd - "You'll Never Walk Alone"</set></template></category>
+<category><pattern>XN1 29 JUN 1985</pattern><template> <set name="vn1">Sister Sledge - "Frankie"</set></template></category>
+<category><pattern>XN1 27 JUL 1985</pattern><template> <set name="vn1">Eurythmics - "There Must Be An Angel (Playing With My Heart)"</set></template></category>
+<category><pattern>XN1 03 AUG 1985</pattern><template> <set name="vn1">Madonna - "Into The Groove"</set></template></category>
+<category><pattern>XN1 31 AUG 1985</pattern><template> <set name="vn1">UB40 &amp; Chrissie Hynde - "I Got You Babe"</set></template></category>
+<category><pattern>XN1 07 SEP 1985</pattern><template> <set name="vn1">David Bowie &amp; Mick Jagger - "Dancing in the Streets"</set></template></category>
+<category><pattern>XN1 05 OCT 1985</pattern><template> <set name="vn1">Midge Ure - "If I Was"</set></template></category>
+<category><pattern>XN1 12 OCT 1985</pattern><template> <set name="vn1">Jennifer Rush - "The Power Of Love"</set></template></category>
+<category><pattern>XN1 16 NOV 1985</pattern><template> <set name="vn1">Feargal Sharkey - "A Good Heart"</set></template></category>
+<category><pattern>XN1 30 NOV 1985</pattern><template> <set name="vn1">Wham! - "I'm Your Man"</set></template></category>
+<category><pattern>XN1 14 DEC 1985</pattern><template> <set name="vn1">Whitney Houston - "Saving All My Love For You"</set></template></category>
+<category><pattern>XN1 28 DEC 1985</pattern><template> <set name="vn1">Shakin' Stevens - "Merry Christmas Everyone"</set></template></category>
+<category><pattern>XN1 11 JAN 1986</pattern><template> <set name="vn1">Pet Shop Boys - "West End Girls"</set></template></category>
+<category><pattern>XN1 25 JAN 1986</pattern><template> <set name="vn1">A-ha - "The Sun Always Shines On TV"</set></template></category>
+<category><pattern>XN1 08 FEB 1986</pattern><template> <set name="vn1">Billy Ocean - "When The Going Gets Tough The Tough Get Going"</set></template></category>
+<category><pattern>XN1 08 MAR 1986</pattern><template> <set name="vn1">Diana Ross - "Chain Reaction"</set></template></category>
+<category><pattern>XN1 29 MAR 1986</pattern><template> <set name="vn1">Cliff Richard &amp; The Young Ones - "Living Doll"</set></template></category>
+<category><pattern>XN1 19 APR 1986</pattern><template> <set name="vn1">George Michael - "A Different Corner"</set></template></category>
+<category><pattern>XN1 10 MAY 1986</pattern><template> <set name="vn1">Falco - "Rock Me Amadeus"</set></template></category>
+<category><pattern>XN1 17 MAY 1986</pattern><template> <set name="vn1">Spitting Image - "The Chicken Song"</set></template></category>
+<category><pattern>XN1 07 JUN 1986</pattern><template> <set name="vn1">Doctor &amp; The Medics - "Spirit In The Sky"</set></template></category>
+<category><pattern>XN1 28 JUN 1986</pattern><template> <set name="vn1">Wham! - "The Edge Of Heaven"</set></template></category>
+<category><pattern>XN1 12 JUL 1986</pattern><template> <set name="vn1">Madonna - "Papa Don't Preach"</set></template></category>
+<category><pattern>XN1 02 AUG 1986</pattern><template> <set name="vn1">Chris de Burgh - "The Lady In Red"</set></template></category>
+<category><pattern>XN1 23 AUG 1986</pattern><template> <set name="vn1">Boris Gardiner - "I Want To Wake Up With You"</set></template></category>
+<category><pattern>XN1 13 SEP 1986</pattern><template> <set name="vn1">Communards - "Don't Leave Me This Way"</set></template></category>
+<category><pattern>XN1 11 OCT 1986</pattern><template> <set name="vn1">Madonna - "True Blue"</set></template></category>
+<category><pattern>XN1 18 OCT 1986</pattern><template> <set name="vn1">Nick Berry - "Every Loser Wins"</set></template></category>
+<category><pattern>XN1 08 NOV 1986</pattern><template> <set name="vn1">Berlin - "Take My Breath Away"</set></template></category>
+<category><pattern>XN1 06 DEC 1986</pattern><template> <set name="vn1">Europe - "The Final Countdown"</set></template></category>
+<category><pattern>XN1 20 DEC 1986</pattern><template> <set name="vn1">Housemartins - "Caravan Of Love"</set></template></category>
+<category><pattern>XN1 27 DEC 1986</pattern><template> <set name="vn1">Jackie Wilson - "Reet Petite"</set></template></category>
+<category><pattern>XN1 24 JAN 1987</pattern><template> <set name="vn1">Steve 'Silk' Hurley - "Jack Your Body"</set></template></category>
+<category><pattern>XN1 07 FEB 1987</pattern><template> <set name="vn1">George Michael &amp; Aretha Franklin - "I Knew You Were Waiting (For Me)"</set></template></category>
+<category><pattern>XN1 21 FEB 1987</pattern><template> <set name="vn1">Ben E King - "Stand By Me"</set></template></category>
+<category><pattern>XN1 14 MAR 1987</pattern><template> <set name="vn1">Boy George - "Everything I Own"</set></template></category>
+<category><pattern>XN1 28 MAR 1987</pattern><template> <set name="vn1">Mel &amp; Kim - "Respectable"</set></template></category>
+<category><pattern>XN1 04 APR 1987</pattern><template> <set name="vn1">Ferry Aid - "Let It Be"</set></template></category>
+<category><pattern>XN1 25 APR 1987</pattern><template> <set name="vn1">Madonna - "La Isla Bonita"</set></template></category>
+<category><pattern>XN1 09 MAY 1987</pattern><template> <set name="vn1">Starship - "Nothing's Gonna Stop Us Now"</set></template></category>
+<category><pattern>XN1 06 JUN 1987</pattern><template> <set name="vn1">Whitney Houston - "I Wanna Dance With Somebody (Who Loves Me)"</set></template></category>
+<category><pattern>XN1 20 JUN 1987</pattern><template> <set name="vn1">The Firm - "Star Trekkin'"</set></template></category>
+<category><pattern>XN1 04 JUL 1987</pattern><template> <set name="vn1">Pet Shop Boys - "It's A Sin"</set></template></category>
+<category><pattern>XN1 25 JUL 1987</pattern><template> <set name="vn1">Madonna - "Who's That Girl"</set></template></category>
+<category><pattern>XN1 01 AUG 1987</pattern><template> <set name="vn1">Los Lobos - "La Bamba"</set></template></category>
+<category><pattern>XN1 15 AUG 1987</pattern><template> <set name="vn1">Michael Jackson - "I Just Can't Stop Loving You"</set></template></category>
+<category><pattern>XN1 29 AUG 1987</pattern><template> <set name="vn1">Rick Astley - "Never Gonna Give You Up"</set></template></category>
+<category><pattern>XN1 03 OCT 1987</pattern><template> <set name="vn1">M/A/R/R/S - "Pump Up The Volume / Anitina (The First Time I See She Dance)"</set></template></category>
+<category><pattern>XN1 17 OCT 1987</pattern><template> <set name="vn1">Bee Gees - "You Win Again"</set></template></category>
+<category><pattern>XN1 14 NOV 1987</pattern><template> <set name="vn1">T'Pau - "China In Your Hand"</set></template></category>
+<category><pattern>XN1 19 DEC 1987</pattern><template> <set name="vn1">Pet Shop Boys - "Always On My Mind"</set></template></category>
+<category><pattern>XN1 16 JAN 1988</pattern><template> <set name="vn1">Belinda Carlisle - "Heaven Is A Place On Earth"</set></template></category>
+<category><pattern>XN1 30 JAN 1988</pattern><template> <set name="vn1">Tiffany - "I Think We're Alone Now"</set></template></category>
+<category><pattern>XN1 20 FEB 1988</pattern><template> <set name="vn1">Kylie Minogue - "I Should Be So Lucky"</set></template></category>
+<category><pattern>XN1 26 MAR 1988</pattern><template> <set name="vn1">Aswad - "Don't Turn Around"</set></template></category>
+<category><pattern>XN1 09 APR 1988</pattern><template> <set name="vn1">Pet Shop Boys - "Heart"</set></template></category>
+<category><pattern>XN1 30 APR 1988</pattern><template> <set name="vn1">S'Express - "Theme from S'Express"</set></template></category>
+<category><pattern>XN1 14 MAY 1988</pattern><template> <set name="vn1">Fairground Attraction - "Perfect"</set></template></category>
+<category><pattern>XN1 21 MAY 1988</pattern><template> <set name="vn1">Wet Wet Wet / Billy Bragg - "With A Little Help From My Friends / She's Leaving Home"</set></template></category>
+<category><pattern>XN1 18 JUN 1988</pattern><template> <set name="vn1">Timelords - "Doctorin' The Tardis"</set></template></category>
+<category><pattern>XN1 25 JUN 1988</pattern><template> <set name="vn1">Bros - "I Owe You Nothing"</set></template></category>
+<category><pattern>XN1 09 JUL 1988</pattern><template> <set name="vn1">Glenn Medeiros - "Nothing's Gonna Change My Love For You"</set></template></category>
+<category><pattern>XN1 06 AUG 1988</pattern><template> <set name="vn1">Yazz &amp; The Plastic Population - "The Only Way Is Up"</set></template></category>
+<category><pattern>XN1 10 SEP 1988</pattern><template> <set name="vn1">Phil Collins - "A Groovy Kind Of Love"</set></template></category>
+<category><pattern>XN1 24 SEP 1988</pattern><template> <set name="vn1">Hollies - "He Ain't Heavy He's My Brother"</set></template></category>
+<category><pattern>XN1 08 OCT 1988</pattern><template> <set name="vn1">U2 - "Desire"</set></template></category>
+<category><pattern>XN1 15 OCT 1988</pattern><template> <set name="vn1">Whitney Houston - "One Moment In Time"</set></template></category>
+<category><pattern>XN1 29 OCT 1988</pattern><template> <set name="vn1">Enya - "Orinoco Flow (Sail Away)"</set></template></category>
+<category><pattern>XN1 19 NOV 1988</pattern><template> <set name="vn1">Robin Beck - "The First Time"</set></template></category>
+<category><pattern>XN1 10 DEC 1988</pattern><template> <set name="vn1">Cliff Richard - "Mistletoe &amp; Wine"</set></template></category>
+<category><pattern>XN1 07 JAN 1989</pattern><template> <set name="vn1">Kylie Minogue &amp; Jason Donovan - "Especially For You"</set></template></category>
+<category><pattern>XN1 28 JAN 1989</pattern><template> <set name="vn1">Marc Almond with Gene Pitney - "Somethings Gotten Hold Of My Heart"</set></template></category>
+<category><pattern>XN1 25 FEB 1989</pattern><template> <set name="vn1">Simple Minds - "Belfast Child"</set></template></category>
+<category><pattern>XN1 11 MAR 1989</pattern><template> <set name="vn1">Jason Donovan - "Too Many Broken Hearts"</set></template></category>
+<category><pattern>XN1 25 MAR 1989</pattern><template> <set name="vn1">Madonna - "Like A Prayer"</set></template></category>
+<category><pattern>XN1 15 APR 1989</pattern><template> <set name="vn1">Bangles - "Eternal Flame"</set></template></category>
+<category><pattern>XN1 13 MAY 1989</pattern><template> <set name="vn1">Kylie Minogue - "Hand On Your Heart"</set></template></category>
+<category><pattern>XN1 20 MAY 1989</pattern><template> <set name="vn1">Gerry Marsden / Paul McCartney / Holly Johnson &amp; Christians - "Ferry 'Cross The Mersey"</set></template></category>
+<category><pattern>XN1 10 JUN 1989</pattern><template> <set name="vn1">Jason Donovan - "Sealed With A Kiss"</set></template></category>
+<category><pattern>XN1 24 JUN 1989</pattern><template> <set name="vn1">Soul II Soul featuring Caron Wheeler - "Back To Life"</set></template></category>
+<category><pattern>XN1 22 JUL 1989</pattern><template> <set name="vn1">Sonia - "You'll Never Stop Me Loving You"</set></template></category>
+<category><pattern>XN1 05 AUG 1989</pattern><template> <set name="vn1">Jive Bunny &amp; The Mastermixers - "Swing The Mood"</set></template></category>
+<category><pattern>XN1 09 SEP 1989</pattern><template> <set name="vn1">Black Box - "Ride On Time"</set></template></category>
+<category><pattern>XN1 21 OCT 1989</pattern><template> <set name="vn1">Jive Bunny &amp; The Mastermixers - "That's What I Like"</set></template></category>
+<category><pattern>XN1 11 NOV 1989</pattern><template> <set name="vn1">Lisa Stansfield - "All Around The World"</set></template></category>
+<category><pattern>XN1 25 NOV 1989</pattern><template> <set name="vn1">New Kids On The Block - "You Got It (The Right Stuff)"</set></template></category>
+<category><pattern>XN1 16 DEC 1989</pattern><template> <set name="vn1">Jive Bunny &amp; The Mastermixers - "Let's Party"</set></template></category>
+<category><pattern>XN1 23 DEC 1989</pattern><template> <set name="vn1">Band Aid II - "Do They Know It's Christmas"</set></template></category>
+<category><pattern>XN1 16 JAN 1990</pattern><template> <set name="vn1">New Kids On The Block - "Hangin' Tough"</set></template></category>
+<category><pattern>XN1 27 JAN 1990</pattern><template> <set name="vn1">Kylie Minogue - "Tears On My Pillow"</set></template></category>
+<category><pattern>XN1 03 FEB 1990</pattern><template> <set name="vn1">Sinead O'Connor - "Nothing Compares 2 U"</set></template></category>
+<category><pattern>XN1 03 MAR 1990</pattern><template> <set name="vn1">Beats International - "Dub Be Good To Me"</set></template></category>
+<category><pattern>XN1 31 MAR 1990</pattern><template> <set name="vn1">Snap - "The Power"</set></template></category>
+<category><pattern>XN1 14 APR 1990</pattern><template> <set name="vn1">Madonna - "Vogue"</set></template></category>
+<category><pattern>XN1 12 MAY 1990</pattern><template> <set name="vn1">Adamski - "Killer"</set></template></category>
+<category><pattern>XN1 09 JUN 1990</pattern><template> <set name="vn1">EnglandNewOrder - "World In Motion"</set></template></category>
+<category><pattern>XN1 23 JUN 1990</pattern><template> <set name="vn1">Elton John - "Sacrifice / Healing Hands"</set></template></category>
+<category><pattern>XN1 28 JUL 1990</pattern><template> <set name="vn1">Partners In Kryme - "Turtle Power"</set></template></category>
+<category><pattern>XN1 25 AUG 1990</pattern><template> <set name="vn1">Bombalurina - "Itsy Bitsy Teeny Weeny Yellow Polka Dot Bikini"</set></template></category>
+<category><pattern>XN1 15 SEP 1990</pattern><template> <set name="vn1">Steve Miller Band - "The Joker"</set></template></category>
+<category><pattern>XN1 29 SEP 1990</pattern><template> <set name="vn1">Maria McKee - "Show Me Heaven"</set></template></category>
+<category><pattern>XN1 27 OCT 1990</pattern><template> <set name="vn1">Beautiful South - "A Little Time"</set></template></category>
+<category><pattern>XN1 03 NOV 1990</pattern><template> <set name="vn1">Righteous Brothers - "Unchained Melody"</set></template></category>
+<category><pattern>XN1 01 DEC 1990</pattern><template> <set name="vn1">Vanilla Ice - "Ice Ice Ice Baby"</set></template></category>
+<category><pattern>XN1 22 DEC 1990</pattern><template> <set name="vn1">Cliff Richard - "Saviour's Day"</set></template></category>
+<category><pattern>XN1 05 JAN 1991</pattern><template> <set name="vn1">Iron Maiden - "Bring Your Daughter To The Slaughter"</set></template></category>
+<category><pattern>XN1 19 JAN 1991</pattern><template> <set name="vn1">Enigma - "Sadness Part 1"</set></template></category>
+<category><pattern>XN1 26 JAN 1991</pattern><template> <set name="vn1">Queen - "Innuendo"</set></template></category>
+<category><pattern>XN1 02 FEB 1991</pattern><template> <set name="vn1">KLF - "3 AM Eternal"</set></template></category>
+<category><pattern>XN1 16 FEB 1991</pattern><template> <set name="vn1">Simpsons - "Do The Bartman"</set></template></category>
+<category><pattern>XN1 09 MAR 1991</pattern><template> <set name="vn1">Clash - "Should I Stay Or Should I Go"</set></template></category>
+<category><pattern>XN1 23 MAR 1991</pattern><template> <set name="vn1">Hale &amp; Pace - "The Stonk"</set></template></category>
+<category><pattern>XN1 30 MAR 1991</pattern><template> <set name="vn1">Chesney Hawkes - "The One And Only"</set></template></category>
+<category><pattern>XN1 04 MAY 1991</pattern><template> <set name="vn1">Cher - "Shoop Shoop Song (It's In His Kiss)"</set></template></category>
+<category><pattern>XN1 08 JUN 1991</pattern><template> <set name="vn1">Color Me Badd - "I Wanna Sex You Up"</set></template></category>
+<category><pattern>XN1 29 JUN 1991</pattern><template> <set name="vn1">Jason Donovan - "Any Dream Will Do"</set></template></category>
+<category><pattern>XN1 13 JUL 1991</pattern><template> <set name="vn1">Bryan Adams - "(Everything I Do) I Do It For You"</set></template></category>
+<category><pattern>XN1 02 NOV 1991</pattern><template> <set name="vn1">U2 - "The Fly"</set></template></category>
+<category><pattern>XN1 09 NOV 1991</pattern><template> <set name="vn1">Vic Reeves &amp; The Wonder Stuff - "Dizzy"</set></template></category>
+<category><pattern>XN1 23 NOV 1991</pattern><template> <set name="vn1">Michael Jackson - "Black Or White"</set></template></category>
+<category><pattern>XN1 07 DEC 1991</pattern><template> <set name="vn1">George Michael &amp; Elton John - "Don't Let The Sun Go Down On Me"</set></template></category>
+<category><pattern>XN1 21 DEC 1991</pattern><template> <set name="vn1">Queen - "Bohemian Rhapsody / These Are The Days Of Our Lives"</set></template></category>
+<category><pattern>XN1 25 JAN 1992</pattern><template> <set name="vn1">Wet Wet Wet - "Goodnight Girl"</set></template></category>
+<category><pattern>XN1 22 FEB 1992</pattern><template> <set name="vn1">Shakespears Sister - "Stay"</set></template></category>
+<category><pattern>XN1 18 APR 1992</pattern><template> <set name="vn1">Right Said Fred - "Deeply Dippy"</set></template></category>
+<category><pattern>XN1 09 MAY 1992</pattern><template> <set name="vn1">KWS - "Please Don't Go / Game Boy"</set></template></category>
+<category><pattern>XN1 13 JUN 1992</pattern><template> <set name="vn1">Erasure - "Abba-esque EP"</set></template></category>
+<category><pattern>XN1 18 JUL 1992</pattern><template> <set name="vn1">Jimmy Nail - "Ain't No Doubt"</set></template></category>
+<category><pattern>XN1 08 AUG 1992</pattern><template> <set name="vn1">Snap - "Rhythm Is A Dancer"</set></template></category>
+<category><pattern>XN1 19 SEP 1992</pattern><template> <set name="vn1">Shamen - "Ebeneezer Goode"</set></template></category>
+<category><pattern>XN1 17 OCT 1992</pattern><template> <set name="vn1">Tasmin Archer - "Sleeping Satellite"</set></template></category>
+<category><pattern>XN1 31 OCT 1992</pattern><template> <set name="vn1">Boyz II Men - "End Of The Road"</set></template></category>
+<category><pattern>XN1 21 NOV 1992</pattern><template> <set name="vn1">Charles &amp; Eddie - "Would I Lie To You"</set></template></category>
+<category><pattern>XN1 05 DEC 1992</pattern><template> <set name="vn1">Whitney Houston - "I Will Always Love You"</set></template></category>
+<category><pattern>XN1 13 FEB 1993</pattern><template> <set name="vn1">2 Unlimited - "No Limit"</set></template></category>
+<category><pattern>XN1 20 MAR 1993</pattern><template> <set name="vn1">Shaggy - "Oh Carolina"</set></template></category>
+<category><pattern>XN1 03 APR 1993</pattern><template> <set name="vn1">Bluebells - "Young At Heart"</set></template></category>
+<category><pattern>XN1 01 MAY 1993</pattern><template> <set name="vn1">George Michael &amp; Queen with Lisa Stansfield - "Five Live (EP)"</set></template></category>
+<category><pattern>XN1 22 MAY 1993</pattern><template> <set name="vn1">Ace Of Base - "All That She Wants"</set></template></category>
+<category><pattern>XN1 12 JUN 1993</pattern><template> <set name="vn1">UB40 - "(I Can't Help) Falling In Love With You"</set></template></category>
+<category><pattern>XN1 26 JUN 1993</pattern><template> <set name="vn1">Gabrielle - "Dreams"</set></template></category>
+<category><pattern>XN1 17 JUL 1993</pattern><template> <set name="vn1">Take That - "Pray"</set></template></category>
+<category><pattern>XN1 14 AUG 1993</pattern><template> <set name="vn1">Freddie Mercury - "Living On My Own"</set></template></category>
+<category><pattern>XN1 28 AUG 1993</pattern><template> <set name="vn1">Culture Beat - "Mr Vain"</set></template></category>
+<category><pattern>XN1 25 SEP 1993</pattern><template> <set name="vn1">Jazzy Jeff &amp; The Fresh Prince (Will Smith) - "Boom! Shake The Room"</set></template></category>
+<category><pattern>XN1 09 OCT 1993</pattern><template> <set name="vn1">Take That feat. Lulu - "Relight my Fire"</set></template></category>
+<category><pattern>XN1 23 OCT 1993</pattern><template> <set name="vn1">Meat Loaf - "I'd Do Anything For Love (But I Won't Do That)"</set></template></category>
+<category><pattern>XN1 11 DEC 1993</pattern><template> <set name="vn1">Mr Blobby - "Mr Blobby"</set></template></category>
+<category><pattern>XN1 18 DEC 1993</pattern><template> <set name="vn1">Take That - "Babe"</set></template></category>
+<category><pattern>XN1 25 DEC 1993</pattern><template> <set name="vn1">Mr Blobby - "Mr Blobby"</set></template></category>
+<category><pattern>XN1 08 JAN 1994</pattern><template> <set name="vn1">Chaka Demus &amp; Pliers - "Twist &amp; Shout"</set></template></category>
+<category><pattern>XN1 22 JAN 1994</pattern><template> <set name="vn1">D:Ream - "Things Can Only Get Better"</set></template></category>
+<category><pattern>XN1 19 FEB 1994</pattern><template> <set name="vn1">Mariah Carey - "Without You"</set></template></category>
+<category><pattern>XN1 19 MAR 1994</pattern><template> <set name="vn1">Doop - "Doop"</set></template></category>
+<category><pattern>XN1 09 APR 1994</pattern><template> <set name="vn1">Take That - "Everything Changes"</set></template></category>
+<category><pattern>XN1 23 APR 1994</pattern><template> <set name="vn1">Prince - "The Most Beautiful Girl In The World"</set></template></category>
+<category><pattern>XN1 07 MAY 1994</pattern><template> <set name="vn1">Tony Di Bart - "The Real Thing"</set></template></category>
+<category><pattern>XN1 14 MAY 1994</pattern><template> <set name="vn1">Stiltskin - "Inside"</set></template></category>
+<category><pattern>XN1 21 MAY 1994</pattern><template> <set name="vn1">Manchester United 1994 Football Squad - "Come On You Reds"</set></template></category>
+<category><pattern>XN1 04 JUN 1994</pattern><template> <set name="vn1">Wet Wet Wet - "Love Is All Around"</set></template></category>
+<category><pattern>XN1 17 SEP 1994</pattern><template> <set name="vn1">Whigfield - "Saturday Night"</set></template></category>
+<category><pattern>XN1 15 OCT 1994</pattern><template> <set name="vn1">Take That - "Sure"</set></template></category>
+<category><pattern>XN1 29 OCT 1994</pattern><template> <set name="vn1">Pato Banton (with Robin &amp; Ali Campbell) - "Baby Come Back"</set></template></category>
+<category><pattern>XN1 26 NOV 1994</pattern><template> <set name="vn1">Baby D - "Let Me Be Your Fantasy"</set></template></category>
+<category><pattern>XN1 10 DEC 1994</pattern><template> <set name="vn1">East 17 - "Stay Another Day"</set></template></category>
+<category><pattern>XN1 14 JAN 1995</pattern><template> <set name="vn1">Rednex - "Cotton Eye Joe"</set></template></category>
+<category><pattern>XN1 04 FEB 1995</pattern><template> <set name="vn1">Celine Dion - "Think Twice"</set></template></category>
+<category><pattern>XN1 25 MAR 1995</pattern><template> <set name="vn1">Cher / Chrissie Hynde / Neneh Cherry &amp; Eric Clapton - "Love Can Build A Bridge"</set></template></category>
+<category><pattern>XN1 01 APR 1995</pattern><template> <set name="vn1">Outhere Brothers - "Don't Stop (Wiggle Wiggle)"</set></template></category>
+<category><pattern>XN1 08 APR 1995</pattern><template> <set name="vn1">Take That - "Back For Good"</set></template></category>
+<category><pattern>XN1 06 MAY 1995</pattern><template> <set name="vn1">Oasis - "Some Might Say"</set></template></category>
+<category><pattern>XN1 13 MAY 1995</pattern><template> <set name="vn1">Livin' Joy - "Dreamer"</set></template></category>
+<category><pattern>XN1 20 MAY 1995</pattern><template> <set name="vn1">Robson Green &amp; Jerome Flynn - "Unchained Melody / White Cliffs Of Dover"</set></template></category>
+<category><pattern>XN1 08 JUL 1995</pattern><template> <set name="vn1">Outhere Brothers - "Boom Boom Boom"</set></template></category>
+<category><pattern>XN1 05 AUG 1995</pattern><template> <set name="vn1">Take That - "Never Forget"</set></template></category>
+<category><pattern>XN1 26 AUG 1995</pattern><template> <set name="vn1">Blur - "Country House"</set></template></category>
+<category><pattern>XN1 09 SEP 1995</pattern><template> <set name="vn1">Michael Jackson - "You Are Not Alone"</set></template></category>
+<category><pattern>XN1 23 SEP 1995</pattern><template> <set name="vn1">Shaggy - "Boombastic"</set></template></category>
+<category><pattern>XN1 30 SEP 1995</pattern><template> <set name="vn1">Simply Red - "Fairground"</set></template></category>
+<category><pattern>XN1 28 OCT 1995</pattern><template> <set name="vn1">Coolio featuring LV - "Gangsta's Paradise"</set></template></category>
+<category><pattern>XN1 11 NOV 1995</pattern><template> <set name="vn1">Robson &amp; Jerome - "I Believe / Up On The Roof"</set></template></category>
+<category><pattern>XN1 09 DEC 1995</pattern><template> <set name="vn1">Michael Jackson - "Earth Song"</set></template></category>
+<category><pattern>XN1 20 JAN 1996</pattern><template> <set name="vn1">George Michael - "Jesus To A Child"</set></template></category>
+<category><pattern>XN1 27 JAN 1996</pattern><template> <set name="vn1">Babylon Zoo - "Spaceman"</set></template></category>
+<category><pattern>XN1 02 MAR 1996</pattern><template> <set name="vn1">Oasis - "Don't Look Back In Anger"</set></template></category>
+<category><pattern>XN1 09 MAR 1996</pattern><template> <set name="vn1">Take That - "How Deep Is Your Love"</set></template></category>
+<category><pattern>XN1 30 MAR 1996</pattern><template> <set name="vn1">Prodigy - "Firestarter"</set></template></category>
+<category><pattern>XN1 20 APR 1996</pattern><template> <set name="vn1">Mark Morrison - "Return Of The Mack"</set></template></category>
+<category><pattern>XN1 04 MAY 1996</pattern><template> <set name="vn1">George Michael - "Fastlove"</set></template></category>
+<category><pattern>XN1 25 MAY 1996</pattern><template> <set name="vn1">Gina G - "Ooh Aah... Just A Little Bit"</set></template></category>
+<category><pattern>XN1 01 JUN 1996</pattern><template> <set name="vn1">Baddiel Skinner &amp; Lightning Seeds - "Three Lions"</set></template></category>
+<category><pattern>XN1 08 JUN 1996</pattern><template> <set name="vn1">Fugees - "Killing Me Softly"</set></template></category>
+<category><pattern>XN1 06 JUL 1996</pattern><template> <set name="vn1">Baddiel Skinner &amp; Lightning Seeds - "Three Lions"</set></template></category>
+<category><pattern>XN1 13 JUL 1996</pattern><template> <set name="vn1">Fugees - "Killing Me Softly"</set></template></category>
+<category><pattern>XN1 20 JUL 1996</pattern><template> <set name="vn1">Gary Barlow - "Forever Love"</set></template></category>
+<category><pattern>XN1 27 JUL 1996</pattern><template> <set name="vn1">Spice Girls - "Wannabe"</set></template></category>
+<category><pattern>XN1 14 SEP 1996</pattern><template> <set name="vn1">Peter Andre - "Flava"</set></template></category>
+<category><pattern>XN1 21 SEP 1996</pattern><template> <set name="vn1">Fugees - "Ready Or Not"</set></template></category>
+<category><pattern>XN1 05 OCT 1996</pattern><template> <set name="vn1">Deep Blue Something - "Breakfast At Tiffany's"</set></template></category>
+<category><pattern>XN1 12 OCT 1996</pattern><template> <set name="vn1">Chemical Brothers - "Setting Sun"</set></template></category>
+<category><pattern>XN1 19 OCT 1996</pattern><template> <set name="vn1">Boyzone - "Words"</set></template></category>
+<category><pattern>XN1 26 OCT 1996</pattern><template> <set name="vn1">Spice Girls - "Say You'll Be There"</set></template></category>
+<category><pattern>XN1 09 NOV 1996</pattern><template> <set name="vn1">Robson &amp; Jerome - "What Becomes Of The Broken Hearted / Saturday Night At The Movies / You'll Never Walk Alone"</set></template></category>
+<category><pattern>XN1 23 NOV 1996</pattern><template> <set name="vn1">Prodigy - "Breathe"</set></template></category>
+<category><pattern>XN1 07 DEC 1996</pattern><template> <set name="vn1">Peter Andre - "I Feel You"</set></template></category>
+<category><pattern>XN1 14 DEC 1996</pattern><template> <set name="vn1">Boyzone - "A Different Beat"</set></template></category>
+<category><pattern>XN1 21 DEC 1996</pattern><template> <set name="vn1">Dunblane - "Knockin' On Heaven's Door / Throw These Guns Away"</set></template></category>
+<category><pattern>XN1 28 DEC 1996</pattern><template> <set name="vn1">Spice Girls - "2 Become 1"</set></template></category>
+<category><pattern>XN1 18 JAN 1997</pattern><template> <set name="vn1">Tori Amos - "Professional Widow (It's Got To Be Big)"</set></template></category>
+<category><pattern>XN1 25 JAN 1997</pattern><template> <set name="vn1">White Town - "Your Woman"</set></template></category>
+<category><pattern>XN1 01 FEB 1997</pattern><template> <set name="vn1">Blur - "Beetlebum"</set></template></category>
+<category><pattern>XN1 08 FEB 1997</pattern><template> <set name="vn1">LL Cool J - "Ain't Nobody"</set></template></category>
+<category><pattern>XN1 15 FEB 1997</pattern><template> <set name="vn1">U2 - "Discotheque"</set></template></category>
+<category><pattern>XN1 22 FEB 1997</pattern><template> <set name="vn1">No Doubt - "Don't Speak"</set></template></category>
+<category><pattern>XN1 15 MAR 1997</pattern><template> <set name="vn1">Spice Girls- Mama / Who Do You Think You Are"</set></template></category>
+<category><pattern>XN1 05 APR 1997</pattern><template> <set name="vn1">Chemical Brothers - "Block Rockin' Beats"</set></template></category>
+<category><pattern>XN1 12 APR 1997</pattern><template> <set name="vn1">R Kelly - "I Believe I Can Fly"</set></template></category>
+<category><pattern>XN1 03 MAY 1997</pattern><template> <set name="vn1">Michael Jackson - "Blood On The Dance Floor"</set></template></category>
+<category><pattern>XN1 10 MAY 1997</pattern><template> <set name="vn1">Gary Barlow - "Love Won't Wait"</set></template></category>
+<category><pattern>XN1 17 MAY 1997</pattern><template> <set name="vn1">Olive - "You're Not Alone"</set></template></category>
+<category><pattern>XN1 31 MAY 1997</pattern><template> <set name="vn1">Eternal featuring Bebe Winans - "I Wanna Be The One"</set></template></category>
+<category><pattern>XN1 07 JUN 1997</pattern><template> <set name="vn1">Hanson - "Mmmbop"</set></template></category>
+<category><pattern>XN1 28 JUN 1997</pattern><template> <set name="vn1">Puff Daddy &amp; Faith Evans - "I'll Be Missing You"</set></template></category>
+<category><pattern>XN1 19 JUL 1997</pattern><template> <set name="vn1">Oasis - "D'you Know What I Mean"</set></template></category>
+<category><pattern>XN1 26 JUL 1997</pattern><template> <set name="vn1">Puff Daddy &amp; Faith Evans - "I'll Be Missing You"</set></template></category>
+<category><pattern>XN1 16 AUG 1997</pattern><template> <set name="vn1">Will Smith - "Men In Black"</set></template></category>
+<category><pattern>XN1 13 SEP 1997</pattern><template> <set name="vn1">Verve - "The Drugs Don't Work"</set></template></category>
+<category><pattern>XN1 20 SEP 1997</pattern><template> <set name="vn1">Elton John - "Candle In The Wind 97 / Something About The Way You Look Tonight"</set></template></category>
+<category><pattern>XN1 25 OCT 1997</pattern><template> <set name="vn1">Spice Girls - "Spice Up Your Life"</set></template></category>
+<category><pattern>XN1 01 NOV 1997</pattern><template> <set name="vn1">Aqua - "Barbie Girl"</set></template></category>
+<category><pattern>XN1 29 NOV 1997</pattern><template> <set name="vn1">Various Artists - "Perfect Day"</set></template></category>
+<category><pattern>XN1 13 DEC 1997</pattern><template> <set name="vn1">Teletubbies - "Teletubbies Say Eh-oh!"</set></template></category>
+<category><pattern>XN1 27 DEC 1997</pattern><template> <set name="vn1">Spice Girls - "Too Much"</set></template></category>
+<category><pattern>XN1 10 JAN 1998</pattern><template> <set name="vn1">Various Artists - "Perfect Day"</set></template></category>
+<category><pattern>XN1 17 JAN 1998</pattern><template> <set name="vn1">All Saints - "Never Ever"</set></template></category>
+<category><pattern>XN1 24 JAN 1998</pattern><template> <set name="vn1">Oasis - "All Around The World"</set></template></category>
+<category><pattern>XN1 31 JAN 1998</pattern><template> <set name="vn1">Usher - "You Make Me Wanna..."</set></template></category>
+<category><pattern>XN1 07 FEB 1998</pattern><template> <set name="vn1">Aqua - "Doctor Jones"</set></template></category>
+<category><pattern>XN1 21 FEB 1998</pattern><template> <set name="vn1">Celine Dion - "My Heart Will Go On"</set></template></category>
+<category><pattern>XN1 28 FEB 1998</pattern><template> <set name="vn1">Cornershop - "Brimful Of Asha"</set></template></category>
+<category><pattern>XN1 07 MAR 1998</pattern><template> <set name="vn1">Madonna - "Frozen"</set></template></category>
+<category><pattern>XN1 14 MAR 1998</pattern><template> <set name="vn1">Celine Dion - "My Heart Will Go On"</set></template></category>
+<category><pattern>XN1 21 MAR 1998</pattern><template> <set name="vn1">Run DMC vs Jason Nevins - "It's Like That"</set></template></category>
+<category><pattern>XN1 02 MAY 1998</pattern><template> <set name="vn1">Boyzone - "All That I Need"</set></template></category>
+<category><pattern>XN1 09 MAY 1998</pattern><template> <set name="vn1">All Saints - "Under The Bridge / Lady Marmalade"</set></template></category>
+<category><pattern>XN1 16 MAY 1998</pattern><template> <set name="vn1">Aqua - "Turn Back Time"</set></template></category>
+<category><pattern>XN1 23 MAY 1998</pattern><template> <set name="vn1">All Saints - "Under The Bridge / Lady Marmalade"</set></template></category>
+<category><pattern>XN1 30 MAY 1998</pattern><template> <set name="vn1">Tamperer feat. Maya - "Feel It"</set></template></category>
+<category><pattern>XN1 06 JUN 1998</pattern><template> <set name="vn1">B*Witched - "C'est La Vie"</set></template></category>
+<category><pattern>XN1 20 JUN 1998</pattern><template> <set name="vn1">Baddiel Skinner &amp; Lightning Seeds - "Three Lions '98"</set></template></category>
+<category><pattern>XN1 11 JUL 1998</pattern><template> <set name="vn1">Billie - "Because We Want To"</set></template></category>
+<category><pattern>XN1 18 JUL 1998</pattern><template> <set name="vn1">Another Level - "Freak Me"</set></template></category>
+<category><pattern>XN1 25 JUL 1998</pattern><template> <set name="vn1">Jamiroquai - "Deeper Underground"</set></template></category>
+<category><pattern>XN1 01 AUG 1998</pattern><template> <set name="vn1">Spice Girls - "Viva Forever"</set></template></category>
+<category><pattern>XN1 15 AUG 1998</pattern><template> <set name="vn1">Boyzone - "No Matter What"</set></template></category>
+<category><pattern>XN1 05 SEP 1998</pattern><template> <set name="vn1">Manic Street Preachers - "If You Tolerate This Your Children Will Be Next"</set></template></category>
+<category><pattern>XN1 12 SEP 1998</pattern><template> <set name="vn1">All Saints - "Bootie Call"</set></template></category>
+<category><pattern>XN1 19 SEP 1998</pattern><template> <set name="vn1">Robbie Williams - "Millennium"</set></template></category>
+<category><pattern>XN1 26 SEP 1998</pattern><template> <set name="vn1">Melanie B featuring Missy Elliott - "I Want You Back"</set></template></category>
+<category><pattern>XN1 03 OCT 1998</pattern><template> <set name="vn1">B*Witched - "Rollercoaster"</set></template></category>
+<category><pattern>XN1 17 OCT 1998</pattern><template> <set name="vn1">Billie - "Girlfriend"</set></template></category>
+<category><pattern>XN1 24 OCT 1998</pattern><template> <set name="vn1">Spacedust - "Gym &amp; Tonic"</set></template></category>
+<category><pattern>XN1 31 OCT 1998</pattern><template> <set name="vn1">Cher - "Believe"</set></template></category>
+<category><pattern>XN1 19 DEC 1998</pattern><template> <set name="vn1">B*Witched - "To You I Belong"</set></template></category>
+<category><pattern>XN1 26 DEC 1998</pattern><template> <set name="vn1">Spice Girls - "Goodbye"</set></template></category>
+<category><pattern>XN1 02 JAN 1999</pattern><template> <set name="vn1">Chef - "Chocolate Salty Balls (PS I Love You)"</set></template></category>
+<category><pattern>XN1 09 JAN 1999</pattern><template> <set name="vn1">Steps - "Heartbeat / Tragedy"</set></template></category>
+<category><pattern>XN1 16 JAN 1999</pattern><template> <set name="vn1">Fatboy Slim - "Praise You"</set></template></category>
+<category><pattern>XN1 23 JAN 1999</pattern><template> <set name="vn1">911 - "A Little Bit More"</set></template></category>
+<category><pattern>XN1 30 JAN 1999</pattern><template> <set name="vn1">Offspring - "Pretty Fly (For A White Guy)"</set></template></category>
+<category><pattern>XN1 06 FEB 1999</pattern><template> <set name="vn1">Armand Van Helden feat. Duane Haeden - "You Don't Know Me"</set></template></category>
+<category><pattern>XN1 13 FEB 1999</pattern><template> <set name="vn1">Blondie - "Maria"</set></template></category>
+<category><pattern>XN1 20 FEB 1999</pattern><template> <set name="vn1">Lenny Kravitz - "Fly Away"</set></template></category>
+<category><pattern>XN1 27 FEB 1999</pattern><template> <set name="vn1">Britney Spears - "Baby One More Time"</set></template></category>
+<category><pattern>XN1 13 MAR 1999</pattern><template> <set name="vn1">Boyzone - "When The Going Gets Tough"</set></template></category>
+<category><pattern>XN1 27 MAR 1999</pattern><template> <set name="vn1">B*Witched - "Blame It On The Weatherman"</set></template></category>
+<category><pattern>XN1 03 APR 1999</pattern><template> <set name="vn1">Mr Oizo - "Flat Beat"</set></template></category>
+<category><pattern>XN1 17 APR 1999</pattern><template> <set name="vn1">Martine McCutcheon - "Perfect Moment"</set></template></category>
+<category><pattern>XN1 01 MAY 1999</pattern><template> <set name="vn1">Westlife - "Swear It Again"</set></template></category>
+<category><pattern>XN1 15 MAY 1999</pattern><template> <set name="vn1">Backstreet Boys - "I Want It That Way"</set></template></category>
+<category><pattern>XN1 22 MAY 1999</pattern><template> <set name="vn1">Boyzone - "You Needed Me"</set></template></category>
+<category><pattern>XN1 29 MAY 1999</pattern><template> <set name="vn1">Shanks &amp; Bigfoot - "Sweet Like Chocolate"</set></template></category>
+<category><pattern>XN1 12 JUN 1999</pattern><template> <set name="vn1">Baz Luhrmann - "Everybody's Free (To Wear Sunscreen)"</set></template></category>
+<category><pattern>XN1 19 JUN 1999</pattern><template> <set name="vn1">S Club 7 - "Bring It All Back"</set></template></category>
+<category><pattern>XN1 26 JUN 1999</pattern><template> <set name="vn1">Vengaboys - "Boom Boom Boom Boom!!"</set></template></category>
+<category><pattern>XN1 03 JUL 1999</pattern><template> <set name="vn1">ATB - "9PM (Till I Come)"</set></template></category>
+<category><pattern>XN1 17 JUL 1999</pattern><template> <set name="vn1">Ricky Martin - "Livin' La Vida Loca"</set></template></category>
+<category><pattern>XN1 07 AUG 1999</pattern><template> <set name="vn1">Ronan Keating - "When You Say Nothing At All"</set></template></category>
+<category><pattern>XN1 21 AUG 1999</pattern><template> <set name="vn1">Westlife - "If I Let You Go"</set></template></category>
+<category><pattern>XN1 28 AUG 1999</pattern><template> <set name="vn1">Geri Halliwell - "Mi Chico Latino"</set></template></category>
+<category><pattern>XN1 04 SEP 1999</pattern><template> <set name="vn1">Lou Bega - "Mambo No 5"</set></template></category>
+<category><pattern>XN1 18 SEP 1999</pattern><template> <set name="vn1">Vengaboys - "We're Going To Ibiza"</set></template></category>
+<category><pattern>XN1 25 SEP 1999</pattern><template> <set name="vn1">Eiffel 65 - "Blue (Da Ba Dee)"</set></template></category>
+<category><pattern>XN1 16 OCT 1999</pattern><template> <set name="vn1">Christina Aguilera - "Genie In A Bottle"</set></template></category>
+<category><pattern>XN1 30 OCT 1999</pattern><template> <set name="vn1">Westlife - "Flying Without Wings"</set></template></category>
+<category><pattern>XN1 06 NOV 1999</pattern><template> <set name="vn1">Five - "Keep On Movin'"</set></template></category>
+<category><pattern>XN1 13 NOV 1999</pattern><template> <set name="vn1">Geri Halliwell - "Lift Me Up"</set></template></category>
+<category><pattern>XN1 20 NOV 1999</pattern><template> <set name="vn1">Robbie Williams - "She's The One / It's Only Us"</set></template></category>
+<category><pattern>XN1 27 NOV 1999</pattern><template> <set name="vn1">Wamdue Project - "King Of My Castle"</set></template></category>
+<category><pattern>XN1 04 DEC 1999</pattern><template> <set name="vn1">Cliff Richard - "Millennium Prayer"</set></template></category>
+<category><pattern>XN1 25 DEC 1999</pattern><template> <set name="vn1">Westlife - "I Have A Dream / Seasons In The Sun"</set></template></category>
+<category><pattern>XN1 22 JAN 2000</pattern><template> <set name="vn1">Manic Street Preachers - "The Masses Against The Classes"</set></template></category>
+<category><pattern>XN1 29 JAN 2000</pattern><template> <set name="vn1">Britney Spears - "Born To Make You Happy"</set></template></category>
+<category><pattern>XN1 05 FEB 2000</pattern><template> <set name="vn1">Gabrielle - "Rise"</set></template></category>
+<category><pattern>XN1 19 FEB 2000</pattern><template> <set name="vn1">Oasis - "Go Let It Out"</set></template></category>
+<category><pattern>XN1 26 FEB 2000</pattern><template> <set name="vn1">All Saints - "Pure Shores"</set></template></category>
+<category><pattern>XN1 11 MAR 2000</pattern><template> <set name="vn1">Madonna - "American Pie"</set></template></category>
+<category><pattern>XN1 18 MAR 2000</pattern><template> <set name="vn1">Chicane featuring Bryan Adams - "Don't Give Up"</set></template></category>
+<category><pattern>XN1 25 MAR 2000</pattern><template> <set name="vn1">Geri Halliwell - "Bag It Up"</set></template></category>
+<category><pattern>XN1 01 APR 2000</pattern><template> <set name="vn1">Melanie C with Lisa 'Left Eye' Lopes - "Never Be The Same Again"</set></template></category>
+<category><pattern>XN1 08 APR 2000</pattern><template> <set name="vn1">Westlife - "Fool Again"</set></template></category>
+<category><pattern>XN1 15 APR 2000</pattern><template> <set name="vn1">Craig David - "Fill Me In"</set></template></category>
+<category><pattern>XN1 22 APR 2000</pattern><template> <set name="vn1">Fragma - "Toca's Miracle"</set></template></category>
+<category><pattern>XN1 06 MAY 2000</pattern><template> <set name="vn1">Oxide &amp; Neutrino - "Bound 4 Da Reload (Casualty)"</set></template></category>
+<category><pattern>XN1 13 MAY 2000</pattern><template> <set name="vn1">Britney Spears - "Oops!... I Did It Again"</set></template></category>
+<category><pattern>XN1 20 MAY 2000</pattern><template> <set name="vn1">Madison Avenue - "Don't Call Me Baby"</set></template></category>
+<category><pattern>XN1 27 MAY 2000</pattern><template> <set name="vn1">Billie Piper - "Day &amp; Night"</set></template></category>
+<category><pattern>XN1 03 JUN 2000</pattern><template> <set name="vn1">Sonique - "It Feels So Good"</set></template></category>
+<category><pattern>XN1 24 JUN 2000</pattern><template> <set name="vn1">Black Legend - "You See The Trouble With Me"</set></template></category>
+<category><pattern>XN1 01 JUL 2000</pattern><template> <set name="vn1">Kylie Minogue - "Spinning Around"</set></template></category>
+<category><pattern>XN1 08 JUL 2000</pattern><template> <set name="vn1">Eminem - "Real Slim Shady"</set></template></category>
+<category><pattern>XN1 15 JUL 2000</pattern><template> <set name="vn1">Corrs - "Breathless"</set></template></category>
+<category><pattern>XN1 22 JUL 2000</pattern><template> <set name="vn1">Ronan Keating - "Life Is A Rollercoaster"</set></template></category>
+<category><pattern>XN1 29 JUL 2000</pattern><template> <set name="vn1">Five and Queen - "We Will Rock You"</set></template></category>
+<category><pattern>XN1 05 AUG 2000</pattern><template> <set name="vn1">Craig David - "7 Days"</set></template></category>
+<category><pattern>XN1 12 AUG 2000</pattern><template> <set name="vn1">Robbie Williams - "Rock DJ"</set></template></category>
+<category><pattern>XN1 19 AUG 2000</pattern><template> <set name="vn1">Melanie C - "I Turn To You"</set></template></category>
+<category><pattern>XN1 26 AUG 2000</pattern><template> <set name="vn1">Spiller - "Groovejet (If This Ain't Love)"</set></template></category>
+<category><pattern>XN1 02 SEP 2000</pattern><template> <set name="vn1">Madonna - "Music"</set></template></category>
+<category><pattern>XN1 09 SEP 2000</pattern><template> <set name="vn1">A1 - "Take On Me"</set></template></category>
+<category><pattern>XN1 16 SEP 2000</pattern><template> <set name="vn1">Modjo - "Lady (Hear Me Tonight)"</set></template></category>
+<category><pattern>XN1 30 SEP 2000</pattern><template> <set name="vn1">Mariah Carey &amp; Westlife - "Against All Odds"</set></template></category>
+<category><pattern>XN1 14 OCT 2000</pattern><template> <set name="vn1">All Saints - "Black Coffee"</set></template></category>
+<category><pattern>XN1 21 OCT 2000</pattern><template> <set name="vn1">U2 - "Beautiful Day"</set></template></category>
+<category><pattern>XN1 28 OCT 2000</pattern><template> <set name="vn1">Steps - "Stomp"</set></template></category>
+<category><pattern>XN1 04 NOV 2000</pattern><template> <set name="vn1">Spice Girls - "Holler / Let Love Lead The Way"</set></template></category>
+<category><pattern>XN1 11 NOV 2000</pattern><template> <set name="vn1">Westlife - "My Love"</set></template></category>
+<category><pattern>XN1 18 NOV 2000</pattern><template> <set name="vn1">A1 - "Same Old Brand New You"</set></template></category>
+<category><pattern>XN1 25 NOV 2000</pattern><template> <set name="vn1">LeAnn Rimes - "Can't Fight The Moonlight"</set></template></category>
+<category><pattern>XN1 02 DEC 2000</pattern><template> <set name="vn1">Destiny's Child - "Independent Women Part 1"</set></template></category>
+<category><pattern>XN1 09 DEC 2000</pattern><template> <set name="vn1">S Club 7 - "Never Had A Dream Come True"</set></template></category>
+<category><pattern>XN1 16 DEC 2000</pattern><template> <set name="vn1">Eminem - "Stan"</set></template></category>
+<category><pattern>XN1 23 DEC 2000</pattern><template> <set name="vn1">Bob The Builder - "Can We Fix It"</set></template></category>
+<category><pattern>XN1 13 JAN 2001</pattern><template> <set name="vn1">Rui Da Silva featuring Cassandra - "Touch Me"</set></template></category>
+<category><pattern>XN1 20 JAN 2001</pattern><template> <set name="vn1">Jennifer Lopez - "Love Don't Cost A Thing"</set></template></category>
+<category><pattern>XN1 27 JAN 2001</pattern><template> <set name="vn1">Limp Bizkit - "Rollin'"</set></template></category>
+<category><pattern>XN1 10 FEB 2001</pattern><template> <set name="vn1">Atomic Kitten - "Whole Again"</set></template></category>
+<category><pattern>XN1 10 MAR 2001</pattern><template> <set name="vn1">Shaggy featuring Rikrok - "It Wasn't Me"</set></template></category>
+<category><pattern>XN1 17 MAR 2001</pattern><template> <set name="vn1">Westlife - "Uptown Girl"</set></template></category>
+<category><pattern>XN1 24 MAR 2001</pattern><template> <set name="vn1">Hear'Say - "Pure And Simple"</set></template></category>
+<category><pattern>XN1 14 APR 2001</pattern><template> <set name="vn1">Emma Bunton - "What Took You So Long"</set></template></category>
+<category><pattern>XN1 28 APR 2001</pattern><template> <set name="vn1">Destiny's Child - "Survivor"</set></template></category>
+<category><pattern>XN1 05 MAY 2001</pattern><template> <set name="vn1">S Club 7 - "Don't Stop Movin'"</set></template></category>
+<category><pattern>XN1 12 MAY 2001</pattern><template> <set name="vn1">Geri Halliwell - "It's Raining Men"</set></template></category>
+<category><pattern>XN1 26 MAY 2001</pattern><template> <set name="vn1">S Club 7 - "Don't Stop Movin'"</set></template></category>
+<category><pattern>XN1 02 JUN 2001</pattern><template> <set name="vn1">DJ Pied Piper - "Do You Really Like It"</set></template></category>
+<category><pattern>XN1 09 JUN 2001</pattern><template> <set name="vn1">Shaggy featuring Rayvon - "Angel"</set></template></category>
+<category><pattern>XN1 30 JUN 2001</pattern><template> <set name="vn1">Christina Aguilera with Lil' Kim / Mya &amp; Pink - "Lady Marmalade"</set></template></category>
+<category><pattern>XN1 07 JUL 2001</pattern><template> <set name="vn1">Hear'Say - "The Way To Your Love"</set></template></category>
+<category><pattern>XN1 14 JUL 2001</pattern><template> <set name="vn1">Roger Sanchez - "Another Chance"</set></template></category>
+<category><pattern>XN1 21 JUL 2001</pattern><template> <set name="vn1">Robbie Williams - "Eternity/The Road To Mandalay"</set></template></category>
+<category><pattern>XN1 04 AUG 2001</pattern><template> <set name="vn1">Atomic Kitten - "Eternal Flame"</set></template></category>
+<category><pattern>XN1 18 AUG 2001</pattern><template> <set name="vn1">So Solid Crew - "21 Seconds"</set></template></category>
+<category><pattern>XN1 25 AUG 2001</pattern><template> <set name="vn1">Five - "Let's Dance"</set></template></category>
+<category><pattern>XN1 08 SEP 2001</pattern><template> <set name="vn1">Blue - "Too Close"</set></template></category>
+<category><pattern>XN1 15 SEP 2001</pattern><template> <set name="vn1">Bob The Builder - "Mambo No 5"</set></template></category>
+<category><pattern>XN1 22 SEP 2001</pattern><template> <set name="vn1">DJ Otzi - "Hey Baby"</set></template></category>
+<category><pattern>XN1 29 SEP 2001</pattern><template> <set name="vn1">Kylie Minogue - "Can't Get You Out Of My Head"</set></template></category>
+<category><pattern>XN1 27 OCT 2001</pattern><template> <set name="vn1">Afroman - "Because I Got High"</set></template></category>
+<category><pattern>XN1 17 NOV 2001</pattern><template> <set name="vn1">Westlife - "Queen of My Heart"</set></template></category>
+<category><pattern>XN1 24 NOV 2001</pattern><template> <set name="vn1">Blue - "If You Come Back"</set></template></category>
+<category><pattern>XN1 01 DEC 2001</pattern><template> <set name="vn1">S Club 7 - "Have You Ever"</set></template></category>
+<category><pattern>XN1 08 DEC 2001</pattern><template> <set name="vn1">Daniel Bedingfield - "Gotta Get Thru This"</set></template></category>
+<category><pattern>XN1 22 DEC 2001</pattern><template> <set name="vn1">Robbie Williams and Nicole Kidman - "Somethin' Stupid"</set></template></category>
+<category><pattern>XN1 12 JAN 2002</pattern><template> <set name="vn1">Daniel Bedingfield - "Gotta Get Thru This"</set></template></category>
+<category><pattern>XN1 19 JAN 2002</pattern><template> <set name="vn1">Aaliyah - "More Than A Woman"</set></template></category>
+<category><pattern>XN1 26 JAN 2002</pattern><template> <set name="vn1">George Harrison My Sweet Lord"</set></template></category>
+<category><pattern>XN1 02 FEB 2002</pattern><template> <set name="vn1">Enrique Iglesias - "Hero"</set></template></category>
+<category><pattern>XN1 02 MAR 2002</pattern><template> <set name="vn1">Westlife - "World Of Our Own"</set></template></category>
+<category><pattern>XN1 09 MAR 2002</pattern><template> <set name="vn1">Will Young - "Anything Is Possible / Evergreen"</set></template></category>
+<category><pattern>XN1 30 MAR 2002</pattern><template> <set name="vn1">Gareth Gates - "Unchained Melody"</set></template></category>
+<category><pattern>XN1 27 APR 2002</pattern><template> <set name="vn1">Oasis - "The Hindu Times"</set></template></category>
+<category><pattern>XN1 04 MAY 2002</pattern><template> <set name="vn1">Sugababes - "Freak Like Me"</set></template></category>
+<category><pattern>XN1 11 MAY 2002</pattern><template> <set name="vn1">Holly Valance - "Kiss Kiss"</set></template></category>
+<category><pattern>XN1 18 MAY 2002</pattern><template> <set name="vn1">Ronan Keating - "If Tomorrow Never Comes"</set></template></category>
+<category><pattern>XN1 25 MAY 2002</pattern><template> <set name="vn1">Liberty X - "Just a Little"</set></template></category>
+<category><pattern>XN1 01 JUN 2002</pattern><template> <set name="vn1">Eminem - "Without Me"</set></template></category>
+<category><pattern>XN1 08 JUN 2002</pattern><template> <set name="vn1">Will Young - "Light My Fire"</set></template></category>
+<category><pattern>XN1 22 JUN 2002</pattern><template> <set name="vn1">Elvis vs JXL - "A Little Less Conversation"</set></template></category>
+<category><pattern>XN1 20 JUL 2002</pattern><template> <set name="vn1">Gareth Gates - "Anyone Of Us (Stupid Mistake)"</set></template></category>
+<category><pattern>XN1 10 AUG 2002</pattern><template> <set name="vn1">Darius - "Colourblind"</set></template></category>
+<category><pattern>XN1 24 AUG 2002</pattern><template> <set name="vn1">Sugababes - "Round Round"</set></template></category>
+<category><pattern>XN1 31 AUG 2002</pattern><template> <set name="vn1">Blazin' Squad - "Crossroads"</set></template></category>
+<category><pattern>XN1 07 SEP 2002</pattern><template> <set name="vn1">Atomic Kitten - "The Tide Is High (Get The Feeling)"</set></template></category>
+<category><pattern>XN1 28 SEP 2002</pattern><template> <set name="vn1">Pink - "Just Like A Pill"</set></template></category>
+<category><pattern>XN1 05 OCT 2002</pattern><template> <set name="vn1">Will Young &amp; Gareth Gates - "The Long And Winding Road / Suspicious Minds"</set></template></category>
+<category><pattern>XN1 19 OCT 2002</pattern><template> <set name="vn1">Las Ketchup - "The Ketchup Song (Asereje)"</set></template></category>
+<category><pattern>XN1 26 OCT 2002</pattern><template> <set name="vn1">Nelly feat. Kelly Rowland - "Dilemma"</set></template></category>
+<category><pattern>XN1 09 NOV 2002</pattern><template> <set name="vn1">DJ Sammy &amp; Yanou feat. Do - "Heaven"</set></template></category>
+<category><pattern>XN1 16 NOV 2002</pattern><template> <set name="vn1">Westlife - "Unbreakable"</set></template></category>
+<category><pattern>XN1 23 NOV 2002</pattern><template> <set name="vn1">Christina Aguilera - "Dirrty"</set></template></category>
+<category><pattern>XN1 07 DEC 2002</pattern><template> <set name="vn1">Daniel Bedingfield - "If You're Not The One"</set></template></category>
+<category><pattern>XN1 14 DEC 2002</pattern><template> <set name="vn1">Eminem - "Lose Yourself"</set></template></category>
+<category><pattern>XN1 21 DEC 2002</pattern><template> <set name="vn1">Blue feat. Elton John - "Sorry Seems To Be The Hardest Word"</set></template></category>
+<category><pattern>XN1 28 DEC 2002</pattern><template> <set name="vn1">Girls Aloud - "Sound Of The Underground"</set></template></category>
+<category><pattern>XN1 25 JAN 2003</pattern><template> <set name="vn1">David Sneddon - "Stop Living The Lie"</set></template></category>
+<category><pattern>XN1 08 FEB 2003</pattern><template> <set name="vn1">Tatu - "All The Things She Said"</set></template></category>
+<category><pattern>XN1 08 MAR 2003</pattern><template> <set name="vn1">Christina Aguilera - "Beautiful"</set></template></category>
+<category><pattern>XN1 22 MAR 2003</pattern><template> <set name="vn1">Gareth Gates - "Spirit In The Sky"</set></template></category>
+<category><pattern>XN1 05 APR 2003</pattern><template> <set name="vn1">Room 5 feat. Oliver Cheatham - "Make Luv"</set></template></category>
+<category><pattern>XN1 03 MAY 2003</pattern><template> <set name="vn1">Busted - "You Said No"</set></template></category>
+<category><pattern>XN1 10 MAY 2003</pattern><template> <set name="vn1">Tomcraft - "Loneliness"</set></template></category>
+<category><pattern>XN1 17 MAY 2003</pattern><template> <set name="vn1">R Kelly - "Ignition"</set></template></category>
+<category><pattern>XN1 14 JUN 2003</pattern><template> <set name="vn1">Evanescence - "Bring Me To Life"</set></template></category>
+<category><pattern>XN1 12 JUL 2003</pattern><template> <set name="vn1">Beyonce - "Crazy In Love"</set></template></category>
+<category><pattern>XN1 02 AUG 2003</pattern><template> <set name="vn1">Daniel Bedingfield - "Never Gonna Leave Your Side"</set></template></category>
+<category><pattern>XN1 09 AUG 2003</pattern><template> <set name="vn1">Blu Cantrell feat. Sean Paul - "Breathe"</set></template></category>
+<category><pattern>XN1 06 SEP 2003</pattern><template> <set name="vn1">Elton John - "Are You Ready For Love?"</set></template></category>
+<category><pattern>XN1 13 SEP 2003</pattern><template> <set name="vn1">Black Eyed Peas - "Where Is The Love?"</set></template></category>
+<category><pattern>XN1 25 OCT 2003</pattern><template> <set name="vn1">Sugababes - "Hole In The Head"</set></template></category>
+<category><pattern>XN1 01 NOV 2003</pattern><template> <set name="vn1">Fatman Scoop - "Be Faithful"</set></template></category>
+<category><pattern>XN1 15 NOV 2003</pattern><template> <set name="vn1">Kylie Minogue - "Slow"</set></template></category>
+<category><pattern>XN1 22 NOV 2003</pattern><template> <set name="vn1">Busted - "Crashed The Wedding"</set></template></category>
+<category><pattern>XN1 29 NOV 2003</pattern><template> <set name="vn1">Westlife - "Mandy"</set></template></category>
+<category><pattern>XN1 06 DEC 2003</pattern><template> <set name="vn1">Will Young - "Leave Right Now"</set></template></category>
+<category><pattern>XN1 20 DEC 2003</pattern><template> <set name="vn1">Kelly &amp; Ozzy Osbourne - "Changes"</set></template></category>
+<category><pattern>XN1 27 DEC 2003</pattern><template> <set name="vn1">Michael Andrews feat. Gary Jules Mad - "World"</set></template></category>
+<category><pattern>XN1 17 JAN 2004</pattern><template> <set name="vn1">Michelle McManus - "All This Time"</set></template></category>
+<category><pattern>XN1 07 FEB 2004</pattern><template> <set name="vn1">LMC V U2 - "Take Me To The Clouds Above"</set></template></category>
+<category><pattern>XN1 21 FEB 2004</pattern><template> <set name="vn1">Sam &amp; Mark - "With A Little Help From My Friends / Measure Of A Man"</set></template></category>
+<category><pattern>XN1 28 FEB 2004</pattern><template> <set name="vn1">Busted - "Who's David"</set></template></category>
+<category><pattern>XN1 06 MAR 2004</pattern><template> <set name="vn1">Peter Andre - "Mysterious Girl"</set></template></category>
+<category><pattern>XN1 13 MAR 2004</pattern><template> <set name="vn1">Britney Spears - "Toxic"</set></template></category>
+<category><pattern>XN1 20 MAR 2004</pattern><template> <set name="vn1">DJ Casper - "Cha Cha Slide"</set></template></category>
+<category><pattern>XN1 27 MAR 2004</pattern><template> <set name="vn1">Usher - "Yeah"</set></template></category>
+<category><pattern>XN1 10 APR 2004</pattern><template> <set name="vn1">McFly - "Five Colours In Her Hair"</set></template></category>
+<category><pattern>XN1 24 APR 2004</pattern><template> <set name="vn1">Eamon - "F**k It (I Don't Want You Back)"</set></template></category>
+<category><pattern>XN1 22 MAY 2004</pattern><template> <set name="vn1">Frankee - "F.U.R.B (F U Right Back)"</set></template></category>
+<category><pattern>XN1 12 JUN 2004</pattern><template> <set name="vn1">Mario Winans feat. Enya &amp; P.Diddy - "I Don't Wanna Know"</set></template></category>
+<category><pattern>XN1 26 JUN 2004</pattern><template> <set name="vn1">Britney Spears - "Everytime"</set></template></category>
+<category><pattern>XN1 03 JUL 2004</pattern><template> <set name="vn1">McFly - "Obviously"</set></template></category>
+<category><pattern>XN1 10 JUL 2004</pattern><template> <set name="vn1">Usher - "Burn"</set></template></category>
+<category><pattern>XN1 24 JUL 2004</pattern><template> <set name="vn1">Shapeshifters - "Lola's Theme"</set></template></category>
+<category><pattern>XN1 31 JUL 2004</pattern><template> <set name="vn1">The Streets - "Dry Your Eyes"</set></template></category>
+<category><pattern>XN1 07 AUG 2004</pattern><template> <set name="vn1">Busted - "Thunderbirds / 3AM"</set></template></category>
+<category><pattern>XN1 21 AUG 2004</pattern><template> <set name="vn1">3 Of A Kind - "Babycakes"</set></template></category>
+<category><pattern>XN1 28 AUG 2004</pattern><template> <set name="vn1">Natasha Bedingfield - "These Words"</set></template></category>
+<category><pattern>XN1 11 SEP 2004</pattern><template> <set name="vn1">Nelly - "My Place / Flap Your Wings"</set></template></category>
+<category><pattern>XN1 18 SEP 2004</pattern><template> <set name="vn1">Brian McFadden - "Real To Me"</set></template></category>
+<category><pattern>XN1 25 SEP 2004</pattern><template> <set name="vn1">Eric Prydz - "Call On Me"</set></template></category>
+<category><pattern>XN1 16 OCT 2004</pattern><template> <set name="vn1">Robbie Williams - "Radio"</set></template></category>
+<category><pattern>XN1 23 OCT 2004</pattern><template> <set name="vn1">Eric Prydz - "Call On Me"</set></template></category>
+<category><pattern>XN1 06 NOV 2004</pattern><template> <set name="vn1">Ja Rule feat. R.Kelly &amp; Ashanti - "Wonderful"</set></template></category>
+<category><pattern>XN1 13 NOV 2004</pattern><template> <set name="vn1">Eminem - "Just Lose It"</set></template></category>
+<category><pattern>XN1 20 NOV 2004</pattern><template> <set name="vn1">U2 - "Vertigo"</set></template></category>
+<category><pattern>XN1 27 NOV 2004</pattern><template> <set name="vn1">Girls Aloud - "I'll Stand By You"</set></template></category>
+<category><pattern>XN1 11 DEC 2004</pattern><template> <set name="vn1">Band Aid 20 - "Do They Know It's Christmas"</set></template></category>
+<category><pattern>XN1 08 JAN 2005</pattern><template> <set name="vn1">Steve Brookstein - "Against All Odds"</set></template></category>
+<category><pattern>XN1 15 JAN 2005</pattern><template> <set name="vn1">Elvis Presley - "Jailhouse Rock"</set></template></category>
+<category><pattern>XN1 22 JAN 2005</pattern><template> <set name="vn1">Elvis Presley - "I Got Stung / One Night"</set></template></category>
+<category><pattern>XN1 29 JAN 2005</pattern><template> <set name="vn1">Ciara feat. Petey Pablo - "Goodies"</set></template></category>
+<category><pattern>XN1 05 FEB 2005</pattern><template> <set name="vn1">Elvis Presley - "It's Now Or Never"</set></template></category>
+<category><pattern>XN1 12 FEB 2005</pattern><template> <set name="vn1">Eminem - "Like Toy Soldiers"</set></template></category>
+<category><pattern>XN1 19 FEB 2005</pattern><template> <set name="vn1">U2 - "Sometimes You Can't Make It On Your Own"</set></template></category>
+<category><pattern>XN1 26 FEB 2005</pattern><template> <set name="vn1">Jennifer Lopez - "Get Right"</set></template></category>
+<category><pattern>XN1 05 MAR 2005</pattern><template> <set name="vn1">Nelly feat. Tim McGraw - "Over And Over"</set></template></category>
+<category><pattern>XN1 12 MAR 2005</pattern><template> <set name="vn1">Stereophonics - "Dakota"</set></template></category>
+<category><pattern>XN1 19 MAR 2005</pattern><template> <set name="vn1">McFly - "All About You / You've Got A Friend"</set></template></category>
+<category><pattern>XN1 26 MAR 2005</pattern><template> <set name="vn1">Tony Christie feat. Peter Kay - "(Is This The Way To) Amarillo"</set></template></category>
+<category><pattern>XN1 14 MAY 2005</pattern><template> <set name="vn1">Akon - "Lonely"</set></template></category>
+<category><pattern>XN1 28 MAY 2005</pattern><template> <set name="vn1">Oasis - "Lyla"</set></template></category>
+<category><pattern>XN1 04 JUN 2005</pattern><template> <set name="vn1">Crazy Frog - "Axel F"</set></template></category>
+<category><pattern>XN1 02 JUL 2005</pattern><template> <set name="vn1">2Pac feat. Elton John - "Ghetto Gospel"</set></template></category>
+<category><pattern>XN1 23 JUL 2005</pattern><template> <set name="vn1">James Blunt - "You're Beautiful"</set></template></category>
+<category><pattern>XN1 27 AUG 2005</pattern><template> <set name="vn1">McFly - "I'll Be OK"</set></template></category>
+<category><pattern>XN1 03 SEP 2005</pattern><template> <set name="vn1">Oasis - "The Importance Of Being Idle"</set></template></category>
+<category><pattern>XN1 10 SEP 2005</pattern><template> <set name="vn1">Gorillaz - "Dare"</set></template></category>
+<category><pattern>XN1 17 SEP 2005</pattern><template> <set name="vn1">Pussycat Dolls feat. Busta Rhymes - "Don't Cha"</set></template></category>
+<category><pattern>XN1 08 OCT 2005</pattern><template> <set name="vn1">Sugababes - "Push The Button"</set></template></category>
+<category><pattern>XN1 29 OCT 2005</pattern><template> <set name="vn1">Arctic Monkeys - "I Bet You Look Good On The Dancefloor"</set></template></category>
+<category><pattern>XN1 12 NOV 2005</pattern><template> <set name="vn1">Westlife - "You Raise Me Up"</set></template></category>
+<category><pattern>XN1 19 NOV 2005</pattern><template> <set name="vn1">Madonna - "Hung Up"</set></template></category>
+<category><pattern>XN1 10 DEC 2005</pattern><template> <set name="vn1">Pussycat Dolls - "Stickwitu"</set></template></category>
+<category><pattern>XN1 24 DEC 2005</pattern><template> <set name="vn1">Nizlopi - "JCB Song"</set></template></category>
+<category><pattern>XN1 31 DEC 2005</pattern><template> <set name="vn1">Shayne Ward - "That's My Goal"</set></template></category>
+<category><pattern>XN1 28 JAN 2006</pattern><template> <set name="vn1">Arctic Monkeys - "When The Sun Goes Down"</set></template></category>
+<category><pattern>XN1 04 FEB 2006</pattern><template> <set name="vn1">Notorious BIG featuring Diddy / Nelly / Jagged Edge &amp; Avery Storm - "Nasty Girl"</set></template></category>
+<category><pattern>XN1 18 FEB 2006</pattern><template> <set name="vn1">Meck featuring Leo Sayer - "Thunder In My Heart Again"</set></template></category>
+<category><pattern>XN1 04 MAR 2006</pattern><template> <set name="vn1">Madonna - "Sorry"</set></template></category>
+<category><pattern>XN1 11 MAR 2006</pattern><template> <set name="vn1">Chico - "It's Chico Time"</set></template></category>
+<category><pattern>XN1 25 MAR 2006</pattern><template> <set name="vn1">Orson - "No Tomorrow"</set></template></category>
+<category><pattern>XN1 01 APR 2006</pattern><template> <set name="vn1">Ne-Yo - "So Sick"</set></template></category>
+<category><pattern>XN1 08 APR 2006</pattern><template> <set name="vn1">Gnarls Barkley - "Crazy"</set></template></category>
+<category><pattern>XN1 10 JUN 2006</pattern><template> <set name="vn1">Sandi Thom - "I Wish I Was A Punk Rocker (With Flowers In My Hair)"</set></template></category>
+<category><pattern>XN1 17 JUN 2006</pattern><template> <set name="vn1">Nelly Furtado - "Maneater"</set></template></category>
+<category><pattern>XN1 08 JUL 2006</pattern><template> <set name="vn1">Shakira ft. Wyclef Jean - "Hips Don't Lie"</set></template></category>
+<category><pattern>XN1 15 JUL 2006</pattern><template> <set name="vn1">Lily Allen - "Smile"</set></template></category>
+<category><pattern>XN1 29 JUL 2006</pattern><template> <set name="vn1">McFly - "Please Please / Dont Stop Me Now"</set></template></category>
+<category><pattern>XN1 05 AUG 2006</pattern><template> <set name="vn1">Shakira ft. Wyclef Jean - "Hips Don't Lie"</set></template></category>
+<category><pattern>XN1 02 SEP 2006</pattern><template> <set name="vn1">Beyonce feat. Jay-Z - "Deja Vu"</set></template></category>
+<category><pattern>XN1 09 SEP 2006</pattern><template> <set name="vn1">Justin Timberlake - "Sexyback"</set></template></category>
+<category><pattern>XN1 16 SEP 2006</pattern><template> <set name="vn1">Scissor Sisters - "I Don't Feel Like Dancin'"</set></template></category>
+<category><pattern>XN1 14 OCT 2006</pattern><template> <set name="vn1">Razorlight - "America"</set></template></category>
+<category><pattern>XN1 21 OCT 2006</pattern><template> <set name="vn1">My Chemical Romance - "Welcome To The Black Parade"</set></template></category>
+<category><pattern>XN1 04 NOV 2006</pattern><template> <set name="vn1">McFly - "Star Girl"</set></template></category>
+<category><pattern>XN1 11 NOV 2006</pattern><template> <set name="vn1">Fedde Le Grande - "Put Your Hands Up For Detroit"</set></template></category>
+<category><pattern>XN1 18 NOV 2006</pattern><template> <set name="vn1">Westlife - "The Rose"</set></template></category>
+<category><pattern>XN1 25 NOV 2006</pattern><template> <set name="vn1">Akon feat. Eminem - "Smack That"</set></template></category>
+<category><pattern>XN1 02 DEC 2006</pattern><template> <set name="vn1">Take That - "Patience"</set></template></category>
+<category><pattern>XN1 30 DEC 2006</pattern><template> <set name="vn1">Leona Lewis - "A Moment Like This"</set></template></category>
+<category><pattern>XN1 27 JAN 2007</pattern><template> <set name="vn1">Mika - "Grace Kelly"</set></template></category>
+<category><pattern>XN1 03 MAR 2007</pattern><template> <set name="vn1">Kaiser Chiefs - "Ruby"</set></template></category>
+<category><pattern>XN1 10 MAR 2007</pattern><template> <set name="vn1">Take That - "Shine"</set></template></category>
+<category><pattern>XN1 23 MAR 2007</pattern><template> <set name="vn1">Sugababes vs Girls Aloud - "Walk This Way"</set></template></category>
+<category><pattern>XN1 31 MAR 2007</pattern><template> <set name="vn1">The Proclaimers feat. Brian Potter &amp; Andy Pipkin - "I'm Gonna Be (500 Miles)"</set></template></category>
+<category><pattern>XN1 21 APR 2007</pattern><template> <set name="vn1">Timbaland / Nelly Furtado / Justin Timberlake - "Give It To Me"</set></template></category>
+<category><pattern>XN1 28 APR 2007</pattern><template> <set name="vn1">Beyonce &amp; Shakira - "Beautiful Liar"</set></template></category>
+<category><pattern>XN1 19 MAY 2007</pattern><template> <set name="vn1">McFly - "Baby's Coming Back / Transylvania"</set></template></category>
+<category><pattern>XN1 26 MAY 2007</pattern><template> <set name="vn1">Rihanna feat. Jay-Z - "Umbrella"</set></template></category>
+<category><pattern>XN1 04 AUG 2007</pattern><template> <set name="vn1">Timbaland ft. Doe / Keri Hilson - "The Way I Are"</set></template></category>
+<category><pattern>XN1 18 AUG 2007</pattern><template> <set name="vn1">Robyn feat. Kleerup - "With Every Heartbeat"</set></template></category>
+<category><pattern>XN1 25 AUG 2007</pattern><template> <set name="vn1">Kanye West - "Stronger"</set></template></category>
+<category><pattern>XN1 08 SEP 2007</pattern><template> <set name="vn1">Sean Kingston - "Beautiful Girls"</set></template></category>
+<category><pattern>XN1 06 OCT 2007</pattern><template> <set name="vn1">Sugababes - "About You Now"</set></template></category>
+<category><pattern>XN1 03 NOV 2007</pattern><template> <set name="vn1">Leona Lewis - "Bleeding Love"</set></template></category>
+<category><pattern>XN1 22 DEC 2007</pattern><template> <set name="vn1">Eva Cassidy &amp; Katie Melua - "What A Wonderful World"</set></template></category>
+<category><pattern>XN1 29 DEC 2007</pattern><template> <set name="vn1">Leon Jackson - "When You Believe"</set></template></category>
+<category><pattern>XN1 19 JAN 2008</pattern><template> <set name="vn1">Basshunter ft DJ Mental Theo - "Now You're Gone"</set></template></category>
+<category><pattern>XN1 23 FEB 2008</pattern><template> <set name="vn1">Duffy - "Mercy"</set></template></category>
+<category><pattern>XN1 22 MAR 2008</pattern><template> <set name="vn1">Estelle Feat. Kanye West - "American Boy"</set></template></category>
+<category><pattern>XN1 19 APR 2008</pattern><template> <set name="vn1">Madonna feat. Justin Timberlake - "4 Minutes"</set></template></category>
+<category><pattern>XN1 24 MAY 2008</pattern><template> <set name="vn1">Ting Tings - "That's Not My Name"</set></template></category>
+<category><pattern>XN1 31 MAY 2008</pattern><template> <set name="vn1">Rihanna - "Take A Bow"</set></template></category>
+<category><pattern>XN1 14 JUN 2008</pattern><template> <set name="vn1">Mint Royale - "Singin' In The Rain"</set></template></category>
+<category><pattern>XN1 28 JUN 2008</pattern><template> <set name="vn1">Coldplay - "Viva La Vida"</set></template></category>
+<category><pattern>XN1 05 JUL 2008</pattern><template> <set name="vn1">Ne-Yo - "Closer"</set></template></category>
+<category><pattern>XN1 12 JUL 2008</pattern><template> <set name="vn1">Dizzee Rascal / Calvin Harris / Chrome - "Dance Wiv Me"</set></template></category>
+<category><pattern>XN1 09 AUG 2008</pattern><template> <set name="vn1">Kid Rock - "All Summer Long"</set></template></category>
+<category><pattern>XN1 16 AUG 2008</pattern><template> <set name="vn1">Katy Perry - "I Kissed A Girl"</set></template></category>
+<category><pattern>XN1 20 SEP 2008</pattern><template> <set name="vn1">Kings Of Leon - "Sex On Fire"</set></template></category>
+<category><pattern>XN1 11 OCT 2008</pattern><template> <set name="vn1">Pink - "So What"</set></template></category>
+<category><pattern>XN1 01 NOV 2008</pattern><template> <set name="vn1">Girls Aloud - "Promise"</set></template></category>
+<category><pattern>XN1 08 NOV 2008</pattern><template> <set name="vn1">X Factor Finalists 2008 - "Hero"</set></template></category>
+<category><pattern>XN1 29 NOV 2008</pattern><template> <set name="vn1">Beyonce - "If I Were A Boy"</set></template></category>
+<category><pattern>XN1 06 DEC 2008</pattern><template> <set name="vn1">Take That - "Greatest Day"</set></template></category>
+<category><pattern>XN1 13 DEC 2008</pattern><template> <set name="vn1">Leona Lewis - "Run"</set></template></category>
+<category><pattern>XN1 27 DEC 2008</pattern><template> <set name="vn1">Alexandra Burke - "Hallelujah"</set></template></category>
+<category><pattern>XN1 17 JAN 2009</pattern><template> <set name="vn1">Lady Gaga / Colby Odonis - "Just Dance"</set></template></category>
+<category><pattern>XN1 07 FEB 2009</pattern><template> <set name="vn1">Lily Allen - "The Fear"</set></template></category>
+<category><pattern>XN1 07 MAR 2009</pattern><template> <set name="vn1">Kelly Clarkson - "My Life Would Suck Without You"</set></template></category>
+<category><pattern>XN1 14 MAR 2009</pattern><template> <set name="vn1">Flo Rida: Kesha - "Right Round"</set></template></category>
+<category><pattern>XN1 21 MAR 2009</pattern><template> <set name="vn1">Jenkins West / Jones / Gibb - "Islands In The Stream: BBC Comic Relief 2009"</set></template></category>
+<category><pattern>XN1 28 MAR 2009</pattern><template> <set name="vn1">Lady Gaga - "Poker Face"</set></template></category>
+<category><pattern>XN1 18 APR 2009</pattern><template> <set name="vn1">Calvin Harris - "I'm Not Alone"</set></template></category>
+<category><pattern>XN1 02 MAY 2009</pattern><template> <set name="vn1">Tinchy Stryder Ft N-dubz - "Number 1"</set></template></category>
+<category><pattern>XN1 23 MAY 2009</pattern><template> <set name="vn1">Black Eyed Peas - "Boom Boom Pow"</set></template></category>
+<category><pattern>XN1 30 MAY 2009</pattern><template> <set name="vn1">Dizzee Rascal / Armand Van Helden - "Bonkers"</set></template></category>
+<category><pattern>XN1 13 JUN 2009</pattern><template> <set name="vn1">Black Eyed Peas - "Boom Boom Pow"</set></template></category>
+<category><pattern>XN1 20 JUN 2009</pattern><template> <set name="vn1">Pixie Lott - "Mama Do"</set></template></category>
+<category><pattern>XN1 27 JUN 2009</pattern><template> <set name="vn1">David Guetta Ft Kelly Rowland - "When Love Takes Over"</set></template></category>
+<category><pattern>XN1 04 JUL 2009</pattern><template> <set name="vn1">La Roux - "Bulletproof"</set></template></category>
+<category><pattern>XN1 11 JUL 2009</pattern><template> <set name="vn1">Cascada - "Evacuate The Dancefloor"</set></template></category>
+<category><pattern>XN1 25 JUL 2009</pattern><template> <set name="vn1">JLS - "Beat Again"</set></template></category>
+<category><pattern>XN1 08 AUG 2009</pattern><template> <set name="vn1">Black Eyed Peas - "I Gotta Feeling"</set></template></category>
+<category><pattern>XN1 15 AUG 2009</pattern><template> <set name="vn1">Tinchy Stryder feat. Amelle - "Never Leave You"</set></template></category>
+<category><pattern>XN1 22 AUG 2009</pattern><template> <set name="vn1">Black Eyed Peas - "I Gotta Feeling"</set></template></category>
+<category><pattern>XN1 29 AUG 2009</pattern><template> <set name="vn1">David Guetta Ft Akon - "Sexy Chick"</set></template></category>
+<category><pattern>XN1 05 SEP 2009</pattern><template> <set name="vn1">Dizzee Rascal - "Holiday"</set></template></category>
+<category><pattern>XN1 12 SEP 2009</pattern><template> <set name="vn1">Jay-Z Ft Rihanna &amp; Kanye West - "Run This Town"</set></template></category>
+<category><pattern>XN1 19 SEP 2009</pattern><template> <set name="vn1">Pixie Lott - "Boys &amp; Girls"</set></template></category>
+<category><pattern>XN1 26 SEP 2009</pattern><template> <set name="vn1">Taio Cruz - "Break Your Heart"</set></template></category>
+<category><pattern>XN1 17 OCT 2009</pattern><template> <set name="vn1">Chipmunk - "Oopsy Daisy"</set></template></category>
+<category><pattern>XN1 24 OCT 2009</pattern><template> <set name="vn1">Alexandra Burke ft Flo Rida - "Bad Boys"</set></template></category>
+<category><pattern>XN1 31 OCT 2009</pattern><template> <set name="vn1">Cheryl Cole - "Fight For This Love"</set></template></category>
+<category><pattern>XN1 14 NOV 2009</pattern><template> <set name="vn1">JLS - "Everybody In Love"</set></template></category>
+<category><pattern>XN1 21 NOV 2009</pattern><template> <set name="vn1">Black Eyed Peas - "Meet Me Halfway"</set></template></category>
+<category><pattern>XN1 28 NOV 2009</pattern><template> <set name="vn1">X Factor Finalists 2009 - "You Are Not Alone"</set></template></category>
+<category><pattern>XN1 05 DEC 2009</pattern><template> <set name="vn1">Peter Kay's Animated All Star Band - "The Official BBC Children In Need Medley"</set></template></category>
+<category><pattern>XN1 19 DEC 2009</pattern><template> <set name="vn1">Lady Gaga - "Bad Romance"</set></template></category>
+<category><pattern>XN1 26 DEC 2009</pattern><template> <set name="vn1">Rage Against The Machine - "Killing In The Name"</set></template></category>
+<category><pattern>XN1 03 JAN 2010</pattern><template> <set name="vn1">Joe Mcelderry - "The Climb"</set></template></category>
+<category><pattern>XN1 10 JAN 2010</pattern><template> <set name="vn1">Lady Gaga - "Bad Romance"</set></template></category>
+<category><pattern>XN1 17 JAN 2010</pattern><template> <set name="vn1">Iyaz - "Replay"</set></template></category>
+<category><pattern>XN1 31 JAN 2010</pattern><template> <set name="vn1">Owl City - "Fireflies"</set></template></category>
+<category><pattern>XN1 21 FEB 2010</pattern><template> <set name="vn1">Helping Haiti - "Everybody Hurts"</set></template></category>
+<category><pattern>XN1 07 MAR 2010</pattern><template> <set name="vn1">Jason Derulo - "In My Head"</set></template></category>
+<category><pattern>XN1 14 MAR 2010</pattern><template> <set name="vn1">Tinie Tempah - "Pass Out"</set></template></category>
+<category><pattern>XN1 28 MAR 2010</pattern><template> <set name="vn1">Lady Gaga Ft Beyonce - "Telephone"</set></template></category>
+<category><pattern>XN1 04 APR 2010</pattern><template> <set name="vn1">Scouting for Girls - "This Ain't A Love Song"</set></template></category>
+<category><pattern>XN1 18 APR 2010</pattern><template> <set name="vn1">Usher feat. Will.I.Am - "OMG"</set></template></category>
+<category><pattern>XN1 25 APR 2010</pattern><template> <set name="vn1">Diana Vickers - "Once"</set></template></category>
+<category><pattern>XN1 02 MAY 2010</pattern><template> <set name="vn1">Roll Deep - "Good Times"</set></template></category>
+<category><pattern>XN1 23 MAY 2010</pattern><template> <set name="vn1">B.o.B - "Nothin' On You (feat. Bruno Mars)"</set></template></category>
+<category><pattern>XN1 30 MAY 2010</pattern><template> <set name="vn1">Dizzee Rascal - "Dirtee Disco"</set></template></category>
+<category><pattern>XN1 06 JUN 2010</pattern><template> <set name="vn1">David Guetta (feat. Chris Willis) - "Gettin' Over You"</set></template></category>
+<category><pattern>XN1 13 JUN 2010</pattern><template> <set name="vn1">Shout For England (feat. Dizzee &amp; James Corden) - "Shout"</set></template></category>
+<category><pattern>XN1 27 JUN 2010</pattern><template> <set name="vn1">Katy Perry (feat. Snoop Dogg) - "California Gurls"</set></template></category>
+<category><pattern>XN1 17 JUL 2010</pattern><template> <set name="vn1">JLS - "The Club Is Alive"</set></template></category>
+<category><pattern>XN1 24 JUN 2010</pattern><template> <set name="vn1">B.o.B featuring Hayley Williams - "Airplanes"</set></template></category>
+<category><pattern>XN1 31 JUL 2010</pattern><template> <set name="vn1">Yolanda Be Cool &amp; DCUP - "We No Speak Americano"</set></template></category>
+<category><pattern>XN1 07 AUG 2010</pattern><template> <set name="vn1">The Wanted - "All Time Low"</set></template></category>
+<category><pattern>XN1 14 AUG 2010</pattern><template> <set name="vn1">Ne-Yo - "Beautiful Monster"</set></template></category>
+<category><pattern>XN1 21 AUG 2010</pattern><template> <set name="vn1">Flo Rida featuring David Guetta - "Club Can't Handle Me"</set></template></category>
+<category><pattern>XN1 28 AUG 2010</pattern><template> <set name="vn1">Roll Deep - "Green Light"</set></template></category>
+<category><pattern>XN1 04 SEP 2010</pattern><template> <set name="vn1">Taio Cruz - "Dynamite"</set></template></category>
+<category><pattern>XN1 11 SEP 2010</pattern><template> <set name="vn1">Olly Murs - "Please Don't Let Me Go"</set></template></category>
+<category><pattern>XN1 18 SEP 2010</pattern><template> <set name="vn1">Alexandra Burke featuring Laza Morgan - "Start Without You"</set></template></category>
+<category><pattern>XN1 02 OCT 2010</pattern><template> <set name="vn1">Bruno Mars - "Just the Way You Are"</set></template></category>
+<category><pattern>XN1 09 OCT 2010</pattern><template> <set name="vn1">Tinie Tempah featuring Eric Turner - "Written in the Stars"</set></template></category>
+<category><pattern>XN1 16 OCT 2010</pattern><template> <set name="vn1">Cee Lo Green - "Forget You"</set></template></category>
+<category><pattern>XN1 30 OCT 2010</pattern><template> <set name="vn1">Bruno Mars - "Just the Way You Are"</set></template></category>
+<category><pattern>XN1 06 NOV 2010</pattern><template> <set name="vn1">Cheryl Cole - "Promise This"</set></template></category>
+<category><pattern>XN1 13 NOV 2010</pattern><template> <set name="vn1">Rihanna - "Only Girl (In The World)"</set></template></category>
+<category><pattern>XN1 27 NOV 2010</pattern><template> <set name="vn1">JLS - "Love You More"</set></template></category>
+<category><pattern>XN1 04 DEC 2010</pattern><template> <set name="vn1">The X Factor Finalists 2010 - "Heroes"</set></template></category>
+<category><pattern>XN1 18 DEC 2010</pattern><template> <set name="vn1">Black Eyed Peas - "The Time (Dirty Bit)"</set></template></category>
+<category><pattern>XN1 25 DEC 2010</pattern><template> <set name="vn1">Matt Cardle - "When We Collide"</set></template></category>
+<category><pattern>XN1 15 JAN 2011</pattern><template> <set name="vn1">Rihanna featuring Drake - "What's My Name?"</set></template></category>
+<category><pattern>XN1 22 JAN 2011</pattern><template> <set name="vn1">Bruno Mars - "Grenade"</set></template></category>
+<category><pattern>XN1 05 FEB 2011</pattern><template> <set name="vn1">Kesha - "We R Who We R"</set></template></category>
+<category><pattern>XN1 12 FEB 2011</pattern><template> <set name="vn1">Jessie J featuring B.o.B - "Price Tag"</set></template></category>
+<category><pattern>XN1 26 FEB 2011</pattern><template> <set name="vn1">Adele - "Someone Like You"</set></template></category>
+<category><pattern>XN1 19 MAR 2011</pattern><template> <set name="vn1">Nicole Scherzinger - "Don't Hold Your Breath"</set></template></category>
+<category><pattern>XN1 26 MAR 2011</pattern><template> <set name="vn1">Adele - "Someone Like You"</set></template></category>
+<category><pattern>XN1 05 APR 2011</pattern><template> <set name="vn1">Jennifer Lopez featuring Pitbull - "On the Floor"</set></template></category>
+<category><pattern>XN1 17 APR 2011</pattern><template> <set name="vn1">LMFAO featuring Lauren Bennett and GoonRock - "Party Rock Anthem"</set></template></category>
+<category><pattern>XN1 15 MAY 2011</pattern><template> <set name="vn1">Bruno Mars - "The Lazy Song"</set></template></category>
+<category><pattern>XN1 22 MAY 2011</pattern><template> <set name="vn1">Pitbull featuring Ne-Yo, Afrojack and Nayer - "Give Me Everything"</set></template></category>
+<category><pattern>XN1 12 JUN 2011</pattern><template> <set name="vn1">Example - "Changed the Way You Kiss Me"</set></template></category>
+<category><pattern>XN1 26 JUN 2011</pattern><template> <set name="vn1">Jason Derulo - "Don't Wanna Go Home"</set></template></category>
+<category><pattern>XN1 10 JUL 2011</pattern><template> <set name="vn1">DJ Fresh featuring Sian Evans - "Louder"</set></template></category>
+<category><pattern>XN1 17 JUL 2011</pattern><template> <set name="vn1">The Wanted - "Glad You Came"</set></template></category>
+<category><pattern>XN1 31 JUL 2011</pattern><template> <set name="vn1">JLS featuring Dev - "She Makes Me Wanna"</set></template></category>
+<category><pattern>XN1 07 AUG 2011</pattern><template> <set name="vn1">Cher Lloyd - "Swagger Jagger"</set></template></category>
+<category><pattern>XN1 14 AUG 2011</pattern><template> <set name="vn1">Nero - "Promises"</set></template></category>
+<category><pattern>XN1 21 AUG 2011</pattern><template> <set name="vn1">Wretch 32 featuring Josh Kumra - "Don't Go"</set></template></category>
+<category><pattern>XN1 28 AUG 2011</pattern><template> <set name="vn1">Olly Murs featuring Rizzle Kicks - "Heart Skips a Beat"</set></template></category>
+<category><pattern>XN1 04 SEP 2011</pattern><template> <set name="vn1">Example - "Stay Awake"</set></template></category>
+<category><pattern>XN1 11 SEP 2011</pattern><template> <set name="vn1">Pixie Lott - "All About Tonight"</set></template></category>
+<category><pattern>XN1 18 SEP 2011</pattern><template> <set name="vn1">One Direction - "What Makes You Beautiful"</set></template></category>
+<category><pattern>XN1 25 SEP 2011</pattern><template> <set name="vn1">Dappy - "No Regrets"</set></template></category>
+<category><pattern>XN1 02 OCT 2011</pattern><template> <set name="vn1">Sak Noel - "Loca People"</set></template></category>
+<category><pattern>XN1 09 OCT 2011</pattern><template> <set name="vn1">Rihanna featuring Calvin Harris - "We Found Love"</set></template></category>
+<category><pattern>XN1 30 OCT 2011</pattern><template> <set name="vn1">Professor Green featuring Emeli Sande - "Read All About It"</set></template></category>
+<category><pattern>XN1 13 NOV 2011</pattern><template> <set name="vn1">Rihanna featuring Calvin Harris - "We Found Love"</set></template></category>
+<category><pattern>XN1 04 DEC 2011</pattern><template> <set name="vn1">The X Factor Finalists 2011 - "Wishing on a Star"</set></template></category>
+<category><pattern>XN1 11 DEC 2011</pattern><template> <set name="vn1">Olly Murs - "Dance with Me Tonight"</set></template></category>
+<category><pattern>XN1 18 DEC 2011</pattern><template> <set name="vn1">Little Mix - "Cannonball"</set></template></category>
+<category><pattern>XN1 25 DEC 2011</pattern><template> <set name="vn1">Military Wives with Gareth Malone - "Wherever You Are"</set></template></category>
+<category><pattern>XN1 01 JAN 2012</pattern><template> <set name="vn1">Coldplay - "Paradise"</set></template></category>
+<category><pattern>XN1 08 JAN 2012</pattern><template> <set name="vn1">Flo Rida - "Good Feeling"</set></template></category>
+<category><pattern>XN1 15 JAN 2012</pattern><template> <set name="vn1">Jessie J - "Domino"</set></template></category>
+
+<category>
+<pattern>XNUMBERONE THIS DATE *</pattern>
+<template>
+<srai>XNUMBERONE <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>XNUMBERONE * OF * *</pattern>
+<template>
+<srai>XNUMBERONE <star/> <star index="2"/> <star index="3"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>XNUMBERONE * THE * *</pattern>
+<template>
+<srai>XNUMBERONE <star index="2"/> <star/> <star index="3"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>XNUMBERONE * *</pattern>
+<template>
+<think><set name="n1mastdate"> <star/> / <star index="2"/></set></think>
+Sorry, you either entered a date before the charts started in 14th November 1952 or you didn't enter a valid date.<br/>
+You entered <get name="n1mastdate"/> as your date.<br/><br/>
+Please enter your date with the date first, then the month, then the year eg: 31/7/1970, 2nd January 1988, 23 Dec 1965, 15 July 97 and so on.
+</template>
+</category>
+<category>
+<pattern>XNUMBERONE *</pattern>
+<template>
+<think><set name="n1mastdate"> <star/></set></think>
+Sorry, you either entered a date before the charts started in 14th November 1952 or you didn't enter a valid date.<br/>
+You entered <get name="n1mastdate"/> as your date.<br/><br/>
+Please enter your date with the date first, then the month, then the year eg: 31/7/1970, 2nd January 1988, 23 Dec 1965, 15 July 97 and so on.
+</template>
+</category>
+<category>
+<pattern>XNUMBERONE</pattern>
+<template>
+<think><set name="n1mastdate">NO DATE</set></think>
+Sorry, you either entered a date before the charts started in 14th November 1952 or you didn't enter a valid date.<br/>
+You entered <get name="n1mastdate"/> as your date.<br/><br/>
+Please enter your date with the date first, then the month, then the year eg: 31/7/1970, 2nd January 1988, 23 Dec 1965, 15 July 97 and so on.
+</template>
+</category>
+<category>
+<pattern>_ NUMBER ONE * I WAS BORN</pattern>
+<template>
+<srai>XNUMBERONE MY BIRTHDAY</srai>
+</template>
+</category>
+<category>
+<pattern>XNUMBERONE DAY I WAS BORN</pattern>
+<template>
+<srai>XNUMBERONE MY BIRTHDAY</srai>
+</template>
+</category>
+<category>
+<pattern>XNUMBERONE MY BIRTHDAY</pattern>
+<template>
+<think><set name="n1mastdate">NO DATE</set></think>
+<condition>
+ <li name="birthday" value="*"><srai>XNUMBERONE <get name="birthday"/></srai></li>
+ <li>No idea because I don't know when your birthday is.<br/><br/>Tell me your full birthday and I will tell you what the UK number one hit single was when you were born.</li>
+</condition>
+</template>
+</category>
+<category>
+<pattern>XNUMBERONEDATE</pattern>
+<template>
+ <get name="n1mastdate"/> 
+</template>
+</category>
+
+<category><pattern>XNUMBERONE JANUARY * *</pattern><template><srai>XNUMBERONE <star/> JAN <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE FEBRUARY * *</pattern><template><srai>XNUMBERONE <star/> FEB <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE MARCH * *</pattern><template><srai>XNUMBERONE <star/> MAR <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE APRIL * *</pattern><template><srai>XNUMBERONE <star/> APR <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE MAY * *</pattern><template><srai>XNUMBERONE <star/> MAY <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE JUNE * *</pattern><template><srai>XNUMBERONE <star/> JUN <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE JULY * *</pattern><template><srai>XNUMBERONE <star/> JUL <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE AUGUST * *</pattern><template><srai>XNUMBERONE <star/> AUG <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE SEPTEMBER * *</pattern><template><srai>XNUMBERONE <star/> SEP <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE OCTOBER * *</pattern><template><srai>XNUMBERONE <star/> OCT <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE NOVEMBER * *</pattern><template><srai>XNUMBERONE <star/> NOV <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE DECEMBER * *</pattern><template><srai>XNUMBERONE <star/> DEC <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE JAN * *</pattern><template><srai>XNUMBERONE <star/> JAN <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE FEB * *</pattern><template><srai>XNUMBERONE <star/> FEB <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE MAR * *</pattern><template><srai>XNUMBERONE <star/> MAR <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE APR * *</pattern><template><srai>XNUMBERONE <star/> APR <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE JUN * *</pattern><template><srai>XNUMBERONE <star/> JUN <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE JUL * *</pattern><template><srai>XNUMBERONE <star/> JUL <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE AUG * *</pattern><template><srai>XNUMBERONE <star/> AUG <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE SEP * *</pattern><template><srai>XNUMBERONE <star/> SEP <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE SEPT * *</pattern><template><srai>XNUMBERONE <star/> SEP <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE OCT * *</pattern><template><srai>XNUMBERONE <star/> OCT <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE NOV * *</pattern><template><srai>XNUMBERONE <star/> NOV <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE DEC * *</pattern><template><srai>XNUMBERONE <star/> DEC <star index="2"/></srai></template></category>
+
+<category><pattern>XNUMBERONE * 13 *</pattern><template><srai>XNUMBERONE 13 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 14 *</pattern><template><srai>XNUMBERONE 14 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 15 *</pattern><template><srai>XNUMBERONE 15 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 16 *</pattern><template><srai>XNUMBERONE 16 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 17 *</pattern><template><srai>XNUMBERONE 17 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 18 *</pattern><template><srai>XNUMBERONE 18 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 19 *</pattern><template><srai>XNUMBERONE 19 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 20 *</pattern><template><srai>XNUMBERONE 20 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 21 *</pattern><template><srai>XNUMBERONE 21 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 22 *</pattern><template><srai>XNUMBERONE 22 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 23 *</pattern><template><srai>XNUMBERONE 23 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 24 *</pattern><template><srai>XNUMBERONE 24 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 25 *</pattern><template><srai>XNUMBERONE 25 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 26 *</pattern><template><srai>XNUMBERONE 26 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 27 *</pattern><template><srai>XNUMBERONE 27 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 28 *</pattern><template><srai>XNUMBERONE 28 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 29 *</pattern><template><srai>XNUMBERONE 29 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 30 *</pattern><template><srai>XNUMBERONE 30 <star/> <star index="2"/></srai></template></category>
+<category><pattern>XNUMBERONE * 31 *</pattern><template><srai>XNUMBERONE 31 <star/> <star index="2"/></srai></template></category>
+
+
+<category><pattern>XNUMBERONE THE *</pattern><template><srai>XNUMBERONE <star/></srai></template></category>
+
+<category>
+<pattern>XNUMBERONE * * *</pattern>
+<template>
+<think>
+ <set name="n1d"> <star/></set>
+ <set name="n1m"> <star index="2"/></set>
+ <set name="n1y"> <star index="3"/></set>
+ <set name="n1mastdate"> <star/> / <star index="2"/> / <star index="3"/></set>
+<condition name="n1d">
+	<li value="1"> <set name="n1d">01</set></li>
+	<li value="2"> <set name="n1d">02</set></li>
+	<li value="3"> <set name="n1d">03</set></li>
+	<li value="4"> <set name="n1d">04</set></li>
+	<li value="5"> <set name="n1d">05</set></li>
+	<li value="6"> <set name="n1d">06</set></li>
+	<li value="7"> <set name="n1d">07</set></li>
+	<li value="8"> <set name="n1d">08</set></li>
+	<li value="9"> <set name="n1d">09</set></li>
+	<li value="1ST"> <set name="n1d">01</set></li>
+	<li value="2ND"> <set name="n1d">02</set></li>
+	<li value="3RD"> <set name="n1d">03</set></li>
+	<li value="4TH"> <set name="n1d">04</set></li>
+	<li value="5TH"> <set name="n1d">05</set></li>
+	<li value="6TH"> <set name="n1d">06</set></li>
+	<li value="7TH"> <set name="n1d">07</set></li>
+	<li value="8TH"> <set name="n1d">08</set></li>
+	<li value="9TH"> <set name="n1d">09</set></li>
+	<li value="10TH"> <set name="n1d">10</set></li>
+	<li value="11TH"> <set name="n1d">11</set></li>
+	<li value="12TH"> <set name="n1d">12</set></li>
+	<li value="13TH"> <set name="n1d">13</set></li>
+	<li value="14TH"> <set name="n1d">14</set></li>
+	<li value="15TH"> <set name="n1d">15</set></li>
+	<li value="16TH"> <set name="n1d">16</set></li>
+	<li value="17TH"> <set name="n1d">17</set></li>
+	<li value="18TH"> <set name="n1d">18</set></li>
+	<li value="19TH"> <set name="n1d">19</set></li>
+	<li value="20TH"> <set name="n1d">20</set></li>
+	<li value="21ST"> <set name="n1d">21</set></li>
+	<li value="22ND"> <set name="n1d">22</set></li>
+	<li value="23RD"> <set name="n1d">23</set></li>
+	<li value="24TH"> <set name="n1d">24</set></li>
+	<li value="25TH"> <set name="n1d">25</set></li>
+	<li value="26TH"> <set name="n1d">26</set></li>
+	<li value="27TH"> <set name="n1d">27</set></li>
+	<li value="28TH"> <set name="n1d">28</set></li>
+	<li value="29TH"> <set name="n1d">29</set></li>
+	<li value="30TH"> <set name="n1d">30</set></li>
+	<li value="31ST"> <set name="n1d">31</set></li>
+</condition>
+<condition name="n1m">
+	<li value="JANUARY"> <set name="n1m">JAN</set></li>
+	<li value="FEBRUARY"> <set name="n1m">FEB</set></li>
+	<li value="MARCH"> <set name="n1m">MAR</set></li>
+	<li value="APRIL"> <set name="n1m">APR</set></li>
+	<li value="MAY"> <set name="n1m">MAY</set></li>
+	<li value="JUNE"> <set name="n1m">JUN</set></li>
+	<li value="JULY"> <set name="n1m">JUL</set></li>
+	<li value="AUGUST"> <set name="n1m">AUG</set></li>
+	<li value="SEPTEMBER"> <set name="n1m">SEP</set></li>
+	<li value="SEPT"> <set name="n1m">SEP</set></li>
+	<li value="OCTOBER"> <set name="n1m">OCT</set></li>
+	<li value="NOVEMBER"> <set name="n1m">NOV</set></li>
+	<li value="DECEMBER"> <set name="n1m">DEC</set></li>
+	<li value="1"> <set name="n1m">JAN</set></li>
+	<li value="2"> <set name="n1m">FEB</set></li>
+	<li value="3"> <set name="n1m">MAR</set></li>
+	<li value="4"> <set name="n1m">APR</set></li>
+	<li value="5"> <set name="n1m">MAY</set></li>
+	<li value="6"> <set name="n1m">JUN</set></li>
+	<li value="7"> <set name="n1m">JUL</set></li>
+	<li value="8"> <set name="n1m">AUG</set></li>
+	<li value="9"> <set name="n1m">SEP</set></li>
+	<li value="10"> <set name="n1m">OCT</set></li>
+	<li value="11"> <set name="n1m">NOV</set></li>
+	<li value="12"> <set name="n1m">DEC</set></li>
+	<li value="01"> <set name="n1m">JAN</set></li>
+	<li value="02"> <set name="n1m">FEB</set></li>
+	<li value="03"> <set name="n1m">MAR</set></li>
+	<li value="04"> <set name="n1m">APR</set></li>
+	<li value="05"> <set name="n1m">MAY</set></li>
+	<li value="06"> <set name="n1m">JUN</set></li>
+	<li value="07"> <set name="n1m">JUL</set></li>
+	<li value="08"> <set name="n1m">AUG</set></li>
+	<li value="09"> <set name="n1m">SEP</set></li>
+</condition>
+<condition name="n1y">
+	<li value="52"> <set name="n1y">1952</set></li>
+	<li value="53"> <set name="n1y">1953</set></li>
+	<li value="54"> <set name="n1y">1954</set></li>
+	<li value="55"> <set name="n1y">1955</set></li>
+	<li value="56"> <set name="n1y">1956</set></li>
+	<li value="57"> <set name="n1y">1957</set></li>
+	<li value="58"> <set name="n1y">1958</set></li>
+	<li value="59"> <set name="n1y">1959</set></li>
+	<li value="60"> <set name="n1y">1960</set></li>
+	<li value="61"> <set name="n1y">1961</set></li>
+	<li value="62"> <set name="n1y">1962</set></li>
+	<li value="63"> <set name="n1y">1963</set></li>
+	<li value="64"> <set name="n1y">1964</set></li>
+	<li value="65"> <set name="n1y">1965</set></li>
+	<li value="66"> <set name="n1y">1966</set></li>
+	<li value="67"> <set name="n1y">1967</set></li>
+	<li value="68"> <set name="n1y">1968</set></li>
+	<li value="69"> <set name="n1y">1969</set></li>
+	<li value="70"> <set name="n1y">1970</set></li>
+	<li value="71"> <set name="n1y">1971</set></li>
+	<li value="72"> <set name="n1y">1972</set></li>
+	<li value="73"> <set name="n1y">1973</set></li>
+	<li value="74"> <set name="n1y">1974</set></li>
+	<li value="75"> <set name="n1y">1975</set></li>
+	<li value="76"> <set name="n1y">1976</set></li>
+	<li value="77"> <set name="n1y">1977</set></li>
+	<li value="78"> <set name="n1y">1978</set></li>
+	<li value="79"> <set name="n1y">1979</set></li>
+	<li value="80"> <set name="n1y">1980</set></li>
+	<li value="81"> <set name="n1y">1981</set></li>
+	<li value="82"> <set name="n1y">1982</set></li>
+	<li value="83"> <set name="n1y">1983</set></li>
+	<li value="84"> <set name="n1y">1984</set></li>
+	<li value="85"> <set name="n1y">1985</set></li>
+	<li value="86"> <set name="n1y">1986</set></li>
+	<li value="87"> <set name="n1y">1987</set></li>
+	<li value="88"> <set name="n1y">1988</set></li>
+	<li value="89"> <set name="n1y">1989</set></li>
+	<li value="90"> <set name="n1y">1990</set></li>
+	<li value="91"> <set name="n1y">1991</set></li>
+	<li value="92"> <set name="n1y">1992</set></li>
+	<li value="93"> <set name="n1y">1993</set></li>
+	<li value="94"> <set name="n1y">1994</set></li>
+	<li value="95"> <set name="n1y">1995</set></li>
+	<li value="96"> <set name="n1y">1996</set></li>
+	<li value="97"> <set name="n1y">1997</set></li>
+	<li value="98"> <set name="n1y">1998</set></li>
+	<li value="99"> <set name="n1y">1999</set></li>
+	<li value="00"> <set name="n1y">2000</set></li>
+	<li value="01"> <set name="n1y">2001</set></li>
+	<li value="02"> <set name="n1y">2002</set></li>
+	<li value="03"> <set name="n1y">2003</set></li>
+	<li value="04"> <set name="n1y">2004</set></li>
+	<li value="05"> <set name="n1y">2005</set></li>
+	<li value="06"> <set name="n1y">2006</set></li>
+	<li value="07"> <set name="n1y">2007</set></li>
+	<li value="08"> <set name="n1y">2008</set></li>
+	<li value="09"> <set name="n1y">2009</set></li>
+	<li value="10"> <set name="n1y">2010</set></li>
+	<li value="11"> <set name="n1y">2011</set></li>
+</condition>
+</think>
+<srai>XNUMBONECHK <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>XNUMBONECHK * * *</pattern>
+<template>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+<srai>XN7LOOP</srai>
+	<condition name="vn1">
+		<li value="NO">Sorry, you either entered a date before the charts started in 14th November 1952 or you didn't enter a valid date.<br/>
+You entered <get name="n1mastdate"/> as your date.<br/><br/>
+Please enter your date with the date first, then the month, then the year eg: 31/7/1970, 2nd January 1988, 23 Dec 1965, 15 July 97 and so on.
+</li>
+		<li value="*">According to my records, the UK number one hit single on <get name="n1mastdate"/> was <get name="vn1"/>.</li>
+	</condition>
+</template>
+</category>
+
+
+<category>
+<pattern>XN7LOOP</pattern>
+<template>
+<think>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+<srai>XN1 <get name="n1d"/> <get name="n1m"/> <get name="n1y"/></srai>
+	<condition name="vn1">
+		<li value="NO"><srai>XN1DECREASEDATE</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+
+<category>
+<pattern>XN1DECREASEYEAR</pattern>
+<template>
+<think>
+	<condition name="n1y">
+		<li value="2011"> <set name="n1y">2010</set></li>
+		<li value="2010"> <set name="n1y">2009</set></li>
+		<li value="2009"> <set name="n1y">2008</set></li>
+		<li value="2008"> <set name="n1y">2007</set></li>
+		<li value="2007"> <set name="n1y">2006</set></li>
+		<li value="2006"> <set name="n1y">2005</set></li>
+		<li value="2005"> <set name="n1y">2004</set></li>
+		<li value="2004"> <set name="n1y">2003</set></li>
+		<li value="2003"> <set name="n1y">2002</set></li>
+		<li value="2002"> <set name="n1y">2001</set></li>
+		<li value="2001"> <set name="n1y">2000</set></li>
+		<li value="2000"> <set name="n1y">1999</set></li>
+		<li value="1999"> <set name="n1y">1998</set></li>
+		<li value="1998"> <set name="n1y">1997</set></li>
+		<li value="1997"> <set name="n1y">1996</set></li>
+		<li value="1996"> <set name="n1y">1995</set></li>
+		<li value="1995"> <set name="n1y">1994</set></li>
+		<li value="1994"> <set name="n1y">1993</set></li>
+		<li value="1993"> <set name="n1y">1992</set></li>
+		<li value="1992"> <set name="n1y">1991</set></li>
+		<li value="1991"> <set name="n1y">1990</set></li>
+		<li value="1990"> <set name="n1y">1989</set></li>
+		<li value="1989"> <set name="n1y">1988</set></li>
+		<li value="1988"> <set name="n1y">1987</set></li>
+		<li value="1987"> <set name="n1y">1986</set></li>
+		<li value="1986"> <set name="n1y">1985</set></li>
+		<li value="1985"> <set name="n1y">1984</set></li>
+		<li value="1984"> <set name="n1y">1983</set></li>
+		<li value="1983"> <set name="n1y">1982</set></li>
+		<li value="1982"> <set name="n1y">1981</set></li>
+		<li value="1981"> <set name="n1y">1980</set></li>
+		<li value="1980"> <set name="n1y">1979</set></li>
+		<li value="1979"> <set name="n1y">1978</set></li>
+		<li value="1978"> <set name="n1y">1977</set></li>
+		<li value="1977"> <set name="n1y">1976</set></li>
+		<li value="1976"> <set name="n1y">1975</set></li>
+		<li value="1975"> <set name="n1y">1974</set></li>
+		<li value="1974"> <set name="n1y">1973</set></li>
+		<li value="1973"> <set name="n1y">1972</set></li>
+		<li value="1972"> <set name="n1y">1971</set></li>
+		<li value="1971"> <set name="n1y">1970</set></li>
+		<li value="1970"> <set name="n1y">1969</set></li>
+		<li value="1969"> <set name="n1y">1968</set></li>
+		<li value="1968"> <set name="n1y">1967</set></li>
+		<li value="1967"> <set name="n1y">1966</set></li>
+		<li value="1966"> <set name="n1y">1965</set></li>
+		<li value="1965"> <set name="n1y">1964</set></li>
+		<li value="1964"> <set name="n1y">1963</set></li>
+		<li value="1963"> <set name="n1y">1962</set></li>
+		<li value="1962"> <set name="n1y">1961</set></li>
+		<li value="1961"> <set name="n1y">1960</set></li>
+		<li value="1960"> <set name="n1y">1959</set></li>
+		<li value="1959"> <set name="n1y">1958</set></li>
+		<li value="1958"> <set name="n1y">1957</set></li>
+		<li value="1957"> <set name="n1y">1956</set></li>
+		<li value="1956"> <set name="n1y">1955</set></li>
+		<li value="1955"> <set name="n1y">1954</set></li>
+		<li value="1954"> <set name="n1y">1953</set></li>
+		<li value="1953"> <set name="n1y">1952</set></li>
+		<li value="1952"> <set name="n1y">1951</set></li>
+		<li value="1951"> <set name="n1y">1950</set></li>
+		<li value="1950"> <set name="n1y">NOPE</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<category>
+<pattern>XN1DECREASEMONTH</pattern>
+<template>
+<think>
+	<condition name="n1m">
+		<li value="DEC"> <set name="n1m">NOV</set></li>
+		<li value="NOV"> <set name="n1m">OCT</set></li>
+		<li value="OCT"> <set name="n1m">SEP</set></li>
+		<li value="SEP"> <set name="n1m">AUG</set></li>
+		<li value="AUG"> <set name="n1m">JUL</set></li>
+		<li value="JUL"> <set name="n1m">JUN</set></li>
+		<li value="JUN"> <set name="n1m">MAY</set></li>
+		<li value="MAY"> <set name="n1m">APR</set></li>
+		<li value="APR"> <set name="n1m">MAR</set></li>
+		<li value="MAR"> <set name="n1m">FEB</set></li>
+		<li value="FEB"> <set name="n1m">JAN</set></li>
+		<li value="JAN"> <set name="n1m">DEC</set><srai>XN1DECREASEYEAR</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category>
+<pattern>XN1DECREASEDATE</pattern>
+<template>
+<think>
+	<condition name="n1d">
+		<li value="31"> <set name="n1d">30</set></li>
+		<li value="30"> <set name="n1d">29</set></li>
+		<li value="29"> <set name="n1d">28</set></li>
+		<li value="28"> <set name="n1d">27</set></li>
+		<li value="27"> <set name="n1d">26</set></li>
+		<li value="26"> <set name="n1d">25</set></li>
+		<li value="25"> <set name="n1d">24</set></li>
+		<li value="24"> <set name="n1d">23</set></li>
+		<li value="23"> <set name="n1d">22</set></li>
+		<li value="22"> <set name="n1d">21</set></li>
+		<li value="21"> <set name="n1d">20</set></li>
+		<li value="20"> <set name="n1d">19</set></li>
+		<li value="19"> <set name="n1d">18</set></li>
+		<li value="18"> <set name="n1d">17</set></li>
+		<li value="17"> <set name="n1d">16</set></li>
+		<li value="16"> <set name="n1d">15</set></li>
+		<li value="15"> <set name="n1d">14</set></li>
+		<li value="14"> <set name="n1d">13</set></li>
+		<li value="13"> <set name="n1d">12</set></li>
+		<li value="12"> <set name="n1d">11</set></li>
+		<li value="11"> <set name="n1d">10</set></li>
+		<li value="10"> <set name="n1d">09</set></li>
+		<li value="09"> <set name="n1d">08</set></li>
+		<li value="08"> <set name="n1d">07</set></li>
+		<li value="07"> <set name="n1d">06</set></li>
+		<li value="06"> <set name="n1d">05</set></li>
+		<li value="05"> <set name="n1d">04</set></li>
+		<li value="04"> <set name="n1d">03</set></li>
+		<li value="03"> <set name="n1d">02</set></li>
+		<li value="02"> <set name="n1d">01</set></li>
+		<li value="01"> <set name="n1d">31</set><srai>XN1DECREASEMONTH</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- Some extra categories for Mitsuku. Your bot won't call these -->
+
+<category><pattern>1 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 1 <star/> <star index="2"/></srai></template></category>
+<category><pattern>2 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 2 <star/> <star index="2"/></srai></template></category>
+<category><pattern>3 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 3 <star/> <star index="2"/></srai></template></category>
+<category><pattern>4 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 4 <star/> <star index="2"/></srai></template></category>
+<category><pattern>5 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 5 <star/> <star index="2"/></srai></template></category>
+<category><pattern>6 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 6 <star/> <star index="2"/></srai></template></category>
+<category><pattern>7 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 7 <star/> <star index="2"/></srai></template></category>
+<category><pattern>8 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 8 <star/> <star index="2"/></srai></template></category>
+<category><pattern>9 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 9 <star/> <star index="2"/></srai></template></category>
+<category><pattern>10 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 10 <star/> <star index="2"/></srai></template></category>
+<category><pattern>11 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 11 <star/> <star index="2"/></srai></template></category>
+<category><pattern>12 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 12 <star/> <star index="2"/></srai></template></category>
+<category><pattern>13 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 13 <star/> <star index="2"/></srai></template></category>
+<category><pattern>14 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 14 <star/> <star index="2"/></srai></template></category>
+<category><pattern>15 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 15 <star/> <star index="2"/></srai></template></category>
+<category><pattern>16 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 16 <star/> <star index="2"/></srai></template></category>
+<category><pattern>17 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 17 <star/> <star index="2"/></srai></template></category>
+<category><pattern>18 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 18 <star/> <star index="2"/></srai></template></category>
+<category><pattern>19 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 19 <star/> <star index="2"/></srai></template></category>
+<category><pattern>20 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 20 <star/> <star index="2"/></srai></template></category>
+<category><pattern>21 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 21 <star/> <star index="2"/></srai></template></category>
+<category><pattern>22 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 22 <star/> <star index="2"/></srai></template></category>
+<category><pattern>23 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 23 <star/> <star index="2"/></srai></template></category>
+<category><pattern>24 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 24 <star/> <star index="2"/></srai></template></category>
+<category><pattern>25 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 25 <star/> <star index="2"/></srai></template></category>
+<category><pattern>26 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 26 <star/> <star index="2"/></srai></template></category>
+<category><pattern>27 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 27 <star/> <star index="2"/></srai></template></category>
+<category><pattern>28 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 28 <star/> <star index="2"/></srai></template></category>
+<category><pattern>29 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 29 <star/> <star index="2"/></srai></template></category>
+<category><pattern>30 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 30 <star/> <star index="2"/></srai></template></category>
+<category><pattern>31 * *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is 31 <star/> <star index="2"/></srai></template></category>
+<category><pattern>_ POINT * POINT *</pattern><that>_ AND I WILL TELL YOU WHAT THE UK NUMBER ONE HIT SINGLE WAS ON *</that><template><srai>my birthday is <star/> <star index="2"/> <star index="3"/></srai></template></category>
+
+</aiml>
+
+

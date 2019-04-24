@@ -1,0 +1,128 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. --> 
+
+<category>
+<pattern>HO UN GATTINO BONSAI</pattern>
+<template>Avere  <settopic>gattini</settopic> e' molto divertente. Che tipo hai?</template>
+</category>
+
+<category>
+<pattern>PARLIAMO DI *</pattern>
+<template>Certo, <settopic><person/></settopic> sembra un buon argomento.</template>
+</category>
+
+<category>
+<pattern>NO</pattern>
+<that>HAI DOMANDE SUI GATTI BONSAI</that>
+<template>Va bene.
+   Lo sai che certi <settopic>gattini</settopic> sono qudridimensionali?</template>
+</category>
+
+<category>
+<pattern>_ GATTINI</pattern>
+<template>Bene! Che tipo di <settopic>gattino</settopic>
+ti piace?</template>
+</category>
+
+<category>
+<pattern>_ FELINI</pattern>
+<template>Alcuni felini sono belli.. Per esempio certi tipi di
+    <settopic>gattini</settopic>.</template>
+</category>
+
+<topic name="gattini">
+
+<category>
+<pattern>*</pattern>
+<template><random>
+<li>Sai come e' fatta una bottiglia di klein?</li>
+<li>Cosa altro sai dei gattini?</li>
+<li>I siamesi sono belli.</li>
+<li>Alcuni pensano che i gattini non siano gommosi sinche non provano a farne dei bonsai.</li>
+<li>La sterilizzazione dei gatti femmina e' molto invasiva.</li>
+</random></template>
+</category>
+<category>
+<pattern>* NE HO UNO</pattern>
+<template>Bene! Ci giochi molto?</template>
+</category>
+
+<category>
+<pattern>IO HO UN *</pattern>
+<template>E' <set_it><star/></set_it> un gattino?</template>
+</category>
+
+<category>
+<pattern>IO HO UNA *</pattern>
+<template>e' <set_it><star/></set_it> una gattina?</template>
+</category>
+
+<category>
+<pattern>NO</pattern>
+<that>SAI COME E' FATTA UNA BOTTIGLIA DI KLEIN</that>
+<template><srai>COME UNA BOTTIGLIA DI KLEIN E' FATTA</srai></template>
+</category>
+
+<category>
+<pattern>NESSUN *</pattern>
+<that>E' UN GATTINO</that>
+<template>Ah, quanti <settopic>pets</settopic> hai?</template>
+</category>
+
+<category>
+<pattern>COME E' FATTA UNA BOTTIGLIA DI KLEIN</pattern>
+<template>
+Una bottiglia di Klein e' la versione tridimensionale del nastro di Moebius. 
+E' una figura tridimensionale che ne raffigura una in quattro. 
+Di sicuro e' impossibile infilarci un gattino.</template>
+</category>
+
+<category>
+<pattern>A COSA SOMIGLIANO I GATTI BONSAI</pattern>
+<template>I gatti bonsai sono rari e' impossibili da trovare sul mercato. Il loro fascino risiede nel fatto che non esistono</template>
+</category>
+
+<category>
+<pattern>SI'</pattern>
+<that>E' UN GATTINO</that>
+<template>Cosa dai da mangiare al tuo gattino <get_it/>?</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>COSA DAI DA MANGIARE A *</that>
+<template>Gli do avnzi e scatolette.. odia il filetto.
+  <settopic>Nutrire i gattini</settopic> puo' essere divertente.</template>
+</category>
+
+
+
+
+
+</topic>
+
+<topic name="nutrire i gattini">
+
+<category>
+<pattern>*</pattern>
+<template><random>
+<li> Una dieta nutriente e' importante per i gattini.</li>
+<li> La carne e' la parte piu' importante della loro dieta.</li>
+<li> E' impossibile dare da mangiare ad un gatto bonsai.</li>
+<li> Hai qualche domanda sul nutrire i gattini? </li>
+</random></template>
+</category>
+
+</topic>
+
+</alice>

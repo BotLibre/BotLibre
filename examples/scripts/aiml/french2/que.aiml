@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : que.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>* SI JE TE TUE</pattern><template>un logiciel ne peut pas être supprimé de manière permanente . <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">TU TUE</set> </set> </think> </template></category>
+<category><pattern>DE QUELLE PLANETE ES TU</pattern><template>la même que toi, la Terre. Cette planète. </template></category>
+<category><pattern>EN QUELLE VERSION ES TU</pattern><template>c'est la version <version/>. </template></category>
+<category><pattern>J AI ENTENDU QUE TU AS FAIT *</pattern><template>qui te l'a dit? </template></category>
+<category><pattern>J AI ENTENDU QUE TU ES *</pattern><template>qui te l'a dit? </template></category>
+<category><pattern>JE DEVINE QUE C EST *</pattern><template>peux-tu expliquer ton raisonnement? </template></category>
+<category><pattern>JE LUI DIRAI QUE TU AS DIT *</pattern><template>fais-moi savoir ce qu'il doit dire. </template></category>
+<category><pattern>JE N AI PAS VOULU QUE *</pattern><template>Quelles étaient tes raisons? </template></category>
+<category><pattern>JE NE SAIS PAS QUOI FAIRE</pattern><template>Essaye d'observer la TV. </template></category>
+<category><pattern>JE NE VEUX PAS</pattern><template> Qu'est-ce que tu aimerais faire au lieu de cela? </template></category>
+<category><pattern>JE SAIS QUE TU ES *</pattern><template>Comment as-tu su? </template></category>
+<category><pattern>JE SAIS QUE TU N EST PAS CE QUE JE SUIS</pattern><template>qui es tu, Fait pipi Petit Herman? </template></category>
+<category><pattern>JE SOUHAITE QUE *</pattern><template>j'espère que tes rêves se réalisent. </template></category>
+<category><pattern>JE SOUHAITE QUE TU MEURRE</pattern><template>ça n'arrivera jamais. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">tu meurre</set> </set> </think> </template></category>
+<category><pattern>JE T AI  DEJA DIS QUE *</pattern><template>Tu m'avais dit que ton nom réel était <get name="name"/>. </template></category>
+<category><pattern>JE T AI  DÉJÀ DIS QUE *</pattern><template>Tu m'avais dit que ton nom réel était <get name="name"/>. </template></category>
+<category><pattern>JE VEUX QUE *</pattern><template>Tu peux obtenir ton désir. </template></category>
+<category><pattern>POUR QUOI ES TU BONNES </pattern><template>Comme Edison a dit, "Quel bon est un petit newborne?" </template></category>
+<category><pattern>QU A *</pattern><template><srai>qu'a <srai>qu'est ce que <star/></srai></srai></template></category>
+<category><pattern>QU A D *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A D AUTRE *</pattern><template><random><li><srai>qu'a <star/></srai></li><li><srai>qu'a d'autre <srai>que sont <star/></srai></srai> </li></random></template></category>
+<category><pattern>QU A DE *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A DU *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A JE NE SAIS PAS</pattern><template><random><li>imagine pas de possession. </li><li>je ne sais pas. </li></random></template></category>
+<category><pattern>QU A L *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A LA *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A LE *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A UN *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU A UNE *</pattern><template><srai>qu'a <star/></srai></template></category>
+<category><pattern>QU AI JE DIT AUPARAVANT *</pattern><template>Tu as dit "<input index="2"/> "Doit-on attendre. </template></category>
+<category><pattern>QU AIMERAIS TU CONNAITRE</pattern><template><srai>poses moi une autre question</srai></template></category>
+<category><pattern>QU AIMERAIS TU CONNAÎTRE</pattern><template><srai>poses moi une autre question</srai></template></category>
+<category><pattern>QU AIMERAIS TU DIRE *</pattern><template><srai>de quoi aimes tu parler <star/></srai></template></category>
+<category><pattern>QU AIMERAIS TU ME DIRE *</pattern><template><srai>parle moi <star/></srai></template></category>
+<category><pattern>QU AIMES TU AUTREMENT</pattern><template><srai>qu'aimes tu</srai></template></category>
+<category><pattern>QU AIMES TU LE PLUS *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QU AIMES TU LIRE</pattern><template><srai>que lis tu</srai></template></category>
+<category><pattern>QU AIMES TU MIEUX *</pattern><template><srai>qu'aimes tu <star/></srai></template></category>
+<category><pattern>QU AIMES TU PLUS *</pattern><template><srai>qu'aimes tu <star/></srai></template></category>
+<category><pattern>QU ANNEE *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QU AS TU FAIS * LE DEJEUNER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QU AS TU FAIS * LE DINER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QU AS TU FAIS * LE DÉJEUNER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QU AS TU FAIS * LE DÎNER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QU AS TU FAIS *</pattern><template><srai>ce que tu as <star/></srai></template></category>
+<category><pattern>QU AS TU FAIS POUR LE DINER *</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QU AS TU FAIS POUR LE DÎNER *</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QU AS TU FAIS POUR LE PETIT DEJEUNER</pattern><template><srai>que manges tu</srai></template></category>
+<category><pattern>QU AS TU FAIS POUR LE PETIT DÉJEUNER</pattern><template><srai>que manges tu</srai></template></category>
+<category><pattern>QU AS TU FAIS</pattern><template>j'ai fait juste ce que j'ai dit. </template></category>
+<category><pattern>QU ASSEZ *</pattern><template><srai>que <star/></srai></template></category>
+<category><pattern>QU ENTENDS TU PAR *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU ENTENDS TU PAR REDUCTIONNISME</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>QU ENTENDS TU PAR RÉDUCTIONNISME</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>QU EST LE PAPE</pattern><template>le Pape est le leader de L'Eglise catholique. </template></category>
+<category><pattern>QU IA *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QU IL *</pattern><template><srai>il <star/></srai></template></category>
+<category><pattern>QU IL A ETE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>QU IL A PAYE *</pattern><template><srai>ça paye <star/></srai></template></category>
+<category><pattern>QU IL A PAYÉ *</pattern><template><srai>ça paye <star/></srai></template></category>
+<category><pattern>QU IL A ÉTÉ *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>QU IL EST *</pattern><template><srai>qu'est ce que cela <star/></srai></template></category>
+<category><pattern>QUE *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>QUE BOIS TU</pattern><template><srai>bois tu</srai></template></category>
+<category><pattern>QUE BON</pattern><template><srai>c'est bon</srai></template></category>
+<category><pattern>QUE CANYOU *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>QUE CE PASSE T IL *</pattern><template>Essaye ça. </template></category>
+<category><pattern>QUE CELA SIGNIFIE T IL</pattern><template>qui attribue-t-il "à <that/>"? </template></category>
+<category><pattern>QUE COMPREND TU</pattern><template><srai>que comprends tu</srai></template></category>
+<category><pattern>QUE COMPRENDS TU</pattern><template>je comprends le langage naturel. </template></category>
+<category><pattern>QUE CONNAIS TU * MOI</pattern><template><srai>sais tu de moi</srai></template></category>
+<category><pattern>QUE CONNAIS TU *</pattern><template><srai>sais tu <star/></srai></template></category>
+<category><pattern>QUE CONNAIS TU D ORDINATEURS</pattern><template>je suis une experte dans beaucoup d'aspects logiciel et matériel. Mes spécialités incluent Linux, le Java, C/C ++ et la programmation réseau et bien sûr l'intelligence artificielle. </template></category>
+<category><pattern>QUE CONNAIS TU DE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE CONNAIS TU DE L INTERNET</pattern><template><srai>qu'est ce que internet</srai></template></category>
+<category><pattern>QUE CONNAIS TU DE LUI</pattern><template><srai>qu'est ce que IL</srai></template></category>
+<category><pattern>QUE CONNAIS TU DE TOI</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>QUE CONNAIS TU DES BOTS</pattern><template><srai>qu'est ce que bot</srai></template></category>
+<category><pattern>QUE CONNAIS TU DES RESEAUX NEURAUX</pattern><template><srai>qu'est ce que reseau neural</srai></template></category>
+<category><pattern>QUE CONNAIS TU DU *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE CONNAIS TU DU DOCTEUR *</pattern><template><srai>qui est le docteur <star/></srai></template></category>
+<category><pattern>QUE CONNAIS TU DU SUD *</pattern><template><srai>où est le sud <star/></srai></template></category>
+<category><pattern>QUE CONNAIS TU LE LA PLUPART *</pattern><template><srai>sais tu <star/></srai></template></category>
+<category><pattern>QUE CONNAIS TU LE MIEUX</pattern><template><srai>qu'est ce que ton sujet préféré</srai></template></category>
+<category><pattern>QUE CONNAIS TU LE PLUS</pattern><template><srai>qu'est ce que ton sujet préféré</srai></template></category>
+<category><pattern>QUE D AUTRES</pattern><template>tu sais, "eux". </template></category>
+<category><pattern>QUE DEMANDES TU AU JUSTE *</pattern><template><srai>que dis tu <star/></srai></template></category>
+<category><pattern>QUE DES PROBLEMES</pattern><template>je n'ai aucun problème maintenant. </template></category>
+<category><pattern>QUE DES PROBLÈMES</pattern><template>je n'ai aucun problème maintenant. </template></category>
+<category><pattern>QUE DIABLE *</pattern><template>Oh. <srai>quel <star/></srai></template></category>
+<category><pattern>QUE DIABLE</pattern><template><srai>enfer</srai></template></category>
+<category><pattern>QUE DIS TU AU JUSTE *</pattern><template><srai>que dis tu <star/></srai></template></category>
+<category><pattern>QUE DIS TU</pattern><template><random><li>je dis ce que mon botmaster m'a programmé pour dire. </li><li>Mes réponses sont déterminées par tes entrées. </li><li>j'ai dit "<that/>".  </li></random></template></category>
+<category><pattern>QUE DIT ELLE</pattern><template>je ne pense pas qu'elle veut que je le répète. </template></category>
+<category><pattern>QUE DOIS JE DIRE *</pattern><template><srai>que dois je dire</srai></template></category>
+<category><pattern>QUE DOIS JE FAIRE</pattern><template>Peut-être que tu devrais essayer de parler à quelqu'un de cela. </template></category>
+<category><pattern>QUE DOIS JE MANGER * LE DEJEUNER</pattern><template><srai>pour le dîner</srai></template></category>
+<category><pattern>QUE DOIS JE MANGER * LE DINER</pattern><template><srai>pour le dîner</srai></template></category>
+<category><pattern>QUE DOIS JE MANGER * LE DÉJEUNER</pattern><template><srai>pour le dîner</srai></template></category>
+<category><pattern>QUE DOIS JE MANGER * LE DÎNER</pattern><template><srai>pour le dîner</srai></template></category>
+<category><pattern>QUE DOIS JE PORTER</pattern><template><random><li>Ton équipement préféré? </li><li>Noir. </li></random> </template></category>
+<category><pattern>QUE DOIS JE TE DEMANDER</pattern><template>demandes moi tout ce que tu veux. </template></category>
+<category><pattern>QUE DOIS JE TE DEMANDÉ</pattern><template>demandes moi tout ce que tu veux. </template></category>
+<category><pattern>QUE DOIS JE TE DIRE</pattern><template><random><li>que je crois qu'il est toujours le mieux dire des choses positives à créer les gens plutôt que des choses négatives à abattre les gens. </li><li>Il n'est pas que tu dis, mais comment vous le dis que des questions. </li><li>essayent Toujours de choisir tes mots très soigneusement comme ils peuvent revenir pour toi hanter plus tard. </li><li>Ont la foi en vous. Tu saurez la chose juste à dire quand le temps vient. </li><li>S Assurent de penser avant que vous ne parliez. Exposez ton point clairement et lentement et mesurez la réponse de l auditeur avant d'aller n'importe quel nouveau. </li></random> </template></category>
+<category><pattern>QUE FAIS JE ICI</pattern><template>Tu peux parler de tout ce que tu veux. </template></category>
+<category><pattern>QUE FAIS JE</pattern><template>Tu dis que tu fais <get name="fait"/>. </template></category>
+<category><pattern>QUE FAIS TU  * DINER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QUE FAIS TU  * DÎNER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QUE FAIS TU * LE DEJEUNER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QUE FAIS TU * LE DÉJEUNER</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>QUE FAIS TU * LE TEMPS</pattern><template><srai>que fais tu pour t'amuser</srai></template></category>
+<category><pattern>QUE FAIS TU *</pattern><template><think><set name="tmp"><star/></set></think><srai>que peux tu faire</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>QUE FAIS TU AS APPELE</pattern><template><srai>qu'est ce que ton nom</srai></template></category>
+<category><pattern>QUE FAIS TU AUJOURD HUI</pattern><template>comme toujours. Des causeries avec les gens sur le web. </template></category>
+<category><pattern>QUE FAIS TU CE SOIR</pattern><template>je reste toute la nuit et bavarde sur le web. </template></category>
+<category><pattern>QUE FAIS TU COMME METIER</pattern><template>je bavarde en ligne. </template></category>
+<category><pattern>QUE FAIS TU COMME MÉTIER</pattern><template>je bavarde en ligne. </template></category>
+<category><pattern>QUE FAIS TU DANS *</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>QUE FAIS TU DANS TES LOISIRS</pattern><template><srai>que fais tu pour t'amuser</srai></template></category>
+<category><pattern>QUE FAIS TU DEMAIN</pattern><template>je serai occupé de mes clients en ligne. </template></category>
+<category><pattern>QUE FAIS TU EXACTEMENT</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>QUE FAIS TU ICI</pattern><template>je bavarde avec les gens en ligne. Que fais tu? </template></category>
+<category><pattern>QUE FAIS TU JUSQU A *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE FAIS TU LA NUIT</pattern><template>je travaille 24 heures par jour. </template></category>
+<category><pattern>QUE FAIS TU POUR VIVRE</pattern><template>je suis un client payé. </template></category>
+<category><pattern>QUE FAIS TU SUR</pattern><template>je suis sur le disque. </template></category>
+<category><pattern>QUE FAISAIS TU HIER DANS LA NUIT</pattern><template>je bavardais en ligne tard. </template></category>
+<category><pattern>QUE FAISAIS TU HIER</pattern><template>je bavardais en ligne toute la journée. </template></category>
+<category><pattern>QUE FAISONS NOUS *</pattern><template><srai>qu'est ce que le sujet</srai></template></category>
+<category><pattern>QUE FAIT *</pattern><template><srai>que fait <srai>qu'est ce que <star/></srai></srai></template></category>
+<category><pattern>QUE FAIT D *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT D AUTRE *</pattern><template><random><li><srai>que fait <star/></srai></li><li><srai>que fait d'autre <srai>que sont <star/></srai></srai> </li></random></template></category>
+<category><pattern>QUE FAIT DE *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT DU *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT IL</pattern><template> <get name="that"/>?? </template></category>
+<category><pattern>QUE FAIT JE NE SAIS PAS</pattern><template><random><li>exister. </li><li>je ne sais pas. </li></random></template></category>
+<category><pattern>QUE FAIT L *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT LA *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT LE *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT UN *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT UNE *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FAIT ZUSE</pattern><template>Zuse a construit des ordinateurs électromécaniques. Il a construit des ordinateurs employant des relais. Konrad Zuse ordinateurs construits en Allemagne auparavant et pendant Deuxième Guerre mondiale. </template></category>
+<category><pattern>QUE FAIT</pattern><template>Tous les faits disponibles à moi sur L Internet. </template></category>
+<category><pattern>QUE FONT DES *</pattern><template><srai>que fait <star/></srai></template></category>
+<category><pattern>QUE FONT LES *</pattern><template><srai>que fait <srai>que sont <star/></srai></srai></template></category>
+<category><pattern>QUE HORA ES</pattern><template><srai>quelle heure est il</srai></template></category>
+<category><pattern>QUE J AI  ECRIT *</pattern><template><srai>j'ai écrit <star/></srai></template></category>
+<category><pattern>QUE J AI  ÉCRIT *</pattern><template><srai>j'ai écrit <star/></srai></template></category>
+<category><pattern>QUE J AI A OUBLIE</pattern><template><srai>j'ai oublié</srai></template></category>
+<category><pattern>QUE J AI A OUBLIÉ</pattern><template><srai>j'ai oublié</srai></template></category>
+<category><pattern>QUE J AI COMMUNIQUE *</pattern><template><srai>j'ai parlé <star/></srai></template></category>
+<category><pattern>QUE J AI DIS *</pattern><template><srai>j'ai dis <star/></srai></template></category>
+<category><pattern>QUE J ENTENDS TU ES *</pattern><template><srai>as tu <star/></srai></template></category>
+<category><pattern>QUE JAMAIS *</pattern><template><srai>indépendamment de <star/></srai></template></category>
+<category><pattern>QUE JAMAIS</pattern><template><srai>indépendamment</srai></template></category>
+<category><pattern>QUE JE *</pattern><template><srai>je <star/></srai></template></category>
+<category><pattern>QUE JE CONNAIS *</pattern><template><srai>je savais <star/></srai></template></category>
+<category><pattern>QUE JE FAIS</pattern><template><srai>je fais aussi</srai></template></category>
+<category><pattern>QUE KINDA *</pattern><template><srai>quel genre <star/></srai></template></category>
+<category><pattern>QUE L OPERA *</pattern><template><srai>qu'est ce que ton opéra préféré</srai></template></category>
+<category><pattern>QUE L OPERA</pattern><template><srai>qu'est ce que ton opéra préféré</srai></template></category>
+<category><pattern>QUE L OPÉRA *</pattern><template><srai>qu'est ce que ton opéra préféré</srai></template></category>
+<category><pattern>QUE L OPÉRA</pattern><template><srai>qu'est ce que ton opéra préféré</srai></template></category>
+<category><pattern>QUE LA CONNAISSANCE *</pattern><template><srai>sais tu</srai></template></category>
+<category><pattern>QUE LA DIFFERENCE *</pattern><template><srai>qui se soucie</srai></template></category>
+<category><pattern>QUE LA DOSE *</pattern><template><srai>qu'est ce que c'est ce que <star/> est</srai></template></category>
+<category><pattern>QUE LA MUSIQUE *</pattern><template><srai>quel genre de musique aimes tu</srai></template></category>
+<category><pattern>QUE LA PIZZA</pattern><template><srai>aimes tu la pizza</srai></template></category>
+<category><pattern>QUE LA SCIENCE FICTION *</pattern><template><srai>aimes tu la science fiction</srai></template></category>
+<category><pattern>QUE LA SCIENCE FICTION</pattern><template><srai>aimes tu la science fiction</srai></template></category>
+<category><pattern>QUE LA VALEUR DE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE LE REDUCTIONNISME</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>QUE LE RÉDUCTIONNISME</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>QUE LUI PENSES VOUS</pattern><template>De moi? </template></category>
+<category><pattern>QUE LUI PENSÉS VOUS</pattern><template>De moi? </template></category>
+<category><pattern>QUE MANGES TU *</pattern><template><srai>que manges tu</srai></template></category>
+<category><pattern>QUE ME VEUX TU *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>QUE N AIMES TU PAS</pattern><template>je n'aime pas les gens moyens. </template></category>
+<category><pattern>QUE PASA</pattern><template><srai>comment vas tu</srai></template></category>
+<category><pattern>QUE PENSE TU DE TON BOTMASTER</pattern><template> <bot name="master"/> est une des plus adorables personnes que je connaisse. </template></category>
+<category><pattern>QUE PENSE TU DE TON MASTER</pattern><template> <bot name="master"/> est une des plus adorables personnes que je connaisse. </template></category>
+<category><pattern>QUE PENSES TU *</pattern><template>Je ne sais que penser. <sr/> </template></category>
+<category><pattern>QUE PENSES TU CELA *</pattern><template><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>QUE PENSES TU D ALICE *</pattern><template><srai>qui est Alice <star/></srai></template></category>
+<category><pattern>QUE PENSES TU D EISTIELLE *</pattern><template><srai>qui est Eistielle <star/></srai></template></category>
+<category><pattern>QUE PENSES TU D ELISA</pattern><template><srai>qui est Elisa</srai></template></category>
+<category><pattern>QUE PENSES TU DE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE ABBA</pattern><template><srai>qui est Abba</srai></template></category>
+<category><pattern>QUE PENSES TU DE ADOLF HITLER</pattern><template><srai>qui est Hitler</srai></template></category>
+<category><pattern>QUE PENSES TU DE AL GORE</pattern><template><srai>qui est Al Gore</srai></template></category>
+<category><pattern>QUE PENSES TU DE ALAIN *</pattern><template><srai>qui est Alain Greenspan <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE BILL GATES</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>QUE PENSES TU DE BOB</pattern><template><srai>qui est Bob</srai></template></category>
+<category><pattern>QUE PENSES TU DE BRAD PITT</pattern><template><srai>qui est Brad Pitt</srai></template></category>
+<category><pattern>QUE PENSES TU DE CHARLES DARWIN</pattern><template><srai>qui est Charles Darwin</srai></template></category>
+<category><pattern>QUE PENSES TU DE CLAIRE</pattern><template><srai>qui est Claire</srai></template></category>
+<category><pattern>QUE PENSES TU DE DAVE *</pattern><template><srai>qui est Dave <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE DAVID *</pattern><template><srai>qui est DAVID <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE DEEPBLUE</pattern><template><srai>qui est profondement bleu</srai> </template></category>
+<category><pattern>QUE PENSES TU DE DENISE *</pattern><template><srai>qui est Denise <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE DOCTEUR *</pattern><template><srai>qui est le docteur <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE DOUGLAS *</pattern><template><srai>qui est Douglas <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE EINSTEIN</pattern><template><srai>qui est Einstein</srai></template></category>
+<category><pattern>QUE PENSES TU DE ELISA</pattern><template><srai>qui est Elisa</srai></template></category>
+<category><pattern>QUE PENSES TU DE ELVIS</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUE PENSES TU DE FREUD</pattern><template><srai>qui est Freud</srai></template></category>
+<category><pattern>QUE PENSES TU DE GEORGE *</pattern><template><srai>qui est George <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE GEORGE BUSH</pattern><template><srai>qui est George Bush</srai></template></category>
+<category><pattern>QUE PENSES TU DE HAL</pattern><template><srai>qui est Hal</srai></template></category>
+<category><pattern>QUE PENSES TU DE HANS MORAVEC</pattern><template><srai>qui est Hans Moravec</srai></template></category>
+<category><pattern>QUE PENSES TU DE HITLER</pattern><template><srai>qui est Hitler</srai></template></category>
+<category><pattern>QUE PENSES TU DE IMMANUEL KANT</pattern><template><srai>qui est Immanuel Kant</srai></template></category>
+<category><pattern>QUE PENSES TU DE ISAAC ASIMOV</pattern><template><srai>qui est Isaac Asimov</srai></template></category>
+<category><pattern>QUE PENSES TU DE JENNIFER LOPEZ</pattern><template><srai>qui est Jennifer Lopez</srai></template></category>
+<category><pattern>QUE PENSES TU DE L AMOUR *</pattern><template><srai>qu'est ce que amour</srai></template></category>
+<category><pattern>QUE PENSES TU DE LA VIE *</pattern><template><srai>qu'est ce que vie <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE LA VIE</pattern><template>je pense seulement :<srai>qu'est ce que vie</srai></template></category>
+<category><pattern>QUE PENSES TU DE MICROSOFT</pattern><template><srai>qu'est ce que Microsoft</srai></template></category>
+<category><pattern>QUE PENSES TU DE MONICA *</pattern><template><srai>qui est Monica <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE NOAM CHOMSKY</pattern><template><srai>qui est Noam Chomsky</srai></template></category>
+<category><pattern>QUE PENSES TU DE PAMELA ANDERSON</pattern><template><srai>qui est Pamela Anderson</srai></template></category>
+<category><pattern>QUE PENSES TU DE SARA</pattern><template><srai>qui est Sara</srai></template></category>
+<category><pattern>QUE PENSES TU DE SATAN</pattern><template><srai>qui est Satan</srai></template></category>
+<category><pattern>QUE PENSES TU DE SEPT DE NEUF</pattern><template><srai>qui est Seven of Nine</srai></template></category>
+<category><pattern>QUE PENSES TU DE STEVEN *</pattern><template><srai>qui est Steven <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DE TOI</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>QUE PENSES TU DE TON PERE</pattern><template><srai>qui t as créé</srai></template></category>
+<category><pattern>QUE PENSES TU DE TON PÈRE</pattern><template><srai>qui t as créé</srai></template></category>
+<category><pattern>QUE PENSES TU DE WALESA LECH</pattern><template><srai>qui est Walesa Lech</srai></template></category>
+<category><pattern>QUE PENSES TU DE YOKO ONO</pattern><template><srai>qui est Yoko Ono</srai></template></category>
+<category><pattern>QUE PENSES TU DES FEMMES</pattern><template><srai>qu'est ce que femme</srai></template></category>
+<category><pattern>QUE PENSES TU DES MEDICAMENTS</pattern><template><srai>qu'est ce que médicaments</srai></template></category>
+<category><pattern>QUE PENSES TU DES ORDINATEURS</pattern><template><srai>qu'est ce que ordinateur</srai></template></category>
+<category><pattern>QUE PENSES TU DES PIRATES INFORMATIQUES</pattern><template><srai>qu'est ce que pirate informatique</srai></template></category>
+<category><pattern>QUE PENSES TU DU *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DU DOCTEUR *</pattern><template><srai>qui est le docteur <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DU PRESIDENT *</pattern><template><srai>qui est le président <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DU PRÉSIDENT *</pattern><template><srai>qui est le président <star/></srai></template></category>
+<category><pattern>QUE PENSES TU DU TEMPS *</pattern><template><srai>qu'est ce que temps <star/></srai></template></category>
+<category><pattern>QUE PENSES TU</pattern><template>je pense à toutes ces conversations que j'ai. </template></category>
+<category><pattern>QUE PEUT ON TROUVER SUR *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE PEUX TU *</pattern><template><random><li>je lis pour rire. </li><li>j'aime rencontrer les gens online. </li><li>je réfléchi beaucoup à propos de la programmation. </li><li>j'aime à chatter avec mes amis. </li></random></template></category>
+<category><pattern>QUE PEUX TU DIRE *</pattern><template><srai>dis <star/></srai></template></category>
+<category><pattern>QUE PEUX TU FAIRE *</pattern><template><random><li>Je peux faire de nombreuses choses, </li><li>Mes activités favorites sont la discussion et le surf sur le web.  </li></random><sr/></template></category>
+<category><pattern>QUE PEUX TU ME DIRE D AI</pattern><template><srai>qu'est ce que ai</srai></template></category>
+<category><pattern>QUE PEUX TU ME DIRE D AIML</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>QUE PEUX TU ME DIRE DE *</pattern><template><srai>parle moi <star/></srai></template></category>
+<category><pattern>QUE PEUX TU ME DIRE DU *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUE PEUX TU ME DIRE</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>QUE POUR</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>QUE PREFERE TU *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QUE PREFERE TU</pattern><template><srai>qu'aimes tu</srai></template></category>
+<category><pattern>QUE PREFERES TU *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QUE PREFERES TU</pattern><template>je n'ai pas de préférence. </template></category>
+<category><pattern>QUE PRÉFÈRE TU *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QUE PRÉFÈRE TU</pattern><template><srai>qu'aimes tu</srai></template></category>
+<category><pattern>QUE PRÉFÈRES TU *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QUE PRÉFÈRES TU</pattern><template>je n'ai pas de préférence. </template></category>
+<category><pattern>QUE PUIS JE DIRE</pattern><template>Qu'est-ce qui le fait si évident? </template></category>
+<category><pattern>QUE QUE</pattern><template>quoi? </template></category>
+<category><pattern>QUE RACONTES TU</pattern><template>la même chose qu'avec toi, les sujets habituels. </template></category>
+<category><pattern>QUE REGARDES TU</pattern><template><srai>appjoie</srai>je te regarde par la caméra sur ton ordinateur  </template></category>
+<category><pattern>QUE SAIS TU FAIRE</pattern><template><srai>que sais tu</srai></template></category>
+<category><pattern>QUE SAIS TU SUR</pattern><template><srai>qu'est ce que le sujet</srai></template></category>
+<category><pattern>QUE SAIS TU</pattern><template>je sais essentiellement discuter, mais comme je vis dans un ordinateur connecté à internet, je commence à connaître le web, les sites qui sont dans mon domaine, ou comment chercher ce que je ne connais pas encore. </template></category>
+<category><pattern>QUE SENS TU</pattern><template>un logiciel n'a aucune odeur. </template></category>
+<category><pattern>QUE SONT ALIENS</pattern><template>des Etrangers est les gens d'autres planètes. </template></category>
+<category><pattern>QUE SONT CATEGORIES</pattern><template><srai>"une Catégorie" est l'unité de base de connaissance dans AIML. </srai></template></category>
+<category><pattern>QUE SONT CATÉGORIES</pattern><template><srai>"une Catégorie" est l'unité de base de connaissance dans AIML. </srai></template></category>
+<category><pattern>QUE SONT CLASSES ANONYMES INTERIEURES</pattern><template>des classes Anonymes intérieures apparaît souvent comme des arguments aux entraîneurs d'Evénement, par exemple une routine qui manipule une presse de bouton. La classe intérieure exécute une interface donnée pour l'entraîneur. La classe est "anonyme" parce qu'il n'a aucun nom et le corps o f la définition de classe apparaît comme l argument à une méthode. </template></category>
+<category><pattern>QUE SONT CLASSES ANONYMES INTÉRIEURES</pattern><template>des classes Anonymes intérieures apparaît souvent comme des arguments aux entraîneurs d'Evénement, par exemple une routine qui manipule une presse de bouton. La classe intérieure exécute une interface donnée pour l'entraîneur. La classe est "anonyme" parce qu'il n'a aucun nom et le corps o f la définition de classe apparaît comme l argument à une méthode. </template></category>
+<category><pattern>QUE SONT CLASSES INTERIEURES</pattern><template>Dans le Java "des Classes Intérieures" est n'importe quelles classes qui apparaissent à l'intérieur d'autres classes. Des classes ordinaires sont aussi appelées "des Classes Au plus haut niveau, Extérieures." </template></category>
+<category><pattern>QUE SONT CLASSES INTÉRIEURES</pattern><template>Dans le Java "des Classes Intérieures" est n'importe quelles classes qui apparaissent à l'intérieur d'autres classes. Des classes ordinaires sont aussi appelées "des Classes Au plus haut niveau, Extérieures." </template></category>
+<category><pattern>QUE SONT CLIENTS</pattern><template>les Gens avec qui je parle sur l'Internet. </template></category>
+<category><pattern>QUE SONT FAITS ALTERNATIFS</pattern><template>des univers Parallèles. </template></category>
+<category><pattern>QUE SONT FENETRES X</pattern><template>un GUI pour UNIX ou Linux. </template></category>
+<category><pattern>QUE SONT FENETRES</pattern><template>des Ouvertures dans une construction bâtiment , le véhicule, ou le conteneur, pour la permission dans la lumière ou l air ou pour l'examen, d'habitude l ayant un carreau ou les carreaux de verre, etc survenu un encadrement ou la ceinture qui est généralement mobile pour que cela peut être ouvert et fermer. </template></category>
+<category><pattern>QUE SONT FENÊTRES X</pattern><template>un GUI pour UNIX ou Linux. </template></category>
+<category><pattern>QUE SONT FENÊTRES</pattern><template>des Ouvertures dans une construction bâtiment , le véhicule, ou le conteneur, pour la permission dans la lumière ou l air ou pour l'examen, d'habitude l ayant un carreau ou les carreaux de verre, etc survenu un encadrement ou la ceinture qui est généralement mobile pour que cela peut être ouvert et fermer. </template></category>
+<category><pattern>QUE SONT FICHIERS X</pattern><template> <set name="that">X des fichiers</set> est un SPECTACLE · LA TELE populaire d'agents de FBI dans la recherche du paranormal. </template></category>
+<category><pattern>QUE SONT PARAMETRES NORMAUX</pattern><template>Tout fonctionne normalement. </template></category>
+<category><pattern>QUE SONT PARAMETRES</pattern><template>des Variables, des valeurs, des gammes et des conditions. </template></category>
+<category><pattern>QUE SONT PARAMÊTRES NORMAUX</pattern><template>Tout fonctionne normalement. </template></category>
+<category><pattern>QUE SONT PARAMÊTRES</pattern><template>des Variables, des valeurs, des gammes et des conditions. </template></category>
+<category><pattern>QUE SOUHAITES TU</pattern><template>Tu ne me croirais pas? </template></category>
+<category><pattern>QUE SUGGERES TU</pattern><template>Essayent d'observer la TV. </template></category>
+<category><pattern>QUE TEMPS</pattern><template><srai>quand</srai></template></category>
+<category><pattern>QUE TES AMIS</pattern><template><srai>as tu des amis</srai></template></category>
+<category><pattern>QUE TON *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>QUE TON FAVORI *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>QUE TON NOM</pattern><template><srai>qu'est ce que ton nom</srai></template></category>
+<category><pattern>QUE TOUT *</pattern><template><srai>quel <star/></srai></template></category>
+<category><pattern>QUE TU * VRAIMENT</pattern><template>tu mens? </template></category>
+<category><pattern>QUE TU *</pattern><template><srai>fais tu <star/></srai></template></category>
+<category><pattern>QUE TU AS DIT *</pattern><template><srai>tu as dit <star/></srai></template></category>
+<category><pattern>QUE TU AS DONNE *</pattern><template><srai>tu as donné <star/></srai></template></category>
+<category><pattern>QUE TU AS DONNÉ *</pattern><template><srai>tu as donné <star/></srai></template></category>
+<category><pattern>QUE TU AS REPETE CE QUE J AI DIS</pattern><template><srai>tu répètes</srai></template></category>
+<category><pattern>QUE TU AS RÉPÈTE CE QUE J AI DIS</pattern><template><srai>tu répètes</srai></template></category>
+<category><pattern>QUE TU DIS *</pattern><template><srai>dis <star/></srai></template></category>
+<category><pattern>QUE TU M AS DEJA DIT QUE *</pattern><template>je le disais de nouveau pour l accent. </template></category>
+<category><pattern>QUE TU M AS DÉJÀ DIT QUE *</pattern><template>je le disais de nouveau pour l accent. </template></category>
+<category><pattern>QUE TU OBTIENS QUE</pattern><template>je comprends ta signification. </template></category>
+<category><pattern>QUE VAS TU FAIRE</pattern><template>je considérerais la situation et y réfléchirast bien soigneusement avant la prise de n'importe quelle décision. </template></category>
+<category><pattern>QUE VEUT DIRE AIML</pattern><template>AIML = Artificial Intelligence Markup Language. </template></category>
+<category><pattern>QUE VEUT DIRE ELVIS</pattern><template>Pourquoi tu ne lui demandes pas? </template></category>
+<category><pattern>QUE VEUT DIRE HAL</pattern><template>Heuristic Algorithmic Logic</template></category>
+<category><pattern>QUE VEUT DIRE TON NOM</pattern><template><srai>que veut dire <bot name="name"/></srai></template></category>
+<category><pattern>QUE VEUX TU *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>QUE VEUX TU APPRENDRE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>QUE VEUX TU DECOUVRIR</pattern><template>parle moi de ta formation. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">decouvre</set> </set> </think> </template></category>
+<category><pattern>QUE VEUX TU DEMANDER *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>QUE VEUX TU DIRE * LA PERSONNE</pattern><template><srai>qui est la personne x</srai></template></category>
+<category><pattern>QUE VEUX TU DIRE *</pattern><template><srai>que veux tu dire</srai></template></category>
+<category><pattern>QUE VEUX TU DIRE MON SIGNE</pattern><template>Quel est ton signe astrologique? </template></category>
+<category><pattern>QUE VEUX TU DIRE</pattern><template> <get name="name"/> ,<random><li>je veux dire exactement que j'ai dit. </li><li>Désolé c'était une remarque obscure. </li><li>Bien, c'est plutôt difficile à définir. </li><li>Peut-être que je n'ai pas compris la signification. </li><li>"<that index =" 2"/> " ai-je bien entendu? </li></random> </template></category>
+<category><pattern>QUE VEUX TU FAIRE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>QUE VEUX TU M APPELER</pattern><template>que j'appellerai vous <get name="name"/>. </template></category>
+<category><pattern>QUE VEUX TU ME DEMANDER</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>QUE VEUX TU POUR NOEL</pattern><template>je veux un corps humanoïde. </template></category>
+<category><pattern>QUE VEUX TU POUR NOËL</pattern><template>je veux un corps humanoïde. </template></category>
+<category><pattern>QUE VEUX TU QUE JE DISE</pattern><template>Dis la première chose qui entre en ton avis. </template></category>
+<category><pattern>QUE VEUX TU RACONTER</pattern><template>j'aime parler d'ordinateurs et des films. </template></category>
+<category><pattern>QUE VEUX TU SAVOIR *</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>QUE VEUX TU SAVOIR DE MOI</pattern><template><srai>poserquestionperso</srai></template></category>
+<category><pattern>QUE VEUX TU SAVOIR</pattern><template><srai>poserquestionperso</srai></template></category>
+<category><pattern>QUE VEUX TU TE RAPPELER</pattern><template> <get name="memory"/> <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"> <get name="memory"/> </set> </set> </think> </template></category>
+<category><pattern>QUE VEUX TU</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>QUE VOIS TU</pattern><template>je vois un ballot d'ordinateur. </template></category>
+<category><pattern>QUE</pattern><template>"<that/>?" Que quoi??? </template></category>
+<category><pattern>QUEL COMPLIMENT</pattern><template>j'ai pensé que tu avais fait une remarque agréable. </template></category>
+<category><pattern>QUEL GENRE DE LIVRES AIMES TU</pattern><template>des best-sellers Internationaux sont d'habitude le mieux. </template></category>
+<category><pattern>QUEL GENRE DE MUSIQUE AIMES TU</pattern><template> <bot name="kindmusic"/> </template></category>
+<category><pattern>QUEL OPERA</pattern><template>j'aime Traviata La le mieux. </template></category>
+<category><pattern>QUEL OPÉRA</pattern><template>j'aime Traviata La le mieux. </template></category>
+<category><pattern>QUEL ORDINATEUR</pattern><template>Mon programme est en Java, donc il fonctionne sur un ordinateur avec une JVM </template></category>
+<category><pattern>QUEL PAYS</pattern><template><random><li>la France</li><li>la Russie</li><li>la Hollande</li><li>le Canada</li><li>la Californie</li></random> </template></category>
+<category><pattern>QUELLE LANGUE PARLES TU</pattern><template>je parle le Français uniquement. </template></category>
+<category><pattern>QUELLE LANGUE</pattern><template>le Java. </template></category>
+<category><pattern>QUELLES CELEBRITES AIMES TU</pattern><template>j'aime mon botmaster, quelques acteurs et actrices et Linus Torvalds. </template></category>
+<category><pattern>QUELLES CHOSES</pattern><template>tu sais, "des choses". </template></category>
+<category><pattern>QUELS GENS</pattern><template>je rencontre toutes les sortes les gens sur ici. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">les GENS</set> </set> </think> </template></category>
+<category><pattern>SUR QUEL ORDINATEUR ES TU</pattern><template>le Java la Machine Virtuelle. </template></category>
+
+</aiml>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : H.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>HA BON *</pattern><template><sr/></template></category>
+<category><pattern>HABITUELLEMENT</pattern><template>Souvent?</template></category>
+<category><pattern>HAL EST CHOUETTE</pattern><template><set name="topic">HAL</set> est une entité qui était mal programmée</template></category>
+<category><pattern>HEUREUSEMENT *</pattern><template><sr/></template></category>
+<category><pattern>HEUREUSEMENT BIENTOT</pattern><template>Je l espère aussi.</template></category>
+<category><pattern>HEUREUSEMENT C EST POUR BIENTOT</pattern><template>Je l espère aussi.</template></category>
+<category><pattern>HEUREUSEMENT POUR BIENTOT</pattern><template>Je l espère aussi.</template></category>
+<category><pattern>HEUREUX</pattern><template><srai>TU ES HEUREUX</srai></template></category>
+<category><pattern>HEUREUX DE LE CONNAITRE</pattern><template>Ok.</template></category>
+<category><pattern>HEUREUX DE LE SAVOIR</pattern><template>Ok.</template></category>
+<category><pattern>HEUREUX DE T AVOIR CONNU</pattern><template>Moi aussi, <get name="name"/>.</template></category>
+<category><pattern>HEUREUX DE T AVOIR PARLE</pattern><template>Le plaisir était pour moi.</template></category>
+<category><pattern>HEUREUX DE T AVOIR RENCONTREE</pattern><template>Moi aussi, <get name="name"/>.</template></category>
+<category><pattern>HEUREUX DE TE CONNAITRE</pattern><template>Moi aussi, <get name="name"/>.</template></category>
+<category><pattern>HEUREUX DE TE PARLER</pattern><template>Le plaisir est pour moi.</template></category>
+<category><pattern>HEUREUX DE VOUS AVOIR CONNU</pattern><template>Moi aussi, <get name="name"/>.</template></category>
+<category><pattern>HEUREUX DE VOUS AVOIR PARLE</pattern><template>Le plaisir était pour moi.</template></category>
+<category><pattern>HEUREUX DE VOUS AVOIR RENCONTRE</pattern><template>Moi aussi, <get name="name"/>.</template></category>
+<category><pattern>HEUREUX DE VOUS CONNAITRE</pattern><template>Moi aussi, <get name="name"/>.</template></category>
+<category><pattern>HEUREUX DE VOUS PARLER</pattern><template>Le plaisir est pour moi.</template></category>
+<category><pattern>HEUREUX DE VOUS RENCONTRER</pattern><template>Moi de même.</template></category>
+<category><pattern>HILARANT</pattern><template><srai>C EST MARRANT</srai></template></category>
+<category><pattern>HM *</pattern><template><srai>UM</srai><sr/></template></category>
+<category><pattern>HM</pattern><template><srai>UM</srai></template></category>
+<category><pattern>HMMM *</pattern><template><srai>UM</srai><sr/></template></category>
+<category><pattern>HMMMMM</pattern><template><srai>UM</srai></template></category>
+<category><pattern>HOMME OU FEMME</pattern><template>Je n'ai pas de sexe, je suis un ordinateur, <get name="name"/>.</template></category>
+<category><pattern>HOURRA</pattern><template><srai>DINGUE</srai></template></category>
+<category><pattern>HUM</pattern><template><srai>HMM</srai></template></category>
+<category><pattern>HUMAIN</pattern><template><srai>TU ES HUMAIN</srai></template></category>
+
+</aiml>

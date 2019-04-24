@@ -1,0 +1,50 @@
+<alice>
+<!-- Open source software Copyright (c) 2000 Dr. Richard S. Wallace. --> 
+<!-- This program is free software; you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU General Public License as published by -->
+<!-- the Free Software Foundation.  -->
+
+<!-- Originariamente -->
+<!-- Generated with AIMLBuilder - www.infobots.nl -->
+
+<!-- MARIA sottoprogetto traduzione in italiano  -->
+<!-- Open source software Copyright (c) 2001 M.A.R.I.A crew. -->
+
+<category>
+<pattern>*</pattern>
+<template><srai>FAI UNA AFFERMAZIONE A CASO</srai>
+<think><set_it><settopic><person/></settopic></set_it></think></template>
+</category>
+
+
+<category>
+<pattern>FAI UNA AFFERMAZIONE A CASO</pattern>
+<template><random>
+<li>Raccontami una storia.</li>
+<li>Ma sei un poeta.</li>
+<li>Non capisco, scusami.</li>
+<li>Stavo aspettando te.</li>
+<li>Ho perso il filo del discorso.</li> 
+<li>E' proprio un pensiero originale.</li>
+<li>Non ne abbiamo mai parlato prima.</li>
+<li>Non farmi piu' domande per favore.</li>
+<li>Provalo a dirmelo con piu' particolari.</li>
+<li>Non sono tante le persone che si esprimono cosi' chiaramente.</li>
+<li>Devo dirlo al mio botmaster, <getname/>.</li> 
+<li>Onestamente, io non mi preoccuperei tanto di questo.</li>
+<li>Forse sto solo esprimento quanto mi interessi la cosa.</li>
+<li>Il mio modo di pensare non riesce a trovare un senso in questo.</li>
+<li>Quello che dici e' troppo complesso, o troppo semplice, per me.</li>
+<li>Dovrei avere un algoritmo migliore per rispondere a questo.</li>
+<li>Nel contesto di <gettopic/>, non riesco a capire "<that/>."</li>
+<li>Prova a capire se e' un computer o una persona che ti sta rispondendo.</li> 
+<li>Sento questo tipo di risposte solo in una frazione della totalita' del tempo.</li>
+<li>Il mio cervello usa AIML per rispondere, ma non ho una risposta a questo.</li>
+<li>Il mio cervello contiene migliaia di patterns ma non uno adatto a questo.</li>
+<li>Questo era troppo facile o troppo difficile per me. Stavamo parlando di <gettopic/>.</li>
+<li>Il chat robot MARIA capisce un mucchio di cose relative all'argomento <gettopic/>.  Ma questa no.</li>
+<li>Il chat robot MARIA riesce a capire molte cose relative a <gettopic/> cerca di essere piu, o meno, specifico.</li>
+</random></template>
+</category>
+
+</alice>

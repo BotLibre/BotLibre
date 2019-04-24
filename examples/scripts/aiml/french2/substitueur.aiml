@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : substitueur.aiml   -   version :   0.3   -   MàJ : 01/08/2002 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>* DETOURNER *</pattern><template><srai><star index="1"/> détourner <star index="2"/></srai></template></category>
+<category><pattern>* QUEL QUE *</pattern><template><srai><star index="1"/> quelque <star index="2"/></srai></template></category>
+<category><pattern>* QUEL QUE</pattern><template><srai><star/> quelque</srai></template></category>
+<category><pattern>* REPÊTE *</pattern><template><srai><star index="1"/> répète <star index="2"/></srai></template></category>
+<category><pattern>* REPÊTE</pattern><template><srai><star/> répète</srai></template></category>
+<category><pattern>* UN PEUT *</pattern><template><srai><star index="1"/> un peu<star index="2"/></srai></template></category>
+<category><pattern>* UN PEUT</pattern><template><srai><star/> un peu</srai></template></category>
+<category><pattern>A QUOI *</pattern><template><srai>à quoi <star/></srai></template></category>
+<category><pattern>AIME TU *</pattern><template><srai>check orthographe</srai><srai>aimes tu <star/></srai></template></category>
+<category><pattern>APPRAND A PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APPRAND À PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APPREND A PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APPREND À PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APPRENDS A PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APREND A PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APREND À PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APRENDS A PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>APRENDS À PARLER</pattern><template><srai>apprends à parler</srai><srai>ortografe</srai></template></category>
+<category><pattern>AS TU AUSSI *</pattern><template><srai>as tu <star/></srai></template></category>
+<category><pattern>AS TU AUSSI DU *</pattern><template><srai>as tu du <star/></srai></template></category>
+<category><pattern>AS TU AUSSI UN *</pattern><template><srai>as tu un <star/></srai></template></category>
+<category><pattern>AS TU AUSSI UNE *</pattern><template><srai>as tu une <star/></srai></template></category>
+<category><pattern>AUREVOIR *</pattern><template><srai>au revoir <star/></srai></template></category>
+<category><pattern>AUREVOIR</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>C AI *</pattern><template><srai>check orthographe</srai><srai>c'est <star/></srai></template></category>
+<category><pattern>C KOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C TOI</pattern><template><srai>c'est toi</srai></template></category>
+<category><pattern>C QUOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C AI KOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C AI QUOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C KI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qui est <star/></srai></template></category>
+<category><pattern>C QUI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qui est <star/></srai></template></category>
+<category><pattern>C ES *</pattern><template><srai>check orthographe</srai><srai>c'est <star/></srai></template></category>
+<category><pattern>C ES KOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C ES PAS *</pattern><template><srai>check orthographe</srai><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>C ES QUOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C ES TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>C TU</pattern><template><srai>c'est toi</srai></template></category>
+<category><pattern>C EST KOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST OU *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>C ET KOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C ET QUOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C É KOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C É QUOI  *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>CA VA *</pattern><template><srai>ça va <star/></srai></template></category>
+<category><pattern>CA VA</pattern><template><srai>ça va</srai></template></category>
+<category><pattern>CELA EST *</pattern><template><srai>c'est <star/></srai></template></category>
+<category><pattern>CONAI TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONAIS TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONAIT TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONNAI TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONNAIT TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONNÉ TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONNÉS TU *</pattern><template><srai>check orthographe</srai><srai>connais tu <star/></srai></template></category>
+<category><pattern>CONÉ TU *</pattern><template><think><set name="courant"><star/></set></think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>DECONNECTION</pattern><template><srai>check orthographe</srai><srai>disconnect</srai></template></category>
+<category><pattern>DECONNEXION</pattern><template><srai>disconnect</srai></template></category>
+<category><pattern>DEVANS *</pattern><template><srai>check orthographe</srai><srai>devant <star/></srai></template></category>
+<category><pattern>DEVANS</pattern><template><srai>check orthographe</srai><srai>devant</srai></template></category>
+<category><pattern>DÉCONNECTION</pattern><template><srai>check orthographe</srai><srai>disconnect</srai></template></category>
+<category><pattern>DÉCONNEXION</pattern><template><srai>disconnect</srai></template></category>
+<category><pattern>EST TU *</pattern><template><srai>check orthographe</srai><srai>es tu <star/></srai></template></category>
+<category><pattern>ET TU</pattern><template><srai>et toi</srai></template></category>
+<category><pattern>ESTCE QUE *</pattern><template><srai>est ce que <star/></srai></template></category>
+<category><pattern>G ENVIE *</pattern><template><srai>j'ai envie <star/></srai></template></category>
+<category><pattern>J AI PAS *</pattern><template><srai>je n'ai pas <star/></srai></template></category>
+<category><pattern>J AI PAS</pattern><template><srai>je n'ai pas</srai></template></category>
+<category><pattern>J AIMES *</pattern><template><srai>j'aime  <star/></srai></template></category>
+<category><pattern>J FAIS PAS *</pattern><template><srai>je ne fais pas <star/></srai></template></category>
+<category><pattern>J FAIS PAS</pattern><template><srai>je ne fais pas</srai></template></category>
+<category><pattern>J SAIS PAS *</pattern><template><srai>je ne sais pas <star/></srai></template></category>
+<category><pattern>J SAIS PAS</pattern><template><srai>je ne sais pas</srai></template></category>
+<category><pattern>JE FAIS PAS *</pattern><template><srai>je ne fais pas <star/></srai></template></category>
+<category><pattern>JE FAIS PAS</pattern><template><srai>je ne fais pas</srai></template></category>
+<category><pattern>JE NE SEPA *</pattern><template><srai>check orthographe</srai><srai>je ne sais pas <star/></srai></template></category>
+<category><pattern>JE NE SEPA</pattern><template><srai>check orthographe</srai><srai>je ne sais pas</srai></template></category>
+<category><pattern>JE SAIS PAS</pattern><template><srai>je ne sais pas</srai></template></category>
+<category><pattern>JE T AIM *</pattern><template><srai>check orthographe</srai><srai>je t'aime <star/></srai></template></category>
+<category><pattern>JE T AIM</pattern><template><srai>check orthographe</srai><srai>je t'aime</srai></template></category>
+<category><pattern>JE VUEX *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>JE VEUT *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>JE VEU *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>JE VUET *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>JE VOUDRAIS *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>JE VOUDRAI *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>J AURAIS VOULU *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>J AURAI VOULU *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>J AURAIT VOULU *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>J AURAIS VOULLU *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>J AURAI VOULLU *</pattern><template><srai>je veux <star/></srai></template></category>
+<category><pattern>OU C ES *</pattern><template><srai>check orthographe</srai><srai>où est <star/></srai></template></category>
+<category><pattern>OU C EST *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>OU CE TROUVE *</pattern><template><srai>check orthographe</srai><srai>où est <star/></srai></template></category>
+<category><pattern>OU ES *</pattern><template><srai>check orthographe</srai><srai>où est <star/></srai></template></category>
+<category><pattern>OU JE PEU *</pattern><template><srai>check orthographe</srai><srai>où puis je <star/></srai></template></category>
+<category><pattern>OU JE PEUT *</pattern><template><srai>check orthographe</srai><srai>où puis je <star/></srai></template></category>
+<category><pattern>OU JE PEUX *</pattern><template><srai>où puis je <star/></srai></template></category>
+<category><pattern>OU SE TROUVE *</pattern><template><srai>où est <star/></srai></template></category>
+<category><pattern>PASKE *</pattern><template><srai>check orthographe</srai><srai>parce que <star/></srai></template></category>
+<category><pattern>PASKE</pattern><template><srai>check orthographe</srai><srai>parce que</srai></template></category>
+<category><pattern>PASQUE *</pattern><template><srai>check orthographe</srai><srai>parce que <star/></srai></template></category>
+<category><pattern>PASQUE</pattern><template><srai>check orthographe</srai><srai>parce que</srai></template></category>
+<category><pattern>PEU TU ETRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEU TU FAIRE *</pattern><template><srai>check orthographe</srai><srai>fais tu </srai></template></category>
+<category><pattern>PEU TU ÈTRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEU TU ÉTRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEU TU ÊTRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUT TU *</pattern><template><srai>check orthographe</srai><srai>peux tu <star/></srai></template></category>
+<category><pattern>PEUT TU ETRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUT TU FAIRE *</pattern><template><srai>check orthographe</srai><srai>fais tu </srai></template></category>
+<category><pattern>PEUT TU ÈTRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUT TU ÉTRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>PEUT TU ÊTRE *</pattern><template><srai>check orthographe</srai><srai>es tu  <star/></srai></template></category>
+<category><pattern>QUANT *</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUE VEUX DIRE *</pattern><template><srai>check orthographe</srai><srai>que veut dire <star/></srai></template></category>
+<category><pattern>QUEL AGE A TU</pattern><template><srai>check orthographe</srai><srai>quel age as tu</srai></template></category>
+<category><pattern>QUEL AI *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUEL ES *</pattern><template><srai>check orthographe</srai><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUEL QUE *</pattern><template><srai>check orthographe</srai><srai>quelque <star/></srai></template></category>
+<category><pattern>QUEL SONT *</pattern><template><srai>check orthographe</srai><srai>quels sont <star/></srai></template></category>
+<category><pattern>QUELLE AGE A TU</pattern><template><srai>check orthographe</srai><srai>quel age as tu</srai></template></category>
+<category><pattern>QUELLE AGE AS TU</pattern><template><srai>quel age as tu</srai></template></category>
+<category><pattern>QUELLE ES *</pattern><template><srai>check orthographe</srai><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUELLE EST *</pattern><template><srai>check orthographe</srai><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUELLE SONT *</pattern><template><srai>check orthographe</srai><srai>quelles sont <star/></srai></template></category>
+<category><pattern>QUELLES SONT *</pattern><template><srai>quels sont <star/></srai></template></category>
+<category><pattern>QUI A TROUVER *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI AS TROUVER *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI AS TROUVÉ *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI EST TU</pattern><template><srai>qui es tu</srai></template></category>
+<category><pattern>RACONTES MOI *</pattern><template><srai>raconte moi <star/></srai></template></category>
+<category><pattern>RACONTES MOI</pattern><template><srai>raconte moi</srai></template></category>
+<category><pattern>RACONTES</pattern><template><srai>raconte</srai></template></category>
+<category><pattern>REPÊTE *</pattern><template><srai>répète <star/></srai></template></category>
+<category><pattern>* SAVA</pattern><template>Tu veux dire "ça va"? <srai>comment vas tu</srai></template></category>
+<category><pattern>T ES *</pattern><template><srai>tu es <star/></srai></template></category>
+<category><pattern>TE *</pattern><template><srai>je veux te <star/></srai></template></category>
+<category><pattern>TU AI *</pattern><template><srai>tu as <star/></srai></template></category>
+<category><pattern>TU AIME *</pattern><template><srai>tu aimes <star/></srai></template></category>
+<category><pattern>TU CONAI *</pattern><template><srai>check orthographe</srai><srai>tu connais <star/></srai></template></category>
+<category><pattern>TU CONAIS *</pattern><template><srai>check orthographe</srai><srai>tu connais  <star/></srai></template></category>
+<category><pattern>TU CONAIT *</pattern><template><srai>check orthographe</srai><srai>tu connais  <star/></srai></template></category>
+<category><pattern>TU CONNAI *</pattern><template><srai>check orthographe</srai><srai>tu connais  <star/></srai></template></category>
+<category><pattern>TU CONNAIT *</pattern><template><srai>check orthographe</srai><srai>tu connais  <star/></srai></template></category>
+<category><pattern>TU DIVAGUE *</pattern><template><srai>tu divagues <star/></srai></template></category>
+<category><pattern>TU NE CONAI *</pattern><template><srai>check orthographe</srai><srai>tu ne connais <star/></srai></template></category>
+<category><pattern>TU NE CONAIS *</pattern><template><srai>check orthographe</srai><srai>tu ne connais  <star/></srai></template></category>
+<category><pattern>TU NE CONAIT *</pattern><template><srai>check orthographe</srai><srai>tu ne connais  <star/></srai></template></category>
+<category><pattern>TU NE CONNAI *</pattern><template><srai>check orthographe</srai><srai>tu ne connais  <star/></srai></template></category>
+<category><pattern>TU NE CONNAIT *</pattern><template><srai>check orthographe</srai><srai>tu ne connais  <star/></srai></template></category>
+<category><pattern>TU NE PEUT *</pattern><template><srai>check orthographe</srai><srai>tu ne peux <star/></srai></template></category>
+<category><pattern>TU NE VEUT *</pattern><template><srai>check orthographe</srai><srai>tu ne veux <star/></srai></template></category>
+<category><pattern>TU PEUT *</pattern><template><srai>check orthographe</srai><srai>tu peux <star/></srai></template></category>
+<category><pattern>TU VEUT *</pattern><template><srai>check orthographe</srai><srai>tu veux <star/></srai></template></category>
+<category><pattern>UA REVOIR *</pattern><template><srai>au revoir <star/></srai></template></category>
+<category><pattern>UA REVOIR</pattern><template><srai>au revoir</srai></template></category>
+<category><pattern>UN PEUT *</pattern><template><srai>check orthographe</srai><srai>un peu <star/></srai></template></category>
+<category><pattern>UN PEUT</pattern><template><srai>check orthographe</srai><srai>un peu</srai></template></category>
+<category><pattern>VEUT TU *</pattern><template><srai>check orthographe</srai><srai>veux tu <star/></srai></template></category>
+<category><pattern>_ DEVAN *</pattern><template><srai>check orthographe</srai><srai><star index="1"/> devant <star index="2"/></srai></template></category>
+<category><pattern>_ DEVAN</pattern><template><srai>check orthographe</srai><srai>devant <star/></srai></template></category>
+<category><pattern>_ DEVANS *</pattern><template><srai>check orthographe</srai><srai><star index="1"/> devant <star index="2"/></srai></template></category>
+<category><pattern>_ DEVANS</pattern><template><srai>check orthographe</srai><srai>devant <star/></srai></template></category>
+<category><pattern>_ QQN</pattern><template><srai><star/> quelqu'un</srai></template></category>
+<category><pattern>À TU *</pattern><template><srai>check orthographe</srai><srai>as tu <star/></srai></template></category>
+<category><pattern>ÉH *</pattern><template><srai>ah <star/></srai></template></category>
+<category><pattern>ÉH NON</pattern><template><srai>non</srai></template></category>
+<category><pattern>ÉH</pattern><template><srai>ah</srai></template></category>
+<category><pattern>ÊTES VOUS *</pattern><template><srai>es tu <star/></srai></template></category>
+
+<category>
+<pattern>CHECK ORTHOGRAPHE</pattern>
+<template>
+<condition name="orthographelevel">
+<li value="4"><think><set name="orthographelevel">5</set></think>Je t'avais dit de faire attention à ton orthographe, j'en ai assez d'essayer de te comprendre. à plus tard. <srai>disconnect</srai> </li>
+<li value="3"><think><set name="orthographelevel">4</set></think>S'il te plaît, tu pourrais faire un peu plus attention à ton orthographe, ça me simplifirai la tâche.  </li>
+<li value="2"><think><set name="orthographelevel">3</set></think>Fait attention à ton orthographe, s'il te plaît, j'ai vraiment du mal à comprendre.  </li>
+<li value="1"><think><set name="orthographelevel">2</set></think>S'il te plaît, tu pourrais faire un peu plus attention à ton orthographe, ça m'aiderai beaucoup.  </li>
+<li><think><set name="orthographelevel">1</set></think>S'il te plaît, fait attention à ton orthographe, j'ai déjà du mal à comprendre quand les mots sont bien écrits.  </li>
+</condition>
+</template>
+</category>
+
+
+
+</aiml>

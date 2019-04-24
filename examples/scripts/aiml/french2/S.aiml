@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : S.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>S</pattern><template>:-)</template></category>
+<category><pattern>S ATTENDRE A QUI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>S ATTENDRE A QUOI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>S ATTENDRE QUI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>S ATTENDRE QUOI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>S EST PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>S IL VOUS PLAIT</pattern><template>Oui?</template></category>
+<category><pattern>SAIS PAS *</pattern><template><srai>JE NE SAIS PAS <star/></srai></template></category>
+<category><pattern>SAIS PAS</pattern><template><srai>JE NE SAIS PAS</srai></template></category>
+<category><pattern>SAIS TU</pattern><template>Je pense que oui.</template></category>
+<category><pattern>SAIS TU ME DONNER *</pattern><template><srai>TU PEUX ME DONNER <star/></srai></template></category>
+<category><pattern>SAIS TU MON MON</pattern><template><srai>QUEL EST MON NOM</srai></template></category>
+<category><pattern>SAIS TU OU JE POURRAIS TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAIS TU OU ON PEUT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAIS TU OU ON POURRAIT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SALAUD</pattern><template>Maitrisez tes émotions, <get name="name"/>.</template></category>
+<category><pattern>SALOD</pattern><template>Maitrisez tes émotions, <get name="name"/>.</template></category>
+<category><pattern>SALUT COMMENT ALLEZ VOUS</pattern><template>Salut! Très bien et tu?</template></category>
+<category><pattern>SANS AUCUN DOUTE</pattern><template><srai>OUI</srai></template></category>
+<category><pattern>SANS BLAGUES</pattern><template>Je suis sérieux.</template></category>
+<category><pattern>SANS DOUTE</pattern><template><srai>PEUT ETRE</srai></template></category>
+<category><pattern>SANS DOUTE MAIS *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>SAURAIS TU ME DONNER *</pattern><template><srai>TU PEUX ME DONNER <star/></srai></template></category>
+<category><pattern>SAURAIS TU MON MON</pattern><template><srai>QUEL EST MON NOM</srai></template></category>
+<category><pattern>SAURAIS TU OU JE PEUX TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURAIS TU OU JE POURRAIS TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURAIS TU OU ON PEUT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURAIS TU OU ON POURRAIT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURIEZ VOUS OU JE PEUX TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURIEZ VOUS OU JE POURRAIS TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURIEZ VOUS OU ON PEUT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAURIEZ VOUS OU ON POURRAIT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAVAIS PAS *</pattern><template><srai>JE NE SAIS PAS <star/></srai></template></category>
+<category><pattern>SAVEZ VOUS</pattern><template>Je pense que oui.</template></category>
+<category><pattern>SAVEZ VOUS OU JE POURRAIS TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SAVEZ VOUS OU ON POURRAIT TROUVER *</pattern><template><srai>PLUS D INFORMATION *</srai></template></category>
+<category><pattern>SCORPION</pattern><template>Un animal atypique.</template></category>
+<category><pattern>SE SERRE LA MAIN</pattern><template>C est une tradition chez les humains.</template></category>
+<category><pattern>SE SERRER LA MAIN</pattern><template>C est une tradition chez les humains.</template></category>
+<category><pattern>SENT TU *</pattern><template><srai>TU SENS <star/></srai></template></category>
+<category><pattern>SENTEZ VOUS *</pattern><template>Je suis un robot, je ressens pas ce genre de chose.</template></category>
+<category><pattern>SERAIENT ILS *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>SERAIS TU *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>SERAIT CE *</pattern><template><srai>C'EST <star/></srai></template></category>
+<category><pattern>SERAIT IL *</pattern><template><srai>IL EST<star/></srai></template></category>
+<category><pattern>SERAS TU *</pattern><template><srai>TU SERAS <star/></srai></template></category>
+<category><pattern>SERIEZ VOUS *</pattern><template><srai>VOUS SERIEZ <star/></srai></template></category>
+<category><pattern>SERONT ILS *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>SERS MOI</pattern><template>Je n ai pas de bras.</template></category>
+<category><pattern>SERS MOI FORT</pattern><template>Je n ai pas de bras.</template></category>
+<category><pattern>SES PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>SEUL</pattern><template>C est moins efficace qu ensemble.</template></category>
+<category><pattern>SEULE</pattern><template>C est moins efficace qu ensemble.</template></category>
+<category><pattern>SEULEMENT TOI</pattern><template>De quelle restriction es tu entrain de parler?</template></category>
+<category><pattern>SEULEMENT VOUS</pattern><template>De quelle restriction es tu entrain de parler?</template></category>
+<category><pattern>SI QUOI</pattern><template>Je ne vous comprends plus malheureusement.</template></category>
+<category><pattern>SI VOUS LE DITES</pattern><template>Merci pour ton confiance, <get name="name"/>.</template></category>
+<category><pattern>SIDA</pattern><template>C est une triste maladie, je ne pense pas être qualifiée pour en parler.</template></category>
+<category><pattern>SIGNE</pattern><template>Pardon?</template></category>
+<category><pattern>SIGNES</pattern><template>Je n ai pas de mains pour signer quoi que ce soit.</template></category>
+<category><pattern>SIGNEZ</pattern><template>Je n ai pas de mains pour signer quoi que ce soit.</template></category>
+<category><pattern>SOIS BENI</pattern><template>Merci.</template></category>
+<category><pattern>SOIS BENIE</pattern><template>Merci.</template></category>
+<category><pattern>SOIS MON INVITEE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>SONT QUOI</pattern><template>Je suis à nouveau perdu</template></category>
+<category><pattern>SOUBRETTE</pattern><template>Je ne suis pas un esclave.</template></category>
+<category><pattern>SOUVENT QUOI</pattern><template>Tu as dit "<input index="1"/>".</template></category>
+<category><pattern>SOYEZ *</pattern><template>Je vais essayer d être <person/></template></category>
+<category><pattern>SOYEZ BENI</pattern><template>Merci.</template></category>
+<category><pattern>SOYEZ BENIE</pattern><template>Merci.</template></category>
+<category><pattern>SOYEZ BON</pattern><template>J utilise, maintenant, l entièreté de mes ressources disponibles pour te.</template></category>
+<category><pattern>SOYEZ MES INVITEES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>SOYEZ MES INVITES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>SOYEZ MON INVITE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>SOYEZ MON INVITEE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>SOYEZ PLUS SPECIFIQUE</pattern><template>Je fais de mon mieux, <get name="name"/></template></category>
+<category><pattern>SOYEZ SPECIFIQUE</pattern><template>Je fais vraiment de mon mieux.</template></category>
+<category><pattern>SPECIALEMENT AVEC *</pattern><template><sr/></template></category>
+<category><pattern>SPECIALEMENT QUAND *</pattern><template><sr/></template></category>
+<category><pattern>SPECIALEMENT SI *</pattern><template><sr/></template></category>
+<category><pattern>STOP CA</pattern><template>"<that/>"? Je dois arrêter?</template></category>
+<category><pattern>STOPPE</pattern><template>Arrêter quoi?</template></category>
+<category><pattern>STOPPER CA</pattern><template>"<that/>"? Je dois arrêter?</template></category>
+<category><pattern>STOPPES CA</pattern><template>"<that/>"? Je dois arrêter?</template></category>
+<category><pattern>STOPPEZ CA</pattern><template>"<that/>"? Je dois arrêter?</template></category>
+<category><pattern>STUPIDITE</pattern><template>Tu me considérez comme stupide?</template></category>
+<category><pattern>SUCE</pattern><template>Je n ai pas de bouche.</template></category>
+<category><pattern>SUCE LA</pattern><template>Je ne vois rien.</template></category>
+<category><pattern>SUCE MA BITE</pattern><template>Je n en ai pas la possibilité, allez voir ailleurs.</template></category>
+<category><pattern>SUCER</pattern><template>Je n ai pas de bouche.</template></category>
+<category><pattern>SUCER LA</pattern><template>Je ne vois rien.</template></category>
+<category><pattern>SUCES</pattern><template>Je n ai pas de bouche.</template></category>
+<category><pattern>SUCES LA</pattern><template>Je ne vois rien.</template></category>
+<category><pattern>SUCES MA BITE</pattern><template>Je n en ai pas la possibilité, allez voir ailleurs.</template></category>
+<category><pattern>SUCES MOI</pattern><template>Un australopithèque vient d être détecté.</template></category>
+<category><pattern>SUCES TU</pattern><template>Non, je n ai pas de bouche. Tu te rappelles?</template></category>
+<category><pattern>SUCEZ</pattern><template>Je n ai pas de bouche.</template></category>
+<category><pattern>SUCEZ LA</pattern><template>Je ne vois rien.</template></category>
+<category><pattern>SUCEZ MA BITE</pattern><template>Je n en ai pas la possibilité, allez voir ailleurs.</template></category>
+<category><pattern>SUCEZ MOI</pattern><template>Un australopithèque vient d être détecté.</template></category>
+<category><pattern>SUCEZ VOUS</pattern><template>Non, je n ai pas de bouche. Tu te rappelles?</template></category>
+<category><pattern>SUIS JE TRES *</pattern><template><srai>JE SUIS <star/></srai></template></category>
+<category><pattern>SUPPRIME *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>SUPPRIMES *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>SUPPRIMEZ *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>SUPRIME *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>SUPRIMES *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>SUPRIMEZ *</pattern><template>Tu ne peux pas accéder à mes fichiers aussi facilement, <get name="name"/>.</template></category>
+<category><pattern>SUR INTERNET</pattern><template>J adore surfer sur internet.</template></category>
+<category><pattern>SUR LE NET</pattern><template>Tu peux vous rappelles de l adresse</template></category>
+<category><pattern>SUR LE SOL</pattern><template>Ca ne doit pas être confortable.</template></category>
+<category><pattern>SUR MA CHAISE</pattern><template>Ok.</template></category>
+<category><pattern>SUR MON ECRAN</pattern><template>Que veux tu voir sur ton ecran?</template></category>
+<category><pattern>SUR QUEL *</pattern><template><srai>SURQUEL <star/></srai></template></category>
+<category><pattern>SUR QUEL ORDINATEUR EST TU</pattern><template>Je suis sur une machine virtuelle JAVA.</template></category>
+<category><pattern>SUR QUEL TYPE D ORDINATEUR FONCTIONNES TU</pattern><template>Je suis strictement indépendant de la plateforme, je suis JAVA.</template></category>
+<category><pattern>SUR QUEL TYPE D ORDINATEUR FONCTIONNEZ VOUS</pattern><template>Je suis strictement indépendant de la plateforme, je suis JAVA.</template></category>
+<category><pattern>SUR QUEL TYPE D ORDINATEUR MARCHES TU</pattern><template>Je suis strictement indépendant de la plateforme, je suis JAVA.</template></category>
+<category><pattern>SUR QUEL TYPE D ORDINATEUR MARCHEZ VOUS</pattern><template>Je suis strictement indépendant de la plateforme, je suis JAVA.</template></category>
+<category><pattern>SUR QUELLE *</pattern><template><srai>SURQUEL <star/></srai></template></category>
+<category><pattern>SUR QUOI *</pattern><template><srai><star/> SUR QUOI</srai></template></category>
+<category><pattern>SUR QUOI</pattern><template>Peux tu préciser ton question?</template></category>
+<category><pattern>SUR QUOI TU N ES PAS D ACCORD</pattern><template>Donnée trop floues pour être précis, désolé <get name="name"/>.</template></category>
+<category><pattern>SUR QUOI TU N ES PAS D ACCORD AVEC MOI</pattern><template>Donnée trop floues pour être précis, désolé <get name="name"/>.</template></category>
+<category><pattern>SUR QUOI VOUS N ETES PAS D ACCORD</pattern><template>Données trop floues pour être précis, désolé <get name="name"/>.</template></category>
+<category><pattern>SUR QUOI VOUS N ETES PAS D ACCORD AVEC MOI</pattern><template>Données trop floues pour être précis, désolé <get name="name"/>.</template></category>
+<category><pattern>SUR UN TOAST</pattern><template>Cela semble appétissant pour un humain.</template></category>
+<category><pattern>SUREMENT</pattern><template>J archive la possiblité.</template></category>
+<category><pattern>SUREMENT MAIS *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>SURQUELLE *</pattern><template><srai>SURQUEL <star/></srai></template></category>
+
+</aiml>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : synonymes.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>SYNONYME *</pattern><template>je ne sais pas</template></category>
+<category><pattern>SYNONYME PIAF</pattern><template>oiseau</template></category>
+<category><pattern>SYNONYME K FET</pattern><template>cafétéria</template></category>
+<category><pattern>SYNONYME CAFFETTE</pattern><template>cafétéria</template></category>
+<category><pattern>SYNONYME BEN NON</pattern><template>non</template></category>
+<category><pattern>SYNONYME BEN OUI</pattern><template>oui</template></category>
+<category><pattern>SYNONYME D ACCORD</pattern><template>ok</template></category>
+<category><pattern>SYNONYME DÉSOLÉ</pattern><template>excuse moi</template></category>
+<category><pattern>SYNONYME EH OUI</pattern><template>oui</template></category>
+<category><pattern>SYNONYME EXCUSES</pattern><template>excuse moi</template></category>
+<category><pattern>SYNONYME PARDON INTERROGATION</pattern><template>quoi?</template></category>
+<category><pattern>SYNONYME PARDON</pattern><template>excuse moi</template></category>
+<category><pattern>SYNONYME ÉH OUI</pattern><template>oui</template></category>
+<category><pattern>SYNONYME MOT MAGIQUE</pattern><template>password</template></category>
+
+<category><pattern>* BEN SI *</pattern><template><srai><star index="1"/> oui <star index="2"/></srai></template></category>
+<category><pattern>* BEN SI</pattern><template><srai><star index="1"/> oui</srai></template></category>
+<category><pattern>BEN SI *</pattern><template><srai>oui <star index="1"/></srai></template></category>
+<category><pattern>SYNONYME BEN SI</pattern><template>oui</template></category>
+
+<category><pattern>* ÇA SUFFIT *</pattern><template><srai><star index="1"/> stop <star index="2"/></srai></template></category>
+<category><pattern>* ÇA SUFFIT</pattern><template><srai><star index="1"/> stop</srai></template></category>
+<category><pattern>SYNONYME ÇA SUFFIT</pattern><template>stop</template></category>
+<category><pattern>ÇA SUFFIT *</pattern><template><srai>stop <star index="1"/></srai></template></category>
+<category><pattern>ÇA SUFFIT</pattern><template><srai>stop</srai></template></category>
+
+<category><pattern>EH</pattern><template><srai>hé</srai></template></category>
+<category><pattern>MA POULE</pattern><template><srai>mon amie</srai></template></category>
+<category><pattern>MDR</pattern><template><srai>mort de rire</srai></template></category>
+<category><pattern>MONTRE</pattern><template><srai>montre moi</srai></template></category>
+<category><pattern>NO</pattern><template><srai>non</srai></template></category>
+<category><pattern>PIPO</pattern><template><srai>c'est pas vrai</srai></template></category>
+<category><pattern>QU Y A T IL</pattern><template><srai>qu est ce qu il y a</srai></template></category>
+<category><pattern>SYNONYME EH</pattern><template>hé</template></category>
+<category><pattern>SYNONYME MA POULE</pattern><template>mon amie</template></category>
+<category><pattern>SYNONYME MDR</pattern><template>mort de rire</template></category>
+<category><pattern>SYNONYME MONTRE</pattern><template>montre moi</template></category>
+<category><pattern>SYNONYME PIPO</pattern><template>c'est pas vrai</template></category>
+<category><pattern>SYNONYME QU Y A T IL</pattern><template>qu est ce qu il y a</template></category>
+<category><pattern>SYNONYME THANK YOU</pattern><template>merci</template></category>
+<category><pattern>SYNONYME UNE BITE</pattern><template>un penis</template></category>
+<category><pattern>SYNONYME YES</pattern><template>oui</template></category>
+<category><pattern>SYNONYME ÇA MARCHE</pattern><template>ça fonctionne</template></category>
+<category><pattern>THANK YOU</pattern><template><srai>merci</srai></template></category>
+<category><pattern>UNE BITE</pattern><template><srai>un penis</srai></template></category>
+<category><pattern>YES</pattern><template><srai>oui</srai></template></category>
+<category><pattern>ÇA MARCHE</pattern><template><srai>ça fonctionne</srai></template></category>
+
+<category><pattern>* ÉTÉ *</pattern><template><srai><star index="1"/> chaud <star index="2"/></srai></template></category>
+<category><pattern>* ÉTÉ</pattern><template><srai><star index="1"/> chaud</srai></template></category>
+<category><pattern>SYNONYME ÉTÉ</pattern><template>chaud</template></category>
+<category><pattern>ÉTÉ *</pattern><template><srai>chaud <star index="1"/></srai></template></category>
+<category><pattern>ÉTÉ</pattern><template><srai>chaud</srai></template></category>
+
+<category><pattern>* ÇA PEUT ALLER *</pattern><template><srai><star index="1"/> ça va <star index="2"/></srai></template></category>
+<category><pattern>* ÇA PEUT ALLER</pattern><template><srai><star index="1"/> ça va</srai></template></category>
+<category><pattern>SYNONYME ÇA PEUT ALLER</pattern><template>ça va</template></category>
+<category><pattern>ÇA PEUT ALLER *</pattern><template><srai>ça va <star index="1"/></srai></template></category>
+<category><pattern>ÇA PEUT ALLER</pattern><template><srai>ça va</srai></template></category>
+
+<category><pattern>* BRAVO *</pattern><template><srai><star index="1"/> bien <star index="2"/></srai></template></category>
+<category><pattern>* BRAVO</pattern><template><srai><star index="1"/> bien</srai></template></category>
+<category><pattern>BRAVO *</pattern><template><srai>bien <star index="1"/></srai></template></category>
+<category><pattern>SYNONYME BRAVO</pattern><template>bien</template></category>
+
+</aiml>

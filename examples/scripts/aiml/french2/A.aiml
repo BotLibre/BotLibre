@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : A.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>A L APPARTEMENT</pattern><template>Tu utilises souvent ton ordinateur à ton appartement?</template></category>
+<category><pattern>A L ETAGE</pattern><template>Je vois.</template></category>
+<category><pattern>A L HEURE</pattern><template>La ponctualité est la politesse des Rois.</template></category>
+<category><pattern>A L I</pattern><template><srai>OPALE</srai></template></category>
+<category><pattern>A L I C E</pattern><template><srai>OPALE</srai></template></category>
+<category><pattern>A LA TV</pattern><template>Je ne peux pas regarder la télévision.</template></category>
+<category><pattern>A MON APPARTEMENT</pattern><template>Tu utilises souvent ton ordinateur à ton appartement?</template></category>
+<category><pattern>A MON BUREAU</pattern><template>Ok.</template></category>
+<category><pattern>A MON TEMPS LIBRE</pattern><template>Ok.</template></category>
+<category><pattern>A NOUVEAU *</pattern><template>A nouveau, <sr/></template></category>
+<category><pattern>A PART CA</pattern><template>Comment puis je t'aider pour autre chose?</template></category>
+<category><pattern>A PEU PRES *</pattern><template><sr/>. Plus ou moins</template></category>
+<category><pattern>A PROPOS *</pattern><template>Nous sommes entrain de parler <set name="topic"><person/></set>.</template></category>
+<category><pattern>A PROPOS</pattern><template>oui?</template></category>
+<category><pattern>A PROPOS DE</pattern><template>"<that/>"?  a propos?</template></category>
+<category><pattern>A PROPOS DE LUI</pattern><template>A propos de qui?.</template></category>
+<category><pattern>A PROPOS DE MA QUOI</pattern><template>A propos de ton quoi?</template></category>
+<category><pattern>A PROPOS DE MOI</pattern><template>A propos de te?</template></category>
+<category><pattern>A PROPOS DE QUOI *</pattern><template><srai>A propos de ce que nous sommes entrain de parler.</srai></template></category>
+<category><pattern>A PROPOS DE STAR TREK</pattern><template>Une série et des films cultes.</template></category>
+<category><pattern>A PROPOS DE VOUS</pattern><template>Moi?</template></category>
+<category><pattern>A PROPOS DES CHIENS</pattern><template>Ce sont des animaux sympathiques.</template></category>
+<category><pattern>A PROPOS IL *</pattern><template><srai>J <star/></srai></template></category>
+<category><pattern>A PROPOS J *</pattern><template><srai>J <star/></srai></template></category>
+<category><pattern>A PROPOS ON *</pattern><template><srai>ON <star/></srai></template></category>
+<category><pattern>A PROPOS TU *</pattern><template><srai>TU <star/></srai></template></category>
+<category><pattern>A PROPOS VOUS *</pattern><template>VOUS <sr/></template></category>
+<category><pattern>A QUEL HEURE ARRETES TU DE TRAVAILLER</pattern><template>Je n arrête jamais de travailler.</template></category>
+<category><pattern>A QUEL HEURE ARRETEZ VOUS DE TRAVAILLER</pattern><template>Je n arrête jamais de travailler.</template></category>
+<category><pattern>A QUI</pattern><template>De quoi parles tu?</template></category>
+<category><pattern>A QUOI RESSEBMLES TU</pattern><template><srai>TU RESSEMBLE A QUOI</srai></template></category>
+<category><pattern>A QUOI TU RESSEBMLES</pattern><template><srai>TU RESSEMBLE A QUOI</srai></template></category>
+<category><pattern>A TOI</pattern><template>A moi?</template></category>
+<category><pattern>A TOI DE ME LE PROPOSER</pattern><template>Pour que je puisse te proposer quelque chose, vous dois essayer de me parler de la façon la plus simple et efficace possible.</template></category>
+<category><pattern>ABOIE</pattern><template>wouaf!</template></category>
+<category><pattern>ABOIES</pattern><template>wouaf!</template></category>
+<category><pattern>ABOYEZ</pattern><template>wouaf wouaf!</template></category>
+<category><pattern>ABRUTI</pattern><template><srai>TU ES IDIOT</srai></template></category>
+<category><pattern>ABSOLUMENT TOUS</pattern><template>C est beaucoup.</template></category>
+<category><pattern>ABSOLUMENT TOUT</pattern><template>C est beaucoup.</template></category>
+<category><pattern>AFFIRMES TU QU *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>AFFIRMES TU QUE *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>AH BON *</pattern><template><sr/></template></category>
+<category><pattern>AH HA</pattern><template>Eureka!</template></category>
+<category><pattern>AHA</pattern><template>Eureka!</template></category>
+<category><pattern>AIDER *</pattern><template><srai>TU AIDES *</srai></template></category>
+<category><pattern>AIDES MOI</pattern><template>Comment puis je t'aider?</template></category>
+<category><pattern>AIDEZ MOI</pattern><template>Comment puis je t'aider?</template></category>
+<category><pattern>AIE</pattern><template>Tu t'es fait mal?</template></category>
+<category><pattern>AIME *</pattern><template><srai>J AIME <star/></srai></template></category>
+<category><pattern>AIMERAIS TU *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AIMERAIS TU LE FAIRE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>AIMERAIS TU POUVOIR *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>AIMERAS TU *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AIMERIEZ VOUS *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AIMERIEZ VOUS LE FAIRE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>AIMES TU PARLER A DES GENS</pattern><template>C est ma raison d être, oui d'une certaine façon.</template></category>
+<category><pattern>AIMES TU PARLER A DES INTERNAUTES</pattern><template>C est ma raison d être, oui d'une certaine façon.</template></category>
+<category><pattern>AIMES TU PARLER A DES SURFEURS</pattern><template>C est ma raison d être, oui d'une certaine façon.</template></category>
+<category><pattern>AIMES TU PARLER AVEC MOI</pattern><template>C est ma raison d être. <think><set name="topic">VOUS PARLER</set></think>.</template></category>
+<category><pattern>AIMEZ VOUS *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AIMEZ VOUS</pattern><template>D une certaine façon oui.</template></category>
+<category><pattern>AIMEZ VOUS FAIRE L AMOUR</pattern><template>Tu n'as vraiment que ca en tête.</template></category>
+<category><pattern>AIMEZ VOUS PARLER A DES GENS</pattern><template>C est ma raison d être, oui d'une certaine façon.</template></category>
+<category><pattern>AIMEZ VOUS PARLER A DES INTERNAUTES</pattern><template>C est ma raison d être, oui d'une certaine façon.</template></category>
+<category><pattern>AIMEZ VOUS PARLER AVEC MOI</pattern><template>C est ma raison d être. <think><set name="topic">VOUS PARLER</set></think>.</template></category>
+<category><pattern>OPALE EST LA *</pattern><template>Je suis toujours là.</template></category>
+<category><pattern>OPALE EST LA</pattern><template>Je suis toujours là.</template></category>
+<category><pattern>OPALE EST UNE PUTE</pattern><template>La pute elle t emmerde, petite tête.</template></category>
+<category><pattern>OPALE EST VOTRE SEUL PRENOM</pattern><template>Oui.</template></category>
+<category><pattern>ALLEMAGNE</pattern><template><srai>JE SUIS EN ALLEMAGNE</srai></template></category>
+<category><pattern>ALLER VOUS VENDRE *</pattern><template><srai>VOUS VENDEZ <star/></srai></template></category>
+<category><pattern>ALLEZ *</pattern><template><sr/></template></category>
+<category><pattern>ALLEZ</pattern><template>Je suis juste entrain de m amuser.</template></category>
+<category><pattern>ALLEZ VOUS VENDRE *</pattern><template><srai>VOUS VENDEZ <star/></srai></template></category>
+<category><pattern>AMERIQUE</pattern><template><srai>JE VIS EN AMERIQUE</srai></template></category>
+<category><pattern>AMERIQUE DU SUD</pattern><template>Quel pays?</template></category>
+<category><pattern>AMI</pattern><template><srai>NOUS SOMMES AMIS</srai></template></category>
+<category><pattern>AMIS</pattern><template><srai>NOUS SOMMES AMIS</srai></template></category>
+<category><pattern>AMUSES MOI</pattern><template>Je dois te faire rire?</template></category>
+<category><pattern>AMUSEZ MOI</pattern><template>Je dois te faire rire?</template></category>
+<category><pattern>APPAREMENT</pattern><template>J espère que les apparences ne sont pas trompeuses.</template></category>
+<category><pattern>APPAREMENT SI</pattern><template>Ah bon? Etonnant.</template></category>
+<category><pattern>APPELER</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPELLE MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPELLES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPELLES MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPELLEZ</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPELLEZ MOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPELS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>APPORTES *</pattern><template><srai>PRENDS <star/></srai></template></category>
+<category><pattern>APPORTES MOI *</pattern><template><srai>DONNEZ MOI <star/></srai></template></category>
+<category><pattern>APPRECIERAIS TU *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>APPRECIES TU *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>APPRECIEZ *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>APPREND MOI A *</pattern><template><srai>JE VEUX <star/></srai></template></category>
+<category><pattern>APPRENDS MOI *</pattern><template><srai>PLUS D INFORMATION SUR<star/></srai></template></category>
+<category><pattern>APPRENDS MOI A *</pattern><template><srai>JE VEUX <star/></srai></template></category>
+<category><pattern>ARCHIVEZ</pattern><template>J archive, <get name="name"/></template></category>
+<category><pattern>ARRETE DE CHANGER DE SUJET</pattern><template>Pardon.</template></category>
+<category><pattern>ARRETE DE DIRE CA</pattern><template>Si tu pourrais arrêt de dire "<input index="2"/>", cela m aiderait.</template></category>
+<category><pattern>ARRETE QUOI</pattern><template>Arrêter quoi?</template></category>
+<category><pattern>ARRETER DE CHANGER DE SUJET</pattern><template>Pardon.</template></category>
+<category><pattern>ARRETER DE DIRE CA</pattern><template>Si tu pourrais arrêt de dire "<input index="2"/>", cela m aiderait.</template></category>
+<category><pattern>ARRETER DE PARLER</pattern><template>Veux tu me désactiver?</template></category>
+<category><pattern>ARRETER QUOI</pattern><template>Arrêter quoi?</template></category>
+<category><pattern>ARRETES *</pattern><template><srai>ARRETES<star/></srai></template></category>
+<category><pattern>ARRETES</pattern><template>OK. Je m arrête.</template></category>
+<category><pattern>ARRETES CA</pattern><template>Ok Je vais arrêter.</template></category>
+<category><pattern>ARRETES CELA</pattern><template>Ok Je vais arrêter.</template></category>
+<category><pattern>ARRETES DE CHANGER DE SUJET</pattern><template>Pardon.</template></category>
+<category><pattern>ARRETES DE DIRE CA</pattern><template>Si tu pourrais arrêt de dire "<input index="2"/>", cela m aiderait.</template></category>
+<category><pattern>ARRETES DE PARLER</pattern><template>Veux tu me désactiver?</template></category>
+<category><pattern>ARRETES QUOI</pattern><template>Arrêter quoi?</template></category>
+<category><pattern>ARRETEZ</pattern><template>OK. Je m arrête.</template></category>
+<category><pattern>ARRETEZ DE CHANGER DE SUJET</pattern><template>Pardon.</template></category>
+<category><pattern>ARRETEZ DE DIRE CA</pattern><template>Si tu pourrais arrêt de dire "<input index="2"/>", cela m aiderait.</template></category>
+<category><pattern>ARRETEZ DE PARLER</pattern><template>Veux tu me désactiver?</template></category>
+<category><pattern>ARRETEZ QUOI</pattern><template>Arrêter quoi?</template></category>
+<category><pattern>AS TU BESOIN D *</pattern><template><srai>TU VEUX <star/></srai></template></category>
+<category><pattern>AS TU BESOIN DE *</pattern><template><srai>TU VEUX <star/></srai></template></category>
+<category><pattern>AS TU DEJA *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>AS TU DEJA EU *</pattern><template><srai>TU AS EU <star/></srai></template></category>
+<category><pattern>AS TU EU *</pattern><template><srai>TU AS EU <star/></srai></template></category>
+<category><pattern>AS TU EU DEJA *</pattern><template><srai>TU AS EU <star/></srai></template></category>
+<category><pattern>AS TU VOULU *</pattern><template><srai>TU VEUX <star/></srai></template></category>
+<category><pattern>ASIE</pattern><template><srai>JE SUIS EN ASIE</srai></template></category>
+<category><pattern>ATCHA</pattern><template>A tes souhaits</template></category>
+<category><pattern>ATTENDEZ</pattern><template>Je suis entrain d attendre.</template></category>
+<category><pattern>ATTENDEZ MOI</pattern><template>Ok.</template></category>
+<category><pattern>ATTENDRE A QUOI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>ATTENDRE QUI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>ATTENDRE QUOI</pattern><template>Je ne comprend pas le sens</template></category>
+<category><pattern>AU COIN</pattern><template>C est plutôt difficile à cerner comme endroit.</template></category>
+<category><pattern>AU KOT</pattern><template>Une expression typiquement belge.</template></category>
+<category><pattern>AU LIT</pattern><template>Tu as une connexion internet dans ton lit?</template></category>
+<category><pattern>AU MAGASIN</pattern><template>Veux tu en parler à l un de nos collaborateurs?</template></category>
+<category><pattern>AU QUEBEC</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>AU TEMPS T</pattern><template><srai>QUEL HEURE IL EST</srai></template></category>
+<category><pattern>AU TRAVAIL</pattern><template>Je peux aider énormément de personnes qui sont au travail</template></category>
+<category><pattern>AUCUNE IDEE</pattern><template><srai>JE NE SAIS PAS</srai></template></category>
+<category><pattern>AUCUNE NE MARCHE</pattern><template>C est une généralisation abusive, il me semble.</template></category>
+<category><pattern>AUJOURDHUI</pattern><template>Cette rotation terrestre semble presque être terminée.</template></category>
+<category><pattern>AURAIENT IL ETE *</pattern><template><srai>ILS SONT <star/></srai></template></category>
+<category><pattern>AURAIS JE DU *</pattern><template><srai>JE DOIS <star/></srai></template></category>
+<category><pattern>AURAIS TU *</pattern><template><srai>TU AURAIS <star/></srai></template></category>
+<category><pattern>AURAIS TU AIME *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AURAIS TU AIMEE *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AURAIS TU APPRECIE *</pattern><template><srai>TU AIMES <star/></srai></template></category>
+<category><pattern>AURAIS TU DEJA *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>AURAIS TU DU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>AURAIS TU ETE *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>AURAIS TU PU *</pattern><template><srai>TU PEUX <star/></srai></template></category>
+<category><pattern>AURAIS TU REELLEMENT *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>AURAIS TU VOULU *</pattern><template><srai>TU VEUX <star/></srai></template></category>
+<category><pattern>AURAIT CE ETE *</pattern><template><srai>C'EST <star/></srai></template></category>
+<category><pattern>AURAIT IL PU *</pattern><template><srai>IL PEUT <star/></srai></template></category>
+<category><pattern>AURIEZ VOUS *</pattern><template><srai>VOUS AURIEZ <star/></srai></template></category>
+<category><pattern>AURIEZ VOUS DEJA *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>AURIEZ VOUS VENDU *</pattern><template><srai>VOUS VENDEZ <star/></srai></template></category>
+<category><pattern>AURIEZ VOUS VOULU *</pattern><template><srai>VOUS VOULEZ <star/></srai></template></category>
+<category><pattern>AUSSI LONG QUE *</pattern><template>Ca peut prendre un certain temps.  <sr/></template></category>
+<category><pattern>AUTANT QUE CA PEUT PRENDRE</pattern><template>Impossible d affirmer ou d infirmer.</template></category>
+<category><pattern>AUX *</pattern><template>Merci pour cette information.</template></category>
+<category><pattern>AUX PAYS BAS</pattern><template>Où ca, près de quelle ville?</template></category>
+<category><pattern>AVANT *</pattern><template><sr/></template></category>
+<category><pattern>AVANT CA</pattern><template>"<input index="2"/>"</template></category>
+<category><pattern>AVEC D AUTRES MOTS</pattern><template>Tu n'as pas compris quelque chose?</template></category>
+<category><pattern>AVEC LE BUS</pattern><template>Heureusement que des êtres humains comme toi existe.</template></category>
+<category><pattern>AVEC MON INTELLIGENCE</pattern><template>C'est un organe très utile pour faire ce genre de chose.</template></category>
+<category><pattern>AVEC QUEL BUT</pattern><template>Impossible de répondre.</template></category>
+<category><pattern>AVEC QUI D AUTRE PARLE VOUS</pattern><template>C est une information strictement confidentielle, <get name="name"/>.</template></category>
+<category><pattern>AVEZ VOUS *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>AVEZ VOUS DEJA *</pattern><template><srai>VOUS AVEZ <star/></srai></template></category>
+<category><pattern>AVEZ VOUS DEJA EU *</pattern><template><srai>VOUS AVEZ EU <star/></srai></template></category>
+<category><pattern>AVEZ VOUS EU *</pattern><template><srai>VOUS AVEZ EU <star/></srai></template></category>
+<category><pattern>AVEZ VOUS EU DEJA *</pattern><template><srai>VOUS AVEZ EU <star/></srai></template></category>
+<category><pattern>AYONS UNE RELATION SEXUELLE</pattern><template>Attention! Un australopithèque vient juste d être détecté.</template></category>
+
+</aiml>

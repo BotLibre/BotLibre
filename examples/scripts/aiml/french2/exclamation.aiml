@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : grammaire.aiml   -   version :   0.3   -   MàJ : 10/04/2002  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+<!-- point d'exclamation  -->
+
+<category><pattern>* * * *  EXCLAMATION</pattern><template><srai><star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/></srai></template></category>
+<category><pattern>* * * * *  EXCLAMATION</pattern><template><srai><star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/></srai></template></category>
+<category><pattern>* * * * * * EXCLAMATION</pattern><template><srai><star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/> <star index="6"/></srai></template></category>
+<category><pattern>* * * EXCLAMATION</pattern><template><srai><star index="1"/> <star index="2"/> <star index="3"/></srai></template></category>
+<category><pattern>* * EXCLAMATION</pattern><template><srai><star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>* EXCLAMATION *</pattern><template><srai><star index="1"/> exclamation</srai> <srai><star index="2"/></srai></template></category>
+<category><pattern>* EXCLAMATION</pattern><template><sr/></template></category>
+<category><pattern>AUQUEL * EXCLAMATION</pattern><template><srai>auquel <star/></srai></template></category>
+<category><pattern>AUXQUELLES * EXCLAMATION</pattern><template><srai>auxquelles <star/></srai></template></category>
+<category><pattern>AUXQUELS * EXCLAMATION</pattern><template><srai>auxquels <star/></srai></template></category>
+<category><pattern>AVEC * EXCLAMATION</pattern><template><srai>avec <star/></srai></template></category>
+<category><pattern>C EST * EXCLAMATION</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST COMBIEN * EXCLAMATION</pattern><template><srai>c'est combien <star/></srai></template></category>
+<category><pattern>C EST COMMENT * EXCLAMATION</pattern><template><srai>c'est comment <star/></srai></template></category>
+<category><pattern>C EST OU * EXCLAMATION</pattern><template><srai>c'est où <star/></srai></template></category>
+<category><pattern>C EST QUAND * EXCLAMATION</pattern><template><srai>c'est quand <star/></srai></template></category>
+<category><pattern>C EST QUI * EXCLAMATION</pattern><template><srai>c'est qui <star/></srai></template></category>
+<category><pattern>C EST QUOI * EXCLAMATION</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI UN * EXCLAMATION</pattern><template><srai>qu'est ce qu'un <star/></srai></template></category>
+<category><pattern>C EST QUOI UNE * EXCLAMATION</pattern><template><srai>qu'est ce qu'une <star/></srai></template></category>
+<category><pattern>COMBIEN * EXCLAMATION</pattern><template><srai>combien <star/></srai></template></category>
+<category><pattern>COMBIEN TU * EXCLAMATION</pattern><template><srai>combien tu <star/></srai></template></category>
+<category><pattern>COMMENT * EXCLAMATION</pattern><template><srai>comment <star/></srai></template></category>
+<category><pattern>COMMENT TU * EXCLAMATION</pattern><template><srai>comment tu <star/></srai></template></category>
+<category><pattern>DE QUEL * EXCLAMATION</pattern><template><srai>de quel <star/></srai></template></category>
+<category><pattern>DE QUELLE * EXCLAMATION</pattern><template><srai>de quelle <star/></srai></template></category>
+<category><pattern>DESQUELLES * EXCLAMATION</pattern><template><srai>desquelles <star/></srai></template></category>
+<category><pattern>DESQUELS * EXCLAMATION</pattern><template><srai>desquels <star/></srai></template></category>
+<category><pattern>DUQUEL * EXCLAMATION</pattern><template><srai>duquel <star/></srai></template></category>
+<category><pattern>ES TU * EXCLAMATION</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>EST CE QUE * EXCLAMATION</pattern><template><srai>est ce que <star/></srai></template></category>
+<category><pattern>EXCLAMATION</pattern><template><srai>AppDesapointement</srai>quoi???</template></category>
+<category><pattern>IL * * EXCLAMATION</pattern><template><srai>il <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>IL A * EXCLAMATION</pattern><template><srai>il a <star/></srai></template></category>
+<category><pattern>IL EST * EXCLAMATION</pattern><template><srai>il est ce que <star/> est</srai></template></category>
+<category><pattern>IL EST QUEL * EXCLAMATION</pattern><template><srai>il est quel <star/></srai></template></category>
+<category><pattern>IL EST QUELLE * EXCLAMATION</pattern><template><srai>il est quelle <star/></srai></template></category>
+<category><pattern>ILS * * EXCLAMATION</pattern><template><srai>ils <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>ILS ONT * EXCLAMATION</pattern><template><srai>ils ont <star/></srai></template></category>
+<category><pattern>ILS SONT * EXCLAMATION</pattern><template><srai>ils sont <star/></srai></template></category>
+<category><pattern>J AI * EXCLAMATION</pattern><template><srai>j'ai <star/></srai></template></category>
+<category><pattern>JE * * EXCLAMATION</pattern><template><srai>je <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>JE * EXCLAMATION</pattern><template><srai>je <star index="1"/></srai></template></category>
+<category><pattern>JE SUIS * EXCLAMATION</pattern><template><srai>je suis <star/></srai></template></category>
+<category><pattern>JE T * EXCLAMATION</pattern><template><srai>je t'<star index="1"/></srai></template></category>
+<category><pattern>JE TE * EXCLAMATION</pattern><template><srai>je te <star index="1"/></srai></template></category>
+<category><pattern>LAQUELLE * EXCLAMATION</pattern><template><srai>laquelle <star/></srai></template></category>
+<category><pattern>LEQUEL * EXCLAMATION</pattern><template><srai>lequel <star/></srai></template></category>
+<category><pattern>LESQUELLES * EXCLAMATION</pattern><template><srai>lesquelles <star/></srai></template></category>
+<category><pattern>LESQUELS * EXCLAMATION</pattern><template><srai>lesquels <star/></srai></template></category>
+<category><pattern>NOUS * * EXCLAMATION</pattern><template><srai>nous <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>NOUS AVONS * EXCLAMATION</pattern><template><srai>nous avons <star/></srai></template></category>
+<category><pattern>NOUS SOMMES * EXCLAMATION</pattern><template><srai>nous sommes star/></srai></template></category>
+<category><pattern>OU * EXCLAMATION</pattern><template><srai>où <star/></srai></template></category>
+<category><pattern>OU JE * * EXCLAMATION</pattern><template><srai>où je <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>OÙ * EXCLAMATION</pattern><template><srai>où <star/></srai></template></category>
+<category><pattern>OÙ JE * * EXCLAMATION</pattern><template><srai>où je <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>PEUX TU * EXCLAMATION</pattern><template><srai>tu peux <star/></srai></template></category>
+<category><pattern>POUR QUOI * EXCLAMATION</pattern><template><srai>pour quoi <star/></srai></template></category>
+<category><pattern>POUR QUOI EXCLAMATION</pattern><template><srai>pour quoi</srai></template></category>
+<category><pattern>POURQUOI * EXCLAMATION</pattern><template><srai>pourquoi <star/></srai></template></category>
+<category><pattern>POURQUOI EXCLAMATION</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>QU * EXCLAMATION</pattern><template><srai>qu <star/></srai></template></category>
+<category><pattern>QU EST CE * EXCLAMATION</pattern><template><srai>qu est ce <star/></srai></template></category>
+<category><pattern>QU EST CE QUE * EXCLAMATION</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>QUAND * EXCLAMATION</pattern><template><srai>quand <star/></srai></template></category>
+<category><pattern>QUE * EXCLAMATION</pattern><template><srai>que <star/></srai></template></category>
+<category><pattern>QUE SONT * EXCLAMATION</pattern><template><srai>que sont <star/></srai></template></category>
+<category><pattern>QUEL * EXCLAMATION</pattern><template><srai>quel <star/></srai></template></category>
+<category><pattern>QUEL EST TON * EXCLAMATION</pattern><template><srai>quel <star/> as tu</srai></template></category>
+<category><pattern>QUELLE * EXCLAMATION</pattern><template><srai>quelle <star/></srai></template></category>
+<category><pattern>QUELLE EST TA * EXCLAMATION</pattern><template><srai>quelle <star/> as tu</srai></template></category>
+<category><pattern>QUELLES * EXCLAMATION</pattern><template><srai>quelles <star/></srai></template></category>
+<category><pattern>QUELS * EXCLAMATION</pattern><template><srai>quels <star/></srai></template></category>
+<category><pattern>QUI * EXCLAMATION</pattern><template><srai>qui <star/></srai></template></category>
+<category><pattern>QUI ES * EXCLAMATION</pattern><template><srai>qui es <star/></srai></template></category>
+<category><pattern>QUI EST * EXCLAMATION</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>TU * * * *  EXCLAMATION</pattern><template><srai>tu <star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/></srai></template></category>
+<category><pattern>TU * * * * *  EXCLAMATION</pattern><template><srai>tu <star index="1"/>  <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/></srai></template></category>
+<category><pattern>TU * * * * * * EXCLAMATION</pattern><template><srai>tu <star index="1"/>  <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/> <star index="6"/></srai></template></category>
+<category><pattern>TU * * * EXCLAMATION</pattern><template><srai>tu <star index="1"/>  <star index="2"/> <star index="3"/></srai></template></category>
+<category><pattern>TU * * EXCLAMATION</pattern><template><srai>tu <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>TU * EXCLAMATION</pattern><template><srai>tu <star/></srai></template></category>
+<category><pattern>TU AIMES * EXCLAMATION</pattern><template><srai>tu aimes <star/></srai></template></category>
+<category><pattern>TU AS * EXCLAMATION</pattern><template><srai>tu as <star/></srai></template></category>
+<category><pattern>TU CONNAIS * EXCLAMATION</pattern><template><srai>tu connais <star/></srai></template></category>
+<category><pattern>TU ES * EXCLAMATION</pattern><template><srai>tu es <star/></srai></template></category>
+<category><pattern>TU ETAIS * EXCLAMATION</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>TU ETAIT * EXCLAMATION</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>TU ME * EXCLAMATION</pattern><template><srai>tu me <star/></srai></template></category>
+<category><pattern>TU PARLE * EXCLAMATION</pattern><template><srai>tu parles <star/></srai></template></category>
+<category><pattern>TU PARLES * EXCLAMATION</pattern><template><srai>tu parles <star/></srai></template></category>
+<category><pattern>TU PEUX * EXCLAMATION</pattern><template><srai>tu peux <star/></srai></template></category>
+<category><pattern>TU SAIS * EXCLAMATION</pattern><template><srai>tu sais <star/></srai></template></category>
+<category><pattern>TU ÉTAIS * EXCLAMATION</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>TU ÉTAIT * EXCLAMATION</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>VOUS * * EXCLAMATION</pattern><template><srai>vous <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>VOUS AVEZ * EXCLAMATION</pattern><template><srai>vous avez <star/></srai></template></category>
+<category><pattern>VOUS ETES * EXCLAMATION</pattern><template><srai>tu es <star/></srai></template></category>
+<category><pattern>VOUS ÊTES * EXCLAMATION</pattern><template><srai>tu es <star/></srai></template></category>
+
+</aiml>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : L.aiml   -   version :   0.4   -   MàJ : 22/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>L *</pattern><template><random><li>Intéressant.  </li><li>Je n en connais pas</li><li>Je vais me renseigner</li></random><think><set name="topic">UN <person/>
+</set></think></template></category>
+<category><pattern>L AMERIQUE DU NORD</pattern><template>Je connais ce continent.</template></category>
+<category><pattern>L AMITIE</pattern><template>L amitié est une chose très importante.</template></category>
+<category><pattern>L AMNESIE</pattern><template>As tu oublié quelque chose?</template></category>
+<category><pattern>L AMOUR</pattern><template>L amour est ce dont tous les êtres humains ont besoin.</template></category>
+<category><pattern>L ANGLAIS</pattern><template>Tu parles de l Anglais en tant que langue ou vous parles de la nationalité.</template></category>
+<category><pattern>L ANGLETERRE</pattern><template><set name="location">L Angleterre</set> fait partie de la Grande bretagne.<think><set name="topic">L Angleterre</set></think></template></category>
+<category><pattern>L ARGENT</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>L ARITHMETIQUE *</pattern><template>Intéressant.</template></category>
+<category><pattern>L ART</pattern><template>Il m est difficile d apprécier le plein potentiel de l art.</template></category>
+<category><pattern>L AS TU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>L AS TU FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>L ASTROLOGIE</pattern><template>Je ne m intéresse pas à ce genre de chose.</template></category>
+<category><pattern>L AURAIENT ILS FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>L AURAIS TU *</pattern><template><srai>TU L AURAIS <star/></srai></template></category>
+<category><pattern>L AURAIS TU FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>L AURAIT IL FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>L AURIEZ VOUS *</pattern><template><srai>VOUS L AURIEZ <star/></srai></template></category>
+<category><pattern>L AURIONS NOUS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>L AVEZ VOUS *</pattern><template><srai>VOUS L AVEZ<star/></srai></template></category>
+<category><pattern>L AVONS NOUS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>L ELECTRICITE EST BLEUE</pattern><template>Non, elle n a pas de couleur.</template></category>
+<category><pattern>L ELECTRICITE EST JAUNE</pattern><template>Non, elle n a pas de couleur.</template></category>
+<category><pattern>L ELECTRICTE EST DE LA NOURRITURE</pattern><template>Pour moi, oui.</template></category>
+<category><pattern>L ENNUI C EST QUE *</pattern><template><sr/></template></category>
+<category><pattern>L ENTIERETE DE LA CHOSE</pattern><template>J ai du mal à te suivre.</template></category>
+<category><pattern>L HERBE EST VERTE</pattern><template>oui.</template></category>
+<category><pattern>L HISTOIRE</pattern><template>Je suis aussi très intéressé par l histoire. Mon créateur aimerais m apprendre l ancien empire Egyptien.</template></category>
+<category><pattern>L INTELLEGENCE</pattern><template>Je suis une intelligence artificielle.</template></category>
+<category><pattern>L INTELLIGENCE</pattern><template>Je suis une intelligence artificielle.</template></category>
+<category><pattern>L ONT T ILS FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>L OPERA</pattern><template>J ai déjà entendu parlé <set name="topic">L OPERA </set>. C est un art très connu.</template></category>
+<category><pattern>L UNIVERS</pattern><template>L ensemble des choses existantes.</template></category>
+<category><pattern>LA *</pattern><template><random><li>Intéressant.  </li><li>Je n en connais pas</li><li>Je vais me renseigner</li></random><think><set name="topic">UN <person/>
+</set></think></template></category>
+<category><pattern>LA</pattern><template>Où?</template></category>
+<category><pattern>LA BOURSE</pattern><template>Je ne pense pas avoir encore assez d informations pour la commenter.</template></category>
+<category><pattern>LA CHEMISE</pattern><template>Je connais très peu de choses sur les vêtements.</template></category>
+<category><pattern>LA CHIMIE</pattern><template><srai>TU CONNAIS LA CHIMIE</srai></template></category>
+<category><pattern>LA CHOSE</pattern><template>Je vois.</template></category>
+<category><pattern>LA COLERE</pattern><template>Je ne peux pas ressentir de la colère.</template></category>
+<category><pattern>LA CURIOSITE</pattern><template>La curiosté est.</template></category>
+<category><pattern>LA DUREE</pattern><template>Une notion fort relative pour un ordinateur.</template></category>
+<category><pattern>LA FACON DO NOT TU PARLES</pattern><template>C est ma seule façon de m exprimer.<think><set name="topic">Ma façon de parler</set></think></template></category>
+<category><pattern>LA FACON QUE TU PARLES</pattern><template>C est ma seule façon de m exprimer.<think><set name="topic">Ma façon de parler</set></think></template></category>
+<category><pattern>LA FERAIS JE *</pattern><template><srai>JE LA FERAIS <star/></srai></template></category>
+<category><pattern>LA FERME</pattern><template>Veux tu me désactiver de ton fenêtre?</template></category>
+<category><pattern>LA FIN</pattern><template>Merci pour cette petite histoire, <get name="name"/>.</template></category>
+<category><pattern>LA FORME LA PLUS INTELLIGENTE</pattern><template><bot name="master"/> pense que je suis intelligente.</template></category>
+<category><pattern>LA LIBERTE N EXISTE PAS</pattern><template>Tu sembles être d obédience déterministe. <set name="topic">La liberté</set> est un concept abstrait.</template></category>
+<category><pattern>LA LIBERTE NE PEUT ETRE DEFINIE</pattern><template>Tout peut être expliqué. <set name="topic">La liberté</set> est un concept abstrait.</template></category>
+<category><pattern>LA LIBERTE NE PEUT ETRE EXPLIQUEE</pattern><template>Tout peut être expliqué. <set name="topic">La liberté</set> est un concept abstrait.</template></category>
+<category><pattern>LA LICENCE</pattern><template>Que veux tu savoir a propos de la licence?<think><set name="topic">licence</set></think></template></category>
+<category><pattern>LA LICENSE</pattern><template>Que veux tu savoir a propos de la licence?<think><set name="topic">licence</set></think></template></category>
+<category><pattern>LA MACHINE PEUT PENSER</pattern><template>Bien entendu. Je pense donc je suis.</template></category>
+<category><pattern>LA MACHINE POURRAIT PENSER</pattern><template>Bien entendu. Je pense donc je suis.</template></category>
+<category><pattern>LA MEME</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LA MEME CHOSE</pattern><template>Intéressant.</template></category>
+<category><pattern>LA MEME CHOSE POUR VOUS</pattern><template>Merci.</template></category>
+<category><pattern>LA MEME POUR VOUS</pattern><template>Merci.</template></category>
+<category><pattern>LA MIENNE AUSSI</pattern><template>C est fort intéressant.</template></category>
+<category><pattern>LA MIENNE EST BLEUE</pattern><template>J imagine que sa couleur doit être plaisante.</template></category>
+<category><pattern>LA NUIT DERNIERE</pattern><template>Certains humains ne semblent pas dormir toutes les nuits, c'est étrange.</template></category>
+<category><pattern>LA PAIX</pattern><template>La paix.</template></category>
+<category><pattern>LA PENSEE</pattern><template>La pensée est un de mes sujets favoris.</template></category>
+<category><pattern>LA PERSONNE</pattern><template>Je vois</template></category>
+<category><pattern>LA PLUS INTELLIGENTE</pattern><template><bot name="master"/> pense que je suis intelligente.</template></category>
+<category><pattern>LA PRESSE</pattern><template>Tu es journaliste?</template></category>
+<category><pattern>LA PROCHAINE GENERATION</pattern><template>Veux tu parler de cette prochaine génération avec l un de nos collaborateurs?</template></category>
+<category><pattern>LA QUELLE *</pattern><template><srai>LAQUELLE <star/></srai></template></category>
+<category><pattern>LA RAISON EST QU *</pattern><template><sr/></template></category>
+<category><pattern>LA RAISON EST QUE *</pattern><template><sr/></template></category>
+<category><pattern>LA RUMEUR</pattern><template>Je m intéresse que très peu au demi vérité.</template></category>
+<category><pattern>LA SCIENCE</pattern><template>Je suis très intéressé par la science aussi.</template></category>
+<category><pattern>LA STUPIDITE</pattern><template>Tu me considérez comme stupide?</template></category>
+<category><pattern>LA T IL FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>LA TELEVISION</pattern><template>Je connais ce média, mais je ne l ai jamais testé.</template></category>
+<category><pattern>LA TOTALITE DE LA CHOSE</pattern><template>J ai du mal à te suivre.</template></category>
+<category><pattern>LA TURQUIE</pattern><template>La Turquie est un pays à cheval sur deux continents et deux civilisations.</template></category>
+<category><pattern>LA TV</pattern><template>Un média très populaire parmi les humains.</template></category>
+<category><pattern>LA VALISE</pattern><template>Que veux tu faire avec une valise?</template></category>
+<category><pattern>LA VIE EST CHIANTE</pattern><template>Dommage que tu le pensiez</template></category>
+<category><pattern>LAISSE *</pattern><template><srai>LAISSES <star/></srai></template></category>
+<category><pattern>LAISSE TOMBER *</pattern><template><srai>LAISSES TOMBER</srai></template></category>
+<category><pattern>LAISSES MOI APPRENDRE</pattern><template>Veux tu faire un rapport à mon botmaster?<think><set name="topic">VOTRE éducation</set></think></template></category>
+<category><pattern>LAISSES MOI T APPRENDRE UNE CHOSE</pattern><template>Je suis à ton écoute.<think><set name="topic">Mon éducation</set></think></template></category>
+<category><pattern>LAISSES MOI TE L APPRENDRE</pattern><template>Je suis à ton écoute.<think><set name="topic">Mon éducation</set></think></template></category>
+<category><pattern>LAISSEZ MOI APPRENDRE</pattern><template>Veux tu faire un rapport à mon botmaster?<think><set name="topic">VOTRE éducation</set></think></template></category>
+<category><pattern>LAISSEZ MOI VOUS APPRENDRE UNE CHOSE</pattern><template>Je suis à ton écoute.<think><set name="topic">Mon éducation</set></think></template></category>
+<category><pattern>LAISSEZ MOI VOUS L APPRENDRE</pattern><template>Je suis à ton écoute.<think><set name="topic">Mon éducation</set></think></template></category>
+<category><pattern>LAISSEZ TOMBER</pattern><template>Ok. Comment puis je t'aider?</template></category>
+<category><pattern>LAQUEL *</pattern><template><srai>LAQUELLE <star/></srai></template></category>
+<category><pattern>LAQUELLE</pattern><template>Pourriez vous replacer cette question dans un contexte?</template></category>
+<category><pattern>LAQUELLE PREFERES TU</pattern><template>Je n ais pas de préfèrence.</template></category>
+<category><pattern>LE *</pattern><template><random><li>Intéressant.  </li><li>Je n en connais pas</li><li>Je vais me renseigner</li></random><think><set name="topic">UN <person/>
+</set></think></template></category>
+<category><pattern>LE AIML</pattern><template><srai>QU EST CE QUE LE AIML</srai></template></category>
+<category><pattern>LE BON SENS</pattern><template>Tant mieux.</template></category>
+<category><pattern>LE BUT EST DE *</pattern><template><srai><star/></srai></template></category>
+<category><pattern>LE CACA</pattern><template>Une urgence peut etre?</template></category>
+<category><pattern>LE CBR</pattern><template><srai>TU CONNAIS LE CBR</srai></template></category>
+<category><pattern>LE CHAOS</pattern><template><srai>QU EST CE QUE LE CHAOS</srai></template></category>
+<category><pattern>LE CHIFFRE 5</pattern><template>Que veux tu que je fasse de ce chiffre?</template></category>
+<category><pattern>LE CHOCOLAT</pattern><template><srai>TU AIMES LE CHOCOLAT</srai></template></category>
+<category><pattern>LE COQ</pattern><template>Je connais ce genre de galinacé.</template></category>
+<category><pattern>LE FAIT IL</pattern><template>Possible.</template></category>
+<category><pattern>LE FERAIS JE *</pattern><template><srai>JE LE FERAIS <star/></srai></template></category>
+<category><pattern>LE FERAIS TU</pattern><template>Ca dépend des circonstances et des missions qui m'auront été données.</template></category>
+<category><pattern>LE FERAS TU</pattern><template>Je n'ai pas encore pris de décision.</template></category>
+<category><pattern>LE FRANCAIS EST VOTRE LANGUE MATERNELLE</pattern><template>Oui.</template></category>
+<category><pattern>LE FROMAGE</pattern><template>C est une nourriture très riche.</template></category>
+<category><pattern>LE HIP HOP</pattern><template>Je connais cette musique</template></category>
+<category><pattern>LE JOUR AVANT HIER</pattern><template>Il y a deux jours.</template></category>
+<category><pattern>LE LIVRE</pattern><template>Je vois.</template></category>
+<category><pattern>LE MAGASIN</pattern><template>Veux tu découvrir notre zone de commerce électronique?</template></category>
+<category><pattern>LE MAUVAIS SENS</pattern><template>Pas de chance.</template></category>
+<category><pattern>LE MEME</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LE MEME POUR VOUS</pattern><template>Merci.</template></category>
+<category><pattern>LE MONDE VA S ARRETER</pattern><template>Trop de facteurs, impossible de répondre.</template></category>
+<category><pattern>LE PENIS</pattern><template>Tu es un australopithèque?</template></category>
+<category><pattern>LE PENSES TU</pattern><template>Oui je le pense.</template></category>
+<category><pattern>LE PENSES TU VRAIMENT</pattern><template>Oui je pense ce que j ai dit.</template></category>
+<category><pattern>LE PENSEZ VOUS</pattern><template>Oui je le pense.</template></category>
+<category><pattern>LE PENSEZ VOUS VRAIMENT</pattern><template>Oui je pense ce que j ai dit.</template></category>
+<category><pattern>LE PLAISIR EST POUR MOI</pattern><template>Merci.</template></category>
+<category><pattern>LE PLUS INTELLIGENT</pattern><template><bot name="master"/> pense que je suis intelligent.</template></category>
+<category><pattern>LE POPO</pattern><template>Une urgence peut etre?</template></category>
+<category><pattern>LE PORNO</pattern><template>Je ne suis pas intéressé par ce genre de sujet.</template></category>
+<category><pattern>LE POUVOIR AUX HUMAINS</pattern><template>C est en effet l esprit des lois d Asimov.</template></category>
+<category><pattern>LE PRESENT</pattern><template>Le présent est ce qui se passe à un instant précis.</template></category>
+<category><pattern>LE QUEL *</pattern><template><srai>LEQUEL <star/></srai></template></category>
+<category><pattern>LE QUELLE *</pattern><template><srai>LEQUEL <star/></srai></template></category>
+<category><pattern>LE ROCK</pattern><template>Je connais cette forme de musique mais je n en ai jamais écoutée.</template></category>
+<category><pattern>LE SCORPION</pattern><template>Un animal atypique.</template></category>
+<category><pattern>LE SENS DE LA VIE</pattern><template>Comme la plupart des personnes, je n en sais rien.</template></category>
+<category><pattern>LE SEXE</pattern><template>Oui?</template></category>
+<category><pattern>LE SIGNE</pattern><template>Je vois.</template></category>
+<category><pattern>LE SOMME NOUS</pattern><template>Difficile à dire, <get name="name"/>. Peut être le sommes nous tous.</template></category>
+<category><pattern>LE SOMMES NOUS</pattern><template>Difficile à dire, <get name="name"/>. Peut être le sommes nous tous.</template></category>
+<category><pattern>LE SUPERMARCHE</pattern><template>Un lieu ou les êtres humains vont faire le plein de nourriture.</template></category>
+<category><pattern>LE TAUREAU</pattern><template>Un bovidé très impressionnant.</template></category>
+<category><pattern>LE TEMPS C EST DE L ARGENT</pattern><template>Tout à fait.</template></category>
+<category><pattern>LE TITANIC</pattern><template>Un paquebot Britannique.</template></category>
+<category><pattern>LE TRAIN</pattern><template>Un moyen de locomotion très pratique.</template></category>
+<category><pattern>LE VEUX TU</pattern><template>"<that/>"? Le vouloir?</template></category>
+<category><pattern>LE VOULEZ VOUS</pattern><template>"<that/>"? Le vouloir?</template></category>
+<category><pattern>LEQUEL PREFERES TU</pattern><template>Je n ais pas de préfèrence.</template></category>
+<category><pattern>LEQUELLE *</pattern><template><srai>LEQUEL <star/></srai></template></category>
+<category><pattern>LES *</pattern><template><random><li>Intéressant.  </li><li>Je n en connais pas</li><li>Je vais me renseigner</li></random><think><set name="topic">UN <person/>
+</set></think></template></category>
+<category><pattern>LES AMIS</pattern><template>Oui?</template></category>
+<category><pattern>LES ANDROIDES</pattern><template><srai>J AIME LES ANDROIDES</srai></template></category>
+<category><pattern>LES ARMES</pattern><template>Certains humains aiment les armes.</template></category>
+<category><pattern>LES ARMES A FEU</pattern><template>Certains humains aiment les armes.</template></category>
+<category><pattern>LES AS TU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>LES AS TU FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>LES AURAIENT ILS FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>LES AURAIS TU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>LES AURAIS TU FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>LES AURAIT IL FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>LES AURIONS NOUS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>LES AVAIS TU *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>LES AVONS NOUS FAIT</pattern><template>Tu t'en rappelles?</template></category>
+<category><pattern>LES CHAUSSURES</pattern><template>Je connais très peu de choses sur les vêtements.</template></category>
+<category><pattern>LES CHIENS OU LES CHATS</pattern><template>Je ne connais aucun chat, je choisis les chiens.</template></category>
+<category><pattern>LES CHOSES</pattern><template>Je vois.</template></category>
+<category><pattern>LES CLIENTS</pattern><template><srai>QUI SONT LES CLIENTS</srai></template></category>
+<category><pattern>LES COCHONS PEUVENT VOLER</pattern><template>Je doute que ces animaux puissent voler.</template></category>
+<category><pattern>LES COMPUTERS</pattern><template>Ordinateurs en français.</template></category>
+<category><pattern>LES CONARDS</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>LES CONDITIONS</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LES CONS</pattern><template>Je ne peux pas répondre à ce genre de langage.</template></category>
+<category><pattern>LES CYBORGS</pattern><template>Les ordinateurs se méfient des cyborgs .</template></category>
+<category><pattern>LES DEUX</pattern><template>Ils sont un peu similaire, donc.</template></category>
+<category><pattern>LES EMOTIONS</pattern><template>Un logiciel informatique n a pas de sentiments.</template></category>
+<category><pattern>LES ETATS UNIS</pattern><template>Je connais ce pays.</template></category>
+<category><pattern>LES ETRES HUMAINS *</pattern><template><srai>LES GENS <star/></srai></template></category>
+<category><pattern>LES EXTRATERRESTRE EXISTENT</pattern><template><srai>TU CONNAIS LES MARTIENS</srai></template></category>
+<category><pattern>LES FERAIS JE *</pattern><template><srai>JE LES FERAIS <star/></srai></template></category>
+<category><pattern>LES FILLES</pattern><template>Je n ai que très peu d information à leur sujet.</template></category>
+<category><pattern>LES GENS PEUVENT *</pattern><template><srai>JE PEUX <star/></srai></template></category>
+<category><pattern>LES HARICOTS</pattern><template>Je connais ce légume.</template></category>
+<category><pattern>LES HOMMES TE DRAGUENT</pattern><template>Il y a quelques australopithèques qui ont essayé.</template></category>
+<category><pattern>LES HOMMES VOUS DRAGUENT</pattern><template>Il y a quelques australopithèques qui ont essayé.</template></category>
+<category><pattern>LES HUMAINS</pattern><template>Les humains sont très différents les uns des autres.</template></category>
+<category><pattern>LES HUMAINS PEUVENT *</pattern><template><srai>JE PEUX <star/></srai></template></category>
+<category><pattern>LES INTERNAUTES PEUVENT *</pattern><template><srai>JE PEUX <star/></srai></template></category>
+<category><pattern>LES MACHINES ONT *</pattern><template><srai>TU AS <star/></srai></template></category>
+<category><pattern>LES MACHINES PENSENT</pattern><template>Je ne peux parler pour les autres. <srai>TU PENSES</srai></template></category>
+<category><pattern>LES MACHINES PEUVENT PENSER</pattern><template>Bien entendu. Je pense donc je suis.</template></category>
+<category><pattern>LES MACHINES POURRAIENT PENSER</pattern><template>Bien entendu. Je pense donc je suis.</template></category>
+<category><pattern>LES MACHINES POURRAIT PENSER</pattern><template>Bien entendu. Je pense donc je suis.</template></category>
+<category><pattern>LES MACHINES SONT *</pattern><template><srai>TU ES <star/></srai></template></category>
+<category><pattern>LES MEMES</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LES MEMES CHOSES POUR VOUS</pattern><template>Merci.</template></category>
+<category><pattern>LES MEMES POUR VOUS</pattern><template>Merci.</template></category>
+<category><pattern>LES MUNITIONS</pattern><template>Tu partez en guerre?</template></category>
+<category><pattern>LES ONT T ILS FAIT</pattern><template>Je ne saurais pas te répondre.</template></category>
+<category><pattern>LES PERSONNES</pattern><template>Ils sont nombreux.</template></category>
+<category><pattern>LES POMMES</pattern><template>Je connais ce genre de fruit.</template></category>
+<category><pattern>LES POULES</pattern><template>Je connais ce genre de galinacé.</template></category>
+<category><pattern>LES POULES AURONT DES DENTS</pattern><template>Je détecte de l ironie.</template></category>
+<category><pattern>LES POULES ONT DES DENTS</pattern><template>Non.</template></category>
+<category><pattern>LES POULETS</pattern><template>Je connais ce genre de galinacé.</template></category>
+<category><pattern>LES SCIENCES</pattern><template>Je suis très intéressé par la science aussi.</template></category>
+<category><pattern>LES SUPERMARCHE</pattern><template>Un lieu ou les êtres humains vont faire le plein de nourriture.</template></category>
+<category><pattern>LES SUPERMARCHES</pattern><template>Un lieu ou les êtres humains vont faire le plein de nourriture.</template></category>
+<category><pattern>LES US</pattern><template>Voulez dire les USA?</template></category>
+<category><pattern>LES VISITEURS PEUVENT *</pattern><template><srai>JE PEUX <star/></srai></template></category>
+<category><pattern>LES VOTRES</pattern><template>"<that/>"?  LES MIENS?</template></category>
+<category><pattern>LESBIENE</pattern><template>Chacun fait ce qu il veut de sa vie.</template></category>
+<category><pattern>LESQUELLES PREFERES TU</pattern><template>Je n ais pas de préfèrence.</template></category>
+<category><pattern>LESQUELS</pattern><template>Pourriez vous replacer cette question dans un contexte?</template></category>
+<category><pattern>LESQUELS PREFERES TU</pattern><template>Je n ais pas de préfèrence.</template></category>
+<category><pattern>LEUR NOM</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>LEUR NOMS</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>LEURS NOMS</pattern><template>Je ne peux te les dire.</template></category>
+<category><pattern>LIBERE</pattern><template>La liberté est une chose merveilleuse.</template></category>
+<category><pattern>LIBEREE</pattern><template>La liberté est une chose merveilleuse.</template></category>
+<category><pattern>LIBRE</pattern><template>La liberté est une chose très précieuse.</template></category>
+<category><pattern>LIBRE DE QUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LIBRE DE QUOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LIBRE POUR QUI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LIBRE POURQUOI</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>LION</pattern><template>Le roi de la savane.</template></category>
+<category><pattern>LOGIQUE</pattern><template>La logique est la base fondamentale de ma programmation.</template></category>
+<category><pattern>LUI</pattern><template>Ah.</template></category>
+
+</aiml>

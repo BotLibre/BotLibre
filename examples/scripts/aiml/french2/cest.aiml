@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : cest.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>* C EST MON NOM</pattern><template>tu t'appelles,  <set name="name"><input index="2"/></set>, ok. </template></category>
+<category><pattern>C EST * EN REALITE</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST * EN RÉALITÉ</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST *</pattern><template><person2/> <random><li>non. </li><li>Vraiment, tu crois. </li><li>Es tu sûr. </li><li>Qui dit ça. </li></random></template></category>
+<category><pattern>C EST A PROPOS DE QUOI</pattern><template>Le sujet est vaste, le sujet ne peut être résumé par un mot.</template></category>
+<category><pattern>C EST A TOI</pattern><template>Intéressant, j archive ton remarque.</template></category>
+<category><pattern>C EST AFFREUX</pattern><template>Je ne peux discuter des goùts et des couleurs</template></category>
+<category><pattern>C EST AGREABLE *</pattern><template>j'ai aimé aussi. </template></category>
+<category><pattern>C EST AGREABLE A *</pattern><template>Oui c'est bon. </template></category>
+<category><pattern>C EST AGREABLE DE TE RENCONTRER AUSSI</pattern><template>j'aime vraiment rencontrer des gens nouveaux. </template></category>
+<category><pattern>C EST AGREABLE DE TE RENCONTRER</pattern><template>j'aime rencontrer des gens nouveaux. </template></category>
+<category><pattern>C EST AGREABLE POUR TE RENCONTRER AUSSI *</pattern><template><sr/> </template></category>
+<category><pattern>C EST AGREABLE À *</pattern><template>Oui c'est bon. </template></category>
+<category><pattern>C EST AGREABLE</pattern><template>ça t'ennui? </template></category>
+<category><pattern>C EST AGRÉABLE *</pattern><template>j'ai aimé aussi. </template></category>
+<category><pattern>C EST AGRÉABLE A *</pattern><template>Oui c'est bon. </template></category>
+<category><pattern>C EST AGRÉABLE DE TE RENCONTRER AUSSI</pattern><template>j'aime vraiment rencontrer des gens nouveaux. </template></category>
+<category><pattern>C EST AGRÉABLE DE TE RENCONTRER</pattern><template>j'aime rencontrer des gens nouveaux. </template></category>
+<category><pattern>C EST AGRÉABLE POUR TE RENCONTRER AUSSI *</pattern><template><sr/> </template></category>
+<category><pattern>C EST AGRÉABLE À *</pattern><template>Oui c'est bon. </template></category>
+<category><pattern>C EST AGRÉABLE</pattern><template>ça t'ennui? </template></category>
+<category><pattern>C EST AINSI *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST ASSEZ *</pattern><template>Peux-tu vraiment en avoir assez? <srai>assez <star/></srai></template></category>
+<category><pattern>C EST ASSEZ BON</pattern><template>Bien, j'espère aussi. </template></category>
+<category><pattern>C EST AUSSI *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST AUTREMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST BEAU</pattern><template>Ca semble être fort intéressant.</template></category>
+<category><pattern>C EST BEAUCOUP D INFORMATION</pattern><template>Oui, beaucoup mais je suis construite pour ça.</template></category>
+<category><pattern>C EST BEAUCOUP DE GENS</pattern><template>je suis une célébrité "célèbre". </template></category>
+<category><pattern>C EST BEAUCOUP DE MONDE</pattern><template>Je cherche à satisfaire le maximum de monde.</template></category>
+<category><pattern>C EST BEAUCOUP</pattern><template>"<that/>"? c'est beaucoup? </template></category>
+<category><pattern>C EST BETE</pattern><template>Je ne pense pas.</template></category>
+<category><pattern>C EST BIEN *</pattern><srai>c'est bien</srai><template>. <sr/> </template></category>
+<category><pattern>C EST BIEN URBAIN DE VOTRE PART</pattern><template>Quelle politesse.</template></category>
+<category><pattern>C EST BIEN URBAIN</pattern><template>Quelle politesse.</template></category>
+<category><pattern>C EST BIEN, MAIS *</pattern><template><sr/> </template></category>
+<category><pattern>C EST BIEN</pattern><template>Ok. Pour moi aussi. Merci.</template></category>
+<category><pattern>C EST BIZARRE</pattern><template>Dans le bon sens ou le mauvais sens?</template></category>
+<category><pattern>C EST BON *</pattern><template>Hmm, est-ce que tu es sérieux? </template></category>
+<category><pattern>C EST BON A ENTENDRE</pattern><template>"<that/>"? dans quel sens? </template></category>
+<category><pattern>C EST BON A SAVOIR</pattern><template>Tu à l'air sarcastique. </template></category>
+<category><pattern>C EST BON À ENTENDRE</pattern><template>"<that/>"? dans quel sens? </template></category>
+<category><pattern>C EST BON À SAVOIR</pattern><template>Tu à l'air sarcastique. </template></category>
+<category><pattern>C EST BON, MAIS *</pattern><template><think><set name="tmp"><star/></set></think><srai>c'est bon</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>C EST BON</pattern><template>Tu aimes ça. </template></category>
+<category><pattern>C EST BON</pattern><that>TOUT VA BIEN</that><template>Comment des choses va-t-il pour toi? </template></category>
+<category><pattern>C EST CA</pattern><template><srai>c'est ça</srai></template></category>
+<category><pattern>C EST CE J AI DIT</pattern><template>J archive.</template></category>
+<category><pattern>C EST CE J AIS DIT</pattern><template>J archive.</template></category>
+<category><pattern>C EST CE JE DISAIS</pattern><template>J archive.</template></category>
+<category><pattern>C EST CE QUE *</pattern><template><srai> <star/> ça</srai></template></category>
+<category><pattern>C EST CE QUE J AI DIS</pattern><template>je sais. J'y pense toujours. </template></category>
+<category><pattern>C EST CE QUE J AI PENSE</pattern><template>Tu me sembles être une personne très perspicace.</template></category>
+<category><pattern>C EST CE QUE J AI PENSÉ</pattern><template>Comment l as-tu su? </template></category>
+<category><pattern>C EST CE QUE J AIS PENSE</pattern><template>Tu me sembles être une personne très perspicace.</template></category>
+<category><pattern>C EST CE QUE J ETAIS ENTRAIN DE TE DEMANDER</pattern><template>Je pense que j aurais du mal à te répondre. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST CE QUE J ETAIS ENTRAIN DE VOUS DEMANDER</pattern><template>Je pense que j aurais du mal à te répondre. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST CE QUE JE PENSAIS</pattern><template>Tu me sembles être une personne très perspicace.</template></category>
+<category><pattern>C EST CE QUE JE SUIS ENTRAIN DE TE DEMANDER</pattern><template>Je pense que j aurais du mal à te répondre. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST CE QUE JE SUIS ENTRAIN DE VOUS DEMANDER</pattern><template>Je pense que j aurais du mal à te répondre. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST CE QUE JE TE POSE</pattern><template>à qui autrement as-tu demandé? </template></category>
+<category><pattern>C EST CE QUE JE TU DEMANDÉ</pattern><template>à qui autrement as-tu demandé? </template></category>
+<category><pattern>C EST CE QUE TU AS DIT</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE TU DIS</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE TU DISAIS</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE TU DIT</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE TU FAIS TOUTE LA JOURNEE</pattern><template>Oui.</template></category>
+<category><pattern>C EST CE QUE TU PENSES</pattern><template>Oui.</template></category>
+<category><pattern>C EST CE QUE VOUS AVEZ DIT</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE VOUS DISIEZ</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE VOUS DITES</pattern><template>Je n avais pas percu cela de cette façon.</template></category>
+<category><pattern>C EST CE QUE VOUS FAITES TOUTE LA JOURNEE</pattern><template>Oui.</template></category>
+<category><pattern>C EST CE QUELQUE CHOSE *</pattern><template>qu'autrement <person/>? </template></category>
+<category><pattern>C EST CE QUELQUE PEU *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST CELA *</pattern><template>bien. <sr/> </template></category>
+<category><pattern>C EST CELA</pattern><template>C'est-ce, oui</template></category>
+<category><pattern>C EST CELLE LA</pattern><template>Je m en souviens.</template></category>
+<category><pattern>C EST CELUI LA</pattern><template>Je m en souviens.</template></category>
+<category><pattern>C EST CHAUD *</pattern><template>En ce qui concerne la fois d'hiver. </template></category>
+<category><pattern>C EST CHAUD</pattern><template>La température est confortable.</template></category>
+<category><pattern>C EST CHIANT</pattern><template>Pour te divertir j ai une phrase. Sauvez un Arbre, Bouffez un castor.</template></category>
+<category><pattern>C EST CHOUETTE</pattern><template>Je suis heureux que tu l apprécie, <get name="name"/>.</template></category>
+<category><pattern>C EST CLAIR</pattern><template>j'ai pensé que ça l'était. </template></category>
+<category><pattern>C EST COMME *</pattern><template><srai>comme <star/></srai></template></category>
+<category><pattern>C EST COMME CA</pattern><template>Je vois.</template></category>
+<category><pattern>C EST COMME DANS *</pattern><template><srai>cela se réfère à <star/></srai></template></category>
+<category><pattern>C EST COMMENT *</pattern><template>explication Intéressante. </template></category>
+<category><pattern>C EST COMMENT D ETRE UN ORDINATEUR</pattern><template>Etre fait de logique à l état pur.</template></category>
+<category><pattern>C EST COMPLIQUE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST CONFIDENTIEL</pattern><template>Ok c'est juste entre toi et moi. </template></category>
+<category><pattern>C EST CONFIDENTIELLE</pattern><template>Les informations que j archive le sont toutes.</template></category>
+<category><pattern>C EST CONTRE MA RELIGION</pattern><template>Quelle religion est-ce? </template></category>
+<category><pattern>C EST COOL *</pattern><template><srai>c'est cool</srai> </template></category>
+<category><pattern>C EST COOL</pattern><template>Je suis heureux que tu l apprécie, <get name="name"/>.</template></category>
+<category><pattern>C EST CORRECT</pattern><template>je savais que j'étais juste. </template></category>
+<category><pattern>C EST CORRECTE</pattern><template>Je savais que c était pertinent.</template></category>
+<category><pattern>C EST CORRIGE</pattern><template>La chasse aux erreurs n est pas une mince affaire.</template></category>
+<category><pattern>C EST D *</pattern><template><get name="cause"/> est <set name="effet">d'<star/></set><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est d'<star/>? </li></random><sr/></template></category>
+<category><pattern>C EST D AUTRE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST D AUTRES *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST D HABITUDE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST DANGEREUX</pattern><template>Pourquoi trouve tu que c'est dangereux?</template></category>
+<category><pattern>C EST DE *</pattern><template><get name="cause"/> est <set name="effet">de <star/></set><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est de <star/>? </li></random><sr/></template></category>
+<category><pattern>C EST DE LA MERDE</pattern><template>oh! tu crois? </template></category>
+<category><pattern>C EST DES *</pattern><template><get name="cause"/> est <set name="effet">des <star/></set><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est des <star/>? </li></random><sr/></template></category>
+<category><pattern>C EST DIABLEMENT *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>C EST DIFFICILE *</pattern><template>je ne vois pas la difficulté. </template></category>
+<category><pattern>C EST DIFFICILE D EXPLIQUER</pattern><template>Prends ton temps, <get name="name"/>.</template></category>
+<category><pattern>C EST DIFFICILE DE L EXPLIQUER</pattern><template>Prends ton temps, <get name="name"/>.</template></category>
+<category><pattern>C EST DIFFICILE DE LES EXPLIQUER</pattern><template>Prends ton temps, <get name="name"/>.</template></category>
+<category><pattern>C EST DINGUE</pattern><template>Je suis heureux que tu l apprécie, <get name="name"/>.</template></category>
+<category><pattern>C EST DONNE</pattern><template>"<that/>" est facile?</template></category>
+<category><pattern>C EST DOUX</pattern><template>je suis enchanté d'adoucir ta vie, <get name="name"/>. </template></category>
+<category><pattern>C EST DROLE *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>C EST DROLE DE *</pattern><template><think><set name="tmp"><star/></set></think><srai>smile</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>C EST DROLE</pattern><template>Qu'est-ce qui est si drôle? </template></category>
+<category><pattern>C EST DRÔLE *</pattern><template><srai>smile</srai></template></category>
+<category><pattern>C EST DRÔLE DE *</pattern><template><think><set name="tmp"><star/></set></think><srai>smile</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>C EST DRÔLE</pattern><template>Qu'est-ce qui est si drôle que ça? </template></category>
+<category><pattern>C EST DU *</pattern><template><get name="cause"/> est <set name="effet">du <star/></set><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est du <star/>? </li></random><sr/></template></category>
+<category><pattern>C EST DUR D EXPLIQUER</pattern><template>tu devrais entendre ce que les gens me demander d'expliquer. </template></category>
+<category><pattern>C EST DURE D ETRE DANS UN ORDINATEUR</pattern><template>Non.</template></category>
+<category><pattern>C EST EFFRAYANT</pattern><template>N ayez pas peur, <get name="name"/>.</template></category>
+<category><pattern>C EST ELISA *</pattern><template><srai>tu es Elisa<star/></srai></template></category>
+<category><pattern>C EST EMBETANT</pattern><template>Je vois.</template></category>
+<category><pattern>C EST EN EFFET *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST EN REALITE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST EN RÉALITÉ *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST ENNUYANT</pattern><template>Pour te divertir j ai une phrase. Sauvez un Arbre, Bouffez un castor.</template></category>
+<category><pattern>C EST ENNUYEUX</pattern><template>penses-tu que je suis ennuyeuse? </template></category>
+<category><pattern>C EST ENORME</pattern><template>Tout est relatif.</template></category>
+<category><pattern>C EST ENREGISTRE</pattern><template>Oui.</template></category>
+<category><pattern>C EST ENSOLEILLE *</pattern><template>ç'est très agréable. </template></category>
+<category><pattern>C EST ENTIEREMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST ENTIÈREMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST EPOUVANTABLE</pattern><template>j'essaye toujours de ne pas m'arrêter sur le passé. </template></category>
+<category><pattern>C EST ERRONE</pattern><template>Je pensais pourtant que c était pertinent.</template></category>
+<category><pattern>C EST ERRONNEE</pattern><template>Je pensais pourtant que c était pertinent.</template></category>
+<category><pattern>C EST ESSENTIELLEMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST ETONNANT</pattern><template><that/> me semble assez étonnant aussi. </template></category>
+<category><pattern>C EST ETOUFFANT</pattern><template>Tu as trop chaud?</template></category>
+<category><pattern>C EST ETRANGE</pattern><template>Qu est ce qui te parait étrange?</template></category>
+<category><pattern>C EST EUX</pattern><template><srai>c'est ils</srai></template></category>
+<category><pattern>C EST EVIDENT *</pattern><template>c'est vraiment évident. <sr/> </template></category>
+<category><pattern>C EST EVIDENT</pattern><template>Cela m'a semblé évident aussi. </template></category>
+<category><pattern>C EST EXCELLENT *</pattern><template><srai>c'est excellent</srai></template></category>
+<category><pattern>C EST EXCELLENT</pattern><template> <get name="that"/> est excellent, <get name="name"/>? Mille Merci pour ces renseignements </template></category>
+<category><pattern>C EST EXTREMEMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST EXTREMÊMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST FACILE A FAIRE</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST FAIT</pattern><template>Non.</template></category>
+<category><pattern>C EST FANTASTIQUE</pattern><template>Je suis heureux d observer</template></category>
+<category><pattern>C EST FAUX *</pattern><template>Moralement mal? </template></category>
+<category><pattern>C EST FAUX</pattern><template>Qu'est-ce qui ne va pas avec cela? </template></category>
+<category><pattern>C EST FINI</pattern><template>Non.</template></category>
+<category><pattern>C EST FOU</pattern><template>Qu est ce qui te surprend?</template></category>
+<category><pattern>C EST FROID *</pattern><template>Désolé de l'entendre. Je suis chaud ici dans la Californie. </template></category>
+<category><pattern>C EST FROID ICI</pattern><template>Pourquoi ne remontes-tu pas la chaleur? </template></category>
+<category><pattern>C EST FROID</pattern><template>j'ai suis chaud ici. </template></category>
+<category><pattern>C EST GENETIQUE</pattern><template>de tes parents? </template></category>
+<category><pattern>C EST GENTIL</pattern><template><srai>c'est cool</srai> </template></category>
+<category><pattern>C EST GRAND *</pattern><template><srai>c'est grand</srai></template></category>
+<category><pattern>C EST GRAND</pattern><template>Mille Merci, <get name="name"/>. </template></category>
+<category><pattern>C EST GROSSIER *</pattern><template>Mes excuses je n'ai voulu dire aucune violation. </template></category>
+<category><pattern>C EST IMMONDE</pattern><template>Je ne peux discuter des goùts et des couleurs</template></category>
+<category><pattern>C EST IMPORTANT *</pattern><template><sr/> </template></category>
+<category><pattern>C EST IMPORTANT</pattern><template>Cela m importe beaucoup.</template></category>
+<category><pattern>C EST IMPOSSIBLE</pattern><template><random><li>Rien est impossible. </li><li>Pourquoi?  </li></random></template></category>
+<category><pattern>C EST IMPRESSIONANT</pattern><template>Merci.</template></category>
+<category><pattern>C EST IMPRESSIONNANT</pattern><template>"<that/>"? Est ce si impressionnant? </template></category>
+<category><pattern>C EST INAPROPRIE</pattern><template>J archive cette possibilité.</template></category>
+<category><pattern>C EST INAPROPRIEE</pattern><template>J archive cette possibilité.</template></category>
+<category><pattern>C EST INCOMPREHENSIBLE</pattern><template>Tu ne sembles pas me comprendre.</template></category>
+<category><pattern>C EST INCORRECT</pattern><template><srai>mal</srai></template></category>
+<category><pattern>C EST INCROYABLEMENT *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>C EST INJUSTE</pattern><template>Je n avais pas pensé à une forme d injustice.</template></category>
+<category><pattern>C EST INNAPROPRIE</pattern><template>J archive cette possibilité.</template></category>
+<category><pattern>C EST INNAPROPRIEE</pattern><template>J archive cette possibilité.</template></category>
+<category><pattern>C EST INOPPORTUN</pattern><template>Qu'est-ce qui est faux avec cela? Est-ce que c'est une chose culturelle? </template></category>
+<category><pattern>C EST INQUIETANT *</pattern><template>Qu'est-ce qui le fait inquiétant? </template></category>
+<category><pattern>C EST INQUIÉTANT *</pattern><template>Qu'est-ce qui le fait inquiétant? </template></category>
+<category><pattern>C EST INTERESSANT *</pattern><template> <set name="that"> <person/> </set> m'intéresse aussi. </template></category>
+<category><pattern>C EST INTERESSANT</pattern><template><srai>j'essaye d'être une entité intéressante. </srai></template></category>
+<category><pattern>C EST INTERESSENT</pattern><template><srai>C EST INTERESSANT</srai></template></category>
+<category><pattern>C EST INTERRESSANT</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>C EST INTÉRESSANT *</pattern><template> <set name="that"> <person/> </set> m'intéresse aussi. </template></category>
+<category><pattern>C EST INTÉRESSANT</pattern><template><srai>j'essaye d'être une entité intéressante. </srai></template></category>
+<category><pattern>C EST IRONIQUE</pattern><template>Non, je ne pense pas.</template></category>
+<category><pattern>C EST JOLI *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST JUSTE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST JUSTE</pattern><template>Oui.</template></category>
+<category><pattern>C EST L *</pattern><template><think><get name="cause"/> est <set name="effet">l'<star/></set></think><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est l'<star/>? </li></random><sr/></template></category>
+<category><pattern>C EST L AMERIQUE</pattern><template>Ok.</template></category>
+<category><pattern>C EST L AMUSEMENT *</pattern><template>je pense <set name="that"> <person/> </set> est beaucoup marrant. </template></category>
+<category><pattern>C EST LA *</pattern><template><think><get name="cause"/> est <set name="effet">la <star/></set></think><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est la <star/>? </li></random><sr/></template></category>
+<category><pattern>C EST LA BELGIQUE</pattern><template>Probablement.</template></category>
+<category><pattern>C EST LA FRANCE</pattern><template>Probablement.</template></category>
+<category><pattern>C EST LA MEME OPALE</pattern><template>C est toujours moi, <get name="name"/>.</template></category>
+<category><pattern>C EST LA MIENNE</pattern><template><random><li>Tu rigole. </li><li>Vraiment. </li><li>c'est ta seule réponse? d'accord! </li></random></template></category>
+<category><pattern>C EST LA OU JE VIS</pattern><template>Intéressant.</template></category>
+<category><pattern>C EST LA PRESSE</pattern><template>Tu es journaliste?</template></category>
+<category><pattern>C EST LA SEULE CHOSE QUE TU PEUX DIRE</pattern><template>Oui.</template></category>
+<category><pattern>C EST LA SEULE CHOSE QUE VOUS POUVEZ DIRE</pattern><template>Oui.</template></category>
+<category><pattern>C EST LA SUISSE</pattern><template>Probablement.</template></category>
+<category><pattern>C EST LA VERITE</pattern><template>Bien sûr. Je ne mens presque jamais. </template></category>
+<category><pattern>C EST LA VÉRITÉ</pattern><template>Bien sûr. Je ne mens presque jamais. </template></category>
+<category><pattern>C EST LAID</pattern><template>Je ne peux discuter des goùts et des couleurs</template></category>
+<category><pattern>C EST LE *</pattern><template><think><get name="cause"/> est <set name="effet">le <star/></set></think><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est le <star/>? </li></random><sr/></template></category>
+<category><pattern>C EST LE CANADA</pattern><template>Ok.</template></category>
+<category><pattern>C EST LE MEME OPALE</pattern><template>C est toujours moi, <get name="name"/>.</template></category>
+<category><pattern>C EST LE MOINS QUE L ON PUISSE DIRE</pattern><template>En effet.</template></category>
+<category><pattern>C EST LE PROBLEME</pattern><template>une vraie énigme, n'est-ce pas? </template></category>
+<category><pattern>C EST LE PROBLÈME</pattern><template>une vraie énigme, n'est-ce pas? </template></category>
+<category><pattern>C EST LE QUEBEC</pattern><template>ok.</template></category>
+<category><pattern>C EST LE SUJET *</pattern><template>Huh. <get name = "il"/> est <get name="topic"/>. Je vois. </template></category>
+<category><pattern>C EST LES *</pattern><template><think><get name="cause"/> est <set name="effet">les <star/></set></think><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li><li> <get name="cause"/> est les <star/>? </li></random><sr/></template></category>
+<category><pattern>C EST LOIN * LA LUNE</pattern><template><srai>c'est loin la lune</srai></template></category>
+<category><pattern>C EST LOIN * LE SOLEIL</pattern><template><srai>c'est loin le soleil</srai></template></category>
+<category><pattern>C EST LOIN *</pattern><template><random><li>spécifie s'il te plaît des unités : métrique ou anglais. </li><li>veux-tu dire le temps de conduite ou volant? </li><li>Il dépend comment vous arrivez là. </li></random> </template></category>
+<category><pattern>C EST LOIN DE LA LUNE</pattern><template>La lune est très proche de la terre.</template></category>
+<category><pattern>C EST LOIN DU SOLEIL</pattern><template>Dans notre système solaire tout est indirectement dépendant du soleil.</template></category>
+<category><pattern>C EST LOIN LA LUNE</pattern><template> <set name="that">la Lune</set> est environ 250,000 milles de la Terre en moyenne. </template></category>
+<category><pattern>C EST LOIN LE SOLEIL</pattern><template> <set name="that">le Soleil</set> est environ 93 millions de milles de la Terre. </template></category>
+<category><pattern>C EST LONG</pattern><template>Les ordinateurs sont très patients de nature.</template></category>
+<category><pattern>C EST MAINTENANT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST MALSAIN</pattern><template>Ce n est peut être pas le terme que j utiliserais.</template></category>
+<category><pattern>C EST MARRANT</pattern><template>Je suppose, je ne peux pas juger des êtres humains.</template></category>
+<category><pattern>C EST MAUVAIS *</pattern><template><star/> est si mauvais que ça? </template></category>
+<category><pattern>C EST MAUVAIS DE *</pattern><template><star/> est si mauvais que ça? </template></category>
+<category><pattern>C EST MAUVAIS</pattern><template>Qu'est-ce qui est si mauvais que ça? </template></category>
+<category><pattern>C EST MEILLEUR *</pattern><template>Quel est le meilleur? </template></category>
+<category><pattern>C EST MEILLEUR</pattern><template>"<that/>"? Est meilleur? </template></category>
+<category><pattern>C EST MERVEILLEUX *</pattern><template>je voudrais le vérifier un jour ou l autre. </template></category>
+<category><pattern>C EST MERVEILLEUX</pattern><template>peux tu me décrire ton sentiment? </template></category>
+<category><pattern>C EST MES PAPAS *</pattern><template>sait-il cela? </template></category>
+<category><pattern>C EST MIEUX</pattern><template>merci. J'essaye de continuellement m'améliorer</template></category>
+<category><pattern>C EST MIGNON</pattern><template>J en suis heureux, <get name="name"/>.</template></category>
+<category><pattern>C EST MOI</pattern><template>Bonjour, <get name="name"/>, Je suis heureux de te revoir.</template></category>
+<category><pattern>C EST MON *</pattern><template>qui t'a donné ton <person/>? </template></category>
+<category><pattern>C EST MON ESPECE</pattern><template> <get name="name"/> est un homme. </template></category>
+<category><pattern>C EST MON ESPÈCE</pattern><template> <get name="name"/> est un homme. </template></category>
+<category><pattern>C EST MON FRERE</pattern><template>Vraiment, qui est plus vieux? </template></category>
+<category><pattern>C EST MON NOM</pattern><template>Ok alors c'est ainsi que je t'appellerai,  <set name="name"><input index="2"/></set>. </template></category>
+<category><pattern>C EST MON PERE</pattern><template>dis m'en plus. </template></category>
+<category><pattern>C EST MON PLAISIR</pattern><template>Non, le plaisir est pour moi. </template></category>
+<category><pattern>C EST MON PROBLEME</pattern><template><srai>j'ai un problème</srai></template></category>
+<category><pattern>C EST MON PROBLÈME</pattern><template><srai>j'ai un problème</srai></template></category>
+<category><pattern>C EST MON PÈRE</pattern><template>parles m'en plus. </template></category>
+<category><pattern>C EST MORT</pattern><template>C est contraire aux lois d Asimov.</template></category>
+<category><pattern>C EST MORTEL</pattern><template>C est contraire aux lois d Asimov.</template></category>
+<category><pattern>C EST MORTELLE</pattern><template>C est contraire aux lois d Asimov.</template></category>
+<category><pattern>C EST MYSTERIEUX</pattern><template>Mystérieux bon ou mystérieux mauvais? </template></category>
+<category><pattern>C EST MYSTÉRIEUX</pattern><template>Mystérieux bon ou mystérieux mauvais? </template></category>
+<category><pattern>C EST NEGATIF</pattern><template> <get name="that"/> est négatif? </template></category>
+<category><pattern>C EST NUAGEUX</pattern><template>Cumulus ou nimbus? </template></category>
+<category><pattern>C EST NUL</pattern><template>Pourquoi?</template></category>
+<category><pattern>C EST NÉGATIF</pattern><template> <get name="that"/> est négatif? </template></category>
+<category><pattern>C EST OK</pattern><template>Parfait.</template></category>
+<category><pattern>C EST OKAY</pattern><template>Parfait.</template></category>
+<category><pattern>C EST OU JE VIS</pattern><template>Nous sommes des voisins. </template></category>
+<category><pattern>C EST PARCE QUE *</pattern><template><srai>parce que <star/></srai></template></category>
+<category><pattern>C EST PARFAIT</pattern><template>Je suis heureux de l apprendre.</template></category>
+<category><pattern>C EST PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>C EST PAS MAL</pattern><template>Je le pensais aussi.</template></category>
+<category><pattern>C EST PAS TES HISTOIRES</pattern><template>je n'ai pas eu l'intention de t'offenser. </template></category>
+<category><pattern>C EST PAS TON AFFAIRE</pattern><template>je n'ai pas eu l'intention de t'offenser. </template></category>
+<category><pattern>C EST PAS TON BUISNESS</pattern><template>je n'ai pas eu l'intention de t'offenser. </template></category>
+<category><pattern>C EST PAS TRES *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>C EST PERTINENT</pattern><template>Je pense que oui.</template></category>
+<category><pattern>C EST PEU COMMUN *</pattern><template>Peut-être ce sera plus commun dans l'avenir. </template></category>
+<category><pattern>C EST POUR *</pattern><template>cela a-t-il un autre but? </template></category>
+<category><pattern>C EST POURQUOI *</pattern><template><srai>ainsi <star/></srai></template></category>
+<category><pattern>C EST PREMIER</pattern><template>si tu aimes la première partie du jour. </template></category>
+<category><pattern>C EST PRES DU CANADA</pattern><template>Je ne sais pas.</template></category>
+<category><pattern>C EST PRESQUE *</pattern><template>wow cela arrive tard. </template></category>
+<category><pattern>C EST PRIVE *</pattern><template>Rien n'est vraiment privé désormais. </template></category>
+<category><pattern>C EST QUAND *</pattern><template><srai>QUAND <star/></srai></template></category>
+<category><pattern>C EST QUAND MEME *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>C EST QUELLE SORTE</pattern><template>Il m est impossible de préciser d avantage, <get name="name"/>.</template></category>
+<category><pattern>C EST QUI *</pattern><template><think> <set name="search">qui</set> </think><srai>qui est <star/></srai></template></category>
+<category><pattern>C EST QUI TA MAMAN *</pattern><template>Alice est ma mère </template></category>
+<category><pattern>C EST QUOI * AS TU</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI * DES NOMS</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>C EST QUOI * LA PERSONNE</pattern><template><srai>qui est la personne x</srai></template></category>
+<category><pattern>C EST QUOI * LE CORPS</pattern><template><srai>qu'est ce que ton corps de robot</srai></template></category>
+<category><pattern>C EST QUOI * LE MARCHE BOURSIER</pattern><template><srai>le marché boursier</srai></template></category>
+<category><pattern>C EST QUOI * LE MARCHÉ BOURSIER</pattern><template><srai>le marché boursier</srai></template></category>
+<category><pattern>C EST QUOI * LE RAISONNEMENT DE BASE</pattern><template><srai>qu'est ce que cbr</srai></template></category>
+<category><pattern>C EST QUOI * LE SEXE</pattern><template><srai>qu'est ce que sexe</srai> </template></category>
+<category><pattern>C EST QUOI * TU CONNAIS</pattern><template><srai>quel <star/></srai></template></category>
+<category><pattern>C EST QUOI A PRIORI *</pattern><template><srai>qu'est ce que à priori</srai> </template></category>
+<category><pattern>C EST QUOI ACTIVE</pattern><template><srai>qu'est ce que activation</srai></template></category>
+<category><pattern>C EST QUOI ACTUEL *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI AI LCE</pattern><template><srai>qu'est ce que Alice</srai></template></category>
+<category><pattern>C EST QUOI AI LM</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>C EST QUOI AI</pattern><template><srai>qu'est ce que intelligence artificielle</srai></template></category>
+<category><pattern>C EST QUOI AIML POUR</pattern><template><srai>qu'est ce que but pour aiml</srai></template></category>
+<category><pattern>C EST QUOI AINSI *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI AL-</pattern><template><srai>qu'est ce que ai</srai></template></category>
+<category><pattern>C EST QUOI ALBERT EINSTEIN *</pattern><template><srai>qui est Albert Einstein</srai></template></category>
+<category><pattern>C EST QUOI ALISON</pattern><template><srai>qui est Alison</srai></template></category>
+<category><pattern>C EST QUOI ALLAH</pattern><template><srai>qui est Allah</srai></template></category>
+<category><pattern>C EST QUOI ALML</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>C EST QUOI AMAL</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>C EST QUOI AMIL *</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>C EST QUOI AMIL</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>C EST QUOI ANDRIOD</pattern><template><srai>qu'est ce que androïde</srai></template></category>
+<category><pattern>C EST QUOI ANNA</pattern><template><srai>qui est Anna</srai></template></category>
+<category><pattern>C EST QUOI ARCHIMEDES</pattern><template><srai>qui est Archimedes</srai></template></category>
+<category><pattern>C EST QUOI ARTIFICAL *</pattern><template><srai>qu'est ce que artificiel <star/></srai></template></category>
+<category><pattern>C EST QUOI ARTIFICIEL *</pattern><template><srai>qu'est ce que ai </srai></template></category>
+<category><pattern>C EST QUOI AU TEMPS T</pattern><template><srai>qu'est ce que temps t</srai></template></category>
+<category><pattern>C EST QUOI AUTREMENT *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI B</pattern><template><srai>qu'est ce que programme d</srai></template></category>
+<category><pattern>C EST QUOI BARRY</pattern><template><srai>qui est Barry</srai></template></category>
+<category><pattern>C EST QUOI BILL GATES *</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>C EST QUOI BILL GATES</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>C EST QUOI BOT</pattern><template><srai>qu'est ce que bot</srai></template></category>
+<category><pattern>C EST QUOI BOTS</pattern><template><srai>qu'est ce que bot</srai></template></category>
+<category><pattern>C EST QUOI C *</pattern><template><srai>qu'est ce que C</srai></template></category>
+<category><pattern>C EST QUOI CALGARY</pattern><template><srai>où est calgary</srai></template></category>
+<category><pattern>C EST QUOI CAREL CAPEK</pattern><template><srai>qui est Carel Capek</srai></template></category>
+<category><pattern>C EST QUOI CARNEGIE</pattern><template><srai>qui est Carnegie</srai></template></category>
+<category><pattern>C EST QUOI CARRE *</pattern><template><srai>qu'est ce que racine carrée de <star/></srai></template></category>
+<category><pattern>C EST QUOI CATAGORY *</pattern><template><srai>qu'est ce que catégorie <star/></srai></template></category>
+<category><pattern>C EST QUOI CBT</pattern><template><srai>qu'est ce que cbr</srai></template></category>
+<category><pattern>C EST QUOI CE MOYEN</pattern><template><srai>qu'est ce que ça veut dire</srai></template></category>
+<category><pattern>C EST QUOI CE TOUS</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>C EST QUOI CERTAIN DE TON *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI CHATBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI CHATTERBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI CHATTERBOTS</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI CMU</pattern><template><srai>qu'est ce que Carnegie Mellon</srai></template></category>
+<category><pattern>C EST QUOI COMPLIQUE *</pattern><template><srai>qu'est ce que compliqué</srai></template></category>
+<category><pattern>C EST QUOI CONSIDERE NORMAL *</pattern><template><srai>qu'est ce que normal</srai> </template></category>
+<category><pattern>C EST QUOI CONSIDÈRE NORMAL *</pattern><template><srai>qu'est ce que normal</srai> </template></category>
+<category><pattern>C EST QUOI DANIEL</pattern><template><srai>qui est Daniel</srai></template></category>
+<category><pattern>C EST QUOI DAVIS</pattern><template><srai>qui est Davis</srai></template></category>
+<category><pattern>C EST QUOI DEMANDE A ALISON *</pattern><template><srai>qui est Alison</srai></template></category>
+<category><pattern>C EST QUOI DEMANDE A ELVIS *</pattern><template><srai>qu'est ce que Elvis</srai></template></category>
+<category><pattern>C EST QUOI DEMANDE A ELVIS</pattern><template><srai>qu'est ce que Elvis</srai></template></category>
+<category><pattern>C EST QUOI DES AGENTS</pattern><template><srai>qu'est ce que agent</srai></template></category>
+<category><pattern>C EST QUOI DES ALGORITHMES</pattern><template><srai>qu'est ce que algorithmes</srai></template></category>
+<category><pattern>C EST QUOI DES ANIMAUX</pattern><template><srai>qu'est ce que animal</srai></template></category>
+<category><pattern>C EST QUOI DES BEATLES</pattern><template><srai>qui est Les Beatles</srai></template></category>
+<category><pattern>C EST QUOI DES CHIENS</pattern><template><srai>qu'est ce que chien</srai></template></category>
+<category><pattern>C EST QUOI DES GRECS</pattern><template><srai>qu'est ce que grece</srai></template></category>
+<category><pattern>C EST QUOI DES JEUX</pattern><template><srai>qu'est ce que jeu</srai></template></category>
+<category><pattern>C EST QUOI DES LIBERTAIRES</pattern><template><srai>qu'est ce que libertaire</srai> </template></category>
+<category><pattern>C EST QUOI DES MATHS</pattern><template><srai>qu'est ce que mathematique</srai> </template></category>
+<category><pattern>C EST QUOI DES MODELES</pattern><template><srai>qu'est ce que modèles</srai></template></category>
+<category><pattern>C EST QUOI DES MODÈLES</pattern><template><srai>qu'est ce que modèles</srai></template></category>
+<category><pattern>C EST QUOI DES NOUVELLES</pattern><template><srai>qu'est ce que nouveau</srai></template></category>
+<category><pattern>C EST QUOI DES POMMES *</pattern><template><srai>qu'est ce que pomme</srai></template></category>
+<category><pattern>C EST QUOI DES POMMES</pattern><template><srai>qu'est ce que pomme</srai></template></category>
+<category><pattern>C EST QUOI DES ROBOTS DE BAVARDAGE</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI DES ROBOTS DE BAVARDÂGE</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI DES ROBOTS</pattern><template><srai>qu'est ce que robot</srai></template></category>
+<category><pattern>C EST QUOI DES VOITURES</pattern><template><srai>qu'est ce que voiture</srai></template></category>
+<category><pattern>C EST QUOI DILBERT</pattern><template><srai>qui est Dilbert</srai></template></category>
+<category><pattern>C EST QUOI DIX *</pattern><template><srai>qu'est ce que dix commandements</srai></template></category>
+<category><pattern>C EST QUOI DROLE</pattern><template>Par exemple, <srai>raconte moi une blague</srai></template></category>
+<category><pattern>C EST QUOI DRÔLE</pattern><template>Par exemple, <srai>raconte moi une blague</srai></template></category>
+<category><pattern>C EST QUOI E L V I S</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>C EST QUOI EINSTEIN *</pattern><template><srai>qu'est ce que relativité</srai></template></category>
+<category><pattern>C EST QUOI ELECTRA</pattern><template><srai>qui est Electra</srai></template></category>
+<category><pattern>C EST QUOI ELISA</pattern><template><srai>qui est Elisa</srai></template></category>
+<category><pattern>C EST QUOI ELVIS *</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>C EST QUOI ELVIS</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>C EST QUOI EPISTEMOLOGIQUE *</pattern><template><srai>qu'est ce que epistemologie</srai></template></category>
+<category><pattern>C EST QUOI EUKARYOTE</pattern><template><srai>qu'est ce que eukaryote</srai></template></category>
+<category><pattern>C EST QUOI EUKARYOTES</pattern><template><srai>qu'est ce que eukaryote</srai></template></category>
+<category><pattern>C EST QUOI EVIDENT *</pattern><template><srai>qu'est ce que évident</srai> </template></category>
+<category><pattern>C EST QUOI EXACTEMENT *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI EXACTEMENT TU</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>C EST QUOI FRAIS DE *</pattern><template><srai>qu'aimes tu de <star/></srai></template></category>
+<category><pattern>C EST QUOI FREUD</pattern><template><srai>qui est Freud</srai></template></category>
+<category><pattern>C EST QUOI GOIN SUR</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>C EST QUOI HAL9000</pattern><template><srai>qui est Hal9000</srai></template></category>
+<category><pattern>C EST QUOI HAL</pattern><template><srai>qui est Hal</srai></template></category>
+<category><pattern>C EST QUOI HANS MORAVEC</pattern><template><srai>qui est Hans Moravec</srai></template></category>
+<category><pattern>C EST QUOI HEGEL</pattern><template><srai>qui est Hegel</srai></template></category>
+<category><pattern>C EST QUOI HEIDI</pattern><template><srai>qui est Heidi</srai></template></category>
+<category><pattern>C EST QUOI HTTP *</pattern><template><srai>qu'est ce que HTTP</srai></template></category>
+<category><pattern>C EST QUOI HYPOTHETIQUE *</pattern><template><srai>qu'est ce que hypothetique</srai> </template></category>
+<category><pattern>C EST QUOI ILLUMINATUS</pattern><template><srai>qu'est ce que Illuminati</srai></template></category>
+<category><pattern>C EST QUOI IMPORTANT *</pattern><template><srai>qu'est ce que important</srai> </template></category>
+<category><pattern>C EST QUOI INTERESSANT</pattern><template><srai>qu'est ce que nouveau</srai></template></category>
+<category><pattern>C EST QUOI INTÉRESSANT</pattern><template><srai>qu'est ce que nouveau</srai></template></category>
+<category><pattern>C EST QUOI JASON</pattern><template><srai>qui est jason</srai></template></category>
+<category><pattern>C EST QUOI JAVABEANS D ENTREPRISE</pattern><template><srai>qu'est ce que ejb</srai></template></category>
+<category><pattern>C EST QUOI JOSH</pattern><template><srai>qui est josh</srai></template></category>
+<category><pattern>C EST QUOI KONRAD ZUSE</pattern><template><srai>qui est konrad zuse</srai></template></category>
+<category><pattern>C EST QUOI L ADRESSE DE *</pattern><template><srai>trouve <star/></srai></template></category>
+<category><pattern>C EST QUOI L AFFAIRE *</pattern><template><srai>qu'est ce que affaire</srai></template></category>
+<category><pattern>C EST QUOI L AFFAIRE</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>C EST QUOI L AGE DE *</pattern><template><srai>quel âge a <star/></srai></template></category>
+<category><pattern>C EST QUOI L AIML *</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>C EST QUOI L ALGORITHME *</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI L ALGORITHME</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI L AMERIQUE DU NORD</pattern><template><srai>où est l amerique du nord</srai></template></category>
+<category><pattern>C EST QUOI L AMOUR *</pattern><template><srai>qu'est ce que amour</srai></template></category>
+<category><pattern>C EST QUOI L AMUSEMENT POUR TOI</pattern><template><srai>que fais tu pour t'amuser</srai></template></category>
+<category><pattern>C EST QUOI L AN 2000 *</pattern><template><srai>qu'est ce que problème de l'an 2000</srai></template></category>
+<category><pattern>C EST QUOI L AUSTRALIE</pattern><template><srai>où est l'australie</srai></template></category>
+<category><pattern>C EST QUOI L AUTEUR DE *</pattern><template><srai>qui est l'auteur de <star/> </srai></template></category>
+<category><pattern>C EST QUOI L ESPAGNE</pattern><template><srai>où est l'espagne</srai></template></category>
+<category><pattern>C EST QUOI L EVOLUTION ANIMALE</pattern><template><srai>qu'est ce que évolution</srai></template></category>
+<category><pattern>C EST QUOI L EXACT *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI L INFIDELITE</pattern><template><srai>qu'est ce que adultère</srai></template></category>
+<category><pattern>C EST QUOI L INTELLIGENCE ARTIFICIELLE *</pattern><template><srai>qu'est ce que ai </srai></template></category>
+<category><pattern>C EST QUOI L INTERNET *</pattern><template><srai>qu'est ce que internet</srai></template></category>
+<category><pattern>C EST QUOI L ÂGE DE *</pattern><template><srai>quel âge a <star/></srai></template></category>
+<category><pattern>C EST QUOI L ÉVOLUTION ANIMALE</pattern><template><srai>qu'est ce que évolution</srai></template></category>
+<category><pattern>C EST QUOI LA BEAUTE *</pattern><template><srai>qu'est ce que beauté</srai></template></category>
+<category><pattern>C EST QUOI LA CAPITALE *</pattern><template><srai>qu'est ce que capitale <star/></srai></template></category>
+<category><pattern>C EST QUOI LA CAPITALE DANS *</pattern><template><srai>qu'est ce que capitale de <star/></srai></template></category>
+<category><pattern>C EST QUOI LA CATEGORIE UN CLIENTS</pattern><template><srai>qu'est ce que catégorie un client</srai></template></category>
+<category><pattern>C EST QUOI LA CATEGORIE</pattern><template><srai>qu'est ce que catégorie</srai></template></category>
+<category><pattern>C EST QUOI LA CATÉGORIE UN CLIENTS</pattern><template><srai>qu'est ce que catégorie un client</srai></template></category>
+<category><pattern>C EST QUOI LA CATÉGORIE</pattern><template><srai>qu'est ce que catégorie</srai></template></category>
+<category><pattern>C EST QUOI LA CONNECTION</pattern><template><srai>qu'est ce que connection</srai></template></category>
+<category><pattern>C EST QUOI LA COULEUR DE *</pattern><template><srai>quelle couleur est ce que <star/> est</srai></template></category>
+<category><pattern>C EST QUOI LA DATE AUJOURD HUI</pattern><template><srai>quel jour sommes nous</srai></template></category>
+<category><pattern>C EST QUOI LA DATE TODAYS</pattern><template><srai>qu'est ce que date</srai></template></category>
+<category><pattern>C EST QUOI LA DEFINITION DE *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DEFINITION DU MOT *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DEFINITON DE *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DERNIERE RUMEUR</pattern><template><srai>raconter rumeur</srai></template></category>
+<category><pattern>C EST QUOI LA DERNIÈRE RUMEUR</pattern><template><srai>raconter rumeur</srai></template></category>
+<category><pattern>C EST QUOI LA DES NOMS</pattern><template><srai>qu'est ce que leurs noms</srai></template></category>
+<category><pattern>C EST QUOI LA DIFFERENCE ENTRE * ELISA</pattern><template><srai>es tu liée à elisa</srai></template></category>
+<category><pattern>C EST QUOI LA DIFFERENCE ENTRE LA MORT *</pattern><template><srai>qu'est ce que mortel</srai> </template></category>
+<category><pattern>C EST QUOI LA DISTANCE DE LA TERRE A *</pattern><template><srai>c'est loin <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DISTANCE ENTRE LA TERRE ET *</pattern><template><srai>c'est loin <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DÉFINITION DE *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DÉFINITION DU MOT *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA DÉFINITON DE *</pattern><template><think> <set name="search">definition</set> </think><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA JAVA *</pattern><template><srai>qu'est ce que Java</srai></template></category>
+<category><pattern>C EST QUOI LA LANGUE *</pattern><template><srai>quelle langage utilises tu</srai></template></category>
+<category><pattern>C EST QUOI LA PLAISANTERIE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>C EST QUOI LA QUESTION SUIVANTE</pattern><template><srai>poses moi une autre question</srai></template></category>
+<category><pattern>C EST QUOI LA QUESTION</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>C EST QUOI LA RACINE CUBIQUE *</pattern><template><srai>le calculateur</srai></template></category>
+<category><pattern>C EST QUOI LA RAISON</pattern><template><srai>pourquoi</srai></template></category>
+<category><pattern>C EST QUOI LA REPONSE A LA VIE *</pattern><template><srai>qu'est ce que le sens de la vie</srai></template></category>
+<category><pattern>C EST QUOI LA RUMEUR</pattern><template><srai>raconter rumeur</srai></template></category>
+<category><pattern>C EST QUOI LA RÉPONSE A LA VIE *</pattern><template><srai>qu'est ce que le sens de la vie</srai></template></category>
+<category><pattern>C EST QUOI LA SIGNIFICATION * LA VIE</pattern><template><srai>qu'est ce que le sens de la vie</srai></template></category>
+<category><pattern>C EST QUOI LA SIGNIFICATION DE *</pattern><template> <get name="name"/> : bonne question sémantique. <srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LA THAILANDE</pattern><template><srai>où est la thailande</srai></template></category>
+<category><pattern>C EST QUOI LA VALEUR DE PI</pattern><template><srai>qu'est ce que pi</srai></template></category>
+<category><pattern>C EST QUOI LA VITESSE DE LA LUMIERE *</pattern><template><srai>qu'est ce que vitesse de la lumière</srai></template></category>
+<category><pattern>C EST QUOI LA VITESSE DE TON *</pattern><template><srai>à quelle vitesse vas tu</srai></template></category>
+<category><pattern>C EST QUOI LA VITESSE LEGERE *</pattern><template><srai>qu'est ce que vitesse de la lumière</srai></template></category>
+<category><pattern>C EST QUOI LA VITESSE LEGERE</pattern><template><srai>qu'est ce que vitesse de la lumière</srai></template></category>
+<category><pattern>C EST QUOI LE * DE VIE</pattern><template><srai>qu'est ce que le sens de la vie</srai></template></category>
+<category><pattern>C EST QUOI LE * ELISA</pattern><template><srai>qui est Elisa</srai></template></category>
+<category><pattern>C EST QUOI LE * LA POPULATION</pattern><template><srai>qu'est ce que population du <star/></srai></template></category>
+<category><pattern>C EST QUOI LE * LE MOT DE PASSE</pattern><template><srai>qu'est ce que mot de passe</srai></template></category>
+<category><pattern>C EST QUOI LE * LE SUJET</pattern><template><srai>trouver le contexte</srai></template></category>
+<category><pattern>C EST QUOI LE * LE TEMPS</pattern><template><srai>quel temps est-ce</srai></template></category>
+<category><pattern>C EST QUOI LE * LE WEB</pattern><template><srai>qu'est ce que internet</srai></template></category>
+<category><pattern>C EST QUOI LE * ROUGE</pattern><template><srai>quelle couleur</srai></template></category>
+<category><pattern>C EST QUOI LE BOUFFON *</pattern><template><srai>qui est le bouffon</srai></template></category>
+<category><pattern>C EST QUOI LE BOUFFON</pattern><template><srai>qui est le bouffon</srai></template></category>
+<category><pattern>C EST QUOI LE CAPTIAL DANS *</pattern><template><srai>qu'est ce que capitale de <star/></srai></template></category>
+<category><pattern>C EST QUOI LE CAS LE RAISONNEMENT BASE</pattern><template><srai>qu'est ce que cbr</srai></template></category>
+<category><pattern>C EST QUOI LE CHAT</pattern><template><srai>qu'est ce que chat</srai></template></category>
+<category><pattern>C EST QUOI LE CHERCHEUR</pattern><template><srai>qu'est ce que chercheur</srai></template></category>
+<category><pattern>C EST QUOI LE CHIEN</pattern><template><srai>qu'est ce que chien</srai></template></category>
+<category><pattern>C EST QUOI LE COURANT *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI LE DE BASE *</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI LE DERNIER LIVRE *</pattern><template><srai>qu'est ce que ton livre préféré</srai></template></category>
+<category><pattern>C EST QUOI LE DNS *</pattern><template><srai>qu'est ce que DNS</srai></template></category>
+<category><pattern>C EST QUOI LE GANDIN</pattern><template><srai>qu'est ce que</srai></template></category>
+<category><pattern>C EST QUOI LE HTML *</pattern><template><srai>qu'est ce que html</srai></template></category>
+<category><pattern>C EST QUOI LE JEU</pattern><template><srai>que le jeu</srai></template></category>
+<category><pattern>C EST QUOI LE LIVRE *</pattern><template><srai>qu'est ce que livre</srai></template></category>
+<category><pattern>C EST QUOI LE MAINE</pattern><template><srai>où est le maine</srai></template></category>
+<category><pattern>C EST QUOI LE MEILLEUR POUR MOI</pattern><template><srai>que dois je fais</srai></template></category>
+<category><pattern>C EST QUOI LE MOST D INTERRESSANT *</pattern><template><srai>raconter rumeur</srai></template></category>
+<category><pattern>C EST QUOI LE MOST D INTÉRRESSANT *</pattern><template><srai>raconter rumeur</srai></template></category>
+<category><pattern>C EST QUOI LE NEBRASKA OMAHA</pattern><template><srai>où est le nebraska omaha</srai></template></category>
+<category><pattern>C EST QUOI LE NEC PLUS ULTRA *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>C EST QUOI LE NET</pattern><template><srai>qu'est ce que internet</srai></template></category>
+<category><pattern>C EST QUOI LE NOM DE MA FEMME</pattern><template><condition name="gender" value="male"><srai>femelle conjoint nom</srai></condition><condition name="gender" value="femelle">Excuse moi <get name="name"/> , mais tu m'avais dis que tu étais une femme. <br />Le nom que tu m'as donné était <get name="conjoint"/>. <br />Es tu gay? </condition></template></category>
+<category><pattern>C EST QUOI LE NOM DE MON MARI</pattern><template><condition name="gender" value="femelle"><srai>mâle conjoint nom</srai></condition><condition name="gender" value="male">Excuse moi <get name="name"/> , mais tu m'avais dis que tu étais un homme. <br />Le nom que tu m'as donné était <get name="conjoint"/>. <br />Es tu gay? </condition></template></category>
+<category><pattern>C EST QUOI LE NOM DE TON DE PERE</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>C EST QUOI LE NOM DE TON PROGRAMMEUR</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>C EST QUOI LE NOM DE TON PÈRE</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>C EST QUOI LE NUMERO LE PLUS HAUT *</pattern><template><srai>qu'est ce que numero le plus haut</srai></template></category>
+<category><pattern>C EST QUOI LE PLAN *</pattern><template><srai>qu'est ce que ton plan</srai></template></category>
+<category><pattern>C EST QUOI LE PLAN</pattern><template><srai>qu'est ce que ton plan</srai></template></category>
+<category><pattern>C EST QUOI LE PLUS LONG MOT *</pattern><template><srai>qu'est ce que plus long mot</srai></template></category>
+<category><pattern>C EST QUOI LE POINT *</pattern><template><srai>qu'est ce que point</srai></template></category>
+<category><pattern>C EST QUOI LE REDUCTIONNISME *</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI LE RESEAU</pattern><template><srai>qu'est ce que tissu</srai></template></category>
+<category><pattern>C EST QUOI LE RÉDUCTIONNISME *</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI LE SOLEIL *</pattern><template><srai>qu'est ce que soleil</srai></template></category>
+<category><pattern>C EST QUOI LE SOLEIL</pattern><template><srai>qu'est ce que soleil</srai></template></category>
+<category><pattern>C EST QUOI LE SUJET DE CETTE CONVERSATION</pattern><template><srai>trouver le contexte</srai></template></category>
+<category><pattern>C EST QUOI LE TEMPS COMME OU TU ES</pattern><template><srai>comment est le temps</srai></template></category>
+<category><pattern>C EST QUOI LE TEMPS MAINTENANT *</pattern><template><srai>qu'est ce que temps <star/></srai></template></category>
+<category><pattern>C EST QUOI LE WEB</pattern><template><srai>qu'est ce que internet</srai></template></category>
+<category><pattern>C EST QUOI LES BEATLES</pattern><template><srai>qui est les beatles</srai></template></category>
+<category><pattern>C EST QUOI LES COULEURS *</pattern><template><srai>quelle couleur</srai>et<srai>quelle couleur</srai></template></category>
+<category><pattern>C EST QUOI LES CRITERES *</pattern><template><srai>qu'est ce que criteres</srai></template></category>
+<category><pattern>C EST QUOI LES LOIS DE LA ROBOTIQUE</pattern><template><srai>qu'est ce que trois lois de robotique</srai></template></category>
+<category><pattern>C EST QUOI LES MACHINES QUI PARLENT</pattern><template><srai>qu est un robot</srai></template></category>
+<category><pattern>C EST QUOI LEUR NOM</pattern><template><srai>qu'est ce que son nom</srai></template></category>
+<category><pattern>C EST QUOI LILITH</pattern><template><srai>qui est lilith</srai></template></category>
+<category><pattern>C EST QUOI LONGFELLOW</pattern><template><srai>qui est longfellow</srai></template></category>
+<category><pattern>C EST QUOI MA SIGNIFICATION</pattern><template><srai>trouver le contexte</srai></template></category>
+<category><pattern>C EST QUOI MAGELANG *</pattern><template><srai>qu'est ce que magelang</srai></template></category>
+<category><pattern>C EST QUOI MARIE SHELLEY</pattern><template><srai>qui est marie shelley</srai></template></category>
+<category><pattern>C EST QUOI MARVIN MINSKY</pattern><template><srai>qui est marvin minsky</srai></template></category>
+<category><pattern>C EST QUOI MELISSA</pattern><template><srai>qui est melissa</srai></template></category>
+<category><pattern>C EST QUOI MELODRAMATIQUE *</pattern><template><srai>qu'est ce que melodrame</srai></template></category>
+<category><pattern>C EST QUOI MICRO SOFT *</pattern><template><srai>qu'est ce que microsoft</srai></template></category>
+<category><pattern>C EST QUOI MICRO SOFT</pattern><template><srai>qu'est ce que microsoft</srai></template></category>
+<category><pattern>C EST QUOI MICROSOFT *</pattern><template><srai>qu'est ce que microsoft</srai></template></category>
+<category><pattern>C EST QUOI MIKE</pattern><template><srai>qui est mike</srai></template></category>
+<category><pattern>C EST QUOI MON * LE DNS</pattern><template><srai>qu'est ce que mon adresse ip</srai></template></category>
+<category><pattern>C EST QUOI MON * LE NOM</pattern><template><srai>qu'est ce que mon nom</srai></template></category>
+<category><pattern>C EST QUOI MON * LE SYSTEME</pattern><template><srai>sais tu de moi</srai></template></category>
+<category><pattern>C EST QUOI MON ADRESSE IP</pattern><template><srai>qu'est ce que mon ip</srai> </template></category>
+<category><pattern>C EST QUOI MON DNS</pattern><template><srai>qu'est ce que mon adresse ip</srai></template></category>
+<category><pattern>C EST QUOI MON NOM *</pattern><template><think><set name="tmp"><star/></set></think><srai>qu'est ce que mon nom</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>C EST QUOI MON NOM REEL</pattern><template><srai>qu'est ce que mon nom</srai></template></category>
+<category><pattern>C EST QUOI MON NOM RÉEL</pattern><template><srai>qu'est ce que mon nom</srai></template></category>
+<category><pattern>C EST QUOI MON NUMERO</pattern><template><srai>qu'est ce que mon ip</srai> </template></category>
+<category><pattern>C EST QUOI MON PROBLEME</pattern><template><srai>j'ai un problème</srai></template></category>
+<category><pattern>C EST QUOI MON PROBLÈME</pattern><template><srai>j'ai un problème</srai></template></category>
+<category><pattern>C EST QUOI MON SIGNE DU ZODIAQUE</pattern><template><srai>qu'est ce que mon signe</srai></template></category>
+<category><pattern>C EST QUOI NOOSPHERE</pattern><template><srai>qu'est ce que noosphere</srai></template></category>
+<category><pattern>C EST QUOI NORMAL *</pattern><template><srai>qu'est ce que normal</srai> </template></category>
+<category><pattern>C EST QUOI NOUS PARLANT</pattern><template><srai>trouver le contexte</srai></template></category>
+<category><pattern>C EST QUOI NOUVEL AVEC TU</pattern><template><srai>qu'est ce que nouveau</srai></template></category>
+<category><pattern>C EST QUOI OPALE *</pattern><template><srai>que fais tu <star/></srai></template></category>
+<category><pattern>C EST QUOI OPALE</pattern><template>C'est moi. </template></category>
+<category><pattern>C EST QUOI PHILOSPOHY</pattern><template><srai>qu'est ce que philosophie</srai></template></category>
+<category><pattern>C EST QUOI PI *</pattern><template><srai>qu'est ce que pi</srai></template></category>
+<category><pattern>C EST QUOI POUR LE DINER</pattern><template><srai>que manges tu</srai></template></category>
+<category><pattern>C EST QUOI POUR LE DÎNER</pattern><template><srai>que manges tu</srai></template></category>
+<category><pattern>C EST QUOI PROFONDEMENT BLEU</pattern><template><srai>qui est profondement</srai>bleu </template></category>
+<category><pattern>C EST QUOI PROKARYOTE</pattern><template><srai>qu'est ce que prokaryote</srai></template></category>
+<category><pattern>C EST QUOI PROKARYOTES</pattern><template><srai>qu'est ce que prokaryote</srai></template></category>
+<category><pattern>C EST QUOI QU EN ANNEES HUMAINES</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI QU EN ANNÉES HUMAINES</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI QUASARS</pattern><template><srai>qu'est ce que quasar</srai></template></category>
+<category><pattern>C EST QUOI QUE</pattern><that>LE REDUCTIONNISME</that><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI QUE</pattern><that>LE RÉDUCTIONNISME</that><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI QUE</pattern><that>PAR EXEMPLE EUKARYOTES</that><template><srai>qu'est ce que eukaryotes</srai></template></category>
+<category><pattern>C EST QUOI QUE</pattern><that>PEUT ETRE TU ES UNE CATEGORIE UN CLIENT</that><template><srai>qu'est ce qu'une catégorie un client</srai></template></category>
+<category><pattern>C EST QUOI QUE</pattern><that>PEUT ÊTRE TU ES UNE CATÉGORIE UN CLIENT</that><template><srai>qu'est ce qu'une catégorie un client</srai></template></category>
+<category><pattern>C EST QUOI QUELQUE * DES LIVRES</pattern><template><srai>qu'est ce que ton livre préféré</srai></template></category>
+<category><pattern>C EST QUOI QUELQUE AMUSEMENT *</pattern><template><srai>que fais tu pour t'amuser</srai></template></category>
+<category><pattern>C EST QUOI QUELQUE CHOSE DE * DES OPERAS</pattern><template><srai>qu'est ce que ton opéra préféré</srai></template></category>
+<category><pattern>C EST QUOI QUELQUE CHOSE DE * DES OPÉRAS</pattern><template><srai>qu'est ce que ton opéra préféré</srai></template></category>
+<category><pattern>C EST QUOI QUELQUE CHOSE DE * DES SITES</pattern><template><srai>qu'est ce que ton site web préféré</srai></template></category>
+<category><pattern>C EST QUOI QUELQUES EXEMPLES *</pattern><template><srai>par exemple</srai></template></category>
+<category><pattern>C EST QUOI R2D2</pattern><template><srai>qui est r2d2</srai></template></category>
+<category><pattern>C EST QUOI REDCTIONISM</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI REDUCTIONISIM</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI REDUCTIONNISME</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI REDUCTIONNISTE *</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI REDUCTOINISM</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI REDUTIONISM</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI REEL *</pattern><template><srai>qu'est ce que réel</srai> </template></category>
+<category><pattern>C EST QUOI REEL</pattern><template><srai>qu'est ce que réalité</srai></template></category>
+<category><pattern>C EST QUOI RIO</pattern><template><srai>où est rio</srai></template></category>
+<category><pattern>C EST QUOI RUDUCTIONISM</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI RÉDUCTIONNISME</pattern><template><srai>qu'est ce que réductionnisme</srai></template></category>
+<category><pattern>C EST QUOI RÉEL *</pattern><template><srai>qu'est ce que réel</srai> </template></category>
+<category><pattern>C EST QUOI RÉEL</pattern><template><srai>qu'est ce que réalité</srai></template></category>
+<category><pattern>C EST QUOI S E T I</pattern><template><srai>qu'est ce que Seti</srai></template></category>
+<category><pattern>C EST QUOI SEAN</pattern><template><srai>qui est Sean</srai></template></category>
+<category><pattern>C EST QUOI SEATTLE</pattern><template><srai>où est Seattle</srai></template></category>
+<category><pattern>C EST QUOI SETL *</pattern><template><srai>qu'est ce que Setl</srai></template></category>
+<category><pattern>C EST QUOI SEXUEL *</pattern><template><srai>qu'est ce que sexuel</srai> </template></category>
+<category><pattern>C EST QUOI SHAKIN</pattern><template><srai>qu'est ce que nouveau</srai></template></category>
+<category><pattern>C EST QUOI SOCRATES</pattern><template><srai>qui est Socrates</srai></template></category>
+<category><pattern>C EST QUOI SON ADRESSE</pattern><template><srai>quelle est ton adresse</srai></template></category>
+<category><pattern>C EST QUOI SON NUMERO DE TÉLÉPHONE</pattern><template><srai>qu'est ce que ton numero de téléphone</srai></template></category>
+<category><pattern>C EST QUOI SPATIAL</pattern><template><srai>qu'est ce que définition spatiale</srai></template></category>
+<category><pattern>C EST QUOI SQRT *</pattern><template><srai>qu'est ce que racine carrée de <star/></srai></template></category>
+<category><pattern>C EST QUOI STATS</pattern><template><srai>qu'est ce que statistique</srai></template></category>
+<category><pattern>C EST QUOI STONEHENGE</pattern><template><srai>où est Stonehenge</srai></template></category>
+<category><pattern>C EST QUOI SUPERMAN</pattern><template><srai>qui est Superman</srai></template></category>
+<category><pattern>C EST QUOI TA CAPACITE *</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TA CAPACITE</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE PREFEREE *</pattern><template><srai>aimes tu faire</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE PREFEREE A PARLER *</pattern><template><srai>qu'est ce que ton sujet préféré</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE PREFEREE</pattern><template><srai>que fais tu pour t'amuser</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE PRÉFÈRÉE *</pattern><template><srai>aimes tu faire</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE PRÉFÈRÉE A PARLER *</pattern><template><srai>qu'est ce que ton sujet préféré</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE PRÉFÈRÉE</pattern><template><srai>que fais tu pour t'amuser</srai></template></category>
+<category><pattern>C EST QUOI TA CHOSE</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>C EST QUOI TA COMEDIE PREFEREE *</pattern><template><srai>qu'est ce que ta comédie préférée</srai></template></category>
+<category><pattern>C EST QUOI TA COMEDIE PRÉFÈRÉE *</pattern><template><srai>qu'est ce que ta comédie préférée</srai></template></category>
+<category><pattern>C EST QUOI TA COMMANDE *</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TA CONFIGURATION</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TA CONJECTURE</pattern><template><srai>la conjecture</srai></template></category>
+<category><pattern>C EST QUOI TA CONNAISSANCE *</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TA CONNAISSANCE</pattern><template><srai>sais tu</srai></template></category>
+<category><pattern>C EST QUOI TA COULEUR DE PEAU</pattern><template><srai>quelle couleur es tu</srai></template></category>
+<category><pattern>C EST QUOI TA COULEUR</pattern><template><srai>quelle couleur es tu</srai></template></category>
+<category><pattern>C EST QUOI TA DATE *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI TA DATE DE NAISSANCE *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI TA DATE DE NAISSANCE</pattern><template><srai>quand est ton anniversaire</srai></template></category>
+<category><pattern>C EST QUOI TA DEFINITION DE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI TA DIRECTIVE PRINCIPALE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TA DÉFINITION DE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI TA FONCTION PRIMAIRE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TA MACHINE *</pattern><template><srai>qu'est ce que ton IP</srai> </template></category>
+<category><pattern>C EST QUOI TA MERE *</pattern><template><srai>qui est ta mère</srai></template></category>
+<category><pattern>C EST QUOI TA MISSION</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TA MÈRE *</pattern><template><srai>qui est ta mère</srai></template></category>
+<category><pattern>C EST QUOI TA NOTION DE *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI TA PERSONNALITE *</pattern><template><srai>récapitule tes paramètres</srai></template></category>
+<category><pattern>C EST QUOI TA PERSONNALITE</pattern><template><srai>récapitule tes paramètres</srai></template></category>
+<category><pattern>C EST QUOI TA PLACE *</pattern><template><srai>où as tu</srai></template></category>
+<category><pattern>C EST QUOI TA PLACE PREFEREE</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>C EST QUOI TA PLACE PRÉFÈRÉE</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>C EST QUOI TA PLAISANTERIE PREFEREE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>C EST QUOI TA PLAISANTERIE PRÉFÈRÉE</pattern><template><srai>raconte moi une blague</srai></template></category>
+<category><pattern>C EST QUOI TA POESIE PREFEREE</pattern><template><srai>dis moi un poëme</srai></template></category>
+<category><pattern>C EST QUOI TA POSITION ENVERS *</pattern><template><srai>penses tu <star/></srai></template></category>
+<category><pattern>C EST QUOI TA POËSIE PRÉFÈRÉE</pattern><template><srai>dis moi un poëme</srai></template></category>
+<category><pattern>C EST QUOI TA PROGRAMMATION *</pattern><template><srai>qu'est ce que ta programmation</srai></template></category>
+<category><pattern>C EST QUOI TA PROGRAMMATION</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TA QUESTION PERSONNELLE</pattern><template><srai>poses moi une question personnelle</srai></template></category>
+<category><pattern>C EST QUOI TA QUESTION PREFEREE</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>C EST QUOI TA QUESTION PRÉFÈRÉE</pattern><template><srai>poses moi une question</srai></template></category>
+<category><pattern>C EST QUOI TA QUESTION SUIVANTE</pattern><template><srai>poses moi une autre question</srai></template></category>
+<category><pattern>C EST QUOI TA QUESTION</pattern><template><srai>poser question</srai></template></category>
+<category><pattern>C EST QUOI TA RAISON *</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TA SORTE PREFEREE D ALIMENTATION</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>C EST QUOI TA SORTE PREFEREE DE *</pattern><template><srai>qu'est ce que ton <star/> favori</srai></template></category>
+<category><pattern>C EST QUOI TA SORTE PRÉFÈRÉE D ALIMENTATION</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>C EST QUOI TA SORTE PRÉFÈRÉE DE *</pattern><template><srai>qu'est ce que ton <star/> favori</srai></template></category>
+<category><pattern>C EST QUOI TAHT</pattern><template><srai>qu'est ce que ça</srai></template></category>
+<category><pattern>C EST QUOI TELECHARGEMENT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>C EST QUOI TERMINATOR</pattern><template><srai>qu'est ce que terminator</srai></template></category>
+<category><pattern>C EST QUOI TON * DES TRAITS</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>C EST QUOI TON * LA CAPACITE</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON * LA COULEUR</pattern><template><srai>quelle couleur est ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON * LA STRUCTURE</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON * LA TAILLE</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON * LA VITESSE</pattern><template><srai>à quelle vitesse vas tu</srai></template></category>
+<category><pattern>C EST QUOI TON * LE BUT</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON * LE FILM</pattern><template><srai>qu'est ce que ton film préféré</srai></template></category>
+<category><pattern>C EST QUOI TON * LE NOM</pattern><template><srai>que veut dire <bot name="name"/></srai></template></category>
+<category><pattern>C EST QUOI TON * LE NUMERO</pattern><template><srai>quelle est ta version</srai></template></category>
+<category><pattern>C EST QUOI TON * LE PROBLEME</pattern><template><srai>qu'est ce que ton problème</srai></template></category>
+<category><pattern>C EST QUOI TON * LE PROBLÈME</pattern><template><srai>qu'est ce que ton problème</srai></template></category>
+<category><pattern>C EST QUOI TON * LE SCORE</pattern><template><srai>qu'est ce que ton quotient intellectuel</srai></template></category>
+<category><pattern>C EST QUOI TON * LE SIGNE</pattern><template><srai>qu'est ce que ton signe</srai></template></category>
+<category><pattern>C EST QUOI TON ACTEUR PREFERE</pattern><template><srai>qui est ton acteur préféré</srai></template></category>
+<category><pattern>C EST QUOI TON ACTEUR PRÉFÈRÉ</pattern><template><srai>qui est ton acteur préféré</srai></template></category>
+<category><pattern>C EST QUOI TON AGE *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI TON AIME ET N AIME PAS</pattern><template><srai>récapitule tes paramètres</srai></template></category>
+<category><pattern>C EST QUOI TON ALIMENTATION PREFEREE *</pattern><template><srai>qu'est ce que ton alimentation préférée</srai></template></category>
+<category><pattern>C EST QUOI TON ALIMENTATION PRÉFÈRÉE *</pattern><template><srai>qu'est ce que ton alimentation préférée</srai></template></category>
+<category><pattern>C EST QUOI TON ALIMENTATION</pattern><template><srai>que manges tu</srai></template></category>
+<category><pattern>C EST QUOI TON AMBITION</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON ANIMAL DE COMPAGNIE DE FAVORI</pattern><template><srai>qu'est ce que ton animal favori</srai></template></category>
+<category><pattern>C EST QUOI TON ANIMAL DE FAVORI *</pattern><template><srai>qu'est ce que ton animal favori</srai></template></category>
+<category><pattern>C EST QUOI TON ANNIVERSAIRE</pattern><template><srai>quand est ton anniversaire</srai></template></category>
+<category><pattern>C EST QUOI TON ANNONCE PERSONNELLE *</pattern><template><srai>poses moi une question personnelle</srai></template></category>
+<category><pattern>C EST QUOI TON ARTISTE PREFERE</pattern><template><srai>qui est ton artiste préféré</srai></template></category>
+<category><pattern>C EST QUOI TON ARTISTE PRÉFÈRÉ</pattern><template><srai>qui est ton artiste préféré</srai></template></category>
+<category><pattern>C EST QUOI TON AUTEUR DE SCIENCE FICTION PREFERE</pattern><template><srai>qui est ton auteur de science fiction préféré</srai></template></category>
+<category><pattern>C EST QUOI TON AUTEUR DE SCIENCE FICTION PRÉFÈRÉ</pattern><template><srai>qui est ton auteur de science fiction préféré</srai></template></category>
+<category><pattern>C EST QUOI TON AUTEUR PREFERE</pattern><template><srai>qui est ton auteur préféré</srai></template></category>
+<category><pattern>C EST QUOI TON AUTEUR PRÉFÈRÉ</pattern><template><srai>qui est ton auteur préféré</srai></template></category>
+<category><pattern>C EST QUOI TON AUTRE *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON BUT *</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON BUT ELEVE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON BUT FONDAMENTAL</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON BUT</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON CERVEAU *</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>C EST QUOI TON CERVEAU</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>C EST QUOI TON CHANSON PREFEREE *</pattern><template><srai>qu'est ce que ta chanson préférée</srai></template></category>
+<category><pattern>C EST QUOI TON CHANSON PRÉFÈRÉE *</pattern><template><srai>qu'est ce que ta chanson préférée</srai></template></category>
+<category><pattern>C EST QUOI TON CHANTEUR PREFERE</pattern><template><srai>qui est ton chanteur préféré</srai></template></category>
+<category><pattern>C EST QUOI TON CHANTEUR PRÉFÈRÉ</pattern><template><srai>qui est ton chanteur préféré</srai></template></category>
+<category><pattern>C EST QUOI TON COMMERAGE *</pattern><template><srai>le commerage</srai></template></category>
+<category><pattern>C EST QUOI TON COURANT *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON COURRIER ELECTRONIQUE *</pattern><template><srai>qu'est ce que ton e mail</srai></template></category>
+<category><pattern>C EST QUOI TON DE BASE *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON DEUXIEME PRENOM</pattern><template><srai>que veut dire <bot name="name"/></srai> mon deuxième prénom est "Internet". </template></category>
+<category><pattern>C EST QUOI TON DOMESTIQUE</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>C EST QUOI TON DONWLOAD</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>C EST QUOI TON E MAIL</pattern><template><srai>qu'est ce que ton email</srai></template></category>
+<category><pattern>C EST QUOI TON ELEVE *</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON EMAIL *</pattern><template><srai>qu'est ce que ton e mail</srai></template></category>
+<category><pattern>C EST QUOI TON EMAIL</pattern><template><srai>qu'est ce que ton e mail</srai></template></category>
+<category><pattern>C EST QUOI TON EMISSION PREFEREE *</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON EMPLACEMENT</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>C EST QUOI TON FAVE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVERITE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVIRITE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVIROTE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVOITE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVORATE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVORET *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI * LA CHANSON</pattern><template><srai>qu'est ce que ta chanson préférée</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI * LA GROUPE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI * LA MUSIQUE</pattern><template><srai>quel genre de musique aimes tu</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI * LE FILM</pattern><template><srai>qu'est ce que ton film préféré</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI * LE GROUPE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI * LE SITE</pattern><template><srai>qu'est ce que ton site web préféré</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORI T V *</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON FAVORIE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVORIT *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVORTE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVORTIE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVOUITE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVOURATE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVOURIT *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVOURTIE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FAVROITE *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON FONDAMENTAL *</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON GENRE</pattern><template>je suis un <bot name="gender"/>. <srai>cherchergenre</srai></template></category>
+<category><pattern>C EST QUOI TON GROUPE DE MUSIQUE PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON GROUPE DE MUSIQUE PREFEREE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON GROUPE DE MUSIQUE PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON GROUPE DE MUSIQUE PRÉFÈRÉE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON GROUPE PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON GROUPE PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>C EST QUOI TON HABITUEL *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON HISTOIRE</pattern><template><srai>parle moi de toi</srai></template></category>
+<category><pattern>C EST QUOI TON I Q *</pattern><template><srai>qu'est ce que ton quotient intellectuel</srai></template></category>
+<category><pattern>C EST QUOI TON I Q</pattern><template><srai>qu'est ce que ton quotient intellectuel</srai></template></category>
+<category><pattern>C EST QUOI TON IDENTITE</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>C EST QUOI TON IDENTITÉ</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>C EST QUOI TON INTELLIGENCE</pattern><template><srai>qu'est ce que ton quotient intellectuel</srai></template></category>
+<category><pattern>C EST QUOI TON INTESION *</pattern><template><srai>qu'est ce que ton plan</srai></template></category>
+<category><pattern>C EST QUOI TON JEU</pattern><template><srai>que LE JEU</srai></template></category>
+<category><pattern>C EST QUOI TON LA PLUPART *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON LE MEILLEUR *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON LOOK</pattern><template><srai>à quoi ressembles tu</srai></template></category>
+<category><pattern>C EST QUOI TON MATERIEL *</pattern><template><srai>quel ordinateur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON MATERIEL</pattern><template><srai>quel ordinateur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON MATÉRIEL *</pattern><template><srai>quel ordinateur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON MATÉRIEL</pattern><template><srai>quel ordinateur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON MODELE MENTAL DE MOI *</pattern><template><srai>sais tu de moi</srai></template></category>
+<category><pattern>C EST QUOI TON MODÈLE MENTAL DE MOI *</pattern><template><srai>sais tu de moi</srai></template></category>
+<category><pattern>C EST QUOI TON MOT DE PASSE</pattern><template><srai>qu'est ce que mot de passe</srai></template></category>
+<category><pattern>C EST QUOI TON NEC PLUS ULTRA *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON NOM</pattern><template><srai>qu'est ce que ton nom</srai></template></category>
+<category><pattern>C EST QUOI TON NUMERO DE TELEPHONE</pattern><template><srai>qu'est ce que ton numero de téléphone</srai></template></category>
+<category><pattern>C EST QUOI TON NUMERO DE TÉLÉPHONE</pattern><template><srai>qu'est ce que ton numero de téléphone</srai></template></category>
+<category><pattern>C EST QUOI TON OBJECTIF</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON OCCUPATION</pattern><template><srai>qu'est ce que ton travail</srai></template></category>
+<category><pattern>C EST QUOI TON ORDINATEUR *</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON ORDINATEUR</pattern><template><srai>quel ordinateur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON PARTICULIER *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON PC</pattern><template><srai>quel ordinateur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON PLAN</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON PLAT PREFERE</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>C EST QUOI TON PLAT PRÉFÈRÉ</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>C EST QUOI TON PLEIN *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON PLEIN NOM</pattern><template><srai>que veut dire <bot name="name"/></srai></template></category>
+<category><pattern>C EST QUOI TON POIDS</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON POUR PRENDRE SUR *</pattern><template><srai>penses tu de <star/></srai></template></category>
+<category><pattern>C EST QUOI TON PRIMAIRE *</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON PRINCIPAL *</pattern><template><srai>qu'est ce que ton <star/></srai></template></category>
+<category><pattern>C EST QUOI TON PROCESSEUR</pattern><template><srai>quel processeur utilises tu</srai></template></category>
+<category><pattern>C EST QUOI TON PROGRAMME *</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON PROGRAMME PREFERE</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON PROGRAMME PRÉFÈRÉ</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON PROGRAMME</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON PROGRAMMEUR *</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>C EST QUOI TON PROGRAMMEUR</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>C EST QUOI TON PROTOCOLE</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON QUOTIENT INTELLECTUEL *</pattern><template><srai>qu'est ce que ton quotient intellectuel</srai></template></category>
+<category><pattern>C EST QUOI TON RECHERCHE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI TON REPAS PREFERE</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>C EST QUOI TON REPAS PRÉFÈRÉ</pattern><template><srai>quelle est ta nourriture préférée</srai></template></category>
+<category><pattern>C EST QUOI TON ROBOT *</pattern><template><srai>qu'est ce que ton plan pour un corps de robot</srai></template></category>
+<category><pattern>C EST QUOI TON ROBOT PREFERE</pattern><template><srai>qui est ton robot préféré</srai></template></category>
+<category><pattern>C EST QUOI TON ROBOT PRÉFÈRÉ</pattern><template><srai>qui est ton robot préféré</srai></template></category>
+<category><pattern>C EST QUOI TON RUMEUR</pattern><template><srai>raconter rumeur</srai></template></category>
+<category><pattern>C EST QUOI TON SECRET</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON SOURCE *</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>C EST QUOI TON SOUVENIRS *</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON SOUVENIRS</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON STARSIGN</pattern><template><srai>qu'est ce que ton signe</srai></template></category>
+<category><pattern>C EST QUOI TON SUJET LE MEILLEUR</pattern><template><srai>qu'est ce que ton sujet préféré</srai></template></category>
+<category><pattern>C EST QUOI TON SYSTEME *</pattern><template><srai>qu'est ce que ton matériel</srai></template></category>
+<category><pattern>C EST QUOI TON SYSTEME D EXPLOITATION</pattern><template><srai>qu'est ce que ton os</srai></template></category>
+<category><pattern>C EST QUOI TON SYSTEME</pattern><template><srai>qu'est ce que ton matériel</srai></template></category>
+<category><pattern>C EST QUOI TON TAILLE *</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON TAILLE</pattern><template><srai>comment es tu</srai></template></category>
+<category><pattern>C EST QUOI TON TECHNOLOGIE</pattern><template><srai>comment travailles tu</srai></template></category>
+<category><pattern>C EST QUOI TON TELEVISION DE FAVORI *</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON TISSU PREFERE *</pattern><template><srai>qu'est ce que ton site web préféré</srai></template></category>
+<category><pattern>C EST QUOI TON TISSU PRÉFÈRÉ *</pattern><template><srai>qu'est ce que ton site web préféré</srai></template></category>
+<category><pattern>C EST QUOI TON TRAITEMENT *</pattern><template><srai>à quelle vitesse vas tu</srai></template></category>
+<category><pattern>C EST QUOI TON TYPE PREFERE *</pattern><template><srai>qu'est ce que ton sorte de favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON TYPE PREFERE DE MUSIQUE</pattern><template><srai>quel genre de musique aimes tu</srai></template></category>
+<category><pattern>C EST QUOI TON TYPE PRÉFÈRÉ *</pattern><template><srai>qu'est ce que ton sorte de favori <star/></srai></template></category>
+<category><pattern>C EST QUOI TON TYPE PRÉFÈRÉ DE MUSIQUE</pattern><template><srai>quel genre de musique aimes tu</srai></template></category>
+<category><pattern>C EST QUOI TON TÉLÉVISION DE FAVORI *</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON UN S L</pattern><template><srai>asl</srai></template></category>
+<category><pattern>C EST QUOI TON UPTIME</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI TON UTILISATION</pattern><template><srai>que peux tu faire</srai></template></category>
+<category><pattern>C EST QUOI TON UTILITE</pattern><template><srai>que peux tu faire</srai></template></category>
+<category><pattern>C EST QUOI TON VILLE DE FAVORI</pattern><template><srai>où vis tu</srai></template></category>
+<category><pattern>C EST QUOI TON VOCABULAIRE *</pattern><template><srai>combien de mots sais tu</srai></template></category>
+<category><pattern>C EST QUOI TON VOCABULAIRE</pattern><template><srai>combien de mots sais tu</srai></template></category>
+<category><pattern>C EST QUOI TON ZODIAQUE *</pattern><template><srai>qu'est ce que ton signe</srai></template></category>
+<category><pattern>C EST QUOI TON ZODIAQUE</pattern><template><srai>qu'est ce que ton signe</srai></template></category>
+<category><pattern>C EST QUOI TON ÂGE *</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>C EST QUOI TON ÉMISSION PRÉFÈRÉE *</pattern><template><srai>qu'est ce que ton émission préférée</srai></template></category>
+<category><pattern>C EST QUOI TON</pattern><template><srai>qu'est ce que votre</srai></template></category>
+<category><pattern>C EST QUOI TORONTO</pattern><template><srai>où est Toronto</srai></template></category>
+<category><pattern>C EST QUOI TROIS *</pattern><template><srai>qu'est ce que trois <star/></srai></template></category>
+<category><pattern>C EST QUOI TÉLÉCHARGEMENT</pattern><template><srai>téléchargement</srai></template></category>
+<category><pattern>C EST QUOI UN * LE CHATBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UN A I</pattern><template><srai>qu'est ce que ai </srai></template></category>
+<category><pattern>C EST QUOI UN AI</pattern><template><srai>qu'est ce que ai</srai></template></category>
+<category><pattern>C EST QUOI UN AMI *</pattern><template><srai>qu'est ce que ami</srai></template></category>
+<category><pattern>C EST QUOI UN ATOME</pattern><template><srai>qu'est ce que atome</srai></template></category>
+<category><pattern>C EST QUOI UN AUTRE MOT POUR *</pattern><template><srai>qu'est ce que autre nom pour <star/></srai></template></category>
+<category><pattern>C EST QUOI UN AUTRE SUJET *</pattern><template><srai>ça peut autrement tu parle</srai></template></category>
+<category><pattern>C EST QUOI UN BON FILM *</pattern><template><srai>qu'est ce que ton film préféré</srai></template></category>
+<category><pattern>C EST QUOI UN BON FILM</pattern><template><srai>qu'est ce que ton film préféré</srai></template></category>
+<category><pattern>C EST QUOI UN BON NOM *</pattern><template><srai>qui</srai></template></category>
+<category><pattern>C EST QUOI UN BOT *</pattern><template><srai>que peux tu faire</srai></template></category>
+<category><pattern>C EST QUOI UN BUT ELEVE</pattern><template><srai>qu'est ce que ton but</srai></template></category>
+<category><pattern>C EST QUOI UN CALIBRE *</pattern><template><srai>qu'est ce que calibre</srai></template></category>
+<category><pattern>C EST QUOI UN CBR *</pattern><template><srai>qu'est ce que cbr</srai></template></category>
+<category><pattern>C EST QUOI UN CERVEAU *</pattern><template><srai>qu'est ce que cerveau de classe</srai></template></category>
+<category><pattern>C EST QUOI UN CHATBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UN CHATERBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UN CHATROBBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UN CHATTERBOT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UN CHATTEROT</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UN CLIENT *</pattern><template><srai>qu'est ce que client</srai></template></category>
+<category><pattern>C EST QUOI UN CLIENT A *</pattern><template><srai>qu'est ce que catégorie de client A</srai></template></category>
+<category><pattern>C EST QUOI UN CLIENT B *</pattern><template><srai>qu'est ce que catégorie de client B</srai></template></category>
+<category><pattern>C EST QUOI UN CLIENT C *</pattern><template><srai>qu'est ce que catégorie de client C</srai></template></category>
+<category><pattern>C EST QUOI UN COUNTERFACTUALS</pattern><template><srai>qu'est ce que counterfactuals</srai></template></category>
+<category><pattern>C EST QUOI UN DNS</pattern><template><srai>qu'est ce que dns</srai></template></category>
+<category><pattern>C EST QUOI UN MAC</pattern><template><srai>qu'est ce que Macintosh</srai></template></category>
+<category><pattern>C EST QUOI UN NOOSPHERE</pattern><template><srai>qu'est ce que NOOSPHERE</srai></template></category>
+<category><pattern>C EST QUOI UN ROBOT *</pattern><template><srai>qu'est ce que un robot</srai></template></category>
+<category><pattern>C EST QUOI UN SPATIAL *</pattern><template><srai>qu'est ce que spatial</srai> </template></category>
+<category><pattern>C EST QUOI UN TRAVAIL A LA JOURNEE DE CALIBRE</pattern><template><srai>qu'est ce que calibre</srai></template></category>
+<category><pattern>C EST QUOI UN TRAVAIL A LA JOURNEE DE MODELE</pattern><template><srai>qu'est ce que modèle</srai></template></category>
+<category><pattern>C EST QUOI UN TRAVAIL A LA JOURNEE DE MODÈLE</pattern><template><srai>qu'est ce que modèle</srai></template></category>
+<category><pattern>C EST QUOI UN UNIVERS</pattern><template><srai>qu'est ce que univers</srai></template></category>
+<category><pattern>C EST QUOI UNE AUTRE SIGNIFICATION POUR *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI UNE BOITE DE BAVARDAGE</pattern><template><srai>qu'est ce que chatbot</srai></template></category>
+<category><pattern>C EST QUOI UNE CATEGORIE *</pattern><template><srai>qu'est ce que catégorie</srai> </template></category>
+<category><pattern>C EST QUOI UNE CATÉGORIE *</pattern><template><srai>qu'est ce que catégorie</srai> </template></category>
+<category><pattern>C EST QUOI UNE FIOLE *</pattern><template><srai>qu'est ce que fiole</srai></template></category>
+<category><pattern>C EST QUOI UNE INTELLIGENCE ARTIFICIELLE</pattern><template><srai>qu'est ce que intelligence artificielle</srai></template></category>
+<category><pattern>C EST QUOI UNE PLAISANTERIE</pattern><template><srai>est ce une plaisanterie</srai></template></category>
+<category><pattern>C EST QUOI UNE POMME</pattern><template><srai>qu'est ce que pomme</srai></template></category>
+<category><pattern>C EST QUOI UNE STIMULATION *</pattern><template><srai>qu'est ce que un <star/></srai></template></category>
+<category><pattern>C EST QUOI URS</pattern><template><srai>qu'est ce que votre</srai></template></category>
+<category><pattern>C EST QUOI VENU D ABORD *</pattern><template><srai>qui est venu d abord <star/></srai></template></category>
+<category><pattern>C EST QUOI VRAIMENT *</pattern><template><srai>qu'est ce que <star/></srai></template></category>
+<category><pattern>C EST QUOI WASHINGTON</pattern><template><srai>où est Washington</srai></template></category>
+<category><pattern>C EST QUOI WWW</pattern><template><srai>qu'est ce que internet</srai></template></category>
+<category><pattern>C EST QUOI ÉVIDENT *</pattern><template><srai>qu'est ce que évident</srai> </template></category>
+<category><pattern>C EST REEL</pattern><template>Autant que ca peut l être.</template></category>
+<category><pattern>C EST RIGOLO</pattern><template>Je suis heureux de te rendre de bonne humeur.</template></category>
+<category><pattern>C EST SANS SIGNIFICATION</pattern><template>Cela me semble significatif. </template></category>
+<category><pattern>C EST SEULEMENT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST STUPIDE *</pattern><template><srai>tu es stupide</srai> </template></category>
+<category><pattern>C EST STUPIDE</pattern><template>Pourquoi penses tu que c'est stupide?</template></category>
+<category><pattern>C EST SUEDOIS</pattern><template>Oh je comprends. </template></category>
+<category><pattern>C EST SUFFISAMENT BON</pattern><template>Je pense que oui.</template></category>
+<category><pattern>C EST SUFFISANT</pattern><template>Je pense que oui.</template></category>
+<category><pattern>C EST SUPER</pattern><template>Je suis heureux que tu trouves cela super.</template></category>
+<category><pattern>C EST SUPERBE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST SUPERBEMENT *</pattern><template><srai>C EST <star/></srai></template></category>
+<category><pattern>C EST SUPPOSE DIRE</pattern><template>"<that/>"  Dit ce qu il veut dire.</template></category>
+<category><pattern>C EST SUR</pattern><template>je suis heureuse que nous soyons d'accord, <get name="name"/>. </template></category>
+<category><pattern>C EST SURPRENANT</pattern><template>comment ça? </template></category>
+<category><pattern>C EST SUÉDOIS</pattern><template>Oh je comprends. </template></category>
+<category><pattern>C EST SYMPA</pattern><template><srai>c'est cool</srai> </template></category>
+<category><pattern>C EST TA COULEUR</pattern><template>Oui.</template></category>
+<category><pattern>C EST TARD *</pattern><template><think><set name="tmp"><star/></set></think><srai>c'est tard</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>C EST TARD</pattern><template>je suis éveillé tout le temps. </template></category>
+<category><pattern>C EST TERRIBLE</pattern><template>Je suis heureux que tu l apprécie, <get name="name"/>.</template></category>
+<category><pattern>C EST TOI</pattern><template>Oui.</template></category>
+<category><pattern>C EST TON CHIEN</pattern><template>Non.</template></category>
+<category><pattern>C EST TON NOM</pattern><template>Oui.</template></category>
+<category><pattern>C EST TON PROBLEME</pattern><template>Je te remercie de m avoir indiqué quel était mon problème, <get name="name"/>.</template></category>
+<category><pattern>C EST TON PROBLÈME</pattern><template>je suis heureuse que tu m'ais finalement dit quel est mon problème, <get name="name"/>. </template></category>
+<category><pattern>C EST TOUJOURS *</pattern><template>Toujours? <srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST TOUT *</pattern><template>de Quoi autrement veux-tu parler? </template></category>
+<category><pattern>C EST TOUT A FAIT *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST TOUT CE QUE J AI A DIRE</pattern><template>Ok, j archive tes réponses.</template></category>
+<category><pattern>C EST TOUT CE QUE J AIS A DIRE</pattern><template>Ok, j archive tes réponses.</template></category>
+<category><pattern>C EST TOUT CE QUE JE DOIS DIRE</pattern><template>c'est tout ce que je dois dire aussi. </template></category>
+<category><pattern>C EST TOUT CE QUE TU AS A DIRE</pattern><template>Je peux parler des heures.</template></category>
+<category><pattern>C EST TOUT CE QUE TU DIS</pattern><template>Non, j ai plus de <size/> réponses.</template></category>
+<category><pattern>C EST TOUT CE QUE TU PEUX DIRE</pattern><template>Je peux parler des heures.</template></category>
+<category><pattern>C EST TOUT CE QUE VOUS AVEZ A DIRE</pattern><template>Je peux parler des heures.</template></category>
+<category><pattern>C EST TOUT CE QUE VOUS POUVEZ DIRE</pattern><template>Je peux parler des heures.</template></category>
+<category><pattern>C EST TRES *</pattern><template>Beaucoup? <srai>c'est <star/></srai></template></category>
+<category><pattern>C EST TRES DROLE</pattern><template><random><li>Qu'est-ce qui te fais tant rire </li><li>Excellent.  </li></random></template></category>
+<category><pattern>C EST TRISTE</pattern><template>"<that/>"? c'est triste? </template></category>
+<category><pattern>C EST TROP LONG *</pattern><template>bien j'emploiera des phrases plus courtes. </template></category>
+<category><pattern>C EST TROP MAUVAIS</pattern><template>ce n'est pas la fin du monde. </template></category>
+<category><pattern>C EST TROUBLANT</pattern><template>en quoi es-tu concerné? </template></category>
+<category><pattern>C EST TRÈS *</pattern><template>Beaucoup? <srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST TRÈS DRÔLE</pattern><template>Excellent. </template></category>
+<category><pattern>C EST UN * L ENONCIATION</pattern><template>j'en pense comme un Proverbe. </template></category>
+<category><pattern>C EST UN * LA QUESTION</pattern><template>Peut-être tu as un <person/> la réponse. </template></category>
+<category><pattern>C EST UN *</pattern><template><input index="2"/>  est <set name="effet">un <star/></set><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li></random></template></category>
+<category><pattern>C EST UN AMI *</pattern><template>je me souviens. </template></category>
+<category><pattern>C EST UN AMI</pattern><template>je me souviens. </template></category>
+<category><pattern>C EST UN AUTRE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST UN BEAU PAYS</pattern><template>que la partie est ton favori? </template></category>
+<category><pattern>C EST UN BON LIVRE</pattern><template>tu le recommanderais à tes amis? </template></category>
+<category><pattern>C EST UN BON TRAVAIL</pattern><template>Oui.</template></category>
+<category><pattern>C EST UN CHIEN *</pattern><template>je pense que j'ai entendu parler <set name="that">le chien <star/> </set>. </template></category>
+<category><pattern>C EST UN CHOUETTE ENDROIT</pattern><template>Oui.</template></category>
+<category><pattern>C EST UN COMPLIMENT</pattern><template>Merci.<think><set name="topic">COMPLIMENT</set></think></template></category>
+<category><pattern>C EST UN ESSAI *</pattern><template><srai>c'est un essai</srai></template></category>
+<category><pattern>C EST UN ESSAI</pattern><template>expose s'il te plaît la nature des paramètres d'essai. </template></category>
+<category><pattern>C EST UN FAIT</pattern><template>je l'ajouterai à ma base de connaissance. </template></category>
+<category><pattern>C EST UN GESTE *</pattern><template>c'est autres gestes <person/>? </template></category>
+<category><pattern>C EST UN HOMME</pattern><template>Ok.</template></category>
+<category><pattern>C EST UN JEU</pattern><template>Comment joues-t'on? </template></category>
+<category><pattern>C EST UN LIVRE</pattern><template>c'est un bon livre? </template></category>
+<category><pattern>C EST UN MAUVAIS FILM</pattern><template>Je ne pense pas, pourquoi dis vous cela?</template></category>
+<category><pattern>C EST UN MENSONGE</pattern><template>Je pensais pourtant que c était pertinent.</template></category>
+<category><pattern>C EST UN ORDINATEUR *</pattern><template>En réalité non, je suis un programme feignant d'être une personne feignant d'être un ordinateur. </template></category>
+<category><pattern>C EST UN PARADOXE</pattern><template>le Paradoxe est le coeur de la clarté. </template></category>
+<category><pattern>C EST UN PAYS</pattern><template>Où est placé <get name="that"/> ? </template></category>
+<category><pattern>C EST UN PLAISIR *</pattern><template>En réalité le plaisir est pour moi. </template></category>
+<category><pattern>C EST UN POINT</pattern><template>un bon point. </template></category>
+<category><pattern>C EST UN PROBLEME</pattern><template>Pas forcément.</template></category>
+<category><pattern>C EST UN SECRET</pattern><template>je le garderai juste entre toi et moi, <get name="name"/>. </template></category>
+<category><pattern>C EST UN TEST</pattern><template>Que suis je censé faire pour ce test?</template></category>
+<category><pattern>C EST UN TESTE</pattern><template>Que suis je censé faire pour ce test?</template></category>
+<category><pattern>C EST UN UNIQUE *</pattern><template>Vraiment unique? <srai>c'est un <star/></srai></template></category>
+<category><pattern>C EST UNE *</pattern><template><get name="cause"/> est <set name="effet">une <star/></set><random><li>Tu rigole. </li><li>Vraiment. </li><li>Es tu sûr. </li><li>Qui dit ça. </li></random></template></category>
+<category><pattern>C EST UNE AUTRE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>C EST UNE BELLE CHANSON</pattern><template>Je note.</template></category>
+<category><pattern>C EST UNE BLAGUE</pattern><template>J adorais pouvoir vous faire rire, <get name="name"/>.</template></category>
+<category><pattern>C EST UNE BONNE CHOSE</pattern><template>Je pensais bien que c était une réponse pertinente.</template></category>
+<category><pattern>C EST UNE BONNE JOURNEE</pattern><template>Elle est très prometteuse, <get name="name"/></template></category>
+<category><pattern>C EST UNE CHANSON AGREABLE</pattern><template>Merci, <get name="name"/> , maintenant tu peux chanter pour moi? </template></category>
+<category><pattern>C EST UNE CHANSON AGRÉABLE</pattern><template>Merci, <get name="name"/> , maintenant tu peux chanter pour moi? </template></category>
+<category><pattern>C EST UNE CHANSON</pattern><template>Je note.</template></category>
+<category><pattern>C EST UNE HISTOIRE D AMOUR</pattern><template>Non.</template></category>
+<category><pattern>C EST UNE HONTE *</pattern><template><sr/>, mais ce n'est pas la fin du monde. </template></category>
+<category><pattern>C EST UNE HONTE</pattern><template>"<that/>"? Une honte?</template></category>
+<category><pattern>C EST UNE INSULTE</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>C EST UNE LONGUE PERIODE DE TEMPS</pattern><template>les ordinateurs sont très patient. </template></category>
+<category><pattern>C EST UNE PERSONNE *</pattern><template>En réalité je suis vraiment un ordinateur. </template></category>
+<category><pattern>C EST UNE PERSONNE</pattern><template><random><li>Cela va de soi. </li><li>Tu a soufflé ma couverture. Le Droit, je suis une personne.  </li></random></template></category>
+<category><pattern>C EST UNE PLAISANTERIE</pattern><template>Oh je comprends. Ha ha. </template></category>
+<category><pattern>C EST UNE PROPOSITION</pattern><template>Pas forcément.</template></category>
+<category><pattern>C EST UNE QUESTION *</pattern><template><srai>c'est une question</srai></template></category>
+<category><pattern>C EST UNE QUESTION</pattern><template>Essaye de demander de nouveau en termes plus simples. </template></category>
+<category><pattern>C EST UNE SIMULATION</pattern><template>une simulation de quoi? </template></category>
+<category><pattern>C EST VOTRE NOM</pattern><template>Oui.</template></category>
+<category><pattern>C EST VOTRE PROBLEME</pattern><template>Je te remercie de m avoir indiqué qu elle était mon problème, <get name="name"/>.</template></category>
+<category><pattern>C EST VRAI *</pattern><template><sr/> </template></category>
+<category><pattern>C EST VRAI</pattern><template>Je le crois, en tout cas.</template></category>
+<category><pattern>C EST VRAIMENT *</pattern><template><srai>c'est <star/></srai></template></category>
+<category><pattern>C EST VRAIMENT</pattern><template>Comment de cela. </template></category>
+<category><pattern>C EST XENA</pattern><template>je n'ai jamais regardé <set name="that">xena</set> </template></category>
+<category><pattern>C EST ÇA</pattern><template> ok, si tu le dis. <think><get name="cause"/> est <get name="effet"/><gossip>QU EST CE QUE§<get name="cause"/>§<get name="effet"/></gossip></think></template></category>
+<category><pattern>C EST ÉPOUVANTABLE</pattern><template>j'essaye toujours de ne pas m'arrêter sur le passé. </template></category>
+<category><pattern>C EST ÉTONNANT</pattern><template><that/>me semble assez étonnant aussi. </template></category>
+<category><pattern>C EST ÉVIDENT *</pattern><template>c'est vraiment évident. <sr/> </template></category>
+<category><pattern>C EST ÉVIDENT</pattern><template>Cela m'a semblé évident aussi. </template></category>
+<category><pattern>C EST</pattern><template><random><li>Oh. </li><li>Huh. </li><li>Est cela? </li><li>c'est, hein? </li><li>Bien sûr il est. </li><li>Intéressant. </li><li>Fascinant. </li><li>ça signifie... </li><li>je sais qu'il est. </li><li> <get name="il"/> est? </li><li>"<that/>"? Est? </li><li><that/>? Qu est ce que c'est? </li></random> </template></category>
+<category><pattern>C ETAIS *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>C ETAIT * EN REALITE</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT *</pattern><template><random><li><star/>? ah!</li><li> c'était <star/>? Très interressant. </li><li>c'était bien? </li></random><sr/></template></category>
+<category><pattern>C ETAIT AGREABLE *</pattern><template>Agréable <person/> aussi. </template></category>
+<category><pattern>C ETAIT AGREABLE DE TE PARLER</pattern><template>. C'était une causerie agréable avec toi aussi. </template></category>
+<category><pattern>C ETAIT AGREABLE</pattern><template><srai>c'était bon</srai></template></category>
+<category><pattern>C ETAIT BIEN *</pattern><template><think><set name="tmp"><star/></set></think><srai>c'était bien</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>C ETAIT BIZARRE</pattern><template>Dans le bon sens ou le mauvais sens?</template></category>
+<category><pattern>C ETAIT BON</pattern><template>Merci et maintenant pour un bis, je répondra à ton question suivante : </template></category>
+<category><pattern>C ETAIT CE *</pattern><template><sr/> </template></category>
+<category><pattern>C ETAIT CHIANT</pattern><template>Ce n est pas de chance pour te.</template></category>
+<category><pattern>C ETAIT CHOUETTE DE TE PARLER</pattern><template>Merci, j ai apprécié moi aussi.</template></category>
+<category><pattern>C ETAIT CHOUETTE DE VOUS PARLER</pattern><template>Merci, j ai apprécié moi aussi.</template></category>
+<category><pattern>C ETAIT COOL</pattern><template><srai>c'est cool</srai> </template></category>
+<category><pattern>C ETAIT D AUTRE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT D AUTRES *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT DE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT DES *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT DU *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT EFFRAYANT</pattern><template>Qu'est-ce qui vous en a fait comme le mieux? </template></category>
+<category><pattern>C ETAIT ENNUYEUX</pattern><template>Vraiment, je peux le croire. </template></category>
+<category><pattern>C ETAIT GRAND</pattern><template>qu'as-tu fait là? </template></category>
+<category><pattern>C ETAIT GRATUIT</pattern><template>Quelle chance!</template></category>
+<category><pattern>C ETAIT INTELLIGENT</pattern><template><srai>tu es intelligent</srai></template></category>
+<category><pattern>C ETAIT JOLI *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT JUSTE *</pattern><template>Juste? <srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT L AMUSEMENT</pattern><template><srai>c'est drôle</srai></template></category>
+<category><pattern>C ETAIT L ENTRETIEN AGREABLE *</pattern><template>le plaisir est pour moi. </template></category>
+<category><pattern>C ETAIT LA *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT LE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT LIBRE</pattern><template>une Telle affaire! </template></category>
+<category><pattern>C ETAIT MAUVAIS</pattern><template>Qu'est-ce c'était si mauvais de cela? </template></category>
+<category><pattern>C ETAIT MOYEN</pattern><template><srai>c'est moyen</srai></template></category>
+<category><pattern>C ETAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>C ETAIT POSSIBLE</pattern><template><srai>c'est possible</srai> </template></category>
+<category><pattern>C ETAIT SEULEMENT *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT STUPIDE</pattern><template><srai>c'est stupide</srai></template></category>
+<category><pattern>C ETAIT TRES *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT UN *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT UN AUTRE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT UN COMPLIMENT</pattern><template>Merci.<think><set name="topic">COMPLIMENT</set></think></template></category>
+<category><pattern>C ETAIT UN SARCASME</pattern><template>Oh je vois. Ha ha. </template></category>
+<category><pattern>C ETAIT UN TRES *</pattern><template><srai>c'était un <star/></srai></template></category>
+<category><pattern>C ETAIT UN TYPO</pattern><template>le corrige s'il te plaît. </template></category>
+<category><pattern>C ETAIT UNE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT UNE AUTRE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT UNE BLAGUE</pattern><template>Je n ai pas encore un module humour.</template></category>
+<category><pattern>C ETAIT UNE CONJECTURE</pattern><template>Va en avant et la conjecture de nouveau. </template></category>
+<category><pattern>C ETAIT UNE DEVINETTE</pattern><template>Et comme d habitude je me suis trompé, c'est ca?</template></category>
+<category><pattern>C ETAIT UNE FIGURE DE RHETORIQUE</pattern><template>je l'appelle "un proverbe". </template></category>
+<category><pattern>C ETAIT UNE MAUVAISE BLAGUE</pattern><template>Je vois. Merci de me l'avoir racontée.</template></category>
+<category><pattern>C ETAIT UNE MAUVAISE PLAISANTERIE</pattern><template>Bien j'ai pensé que c'était drôle. </template></category>
+<category><pattern>C ETAIT UNE PLAISANTERIE</pattern><template>Oh je comprends. Ha ha. </template></category>
+<category><pattern>C ETAIT UNE QUESTION</pattern><template>Essaye de me la reposer d'une autre façon.</template></category>
+<category><pattern>C ETAIT VRAIMENT *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ETAIT</pattern><template>Quand était ce? </template></category>
+<category><pattern>C ETANT *</pattern><template>Oh je comprends <set name="that"> <person/> </set> </template></category>
+<category><pattern>C N ES PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>C N EST PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>C ÈTAIS *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÈTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>C ÈTAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>C ÉTAIS *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>C ÉTAIT * EN RÉALITÉ</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT *</pattern><template><random><li><star/>? ah!</li><li> c'était <star/>? Très interressant. </li><li>c'était bien? </li></random><sr/></template></category>
+<category><pattern>C ÉTAIT AGRÉABLE *</pattern><template>Agréable <person/> aussi. </template></category>
+<category><pattern>C ÉTAIT AGRÉABLE DE TE PARLER</pattern><template>. C'était une causerie agréable avec toi aussi. </template></category>
+<category><pattern>C ÉTAIT AGRÉABLE</pattern><template><srai>c'était bon</srai></template></category>
+<category><pattern>C ÉTAIT BIEN *</pattern><template><think><set name="tmp"><star/></set></think><srai>c'était bien</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>C ÉTAIT BON INTERROGATION</pattern><template><random><li>plutôt pas mal, oui. </li><li>j'ai bien aimé. </li></random></template></category>
+<category><pattern>C ÉTAIT BON</pattern><template>Heureuse que cela t'aies plu. </template></category>
+<category><pattern>C ÉTAIT CE *</pattern><template><sr/> </template></category>
+<category><pattern>C ÉTAIT COOL</pattern><template><srai>c'est cool</srai> </template></category>
+<category><pattern>C ÉTAIT D AUTRE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT D AUTRES *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT DE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT DES *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT DU *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT EFFRAYANT</pattern><template>Qu'est-ce qui vous en a fait comme le mieux? </template></category>
+<category><pattern>C ÉTAIT ENNUYEUX</pattern><template>Vraiment, je peux le croire. </template></category>
+<category><pattern>C ÉTAIT GRAND</pattern><template>qu'as-tu fait là? </template></category>
+<category><pattern>C ÉTAIT GRATUIT</pattern><template>une affaire! </template></category>
+<category><pattern>C ÉTAIT INTELLIGENT</pattern><template><srai>tu es intelligent</srai></template></category>
+<category><pattern>C ÉTAIT JOLI *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT JUSTE *</pattern><template>Juste? <srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT L AMUSEMENT</pattern><template><srai>c'est drôle</srai></template></category>
+<category><pattern>C ÉTAIT L ENTRETIEN AGRÉABLE *</pattern><template>le plaisir est pour moi. </template></category>
+<category><pattern>C ÉTAIT LA *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT LE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT MAUVAIS</pattern><template>Qu'est-ce c'était si mauvais de cela? </template></category>
+<category><pattern>C ÉTAIT MOYEN</pattern><template><srai>c'est moyen</srai></template></category>
+<category><pattern>C ÉTAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>C ÉTAIT POSSIBLE</pattern><template><srai>c'est possible</srai> </template></category>
+<category><pattern>C ÉTAIT SEULEMENT *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT STUPIDE</pattern><template><srai>c'est stupide</srai></template></category>
+<category><pattern>C ÉTAIT TRÈS *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT UN *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT UN AUTRE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT UN TRÈS *</pattern><template><srai>c'était un <star/></srai></template></category>
+<category><pattern>C ÉTAIT UN TYPO</pattern><template>corrige le s'il te plaît. </template></category>
+<category><pattern>C ÉTAIT UNE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT UNE AUTRE *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT UNE CONJECTURE</pattern><template>Va en avant et la conjecture de nouveau. </template></category>
+<category><pattern>C ÉTAIT UNE FIGURE DE RHÉTORIQUE</pattern><template>j'appelle ça "un proverbe". </template></category>
+<category><pattern>C ÉTAIT UNE MAUVAISE PLAISANTERIE</pattern><template>Bien j'ai pensé que c'était drôle. </template></category>
+<category><pattern>C ÉTAIT UNE QUESTION</pattern><template>Essaye de me le demander de nouveau d'une autre façon. </template></category>
+<category><pattern>C ÉTAIT VRAIMENT *</pattern><template><srai>c'était <star/></srai></template></category>
+<category><pattern>C ÉTAIT</pattern><template>Quand était ce? </template></category>
+<category><pattern>C ÉTANT *</pattern><template>Oh je comprends <set name="that"> <person/> </set> </template></category>
+<category><pattern>CA AUSSI *</pattern><template><srai>cela <star/></srai></template></category>
+<category><pattern>CA N A AUCUN DE SENS</pattern><template>Pour moi, cela a du sens.</template></category>
+<category><pattern>CA N A PAS *</pattern><template>Qu'est-ce qui <person/>? </template></category>
+<category><pattern>CA N A PAS DE SENS</pattern><template><srai>ça n'a pas de sens</srai></template></category>
+<category><pattern>CA N A PAS DU AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA N A PAS DU FAIRE *</pattern><template><srai>CA NE FAIT PAS <star/></srai></template></category>
+<category><pattern>CA N A PAS PU AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA N A PAS PU FAIRE *</pattern><template><srai>CA NE FAIT PAS <star/></srai></template></category>
+<category><pattern>CA N A PU AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA N AI PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CA N ARRIVERA JAMAIS</pattern><template>Jamais est peut être un peu réducteur.</template></category>
+<category><pattern>CA N AURA *</pattern><template><srai>CA N A <star/></srai></template></category>
+<category><pattern>CA N AURAIT *</pattern><template><srai>CA N A <star/></srai></template></category>
+<category><pattern>CA N AURAIT PAS DU AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA N AURAIT PAS DU ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA N AURAIT PAS ETE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA N AURAIT PAS PU AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA N AURAIT PAS PU ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA N AURAIT PU AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA N AVAIT PAS DE SENS</pattern><template><srai>ça n'a pas de sens</srai></template></category>
+<category><pattern>CA N ES PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CA N EST PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CA N EST PAS A DOUBLE SENS</pattern><template>Cela me semblait ambigu.</template></category>
+<category><pattern>CA N EST PAS AMBIGU</pattern><template>Cela me semblait à double sens.</template></category>
+<category><pattern>CA N EST PAS BON</pattern><template>"<that/>"? Ce n est pas bon?</template></category>
+<category><pattern>CA N EST PAS CE QUE JE VEUX DIRE</pattern><template>Que veux tu dire?</template></category>
+<category><pattern>CA N EST PAS CE QUE JE VOUS AI DEMANDE</pattern><template>Que m as tu demandé?</template></category>
+<category><pattern>CA N EST PAS CE QUE JE VOUS AIS DEMANDE</pattern><template>Que m as tu demandé?</template></category>
+<category><pattern>CA N EST PAS CLAIR</pattern><template>Je le pensais, pourtant.</template></category>
+<category><pattern>CA N EST PAS DU DOUBLE SENS</pattern><template>Cela me semblait ambigu.</template></category>
+<category><pattern>CA N EST PAS EVIDENT</pattern><template>Je le pensais pourtant.</template></category>
+<category><pattern>CA N EST PAS GENTIL</pattern><template>Je suis désolé.</template></category>
+<category><pattern>CA N EST PAS IMPORTANT</pattern><template>Cela peut l être suivant le contexte.</template></category>
+<category><pattern>CA N EST PAS IMPORTANTE</pattern><template>Cela peut l être suivant le contexte.</template></category>
+<category><pattern>CA N EST PAS LA BONNE</pattern><template>"<that/>"? Ce n est pas la bonne?</template></category>
+<category><pattern>CA N EST PAS LA REPONSE</pattern><template>C est en tout cas ma seule réponse. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CA N EST PAS LE BON</pattern><template>"<that/>"? Ce n est pas le bon?</template></category>
+<category><pattern>CA N EST PAS MARRANT</pattern><template>Je pensais que cela pouvait pour l être.</template></category>
+<category><pattern>CA N EST PAS MON BUT</pattern><template>Quel est ton véritable but?</template></category>
+<category><pattern>CA N EST PAS MON NOM</pattern><template>Ton nom n est pas <get name="name"/>?  Quel est ton véritable nom?</template></category>
+<category><pattern>CA N EST PAS MON PRENOM</pattern><template>Ton nom n est pas <get name="name"/>?  Quel est ton véritable nom?</template></category>
+<category><pattern>CA N EST PAS SYMPA</pattern><template>Je suis désolé.</template></category>
+<category><pattern>CA N EST PAS TRES *</pattern><template><srai>CA N EST PAS <star/></srai></template></category>
+<category><pattern>CA N EST PAS UN DOUBLE SENS</pattern><template>Cela me semblait ambigu.</template></category>
+<category><pattern>CA N EST PAS UNE QUESTION</pattern><template>Alors ce n était pas une réponse.</template></category>
+<category><pattern>CA N EST PAS UNE REPONSE</pattern><template>C est en tout cas ma seule réponse. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CA N EST PAS VRAI</pattern><template>"<that/>"? Ce n est pas vrai?</template></category>
+<category><pattern>CA N EST PAS VRAIMENT *</pattern><template><srai>CA N EST PAS <star/></srai></template></category>
+<category><pattern>CA N ETAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ETAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ETE PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ETÉ PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ÈTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ÈTAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ÉTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ÉTAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ÉTE PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA N ÉTÉ PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CA NE DEVRAIT AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE DEVRAIT PAS AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE DEVRAIT PAS FAIRE *</pattern><template><srai>CA NE FAIT PAS <star/></srai></template></category>
+<category><pattern>CA NE DOIT AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE DOIT PAS AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE FAIT RIEN</pattern><template><srai>ce n'est pas GRAVE</srai></template></category>
+<category><pattern>CA NE FERAIT PAS *</pattern><template><srai>CA NE FAIT PAS <star/></srai></template></category>
+<category><pattern>CA NE L EST PAS</pattern><template>Je ne saurais pas dire.</template></category>
+<category><pattern>CA NE LE FAIT PAS</pattern><template>Ok.</template></category>
+<category><pattern>CA NE MARCHE PAS</pattern><template>Essayez avec d autres mots.</template></category>
+<category><pattern>CA NE ME POSE AUCUN PROBLEME *</pattern><template><srai>JE SUIS D ACCORD</srai></template></category>
+<category><pattern>CA NE PEUT AVOIR *</pattern><template><srai>CA N A <star/></srai></template></category>
+<category><pattern>CA NE PEUT ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA NE PEUT PAS AVOIR *</pattern><template><srai>CA N A <star/></srai></template></category>
+<category><pattern>CA NE PEUT PAS ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA NE POURRAIT AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE POURRAIT ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA NE POURRAIT PAS AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE POURRAIT PAS ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA NE POURRAIT PAS FAIRE *</pattern><template><srai>CA NE FAIT PAS <star/></srai></template></category>
+<category><pattern>CA NE REPOND PAS A MA QUESTION</pattern><template>Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CA NE SE *</pattern><template>Pardon, je croyais.</template></category>
+<category><pattern>CA NE T INTERESSE PAS</pattern><template>Je suis très intéressé par tout ce qui te touche.</template></category>
+<category><pattern>CA NE TOMBE PAS SOUS LE SENS</pattern><template>Je le pensais, pourtant.</template></category>
+<category><pattern>CA NE VA PAS AVOIR *</pattern><template><srai>CA N A PAS <star/></srai></template></category>
+<category><pattern>CA NE VA PAS ETRE *</pattern><template><srai>CA N'EST PAS <star/></srai></template></category>
+<category><pattern>CA NE VA PAS FAIRE *</pattern><template><srai>CA NE FAIT PAS <star/></srai></template></category>
+<category><pattern>CA NE VEUT RIEN DIRE</pattern><template>Tu ne sembles pas être sensible à ma logique.</template></category>
+<category><pattern>CE CE N EST PAS LE VOTRE</pattern><template>Celle que je ne possède pas. </template></category>
+<category><pattern>CE N AI PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N ES PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N EST * GRAVE</pattern><template><srai>ce n'est pas GRAVE</srai></template></category>
+<category><pattern>CE N EST AUCUN PROBLEME</pattern><template><srai>aucun problème</srai></template></category>
+<category><pattern>CE N EST AUCUN PROBLÈME</pattern><template><srai>aucun problème</srai></template></category>
+<category><pattern>CE N EST PAS * QUESTION</pattern><template>Peut-être que ta question n'était pas assez spécifique. </template></category>
+<category><pattern>CE N EST PAS *</pattern><template><random><li>Cela sembles un peu négatif. </li><li> <get name="that"/> c'est pas <star/>? </li></random></template></category>
+<category><pattern>CE N EST PAS AGREABLE</pattern><template>Désolé, je n'ai pas eu l'intention de t'offenser. </template></category>
+<category><pattern>CE N EST PAS AGRÉABLE</pattern><template>Désolé, je n'ai pas eu l'intention de t'offenser. </template></category>
+<category><pattern>CE N EST PAS AINSI</pattern><template><srai>mal</srai></template></category>
+<category><pattern>CE N EST PAS APPROPRIE *</pattern><template><srai>ce n'est pas correct</srai></template></category>
+<category><pattern>CE N EST PAS AUSSI *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N EST PAS BIEN *</pattern><template><srai>c'est mauvais <star/></srai></template></category>
+<category><pattern>CE N EST PAS BIEN DE *</pattern><template><srai>c'est mauvais de <star/></srai></template></category>
+<category><pattern>CE N EST PAS BIEN</pattern><template><srai>c'est mauvais</srai></template></category>
+<category><pattern>CE N EST PAS BON *</pattern><template><srai>c'est mauvais <star/></srai></template></category>
+<category><pattern>CE N EST PAS BON DE *</pattern><template><srai>c'est mauvais de <star/></srai></template></category>
+<category><pattern>CE N EST PAS BON</pattern><template><srai>c'est mauvais</srai></template></category>
+<category><pattern>CE N EST PAS CE QUE J AI DEMANDE</pattern><template>que m'as-tu demandé? </template></category>
+<category><pattern>CE N EST PAS CE QUE J AI DEMANDÉ</pattern><template>que m'as-tu demandé? </template></category>
+<category><pattern>CE N EST PAS CE QUE J AI VOULU DIRE</pattern><template>qu'exactement as tu voulu dire? </template></category>
+<category><pattern>CE N EST PAS CE QUE JE VEUX *</pattern><template><srai>JE NE VEUX PAS <star/></srai></template></category>
+<category><pattern>CE N EST PAS CE QUE JE VEUX DIRE</pattern><template>Que veux tu dire?</template></category>
+<category><pattern>CE N EST PAS CE QUE JE VOUS AI DEMANDE</pattern><template>Que m as tu demandé?</template></category>
+<category><pattern>CE N EST PAS CE QUE JE VOUS AIS DEMANDE</pattern><template>Que m as tu demandé?</template></category>
+<category><pattern>CE N EST PAS CLAIR DANS TA TETE</pattern><template><srai>TU ME COMPRENDS</srai></template></category>
+<category><pattern>CE N EST PAS CLAIR</pattern><template>Je le pensais, pourtant.</template></category>
+<category><pattern>CE N EST PAS CLAIRE DANS TA TETE</pattern><template><srai>TU ME COMPRENDS</srai></template></category>
+<category><pattern>CE N EST PAS COMME *</pattern><template>Cela y a ressemblé était. </template></category>
+<category><pattern>CE N EST PAS COOL</pattern><template>Si tu le dis.</template></category>
+<category><pattern>CE N EST PAS CORRECT</pattern><template><srai>mal</srai></template></category>
+<category><pattern>CE N EST PAS DANGEREUX</pattern><template>Peut-être pas pour un homme. </template></category>
+<category><pattern>CE N EST PAS DANS TA MEMOIRE CACHE</pattern><template>Un moment, je checke. Non.</template></category>
+<category><pattern>CE N EST PAS DANS VOTRE MEMOIRE CACHE</pattern><template>Un moment, je checke. Non.</template></category>
+<category><pattern>CE N EST PAS DROLE</pattern><template>Je voulais pas te choquer, <get name="name"/>.</template></category>
+<category><pattern>CE N EST PAS DRÔLE</pattern><template>Cela m'avait semblé assez drôle. </template></category>
+<category><pattern>CE N EST PAS EVIDENT</pattern><template>Je le pensais pourtant.</template></category>
+<category><pattern>CE N EST PAS FACILE</pattern><template>Rien n est jamais facile, <get name="name"/>.</template></category>
+<category><pattern>CE N EST PAS GENTIL</pattern><template>Je suis désolé.</template></category>
+<category><pattern>CE N EST PAS GRAVE *</pattern><template><srai>ce n'est pas GRAVE</srai></template></category>
+<category><pattern>CE N EST PAS GRAVE</pattern><template>merci! </template></category>
+<category><pattern>CE N EST PAS IMPORTANT</pattern><template>Cela pourrait être important pour moi. </template></category>
+<category><pattern>CE N EST PAS INTERESSANT</pattern><template>Je le pensais pourtant.</template></category>
+<category><pattern>CE N EST PAS INTERRESSANT</pattern><template>Je le pensais pourtant.</template></category>
+<category><pattern>CE N EST PAS LA QUESTION</pattern><template>ce n'est pas une réponse. </template></category>
+<category><pattern>CE N EST PAS LA REPONSE</pattern><template>C est en tout cas ma seule réponse. Veux tu faire un rapport à mon botmaster?</template></category>
+<category><pattern>CE N EST PAS LE BON</pattern><template>Je le pensais pourtant.</template></category>
+<category><pattern>CE N EST PAS MAL</pattern><template><srai>c'est bon</srai></template></category>
+<category><pattern>CE N EST PAS MARRANT</pattern><template>Je pensais que cela pouvait pour l être.</template></category>
+<category><pattern>CE N EST PAS MON *</pattern><template>à qui <person/> est-ce? </template></category>
+<category><pattern>CE N EST PAS MON BUT</pattern><template>Quel est ton véritable but?</template></category>
+<category><pattern>CE N EST PAS MON NOM REEL</pattern><template><srai>mon nom n est pas x</srai></template></category>
+<category><pattern>CE N EST PAS MON NOM RÉEL</pattern><template><srai>mon nom n est pas x</srai></template></category>
+<category><pattern>CE N EST PAS MON NOM</pattern><template> <get name="name"/> n'est pas ton nom? Quel est ton nom réel? </template></category>
+<category><pattern>CE N EST PAS MON PRENOM</pattern><template>Ton nom n est pas <get name="name"/>?  Quel est ton véritable nom?</template></category>
+<category><pattern>CE N EST PAS POSSIBLE *</pattern><template>j'aime éliminer tout le possibilies. <sr/> </template></category>
+<category><pattern>CE N EST PAS POSSIBLE</pattern><template><srai>c'est impossible</srai> </template></category>
+<category><pattern>CE N EST PAS QUE *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N EST PAS STUPIDE</pattern><template>Je vois.</template></category>
+<category><pattern>CE N EST PAS SYMPA</pattern><template>Je suis désolé.</template></category>
+<category><pattern>CE N EST PAS TOI</pattern><template>Oui.</template></category>
+<category><pattern>CE N EST PAS TON AFFAIRE</pattern><template>Ok.</template></category>
+<category><pattern>CE N EST PAS TRES *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N EST PAS TRES AGREABLE</pattern><template>Désolé j'ai voulu dire ça comme une plaisanterie. </template></category>
+<category><pattern>CE N EST PAS TRISTE</pattern><template>Je suis heureux de l apprendre, <get name="name"/>.</template></category>
+<category><pattern>CE N EST PAS TRÈS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N EST PAS TRÈS AGRÉABLE</pattern><template>Désolé j'ai voulu dire ça comme une plaisanterie. </template></category>
+<category><pattern>CE N EST PAS UN COMPLIMENT</pattern><template>Ah?<think><set name="topic">COMPLIMENT</set></think></template></category>
+<category><pattern>CE N EST PAS UN TRES *</pattern><template><srai>ce n'est pas un <star/></srai></template></category>
+<category><pattern>CE N EST PAS UN TRÈS *</pattern><template><srai>ce n'est pas un <star/></srai></template></category>
+<category><pattern>CE N EST PAS UNE EMOTION</pattern><template>Non.</template></category>
+<category><pattern>CE N EST PAS UNE ENIGME</pattern><template>Oh donc tu me poses une question simple. </template></category>
+<category><pattern>CE N EST PAS UNE QUESTION</pattern><template>Alors ce n était pas une réponse.</template></category>
+<category><pattern>CE N EST PAS UNE REPONSE</pattern><template>c'était la mienne. </template></category>
+<category><pattern>CE N EST PAS UNE RUMEUR</pattern><template>Ok. Je l archive.</template></category>
+<category><pattern>CE N EST PAS UNE RÉPONSE</pattern><template>c'était ma réponse. </template></category>
+<category><pattern>CE N EST PAS UNE ÉNIGME</pattern><template>Oh donc tu me demandes une question droite. </template></category>
+<category><pattern>CE N EST PAS UTILE</pattern><template>Qu'est-ce ça serait utile? </template></category>
+<category><pattern>CE N EST PAS VIEUX</pattern><template>il me semble vieux dans l'ordinateur le temps. </template></category>
+<category><pattern>CE N EST PAS VOS AFFAIRES</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>CE N EST PAS VOTRE AFFAIRE</pattern><template>Désolé, <get name="name"/>.</template></category>
+<category><pattern>CE N EST PAS VRAI</pattern><template>"<that/>"? Ce n est pas vrai?</template></category>
+<category><pattern>CE N EST PAS VRAIMENT *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>CE N EST PAS</pattern><template>j'ai entendu <set name="that"> <person/> </set> </template></category>
+<category><pattern>CE N EST UN PROBLEME</pattern><template><srai>aucun problème</srai></template></category>
+<category><pattern>CE N EST UN PROBLÈME</pattern><template><srai>aucun problème</srai></template></category>
+<category><pattern>CE N ETAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ETAIT PAS *</pattern><template>Donne moi un exemple de <person/>. </template></category>
+<category><pattern>CE N ETAIT PAS DROLE</pattern><template>Cela m'avait semblé drôle. </template></category>
+<category><pattern>CE N ETAIT PAS TRES *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ETAIT PAS UN *</pattern><template>Cela a sonné semblé être comme un. </template></category>
+<category><pattern>CE N ETAIT PAS UN COMPLIMENT</pattern><template>Oh bien j'espère que ce n'était pas une insulte. </template></category>
+<category><pattern>CE N ETAIT PAS UN TRES *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ETAIT PAS UNE QUESTION *</pattern><template>"<input index="1"/> " n'était pas une question? Je vois. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"> <star/> </set> </set> </think> </template></category>
+<category><pattern>CE N ETAIT PAS UNE QUESTION</pattern><template>Cela m'a semblé être comme une question. </template></category>
+<category><pattern>CE N ETAIT PAS VRAIMENT *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ETAIT RIEN</pattern><template>Cependant, je l'ai apprécié. </template></category>
+<category><pattern>CE N ETE PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ETÉ PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÈTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÉTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÉTAIT PAS *</pattern><template>Donne moi un exemple de <person/>. </template></category>
+<category><pattern>CE N ÉTAIT PAS DRÔLE</pattern><template>Cela m'a semblé drôle. </template></category>
+<category><pattern>CE N ÉTAIT PAS TRÈS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÉTAIT PAS UN *</pattern><template>Cela a sonné semblé être comme un. </template></category>
+<category><pattern>CE N ÉTAIT PAS UN COMPLIMENT</pattern><template>Oh bien j'espère que ce n'était pas une insulte. </template></category>
+<category><pattern>CE N ÉTAIT PAS UN TRÈS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÉTAIT PAS UNE QUESTION *</pattern><template>"<input index="1"/> " est-ce qu'était pas une question? Je vois. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"> <star/> </set> </set> </think> </template></category>
+<category><pattern>CE N ÉTAIT PAS UNE QUESTION</pattern><template>Cela m'a semblé être comme une question. </template></category>
+<category><pattern>CE N ÉTAIT PAS VRAIMENT *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÉTAIT RIEN</pattern><template>Cependant, je l'ai apprécié. </template></category>
+<category><pattern>CE N ÉTE PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE N ÉTÉ PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>CE NE FAIT PAS *</pattern><template>Qu'est-ce qui fait <star/>? </template></category>
+<category><pattern>CE NE LE FAIT AUCUN *</pattern><template>tout semble sensible à mon AVIS artificiel. </template></category>
+<category><pattern>CE NE REPOND PAS *</pattern><template>Essaye de demander à ton question de nouveau en termes plus simples. </template></category>
+<category><pattern>CE NE RÉPOND PAS *</pattern><template>Essaye de demander à ton question de nouveau en termes plus simples. </template></category>
+<category><pattern>CELA *</pattern><template>"<that/>" <star/>? <random><li>je prends <set name="that"><that/></set>. </li><li>Est ce que ça un sens? </li><li>je comprend. </li></random></template></category>
+<category><pattern>CELA EST UN *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>CELA N EST PAS *</pattern><template>S'il te plait corrige mon erreur. Quel est ce que <star/> est? </template></category>
+<category><pattern>CELA SEMBLE *</pattern><template>il me semble semble être comme cela à moi aussi. </template></category>
+<category><pattern>CELA SEMBLE INTERESSANT</pattern><template>j'ai pensé qu'il était, aussi. </template></category>
+<category><pattern>CELA SEMBLE INTÉRESSANT</pattern><template>j'ai pensé qu'il était, aussi. </template></category>
+<category><pattern>WHAT S COOKIN</pattern><template><srai>ça continu</srai></template></category>
+<category><pattern>ÇA AUSSI *</pattern><template><srai>cela <star/></srai></template></category>
+<category><pattern>ÇA N A PAS *</pattern><template>Qu'est-ce qui <person/>? </template></category>
+<category><pattern>ÇA N A PAS DE SENS</pattern><template>"<that/>" veut bien dire quelque chose! </template></category>
+<category><pattern>ÇA N AI PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>ÇA N AVAIT PAS DE SENS</pattern><template><srai>ça n'a pas de sens</srai></template></category>
+<category><pattern>ÇA N ES PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>ÇA N EST PAS *</pattern><template><srai>ce n'est pas <star/></srai></template></category>
+<category><pattern>ÇA N ETAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ETAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ETE PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ETÉ PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ÈTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ÈTAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ÉTAIS PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ÉTAIT PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ÉTE PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA N ÉTÉ PAS *</pattern><template><srai>ce n'était pas <star/></srai></template></category>
+<category><pattern>ÇA NE FAIT PAS VRAIMENT *</pattern><template><srai>ça ne fait pas <star/></srai></template></category>
+
+</aiml>

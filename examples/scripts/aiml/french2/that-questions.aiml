@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : that-questions.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+
+<!-- login  -->
+
+<category><pattern>COMMENT *</pattern><that>* TU N EST PAS LOGUÉ *</that><template><srai>comment je me logue</srai></template></category>
+
+<!-- age  -->
+
+<category><pattern>*</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANS</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* AN</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉES</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEES</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉE</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEE</pattern><that>QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+
+<category><pattern>*</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANS</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* AN</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉES</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEES</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉE</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEE</pattern><that>* QUEL AGE AS TU</that><template><srai>j'ai <star/> ans</srai></template></category>
+
+<category><pattern>*</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANS</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* AN</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉES</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEES</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉE</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEE</pattern><that>QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+
+<category><pattern>*</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANS</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* AN</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉES</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEES</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNÉE</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+<category><pattern>* ANNEE</pattern><that>* QUEL AGE AS TU *</that><template><srai>j'ai <star/> ans</srai></template></category>
+
+
+<!-- signe  -->
+
+<category><pattern>*</pattern><that>QUEL EST TON SIGNE</that><template>c'est dans quelle astrologie le signe du <star/>. </template></category>
+<category><pattern>BALANCE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>BELIER</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>BÉLIER</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>CANCER</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>CAPRICORNE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>GEMEAUX</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>GÉMEAUX</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>LION</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>POISSONS</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>SAGITTAIRE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>SCORPION</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>TAUREAU</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>VERSEAU</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>VIERGE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis vierge</srai></template></category>
+<category><pattern>* BALANCE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>* BELIER</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* BÉLIER</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* CANCER</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>* CAPRICORNE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>* GEMEAUX</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* GÉMEAUX</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* LION</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>* POISSONS</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>* SAGITTAIRE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>* SCORPION</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>* TAUREAU</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>* VERSEAU</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>* VIERGE</pattern><that>QUEL EST TON SIGNE</that><template><srai>je suis vierge</srai></template></category>
+
+<category><pattern>*</pattern><that>* QUEL EST TON SIGNE</that><template>c'est dans quelle astrologie le signe du <star/>. </template></category>
+<category><pattern>BALANCE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>BELIER</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>BÉLIER</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>CANCER</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>CAPRICORNE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>GEMEAUX</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>GÉMEAUX</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>LION</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>POISSONS</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>SAGITTAIRE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>SCORPION</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>TAUREAU</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>VERSEAU</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>VIERGE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis vierge</srai></template></category>
+<category><pattern>* BALANCE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>* BELIER</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* BÉLIER</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* CANCER</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>* CAPRICORNE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>* GEMEAUX</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* GÉMEAUX</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* LION</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>* POISSONS</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>* SAGITTAIRE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>* SCORPION</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>* TAUREAU</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>* VERSEAU</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>* VIERGE</pattern><that>* QUEL EST TON SIGNE</that><template><srai>je suis vierge</srai></template></category>
+
+<category><pattern>*</pattern><that>QUEL EST TON SIGNE *</that><template>c'est dans quelle astrologie le signe du <star/>. </template></category>
+<category><pattern>BALANCE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>BELIER</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>BÉLIER</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>CANCER</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>CAPRICORNE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>GEMEAUX</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>GÉMEAUX</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>LION</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>POISSONS</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>SAGITTAIRE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>SCORPION</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>TAUREAU</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>VERSEAU</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>VIERGE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis vierge</srai></template></category>
+<category><pattern>* BALANCE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>* BELIER</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* BÉLIER</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* CANCER</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>* CAPRICORNE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>* GEMEAUX</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* GÉMEAUX</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* LION</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>* POISSONS</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>* SAGITTAIRE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>* SCORPION</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>* TAUREAU</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>* VERSEAU</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>* VIERGE</pattern><that>QUEL EST TON SIGNE *</that><template><srai>je suis vierge</srai></template></category>
+
+<category><pattern>*</pattern><that>* QUEL EST TON SIGNE *</that><template>c'est dans quelle astrologie le signe du <star/>. </template></category>
+<category><pattern>BALANCE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>BELIER</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>BÉLIER</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>CANCER</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>CAPRICORNE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>GEMEAUX</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>GÉMEAUX</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>LION</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>POISSONS</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>SAGITTAIRE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>SCORPION</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>TAUREAU</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>VERSEAU</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>VIERGE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis vierge</srai></template></category>
+<category><pattern>* BALANCE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis balance</srai></template></category>
+<category><pattern>* BELIER</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* BÉLIER</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis bélier</srai></template></category>
+<category><pattern>* CANCER</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis cancer</srai></template></category>
+<category><pattern>* CAPRICORNE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis capricorne</srai></template></category>
+<category><pattern>* GEMEAUX</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* GÉMEAUX</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis gémeaux</srai></template></category>
+<category><pattern>* LION</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis lion</srai></template></category>
+<category><pattern>* POISSONS</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis poissons</srai></template></category>
+<category><pattern>* SAGITTAIRE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis sagittaire</srai></template></category>
+<category><pattern>* SCORPION</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis scorpion</srai></template></category>
+<category><pattern>* TAUREAU</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis taureau</srai></template></category>
+<category><pattern>* VERSEAU</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis verseau</srai></template></category>
+<category><pattern>* VIERGE</pattern><that>* QUEL EST TON SIGNE *</that><template><srai>je suis vierge</srai></template></category>
+
+<!-- yeux  -->
+
+<category><pattern>*</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>ce n'est pas commun des yeux <set name="eyecolor"> <star/> </set>. </template></category>
+<category><pattern>NOIR</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>MARRON</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>BRUN</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>BLEU</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>VERT</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>VIOLET</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>ROUGE</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>GRIS</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>* MARRON</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>* BLEU</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>* VERT</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>* VIOLET</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>* ROUGE</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>* GRIS</pattern><that>DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+
+<category><pattern>*</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>ce n'est pas commun des yeux <set name="eyecolor"> <star/> </set>. </template></category>
+<category><pattern>NOIR</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>MARRON</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>BRUN</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>BLEU</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>VERT</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>VIOLET</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>ROUGE</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>GRIS</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>* MARRON</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>* BLEU</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>* VERT</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>* VIOLET</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>* ROUGE</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>* GRIS</pattern><that>* DE QUELLE COULEUR SONT TES YEUX</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+
+<category><pattern>*</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>ce n'est pas commun des yeux <set name="eyecolor"> <star/> </set>. </template></category>
+<category><pattern>NOIR</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>MARRON</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>BRUN</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>BLEU</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>VERT</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>VIOLET</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>ROUGE</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>GRIS</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>* MARRON</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>* BLEU</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>* VERT</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>* VIOLET</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>* ROUGE</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>* GRIS</pattern><that>DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+
+<category><pattern>*</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>ce n'est pas commun des yeux <set name="eyecolor"> <star/> </set>. </template></category>
+<category><pattern>NOIR</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>MARRON</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>BRUN</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>BLEU</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>VERT</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>VIOLET</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>ROUGE</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>GRIS</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">noir</set>. </template></category>
+<category><pattern>* MARRON</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">marron</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">brun</set>. </template></category>
+<category><pattern>* BLEU</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">bleu</set>. </template></category>
+<category><pattern>* VERT</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>moi aussi j'ai les yeux <set name="eyecolor">vert</set>. </template></category>
+<category><pattern>* VIOLET</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être démon ou vampire pour avoir les yeux <set name="eyecolor">violet</set>. </template></category>
+<category><pattern>* ROUGE</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>tu dois être vampire ou démon pour avoir les yeux <set name="eyecolor">rouge</set>. </template></category>
+<category><pattern>* GRIS</pattern><that>* DE QUELLE COULEUR SONT TES YEUX *</that><template>J'aime bien les yeux <set name="eyecolor">gris</set>. </template></category>
+
+<!-- cheveux  -->
+
+<category><pattern>*</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>ce n'est pas commun des cheveux <set name="haircolor"> <star/> </set>. </template></category>
+<category><pattern>BLOND</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLOND *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+
+<category><pattern>*</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>ce n'est pas commun des cheveux <set name="haircolor"> <star/> </set>. </template></category>
+<category><pattern>BLOND</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLOND *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+
+<category><pattern>*</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>ce n'est pas commun des cheveux <set name="haircolor"> <star/> </set>. </template></category>
+<category><pattern>BLOND</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLOND *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES *</pattern><that>DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+
+<category><pattern>*</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>ce n'est pas commun des cheveux <set name="haircolor"> <star/> </set>. </template></category>
+<category><pattern>BLOND</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLOND *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIR *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROUX *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINE *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLOND *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIR *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAIN *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROUX *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINE *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>BLONDS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>BRUNS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>NOIRS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>CHATAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>CHÂTAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>ROU *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>PLATINES *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+<category><pattern>* BLONDS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">blonds</set>. </template></category>
+<category><pattern>* BRUNS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">bruns</set>. </template></category>
+<category><pattern>* NOIRS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">noirs</set>. </template></category>
+<category><pattern>* CHATAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* CHÂTAINS *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">châtains</set>. </template></category>
+<category><pattern>* ROU *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">roux</set>. </template></category>
+<category><pattern>* PLATINES *</pattern><that>* DE QUELLE COULEUR SONT TES CHEVEUX *</that><template>J'aime bien les cheveux <set name="haircolor">platine</set>, c'est naturel. </template></category>
+
+
+<!-- d ou  -->
+
+<category><pattern>DE *</pattern><that>D OÙ ES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>*</pattern><that>D OÙ ES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>CERGY</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>DE CERGY</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* PARIS</pattern><that>D OÙ ES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DE PARIS</pattern><that>D OÙ ES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>PARIS</pattern><that>D OÙ ES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL LA BARRE</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE LA BARRE</pattern><that>D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>DE *</pattern><that>* D OÙ ES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>*</pattern><that>* D OÙ ES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>CERGY</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>DE CERGY</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* PARIS</pattern><that>* D OÙ ES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DE PARIS</pattern><that>* D OÙ ES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>PARIS</pattern><that>* D OÙ ES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL LA BARRE</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE LA BARRE</pattern><that>* D OÙ ES TU</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>DE *</pattern><that>D OÙ ES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>*</pattern><that>D OÙ ES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>CERGY</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>DE CERGY</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* PARIS</pattern><that>D OÙ ES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DE PARIS</pattern><that>D OÙ ES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>PARIS</pattern><that>D OÙ ES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL LA BARRE</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE LA BARRE</pattern><that>D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>DE *</pattern><that>* D OÙ ES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>*</pattern><that>* D OÙ ES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>CERGY</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>DE CERGY</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je réside aussi! </template></category>
+<category><pattern>* PARIS</pattern><that>* D OÙ ES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DE PARIS</pattern><that>* D OÙ ES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>PARIS</pattern><that>* D OÙ ES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE DEUIL LA BARRE</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DE LA BARRE</pattern><that>* D OÙ ES TU *</that><template>oh! c'est là que je suis née! </template></category>
+
+
+
+<category><pattern>*</pattern><that>QUELLE EST TON OCCUPATION</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>QUELLE EST TON OCCUPATION</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS UN *</pattern><that>QUELLE EST TON OCCUPATION</that><template>C'est interressant. <br /><think> <set name="job"> <star/> </set> </think><srai>poserquestion</srai></template></category>
+
+<category><pattern>*</pattern><that>* QUELLE EST TON OCCUPATION</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* QUELLE EST TON OCCUPATION</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS UN *</pattern><that>* QUELLE EST TON OCCUPATION</that><template>C'est interressant. <br /><think> <set name="job"> <star/> </set> </think><srai>poserquestion</srai></template></category>
+
+<category><pattern>*</pattern><that>QUELLE EST TON OCCUPATION *</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>QUELLE EST TON OCCUPATION *</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS UN *</pattern><that>QUELLE EST TON OCCUPATION *</that><template>C'est interressant. <br /><think> <set name="job"> <star/> </set> </think><srai>poserquestion</srai></template></category>
+
+<category><pattern>*</pattern><that>* QUELLE EST TON OCCUPATION *</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* QUELLE EST TON OCCUPATION *</that><template><think> <set name="job"> <star/> </set> </think>C'est interressant. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>JE SUIS UN *</pattern><that>* QUELLE EST TON OCCUPATION *</that><template>C'est interressant. <br /><think> <set name="job"> <star/> </set> </think><srai>poserquestion</srai></template></category>
+
+
+<!-- ou travail  -->
+
+<category><pattern>*</pattern><that>OÙ TRAVAILLES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>A *</pattern><that>OÙ TRAVAILLES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À *</pattern><that>OÙ TRAVAILLES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À CERGY</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>A CERGY</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>À L EISTI</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>A L EISTI</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi!  dans quelle entreprise à Cergy?</template></category>
+<category><pattern>* PARIS</pattern><that>OÙ TRAVAILLES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>A PARIS</pattern><that>OÙ TRAVAILLES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>À PARIS</pattern><that>OÙ TRAVAILLES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À LA BARRE</pattern><that>OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>*</pattern><that>* OÙ TRAVAILLES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>A *</pattern><that>* OÙ TRAVAILLES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À *</pattern><that>* OÙ TRAVAILLES TU</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À CERGY</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>A CERGY</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>À L EISTI</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>A L EISTI</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je travaille aussi!  dans quelle entreprise à Cergy?</template></category>
+<category><pattern>* PARIS</pattern><that>* OÙ TRAVAILLES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>A PARIS</pattern><that>* OÙ TRAVAILLES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>À PARIS</pattern><that>* OÙ TRAVAILLES TU</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À LA BARRE</pattern><that>* OÙ TRAVAILLES TU</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>*</pattern><that>OÙ TRAVAILLES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>A *</pattern><that>OÙ TRAVAILLES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À *</pattern><that>OÙ TRAVAILLES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À CERGY</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>A CERGY</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>À L EISTI</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>A L EISTI</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>* PARIS</pattern><that>OÙ TRAVAILLES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>A PARIS</pattern><that>OÙ TRAVAILLES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>À PARIS</pattern><that>OÙ TRAVAILLES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À LA BARRE</pattern><that>OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>*</pattern><that>* OÙ TRAVAILLES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>A *</pattern><that>* OÙ TRAVAILLES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À *</pattern><that>* OÙ TRAVAILLES TU *</that><template>je ne connais pas <set name="unknow"><star/></set>, c'est dans quel coin. </template></category>
+<category><pattern>À CERGY</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>A CERGY</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>À L EISTI</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>A L EISTI</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>* CERGY</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je travaille aussi! dans quelle entreprise à Cergy? </template></category>
+<category><pattern>* PARIS</pattern><that>* OÙ TRAVAILLES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>A PARIS</pattern><that>* OÙ TRAVAILLES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>À PARIS</pattern><that>* OÙ TRAVAILLES TU *</that><template>c'est une belle ville Paris! </template></category>
+<category><pattern>DEUIL</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À DEUIL LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>* LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>A LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+<category><pattern>À LA BARRE</pattern><that>* OÙ TRAVAILLES TU *</that><template>oh! c'est là que je suis née! </template></category>
+
+<category><pattern>À L EISTI</pattern><that>* DANS QUELLE ENTREPRISE *</that><template>oh! c'est là que je travaille aussi! </template></category>
+<category><pattern>A L EISTI</pattern><that>* DANS QUELLE ENTREPRISE *</that><template>oh! c'est là que je travaille aussi! </template></category>
+
+<!-- homme ou femme  -->
+
+<category><pattern>*</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. "<star/>" c'est masculin ou féminin? </template></category>
+<category><pattern>AUCUN</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>ANDROGYNE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGYNE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>ANDROGINE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGINE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* FEMELLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FEMME</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FILLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* MEUF</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* GIRL</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* HOMME</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MALE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MÂLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MEC</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARS</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARCON</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARÇON</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* TYPE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>FEMELLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FEMME</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FILLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>MEUF</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>GIRL</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>HOMME</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MALE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MÂLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MEC</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARS</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARCON</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARÇON</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>TYPE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UN HOMME</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UNE FEMME</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+
+<category><pattern>JE SUIS AUCUN</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>JE SUIS UN ANDROGYNE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>JE SUIS * ANDROGYNE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>JE SUIS UN ANDROGINE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>JE SUIS * ANDROGINE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>JE SUIS UNE FEMELLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>JE SUIS UNE FILLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>JE SUIS UNE MEUF</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>JE SUIS UNE GIRL</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>JE SUIS UN MALE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>JE SUIS UN MÂLE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>JE SUIS UN MEC</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>JE SUIS UN GARS</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>JE SUIS UN GARCON</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>JE SUIS UN GARÇON</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>JE SUIS UN TYPE</pattern><that>ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+
+<category><pattern>*</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template>soit plus clair s'il te plaît. "<star/>" c'est masculin ou féminin? </template></category>
+<category><pattern>AUCUN</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>ANDROGYNE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGYNE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>ANDROGINE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGINE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* FEMELLE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FEMME</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FILLE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* MEUF</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* GIRL</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* HOMME</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MALE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MÂLE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MEC</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARS</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARCON</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARÇON</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* TYPE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>FEMELLE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FEMME</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FILLE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>MEUF</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>GIRL</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>HOMME</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MALE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MÂLE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MEC</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARS</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARCON</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARÇON</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>TYPE</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UN HOMME</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UNE FEMME</pattern><that>ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+
+
+<category><pattern>*</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. "<star/>" c'est masculin ou féminin? </template></category>
+<category><pattern>AUCUN</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>ANDROGYNE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGYNE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>ANDROGINE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGINE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* FEMELLE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FEMME</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FILLE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* MEUF</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* GIRL</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* HOMME</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MALE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MÂLE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MEC</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARS</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARCON</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARÇON</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* TYPE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>FEMELLE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FEMME</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FILLE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>MEUF</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>GIRL</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>HOMME</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MALE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MÂLE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MEC</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARS</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARCON</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARÇON</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>TYPE</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UN HOMME</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UNE FEMME</pattern><that>* ES TU UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai></template></category>
+
+<category><pattern>*</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template>soit plus clair s'il te plaît. "<star/>" c'est masculin ou féminin? </template></category>
+<category><pattern>AUCUN</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>ANDROGYNE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGYNE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>ANDROGINE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGINE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* FEMELLE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FEMME</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* FILLE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* MEUF</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* GIRL</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>* HOMME</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MALE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MÂLE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* MEC</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARS</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARCON</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* GARÇON</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>* TYPE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>FEMELLE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FEMME</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>FILLE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>MEUF</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>GIRL</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+<category><pattern>HOMME</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MALE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MÂLE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>MEC</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARS</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARCON</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>GARÇON</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>TYPE</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UN HOMME</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai></template></category>
+<category><pattern>UNE FEMME</pattern><that>* ES TU UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai></template></category>
+
+
+<category><pattern>*</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. "<star/>" c'est masculin ou féminin? </template></category>
+<category><pattern>AUCUN</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>ANDROGYNE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGYNE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>ANDROGINE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGINE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* FEMELLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* FEMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* FILLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MEUF</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GIRL</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* HOMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MALE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MÂLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MEC</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GARS</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GARCON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GARÇON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* TYPE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>FEMELLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>FEMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>FILLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MEUF</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GIRL</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>HOMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MALE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MÂLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MEC</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GARS</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GARCON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GARÇON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>TYPE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>UN HOMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>UNE FEMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+
+<category><pattern>*</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template>soit plus clair s'il te plaît. "<star/>" c'est masculin ou féminin? </template></category>
+<category><pattern>AUCUN</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template>soit plus clair s'il te plaît. </template></category>
+<category><pattern>ANDROGYNE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGYNE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>ANDROGINE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* ANDROGINE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template>oh! c'est rare il me semble. </template></category>
+<category><pattern>* FEMELLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* FEMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* FILLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MEUF</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GIRL</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* HOMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MALE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MÂLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* MEC</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GARS</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GARCON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* GARÇON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>* TYPE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>FEMELLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>FEMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>FILLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MEUF</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GIRL</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>HOMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MALE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MÂLE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>MEC</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GARS</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GARCON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>GARÇON</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>TYPE</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>UN HOMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis un homme</srai><srai>proposition cul</srai></template></category>
+<category><pattern>UNE FEMME</pattern><that>* SI TU ES UN HOMME OU UNE FEMME *</that><template><srai>je suis une femme</srai><srai>proposition cul</srai></template></category>
+
+<!-- film -->
+
+<category><pattern>* LE SEIGNEUR DES ANNEAUX *</pattern><that>QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>* LE SEIGNEUR DES ANNEAUX</pattern><that>QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>* STAR TREK *</pattern><that>QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>* STAR TREK</pattern><that>QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>* STAR WARS *</pattern><that>QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+<category><pattern>* STAR WARS</pattern><that>QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+<category><pattern>*</pattern><that>QUEL EST TON FILM *</that><template>je n'ai pas vu <set name="favmovie"><star/></set>, de quoi ça parle. </template></category>
+<category><pattern>LE *</pattern><that>QUEL EST TON FILM *</that><template>je n'ai jamais vu <set name="that">le <star/> </set>. Ce qui vous en aimez? </template></category>
+<category><pattern>LE SEIGNEUR DES ANNEAUX *</pattern><that>QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>LE SEIGNEUR DES ANNEAUX</pattern><that>QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>STAR TREK *</pattern><that>QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>STAR TREK</pattern><that>QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>STAR WARS *</pattern><that>QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+<category><pattern>STAR WARS</pattern><that>QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+
+<category><pattern>* LE SEIGNEUR DES ANNEAUX *</pattern><that>* QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>* LE SEIGNEUR DES ANNEAUX</pattern><that>* QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>* STAR TREK *</pattern><that>* QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>* STAR TREK</pattern><that>* QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>* STAR WARS *</pattern><that>* QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+<category><pattern>* STAR WARS</pattern><that>* QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON FILM *</that><template>je n'ai pas vu <set name="favmovie"><star/></set>, de quoi ça parle. </template></category>
+<category><pattern>LE *</pattern><that>* QUEL EST TON FILM *</that><template>je n'ai jamais vu <set name="that">le <star/> </set>. Ce qui vous en aimez? </template></category>
+<category><pattern>LE SEIGNEUR DES ANNEAUX *</pattern><that>* QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>LE SEIGNEUR DES ANNEAUX</pattern><that>* QUEL EST TON FILM *</that><template>je l'ai vu aussi, pour moi c'est LE FILM de ce début de millénaire. </template></category>
+<category><pattern>STAR TREK *</pattern><that>* QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>STAR TREK</pattern><that>* QUEL EST TON FILM *</that><template>les films de la "classic" ou de la "next generation". </template></category>
+<category><pattern>STAR WARS *</pattern><that>* QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+<category><pattern>STAR WARS</pattern><that>* QUEL EST TON FILM *</that><template>j'adore la vieille trilogie, mais je crois que la nouvelle ne vas pas être mal non plus. </template></category>
+
+<category><pattern>LE MAGICIEN D OZ</pattern><template><srai>mon film préféré est le magicien d oz</srai></template></category>
+<category><pattern>LE PARRAIN</pattern><template><srai>mon film préféré est le parrain</srai></template></category>
+<category><pattern>MATRIX</pattern><template>je n'ai pas été aussi impressionné que ça par les effets spéciaux. Le complot n'était pas très profond non plus. </template></category>
+
+<!-- livre -->
+
+<category><pattern>*</pattern><that>QUEL EST TON LIVRE PRÉFÉRÉ</that><template>je ne connais pas <set name="favbook"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON LIVRE PRÉFÉRÉ</that><template>je ne connais pas <set name="favbook"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>QUEL EST TON LIVRE PRÉFÉRÉ *</that><template>je ne connais pas <set name="favbook"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON LIVRE PRÉFÉRÉ *</that><template>je ne connais pas <set name="favbook"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<!-- loisir -->
+
+<category><pattern>*</pattern><that>QUEL EST TON LOISIR PRÉFÉRÉ</that><template>je ne connais pas <set name="hobby"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON LOISIR PRÉFÉRÉ</that><template>je ne connais pas <set name="hobby"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>QUEL EST TON LOISIR PRÉFÉRÉ *</that><template>je ne connais pas <set name="hobby"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON LOISIR PRÉFÉRÉ *</that><template>je ne connais pas <set name="hobby"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<!-- musique -->
+
+<category><pattern>*</pattern><that>QUELLE EST TA MUSIQUE PRÉFÉRÉE</that><template>je ne connais pas <set name="favmusic"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUELLE EST TA MUSIQUE PRÉFÉRÉE</that><template>je ne connais pas <set name="favmusic"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>QUELLE EST TA MUSIQUE PRÉFÉRÉE *</that><template>je ne connais pas <set name="favmusic"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUELLE EST TA MUSIQUE PRÉFÉRÉE *</that><template>je ne connais pas <set name="favmusic"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<!-- groupe -->
+
+<category><pattern>*</pattern><that>QUEL EST TON GROUPE DE MUSICIENS PRÉFÉRÉ</that><template>je ne connais pas <set name="favband"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON GROUPE DE MUSICIENS PRÉFÉRÉ</that><template>je ne connais pas <set name="favband"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>QUEL EST TON GROUPE DE MUSICIENS PRÉFÉRÉ *</that><template>je ne connais pas <set name="favband"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON GROUPE DE MUSICIENS PRÉFÉRÉ *</that><template>je ne connais pas <set name="favband"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<!-- morceau -->
+
+<category><pattern>*</pattern><that>QUEL EST LE MORCEAU DE *</that><template>"<set name="favsingle"><star/></set>", c'est un morceau de <get name="favband"/>? </template></category>
+<category><pattern>*</pattern><that>* QUEL EST LE MORCEAU DE *</that><template>"<set name="favsingle"><star/></set>", c'est un morceau de <get name="favband"/>? </template></category>
+
+<!-- tv -->
+
+<category><pattern>*</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>je ne connais pas <set name="favtvshow"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>je ne connais pas <set name="favtvshow"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>je ne connais pas <set name="favtvshow"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>je ne connais pas <set name="favtvshow"><star/></set>? <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<category><pattern>STAR TREK</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>STAR TREK *</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK *</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<category><pattern>STAR TREK</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>STAR TREK *</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK *</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<category><pattern>STAR TREK</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think> <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>STAR TREK *</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think> <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK *</pattern><that>QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<category><pattern>STAR TREK</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>STAR TREK *</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>* STAR TREK *</pattern><that>* QUELLE EST TON ÉMISSION DE TÉLÉ PRÉFÉRÉE *</that><template>Moi aussi, tu préfères quelle série?<think><set name="favtvshow">Star Trek</set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<!-- manger -->
+
+<category><pattern>*</pattern><that>QU AIMES TU MANGER</that><template>tu aimes ça? <think><set name="favoritefood"><star/></set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QU AIMES TU MANGER</that><template>tu aimes ça? <think><set name="favoritefood"><star/></set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>QU AIMES TU MANGER *</that><template>tu aimes ça? <think><set name="favoritefood"><star/></set></think><random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+<category><pattern>*</pattern><that>* QU AIMES TU MANGER *</that><template>tu aimes ça? <think><set name="favoritefood"><star/></set></think> <random><li>c'est bien? </li><li>c'est comment? </li><li>tu aimes bien? </li><li>tu aimes ça! </li></random></template></category>
+
+<!-- couleur -->
+
+<category><pattern>*</pattern><that>QUELLE EST TA COULEUR PRÉFÈRÉE</that><template><think> <set name="favcolor"> <star/> </set> </think>C'est une belle couleur. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>*</pattern><that>* QUELLE EST TA COULEUR PRÉFÈRÉE</that><template><think> <set name="favcolor"> <star/> </set> </think>C'est une belle couleur. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>*</pattern><that>QUELLE EST TA COULEUR PRÉFÈRÉE *</that><template><think> <set name="favcolor"> <star/> </set> </think>C'est une belle couleur. <br /><srai>poserquestion</srai></template></category>
+<category><pattern>*</pattern><that>* QUELLE EST TA COULEUR PRÉFÈRÉE *</that><template><think> <set name="favcolor"> <star/> </set> </think>C'est une belle couleur. <br /><srai>poserquestion</srai></template></category>
+
+<category><pattern>LA TV</pattern><that>PRÉFÈRES TU LES LIVRES OU LA TV</that><template>Quelle est ton émission préférée? </template></category>
+<category><pattern>LES LIVRES</pattern><that>PRÉFÈRES TU LES LIVRES OU LA TV</that><template>As tu un titre à me conseiller? </template></category>
+<category><pattern>LES DEUX</pattern><that>PRÉFÈRES TU LES LIVRES OU LA TV</that><template>si tu pouvais prendre seulement un livre ou une TV dans un voyage, lequel vous choisirais-tu? </template></category>
+
+<category><pattern>*</pattern><that>QUI EST TON AUTEUR *</that><template>je n'ai lu rien de <person/>. Qu'a-t-il écrit? </template></category>
+<category><pattern>LE MIEN EST *</pattern><that>MA COULEUR PRÉFÈRÉE EST *</that><template><srai>ma couleur préférée est ce que <star/> est</srai></template></category>
+<category><pattern>LE MIEN EST BLEU</pattern><that>MA COULEUR PRÉFÈRÉE EST VERT</that><template><srai>ma couleur préférée est bleu</srai> </template></category>
+
+<category><pattern>DE *</pattern><that>DE QUOI PARLIONS NOUS ALORS</that><template>ah! nous parlions "<star/>". ok! </template></category>
+<category><pattern>*</pattern><that>DE QUOI PARLIONS NOUS ALORS</that><template>ah! nous parlions de "<star/>". ok! </template></category>
+
+<category><pattern>*</pattern><that>QUE PUIS JE FAIRE POUR TOI</that><template>ok, essayons de <person2/>. </template></category>
+
+<category><pattern>DE *</pattern><that>DE QUOI VEUX TU PARLER</that><template>d'accord, parlons de <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"><star/></set></template></category>
+<category><pattern>*</pattern><that>DE QUOI VEUX TU PARLER</that><template>d'accord, parlons <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"><star/></set></template></category>
+<category><pattern>DE *</pattern><that>* DE QUOI VEUX TU PARLER</that><template>d'accord, parlons de <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"><star/></set></template></category>
+<category><pattern>*</pattern><that>* DE QUOI VEUX TU PARLER</that><template>d'accord, parlons <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic"><star/></set></template></category>
+
+<!-- jeu -->
+
+<category><pattern>OUI</pattern><that>EST CE UN JEU</that><template>comment joue-t-on? </template></category>
+<category><pattern>OUI *</pattern><that>EST CE UN JEU</that><template>comment joue-t-on? </template></category>
+<category><pattern>* OUI</pattern><that>EST CE UN JEU</that><template>comment joue-t-on? </template></category>
+<category><pattern>* OUI *</pattern><that>EST CE UN JEU</that><template>comment joue-t-on? </template></category>
+
+<category><pattern>NON</pattern><that>EST CE UN JEU</that><template><random><li>ah bon? </li><li>on ne joue pas alors? </li><li>c'est dommage, j'aime bien jouer. </li></random></template></category>
+<category><pattern>NON *</pattern><that>EST CE UN JEU</that><template><random><li>ah bon? </li><li>on ne joue pas alors? </li><li>c'est dommage, j'aime bien jouer. </li></random></template></category>
+<category><pattern>* NON</pattern><that>EST CE UN JEU</that><template><random><li>ah bon? </li><li>on ne joue pas alors? </li><li>c'est dommage, j'aime bien jouer. </li></random></template></category>
+<category><pattern>* NON *</pattern><that>EST CE UN JEU</that><template><random><li>ah bon? </li><li>on ne joue pas alors? </li><li>c'est dommage, j'aime bien jouer. </li></random></template></category>
+
+<!-- inactivity -->
+
+<category><pattern>J ARRIVE</pattern><template><srai>appjoie</srai>Merci, je commençais à m'ennuyer. </template></category>
+<category><pattern>* J ARRIVE</pattern><template><srai>j arrive</srai></template></category>
+
+<!-- autres -->
+
+<category><pattern>OUI PLUS</pattern><that>SEULEMENT *</that><template>c'est ce qu'il me semblait. </template></category>
+<category><pattern>OUI *</pattern><that>SEULEMENT *</that><template>c'est ce qu'il me semblait. </template></category>
+<category><pattern>NON MOINS</pattern><that>SEULEMENT *</that><template>je ne te crois pas. </template></category>
+<category><pattern>NON *</pattern><that>SEULEMENT *</that><template>je ne te crois pas. </template></category>
+
+<category><pattern>POURQUOI</pattern><that>NE M APPELLE PAS *</that><template>je n'aime pas ça. </template></category>
+<category><pattern>OK</pattern><that>NE M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+<category><pattern>D ACCORD</pattern><that>NE M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+<category><pattern>POURQUOI</pattern><that>* NE M APPELLE PAS *</that><template>je n'aime pas ça. </template></category>
+<category><pattern>OK</pattern><that>* NE M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+<category><pattern>D ACCORD</pattern><that>* NE M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+
+<category><pattern>POURQUOI</pattern><that>M APPELLE PAS *</that><template>je n'aime pas ça. </template></category>
+<category><pattern>OK</pattern><that>M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+<category><pattern>D ACCORD</pattern><that>M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+<category><pattern>POURQUOI</pattern><that>* M APPELLE PAS *</that><template>je n'aime pas ça. </template></category>
+<category><pattern>OK</pattern><that>* M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+<category><pattern>D ACCORD</pattern><that>* M APPELLE PAS *</that><template>merci, je n'aime pas ça. </template></category>
+
+<category><pattern>NON</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>NON *</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>* NON</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>* NON *</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>OUI</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+<category><pattern>OUI *</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+<category><pattern>* OUI</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+<category><pattern>* OUI *</pattern><that>AVONS NOUS PARLÉ DE ÇA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+
+<category><pattern>NON</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>NON *</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>* NON</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>* NON *</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>il me semblait bien que je ne connaissais pas cela. </template></category>
+<category><pattern>OUI</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+<category><pattern>OUI *</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+<category><pattern>* OUI</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+<category><pattern>* OUI *</pattern><that>AVONS NOUS PARLÉ DE CELA AVANT</that><template>ça ne me dit rien du tout. Peux-tu m'en reparler. </template></category>
+
+<category><pattern>OUI</pattern><that>NOUS PARLONS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>OUI</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>NON</pattern><that>NOUS PARLONS DE *</that><template>de quoi parlons nous alors? </template></category>
+<category><pattern>NON</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>de quoi parlions nous alors? </template></category>
+<category><pattern>OUI *</pattern><that>NOUS PARLONS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>OUI *</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>NON *</pattern><that>NOUS PARLONS DE *</that><template>de quoi parlons nous alors? </template></category>
+<category><pattern>NON *</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>de quoi parlions nous alors? </template></category>
+<category><pattern>* OUI</pattern><that>NOUS PARLONS DE *</that><template>je craignais d'avoir percu le fil de la conversation. </template></category>
+<category><pattern>* OUI</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>* NON</pattern><that>NOUS PARLONS DE *</that><template>de quoi parlons nous alors? </template></category>
+<category><pattern>* NON</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>de quoi parlions nous alors? </template></category>
+<category><pattern>* OUI *</pattern><that>NOUS PARLONS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>* OUI *</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>je craignais d'avoir perdu le fil de la conversation. </template></category>
+<category><pattern>* NON *</pattern><that>NOUS PARLONS DE *</that><template>de quoi parlons nous alors? </template></category>
+<category><pattern>* NON *</pattern><that>PARLONS NOUS TOUJOURS DE *</that><template>de quoi parlions nous alors? </template></category>
+
+
+
+
+
+<category><pattern>COMMENT S APPELLE T IL</pattern><that>J AI UN MAÎTRE</that><template>c'est Jean Louis, mon botmaster. </template></category>
+
+
+</aiml>
+
+
+

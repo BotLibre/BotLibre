@@ -1,0 +1,1212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Free software (c)2008 Square Bear -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- Complies with AIML 1.0.1 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation. -->
+<!-- poker.aiml by Square Bear -->
+<!-- Play draw poker with your bot -->
+
+
+<!-- Introduce the game -->
+
+<category> 
+<pattern>5CARDPOKER</pattern>
+<template>
+Welcome to the <bot name="name"/>version of 5 card "Jacks or Better" draw poker.<br/>
+You start with $100 and each game costs $5.<br/><br/>
+Type START to play my poker game.
+</template>
+</category>
+
+
+<!-- First round. Sets up the bank and plays one round. -->
+
+<category> 
+<pattern>START</pattern>
+<that>TYPE START TO PLAY MY POKER GAME</that>
+<template>
+<think>
+	<set name="kount">0</set>
+	<set name="bankth">0</set>
+	<set name="bankhu">1</set>
+	<set name="bankte">0</set>
+	<set name="bankon">0</set>
+</think>
+<srai>PKBANKSUB5</srai>
+<srai>PKDRAWNEWDECK</srai>
+Bank = $<get name="bankth"/><get name="bankhu"/><get name="bankte"/><get name="bankon"/><br/><br/>
+A)<get name="card1"/>of<get name="suit1"/><br/>
+B)<get name="card2"/>of<get name="suit2"/><br/>
+C)<get name="card3"/>of<get name="suit3"/><br/>
+D)<get name="card4"/>of<get name="suit4"/><br/>
+E)<get name="card5"/>of<get name="suit5"/><br/><br/>
+Which cards do you want to hold?<br/>
+Type "N" to hold no cards or "Q" to quit.<br/><br/>
+Pay Table:<br/>
+Royal Flush ----- $4000<br/>
+Straight Flush -- $250<br/>
+Four of a Kind -- $125<br/>
+Full House ------ $45<br/>
+Flush ----------- $30<br/>
+Straight -------- $20<br/>
+Three of a Kind - $15<br/>
+Two Pair -------- $10<br/>
+Jacks or Better - $5
+<think>
+	<set name="topic">5CARDPOKER</set>
+</think>
+</template>
+</category>
+
+
+<!-- Main loop for the game -->
+
+<category> 
+<pattern>PKMAINLOOP</pattern>
+<template>
+<think>
+	<set name="kount">0</set>
+</think>
+<srai>PKBANKSUB5</srai>
+<srai>PKDRAWNEWDECK</srai>
+Bank = $<get name="bankth"/><get name="bankhu"/><get name="bankte"/><get name="bankon"/><br/><br/>
+A)<get name="card1"/>of<get name="suit1"/><br/>
+B)<get name="card2"/>of<get name="suit2"/><br/>
+C)<get name="card3"/>of<get name="suit3"/><br/>
+D)<get name="card4"/>of<get name="suit4"/><br/>
+E)<get name="card5"/>of<get name="suit5"/><br/><br/>
+Which cards do you want to hold?<br/>
+Type "N" to hold no cards or "Q" to quit.<br/><br/>
+Pay Table:<br/>
+Royal Flush ----- $4000<br/>
+Straight Flush -- $250<br/>
+Four of a Kind -- $125<br/>
+Full House ------ $45<br/>
+Flush ----------- $30<br/>
+Straight -------- $20<br/>
+Three of a Kind - $15<br/>
+Two Pair -------- $10<br/>
+Jacks or Better - $5
+<think>
+	<set name="topic">5CARDPOKER</set>
+</think>
+</template>
+</category>
+
+
+<!-- Draws out 10 random cards and make sure they are different. If it can't pull 10 different cards after 2 goes then choose a set from the prearranged deck -->
+
+<category> 
+<pattern>PKDRAWNEWDECK</pattern>
+<template>
+<think>
+	<set name="card1"><srai>PKDRAWCARD</srai></set>
+	<set name="card2"><srai>PKDRAWCARD</srai></set>
+	<set name="card3"><srai>PKDRAWCARD</srai></set>
+	<set name="card4"><srai>PKDRAWCARD</srai></set>
+	<set name="card5"><srai>PKDRAWCARD</srai></set>
+	<set name="card6"><srai>PKDRAWCARD</srai></set>
+	<set name="card7"><srai>PKDRAWCARD</srai></set>
+	<set name="card8"><srai>PKDRAWCARD</srai></set>
+	<set name="card9"><srai>PKDRAWCARD</srai></set>
+	<set name="card10"><srai>PKDRAWCARD</srai></set>
+	<set name="suit1"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit2"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit3"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit4"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit5"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit6"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit7"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit8"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit9"><srai>PKDRAWSUIT</srai></set>
+	<set name="suit10"><srai>PKDRAWSUIT</srai></set>
+	<srai>PKADDKOUNT</srai>
+	<condition name="kount">
+		<li value="2"><srai>PKCHOOSEOWNCARDS</srai></li>
+	</condition>
+	<srai>PKCHECKDIFFCARDS</srai>
+</think>
+</template>
+</category>
+
+
+<!-- Choose a random card number -->
+
+<category> 
+<pattern>PKDRAWCARD</pattern>
+<template>
+	<random>
+		<li>Two</li>
+		<li>Three</li>
+		<li>Four</li>
+		<li>Five</li>
+		<li>Six</li>
+		<li>Seven</li>
+		<li>Eight</li>
+		<li>Nine</li>
+		<li>Ten</li>
+		<li>Jack</li>
+		<li>Queen</li>
+		<li>King</li>
+		<li>Ace</li>
+	</random>
+</template>
+</category>
+
+
+<!-- Choose a random card suit -->
+
+<category> 
+<pattern>PKDRAWSUIT</pattern>
+<template>
+	<random>
+		<li>Hearts</li>
+		<li>Clubs</li>
+		<li>Diamonds</li>
+		<li>Spades</li>
+	</random>
+</template>
+</category>
+
+
+<!-- Check that the cards it has pulled out are different -->
+
+<category> 
+<pattern>PKCHECKDIFFCARDS</pattern>
+<template>
+<think>
+<set name="diffcards">Y</set>
+	<set name="checkcards"><get name="card1"/><get name="card2"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit2"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card3"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit3"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card4"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit4"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card5"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit5"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card6"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit6"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card7"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit7"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card1"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit1"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card3"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit3"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card4"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit4"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card5"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit5"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card6"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit6"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card7"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit7"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card2"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit2"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card4"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit4"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card5"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit5"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card6"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit6"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card7"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit7"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card3"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit3"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card4"/><get name="card5"/></set>
+	<set name="checksuits"><get name="suit4"/><get name="suit5"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card4"/><get name="card6"/></set>
+	<set name="checksuits"><get name="suit4"/><get name="suit6"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card4"/><get name="card7"/></set>
+	<set name="checksuits"><get name="suit4"/><get name="suit7"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card4"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit4"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card4"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit4"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card4"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit4"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card5"/><get name="card6"/></set>
+	<set name="checksuits"><get name="suit5"/><get name="suit6"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card5"/><get name="card7"/></set>
+	<set name="checksuits"><get name="suit5"/><get name="suit7"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card5"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit5"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card5"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit5"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card5"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit5"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card6"/><get name="card7"/></set>
+	<set name="checksuits"><get name="suit6"/><get name="suit7"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card6"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit6"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card6"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit6"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card6"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit6"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card7"/><get name="card8"/></set>
+	<set name="checksuits"><get name="suit7"/><get name="suit8"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card7"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit7"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card7"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit7"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card8"/><get name="card9"/></set>
+	<set name="checksuits"><get name="suit8"/><get name="suit9"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card8"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit8"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+	<set name="checkcards"><get name="card9"/><get name="card10"/></set>
+	<set name="checksuits"><get name="suit9"/><get name="suit10"/></set>
+	<srai>PKCHECKDIFFCARDS2</srai>
+</think>
+<condition name="diffcards">
+	<li value="N"><srai>PKDRAWNEWDECK</srai></li>
+</condition>
+</template>
+</category>
+
+
+<!-- If the two cards are the same, check the suits -->
+
+<category> 
+<pattern>PKCHECKDIFFCARDS2</pattern>
+<template>
+<think>
+	<condition name="checkcards">
+		<li value="Two Two"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Three Three"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Four Four"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Five Five"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Six Six"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Seven Seven"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Eight Eight"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Nine Nine"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Ten Ten"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Jack Jack"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Queen Queen"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="King King"><srai>PKCHECKDIFFSUITS</srai></li>
+		<li value="Ace Ace"><srai>PKCHECKDIFFSUITS</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- Check that the suits are different on matching cards otherwise we have drawn two cards the same -->
+
+<category> 
+<pattern>PKCHECKDIFFSUITS</pattern>
+<template>
+<think>
+	<condition name="checksuits">
+		<li value="Hearts Hearts"><set name="diffcards">N</set></li>
+		<li value="Clubs Clubs"><set name="diffcards">N</set></li>
+		<li value="Diamonds Diamonds"><set name="diffcards">N</set></li>
+		<li value="Spades Spades"><set name="diffcards">N</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- The machine couldn't pick 10 random cards so we allocate it 10 from this pre-shuffled deck -->
+
+<category> 
+<pattern>PKCHOOSEOWNCARDS</pattern>
+<template>
+<think>
+	<random>
+		<li><set name="card1">Eight</set><set name="suit1">Hearts</set></li>
+		<li><set name="card1">King</set><set name="suit1">Clubs</set></li>
+		<li><set name="card1">Three</set><set name="suit1">Diamonds</set></li>
+		<li><set name="card1">Ten</set><set name="suit1">Spades</set></li>
+		<li><set name="card1">Two</set><set name="suit1">Hearts</set></li>
+	</random>
+	<random>
+		<li><set name="card2">Seven</set><set name="suit2">Clubs</set></li>
+		<li><set name="card2">Nine</set><set name="suit2">Diamonds</set></li>
+		<li><set name="card2">Five</set><set name="suit2">Spades</set></li>
+		<li><set name="card2">Queen</set><set name="suit2">Hearts</set></li>
+		<li><set name="card2">Four</set><set name="suit2">Clubs</set></li>
+	</random>
+	<random>
+		<li><set name="card3">Ace</set><set name="suit3">Diamonds</set></li>
+		<li><set name="card3">Six</set><set name="suit3">Spades</set></li>
+		<li><set name="card3">Jack</set><set name="suit3">Hearts</set></li>
+		<li><set name="card3">Eight</set><set name="suit3">Clubs</set></li>
+		<li><set name="card3">King</set><set name="suit3">Diamonds</set></li>
+	</random>
+	<random>
+		<li><set name="card4">Three</set><set name="suit4">Spades</set></li>
+		<li><set name="card4">Ten</set><set name="suit4">Hearts</set></li>
+		<li><set name="card4">Two</set><set name="suit4">Clubs</set></li>
+		<li><set name="card4">Seven</set><set name="suit4">Diamonds</set></li>
+		<li><set name="card4">Nine</set><set name="suit4">Spades</set></li>
+	</random>
+	<random>
+		<li><set name="card5">Five</set><set name="suit5">Hearts</set></li>
+		<li><set name="card5">Queen</set><set name="suit5">Clubs</set></li>
+		<li><set name="card5">Four</set><set name="suit5">Diamonds</set></li>
+		<li><set name="card5">Ace</set><set name="suit5">Spades</set></li>
+		<li><set name="card5">Six</set><set name="suit5">Hearts</set></li>
+	</random>
+	<random>
+		<li><set name="card6">Jack</set><set name="suit6">Clubs</set></li>
+		<li><set name="card6">Eight</set><set name="suit6">Diamonds</set></li>
+		<li><set name="card6">King</set><set name="suit6">Spades</set></li>
+		<li><set name="card6">Three</set><set name="suit6">Hearts</set></li>
+		<li><set name="card6">Ten</set><set name="suit6">Clubs</set></li>
+	</random>
+	<random>
+		<li><set name="card7">Two</set><set name="suit7">Diamonds</set></li>
+		<li><set name="card7">Seven</set><set name="suit7">Spades</set></li>
+		<li><set name="card7">Nine</set><set name="suit7">Hearts</set></li>
+		<li><set name="card7">Five</set><set name="suit7">Clubs</set></li>
+		<li><set name="card7">Queen</set><set name="suit7">Diamonds</set></li>
+	</random>
+	<random>
+		<li><set name="card8">Four</set><set name="suit8">Spades</set></li>
+		<li><set name="card8">Ace</set><set name="suit8">Hearts</set></li>
+		<li><set name="card8">Six</set><set name="suit8">Clubs</set></li>
+		<li><set name="card8">Jack</set><set name="suit8">Diamonds</set></li>
+		<li><set name="card8">Three</set><set name="suit8">Clubs</set></li>
+	</random>
+	<random>
+		<li><set name="card9">Ten</set><set name="suit9">Diamonds</set></li>
+		<li><set name="card9">Two</set><set name="suit9">Spades</set></li>
+		<li><set name="card9">Seven</set><set name="suit9">Hearts</set></li>
+		<li><set name="card9">Nine</set><set name="suit9">Clubs</set></li>
+		<li><set name="card9">Five</set><set name="suit9">Diamonds</set></li>
+	</random>
+	<random>
+		<li><set name="card10">Queen</set><set name="suit10">Spades</set></li>
+		<li><set name="card10">Four</set><set name="suit10">Hearts</set></li>
+		<li><set name="card10">Ace</set><set name="suit10">Clubs</set></li>
+		<li><set name="card10">Six</set><set name="suit10">Diamonds</set></li>
+		<li><set name="card10">Jack</set><set name="suit10">Spades</set></li>
+	</random>
+</think>
+</template>
+</category>
+
+
+<!-- Which cards does the player want to hold. Check that the choice is a valid one -->
+
+<topic name="5CARDPOKER"> 
+<category>
+<pattern>_</pattern>
+<template>
+<think>
+	<set name="inp"><star/></set>
+</think>
+<condition name="inp">
+	<li value="Q"><set name="topic"></set><srai>PKQUITGAME</srai></li>
+	<li value="N"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="E"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="D"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="DE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="C"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="CE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="CD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="CDE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="B"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BDE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BC"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BCE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BCD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="BCDE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="A"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="AE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="AD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ADE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="AC"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ACE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ACD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ACDE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="AB"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABDE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABC"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABCE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABCD"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li value="ABCDE"><set name="topic"></set><srai>PKVALIDCHOICE</srai></li>
+	<li>
+A)<get name="card1"/>of<get name="suit1"/><br/>
+B)<get name="card2"/>of<get name="suit2"/><br/>
+C)<get name="card3"/>of<get name="suit3"/><br/>
+D)<get name="card4"/>of<get name="suit4"/><br/>
+E)<get name="card5"/>of<get name="suit5"/><br/><br/>
+Sorry but "<star/>" is not a valid choice.<br/>Which of the cards A-E do you want to hold? eg. "ACD" will hold card A, card C and card D. Type "N" to hold no cards or type "Q" to quit.<br/><br/>
+Pay Table:<br/>
+Royal Flush ----- $4000<br/>
+Straight Flush -- $250<br/>
+Four of a Kind -- $125<br/>
+Full House ------ $45<br/>
+Flush ----------- $30<br/>
+Straight -------- $20<br/>
+Three of a Kind - $15<br/>
+Two Pair -------- $10<br/>
+Jacks or Better - $5
+	</li>
+</condition>
+</template>
+</category>
+</topic>
+
+
+<!-- The choice was valid so now swap the cards the player doesn't want to hold -->
+
+<category>
+<pattern>PKVALIDCHOICE</pattern>
+<template>
+<think>
+<set name="holdcard1">*</set>
+<set name="holdcard2">*</set>
+<set name="holdcard3">*</set>
+<set name="holdcard4">*</set>
+<set name="holdcard5">*</set>
+	<condition name="inp">
+		<li value="N"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPC</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="E"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPC</srai><srai>PKSWAPD</srai></li>
+		<li value="D"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPC</srai><srai>PKSWAPE</srai></li>
+		<li value="DE"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPC</srai></li>
+		<li value="C"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="CE"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPD</srai></li>
+		<li value="CD"><srai>PKSWAPA</srai><srai>PKSWAPB</srai><srai>PKSWAPE</srai></li>
+		<li value="CDE"><srai>PKSWAPA</srai><srai>PKSWAPB</srai></li>
+		<li value="B"><srai>PKSWAPA</srai><srai>PKSWAPC</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="BE"><srai>PKSWAPA</srai><srai>PKSWAPC</srai><srai>PKSWAPD</srai></li>
+		<li value="BD"><srai>PKSWAPA</srai><srai>PKSWAPC</srai><srai>PKSWAPE</srai></li>
+		<li value="BDE"><srai>PKSWAPA</srai><srai>PKSWAPC</srai></li>
+		<li value="BC"><srai>PKSWAPA</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="BCE"><srai>PKSWAPA</srai><srai>PKSWAPD</srai></li>
+		<li value="BCD"><srai>PKSWAPA</srai><srai>PKSWAPE</srai></li>
+		<li value="BCDE"><srai>PKSWAPA</srai></li>
+		<li value="A"><srai>PKSWAPB</srai><srai>PKSWAPC</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="AE"><srai>PKSWAPB</srai><srai>PKSWAPC</srai><srai>PKSWAPD</srai></li>
+		<li value="AD"><srai>PKSWAPB</srai><srai>PKSWAPC</srai><srai>PKSWAPE</srai></li>
+		<li value="ADE"><srai>PKSWAPB</srai><srai>PKSWAPC</srai></li>
+		<li value="AC"><srai>PKSWAPB</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="ACE"><srai>PKSWAPB</srai><srai>PKSWAPD</srai></li>
+		<li value="ACD"><srai>PKSWAPB</srai><srai>PKSWAPE</srai></li>
+		<li value="ACDE"><srai>PKSWAPB</srai></li>
+		<li value="AB"><srai>PKSWAPC</srai><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="ABE"><srai>PKSWAPC</srai><srai>PKSWAPD</srai></li>
+		<li value="ABD"><srai>PKSWAPC</srai><srai>PKSWAPE</srai></li>
+		<li value="ABDE"><srai>PKSWAPC</srai></li>
+		<li value="ABC"><srai>PKSWAPD</srai><srai>PKSWAPE</srai></li>
+		<li value="ABCE"><srai>PKSWAPD</srai></li>
+		<li value="ABCD"><srai>PKSWAPE</srai></li>
+		<li value="ABCDE"></li>
+	</condition>
+</think>
+A)<get name="card1"/>of<get name="suit1"/> <get name="holdcard1"/><br/>
+B)<get name="card2"/>of<get name="suit2"/> <get name="holdcard2"/><br/>
+C)<get name="card3"/>of<get name="suit3"/> <get name="holdcard3"/><br/>
+D)<get name="card4"/>of<get name="suit4"/> <get name="holdcard4"/><br/>
+E)<get name="card5"/>of<get name="suit5"/> <get name="holdcard5"/><br/><br/>
+<srai>PKSORTCARDS</srai>
+</template>
+</category>
+
+
+<!-- Category to swap card A -->
+
+<category> 
+<pattern>PKSWAPA</pattern>
+<template>
+<think>
+	<set name="card1"><get name="card6"/></set>
+	<set name="suit1"><get name="suit6"/></set>
+	<set name="holdcard1"></set>
+</think>
+</template>
+</category>
+
+
+<!-- Category to swap card B -->
+
+<category> 
+<pattern>PKSWAPB</pattern>
+<template>
+<think>
+	<set name="card2"><get name="card7"/></set>
+	<set name="suit2"><get name="suit7"/></set>
+	<set name="holdcard2"></set>
+</think>
+</template>
+</category>
+
+
+<!-- Category to swap card C -->
+
+<category> 
+<pattern>PKSWAPC</pattern>
+<template>
+<think>
+	<set name="card3"><get name="card8"/></set>
+	<set name="suit3"><get name="suit8"/></set>
+	<set name="holdcard3"></set>
+</think>
+</template>
+</category>
+
+
+<!-- Category to swap card D -->
+
+<category> 
+<pattern>PKSWAPD</pattern>
+<template>
+<think>
+	<set name="card4"><get name="card9"/></set>
+	<set name="suit4"><get name="suit9"/></set>
+	<set name="holdcard4"></set>
+</think>
+</template>
+</category>
+
+
+<!-- Category to swap card E -->
+
+<category> 
+<pattern>PKSWAPE</pattern>
+<template>
+<think>
+	<set name="card5"><get name="card10"/></set>
+	<set name="suit5"><get name="suit10"/></set>
+	<set name="holdcard5"></set>
+</think>
+</template>
+</category>
+
+
+<!-- Sort the cards out into ascending order. This makes it easier to check for winning combinations -->
+
+<category>
+<pattern>PKSORTCARDS</pattern>
+<template>
+<think>
+	<set name="sortedcards"></set>
+	<set name="samesuit">N</set>
+	<condition name="card1"><li value="Two"><set name="sortedcards"><get name="sortedcards"/>2</set><set name="card1">2</set></li></condition>
+	<condition name="card2"><li value="Two"><set name="sortedcards"><get name="sortedcards"/>2</set><set name="card2">2</set></li></condition>
+	<condition name="card3"><li value="Two"><set name="sortedcards"><get name="sortedcards"/>2</set><set name="card3">2</set></li></condition>
+	<condition name="card4"><li value="Two"><set name="sortedcards"><get name="sortedcards"/>2</set><set name="card4">2</set></li></condition>
+	<condition name="card5"><li value="Two"><set name="sortedcards"><get name="sortedcards"/>2</set><set name="card5">2</set></li></condition>
+	<condition name="card1"><li value="Three"><set name="sortedcards"><get name="sortedcards"/>3</set><set name="card1">3</set></li></condition>
+	<condition name="card2"><li value="Three"><set name="sortedcards"><get name="sortedcards"/>3</set><set name="card2">3</set></li></condition>
+	<condition name="card3"><li value="Three"><set name="sortedcards"><get name="sortedcards"/>3</set><set name="card3">3</set></li></condition>
+	<condition name="card4"><li value="Three"><set name="sortedcards"><get name="sortedcards"/>3</set><set name="card4">3</set></li></condition>
+	<condition name="card5"><li value="Three"><set name="sortedcards"><get name="sortedcards"/>3</set><set name="card5">3</set></li></condition>
+	<condition name="card1"><li value="Four"><set name="sortedcards"><get name="sortedcards"/>4</set><set name="card1">4</set></li></condition>
+	<condition name="card2"><li value="Four"><set name="sortedcards"><get name="sortedcards"/>4</set><set name="card2">4</set></li></condition>
+	<condition name="card3"><li value="Four"><set name="sortedcards"><get name="sortedcards"/>4</set><set name="card3">4</set></li></condition>
+	<condition name="card4"><li value="Four"><set name="sortedcards"><get name="sortedcards"/>4</set><set name="card4">4</set></li></condition>
+	<condition name="card5"><li value="Four"><set name="sortedcards"><get name="sortedcards"/>4</set><set name="card5">4</set></li></condition>
+	<condition name="card1"><li value="Five"><set name="sortedcards"><get name="sortedcards"/>5</set><set name="card1">5</set></li></condition>
+	<condition name="card2"><li value="Five"><set name="sortedcards"><get name="sortedcards"/>5</set><set name="card2">5</set></li></condition>
+	<condition name="card3"><li value="Five"><set name="sortedcards"><get name="sortedcards"/>5</set><set name="card3">5</set></li></condition>
+	<condition name="card4"><li value="Five"><set name="sortedcards"><get name="sortedcards"/>5</set><set name="card4">5</set></li></condition>
+	<condition name="card5"><li value="Five"><set name="sortedcards"><get name="sortedcards"/>5</set><set name="card5">5</set></li></condition>
+	<condition name="card1"><li value="Six"><set name="sortedcards"><get name="sortedcards"/>6</set><set name="card1">6</set></li></condition>
+	<condition name="card2"><li value="Six"><set name="sortedcards"><get name="sortedcards"/>6</set><set name="card2">6</set></li></condition>
+	<condition name="card3"><li value="Six"><set name="sortedcards"><get name="sortedcards"/>6</set><set name="card3">6</set></li></condition>
+	<condition name="card4"><li value="Six"><set name="sortedcards"><get name="sortedcards"/>6</set><set name="card4">6</set></li></condition>
+	<condition name="card5"><li value="Six"><set name="sortedcards"><get name="sortedcards"/>6</set><set name="card5">6</set></li></condition>
+	<condition name="card1"><li value="Seven"><set name="sortedcards"><get name="sortedcards"/>7</set><set name="card1">7</set></li></condition>
+	<condition name="card2"><li value="Seven"><set name="sortedcards"><get name="sortedcards"/>7</set><set name="card2">7</set></li></condition>
+	<condition name="card3"><li value="Seven"><set name="sortedcards"><get name="sortedcards"/>7</set><set name="card3">7</set></li></condition>
+	<condition name="card4"><li value="Seven"><set name="sortedcards"><get name="sortedcards"/>7</set><set name="card4">7</set></li></condition>
+	<condition name="card5"><li value="Seven"><set name="sortedcards"><get name="sortedcards"/>7</set><set name="card5">7</set></li></condition>
+	<condition name="card1"><li value="Eight"><set name="sortedcards"><get name="sortedcards"/>8</set><set name="card1">8</set></li></condition>
+	<condition name="card2"><li value="Eight"><set name="sortedcards"><get name="sortedcards"/>8</set><set name="card2">8</set></li></condition>
+	<condition name="card3"><li value="Eight"><set name="sortedcards"><get name="sortedcards"/>8</set><set name="card3">8</set></li></condition>
+	<condition name="card4"><li value="Eight"><set name="sortedcards"><get name="sortedcards"/>8</set><set name="card4">8</set></li></condition>
+	<condition name="card5"><li value="Eight"><set name="sortedcards"><get name="sortedcards"/>8</set><set name="card5">8</set></li></condition>
+	<condition name="card1"><li value="Nine"><set name="sortedcards"><get name="sortedcards"/>9</set><set name="card1">9</set></li></condition>
+	<condition name="card2"><li value="Nine"><set name="sortedcards"><get name="sortedcards"/>9</set><set name="card2">9</set></li></condition>
+	<condition name="card3"><li value="Nine"><set name="sortedcards"><get name="sortedcards"/>9</set><set name="card3">9</set></li></condition>
+	<condition name="card4"><li value="Nine"><set name="sortedcards"><get name="sortedcards"/>9</set><set name="card4">9</set></li></condition>
+	<condition name="card5"><li value="Nine"><set name="sortedcards"><get name="sortedcards"/>9</set><set name="card5">9</set></li></condition>
+	<condition name="card1"><li value="Ten"><set name="sortedcards"><get name="sortedcards"/>10</set><set name="card1">10</set></li></condition>
+	<condition name="card2"><li value="Ten"><set name="sortedcards"><get name="sortedcards"/>10</set><set name="card2">10</set></li></condition>
+	<condition name="card3"><li value="Ten"><set name="sortedcards"><get name="sortedcards"/>10</set><set name="card3">10</set></li></condition>
+	<condition name="card4"><li value="Ten"><set name="sortedcards"><get name="sortedcards"/>10</set><set name="card4">10</set></li></condition>
+	<condition name="card5"><li value="Ten"><set name="sortedcards"><get name="sortedcards"/>10</set><set name="card5">10</set></li></condition>
+	<condition name="card1"><li value="Jack"><set name="sortedcards"><get name="sortedcards"/>J</set><set name="card1">J</set></li></condition>
+	<condition name="card2"><li value="Jack"><set name="sortedcards"><get name="sortedcards"/>J</set><set name="card2">J</set></li></condition>
+	<condition name="card3"><li value="Jack"><set name="sortedcards"><get name="sortedcards"/>J</set><set name="card3">J</set></li></condition>
+	<condition name="card4"><li value="Jack"><set name="sortedcards"><get name="sortedcards"/>J</set><set name="card4">J</set></li></condition>
+	<condition name="card5"><li value="Jack"><set name="sortedcards"><get name="sortedcards"/>J</set><set name="card5">J</set></li></condition>
+	<condition name="card1"><li value="Queen"><set name="sortedcards"><get name="sortedcards"/>Q</set><set name="card1">Q</set></li></condition>
+	<condition name="card2"><li value="Queen"><set name="sortedcards"><get name="sortedcards"/>Q</set><set name="card2">Q</set></li></condition>
+	<condition name="card3"><li value="Queen"><set name="sortedcards"><get name="sortedcards"/>Q</set><set name="card3">Q</set></li></condition>
+	<condition name="card4"><li value="Queen"><set name="sortedcards"><get name="sortedcards"/>Q</set><set name="card4">Q</set></li></condition>
+	<condition name="card5"><li value="Queen"><set name="sortedcards"><get name="sortedcards"/>Q</set><set name="card5">Q</set></li></condition>
+	<condition name="card1"><li value="King"><set name="sortedcards"><get name="sortedcards"/>K</set><set name="card1">K</set></li></condition>
+	<condition name="card2"><li value="King"><set name="sortedcards"><get name="sortedcards"/>K</set><set name="card2">K</set></li></condition>
+	<condition name="card3"><li value="King"><set name="sortedcards"><get name="sortedcards"/>K</set><set name="card3">K</set></li></condition>
+	<condition name="card4"><li value="King"><set name="sortedcards"><get name="sortedcards"/>K</set><set name="card4">K</set></li></condition>
+	<condition name="card5"><li value="King"><set name="sortedcards"><get name="sortedcards"/>K</set><set name="card5">K</set></li></condition>
+	<condition name="card1"><li value="Ace"><set name="sortedcards"><get name="sortedcards"/>A</set><set name="card1">A</set></li></condition>
+	<condition name="card2"><li value="Ace"><set name="sortedcards"><get name="sortedcards"/>A</set><set name="card2">A</set></li></condition>
+	<condition name="card3"><li value="Ace"><set name="sortedcards"><get name="sortedcards"/>A</set><set name="card3">A</set></li></condition>
+	<condition name="card4"><li value="Ace"><set name="sortedcards"><get name="sortedcards"/>A</set><set name="card4">A</set></li></condition>
+	<condition name="card5"><li value="Ace"><set name="sortedcards"><get name="sortedcards"/>A</set><set name="card5">A</set></li></condition>
+<set name="suits"><get name="suit1"/><get name="suit2"/><get name="suit3"/><get name="suit4"/><get name="suit5"/></set>
+</think>
+<srai>PKCHECKWINNER</srai>
+</template>
+</category>
+
+
+<!-- A complicated category to check for winning combinations. It starts at Jacks or Better and works up to Royal Flush so only the highest win is remembered -->
+
+<category> 
+<pattern>PKCHECKWINNER</pattern>
+<template>
+<think>
+<set name="bestresult">NO</set>
+<set name="samesuit">N</set>
+	<condition name="suits">
+		<li value="Hearts Hearts Hearts Hearts Hearts"><set name="samesuit">Y</set></li>
+		<li value="Clubs Clubs Clubs Clubs Clubs"><set name="samesuit">Y</set></li>
+		<li value="Diamonds Diamonds Diamonds Diamonds Diamonds"><set name="samesuit">Y</set></li>
+		<li value="Spades Spades Spades Spades Spades"><set name="samesuit">Y</set></li>
+	</condition>
+	<set name="sortedcardssuit"><get name="sortedcards"/><get name="samesuit"/></set>
+	<set name="kount">0</set>
+	<set name="checkcards"><get name="card1"/><get name="card2"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card3"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card4"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card3"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card4"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card3"/><get name="card4"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card3"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+	<set name="checkcards"><get name="card4"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+	<condition name="kount">
+		<li value="2"><set name="bestresult">2P</set></li>
+	</condition>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card3"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card4"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card3"/><get name="card4"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card3"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card3"/><get name="card4"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card3"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+	<set name="checkcards"><get name="card3"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+	<condition name="sortedcards">
+		<li value="2 3 4 5 A"><set name="bestresult">ST</set></li>
+		<li value="2 3 4 5 6"><set name="bestresult">ST</set></li>
+		<li value="3 4 5 6 7"><set name="bestresult">ST</set></li>
+		<li value="4 5 6 7 8"><set name="bestresult">ST</set></li>
+		<li value="5 6 7 8 9"><set name="bestresult">ST</set></li>
+		<li value="6 7 8 9 10"><set name="bestresult">ST</set></li>
+		<li value="7 8 9 10 J"><set name="bestresult">ST</set></li>
+		<li value="8 9 10 J Q"><set name="bestresult">ST</set></li>
+		<li value="9 10 J Q K"><set name="bestresult">ST</set></li>
+		<li value="10 J Q K A"><set name="bestresult">ST</set></li>
+	</condition>
+	<condition name="samesuit">
+		<li value="Y"><set name="bestresult">FL</set></li>
+	</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card3"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card4"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card4"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card3"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card3"/><get name="card4"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card1"/><get name="card3"/><get name="card4"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card2"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card1"/><get name="card3"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card2"/><get name="card4"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card1"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card2"/><get name="card3"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card2"/><get name="card3"/><get name="card4"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card1"/><get name="card5"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card2"/><get name="card3"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card1"/><get name="card4"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card2"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card1"/><get name="card3"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="full3"><set name="full2">N</set></set>
+	<set name="checkcards"><get name="card3"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKTHREECARDS</srai>
+		<condition name="full3">
+			<li value="Y"><set name="checkcards"><get name="card1"/><get name="card2"/></set><srai>PKCHECKTWOCARDS</srai>
+				<condition name="full2">
+					<li value="Y"><set name="bestresult">FH</set></li>
+				</condition>
+			</li>
+		</condition>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card3"/><get name="card4"/></set><srai>PKCHECKFOURCARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card3"/><get name="card5"/></set><srai>PKCHECKFOURCARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card2"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKFOURCARDS</srai>
+	<set name="checkcards"><get name="card1"/><get name="card3"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKFOURCARDS</srai>
+	<set name="checkcards"><get name="card2"/><get name="card3"/><get name="card4"/><get name="card5"/></set><srai>PKCHECKFOURCARDS</srai>
+	<condition name="sortedcardssuit">
+		<li value="2 3 4 5 A Y"><set name="bestresult">SF</set></li>
+		<li value="2 3 4 5 6 Y"><set name="bestresult">SF</set></li>
+		<li value="3 4 5 6 7 Y"><set name="bestresult">SF</set></li>
+		<li value="4 5 6 7 8 Y"><set name="bestresult">SF</set></li>
+		<li value="5 6 7 8 9 Y"><set name="bestresult">SF</set></li>
+		<li value="6 7 8 9 10 Y"><set name="bestresult">SF</set></li>
+		<li value="7 8 9 10 J Y"><set name="bestresult">SF</set></li>
+		<li value="8 9 10 J Q Y"><set name="bestresult">SF</set></li>
+		<li value="9 10 J Q K Y"><set name="bestresult">SF</set></li>
+	</condition>
+	<condition name="sortedcardssuit">
+		<li value="10 J Q K A Y"><set name="bestresult">RF</set></li>
+	</condition>
+</think>
+<srai>PKENDLOOP</srai>
+</template>
+</category>
+
+
+<!-- This checks for a pair. Used in Jacks or Better and Full House -->
+
+<category> 
+<pattern>PKCHECKTWOCARDS</pattern>
+<template>
+<think>
+	<condition name="checkcards">
+		<li value="2 2"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="3 3"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="4 4"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="5 5"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="6 6"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="7 7"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="8 8"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="9 9"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="10 10"><set name="bestresult">NO</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="J J"><set name="bestresult">JB</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="Q Q"><set name="bestresult">JB</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="K K"><set name="bestresult">JB</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+		<li value="A A"><set name="bestresult">JB</set><set name="full2">Y</set><srai>PKADDKOUNT</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- This checks for 3 of a kind and also flags up a possible full house -->
+
+<category> 
+<pattern>PKCHECKTHREECARDS</pattern>
+<template>
+<think>
+	<condition name="checkcards">
+		<li value="2 2 2"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="3 3 3"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="4 4 4"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="5 5 5"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="6 6 6"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="7 7 7"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="8 8 8"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="9 9 9"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="10 10 10"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="J J J"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="Q Q Q"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="K K K"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+		<li value="A A A"><set name="bestresult">3K</set><set name="full3">Y</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- Checks for 4 of a kind -->
+
+<category> 
+<pattern>PKCHECKFOURCARDS</pattern>
+<template>
+<think>
+	<condition name="checkcards">
+		<li value="2 2 2 2"><set name="bestresult">4K</set></li>
+		<li value="3 3 3 3"><set name="bestresult">4K</set></li>
+		<li value="4 4 4 4"><set name="bestresult">4K</set></li>
+		<li value="5 5 5 5"><set name="bestresult">4K</set></li>
+		<li value="6 6 6 6"><set name="bestresult">4K</set></li>
+		<li value="7 7 7 7"><set name="bestresult">4K</set></li>
+		<li value="8 8 8 8"><set name="bestresult">4K</set></li>
+		<li value="9 9 9 9"><set name="bestresult">4K</set></li>
+		<li value="10 10 10 10"><set name="bestresult">4K</set></li>
+		<li value="J J J J"><set name="bestresult">4K</set></li>
+		<li value="Q Q Q Q"><set name="bestresult">4K</set></li>
+		<li value="K K K K"><set name="bestresult">4K</set></li>
+		<li value="A A A A"><set name="bestresult">4K</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- Keeps a running count. Used in picking a new deck and counting pairs -->
+
+<category> 
+<pattern>PKADDKOUNT</pattern>
+<template>
+<think>
+	<condition name="kount">
+		<li value="0"><set name="kount">1</set></li>
+		<li value="1"><set name="kount">2</set></li>
+		<li value="2"><set name="kount">3</set></li>
+		<li value="3"><set name="kount">4</set></li>
+		<li value="4"><set name="kount">5</set></li>
+		<li value="5"><set name="kount">6</set></li>
+		<li value="6"><set name="kount">7</set></li>
+		<li value="7"><set name="kount">8</set></li>
+		<li value="8"><set name="kount">9</set></li>
+		<li value="9"><set name="kount">10</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- Add any winnings, display the cards, check for bankrupt or break the bank and offer to play again -->
+
+<category> 
+<pattern>PKENDLOOP</pattern>
+<template>
+	<condition name="bestresult">
+		<li value="NO"><set name="prizemessage">No win</set></li>
+		<li value="JB"><set name="prizemessage">JACKS OR BETTER - You win $5</set><srai>PKBANK5</srai></li>
+		<li value="2P"><set name="prizemessage">TWO PAIR - You win $10</set><srai>PKBANK10</srai></li>
+		<li value="3K"><set name="prizemessage">THREE OF A KIND - You win $15</set><srai>PKBANK10</srai><srai>PKBANK5</srai></li>
+		<li value="ST"><set name="prizemessage">STRAIGHT! - You win $20</set><srai>PKBANK10</srai><srai>PKBANK10</srai></li>
+		<li value="FL"><set name="prizemessage">FLUSH! - You win $30</set><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK10</srai></li>
+		<li value="FH"><set name="prizemessage">FULL HOUSE! - You win $45</set><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK5</srai></li>
+		<li value="4K"><set name="prizemessage">FOUR OF A KIND!! - You win $125</set><srai>PKBANK100</srai><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK5</srai></li>
+		<li value="SF"><set name="prizemessage">STRAIGHT FLUSH!! - You win $250</set><srai>PKBANK100</srai><srai>PKBANK100</srai><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK10</srai><srai>PKBANK10</srai></li>
+		<li value="RF"><set name="prizemessage">ROYAL FLUSH!!! - You win $4000</set><srai>PKBANK1000</srai><srai>PKBANK1000</srai><srai>PKBANK1000</srai><srai>PKBANK1000</srai></li>
+	</condition>
+<br/><br/>
+<think>
+	<set name="dispbank"><get name="bankth"/><get name="bankhu"/><get name="bankte"/><get name="bankon"/></set>
+</think>
+Bank = $<get name="dispbank"/>.<br/>
+	<condition name="dispbank">
+		<li value="9 9 9 9">GAME OVER! CONGRATULATIONS!! YOU BROKE THE BANK.</li>
+		<li value="0 0 0 0">GAME OVER! YOU ARE BANKRUPT!</li>
+		<li>Play again (Y/N)?</li>
+	</condition>
+</template>
+</category>
+
+
+<!-- These next few categories are used for adding prizes to the bank and subtracting $5 a go -->
+
+<category> 
+<pattern>PKBANKSUB5</pattern>
+<template>
+<think>
+	<condition name="bankon">
+		<li value="5"><set name="bankon">0</set></li>
+		<li value="0"><set name="bankon">5</set><srai>PKBANKSUB10</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANKSUB10</pattern>
+<template>
+<think>
+	<condition name="bankte">
+		<li value="9"><set name="bankte">8</set></li>
+		<li value="8"><set name="bankte">7</set></li>
+		<li value="7"><set name="bankte">6</set></li>
+		<li value="6"><set name="bankte">5</set></li>
+		<li value="5"><set name="bankte">4</set></li>
+		<li value="4"><set name="bankte">3</set></li>
+		<li value="3"><set name="bankte">2</set></li>
+		<li value="2"><set name="bankte">1</set></li>
+		<li value="1"><set name="bankte">0</set></li>
+		<li value="0"><set name="bankte">9</set><srai>PKBANKSUB100</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANKSUB100</pattern>
+<template>
+<think>
+	<condition name="bankhu">
+		<li value="9"><set name="bankhu">8</set></li>
+		<li value="8"><set name="bankhu">7</set></li>
+		<li value="7"><set name="bankhu">6</set></li>
+		<li value="6"><set name="bankhu">5</set></li>
+		<li value="5"><set name="bankhu">4</set></li>
+		<li value="4"><set name="bankhu">3</set></li>
+		<li value="3"><set name="bankhu">2</set></li>
+		<li value="2"><set name="bankhu">1</set></li>
+		<li value="1"><set name="bankhu">0</set></li>
+		<li value="0"><set name="bankhu">9</set><srai>PKBANKSUB1000</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANKSUB1000</pattern>
+<template>
+<think>
+	<condition name="bankth">
+		<li value="9"><set name="bankth">8</set></li>
+		<li value="8"><set name="bankth">7</set></li>
+		<li value="7"><set name="bankth">6</set></li>
+		<li value="6"><set name="bankth">5</set></li>
+		<li value="5"><set name="bankth">4</set></li>
+		<li value="4"><set name="bankth">3</set></li>
+		<li value="3"><set name="bankth">2</set></li>
+		<li value="2"><set name="bankth">1</set></li>
+		<li value="1"><set name="bankth">0</set></li>
+		<li value="0"><set name="bankth">0</set><set name="bankhu">0</set><set name="bankte">0</set><set name="bankon">0</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANK5</pattern>
+<template>
+<think>
+	<condition name="bankon">
+		<li value="0"><set name="bankon">5</set></li>
+		<li value="5"><set name="bankon">0</set><srai>PKBANK10</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANK10</pattern>
+<template>
+<think>
+	<condition name="bankte">
+		<li value="0"><set name="bankte">1</set></li>
+		<li value="1"><set name="bankte">2</set></li>
+		<li value="2"><set name="bankte">3</set></li>
+		<li value="3"><set name="bankte">4</set></li>
+		<li value="4"><set name="bankte">5</set></li>
+		<li value="5"><set name="bankte">6</set></li>
+		<li value="6"><set name="bankte">7</set></li>
+		<li value="7"><set name="bankte">8</set></li>
+		<li value="8"><set name="bankte">9</set></li>
+		<li value="9"><set name="bankte">0</set><srai>PKBANK100</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANK100</pattern>
+<template>
+<think>
+	<condition name="bankhu">
+		<li value="0"><set name="bankhu">1</set></li>
+		<li value="1"><set name="bankhu">2</set></li>
+		<li value="2"><set name="bankhu">3</set></li>
+		<li value="3"><set name="bankhu">4</set></li>
+		<li value="4"><set name="bankhu">5</set></li>
+		<li value="5"><set name="bankhu">6</set></li>
+		<li value="6"><set name="bankhu">7</set></li>
+		<li value="7"><set name="bankhu">8</set></li>
+		<li value="8"><set name="bankhu">9</set></li>
+		<li value="9"><set name="bankhu">0</set><srai>PKBANK1000</srai></li>
+	</condition>
+</think>
+</template>
+</category>
+
+<category> 
+<pattern>PKBANK1000</pattern>
+<template>
+<think>
+	<condition name="bankth">
+		<li value="0"><set name="bankth">1</set></li>
+		<li value="1"><set name="bankth">2</set></li>
+		<li value="2"><set name="bankth">3</set></li>
+		<li value="3"><set name="bankth">4</set></li>
+		<li value="4"><set name="bankth">5</set></li>
+		<li value="5"><set name="bankth">6</set></li>
+		<li value="6"><set name="bankth">7</set></li>
+		<li value="7"><set name="bankth">8</set></li>
+		<li value="8"><set name="bankth">9</set></li>
+		<li value="9"><set name="bankth">9</set><set name="bankhu">9</set><set name="bankte">9</set><set name="bankon">9</set></li>
+	</condition>
+</think>
+</template>
+</category>
+
+
+<!-- These last few categories ask if the player wants another go and quits out if not -->
+
+<category> 
+<pattern>Y</pattern>
+<that>PLAY AGAIN Y N</that>
+<template>
+	<srai>YES</srai>
+</template>
+</category>
+
+<category> 
+<pattern>YES</pattern>
+<that>PLAY AGAIN Y N</that>
+<template>
+	<srai>PKMAINLOOP</srai>
+</template>
+</category>
+
+<category> 
+<pattern>N</pattern>
+<that>PLAY AGAIN Y N</that>
+<template>
+	<srai>NO</srai>
+</template>
+</category>
+
+<category> 
+<pattern>NO</pattern>
+<that>PLAY AGAIN Y N</that>
+<template>
+Thanks for playing.<br/><br/>Your final bank was $<get name="bankth"/><get name="bankhu"/><get name="bankte"/><get name="bankon"/>.
+</template>
+</category>
+
+<category> 
+<pattern>PKQUITGAME</pattern>
+<template>
+Thanks for playing.<br/><br/>Your final bank was $<get name="bankth"/><get name="bankhu"/><get name="bankte"/><get name="bankon"/>.
+</template>
+</category>
+
+</aiml>

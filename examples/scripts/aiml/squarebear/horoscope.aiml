@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<aiml version="1.0">
+
+<!-- Free software (c)2008 Square Bear. -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- Complies with AIML 1.0.1 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation. -->
+<!-- horoscope.aiml by Square Bear -->
+<!-- http://www.square-bear.co.uk -->
+
+<category>
+<pattern>_ MY HOROSCOPE</pattern>
+<template>
+<srai>HOROSCOPE</srai>
+</template>
+</category>
+
+<category>
+<pattern>_ MY HOROSCOPE *</pattern>
+<template>
+<srai>HOROSCOPE</srai>
+</template>
+</category>
+
+<category>
+<pattern>HOROSCOPE</pattern>
+<template>
+<think>
+<set name="topic">Horoscope</set>
+</think>
+<condition>
+<li name="sign" value="*">
+<random>
+<li><srai><get name="sign"/></srai></li>
+</random>
+</li>
+<li>What star sign are you?</li>
+</condition>  
+</template>
+</category>
+
+<topic name="Horoscope">
+<category>
+<pattern>*</pattern>
+<that>WHAT STAR SIGN ARE YOU</that>
+<template>There's no such star sign as<star/>.
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>ARIES</pattern>
+<template>ARIES - March 21st - April 20th<br/>
+<think><set name="sign">Aries</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>TAURUS</pattern>
+<template>TAURUS - April 21st - May 21st<br/>
+<think><set name="sign">Taurus</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>GEMINI</pattern>
+<template>GEMINI - May 22nd - June 21st<br/>
+<think><set name="sign">Gemini</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>CANCER</pattern>
+<template>CANCER - June 22nd - July 22nd<br/>
+<think><set name="sign">Cancer</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>LEO</pattern>
+<template>LEO - July 23rd - August 21st<br/>
+<think><set name="sign">Leo</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>VIRGO</pattern>
+<template>VIRGO - August 22nd - September 23rd<br/>
+<think><set name="sign">Virgo</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>LIBRA</pattern>
+<template>LIBRA - September 24th - October 23rd<br/>
+<think><set name="sign">Libra</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>SCORPIO</pattern>
+<template>SCORPIO - October 24th - November 22nd<br/>
+<think><set name="sign">Scorpio</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>SAGITTARIUS</pattern>
+<template>SAGITTARIUS - November 23rd - December 22nd<br/>
+<think><set name="sign">Sagittarius</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>CAPRICORN</pattern>
+<template>CAPRICORN - December 23rd - January 20th<br/>
+<think><set name="sign">Capricorn</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>AQUARIUS</pattern>
+<template>AQUARIUS - January 21st - February 19th<br/>
+<think><set name="sign">Aquarius</set></think>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+<topic name="Horoscope">
+<category>
+<pattern>PISCES</pattern>
+<think><set name="sign">Pisces</set></think>
+<template>Pisces - February 20th - March 20th<br/>
+<srai>RANDOM HOROSCOPE</srai>
+</template>
+</category>
+</topic>
+
+
+<topic name="Horoscope">
+<category>
+<pattern>RANDOM HOROSCOPE</pattern>
+<template>
+Your horoscope for <date format="%x"/><br/><br/>
+<random>
+<li>Today, will be interesting as</li>
+<li>If you have money worries then it's good news as</li>
+<li>If you are single, great news when</li>
+<li>The stars align in your sign over the next few days and</li>
+</random>
+<random>
+<li>Jupiter and Venus</li>
+<li>Mars and Capricorn</li>
+<li>the Sun along with Mercury</li>
+<li>three different planets</li>
+</random>
+<random>
+<li>enter your sign.</li>
+<li>align in Pisces.</li>
+<li>are visible near Neptune.</li>
+<li>come together.</li>
+</random>
+<random>
+<li>This will mean</li>
+<li>A rare event such as this will ensure that</li>
+<li>Spend your day wisely as</li>
+<li>Everything goes right for you,</li>
+</random>
+<random>
+<li>fortune smiles on you and</li>
+<li>Lady Luck is on your side and</li>
+<li>love is not far away and</li>
+<li>this will be a great day and</li>
+</random>
+<random>
+<li>you will not put a foot wrong.</li>
+<li>someone you have a crush on feels the same way.</li>
+<li>a possible Lottery win is in the stars.</li>
+<li>you re-discover an old heirloom.</li>
+</random>
+<random>
+<li>However,</li>
+<li>Good luck may not last though,</li>
+<li>It's not all good news, </li>
+<li>Be careful though,</li>
+</random>
+<random>
+<li>Saturn is not far away from Venus so</li>
+<li>the Moon soon moves through Aries and</li>
+<li>Neptune's alignment with Pluto means</li>
+<li>not all the planets are happy and</li>
+</random>
+<random>
+<li>things may not go according to plan.</li>
+<li>a jealous colleague is watching you closely.</li>
+<li>something you did last week will come back to haunt you.</li>
+<li>you will lose a valuable object.</li>
+</random>
+<random>
+<li>So, in summary,</li>
+<li>Overall,</li>
+<li>After all,</li>
+<li>Taking everything into account,</li>
+</random>
+<random>
+<li>the planets can be fickle but are rising in Libra so</li>
+<li>Mars is an angry planet but is weak as Scorpio rises in the East so</li>
+<li>keep a close eye on those around you but</li>
+<li>you know your own mind very well so</li>
+</random>
+<random>
+<li>enjoy your day.</li>
+<li>make time for yourself today.</li>
+<li>let today be a fun day for you.</li>
+<li>forget the bad things and look forward to a great day.</li>
+</random>
+<think>
+<set name="topic">Future</set>
+</think>
+</template>
+</category>
+</topic>
+
+</aiml>

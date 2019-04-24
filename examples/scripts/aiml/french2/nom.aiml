@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : nom.aiml   -   version :   0.3   -   MàJ : 28/07/2002 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>MON NOM EST *</pattern><template><srai>appgaiete</srai> <set name="name"><formal><star/></formal></set> . <random><li>Heureuse de te rencontrer, </li><li>Enchantée, </li><li>comment vas tu?  </li></random> <get name="name"/>. </template></category>
+<category><pattern>MON NOM N EST PAS *</pattern><template>Oh Je suis désolé. Quel est ton nom? </template></category>
+<category><pattern>C EST MOI</pattern><that>JE NE SAIS PAS</that><template><random><li>OK je t'appellerai</li><li>Hi</li></random> <set name="name"><formal> <get name="qui"/> </formal></set>. <srai>cherchergenre</srai></template></category>
+<category><pattern>* EST MON NOM DE FAMILLE</pattern><template>tu préfère que je t'appelle <get name="name"/> ou M. <star/>? <think><set name="lastname"><star/></set></think></template></category>
+<category><pattern>*</pattern><that>TU PRÉFÈRE QUE JE T APPELLE *</that><template><random><li>OK je t'appellerai</li><li>Hi</li></random> <set name="name"><formal><star/></formal></set>. <srai>cherchergenre</srai></template></category>
+<category><pattern>*</pattern><that>* TU PRÉFÈRE QUE JE T APPELLE *</that><template><random><li>OK je t'appellerai</li><li>Hi</li></random> <set name="name"><formal><star/></formal></set>. <srai>cherchergenre</srai></template></category>
+<category><pattern>LE NOM DE MA FEMME EST *</pattern><template><think> <set name="marie">marie</set> </think>j'aimerai rencontrer <set name="conjoint"><formal><star/></formal></set> </template></category>
+<category><pattern>LE NOM DE MA FEMME ETAIT *</pattern><template><think> <set name="conjoint"><formal><star/></formal></set> <set name="marie">veuf</set> </think>je m'en souviendrai <get name="name"/>. </template></category>
+<category><pattern>LE NOM DE MA FEMME ÉTAIT *</pattern><template><think> <set name="conjoint"><formal><star/></formal></set> <set name="marie">veuf</set> </think>je m'en souviendrai <get name="name"/>. </template></category>
+<category><pattern>LE NOM DE MON MARI EST *</pattern><template><think> <set name="marie">marie</set> </think>j'aimerai rencontrer <set name="conjoint"><formal><star/></formal></set> </template></category>
+<category><pattern>LE NOM DE MON MARI ETAIT *</pattern><template><think> <set name="conjoint"><formal><star/></formal></set> <set name="marie">veuf</set> </think>je m'en souviendrai <get name="name"/>. </template></category>
+<category><pattern>LE NOM DE MON MARI ÉTAIT *</pattern><template><think> <set name="conjoint"><formal><star/></formal></set> <set name="marie">veuf</set> </think>je m'en souviendrai <get name="name"/>. </template></category>
+<category><pattern>JE T AI  DEJA DIS MON NOM</pattern><template>C'est <get name="name"/> ton vrai nom? </template></category>
+<category><pattern>JE T AI  DÉJÀ DIS MON NOM</pattern><template>C'est <get name="name"/> ton vrai nom? </template></category>
+
+<!-- srai -->
+
+<category><pattern>MOI C EST *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C  *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE ME NOMME *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE ME NOME *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MON NOM C EST *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MON NOM C  *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE M APPELLE *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE M APPELLE * ET TOI</pattern><template><srai>mon nom est <star/></srai>, moi c'est <bot name="name"/>. </template></category>
+<category><pattern>TU PEUX M APPELER *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>TU PEUT M APPELER *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>TU PEUX M APPELE *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>TU PEUT M APPELE *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>TU PEUT M APPELEE *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>TU PEUX M APPELEE *</pattern><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>APELE MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APELLE MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APPELE MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APELES MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APELLES MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APPELES MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APPELLE MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>APPELLES MOI *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>JE M APELE *</pattern><template> <set name="name"><formal><star/></formal></set> , heureuse de te rencontrer! <srai>cherchergenre</srai></template></category>
+<category><pattern>JE M APELLE *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>JE MAPELLE *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>JE M APPELE *</pattern><template><srai>je m'appelle <star/></srai></template></category>
+<category><pattern>JE M APPELLES *</pattern><template> <set name="name"><formal><star/></formal></set> , heureuse de te rencontrer! <srai>cherchergenre</srai></template></category>
+
+<category><pattern>* MOI C EST *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* MOI C  *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* JE ME NOMME *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* JE ME NOME *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* MON NOM C EST *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* MON NOM C  *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* JE M APPELLE *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* JE M APPELLE * ET TOI</pattern><template><srai>mon nom est <star index="2"/></srai>, moi c'est <bot name="name"/>. </template></category>
+<category><pattern>* TU PEUX M APPELER *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* TU PEUT M APPELER *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* TU PEUX M APPELE *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* TU PEUT M APPELE *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* TU PEUT M APPELEE *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* TU PEUX M APPELEE *</pattern><template><srai>mon nom est <star index="2"/></srai></template></category>
+<category><pattern>* APELE MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APELLE MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APPELE MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APELES MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APELLES MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APPELES MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APPELLE MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* APPELLES MOI *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* JE M APELE *</pattern><template> <set name="name"><formal><star index="2"/></formal></set> , heureuse de te rencontrer! <srai>cherchergenre</srai></template></category>
+<category><pattern>* JE M APELLE *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* JE MAPELLE *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* JE M APPELE *</pattern><template><srai>je m'appelle <star index="2"/></srai></template></category>
+<category><pattern>* JE M APPELLES *</pattern><template> <set name="name"><formal><star index="2"/></formal></set> , heureuse de te rencontrer! <srai>cherchergenre</srai></template></category>
+
+<!-- that-->
+
+<category><pattern>*</pattern><that>COMMENT PUIS JE T APPELER INTERROGATION</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* COMMENT PUIS JE T APPELER INTERROGATION</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>COMMENT T APPELLES TU INTERROGATION</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* COMMENT T APPELLES TU INTERROGATION</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>QUEL EST TON NOM INTERROGATION</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON NOM INTERROGATION</that><template><srai>mon nom est <star/></srai></template></category>
+
+<category><pattern>*</pattern><that>QUEL EST TON NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>COMMENT PUIS JE T APPELER</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>COMMENT T APPELLES TU</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>COMMENT T APPELLES TU</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>COMMENT T APPELLES TU</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>QUEL EST TON VRAI NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>QUEL EST TON NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>COMMENT PUIS JE T APPELER</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>QUEL EST TON VRAI NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>QUEL EST TON NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>COMMENT PUIS JE T APPELER</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>QUEL EST TON VRAI NOM</that><template><srai>mon nom est <star/></srai></template></category>
+
+<category><pattern>*</pattern><that>* QUEL EST TON NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* COMMENT PUIS JE T APPELER</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON VRAI NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* QUEL EST TON NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* COMMENT PUIS JE T APPELER</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* QUEL EST TON VRAI NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* QUEL EST TON NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* COMMENT PUIS JE T APPELER</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* QUEL EST TON VRAI NOM</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* COMMENT T APPELLES TU</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* COMMENT T APPELLES TU</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* COMMENT T APPELLES TU</that><template><srai>mon nom est <star/></srai></template></category>
+
+<category><pattern>*</pattern><that>QUEL EST TON NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>COMMENT PUIS JE T APPELER *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>QUEL EST TON VRAI NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>COMMENT PUIS JE T APPELER *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>QUEL EST TON VRAI NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>QUEL EST TON NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>COMMENT PUIS JE T APPELER *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>QUEL EST TON VRAI NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>QUEL EST TON NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>COMMENT T APPELLES TU *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>COMMENT T APPELLES TU *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>COMMENT T APPELLES TU *</that><template><srai>mon nom est <star/></srai></template></category>
+
+<category><pattern>*</pattern><that>* QUEL EST TON NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* COMMENT PUIS JE T APPELER *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* QUEL EST TON VRAI NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* QUEL EST TON NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* COMMENT PUIS JE T APPELER *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* QUEL EST TON VRAI NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* QUEL EST TON NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* COMMENT PUIS JE T APPELER *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* QUEL EST TON VRAI NOM *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>*</pattern><that>* COMMENT T APPELLES TU *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>JE SUIS *</pattern><that>* COMMENT T APPELLES TU *</that><template><srai>mon nom est <star/></srai></template></category>
+<category><pattern>MOI C EST *</pattern><that>* COMMENT T APPELLES TU *</that><template><srai>mon nom est <star/></srai></template></category>
+
+<category><pattern>JE NE SUIS PAS *</pattern><that>C EST TOI</that><template><srai>AppDesapointement</srai>ah pardon! </template></category>
+<category><pattern>JE NE M APPELLE PAS *</pattern><that>C EST TOI</that><template><srai>AppDesapointement</srai>ah pardon! </template></category>
+<category><pattern>JE NE SUIS PAS *</pattern><that>SALUT</that><template><srai>AppDesapointement</srai>ah pardon! </template></category>
+<category><pattern>JE NE M APPELLE PAS *</pattern><that>SALUT</that><template><srai>AppDesapointement</srai>ah pardon! </template></category>
+
+
+</aiml>

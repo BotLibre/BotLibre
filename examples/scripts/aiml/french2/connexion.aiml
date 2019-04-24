@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : connexion.aiml   -   version :   0.3   -   MàJ : 14/01/2003 -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category>
+<pattern>CONNECT</pattern>
+<template>
+<srai>AppGaiete</srai>
+<random>
+  <li>Salut, </li>
+  <li>Bonjour, </li>
+  <li>Hello, </li>
+</random>
+
+<condition name="insulte"> 
+<li value="grosse insulte">j'espère que tu sera plus poli aujourd'hui! </li>
+<li value="je me casse">revoilà le grossier personnage. </li>
+</condition>
+
+
+<think>
+<set name="apprendre">inconnu</set>
+<set name="niveau accès">inconnu</set>
+<set name="privilèges">inconnu</set>
+<set name="identity"><id/></set>
+<set name="logue"><javascript>"<get name="identity"/>".substr(0,7);</javascript></set>
+<set name="memoriser">connexion de "<get name="name"/>" logué sous "<get name="identity"/>", venu : <get name="dejavenu"/>, <get name="insulte"/>, personnalité : <get name="personnality"/></set>
+</think>
+
+<condition name="identity" value="botmaster">
+	<think><set name="privilèges">administrateur</set></think>
+</condition>
+
+<condition name="logue" value="webuser">
+	tu n'es pas logué, je ne me souviendrai pas de toi les prochaines fois où tu viendras. </condition>
+
+<condition name="dejavenu">
+	<li value="oui">
+		<condition name="name">
+			<li value="inconnu"> désolé, mais je crois que j'ai oublié ton nom. </li>
+			<li value="utilisateur"> tu ne m'as pas dit ton nom la dernière fois. </li>
+			<li value="inconnu"> désolé, mais je crois que j'ai oublié ton nom. </li>
+			<li>
+			<random>
+	  			<li>merci de venir me revoir, <get name="name"/>! </li>
+	  			<li>comment vas tu, <get name="name"/>? </li>
+	  			<li>que puis-je faire pour toi, <get name="name"/>? </li>
+	  			<li>de quoi veux tu parler, <get name="name"/>? </li>
+	  			<li>comment ça va, <get name="name"/>? </li>
+	  		</random>
+			</li>
+		</condition>
+	</li>
+	<li>
+	Je m'appelle <bot name="name"/>, 
+		<random>
+			<li>Comment puis je t'appeler? </li>
+			<li>Et toi, comment t'appelles tu? </li>
+			<li>Et toi, quel est ton nom? </li>
+		</random>
+	</li>
+</condition>
+<think><set name="dejavenu">oui</set></think>
+
+</template>
+</category>
+
+<category>
+<pattern>COMMENT JE ME LOGUE</pattern>
+<template>
+Tu cliques sur "Login" juste en dessous, et tu réponds aux questions. 
+</template>
+</category>
+
+<category>
+<pattern>POURQUOI JE ME LOGUE</pattern>
+<template>
+Tout d'abord, ça me permet de me souvenir de toi, et ensuite je n'ai le droit de discuter de certaines choses qu'avec des gens qui se sont enregistrés. 
+</template>
+</category>
+
+
+
+</aiml>

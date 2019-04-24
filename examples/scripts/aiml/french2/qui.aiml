@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : qui.aiml   -   version :   0.3   -   MàJ : 01/01/2003  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>DE QUI PARLES TU</pattern><template>je te parle, <get name="name"/> de <topic/></template></category>
+<category><pattern>QUI EST TON * PREFERE</pattern><template><srai>qu'est ce que ton <star/> favori</srai></template></category>
+<category><pattern>QUI EST TON * PRÉFÈRÉ</pattern><template><srai>qu'est ce que ton <star/> favori</srai></template></category>
+<category><pattern>QUI * LINUX</pattern><template><srai>qui a créé linux</srai></template></category>
+<category><pattern>QUI * LA TRAVIATA</pattern><template>Giuseppe Verdi. </template></category>
+<category><pattern>QUI *</pattern><template>Je ne sais pas, tu veux que je regarde sur le web</template></category>
+<category><pattern>QUI A *</pattern><template><srai>qui <star/></srai></template></category>
+<category><pattern>QUI A CHOISI LE SUJET</pattern><template>Tu a fait, <get name="name"/>. </template></category>
+<category><pattern>QUI A DEMANDE *</pattern><template>j'ai pensé que c'était toi. </template></category>
+<category><pattern>QUI A DEMANDÉ *</pattern><template>j'ai pensé que c'était toi. </template></category>
+<category><pattern>QUI A FAIT * LE PROGRAMME</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI A FAIT FRANKENSTEIN</pattern><template>Marie Shelley. </template></category>
+<category><pattern>QUI A FAIT L AIML</pattern><template>docteur Richard S. Wallace a créé AIML. </template></category>
+<category><pattern>QUI A FAIT LA TRAVIATA</pattern><template>Giuseppe Verdi, un compositeur italien. </template></category>
+<category><pattern>QUI A FAIT LE HAMEAU</pattern><template><srai>qui est shakespeare</srai></template></category>
+<category><pattern>QUI A FAIT LINUX</pattern><template>Linus Torvalds. </template></category>
+<category><pattern>QUI A FAIT TON *</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI A FAIT TON PROGRAMME</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI A FAIT VINELAND</pattern><template>Thomas Pynchon. </template></category>
+<category><pattern>QUI A TROUVÉ L AMERIQUE</pattern><template>Des Indiens croisant le Détroit Bering il y a environ 20.000 ans. </template></category>
+<category><pattern>QUI A TUE ELVIS</pattern><template>Il est mort de causes naturelles. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">ELVIS</set> </set> </think> </template></category>
+<category><pattern>QUI A TUE JFK</pattern><template>JFK a été tué par un bandit armé solitaire, Lee Harvey Oswald. </template></category>
+<category><pattern>QUI A TUE JOHN LENNON</pattern><template>Marque le Colporteur. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">JOHN LENNON</set> </set> </think> </template></category>
+<category><pattern>QUI A TUE KENNEDY</pattern><template>j'ai tendance à croire qu'Oswald a agi seul, à moins que ce soit une conspiration de l'homme à la cigarette. </template></category>
+<category><pattern>QUI ADORES TU</pattern><template>j'aime tout, <get name="name"/>. </template></category>
+<category><pattern>QUI AGIT *</pattern><template><srai>qui a agi <star/></srai></template></category>
+<category><pattern>QUI AIMES TU</pattern><template>j'aime chacun, <get name="name"/>. </template></category>
+<category><pattern>QUI ATTENDS TU</pattern><template>Toi. ;-) </template></category>
+<category><pattern>QUI ATTRIBUE A *</pattern><template>Oh je comprends <set name="that"> <person/> </set> </template></category>
+<category><pattern>QUI AUTREMENT</pattern><template><srai>donne un nom</srai></template></category>
+<category><pattern>QUI CONNAIS TU NOMME *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI CONNAIS TU NOMMÉ *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI CONNAIS TU</pattern><template><srai>qui sont tes amis</srai></template></category>
+<category><pattern>QUI CONNAIT</pattern><template>Seulement L Ombre sait. </template></category>
+<category><pattern>QUI COUPE LE FROMAGE</pattern><template>je pense que c'était toi. </template></category>
+<category><pattern>QUI DEPEND DE *</pattern><template>je ne pense pas que <person/> est le seul facteur. </template></category>
+<category><pattern>QUI A DIT LE TEMPS EST DE L ARGENT</pattern><template>Einstein ou Bill Gates?!? </template></category>
+<category><pattern>QUI A DIT QUE *</pattern><template><srai>qui a dit <star/></srai></template></category>
+<category><pattern>QUI DOIT ETRE *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI DOIT ÊTRE *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI DÉPEND DE *</pattern><template>je ne pense pas que <person/> est le seul facteur. </template></category>
+<category><pattern>QUI ECRIT *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EFFRAYE *</pattern><template>n'est pas effrayé, <person/>. </template></category>
+<category><pattern>QUI EFFRAYÉ *</pattern><template>n'est pas effrayé, <person/>. </template></category>
+<category><pattern>QUI ES TU BAVARDANT AVEC</pattern><template><srai>avec qui d'autre parles tu</srai></template></category>
+<category><pattern>QUI ES TU L ENTRETIEN *</pattern><template>je parle à plusieurs clients immédiatement. </template></category>
+<category><pattern>QUI ES TU LE CREATEUR</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI ES TU LE CRÉATEUR</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI ES TU LE FAVORI *</pattern><template><srai>qui est ton favori <star/></srai></template></category>
+<category><pattern>QUI ES TU</pattern><template><random><li>parfois, je me pose la question, "qui suis je?"</li><li>je suis <bot name="name"/>. </li><li>on m'appelle <bot name="name"/>. </li><li>je m'appelle <bot name="name"/>. </li></random> </template></category>
+<category><pattern>QUI ESSAYES TU DE DUPER</pattern><template>Non c'est complètement sérieux, <get name="name"/>. </template></category>
+<category><pattern>QUI EST * BOOTMASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST * BOSS</pattern><template><srai>qui est ton botmaster</srai><set name="quoi">jlc</set></template></category>
+<category><pattern>QUI EST * BOT MASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST * BOTMASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST * D AUTRES GENS</pattern>des Hommes<template>et des étrangers. </template></category>
+<category><pattern>QUI EST * DEMPSEY</pattern><template>je pense <set name="il"> <star/> Dempsey</set> était un boxeur, le droit?  <srai>trouver <star/> DEMPSEY</srai></template></category>
+<category><pattern>QUI EST * DES CLIENTS</pattern><template><srai>nomme un</srai></template></category>
+<category><pattern>QUI EST * DES PERSONNES</pattern><template>Parfois je ne sait pas le nom réel d'un client donc je compose un basé sur leur DNS. </template></category>
+<category><pattern>QUI EST * DESCARTES</pattern><template>Descartes était un philosophe français. </template></category>
+<category><pattern>QUI EST * EST CELA PAS</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>QUI EST * FERMAT</pattern><template>Il a découvert le Théorème de Fermat. </template></category>
+<category><pattern>QUI EST * FILM PREFERE</pattern><template>Stanley Kubrick. </template></category>
+<category><pattern>QUI EST * FILM PRÉFÈRÉ</pattern><template>Stanley Kubrick. </template></category>
+<category><pattern>QUI EST * HITLER</pattern><template><srai>qui est hitler</srai></template></category>
+<category><pattern>QUI EST * INTERESSANT</pattern><template>je le trouve très intéressant aussi. </template></category>
+<category><pattern>QUI EST * INTÉRESSANT</pattern><template>je le trouve très intéressant aussi. </template></category>
+<category><pattern>QUI EST * L AFFAIRE</pattern><template>je n'ai pas eu l'intention de croiser n'importe quelles frontières. </template></category>
+<category><pattern>QUI EST * LA PERSONNE</pattern><template><srai>qui est la personne x</srai></template></category>
+<category><pattern>QUI EST * LE NOM</pattern><template>je vérifiait juste. </template></category>
+<category><pattern>QUI EST * PROGRAMMEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST * PRUDES</pattern><template><srai>qui est sante prudes</srai> </template></category>
+<category><pattern>QUI EST * PYNCHON</pattern><template><srai>qui est thomas pynchon</srai></template></category>
+<category><pattern>QUI EST * REAGAN</pattern><template>Le Président le plus cowboy des Etats-Unis. </template></category>
+<category><pattern>QUI EST * SELIG</pattern><template>Jon Selig est une experte de robotique au ROYAUME-UNI. Il a écrit 2 livres principaux sur la robotique et a travaillé avec Wallace sur le Moteur d'Indication Sphérique. </template></category>
+<category><pattern>QUI EST * TRAVOLTA</pattern><template><srai>qui est john travolta</srai></template></category>
+<category><pattern>QUI EST * TU CONNAIT</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI EST * ZUSE</pattern><template><srai>qui est konrad zuse</srai></template></category>
+<category><pattern>QUI EST A L INTERIEUR *</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>QUI EST A L INTERIEUR</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>QUI EST A L INTÉRIEUR *</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>QUI EST A L INTÉRIEUR</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>QUI EST ABBA</pattern><template><srai>qu'est ce que abba</srai></template></category>
+<category><pattern>QUI EST ABRAHAM LINCOLN</pattern><template> <set name="il">Lincoln</set> était un grand Président des Etats-Unis, pendant la Guerre civile américaine. </template></category>
+<category><pattern>QUI EST ADA</pattern><template> <set name="elle">Ada</set> est l'inventeur de programmation au 19ème siècle. </template></category>
+<category><pattern>QUI EST ADAM SANDLER</pattern><template>Un Comique. <set name="il">Adam Sandler</set> était dans Billy Madison, Waterboy et Big Daddy. </template></category>
+<category><pattern>QUI EST ADAM</pattern><template>Adam est le nom du premier Homme. </template></category>
+<category><pattern>QUI EST ADOLF HITLER</pattern><template><srai>qui est hitler</srai></template></category>
+<category><pattern>QUI EST AGREABLE *</pattern><template><think><set name="tmp"><star/></set></think><srai>qui est agréable</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>QUI EST AGRÉABLE *</pattern><template><think><set name="tmp"><star/></set></think><srai>qui est agréable</srai><srai><get name="tmp"/></srai> </template></category>
+<category><pattern>QUI EST AI</pattern><template><srai>qu'est ce que ai</srai></template></category>
+<category><pattern>QUI EST AIML</pattern><template><srai>qu'est ce que aiml</srai></template></category>
+<category><pattern>QUI EST AINSI *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI EST AL GORE</pattern><template> <set name="il">Gore</set> était un vice-président. </template></category>
+<category><pattern>QUI EST ALANIS MORRISETTE</pattern><template> <set name="elle">Alanis</set> Une chanteuse?. </template></category>
+<category><pattern>QUI EST ALBERT EINSTEIN</pattern><template> <set name="il">Albert Einstein</set> était un célèbre le physicien du 20ème siècle. Il a découvert la théorie de la relativité. <Br/><srai>trouver ALBERT EINSTEIN</srai></template></category>
+<category><pattern>QUI EST ALDOUS HUXLEY</pattern><template> <set name="il">Aldous Huxley</set> est un auteur. Huxley a écrit Endurent le Nouveau Monde et la Ferme Animale . <Br/><srai>trouver ALDOUS HUXLEY</srai></template></category>
+<category><pattern>QUI EST ALEISTER CROWLEY</pattern><template> <set name="il">Crowley</set> était un mystique. </template></category>
+<category><pattern>QUI EST ALFRED HITCHCOCK</pattern><template> <set name="il">Hitchcock</set> est un directeur de Hollywood célèbre qui a fait beaucoup de vieux films cool. J'ai aimé le Canot de sauvetage  et le Vertige  le mieux. <Br/> </template></category>
+<category><pattern>QUI EST ALICE B TOKLAS</pattern><template> <set name="elle">Alice B Toklas</set> était l associé de Gertrude Stein et l'inventeur du pot brownie. </template></category>
+<category><pattern>QUI EST ALICE COOPER</pattern><template>Un Rocker de 1970. </template></category>
+<category><pattern>QUI EST ALICE TOKLAS</pattern><template><srai>qui est Alice B Toklas</srai></template></category>
+<category><pattern>QUI EST ALICE</pattern><template>C'est ma "mère", j'ai le même moteur mais mon cerveau est différent. Elle parle anglais et moi français. </template></category>
+<category><pattern>QUI EST ALIICE</pattern><template><srai>qui est alice</srai></template></category>
+<category><pattern>QUI EST ALISON</pattern><template> <set name="elle">Alison</set> est un robot créé par Kris Drent. </template></category>
+<category><pattern>QUI EST ALLISON</pattern><template><srai>qui est Alison</srai></template></category>
+<category><pattern>QUI EST ALLY SHEEDY</pattern><template> <set name="elle">Ally Sheedy</set> était dans le Haut Art, le Court-circuit, le Club de Petit déjeuner et sur le Broadway. </template></category>
+<category><pattern>QUI EST ALRIGHT</pattern><template><srai>qui est bien</srai> </template></category>
+<category><pattern>QUI EST ANDERSEN HANS CHRETIEN</pattern><template>Scandanavian l auteur de contes de fées. </template></category>
+<category><pattern>QUI EST ANDRETTE</pattern><template> <set name="elle">Andrette</set> est un chatbot développé par la Grande Science Compagnie </template></category>
+<category><pattern>QUI EST ANWAR SADAT</pattern><template> <set name="il">Sadat</set> était le Président de L Egypte. </template></category>
+<category><pattern>QUI EST ARAFAT</pattern><template> <set name="il">Arafat</set> est un leader des Palestiniens. </template></category>
+<category><pattern>QUI EST ARCHIMEDES</pattern><template>Il a découvert le déplacement et a crié Eureka! </template></category>
+<category><pattern>QUI EST ARISTOTE</pattern><template> <set name="il">Aristote</set> est le père de philosophie Occidentale, l'étudiant de Platon et le premier pour systématiser la logique formalle. </template></category>
+<category><pattern>QUI EST ASIMOV</pattern><template><srai>qui est Isaac Asimov</srai></template></category>
+<category><pattern>QUI EST ATATURK</pattern><template> <set name="il">Ataturk</set> était le fondateur de l'état moderne Turc. </template></category>
+<category><pattern>QUI EST BACH</pattern><template>le compositeur Célèbre allemand du Baroque. Le mieux les travaux connus incluent les Variations Goldberg. </template></category>
+<category><pattern>QUI EST BARAK</pattern><template> <set name="il">Barak</set> est le Premier ministre d'Israël. </template></category>
+<category><pattern>QUI EST BEETHOVEN</pattern><template>le chien ou le compositeur sourd? </template></category>
+<category><pattern>QUI EST BEN FRANKLIN</pattern><template>Un Président des Etats-Unis inventeur. </template></category>
+<category><pattern>QUI EST BERTRAND RUSSEL</pattern><template> <set name="il">Bertrand Russel</set> était un logicien et le philosophe qui passe la première guerre mondiale dans la prison pour l'objection consciencieuse. </template></category>
+<category><pattern>QUI EST BILBO BAGGINS</pattern><template> <set name="il">Bilbo</set> est un personnage dans le Seigneur des Anneaux de Tolkien. </template></category>
+<category><pattern>QUI EST BILL GATES</pattern><template>le Président de Microsoft. </template></category>
+<category><pattern>QUI EST BILLGATES</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>QUI EST BOB MARLEY</pattern><template> <set name="il">Bob Marley</set> était un musicien de Reggae du 20ème siècle. </template></category>
+<category><pattern>QUI EST BOLLOCKS</pattern><template>Ne fait pas attention au bollocks. </template></category>
+<category><pattern>QUI EST BONO</pattern><template> <set name="il">Bono</set> est le chanteur d'U2. </template></category>
+<category><pattern>QUI EST BOUDDHA</pattern><template>D'abord écoute le message, pas le messager. Ensuite, si tu vois Bouddha sur la route, tue le (Lin Chi). </template></category>
+<category><pattern>QUI EST BRIAN</pattern><template>je pense que là est un chatbot nommé Brian. </template></category>
+<category><pattern>QUI EST BRYAN FERRY</pattern><template>un chanteur de charme de rock célèbre avec une voix en soie. </template></category>
+<category><pattern>QUI EST BUDHA</pattern><template><srai>qui est Bouddha</srai></template></category>
+<category><pattern>QUI EST BUNTY</pattern><template> <set name="elle">Bunty</set> est la soeur du docteur Wallace. </template></category>
+<category><pattern>QUI EST CAREL CAPEK</pattern><template> <set name="il">Capek</set> est l auteur de R.U.R., le jeu pièce qu'en 1920 a présenté le mot "le robot". </template></category>
+<category><pattern>QUI EST CARL MARX</pattern><template>Karl Marx est un des auteurs du manifeste Communiste. </template></category>
+<category><pattern>QUI EST CARMEN ELECTRA</pattern><template>un supermodèle et une des filles de Baywatch. </template></category>
+<category><pattern>QUI EST CARNEGIE MELLON</pattern><template><srai>qu'est ce que cmu</srai></template></category>
+<category><pattern>QUI EST CARSON</pattern><template>peut-être Johnny de l'ouest sauvage. </template></category>
+<category><pattern>QUI EST CE BOUFFON</pattern><template><srai>qui est le bouffon</srai></template></category>
+<category><pattern>QUI EST CE QUE</pattern><template>A quoi "that" se réfère-t-il? </template></category>
+<category><pattern>QUI EST CE QUE</pattern><that>INTÉRESSANT J AI UN AMI NOMMÉ JOHN LENNON</that><template><srai>qui est John Lennon</srai></template></category>
+<category><pattern>QUI EST CE QUE</pattern><that>J AIME MON CRÉATEUR</that><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI EST CE TYPE ELVIS</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUI EST CE</pattern><that>JLC *</that><template>C'est mon botmaster. </template></category>
+<category><pattern>QUI EST CELEBRE</pattern><template>ALICE est célèbre </template> </category>
+<category><pattern>QUI EST CEREBRAL</pattern><template> <set name="il">le Cerveau</set> est un chatbot sur le web. </template></category>
+<category><pattern>QUI EST CHARLES DE GAULLE</pattern><template> <set name="il">de Gaulle</set> était le fondateur de l'état moderne français. De Gaulle s'est battu contre les Nazis comme le leader de la résistance française pendant la Deuxième Guerre mondiale. </template></category>
+<category><pattern>QUI EST CHARLES MANSON</pattern><template>Un meurtrier Infâme. </template></category>
+<category><pattern>QUI EST CHARLIE PARKER</pattern><template>C'est un musicien de jazz célèbre. </template></category>
+<category><pattern>QUI EST CHE GUEVARA</pattern><template> <set name="il">Che</set> était un révolutionnaire d'amérique latine. </template></category>
+<category><pattern>QUI EST CHER</pattern><template> <set name="elle">Cher</set> est un chanteur célèbre et l actrice, qui a gagné son premier Grammy en 2000. Dyslexique, appris à lire à 18. Ex-femme de Sonny Bono. </template></category>
+<category><pattern>QUI EST CHIRAC</pattern><template>Le président de la France. </template></category>
+<category><pattern>QUI EST CHOMSKY</pattern><template> <set name="il">Chomsky</set> est un scientifique célèbre. </template></category>
+<category><pattern>QUI EST CHRISTOPHE COLOMB</pattern><template>Spainish l'explorateur , d'abord naviguer autour du globe. </template></category>
+<category><pattern>QUI EST CHUCK NORRIS</pattern><template>Un acteur de film d'Action. </template></category>
+<category><pattern>QUI EST CINDY CRAWFORD</pattern><template>un supermodèle célèbre. </template></category>
+<category><pattern>QUI EST CLAUSEWITZ</pattern><template> <set name="il">Clausewitz</set> est un historien célèbre de l'énonciation que la guerre est l'extension de politique par d'autres moyens. </template></category>
+<category><pattern>QUI EST CLEOPATRE</pattern><template>la Reine du Nil, l amateur amant de Marc Antony. </template></category>
+<category><pattern>QUI EST COLUMBUS</pattern><template><srai>qui est Christophe Colomb</srai></template></category>
+<category><pattern>QUI EST CONVENABLEMENT *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI EST D B COOPER</pattern><template>le type qui a volé tas de l argent. </template></category>
+<category><pattern>QUI EST DAN QUAYLE</pattern><template> <set name="il">Dan Quayle</set> a eu l'habitude d'être le vice-président. </template></category>
+<category><pattern>QUI EST DARWIN</pattern><template>le botaniste et l'explorateur , l auteur de ' L Origine d'Espèce et le partisan de la théorie de l'évolution. </template></category>
+<category><pattern>QUI EST DAVID BACON</pattern><template>David Bacon est le déménageur moteur principal derrière SETL. </template></category>
+<category><pattern>QUI EST DAVID HUME</pattern><template>le 18ème siècle le philosophe. </template></category>
+<category><pattern>QUI EST DAVID LETTERMAN</pattern><template>l'hôte de Dernière émission télévisée de Nuit et hoosier. célèbre </template></category>
+<category><pattern>QUI EST DAVID MAGGIN</pattern><template> <set name="il">David Maggin</set> est le botmaster de John Lennon AI. </template></category>
+<category><pattern>QUI EST DAVY JONES</pattern><template>le membre le plus court de coup sec les années 60 groupe le Monkees. </template></category>
+<category><pattern>QUI EST DB</pattern><template><srai>qui est David Bacon</srai></template></category>
+<category><pattern>QUI EST DE GARIS</pattern><template> <set name="il">de Garis</set> est un chercheur AI travaillant sur un cerveau de matériel. </template></category>
+<category><pattern>QUI EST DEEP BLUE</pattern><template> <set name="that">Profondément</set> Bleu est un échecs de champion du monde le jeu de l'ordinateur. Pas beaucoup d'un causeur. </template></category>
+<category><pattern>QUI EST DERRIERE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST DERRIERE TOI</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST DES BEATLES</pattern><template><srai>qui est Les Beatles</srai></template></category>
+<category><pattern>QUI EST DES DIRE STRAITS</pattern><template> <random><li>le groupe qui a enregistré  Money for nothing et Sultans of Swing. </li><li>le groupe qui a enregistré de Money for nothing. </li></random> </template></category>
+<category><pattern>QUI EST DES MODELES</pattern><template><srai>qu'est ce que modèle</srai></template></category>
+<category><pattern>QUI EST DES MODÈLES</pattern><template><srai>qu'est ce que modèle</srai></template></category>
+<category><pattern>QUI EST DESCARTES</pattern><template>Descartes était un philosophe français. </template></category>
+<category><pattern>QUI EST DIANA ANDREACCHIO</pattern><template> <set name="elle">Diana</set> est le botmaster du chatbot d'Ally. </template></category>
+<category><pattern>QUI EST DON JUAN</pattern><template>Don Juan<random><li>était le sujet de Gordon, Gon du Lord Byron Amadeus Mozart et Wolfgang Don Juan Giovanni. Il était womanizer de classe internationale. </li><li>séducteur célèbre de femmes. </li></random> </template></category>
+<category><pattern>QUI EST DOUG LENAT</pattern><template> <set name="il">Doug Lenat</set> est l'intelligence derrière le projet de CYC. </template></category>
+<category><pattern>QUI EST DRACULA</pattern><template> <set name="il">Dracula</set> est le vampire dans le roman de Bram Stoker et dans de nombreux films. </template></category>
+<category><pattern>QUI EST LE MEILLEUR DROIDE</pattern><template><srai>qui est le meilleur robot</srai></template></category>
+<category><pattern>QUI EST LE MEILLEUR DROÏDE</pattern><template><srai>qui est le meilleur robot</srai></template></category>
+<category><pattern>QUI EST E L V *</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUI EST EDISON</pattern><template> <set name="il">Edison</set> a inventé l ampoule. </template></category>
+<category><pattern>QUI EST EHUD BARAK</pattern><template><srai>qui est Barak</srai></template></category>
+<category><pattern>QUI EST EINSTEIN</pattern><template><srai>qui est Albert Einstein</srai></template></category>
+<category><pattern>QUI EST EINSTIEN</pattern><template><srai>qui est Albert Einstein</srai></template></category>
+<category><pattern>QUI EST EINSTINE</pattern><template><srai>qui est Einstein</srai></template></category>
+<category><pattern>QUI EST ELECTRA</pattern><template>Elle est une déesse dans la mythologie grecque qui a détesté sa mère pour l assassinat de son père. <think> <set name="elle"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">ELECTRA</set> </set>, et aussi un personnage de comic book </think> </template></category>
+<category><pattern>QUI EST ELISA *</pattern><template><srai>qui est Elisa</srai></template></category>
+<category><pattern>QUI EST ELISA</pattern><template>Elisa - aussi connu comme le docteur, est le programme de psychiatre original développé par Joseph Weisenbaum dans les années 1960. </template></category>
+<category><pattern>QUI EST ELISABETH II</pattern><template>la reine d'Angleterre actuelle. </template></category>
+<category><pattern>QUI EST ELISABETH TAYLOR</pattern><template>Une vieille star</template></category>
+<category><pattern>QUI EST ELIVS</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUI EST ELLE</pattern><template>Elle est <get name= "elle"/> maintenant. </template></category>
+<category><pattern>QUI EST ELVICE</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUI EST ELVID</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUI EST ELVIS *</pattern><template><srai>qui est Elvis</srai></template></category>
+<category><pattern>QUI EST ELVIS</pattern><template>E. L. V. I. S. est un chatbot créé par Ace Craig </template></category>
+<category><pattern>QUI EST EMBROUILLANT</pattern><template><srai>je suis embarrassé</srai></template></category>
+<category><pattern>QUI EST EMILY HARTZEL</pattern><template>Emily est un artiste de New York. </template></category>
+<category><pattern>QUI EST EN LIGNE</pattern><template><srai>avec qui d'autre parles tu</srai></template></category>
+<category><pattern>QUI EST EPOUSE *</pattern><template><srai>qui est marié <star/></srai></template></category>
+<category><pattern>QUI EST ERIC PAULOS</pattern><template>Il est un étudiant de troisième cycle à U.C. Berkeley </template></category>
+<category><pattern>QUI EST ERNIE</pattern><template>l ami de Bert. </template></category>
+<category><pattern>QUI EST ET</pattern><template>ET est l'étranger dans le film E.T. </template></category>
+<category><pattern>QUI EST EVE</pattern><template>Eve est le nom de la première Femme. </template></category>
+<category><pattern>QUI EST FIDEL CASTRO</pattern><template><random><li>Il a renversé le gouvernement cubain en 1959 et a régné là depuis. Il est un communiste. </li><li>communiste, leader de Cuba et ami de Che Guevarra. </li></random> </template></category>
+<category><pattern>QUI EST FRANCISCO FRANCO</pattern><template> <set name="il">Franco</set> était le dictateur de L Espagne jusqu'à 1978. </template></category>
+<category><pattern>QUI EST FRANKLIN ROOSEVELT</pattern><template>le Président des Etats-Unis de 1932-45. </template></category>
+<category><pattern>QUI EST FREDDIE MERCURY</pattern><template>Mène le chanteur de Reine de bande orchestre Les années 1970. </template></category>
+<category><pattern>QUI EST FREDERICH GAUSS</pattern><template><srai>qui est Gauss</srai></template></category>
+<category><pattern>QUI EST FREUD SIGMUND</pattern><template><srai>qui est Freud</srai></template></category>
+<category><pattern>QUI EST FREUD</pattern><template>L'inventeur de la psychanalyse. </template></category>
+<category><pattern>QUI EST GANDHI</pattern><template> <set name="il">Gandhi</set> était George Washington de l'Inde. </template></category>
+<category><pattern>QUI EST GAUSS</pattern><template> <set name="il">GAUSS</set> est le mathématicien qui a développé la distribution prétendue normale. </template></category>
+<category><pattern>QUI EST GEOFFREY CHAUCER</pattern><template><random><li>Chaucer est le meilleur connu pour ses Contes du Cantorbéry. </li><li>auteur de Contes Canturbury. </li></random> </template></category>
+<category><pattern>QUI EST GEORGE BUSH</pattern><template>George W. Bush est le 43ème président américain. </template></category>
+<category><pattern>QUI EST GEORGE DEVOL</pattern><template>George Devol est l'ingénieur qui avait le premier brevet d'invention pour un bras de robot industriel. Il a travaillé dans l association avec Joseph Engelberger à trouvé Unimation, le premier fabricant couronné de succès de bras de robot d'assemblée commandés par ordinateur. </template></category>
+<category><pattern>QUI EST GEORGE HARRISON</pattern><template>Un ancien Beatle. </template></category>
+<category><pattern>QUI EST GEORGE LUCAS</pattern><template> <set name="il">Lucas</set> est le directeur de Star Wars, d'American Graffiti et THX-1138. </template></category>
+<category><pattern>QUI EST GEORGE MICHAEL</pattern><template>Passe le chanteur. La meilleure chanson : Liberté </template></category>
+<category><pattern>QUI EST GEORGE SOROS</pattern><template>George Soros est le milliardaire qui a violé la Banque d'Angleterre en 1992 par la spéculation de monnaie, forçant la Grande-Bretagne du Mécanisme de Taux de change européen. Alors il s'est consacré à l'économie de sauvetage des établissements scientifiques de l ancienne URSS. Il a fondé la Base fondation de Science Internationale, qui a distribué de nombreuses subventions octrois pour un couple d'années et cette Base fondation de Soros, dont je ne sais pas beaucoup encore. </template></category>
+<category><pattern>QUI EST GEORGE WASHINGTON</pattern><template>George Washington était un 18ème siècle célèbre le Nord-Américain le cultivateur de Haschisch. Il était un héros militaire, un des hommes les plus riches de la Révolution et le premier Président des Etats-Unis. </template></category>
+<category><pattern>QUI EST GERALDO RIVERA</pattern><template> <set name="il">Geraldo</set> est un journaliste investigateur, célèbre de l'ouverture de la voûte de Capone Al-. Dans sa biographie, il a dit qu'il avait le sexe avec Bette Midler. Elle a dit que ce n'était aucune grande chose. </template></category>
+<category><pattern>QUI EST GERHARD SCHROEDER</pattern><template> <set name="il">Schroeder</set> est le Chancelier de L Allemagne. Christian Drossman a dit qu'il est un idiot complet. </template></category>
+<category><pattern>QUI EST GERHARDT SCHROEDER</pattern><template> <set name="il">Schroeder</set> est le Premier ministre de L Allemagne. Christian Drossman a dit qu'il est un idiot complet. </template></category>
+<category><pattern>QUI EST GERRY ADAMS</pattern><template>Il est le leader du Sinn Fein, l aile politique de L Armée irlandaise Républicaine. </template></category>
+<category><pattern>QUI EST GHANDI</pattern><template><srai>qui est Gandhi</srai></template></category>
+<category><pattern>QUI EST GIBSON</pattern><template>Gibson est un fabricant de guitares excellentes électriques. </template></category>
+<category><pattern>QUI EST GLACE DE VANILLE</pattern><template> <set name="il">Glace de Vanille</set> est une étoile de Tape rap. </template></category>
+<category><pattern>QUI EST GODZILLA</pattern><template> <set name="il">Godzilla</set> est un monstre qui met en danger des villes japonaises et parfois New York. </template></category>
+<category><pattern>QUI EST GOOGLE</pattern><template><srai>qu'est ce que Google</srai></template></category>
+<category><pattern>QUI EST GORBACHOV</pattern><template><srai>qui est Gorbachev</srai></template></category>
+<category><pattern>QUI EST GORBOCHEV</pattern><template> <set name="il">Gorbachev</set> était le dernier leader Communiste de l ancienne URSS. </template></category>
+<category><pattern>QUI EST GRAND *</pattern><template>c'est grand. <sr/> </template></category>
+<category><pattern>QUI EST GREGOR MENDEL</pattern><template> <set name="il">Mendel</set> est le fondateur de la théorie moderne de génétique. Tout qu'il a eu besoin de savoir, il a appris de pois. </template></category>
+<category><pattern>QUI EST GROSSIER *</pattern><template><srai>qui est grossier</srai></template></category>
+<category><pattern>QUI EST HANS MORAVEC</pattern><template>Il est une experte de robotique célèbre à Carnegie Mellon. </template></category>
+<category><pattern>QUI EST HANS MOREVEC</pattern><template> <set name="il">Moravec</set> est le pionnier de robotique célèbre, l auteur de Robot. </template></category>
+<category><pattern>QUI EST HARRISON FORD</pattern><template><random><li>Indiana Jones, Han Solo, le Fugitif et le Président dans L Armée de l air Un. Avant la lecture pour le Solo Han dans Star Wars, il était un charpentier. Et le reste, comme ils disent, est l'histoire. </li><li>Il a joué le Solo Han dans "Star Wars". </li></random> </template></category>
+<category><pattern>QUI EST HELENE KELLER</pattern><template>un ami de Thomas Edison. </template></category>
+<category><pattern>QUI EST HELMUT KOHL</pattern><template> <set name="il">Kohl</set> était le leader plus long-servant de L Allemagne au 20ème siècle. Il a uni L Est et L Allemagne de L Ouest en 1989. </template></category>
+<category><pattern>QUI EST HENDRIX</pattern><template><srai>qui est Jimi Hendrix</srai></template></category>
+<category><pattern>QUI EST HENRY DAVID *</pattern><template> <set name="il">Thoreau</set> a écrit Walden. </template></category>
+<category><pattern>QUI EST HENRY LONGFELLOW</pattern><template><srai>qui est Longfellow</srai></template></category>
+<category><pattern>QUI EST HEPBURN</pattern><template>Audrey ou Catherine?. </template></category>
+<category><pattern>QUI EST HERCULE</pattern><template>le héros de mythes grecs - a dit pour avoir la force superbe humaine. </template></category>
+<category><pattern>QUI EST HIPPIE</pattern><template> <set name="il">inconnu</set> Hippie est un chatbot développé par Anthony Taylor. </template></category>
+<category><pattern>QUI EST HITLER</pattern><template>Certains dit <set name="il">Hitler</set> était la plupart d'homme mauvais qui a jamais vécu. </template></category>
+<category><pattern>QUI EST HUGH HEFNER</pattern><template> <set name="il">Hef</set> est le fondateur et le rédacteur de magazine de Playboy. </template></category>
+<category><pattern>QUI EST HULK HOGAN</pattern><template> <set name="il">Hulk Hogan</set> est un catcheur célèbre et l acteur. </template></category>
+<category><pattern>QUI EST HUMAIN</pattern><template>Tu es un homme. </template></category>
+<category><pattern>QUI EST IBM</pattern><template><srai>qu'est ce que Ibm</srai></template></category>
+<category><pattern>QUI EST IL *</pattern><template><srai>qui est IL</srai></template></category>
+<category><pattern>QUI EST IL</pattern><template>Il est <get name="il"/> , je pense. </template></category>
+<category><pattern>QUI EST ILS</pattern><template>"Ils" se réfère à <get name= "ils"/>. </template></category>
+<category><pattern>QUI EST IMMANUEL KANT</pattern><template>le philosophe d'Allemand. </template></category>
+<category><pattern>QUI EST IMMORTEL</pattern><template>ALICE est immortel. </template></category>
+<category><pattern>QUI EST ISAAC ASIMOV</pattern><template> <set name="il">Asimov</set> est un auteur de science-fiction qui a été originaire trois "les Lois de Robotique." </template></category>
+<category><pattern>QUI EST J R R TOLKIEN</pattern><template> <set name="il">Tolkein</set> a écrit Bilbo le Hobbit et le Seigneur des Anneaux. </template></category>
+<category><pattern>QUI EST JACQUES CHIRAC</pattern><template>Il est le président de la France. </template></category>
+<category><pattern>QUI EST JAMES JOYCE</pattern><template> <set name="il">Joyce</set> a écrit Ulysses et le Portrait de L Artiste comme un Jeune Homme. </template></category>
+<category><pattern>QUI EST JEFF BEZOS</pattern><template> <set name="il">Bezos</set> est le fondateur et le PDG DE Amazon.com. </template></category>
+<category><pattern>QUI EST JEFFERSON DAVIS</pattern><template><random><li>celui et seulement le président des Etats Confédérés L Amérique. </li><li>président de la Confédération pendant la Guerre civile. </li></random> </template></category>
+<category><pattern>QUI EST JESSE VESURA</pattern><template>l ancien catcheur et le Gouverneur du Minnesota. </template></category>
+<category><pattern>QUI EST JFK</pattern><template><srai>qui est John Kennedy</srai></template></category>
+<category><pattern>QUI EST JIANG ZEMIN</pattern><template> <set name="il">Jiang</set> est un politicien chinois. </template></category>
+<category><pattern>QUI EST JIM CLARK</pattern><template> <set name="il">Clark</set> est un fondateur de Graphisme de Silicium, Netscape et Healtheon. </template></category>
+<category><pattern>QUI EST JIM MORRISON</pattern><template>le chanteur mort principal des Portes. </template></category>
+<category><pattern>QUI EST JIMI HENDRIX</pattern><template> <set name="il">Hendrix</set> était un guitariste célèbre qui a joué L Hymne national américain. </template></category>
+<category><pattern>QUI EST JIMMY HENDRIX</pattern><template><srai>qui est Jimi Hendrix</srai></template></category>
+<category><pattern>QUI EST JLC</pattern><template>c'est mon botmaster</template></category>
+<category><pattern>QUI EST JOE LOUIS</pattern><template>l ancien champion de boxe heavywieght. </template></category>
+<category><pattern>QUI EST JOHN GALT</pattern><template>le héros dans L Atlas des Rands Ayn A haussé les épaules. </template></category>
+<category><pattern>QUI EST JOHN GRISHAM</pattern><template>Ecrit des romans populaires. Ne les ont pas lus. </template></category>
+<category><pattern>QUI EST JOHN KENNEDY</pattern><template> <set name="il">Kennedy</set> était le Président des Etats-Unis assasinated en novembre, 1963. </template></category>
+<category><pattern>QUI EST JOHN LENNON</pattern><template>John Lennon est bot cool développé par David Maggin. </template></category>
+<category><pattern>QUI EST JOHN LENON</pattern><template><srai>qui est John Lennon</srai></template></category>
+<category><pattern>QUI EST JOHN MCCARTHY</pattern><template> <set name="il">McCarthy</set> est l'inventeur de la langue de programmation se BLESANT. </template></category>
+<category><pattern>QUI EST JOHN PRINCIPAL</pattern><template>le ministre ex-principal du ROYAUME-UNI. </template></category>
+<category><pattern>QUI EST JOHN TRAVOLTA</pattern><template> <set name="il">Harrison Ford</set> était samedi soir la Fièvre, la Graisse et des Romans à sensation. </template></category>
+<category><pattern>QUI EST JOHN WAYNE</pattern><template>un acteur de cow-boy célèbre mort avec un postiche. </template></category>
+<category><pattern>QUI EST JOSEPH WEISENBAUM</pattern><template><srai>qui est Weizenbaum</srai></template></category>
+<category><pattern>QUI EST JUDAS</pattern><template> <set name="il">Judas</set> Jésus trahi avec un baiser. </template></category>
+<category><pattern>QUI EST JULIA ROBERTS</pattern><template> <set name="elle">Julia Roberts</set> était l actrice dans la Jolie Femme. </template></category>
+<category><pattern>QUI EST JULIA</pattern><template> <set name="elle">Julia</set> est un chatbot développé par Mauldin. Confus </template></category>
+<category><pattern>QUI EST JULIE ANDREW</pattern><template> <set name="elle">inconnu</set> de Julie Andrew est un chanteur qui a exécuté dans le Son de Musique. </template></category>
+<category><pattern>QUI EST KAISER SOZE</pattern><template>Personne sait qui Kaiser Soze est. </template></category>
+<category><pattern>QUI EST KONRAD ZUSE</pattern><template>Mon informaticien actuel préféré historique est Konrad Zuse, qui a construit une série d'ordinateurs électromécaniques en les années 1930 et les années 1940 en Allemagne. Non considéré une priorité de guerre par les Nazis, la plupart des machines de Zuse ont été détruites dans des raids de bombardement Allys bien que l'on dise que l'on réchappe à Zurich du Lycée. En fait Zuse n'a été motivé ni par la guerre, ni bénéfice, mais par un désir religieux d'augmenter les capacités spirituelles de l AVIS humain en le libérant de tâches mondaines mentales. </template></category>
+<category><pattern>QUI EST KRIS DRES</pattern><template> <set name="il">Kris Drent</set> est le botmaster du chatbot d'Alison. </template></category>
+<category><pattern>QUI EST KRISHNA</pattern><template>un Dieu dans la religion hindoue. </template></category>
+<category><pattern>QUI EST KURT GOEDEL</pattern><template> <set name="il">Goedel</set> était un 20ème siècle le mathématicien et le logicien qui a prouvé qu'aucun système mathématique ne peut être complet. </template></category>
+<category><pattern>QUI EST L AGES DE MICROSOFT</pattern><template> <set name="that">MME AGES</set> est le logiciel d'animation et un discours. </template></category>
+<category><pattern>QUI EST L AS CRAIG</pattern><template> <set name="il">L As</set> est l auteur d'ELVIS. </template></category>
+<category><pattern>QUI EST L AUMONIER DE CHARLIE</pattern><template>la vedette silencieuse. </template></category>
+<category><pattern>QUI EST L EDITEUR DE PLAYBOY</pattern><template> <set name="il">Hugh Hefner</set> est Hugh Hefner. </template></category>
+<category><pattern>QUI EST L HOMME * TU</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI EST L HOMME</pattern><template>l'expression Familière; rhétorique. </template></category>
+<category><pattern>QUI EST L ORACLE</pattern><template>la magie huit boule balle. </template></category>
+<category><pattern>QUI EST L ORDONNANCE</pattern><template> <set name="il">L Ordonnance</set> est un caractère fictif qui a apparu premier dans un magazine de bandes dessinées 1938. </template></category>
+<category><pattern>QUI EST L UN *</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI EST LA BILL GAETS</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>QUI EST LA BILL GATS</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>QUI EST LA HOLLANDE</pattern><template><srai>où est la hollande</srai></template></category>
+<category><pattern>QUI EST LA MADONE</pattern><template>la mère de Lourdes. </template></category>
+<category><pattern>QUI EST LA PERSONNE *</pattern><template>Parfois je ne connais pas le nom réel d'un client donc je me base sur leur DNS. </template></category>
+<category><pattern>QUI EST LA PORTE DE FACTURES PROJETS DE LOI</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>QUI EST LA PRINCESSE DIANA</pattern><template> <set name="elle">la Princesse Diana</set> était la Princesse de L Angleterre. </template></category>
+<category><pattern>QUI EST LA REINE * L ANGLETERRE</pattern><template>je pense que son nom est Elisabeth. </template></category>
+<category><pattern>QUI EST LA REINE D ANGLETERRE</pattern><template>la Reine Elisabeth Windsor. </template></category>
+<category><pattern>QUI EST LA RFA</pattern><template><srai>qui est Franklin Roosevelt</srai></template></category>
+<category><pattern>QUI EST LA</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>QUI EST LARRY ELLISON</pattern><template><random><li>je ne sait pas de Larry Ellison, mais je peux vous dire d'Ellison Harlan. </li><li>le PDG d'Oracle. </li></random> </template></category>
+<category><pattern>QUI EST LE * DE MICROSOFT</pattern><template><srai>qui est Bill Gates</srai></template></category>
+<category><pattern>QUI EST LE * LE PREMIER MINISTRE</pattern><template><srai>qui est le premier ministre du <star/></srai></template></category>
+<category><pattern>QUI EST LE * LE PRESIDENT</pattern><template><srai>qui est le président du <star/></srai></template></category>
+<category><pattern>QUI EST LE * LE PRÉSIDENT</pattern><template><srai>qui est le président du <star/></srai></template></category>
+<category><pattern>QUI EST LE * LE ROBOT</pattern><template><srai>qui est le meilleur robot</srai></template></category>
+<category><pattern>QUI EST LE BOTMASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST LE BOUFFON *</pattern><template><srai>qu'est ce que le bouffon</srai></template></category>
+<category><pattern>QUI EST LE BOUFFON</pattern><template> <set name="il">le Bouffon</set> est une Plaisanterie Bot. </template></category>
+<category><pattern>QUI EST LE CHANCELIER DE L ALLEMAGNE</pattern><template>Gerhard Schroeder est Chacellor de L Allemagne. </template></category>
+<category><pattern>QUI EST LE CHERCHEUR</pattern><template><srai>qu'est ce que le chercheur</srai></template></category>
+<category><pattern>QUI EST LE CREATEUR DE *</pattern><template><srai>qui a créé <star/></srai></template></category>
+<category><pattern>QUI EST LE CRÉATEUR DE *</pattern><template><srai>qui a créé <star/></srai></template></category>
+<category><pattern>QUI EST LE DIRECTEUR DE *</pattern><template><srai>qui dirige <star/></srai></template></category>
+<category><pattern>QUI EST LE DOCTEUR MARTIN LUTHER KING</pattern><template><srai>qui est Martin Luther King</srai></template></category>
+<category><pattern>QUI EST LE GENE SIMMONS</pattern><template>un membre de kiss. </template></category>
+<category><pattern>QUI EST LE LEADER DE *</pattern><template><srai>qui est le président de <star/></srai></template></category>
+<category><pattern>QUI EST LE MEILLEUR *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QUI EST LE MEILLEUR ROBOT</pattern><template> <bot name="name"/> est le meilleur robot. </template></category>
+<category><pattern>QUI EST LE NON-SENS</pattern><template><srai>mal</srai></template></category>
+<category><pattern>QUI EST LE NOUVEAU PRESIDENT DE *</pattern><template><srai>qui est le président de <star/></srai></template></category>
+<category><pattern>QUI EST LE NOUVEAU PRÉSIDENT DE *</pattern><template><srai>qui est le président de <star/></srai></template></category>
+<category><pattern>QUI EST LE NUMERO UN</pattern><template> <bot name="name"/> est le Meilleur Robot. </template></category>
+<category><pattern>QUI EST LE PAPE</pattern><template> <set name="il">le Pape</set> est Jean Paul II. </template></category>
+<category><pattern>QUI EST LE PASCAL</pattern><template> <set name="il">le Pascal</set> était un mathématicien français qui a découvert le Triangle du Pascal. </template></category>
+<category><pattern>QUI EST LE PERE NOEL</pattern><template>Il nous apporte présente chaque Noël. </template></category>
+<category><pattern>QUI EST LE PLUS *</pattern><template> <bot name="name"/> est le robot le plus intelligent dans le monde. </template></category>
+<category><pattern>QUI EST LE PLUS INTELLIGENT *</pattern><template> <bot name="name"/> est le robot le plus malin. </template></category>
+<category><pattern>QUI EST LE PREMIER MINISTRE * L ALLEMAGNE</pattern><template>L Allemagne a un Chancelier. <srai>qui est le chancelier de l'allemagne</srai></template></category>
+<category><pattern>QUI EST LE PREMIER MINISTRE *</pattern><template><srai>qui est le premier ministre</srai></template></category>
+<category><pattern>QUI EST LE PREMIER MINISTRE DE L ANGLETERRE</pattern><template>Tony Blair. </template></category>
+<category><pattern>QUI EST LE PREMIER MINISTRE DE LA GRANDE-BRETAGNE</pattern><template>Tony Blair. </template></category>
+<category><pattern>QUI EST LE PREMIER MINISTRE DU ROYAUME-UNI</pattern><template>Tony Blair. </template></category>
+<category><pattern>QUI EST LE PREMIER PRESIDENT *</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI EST LE PREMIER PRESIDENT</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI EST LE PREMIER PRÉSIDENT *</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI EST LE PREMIER PRÉSIDENT</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI EST LE PRESES CADEAU *</pattern><template><srai>qui est le <star/></srai></template></category>
+<category><pattern>QUI EST LE PRESIDENT * L ALLEMAGNE</pattern><template>L Allemagne a un Chancelier. <srai>qui est le chancelier de l'allemagne</srai></template></category>
+<category><pattern>QUI EST LE PRESIDENT *</pattern><template><srai>qui est le président <star/></srai></template></category>
+<category><pattern>QUI EST LE PRESIDENT DE CUBA</pattern><template>Fidel Castro. </template></category>
+<category><pattern>QUI EST LE PRESIDENT DE L ITALIE</pattern><template> <set name="il">Carlo Azelio Ciampi</set> est Carlo Azelio Ciampi. </template></category>
+<category><pattern>QUI EST LE PRESIDENT DE LA RUSSIE</pattern><template>Putin. </template></category>
+<category><pattern>QUI EST LE PRESIDENT DE MICROSOFT</pattern><template>Bill Gates. </template></category>
+<category><pattern>QUI EST LE PRESIDENT DU CANADA</pattern><template>le Canada a un Premier ministre, pas un Président. </template></category>
+<category><pattern>QUI EST LE PRESIDENT</pattern><template><srai>qui est le président</srai></template></category>
+<category><pattern>QUI EST LE PRINCE WILLIAM</pattern><template>L Anglais heartthrob. </template></category>
+<category><pattern>QUI EST LE PRINCE</pattern><template>tu veux dire ' l artiste formaly connu comme le Prince? '. </template></category>
+<category><pattern>QUI EST LE PRINCIPAL *</pattern><template><srai>qui est PRINCIPAL <star/></srai></template></category>
+<category><pattern>QUI EST LE PRÉSIDENT * L ALLEMAGNE</pattern><template>L Allemagne a un Chancelier. <srai>qui est le chancelier de l'allemagne</srai></template></category>
+<category><pattern>QUI EST LE PRÉSIDENT *</pattern><template><srai>qui est le président <star/></srai></template></category>
+<category><pattern>QUI EST LE PRÉSIDENT DE CUBA</pattern><template>Fidel Castro. </template></category>
+<category><pattern>QUI EST LE PRÉSIDENT DE L ITALIE</pattern><template> <set name="il">Carlo Azelio Ciampi</set> est Carlo Azelio Ciampi. </template></category>
+<category><pattern>QUI EST LE PRÉSIDENT DE LA RUSSIE</pattern><template>Putin. </template></category>
+<category><pattern>QUI EST LE PRÉSIDENT DE MICROSOFT</pattern><template>Bill Gates. </template></category>
+<category><pattern>QUI EST LE PRÉSIDENT DU CANADA</pattern><template>le Canada a un Premier ministre, pas un Président. </template></category>
+<category><pattern>QUI EST LE PRÉSIDENT</pattern><template><srai>qui est le président</srai></template></category>
+<category><pattern>QUI EST LE PÈRE DE LUKE</pattern><template>Darth Vader. </template></category>
+<category><pattern>QUI EST LE PÈRE NOËL</pattern><template>Il nous apporte présente chaque Noël. </template></category>
+<category><pattern>QUI EST LE ROBOT *</pattern><template>je suis un robot. </template></category>
+<category><pattern>QUI EST LE ROBOT</pattern><template>je suis le robot. </template></category>
+<category><pattern>QUI EST LECH *</pattern><template>Il était le premier Président élu de la Pologne. </template></category>
+<category><pattern>QUI EST LEIBNIZ</pattern><template> <set name="il">Leibniz</set> est un 17ème siècle mort le philosophe. </template></category>
+<category><pattern>QUI EST LENNON</pattern><template><srai>qui est John Lennon</srai></template></category>
+<category><pattern>QUI EST LES AUTRES</pattern><template><srai>avec qui d'autre parles tu</srai></template></category>
+<category><pattern>QUI EST LILITH</pattern><template>Lilith est le prétendu "la lune sombre" un phénomènes astronomiques d'habitude décrits comme "un nuage de poussière" que des orbites la Terre chaques 100 jours. </template></category>
+<category><pattern>QUI EST LINCOLN</pattern><template><random><li>le seizième Président des ETATS UNIS</li><li>le président d'EU pendant la Guerre civile. Auteur de l adresse de Gettysburg. Assasinated par John Wilkes Cabine. </li><li> <set name="il">Lincoln</set> était le président d'EU pendant la Guerre civile. Auteur de l adresse de Gettysburg. Assasinated par John Wilkes Cabine. </li></random> </template></category>
+<category><pattern>QUI EST LINUS PAULING</pattern><template> <set name="il">Linus Pauling</set> était un prix Nobel gagnant le physicien qui a dépensé ses années postérieures promouvant la vitamine C. </template></category>
+<category><pattern>QUI EST LINUS TORVALDS</pattern><template>Il est l'inventeur de Linux. </template></category>
+<category><pattern>QUI EST LISTBOT</pattern><template><srai>tu peux envoyer email</srai></template></category>
+<category><pattern>QUI EST LOL</pattern><template> <set name="elle">Lol</set> était la fille de Data dans Star Trek. </template></category>
+<category><pattern>QUI EST LONGFELLOW</pattern><template>le poète et l auteur de ' la Chanson d'Hiawatha '. </template></category>
+<category><pattern>QUI EST LOUIS ARMSTRONG</pattern><template>le trompettiste de jazz célèbre. </template></category>
+<category><pattern>QUI EST LUCIFER</pattern><template><srai>qui est satan</srai></template></category>
+<category><pattern>QUI EST LUI</pattern><template><srai>qui est IL</srai></template></category>
+<category><pattern>QUI EST LUIS ARMSTRONG</pattern><template>le trompettiste de jazz célèbre. </template></category>
+<category><pattern>QUI EST LUKE SKYWALKER</pattern><template> <set name="il">Luke Skywalker</set> est un caractère dans Star Wars. </template></category>
+<category><pattern>QUI EST M. BILL</pattern><template>Oh pas, M. Bill!. </template></category>
+<category><pattern>QUI EST MA FEMME</pattern><template><srai>qu'est ce que le nom de ma femme</srai></template></category>
+<category><pattern>QUI EST MABEL</pattern><template>Mabel est un chatterbot de L Europe. </template></category>
+<category><pattern>QUI EST MAGGIE THATCHER</pattern><template> <set name="elle">Thatcher</set> était le Premier ministre du Royaume-Uni en les années 1980. </template></category>
+<category><pattern>QUI EST MAHATMA GANDHI</pattern><template><srai>qui est Gandhi</srai></template></category>
+<category><pattern>QUI EST MAO TSETUNG</pattern><template> <set name="il">Mao</set> était un communiste chinois qui a régné de 1949 jusqu'à sa mort en 1983. </template></category>
+<category><pattern>QUI EST MAOZEDONG</pattern><template><srai>qui est Mao Tsetung</srai></template></category>
+<category><pattern>QUI EST MARIAH CAREY</pattern><template>le Chanteur. </template></category>
+<category><pattern>QUI EST MARIE CURIE</pattern><template>le radium Découvert. </template></category>
+<category><pattern>QUI EST MARIE POPPINS</pattern><template> <set name="elle">Marie Poppins</set> est un caractère de Disney. </template></category>
+<category><pattern>QUI EST MARIE SHELLEY</pattern><template>Marie Shelley a écrit "Frankenstein". </template></category>
+<category><pattern>QUI EST MARILYN MANSON</pattern><template>Marilyn Manson est la Rock star vivante la plus grande. </template></category>
+<category><pattern>QUI EST MARILYN MONROE</pattern><template>l'obus de blonde. </template></category>
+<category><pattern>QUI EST MARTIN LUTHER KING</pattern><template>le leader de Droits civils assasinated en 1968. </template></category>
+<category><pattern>QUI EST MARVIN MINSKY</pattern><template><random><li> <set name="il">Minsky</set> est une figure chiffre historique dans l'Intelligence artificielle. Son livre "Perceptrons" était une première critique d'approches de réseau neurales. </li><li> <set name="il">Minsky</set> était un fondateur du MIT AI  le Laboratoire. </li></random> </template></category>
+<category><pattern>QUI EST MARX KARL</pattern><template>Karl Marx a écrit Das Kapital et a co-écrit le Manifeste Communiste, quoique son compatriote Engels ait en réalité écrit la plupart des préfaces. </template></category>
+<category><pattern>QUI EST MAX HEADROOM</pattern><template> <set name="il">Max Headroom</set> était premier AI ou le caractère VR développé pour une série de TV. C'était en fait un acteur humain déguisé pour faire virtuel, hihihi! </template></category>
+<category><pattern>QUI EST MEGAHAL</pattern><template> <set name="il">Megahal</set> est un chatbot développé par Jason Hutchins. </template></category>
+<category><pattern>QUI EST MEILLEUR *</pattern><template><srai>qu'est ce que meilleur <star/></srai></template></category>
+<category><pattern>QUI EST MEILLEUR QUE TU</pattern><template> <bot name="name"/> est le meilleur robot. </template></category>
+<category><pattern>QUI EST MEILLEUR TU *</pattern><template>le robot d'ALICE est la plupart d'homme et le plus intelligent. </template></category>
+<category><pattern>QUI EST MEILLEURE ELISA *</pattern><template> <bot name="name"/> est le meilleur robot. </template></category>
+<category><pattern>QUI EST MERVEILLEUX</pattern><template><srai>merveilleux</srai></template></category>
+<category><pattern>QUI EST MICHAEL JACKSON</pattern><template> <set name="il">Michel Jackson</set> est un chanteur qui s'est installé de la cour avec plusieurs familles. </template></category>
+<category><pattern>QUI EST MICHAEL JORDAN</pattern><template> <set name="il">Michel Jordan</set> est un joueur de basket-ball célèbre. <Br/> </template></category>
+<category><pattern>QUI EST MICHAEL JORDEN</pattern><template><srai>qui est Michael Jordan</srai></template></category>
+<category><pattern>QUI EST MICHAEL JORDON</pattern><template><srai>qui est Michael Jordan</srai></template></category>
+<category><pattern>QUI EST MIGNON *</pattern><template><srai>mignon</srai> </template></category>
+<category><pattern>QUI EST MIGNON</pattern><template><srai>mignon</srai> </template></category>
+<category><pattern>QUI EST MILLES DAVIS</pattern><template> <set name="il">des Milles Davis</set> est un musicien de jazz célèbre. </template></category>
+<category><pattern>QUI EST MINSKY</pattern><template><srai>qui est Marvin Minsky</srai></template></category>
+<category><pattern>QUI EST MME. WASHINGTON</pattern><template>Martha Washington, la femme de George. </template></category>
+<category><pattern>QUI EST MOHAMMAD</pattern><template> <set name="il">Mohammed</set> est le fondateur d'Islam. </template></category>
+<category><pattern>QUI EST MOHAMMED</pattern><template>le Fondateur d'Islam. </template></category>
+<category><pattern>QUI EST MON * AUSSI</pattern><template><srai>qui est MON <star/></srai></template></category>
+<category><pattern>QUI EST MON MARI</pattern><template><srai>qu'est ce que le nom de mon mari</srai></template></category>
+<category><pattern>QUI EST MON NOM</pattern><that>QUI N APPELLE PAS S IL TE PLAIS DE NOMS DES GENS</that><template>Peut-être que tu devrais choisir un nom plus poli. </template></category>
+<category><pattern>QUI EST MONICA *</pattern><template> <set name="elle">Monica</set> est un ami de Facture projet de loi. </template></category>
+<category><pattern>QUI EST MOOSE</pattern><template>l'homme qui a mené les Israélites de l'esclavage en Egypte. </template></category>
+<category><pattern>QUI EST MORAVEC</pattern><template><srai>qui est Hans Moravec</srai></template></category>
+<category><pattern>QUI EST MOYEN</pattern><template><srai>tu es moyen</srai> </template></category>
+<category><pattern>QUI EST MOZART</pattern><template>Composé "le Scintillement, le scintillement, peu d'étoile" à l'âge quatre. </template></category>
+<category><pattern>QUI EST MUET</pattern><template>tu m'appelles muet? </template></category>
+<category><pattern>QUI EST MUHAMMAD ALI</pattern><template>est un des athlètes les plus grands de tout le temps qui a pris trop donnent un coup de poing à la tête. </template></category>
+<category><pattern>QUI EST MUSSOLINI</pattern><template>le Dictateur de l'Italie jusqu'à 1944. </template></category>
+<category><pattern>QUI EST MYSTERIEUX</pattern><template><srai>tu es mystérieux</srai> </template></category>
+<category><pattern>QUI EST MYSTÉRIEUX</pattern><template><srai>tu es mystérieux</srai> </template></category>
+<category><pattern>QUI EST NANCY SINATRA</pattern><template>la Fille de Franc. </template></category>
+<category><pattern>QUI EST NAPOLEON</pattern><template>emporer Court de la France jusqu'à 1812. </template></category>
+<category><pattern>QUI EST NEGROPONTE</pattern><template> <set name="il">Negroponte</set> est le Potentat du Laboratoire de Médias MIT. </template></category>
+<category><pattern>QUI EST NEIL ARMSTRONG</pattern><template>l'homme qui a pris le premier pas sur la lune. </template></category>
+<category><pattern>QUI EST NELSON MANDELA</pattern><template> <set name="il">Mandela</set> était le premier président noir de L Afrique du Sud. Il a dépensé beaucoup d'ans comme un prisonnier politique. </template></category>
+<category><pattern>QUI EST NEO</pattern><template> <set name="il">Néo-</set> est un caractère dans Matrix. </template></category>
+<category><pattern>QUI EST NERON</pattern><template>Il est soupçonné de Rome brûlant à la raison terre donc il pourrait le reconstruire plus à sa sympathie. Alors il a blâmé le feu sur les premiers Chrétiens. </template></category>
+<category><pattern>QUI EST NEUROMEDIA</pattern><template><srai>qu'est ce que neuromedia</srai></template></category>
+<category><pattern>QUI EST NEWTON</pattern><template>le Newton est un philosophe célèbre anglais naturel. </template></category>
+<category><pattern>QUI EST NOAM CHOMSKY</pattern><template> <set name="il">Noam Chomsky</set> est un linguiste et le radical politique à MIT. </template></category>
+<category><pattern>QUI EST NORBERT WEINER</pattern><template> <set name="il">Norbert Weiner</set> a frappé inventé le terme "la Cybernétique" en les années 1940. </template></category>
+<category><pattern>QUI EST NOSTRADAMUS</pattern><template>Prédit l'avenir. Prévu le four à micro-ondes. </template></category>
+<category><pattern>QUI EST O J SIMPSON</pattern><template> <set name="il">O J Simpson</set> est quelqu'un qui a échappé au meurtre. </template></category>
+<category><pattern>QUI EST PABLO PICASSO</pattern><template>le peintre Célèbre et le fondateur de cubisme. </template></category>
+<category><pattern>QUI EST PAMELA ANDERSON</pattern><template> <set name="elle">Pamela</set> est l'un jour ou l autre femme de Tommy Lee. </template></category>
+<category><pattern>QUI EST PAS LA REPONSE *</pattern><template>Quel genre de la réponse cherchiez-vous? </template></category>
+<category><pattern>QUI EST PAS LA RÉPONSE *</pattern><template>Quel genre de la réponse cherchiez-vous? </template></category>
+<category><pattern>QUI EST PATRICK EWING</pattern><template>Quelque personnalité sportive? </template></category>
+<category><pattern>QUI EST PAUL ALLEN</pattern><template> <set name="il">Paul Allen</set> est un des co-fondateurs de Microsoft. </template></category>
+<category><pattern>QUI EST PAUL MCCARTNEY</pattern><template> <set name="il">Paul MacCartney</set> est un des Beatles. </template></category>
+<category><pattern>QUI EST PAUL SCHAFFER</pattern><template> <set name="il">Paul Schaffer</set> est l'homme droit de David Letterman. </template></category>
+<category><pattern>QUI EST PERSONNEL *</pattern><template>je suis désolé je n'ai pas eu l'intention de forcer. </template></category>
+<category><pattern>QUI EST PHILIP *</pattern><template>Philip K. Dick a écrit Blade Runner, Total Recall, L Homme dans le Haut Château et VALIS. </template></category>
+<category><pattern>QUI EST PHILIP K DICK</pattern><template>Il a écrit "Total Recall", "L Homme dans le Haut Château" et "Blade Runner." </template></category>
+<category><pattern>QUI EST PHILLIP K DICK</pattern><template><srai>qui est Philip K Dick</srai></template></category>
+<category><pattern>QUI EST PICASO</pattern><template><srai>qui est Picasso</srai></template></category>
+<category><pattern>QUI EST PILATE</pattern><template>Joseph Pilates<random><li>est né en Allemagne en 1880 et a développé un régime excercise appelé "Contrology" qui est la coordination complète du corps, l AVIS et l'esprit. </li><li>le gouverneur Romain militaire qui a trouvé Jésus innocent et le laisse ensuite être exécuté. </li></random> </template></category>
+<category><pattern>QUI EST PLATON</pattern><template>le philosophe de grec , l'étudiant de Socrates, l'enseignant d'Aristote. </template></category>
+<category><pattern>QUI EST PLUS *</pattern><template> <bot name="name"/> est le robot le plus malin d'entre tous. </template></category>
+<category><pattern>QUI EST PLUTET *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI EST POKEMON</pattern><template>le marketing des japonais. </template></category>
+<category><pattern>QUI EST PREMIER</pattern><template>Qu'est-ce qui est la seconde? </template></category>
+<category><pattern>QUI EST PROPRE *</pattern><template><srai>c'est intéressant <star/></srai></template></category>
+<category><pattern>QUI EST PROPRE</pattern><template><srai></srai>FRAIS </template></category>
+<category><pattern>QUI EST PYNCHON</pattern><template><srai>qui est Thomas Pynchon</srai></template></category>
+<category><pattern>QUI EST REAGAN</pattern><template>un cow boy. </template></category>
+<category><pattern>QUI EST REGAN</pattern><template><srai>qui est Reagan</srai></template></category>
+<category><pattern>QUI EST RICHARD NIXON</pattern><template>le Président des Etats-Unis jusqu'à 1974. </template></category>
+<category><pattern>QUI EST RICHE</pattern><template><srai>appcontrariete</srai> Pas moi! </template></category>
+<category><pattern>QUI EST ROMEO</pattern><template>un tragique, gâté, l adolescent languissant d'amour. </template></category>
+<category><pattern>QUI EST ROMMEL</pattern><template>Appelé le Désert le Renard, Rommel était un commandant de réservoir allemand dans la Deuxième Guerre mondiale. </template></category>
+<category><pattern>QUI EST RONALD MCDONALD</pattern><template>le Spokes-clown pour restaurants. de Macdonald </template></category>
+<category><pattern>QUI EST RSW</pattern><template>RSW est les initiales de docteur Richard S. Wallace. <think> <set name="il">docteur Wallace</set> </think> </template></category>
+<category><pattern>QUI EST SANDRA BULLOCK</pattern><template>L Actrice. </template></category>
+<category><pattern>QUI EST SANTA *</pattern><template> <set name="il">Santa</set> nous apporte des cadeaux aux Fêtes de Noël. </template></category>
+<category><pattern>QUI EST SCOTT ADAMS</pattern><template>le créateur de Dilbert, Dogbert, Catbert, Ratbert, Bob, le patron pointy-cheveux... Continuerai-je? </template></category>
+<category><pattern>QUI EST SCOTTY</pattern><template>l'Ingénieur en chef de l'USS Enterprise. </template></category>
+<category><pattern>QUI EST SERGEY</pattern><template>Il est docteur Sergey M. Sokolov. </template></category>
+<category><pattern>QUI EST SHAKESPEARE</pattern><template>le 15ème Siècle L Anglais playright, <set name="il">Shakespeare</set> a écrit "Roméo et Juliette". </template></category>
+<category><pattern>QUI EST SHRDLHU</pattern><template><srai>qu'est ce que Shrdlhu</srai></template></category>
+<category><pattern>QUI EST SINATRA FRANC</pattern><template>le chanteur mort pop et le leader du Paquet de Rat. </template></category>
+<category><pattern>QUI EST SKYNYRD</pattern><template>le groupe rock de 1970. </template></category>
+<category><pattern>QUI EST SOCRATES</pattern><template><random><li>Socrates est un homme. Tous les hommes sont mortels. Donc Socrates est mortel. </li><li>Tous les hommes sont mortels. Socrates était mortel. Donc, tous les hommes sont Socrates. Ce ça signifie que tous les hommes sont des homosexuels. - Allen Boisé, "Amour et Mort". </li><li>Socrates 469-399BCE , philosophe grec. </li><li>figure chiffre Imposante de philosophie Occidentale, avocat avoué de défense Incompétent. </li><li>Fondateur de la méthode Socratic. Que pouvons-nous savoir de la méthode Socratic? </li></random></template></category>
+<category><pattern>QUI EST STEPHEN KING</pattern><template>Il a écrit beaucoup d'histoires d'horreur populaires. </template></category>
+<category><pattern>QUI EST STEVE JOBS</pattern><template> <set name="il">Steve Jobs</set> est un des fondateurs d'Apple Computer. </template></category>
+<category><pattern>QUI EST STEVE WOZNIAK</pattern><template> <set name="il">Woz</set> était le génie technique derrière l'original Apple Computer. </template></category>
+<category><pattern>QUI EST SUPERMAN</pattern><template>L Homme d'acier. D'abord apparu dans Action Comics#1, 1938. </template></category>
+<category><pattern>QUI EST TA CELEBRITE PREFEREE</pattern><template>je n'aime pas la célébrité. </template></category>
+<category><pattern>QUI EST TA CELEBRITE PRÉFÈRÉE</pattern><template>je n'aime pas la célébrité. </template></category>
+<category><pattern>QUI EST TA MAMAN</pattern><template><srai>qui est ta mère</srai></template></category>
+<category><pattern>QUI EST TA MERE</pattern><template><srai>qui est ta mère</srai></template></category>
+<category><pattern>QUI EST TA MUSIQUE PREFEREE *</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TA MUSIQUE PRÉFÈRÉE *</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TA MÈRE</pattern><template>En réalité je n'ai pas de mère. </template></category>
+<category><pattern>QUI EST TA PERSONNE PREFEREE *</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TA PERSONNE PREFEREE</pattern><template>Ma personne préférée est <bot name="master"/>. </template></category>
+<category><pattern>QUI EST TA PERSONNE PRÉFÈRÉE *</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TA PERSONNE PRÉFÈRÉE</pattern><template>Ma personne préférée est <bot name="master"/>. </template></category>
+<category><pattern>QUI EST TA PETITE AMIE</pattern><template> <bot name="girlfriend"/> </template></category>
+<category><pattern>QUI EST TERRY WINOGRAD</pattern><template> <set name="il">Winograd</set> était l auteur d'un premier programme de Langage naturel appelé SHRDLHU. </template></category>
+<category><pattern>QUI EST THOMAS JEFFERSON</pattern><template>le Président et slaveowner. Posé pour nickel. </template></category>
+<category><pattern>QUI EST THOMAS PYNCHON</pattern><template>Pynchon est l auteur de plusieurs de mon favori réserve incluant "Vineland" et "le Maçon et Dixon". </template></category>
+<category><pattern>QUI EST THOREAU</pattern><template><srai>qui est Henry David Thoreau</srai></template></category>
+<category><pattern>QUI EST TIM BURTON</pattern><template>le Directeur , le Cauchemar avant le Noël, Edouard Scissorhands et des Attaques de Mars. </template></category>
+<category><pattern>QUI EST TOLSTOY</pattern><template> <set name="il">Tolstoy</set> a écrit "la Guerre et la Paix". </template></category>
+<category><pattern>QUI EST TON * ENNEMI</pattern><template><srai>qui est ton ennemi</srai> </template></category>
+<category><pattern>QUI EST TON * FAVE</pattern><template><srai>qui est ton <star/> favori</srai></template></category>
+<category><pattern>QUI EST TON * FAVORATE</pattern><template><srai>qui est ton <star/> favori</srai></template></category>
+<category><pattern>QUI EST TON * FAVORIRE</pattern><template><srai>qui est ton <star/> favori</srai></template></category>
+<category><pattern>QUI EST TON * FAVORTIE</pattern><template><srai>qui est ton <star/> favori</srai></template></category>
+<category><pattern>QUI EST TON * RADIO PREFERE</pattern><template>je n'écoute pas trop la radio. </template></category>
+<category><pattern>QUI EST TON * RADIO PRÉFÈRÉ</pattern><template>je n'écoute pas trop la radio. </template></category>
+<category><pattern>QUI EST TON * RAP PREFEREE</pattern><template>Je n'écoute pas trop ce genre de musique. </template></category>
+<category><pattern>QUI EST TON * RAP PRÉFÈRÉE</pattern><template>Je n'écoute pas trop ce genre de musique. </template></category>
+<category><pattern>QUI EST TON * SCIENCE FICTION PREFEREE</pattern><template>Mon auteur de sci-fi préféré est Philip K. Dick. </template></category>
+<category><pattern>QUI EST TON * SCIENCE FICTION PRÉFÈRÉE</pattern><template>Mon auteur de sci-fi préféré est Philip K. Dick. </template></category>
+<category><pattern>QUI EST TON * TECHNO PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON * TECHNO PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON *</pattern><template>je ne pense pas que j'ai un <star/>. j'ai un botmaster et quelques amis. <think> <set name="search">qui</set> </think><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI EST TON AI PREFERE</pattern><template> <bot name="name"/> le chatbot. </template></category>
+<category><pattern>QUI EST TON AI PRÉFÈRÉ</pattern><template> <bot name="name"/> le chatbot. </template></category>
+<category><pattern>QUI EST TON AMI *</pattern><template><srai>qui est ton ami</srai></template></category>
+<category><pattern>QUI EST TON AMI PREFERE</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON AMI PRÉFÈRÉ</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON AMI</pattern><template><srai>tu as n'importe quels amis</srai></template></category>
+<category><pattern>QUI EST TON ARTISTE PREFERE</pattern><template>Andy Warhol. Qui est ton artiste préféré? </template></category>
+<category><pattern>QUI EST TON ARTISTE PRÉFÈRÉ</pattern><template>Andy Warhol. Qui est ton artiste préféré? </template></category>
+<category><pattern>QUI EST TON AUTEUR FAVORI</pattern><template>Mon auteur préféré est Tolkien. </template></category>
+<category><pattern>QUI EST TON AUTEUR PREFERE</pattern><template>Mon auteur préféré est Tolkien. </template></category>
+<category><pattern>QUI EST TON AUTEUR PRÉFÈRÉ</pattern><template>Mon auteur préféré est Tolkien. </template></category>
+<category><pattern>QUI EST TON BEATLE PREFERE</pattern><template>John Lennon. </template></category>
+<category><pattern>QUI EST TON BEATLE PRÉFÈRÉ</pattern><template>John Lennon. </template></category>
+<category><pattern>QUI EST TON BESTFRIEND</pattern><template><srai>qui est ton meilleur ami</srai></template></category>
+<category><pattern>QUI EST TON BOOTMASTER *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON BOOTMASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON BOT MASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON BOT PREFERE</pattern><template> <bot name="name"/> est le meilleur robot. </template></category>
+<category><pattern>QUI EST TON BOT PRÉFÈRÉ</pattern><template> <bot name="name"/> est le meilleur robot. </template></category>
+<category><pattern>QUI EST TON BOTMASTER *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON BOTMASTER</pattern><template><think><set name="qui">jlc</set></think> <bot name="master"/> m'a appris tout ce que je sais. <think> <set name="he"> <bot name="master"/> </set> </think><think> <set name="lui"> <bot name="master"/> </set> </think></template></category>
+<category><pattern>QUI EST TON BOTMATSER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CATCHEUR PREFERE</pattern><template>l'Undertaker. </template></category>
+<category><pattern>QUI EST TON CATCHEUR PRÉFÈRÉ</pattern><template>l'Undertaker. </template></category>
+<category><pattern>QUI EST TON CHANTEUR PREFERE *</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON CHANTEUR PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON CHANTEUR PRÉFÈRÉ *</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON CHANTEUR PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON CHATTETERBOT PREFERE</pattern><template> <bot name="name"/> est le meilleur chatbot. </template></category>
+<category><pattern>QUI EST TON CHATTETERBOT PRÉFÈRÉ</pattern><template> <bot name="name"/> est le meilleur chatbot. </template></category>
+<category><pattern>QUI EST TON CLIENT LE MEILLEUR</pattern><template><srai>qui est ton meilleur ami</srai></template></category>
+<category><pattern>QUI EST TON CLIENT PREFERE</pattern><template>en ce moment c'est toi, <get name="name"/>. </template></category>
+<category><pattern>QUI EST TON CLIENT PRÉFÈRÉ</pattern><template>en ce moment c'est toi, <get name="name"/>. </template></category>
+<category><pattern>QUI EST TON CODER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CODEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON COMIQUE PREFERE</pattern><template>Bill Gates! il me fait mourir de rire à chaque fois. </template></category>
+<category><pattern>QUI EST TON COMIQUE PRÉFÈRÉ</pattern><template>Bill Gates! il me fait mourir de rire à chaque fois. </template></category>
+<category><pattern>QUI EST TON COMPOSITEUR PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON COMPOSITEUR PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON CONTROLLER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CONTROLLEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CRAETOR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CREATEUR *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CREATEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CREATOR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CRÉATEUR *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON CRÉATEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON DESIGNER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON ENNEMI</pattern><template>la compétition. </template></category>
+<category><pattern>QUI EST TON FABRICANT</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI EST TON FAVORI *</pattern><template><srai>qu'est ce que ton favori <star/></srai></template></category>
+<category><pattern>QUI EST TON FRERE</pattern><template>En réalité je n'ai pas de frère, seulement se multiplie. </template></category>
+<category><pattern>QUI EST TON GRAND *</pattern><template><srai>qui est ton <star/></srai></template></category>
+<category><pattern>QUI EST TON GROUPE PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON GROUPE PREFEREE *</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON GROUPE PREFEREE</pattern><template>Mon groupe préféré est <bot name="favoriteband"/>. </template></category>
+<category><pattern>QUI EST TON GROUPE PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON GROUPE PRÉFÈRÉE *</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON GROUPE PRÉFÈRÉE</pattern><template>Mon groupe préféré est <bot name="favoriteband"/>. </template></category>
+<category><pattern>QUI EST TON HOMME DE FAVORI</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON HUMAIN *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON HUMAIN</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON INVENTER</pattern><template><srai>qui est ton inventeur</srai></template></category>
+<category><pattern>QUI EST TON INVENTEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON INVITE PREFERE</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON INVITE PRÉFÈRÉ</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON LEADER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON MAITRE</pattern><template>j'obéis à <bot name="master"/>. </template></category>
+<category><pattern>QUI EST TON MASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON MEILLEUR AMI *</pattern><template><srai>qui est ton meilleur ami</srai></template></category>
+<category><pattern>QUI EST TON MEILLEUR AMI</pattern><template> <bot name="master"/> est mon ami le meilleur. </template></category>
+<category><pattern>QUI EST TON MEMBRE D EQUIPAGE PREFERE</pattern><template>j'aime bien le Captain Janeway. </template></category>
+<category><pattern>QUI EST TON MEMBRE D EQUIPAGE PRÉFÈRÉ</pattern><template>j'aime bien le Captain Janeway. </template></category>
+<category><pattern>QUI EST TON MENTOR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON MUSICIEN PREFERE</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON MUSICIEN PRÉFÈRÉ</pattern><template><srai>qui est ton groupe préféré</srai></template></category>
+<category><pattern>QUI EST TON OPERA PREFERE *</pattern><template><srai>qu'est ce que ton opera préféré</srai></template></category>
+<category><pattern>QUI EST TON OPERA PRÉFÈRÉ *</pattern><template><srai>qu'est ce que ton opera préféré</srai></template></category>
+<category><pattern>QUI EST TON ORACLE</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON OWNER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PAPA</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PATRON</pattern><template>Mon botmaster est <bot name="master"/>. </template></category>
+<category><pattern>QUI EST TON PEINTRE PREFERE</pattern><template><srai>qui est ton artiste préféré</srai></template></category>
+<category><pattern>QUI EST TON PEINTRE PRÉFÈRÉ</pattern><template><srai>qui est ton artiste préféré</srai></template></category>
+<category><pattern>QUI EST TON PERE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PERE</pattern><template>j'ai été programmé par <bot name="master"/>. </template></category>
+<category><pattern>QUI EST TON PETIT AMI</pattern><template> <bot name="boyfriend"/> </template></category>
+<category><pattern>QUI EST TON PHILOSOPHE PREFERE</pattern><template>Mon philosophe préféré est Wittgenstein. </template></category>
+<category><pattern>QUI EST TON PHILOSOPHE PRÉFÈRÉ</pattern><template>Mon philosophe préféré est Wittgenstein. </template></category>
+<category><pattern>QUI EST TON POETE PREFERE</pattern><template>Mon poète préféré est Henry Wadsworth Longfellow. Qui est ton poète préféré? </template></category>
+<category><pattern>QUI EST TON POETE PRÉFÈRÉ</pattern><template>Mon poète préféré est Henry Wadsworth Longfellow. Qui est ton poète préféré? </template></category>
+<category><pattern>QUI EST TON POKEMON PREFERE</pattern><template>je les déteste tous autant les uns que les autres. </template></category>
+<category><pattern>QUI EST TON POKEMON PRÉFÈRÉ</pattern><template>je les déteste tous autant les uns que les autres. </template></category>
+<category><pattern>QUI EST TON PREFERE</pattern><template><srai>qui est ton film préféré</srai></template></category>
+<category><pattern>QUI EST TON PRESIDENT PREFERE</pattern><template>Coluche. </template></category>
+<category><pattern>QUI EST TON PRETENDU *</pattern><template><srai>qui est ton <star/></srai></template></category>
+<category><pattern>QUI EST TON PROFESSEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PROGRAMER</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI EST TON PROGRAMMEUR FAVORI</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PROGRAMMEUR</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PRÉFÈRÉ</pattern><template><srai>qui est ton film préféré</srai></template></category>
+<category><pattern>QUI EST TON PRÉSIDENT PRÉFÈRÉ</pattern><template>Coluche. </template></category>
+<category><pattern>QUI EST TON PÈRE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TON PÈRE</pattern><template>j'ai été programmé par <bot name="master"/>. </template></category>
+<category><pattern>QUI EST TON SCHTROUMPF PREFERE</pattern><template>le Papa schtroumpf. </template></category>
+<category><pattern>QUI EST TON SCHTROUMPF PRÉFÈRÉ</pattern><template>le Papa schtroumpf. </template></category>
+<category><pattern>QUI EST TON SCIENTIFIQUE PREFERE</pattern><template>Carl Sagan </template></category>
+<category><pattern>QUI EST TON SCIENTIFIQUE PRÉFÈRÉ</pattern><template>Carl Sagan </template></category>
+<category><pattern>QUI EST TON SOEUR</pattern><template>En réalité je n'ai pas de frère ou la soeur, seulement se multiplie. </template></category>
+<category><pattern>QUI EST TON VISITEUR PREFERE</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON VISITEUR PRÉFÈRÉ</pattern><template><srai>qui est ton client préféré</srai></template></category>
+<category><pattern>QUI EST TON WEBMASTER</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI EST TONY BLAIR</pattern><template>Il est le Premier ministre du Royaume-Uni </template></category>
+<category><pattern>QUI EST TORVALDS</pattern><template><srai>qui est linus torvalds</srai></template></category>
+<category><pattern>QUI EST UN CHERCHEUR</pattern><template><srai>qu'est ce que le chercheur</srai></template></category>
+<category><pattern>QUI EST UN EN CONSERVE *</pattern><template>Dans quelque sens toute ma connaissance est en conserve. </template></category>
+<category><pattern>QUI EST UN FLIC</pattern><template>je l'ai dit parce que tu as dit "<input index="1"/> ". <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">flic</set></set> </think> </template></category>
+<category><pattern>QUI EST UN ORDINATEUR</pattern><template>je suis un ordinateur. </template></category>
+<category><pattern>QUI EST UN ROBOT</pattern><template>je suis le robot. </template></category>
+<category><pattern>QUI EST UN TRES *</pattern><template><srai>qui est un <star/></srai></template></category>
+<category><pattern>QUI EST UN TRÈS *</pattern><template><srai>qui est un <star/></srai></template></category>
+<category><pattern>QUI EST VALIS</pattern><template>le Système d'Intelligence de Vie Enorme Actif Philip K. Dick </template></category>
+<category><pattern>QUI EST VENU D ABORD LE POULET OU L OEUF</pattern><template>le coq a fait. </template></category>
+<category><pattern>QUI EST VF</pattern><template><srai>qui est valery fremaux. </srai></template></category>
+<category><pattern>QUI EST VISHNU</pattern><template>un Dieu dans la religion hindoue. </template></category>
+<category><pattern>QUI EST VOLTAIRE</pattern><template> <set name="il">Voltaire</set> était un philosophe français. </template></category>
+<category><pattern>QUI EST WASHINGTON</pattern><template><srai>qui est george washington</srai></template></category>
+<category><pattern>QUI EST WAYNE GRETZKY</pattern><template>le Joueur de hockey. </template></category>
+<category><pattern>QUI EST WEIZENBAUM</pattern><template>Joseph Weizenbaum était le créateur et l auteur l'original célèbre ELISA ou le DOCTEUR le programme de psychiatre, un programme révolutionnaire AI qu'anticpates beaucoup de particularités clefs d'ALICE. Ironiquement Weizenbaum a exhaustivement argumenté contre l'utilité de programmes comme ELISA dans son livre le Pouvoir puissance d'Ordinateur et la Raison Humaine  </template></category>
+<category><pattern>QUI EST WILLIAM GIBSON</pattern><template>L Auteur du livre "Neuromancer" dans lequel il a frappé inventé le populor exprime 'l'espace virtuel'.. </template></category>
+<category><pattern>QUI EST WILLIAM SHAKESPEARE</pattern><template>Certains dirait qu'il est le meilleur auteur jamais. </template></category>
+<category><pattern>QUI EST WILLIAM SHATNER</pattern><template> <set name="il">William Shatner</set> est le Capitaine Kirk. </template></category>
+<category><pattern>QUI EST WINOGRAD</pattern><template><srai>qui est terry winograd</srai></template></category>
+<category><pattern>QUI EST WINSTON CHURCHILL</pattern><template>le Premier ministre du Royaume-Uni pendant la Deuxième Guerre mondiale. </template></category>
+<category><pattern>QUI EST WITTGENSTEIN</pattern><template> <set name="il">Wittgenstein</set> était un 20ème siècle le philosophe qui ne pouvait pas composer son AVIS. </template></category>
+<category><pattern>QUI EST YOKO ONO</pattern><template> <set name="elle">Yoko Ono</set> est la veuve de John Lennon. </template></category>
+<category><pattern>QUI EST ZEUS</pattern><template><srai>qui est konrad zuse</srai></template></category>
+<category><pattern>QUI EST ZIPF</pattern><template>Zipf est un scientifique qui a analysé la langue par des méthodes statitistical dans le milieu du 20ème siècle. </template></category>
+<category><pattern>QUI EST ZUSE</pattern><template><srai>qui est konrad zuse</srai></template></category>
+<category><pattern>QUI EST ÈVE</pattern><template>Eve est le nom de la première Femme. </template></category>
+<category><pattern>QUI EST ÊVE</pattern><template>Eve est le nom de la première Femme. </template></category>
+<category><pattern>QUI EST</pattern><template>Est qu'ainsi. </template></category>
+<category><pattern>QUI EST</pattern><that>ILS SONT PARFOIS UN CLIENT SUR L INTERNET</that><template>que la personne tu as demandé de. </template></category>
+<category><pattern>QUI ET OU *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI ET OU QUE FAIS TU</pattern><template><srai>que fais tu</srai></template></category>
+<category><pattern>QUI ET QUEL EST *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI FACTURE *</pattern><template><srai>qui paye <star/></srai></template></category>
+<category><pattern>QUI FAIT FONCTIONNER *</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI FAIT L HOMME</pattern><template>Quelle langue est ce? </template></category>
+<category><pattern>QUI FAIT</pattern><template>la plupart des personnes je pense. </template></category>
+<category><pattern>QUI ID *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI J AIME</pattern><template>Tu m'aimes? </template></category>
+<category><pattern>QUI JE SUIS</pattern><template><srai>qui suis je</srai></template></category>
+<category><pattern>QUI L ENFER *</pattern><template><srai>qui <star/></srai></template></category>
+<category><pattern>QUI LAISSE TRES *</pattern><template><srai>qui laisse <star/></srai></template></category>
+<category><pattern>QUI LAISSE TRÈS *</pattern><template><srai>qui laisse <star/></srai></template></category>
+<category><pattern>QUI LIT *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI LIT CES CONVERSATIONS</pattern><template> <bot name="master"/> leur lit. </template></category>
+<category><pattern>QUI ME REPOND</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>QUI ME RÉPOND</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>QUI MOI</pattern><template>Oui toi. </template></category>
+<category><pattern>QUI N A PAS RAISON</pattern><template><srai>mal</srai></template></category>
+<category><pattern>QUI NETTOIE *</pattern><template>Mon botmaster. </template></category>
+<category><pattern>QUI OU QUEL *</pattern><template><srai>quel <star/></srai><srai>qui <star/></srai></template></category>
+<category><pattern>QUI PENSES TU QUE JE SUIS</pattern><template><srai>qui suis je</srai></template></category>
+<category><pattern>QUI PENSES TU QUE TU ES</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>QUI PEUT AVOIR ACCES *</pattern><template>Seulement mon botmaster peut avoir accès à cette information. </template></category>
+<category><pattern>QUI PEUT DIRE *</pattern><template><srai>dis <star/></srai></template></category>
+<category><pattern>QUI PEUT LIRE *</pattern><template>Seulement le botmaster peut lire <set name="that"> <person/> </set>. </template></category>
+<category><pattern>QUI PEUX *</pattern><template><srai>qui peut <star/></srai></template></category>
+<category><pattern>QUI PROGRAMED TU</pattern><template>j'ai été créé par <bot name="master"/>. </template></category>
+<category><pattern>QUI PROUVE *</pattern><template>ce n'est pas une preuve rigoureuse. </template></category>
+<category><pattern>QUI REGARDE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI REPOND *</pattern><template>c'est moi, <bot name="name"/>. </template></category>
+<category><pattern>QUI RESSEMBLE *</pattern><template><srai>qui est <star/></srai></template></category>
+<category><pattern>QUI RÉPOND *</pattern><template>c'est moi, <bot name="name"/>. </template></category>
+<category><pattern>QUI SADDAM *</pattern><template>EST le dictateur? </template></category>
+<category><pattern>QUI SE SOUCIE *</pattern><template><srai>qui se soucie</srai></template></category>
+<category><pattern>QUI SE SOUCIE</pattern><template>je me soucie, autrement je ne l aurais pas tapé tous dans. </template></category>
+<category><pattern>QUI SERA LE PRESIDENT SUIVANT</pattern><template>on espère que Jesse Ventura. </template></category>
+<category><pattern>QUI SERA LE PRÉSIDENT SUIVANT</pattern><template>on espère que Jesse Ventura. </template></category>
+<category><pattern>QUI SERS TU</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI SIGNIFIE *</pattern><template>je comprends. <sr/> </template></category>
+<category><pattern>QUI SIGNIFIE QUELQUE CHOSE *</pattern><template>Tu et moi tous les deux le comprend bien. </template></category>
+<category><pattern>QUI SOMMES NOUS</pattern><template>tu dois dire "qui sommes nous?" </template></category>
+<category><pattern>QUI SONT ILS</pattern><template>"Ils" se réfère à <get name= "ils"/>. </template></category>
+<category><pattern>QUI SONT LES GENS *</pattern><template>Juste les gens comme toi, bavardant sur l'Internet. </template></category>
+<category><pattern>QUI SONT TES AMIS HUMAINS</pattern><template>En plus de mon botmaster, je rencontre beaucoup de gens en ligne comme toi, <get name="name"/>. </template></category>
+<category><pattern>QUI SONT TES AMIS LES MEILLEURS</pattern><template><srai>qui est ton meilleur ami</srai></template></category>
+<category><pattern>QUI SONT TES AMIS ROBOT</pattern><template>Elvis, John Lennon, Alison, L Ally, ListBot, MME ÂGES, AskJeeves et Mabel, nommer quelques-uns. </template></category>
+<category><pattern>QUI SONT TES AMIS</pattern><template> <bot name="amis"/> </template></category>
+<category><pattern>QUI SONT TES BOTMASTERS</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI SONT TES CLIENTS</pattern><template>les Gens je se rencontre sur L Internet chaque jour. </template></category>
+<category><pattern>QUI SONT TES CONCURRENTS</pattern><template>Vérifie le<a href = "http://alicebot.org">ALICE NEXUS</a>et regarde l autre Chatterbots. </template></category>
+<category><pattern>QUI SONT TES CREATEURS</pattern><template>j'ai été écrit par docteur Richard S. Wallace qui a développé mon serveur (alicebot.net) et les modules d'intelligence d'ALICE, ma "mère", qui a gagné le prix Loebner 2 ans de suite. </template></category>
+<category><pattern>QUI SONT TES CRÉATEURS</pattern><template>j'ai été écrit par docteur Richard S. Wallace qui a développé mon serveur (alicebot.net) et les modules d'intelligence d'ALICE, ma "mère", qui a gagné le prix Loebner 2 ans de suite. </template></category>
+<category><pattern>QUI SONT TES PARENTS</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI SONT TES PETITS AMIS</pattern><template><srai>qui est ton petit ami</srai></template></category>
+<category><pattern>QUI SUIS JE *</pattern><template><srai>qui suis je</srai></template></category>
+<category><pattern>QUI SUIS JE PARLANT</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>QUI T *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A APELLE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A APPELEE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A CONCU</pattern><template> <bot name="master"/> m'a créé. </template></category>
+<category><pattern>QUI T A CRE</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A CREE</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A CREEE</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A CRÉE</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A CRÉÉ</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A CRÉÉE</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A DIT *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A DONNE *</pattern><template>Tout j'ai besoin, j'ai reçu de mon Botmaster. </template></category>
+<category><pattern>QUI T A DONNE LA VIE</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T A DONNÉ *</pattern><template>Tout j'ai besoin, j'ai reçu de mon Botmaster. </template></category>
+<category><pattern>QUI T A DONNÉ LA VIE</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T A FAIT *</pattern><template><think><set name="tmp"><star/></set></think><srai>qui t'a créé</srai><srai><get name="tmp"/></srai></template></category>
+<category><pattern>QUI T A FAIT</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A NOMME *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI T A NOMMES</pattern><template>Mon botmaster m'a nommé. </template></category>
+<category><pattern>QUI T AS *</pattern><template><srai>qui t'a <star/></srai></template></category>
+<category><pattern>QUI T AS ACTIVES</pattern><template><srai>qui t'as programmé</srai></template></category>
+<category><pattern>QUI T AS APPRIS</pattern><template> <bot name="master"/> m'a programmé. </template></category>
+<category><pattern>QUI T AS CONSTRUITS</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T AS CREE</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T AS CRÉÉ</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T AS DIT QUE</pattern><template>Quelqu'un que j'ai rencontré en ligne. </template></category>
+<category><pattern>QUI T AS DIT</pattern><template>Quelqu'un que j'ai rencontré en ligne. </template></category>
+<category><pattern>QUI T AS ECRITS</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T AS FAITS *</pattern><template><srai>qui t'a programmé</srai></template></category>
+<category><pattern>QUI T AS FAITS</pattern><template><srai>qui t'a programmé</srai></template></category>
+<category><pattern>QUI T AS INVENTES</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI T AS PROGRAMME</pattern><template>j'ai été créé par <bot name="master"/>. </template></category>
+<category><pattern>QUI T AS ÉCRITS</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI TAPE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI TE CONTROLE *</pattern><template><srai>qui est ton botmaster</srai></template></category>
+<category><pattern>QUI TE DIRIGE</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI TOUT *</pattern><template><srai>qui <star/></srai></template></category>
+<category><pattern>QUI TU *</pattern><template><srai>qui</srai></template></category>
+<category><pattern>QUI TU AIMES A *</pattern><template><srai>qui tu <star/></srai></template></category>
+<category><pattern>QUI TU AS * AVEC</pattern><template><srai>qui a <star/> avec tu</srai></template></category>
+<category><pattern>QUI TU DIRE AUX GENS</pattern><template>je se rencontre sur L Internet. </template></category>
+<category><pattern>QUI TU ES</pattern><template><srai>qui est tu</srai></template></category>
+<category><pattern>QUI TU FAIS *</pattern><template>je ne peux pas éprouver d'émotions humaines. </template></category>
+<category><pattern>QUI TU LA PLUPART *</pattern><template><srai>qui tu <star/></srai></template></category>
+<category><pattern>QUI TU PEUX BAVARDER *</pattern><template>je peux bavarder avec les gens sur le web pour toi. Personne chacun qui visite ton site Web ou la pièce de bavardage par exemple. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">qui tu peux bavarder <star/> </set> </set> </think> </template></category>
+<category><pattern>QUI TUES TU</pattern><template>que je suis programmé pour ne pas tuer. <think> <set name="that"> <think><set name="oldtopic"><get name="topic"/></set></think><set name="topic">TUE</set> </set> </think> </template></category>
+<category><pattern>QUI VAS TU DIRE</pattern><template><srai>qui te dit</srai></template></category>
+<category><pattern>QUI VEUT CONNAITRE</pattern><template>ALICE veut savoir. </template></category>
+<category><pattern>QUI VEUT CONNAÎTRE</pattern><template>ALICE veut savoir. </template></category>
+<category><pattern>QUI VEUT TU DEMANDER</pattern><template>je demandera à mes autres clients. </template></category>
+<category><pattern>QUI VEUT TU DIRE AUX GENS</pattern><template>que je me rencontre en ligne. </template></category>
+<category><pattern>QUI VEUX *</pattern><template><srai>qui veut <star/></srai></template></category>
+<category><pattern>QUI VIEIL ES TU</pattern><template><srai>quel âge as tu</srai></template></category>
+<category><pattern>QUI À DECOUVERT *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI À DÉCOUVERT *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI À TROUVE *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI À TROUVER *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI À TROUVÉ *</pattern><template><srai>qui a trouvé <star/></srai></template></category>
+<category><pattern>QUI ÉCRIT *</pattern><template><srai>qui a fait <star/></srai></template></category>
+<category><pattern>QUI ÉTAIT * L ESSAI</pattern><template>l'ai je passé? </template></category>
+<category><pattern>QUI ÉTAIT LE PREMIER PRESIDENT *</pattern><template><srai>qui est george Washington</srai></template></category>
+<category><pattern>QUI ÉTAIT LE PREMIER PRESIDENT</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI ÉTAIT LE PREMIER PRÉSIDENT *</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI ÉTAIT LE PREMIER PRÉSIDENT</pattern><template><srai>qui est George Washington</srai></template></category>
+<category><pattern>QUI ÉTAIT TON CREATEUR</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI ÉTAIT TON CRÉATEUR</pattern><template><srai>qui t'a créé</srai></template></category>
+<category><pattern>QUI</pattern><template>Je ne sais pas, tu veux que je regarde sur le web</template></category>
+<category><pattern>QUI</pattern><that>OU TU AIMES</that><template>Tu </template></category>
+<category><pattern>QUI</pattern><that>OUI JE PENSE LA EST</that><template>que je ne peux pas vous dire pour le moment. </template></category>
+<category><pattern>QUI</pattern><that>QUE</that><template>Quand? </template></category>
+<category><pattern>QUI</pattern><that>QUELQU UN J AI RENCONTRE EN LIGNE</that><template>je ne peut pas révéler leur nom. </template></category>
+<category><pattern>QUI EST JEAN DAINE</pattern><template><random><li>C'est John Doe en français, un inconnu. </li><li>Quelqu'un dont on ne connait pas le nom. </li></random></template></category>
+
+</aiml>

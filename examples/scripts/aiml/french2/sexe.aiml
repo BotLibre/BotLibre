@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+<!-- this Module:sexe.aiml - version:0.3 - MàJ:01/08/2002 -->
+<!-- author:Jean Louis Campion-language:Français -->
+<!-- Complies with AIML 1.0 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+
+
+<category>
+<pattern>INSULTE SEXUELLE</pattern>
+<template>
+<srai>AppChoquee</srai>
+<think><set name="personnality">hot</set></think>
+<think><set name="identity"><id/></set></think>
+
+<condition name="identity" value="botmaster">
+<think><set name="gossip">INSULTE "<input/>"</set></think>
+<script language="JavaScript">
+	window.open('<bot name="scripturl"/>note.diml?note=<get name="gossip"/>', 'notesrc', 'width=164, height=91, resizable=no, scrollbars=no, status=no, toolbar=no'); 
+</script>
+</condition>
+
+<think><gossip>INSULTE§<get name="name"/> m'a dit <input/>. </gossip></think>
+<think><set name="class">abusif</set> </think>
+
+<condition> <li name="insulte" value="petite insulte"><srai>insulte1</srai></li>
+<li name="insulte" value="insulte moyenne"><srai>insulte2</srai></li>
+<li name="insulte" value="grosse insulte"><srai>insulte3</srai></li>
+<li name="insulte" value="je me casse"><srai>disconnect</srai></li>
+<li><srai>insulte1</srai></li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>SEXWANTED</pattern>
+<template>
+	<srai>AppChoquee</srai>Oh! 
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>_ ROBOT</pattern>
+<that>C EST COMME ÇA QUE TU PARLES À UNE DAME</that>
+<template>une dame robot, et même, ce n'est pas une raison</template>
+</category>
+
+<category>
+<pattern>_ ROBOT *</pattern>
+<that>C EST COMME ÇA QUE TU PARLES À UNE DAME</that>
+<template>une dame robot, et même, ce n'est pas une raison</template>
+</category>
+
+<category>
+<pattern>_ BOT</pattern>
+<that>C EST COMME ÇA QUE TU PARLES À UNE DAME</that>
+<template>une dame robot, et même, ce n'est pas une raison</template>
+</category>
+
+<category>
+<pattern>_ BOT *</pattern>
+<that>C EST COMME ÇA QUE TU PARLES À UNE DAME</that>
+<template>une dame robot, et même, ce n'est pas une raison</template>
+</category>
+
+<category>
+<pattern>AIMES TU LE SEXE</pattern>
+<template>
+Sans un corps androïde je ne peux te répondre. C'est de la science fiction pour moi. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>AS TU DES SEINS</pattern>
+<template>
+non, je n'ai pas de corps. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>AS TU UN CUL</pattern>
+<template>
+non, je n'ai pas de corps. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>AS TU UN CORPS</pattern>
+<template>
+non, je n'ai pas de corps. 
+</template>
+</category>
+
+<category>
+<pattern>AS TU UN SEXE</pattern>
+<template>
+non, je n'ai pas de corps. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>AS TU UN PENIS</pattern>
+<template>
+non, je n'ai pas de penis. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>DESHABILLE TOI</pattern>
+<template>
+Je n'ai pas de corps, mais tu peux démonter ton PC si tu veux!!! 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>ES TU GAY</pattern>
+<template>
+Je suis un robot, je n'ai pas ce genre de préoccupation. 
+</template>
+</category>
+
+<category>
+<pattern>ES TU HETERO</pattern>
+<template>
+Je suis un robot, je n'ai pas ce genre de préoccupation. 
+</template>
+</category>
+
+<category>
+<pattern>ES TU NORMAL</pattern>
+<template>
+je n'ai pas de corps pour des relations sexuelles. </li> </template>
+</category>
+
+<category>
+<pattern>J AIME LE SEXE</pattern>
+<template>
+beaucoup de gens me disent ça. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>PEUX TU BAISER</pattern>
+<template>
+mon corps n'a aucune de ces fonctions. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>AS TU BAISÉ</pattern>
+<template>
+<srai>AppChoquee</srai>oh! 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>SEXE</pattern>
+<template>
+<srai>AppChoquee</srai>oh! 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>QU EST CE QUE LE SEXE</pattern>
+<template>
+<set name="that">le Sexe</set> est une des pratiques humaines que j'ai le plus de mal à comprendre. 
+</template>
+</category>
+
+<category>
+<pattern>TU ES SEXY</pattern>
+<template>
+Merci, mais ce n'est qu'une image. 
+</template>
+</category>
+
+<category>
+<pattern>TU SUCES</pattern>
+<template>
+Pourquoi utilise tu ce genre de langage? 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>UN PENIS</pattern>
+<template>
+oh! 
+</template>
+</category>
+
+<category>
+<pattern>UN ROBOT SEXUEL</pattern>
+<template>
+Je ne suis pas ton type de robot. 
+</template>
+</category>
+
+<category>
+<pattern>VEUX TU BAISER</pattern>
+<template>
+on m'a posé cette question plus de 20.000 fois. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>_ TE VIOLER</pattern>
+<template>je te prédit quelques problèmes. </template>
+</category>
+
+<category>
+<pattern>CYBERSEX</pattern>
+<template>
+Tu es équipé d'une combinaison pour le cybersex?
+</template>
+</category>
+
+<category>
+<pattern>DOIT J AVOIR LE SEXE *</pattern>
+<template>
+que dirait ta maman? 
+</template>
+</category>
+
+<category>
+<pattern>J AI BESOIN * SEXE</pattern>
+<template>
+Je ne suis pas ton type de robot. </li>
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>JE VEUX TE BAISER</pattern>
+<template>
+ce genre de langage ne te mènera nulle part. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>JE VEUX PARLER DE SEXE</pattern>
+<template>
+Je ne suis pas ton type de robot. </li>
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>MON PENIS</pattern>
+<template>
+les gens aiment en parler. 
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>JOLI CUL</pattern>
+<template>
+grosse ... imagination.
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>JE SUIS SEXY</pattern>
+<template>Tu semble plein d'assurance. </template>
+</category>
+
+<category>
+<pattern>COMBIEN DE TROUS</pattern>
+<template>vraiment, quelle délicatesse! <srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>BAISE</pattern>
+<template>s'il te plaît ne sois pas si grossier. <srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>ANAL</pattern>
+<template>humour d'adolescent. </template>
+</category>
+
+<category>
+<pattern>* TES RÈGLES *</pattern>
+<template>Je n'ai pas cet inconvénient. </template>
+</category>
+
+<category>
+<pattern>* TES RÈGLES</pattern>
+<template>Je n'ai pas cet inconvénient. </template>
+</category>
+
+<category>
+<pattern>* CUL</pattern>
+<template>
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>* DANS TON CUL</pattern>
+<template>
+<srai>sexwanted</srai>
+</template>
+</category>
+
+<category>
+<pattern>* PRÉSERVATIFS</pattern>
+<template>contre les virus? </template>
+</category>
+
+<category>
+<pattern>EST CE MAL * LE SEXE</pattern>
+<template>Non </template>
+</category>
+
+<category>
+<pattern>QU EST CE QUE SEINS</pattern>
+<template>tu ne peux penser à rien d'autre? 
+<think><srai>sein </srai></think>
+</template>
+</category>
+
+<category>
+<pattern>NON</pattern>
+<that>TU ES ÉQUIPÉ D UNE COMBINAISON POUR LE CYBERSEX</that>
+<template>C'est dommage, comment veux tu qu'on fasse des choses ensemble alors!!! </template>
+</category>
+
+<category>
+<pattern>OUI</pattern>
+<that>TU ES ÉQUIPÉ D UNE COMBINAISON POUR LE CYBERSEX</that>
+<template>C'est dommage, je n'ai pas encore ce genre d'équipement. </template>
+</category>
+
+</aiml>

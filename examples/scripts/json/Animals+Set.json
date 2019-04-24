@@ -1,0 +1,22 @@
+[
+	    { #data : #dog, instantiation : #animal },
+	    { #data : "dog", meaning : #dog },
+	    
+	    { #data : #cat, instantiation : #animal },
+	    { #data : "cat", meaning : #cat },
+	    
+	    { #data : #tiger, instantiation : #animal },
+	    { #data : "tiger", meaning : #tiger },
+	    
+	    { #data : #wolf, instantiation : #animal },
+	    { #data : "wolf", meaning : #wolf },
+	    
+	    { #data : #pig, instantiation : #animal },
+	    { #data : "pig", meaning : #pig },
+	    
+	    { #data : #cow, instantiation : #animal },
+	    { #data : "cow", meaning : #cow },
+	    
+	    { #data : #horse, instantiation : #animal },
+	    { #data : "horse", meaning : #horse }
+]

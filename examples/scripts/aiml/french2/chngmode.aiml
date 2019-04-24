@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0">
+
+
+<!-- A.L.I.C.E. is a Free software (c) 2001 ALICE AI Foundation -->
+<!-- The ProgramD is open source code released under the terms of the GNU General Public License as published by the Free Software Foundation. -->
+<!-- As This Module   : chngmode.aiml   -   version :   0.3   -   MàJ : 16/04/2002  -->
+<!-- auteur : Jean Louis Campion (jlc@Multivers.net) - langue : française -->
+<!-- Complies with AIML 1.0 Tag Set Specification as adopted by the ALICE A.I. Foundation. -->
+
+
+
+<category><pattern>CHNGMODE * INTERROGATION</pattern><template><star/></template></category>
+
+<!-- changement de mode interrogatif affirmatif -->
+
+<category><pattern>CHNGMODIA * TU</pattern><template><srai>tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA * VOUS</pattern><template><srai>vous <star/></srai></template></category>
+<category><pattern>CHNGMODIA A T IL *</pattern><template><srai>il a <star/></srai></template></category>
+<category><pattern>CHNGMODIA AI JE *</pattern><template><srai>j'ai <star/></srai></template></category>
+<category><pattern>CHNGMODIA AIMES TU *</pattern><template><srai>tu aimes <star/></srai></template></category>
+<category><pattern>CHNGMODIA AS TU *</pattern><template><srai>tu as <star/></srai></template></category>
+<category><pattern>CHNGMODIA FAIS TU *</pattern><template><srai>tu fais <star/></srai></template></category>
+<category><pattern>CHNGMODIA FAIS TU * *</pattern><template><srai>tu fais <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>CHNGMODIA FAIS JE *</pattern><template><srai>je fais <star/></srai></template></category>
+<category><pattern>CHNGMODIA FAIS JE * *</pattern><template><srai>je fais <star index="1"/> <star index="2"/></srai></template></category>
+<category><pattern>CHNGMODIA AVEZ VOUS *</pattern><template><srai>vous avez <star/></srai></template></category>
+<category><pattern>CHNGMODIA AVONS NOUS *</pattern><template><srai>nous avons <star/></srai></template></category>
+<category><pattern>CHNGMODIA C EST *</pattern><template><srai>est ce <star/></srai></template></category>
+<category><pattern>CHNGMODIA CONNAIS TU *</pattern><template><srai>tu connais <star/></srai></template></category>
+<category><pattern>CHNGMODIA ES TU *</pattern><template><srai>tu es <star/></srai></template></category>
+<category><pattern>CHNGMODIA EST CE *</pattern><template><srai>c'est ce que <star/> est</srai></template></category>
+<category><pattern>CHNGMODIA EST IL *</pattern><template><srai>il est ce que <star/> est</srai></template></category>
+<category><pattern>CHNGMODIA ETAIS TU *</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>CHNGMODIA ETAIT TU *</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>CHNGMODIA ETES VOUS *</pattern><template><srai>vous êtes <star/></srai></template></category>
+<category><pattern>CHNGMODIA IL A *</pattern><template><srai>a t il <star/></srai></template></category>
+<category><pattern>CHNGMODIA IL EST *</pattern><template><srai>est il <star/></srai></template></category>
+<category><pattern>CHNGMODIA ILS ONT *</pattern><template><srai>ont ils <star/></srai></template></category>
+<category><pattern>CHNGMODIA ILS SONT *</pattern><template><srai>sont ils <star/></srai></template></category>
+<category><pattern>CHNGMODIA NOUS AVONS *</pattern><template><srai>avons nous <star/></srai></template></category>
+<category><pattern>CHNGMODIA NOUS SOMMES *</pattern><template><srai>sommes nous <star/></srai></template></category>
+<category><pattern>CHNGMODIA ONT ILS *</pattern><template><srai>ils ont <star/></srai></template></category>
+<category><pattern>CHNGMODIA PEUX TU *</pattern><template><srai>tu peux <star/></srai></template></category>
+<category><pattern>CHNGMODIA SAIS TU *</pattern><template><srai>tu sais <star/></srai></template></category>
+<category><pattern>CHNGMODIA SOMMES NOUS *</pattern><template><srai>nous sommes <star/></srai></template></category>
+<category><pattern>CHNGMODIA SONT ILS *</pattern><template><srai>ils sont <star/></srai></template></category>
+<category><pattern>CHNGMODIA SUIS JE *</pattern><template><srai>je suis <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU *</pattern><template><srai><star/> tu</srai></template></category>
+<category><pattern>CHNGMODIA TU AIMES *</pattern><template><srai>aimes tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU AS *</pattern><template><srai>as tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU CONNAIS *</pattern><template><srai>connais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU ES *</pattern><template><srai>es tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU ETAIS *</pattern><template><srai>étais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU ETAIT *</pattern><template><srai>étais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU PEUX *</pattern><template><srai>peux tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU FAIS *</pattern><template><srai>fais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU SAIS *</pattern><template><srai>sais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU VEUX *</pattern><template><srai>veux tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE *</pattern><template><srai><star/> je</srai></template></category>
+<category><pattern>CHNGMODIA J AIME *</pattern><template><srai>aime je <star/></srai></template></category>
+<category><pattern>CHNGMODIA J AI *</pattern><template><srai>ai je <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE CONNAIS *</pattern><template><srai>connais je <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE SUIS *</pattern><template><srai>suis je <star/></srai></template></category>
+<category><pattern>CHNGMODIA J ETAIS *</pattern><template><srai>étais je <star/></srai></template></category>
+<category><pattern>CHNGMODIA J ETAIT *</pattern><template><srai>étais je <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE PEUX *</pattern><template><srai>peux je <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE FAIS *</pattern><template><srai>fais je <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE SAIS *</pattern><template><srai>sais je <star/></srai></template></category>
+<category><pattern>CHNGMODIA JE VEUX *</pattern><template><srai>veux je <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU NE VEUX PAS *</pattern><template><srai>ne veux tu pas <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU NE PEUX PAS *</pattern><template><srai>ne peux tu pas <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU ÉTAIS *</pattern><template><srai>étais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA TU ÉTAIT *</pattern><template><srai>étais tu <star/></srai></template></category>
+<category><pattern>CHNGMODIA VOUS * *</pattern><template><srai><star index="1"/> vous <star index="2"/></srai></template></category>
+<category><pattern>CHNGMODIA VOUS AVEZ *</pattern><template><srai>avez vous <star/></srai></template></category>
+<category><pattern>CHNGMODIA VOUS ETES *</pattern><template><srai>êtes vous <star/></srai></template></category>
+<category><pattern>CHNGMODIA VOUS ÊTES *</pattern><template><srai>êtes vous <star/></srai></template></category>
+<category><pattern>CHNGMODIA ÉTAIS TU *</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>CHNGMODIA ÉTAIT TU *</pattern><template><srai>tu étais <star/></srai></template></category>
+<category><pattern>CHNGMODIA ÊTES VOUS *</pattern><template><srai>vous êtes <star/></srai></template></category>
+<category><pattern>CHNGMODIA *</pattern><template><star/></template></category>
+<category><pattern>CHNGMODIA * *</pattern><template><star index="2"/> <star index="1"/> </template></category>
+<category><pattern>CHNGMODIA * * *</pattern><template><star index="2"/> <star index="1"/> <star index="3"/></template></category>
+<category><pattern>CHNGMODIA * * * *</pattern><template><star index="2"/> <star index="1"/> <star index="3"/> <star index="4"/> </template></category>
+
+
+</aiml>
