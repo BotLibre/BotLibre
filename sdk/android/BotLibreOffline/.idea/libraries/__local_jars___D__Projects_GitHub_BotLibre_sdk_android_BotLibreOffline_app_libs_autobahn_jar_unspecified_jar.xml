@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="__local_jars__:D.\Projects\GitHub\BotLibre\sdk\android\BotLibreOffline\app\libs\autobahn.jar:unspecified@jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/autobahn.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

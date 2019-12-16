@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+    
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/help" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/help"
+		    android:textSize="18sp" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+        
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+        
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+    	
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp"
+        android:text="@string/helpText1" />
+    
+    <Button
+        android:id="@+id/faqButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="faq"
+        android:text="@string/faq"
+        android:textColor="@color/lgrey" />
+    
+    <Button
+        android:id="@+id/forumsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="forums"
+        android:text="@string/forum"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/helpBotButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="helpBot"
+        android:text="@string/helpBot"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/liveSupportButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="liveSupport"
+        android:text="@string/liveSupport"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/websiteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="website"
+        android:text="@string/website"
+        android:textColor="@color/lgrey" />
+	
+    <Button
+        android:id="@+id/emailButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="email"
+        android:text="@string/email"
+        android:textColor="@color/lgrey" />
+    
+    </LinearLayout>
+    
+    </ScrollView>
+        
+</LinearLayout>

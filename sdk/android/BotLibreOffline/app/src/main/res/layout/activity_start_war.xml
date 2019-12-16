@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/icon" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/startWar"
+		    android:textSize="18sp" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    	
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp"
+        android:text="@string/startWarText1" />
+    	
+    <TextView
+	    android:id="@+id/winner"
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text=""
+	    android:layout_margin="8sp" />
+    
+    <ListView
+        android:id="@+id/bot1List"
+        android:layout_width="fill_parent"
+        android:layout_height="80sp"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/bot1Button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="browseBot1"
+        android:text="@string/selectFirstBot"
+        android:textColor="@color/lgrey" />
+    
+    <ListView
+        android:id="@+id/bot2List"
+        android:layout_width="fill_parent"
+        android:layout_height="80sp"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/bot2Button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/button"
+        android:onClick="browseBot2"
+        android:text="@string/selectSecondBot"
+        android:textColor="@color/lgrey" />
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10px"
+		android:background="#fff">
+    </View>
+        
+    <EditText
+        android:id="@+id/topicText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/topic"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+    
+        
+    <View
+        android:id="@+id/filler"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+      	android:layout_weight="1"
+        android:text=""/>
+
+    <Button
+        android:id="@+id/warButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/ok_button"
+        android:onClick="war"
+        android:text="@string/startWar"
+        android:textColor="@color/lgrey" />
+
+</LinearLayout>

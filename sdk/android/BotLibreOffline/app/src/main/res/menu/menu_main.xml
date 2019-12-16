@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menuWebsite"
+          android:title="@string/website" />
+    
+    <item android:id="@+id/menuDeleteExistingBot"
+        android:title="@string/deletebot" />
+     
+</menu>

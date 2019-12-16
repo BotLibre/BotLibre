@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuMyBots"
+          android:title="@string/myForums" />
+    
+    <item android:id="@+id/menuFeatured"
+          android:title="@string/browseFeatured" />
+    
+    <item android:id="@+id/menuCategories"
+          android:title="@string/browseCategories" />
+    
+    <item android:id="@+id/menuMyPosts"
+          android:title="@string/myPosts" />
+    
+    <item android:id="@+id/menuBrowseAllPosts"
+          android:title="@string/browseAllPosts" />
+    
+    <item android:id="@+id/menuBrowseFeaturedPosts"
+          android:title="@string/browseFeaturedPosts" />
+    
+    <item android:id="@+id/menuSearchAllPosts"
+          android:title="@string/searchAllPosts" />
+     
+</menu>

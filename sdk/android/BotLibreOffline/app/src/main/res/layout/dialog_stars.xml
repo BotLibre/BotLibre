@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <Button
+        android:id="@+id/oneStar"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/star"
+        android:text="" />
+    
+    <Button
+        android:id="@+id/twoStar"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/star"
+        android:text="" />
+    
+    <Button
+        android:id="@+id/threeStar"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/star"
+        android:text="" />
+    
+    <Button
+        android:id="@+id/fourStar"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/star"
+        android:text="" />
+    
+    <Button
+        android:id="@+id/fiveStar"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/star"
+        android:text="" />
+ 
+</LinearLayout>

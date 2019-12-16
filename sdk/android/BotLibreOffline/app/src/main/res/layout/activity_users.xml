@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/users"
+		    android:textSize="18sp" />
+		
+		<Button
+			android:id="@+id/helpButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+	        android:background="@drawable/help"
+			android:onClick="help"
+			android:text="" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
+    <TextView
+        android:id="@+id/usersLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/users" />
+        
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0px"
+        android:layout_weight="1"
+	    android:orientation="horizontal" >
+	    
+    <ListView
+        android:id="@+id/usersList"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
+    
+    <Button
+        android:id="@+id/removeUserButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/remove"
+        android:onClick="removeUser"
+        android:text="" />
+        
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    
+    <EditText
+        android:id="@+id/userText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:inputType="text"
+    	android:imeOptions="actionDone"/>
+    
+    <Button
+        android:id="@+id/addUserButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/add"
+        android:onClick="addUser"
+        android:text="" />
+        
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/adminLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/administrators" />
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0px"
+      	android:layout_weight="1"
+	    android:orientation="horizontal" >
+	    
+    <ListView
+        android:id="@+id/adminList"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice" 
+        android:listSelector="@android:color/darker_gray"
+        android:layout_weight="1" />
+    
+    <Button
+        android:id="@+id/removeAdminButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/remove"
+        android:onClick="removeAdmin"
+        android:text="" />
+        
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    
+    <EditText
+        android:id="@+id/adminText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+      	android:layout_weight="1"
+        android:inputType="text"
+    	android:imeOptions="actionDone"/>
+    
+    <Button
+        android:id="@+id/addAdminButton"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_margin="1dp"
+        android:background="@drawable/add"
+        android:onClick="addAdmin"
+        android:text="" />
+        
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuAdd"
+          android:title="@string/addMedia" />
+    
+    <item android:id="@+id/menuAddImage"
+          android:title="@string/addImage" />
+ 
+    <item android:id="@+id/menuTag"
+          android:title="@string/tagMedia" />
+ 
+    <item android:id="@+id/menuDelete"
+          android:title="@string/deleteMedia" />
+ 
+    <item android:id="@+id/menuBackground"
+          android:title="@string/setBackground" />
+ 
+    <item android:id="@+id/menuClearBackground"
+          android:title="@string/clearbackground" />
+ 
+    <item android:id="@+id/menuHD"
+          android:title="@string/hdImages"
+          android:checkable="true" />
+    
+</menu>
