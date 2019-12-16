@@ -111,6 +111,17 @@ state TestSelf {
 	
 	pattern "/(?i)what\sis\s(.*)" template "I have no idea what {star} is.";
 	
+	pattern "^ give up ^" template "Goodbye.";
+	
+	pattern "I *" template "What?";
+	
+	pattern "init" template init();
+	
+	function init() {
+		Language.word("give up");
+		return "success";
+	}
+	
 	// test comment
 	var foo {
 		// test comment
@@ -142,6 +153,7 @@ state TestSelf {
 		if ("hello 123" != Template("hello {x}")) {
 			return "fail1";
 		}
+		// Fails on decompile because of JSON literal.
 		learn ({pattern: "email-template", template: Template("hello {x}")});
 		if ((srai "email-template") != "hello 123") {
 			return "fail2";
@@ -455,7 +467,9 @@ state TestSelf {
 	}
 	
 	function testDates() {
+		// Need to change for daylight savings/timezone.
 		var offset = 4;
+		//var offset = 5;
 		
 		var today = Date.timestamp();
 		var hour = Date.get(today, #hour) + offset;

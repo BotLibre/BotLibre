@@ -60,6 +60,27 @@ public class TestAIML2 extends TextTest {
 		} catch (Exception exception) {
 			fail(exception.toString());
 		}
+		try {
+			URL url = TestAIML.class.getResource("animal.set");
+			File file = new File(url.toURI());
+			bot.mind().getThought(Language.class).loadAIMLSETFile(file, "animal", "");
+		} catch (Exception exception) {
+			fail(exception.toString());
+		}
+		try {
+			URL url = TestAIML.class.getResource("state2capital.map");
+			File file = new File(url.toURI());
+			bot.mind().getThought(Language.class).loadAIMLMAPFile(file, "state2capital", "");
+		} catch (Exception exception) {
+			fail(exception.toString());
+		}
+		try {
+			URL url = TestAIML.class.getResource("bot.properties");
+			File file = new File(url.toURI());
+			bot.mind().getThought(Language.class).loadAIMLPropertiesFile(file, "");
+		} catch (Exception exception) {
+			fail(exception.toString());
+		}
 		
 		Utils.sleep(5000);
 		
@@ -97,13 +118,172 @@ public class TestAIML2 extends TextTest {
 	}
 
 	@org.junit.Test
-	public void testIntervals() {
+	public void testConditions() {
 		Bot bot = Bot.createInstance();
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		//bot.setDebugLevel(Level.FINER);
+		
+		text.input("condition hello");
+		String response = waitForOutput(output);
+		checkResponse(response, "Hi");
+		
+		text.input("condition something");
+		response = waitForOutput(output);
+		checkResponse(response, "Condition default");
+		
+		text.input("condition");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		text.input("condition what is life");
+		response = waitForOutput(output);
+		checkResponse(response, "Life");
+		
+		bot.shutdown();
+	}
+
+	@org.junit.Test
+	public void testSets() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		//bot.setDebugLevel(Level.FINER);
+		
+		text.input("Is a tiger an animal?");
+		String response = waitForOutput(output);
+		checkResponse(response, "yes");
+		
+		text.input("Is an ant an animal?");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
+		checkResponse(response, "yes");
+		
+		text.input("Is an Dog an Animal?");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
+		
+		text.input("Is an dog an Animal?");
+		response = waitForOutput(output);
+		checkResponse(response, "yes");
+		
+		text.input("Is a tree an animal");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		text.input("Is a mountain goat an animal?");
+		response = waitForOutput(output);
+		checkResponse(response, "yes"); // Compound sets not yet supported.
+		
+		text.input("Is a tiger shark an animal?");
+		response = waitForOutput(output);
+		checkResponse(response, "yes"); // Compound sets not yet supported.
+		
+		bot.shutdown();
+	}
+
+	@org.junit.Test
+	public void testMaps() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		//bot.setDebugLevel(Level.FINER);
+		
+		text.input("What is the capital of alabama?");
+		String response = waitForOutput(output);
+		checkResponse(response, "Montgomery");
+		
+		text.input("capital of New York?");
+		response = waitForOutput(output);
+		checkResponse(response, "Albany");
+		
+		text.input("capital of Canada?");
+		response = waitForOutput(output);
+		checkResponse(response, "no idea");
+		
+		bot.shutdown();
+	}
+
+	@org.junit.Test
+	public void testProperties() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		//bot.setDebugLevel(Level.FINER);
+		
+		text.input("What is your favorite song?");
+		String response = waitForOutput(output);
+		checkResponse(response, "Imagine");
+		
+		text.input("What is your favorite ice cream?");
+		response = waitForOutput(output);
+		checkResponse(response, "Chocolate");
+		
+		text.input("What do you do for fun?");
+		response = waitForOutput(output);
+		checkResponse(response, "I like to impersonate human beings");
+		
+		bot.shutdown();
+	}
+
+	@org.junit.Test
+	public void testCompoundWords() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		bot.setDebugLevel(Level.FINER);
+		
+		text.input("stars topic");
+		String response = waitForOutput(output);
+		checkResponse(response, "Set stars");
+		
+		text.input("zzz");
+		response = waitForOutput(output);
+		checkResponse(response, "no stars");
+		
+		text.input("zzz star");
+		response = waitForOutput(output);
+		checkResponse(response, "one star");
+		
+		text.input("zzz yyy star");
+		response = waitForOutput(output);
+		checkResponse(response, "one star");
+		
+		text.input("zzz star star");
+		response = waitForOutput(output);
+		checkResponse(response, "two stars");
+
+		if (!isChatLog()) {
+			text.input("zzz yyy star star");
+			response = waitForOutput(output);
+			checkResponse(response, "two stars");
+		}
+		
+		text.input("zzz give up");
+		response = waitForOutput(output);
+		checkResponse(response, "found give up");
+		
+		bot.shutdown();
+	}
+
+	@org.junit.Test
+	public void testIntervals() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		bot.setDebugLevel(Level.FINER);
 		
 		text.input("what is the date");
 		String response = waitForOutput(output);
@@ -171,7 +351,7 @@ public class TestAIML2 extends TextTest {
 		result = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, locale) + " "
 					+ ((calendar.get(Calendar.DAY_OF_MONTH) < 10) ? "0" : "") + String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + ", "
 					+ String.valueOf(calendar.get(Calendar.YEAR)) + " - "
-					+ String.valueOf(calendar.get(Calendar.HOUR)) + ":"
+					+ String.valueOf((calendar.get(Calendar.HOUR) == 0 ? 12 : calendar.get(Calendar.HOUR))) + ":"
 					+ ((calendar.get(Calendar.MINUTE) < 10) ? "0" : "") + String.valueOf(calendar.get(Calendar.MINUTE)) + ":"
 					+ ((calendar.get(Calendar.SECOND) < 10) ? "0" : "") + String.valueOf(calendar.get(Calendar.SECOND));
 		checkResponse(response, "The date is " + result);
@@ -198,7 +378,7 @@ public class TestAIML2 extends TextTest {
 		if (weeks < 0) {
 			weeks = 52 + weeks;
 		}
-		checkResponse(response, "" + weeks + " weeks until Christmas.");
+		checkResponse(response, "" + weeks + " weeks until Christmas.", "" + (weeks + 1) + " weeks until Christmas.");
 		
 		text.input("how many hours until Christmas?");
 		response = waitForOutput(output);
@@ -758,7 +938,7 @@ public class TestAIML2 extends TextTest {
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
-		bot.setDebugLevel(Level.FINE);
+		//bot.setDebugLevel(Level.FINER);
 		
 		text.input("hi alice");
 		String response = waitForOutput(output);
@@ -781,7 +961,7 @@ public class TestAIML2 extends TextTest {
 		} else {
 			if (!response.equals("fine")) {
 				fail("Incorrect response: " + response);
-			}			
+			}
 		}
 		
 		text.input("alice are you nice");
@@ -805,7 +985,7 @@ public class TestAIML2 extends TextTest {
 		} else {
 			if (!response.equals("yes")) {
 				fail("Incorrect response: " + response);
-			}			
+			}
 		}
 		
 		text.input("you are fred");
@@ -999,7 +1179,7 @@ public class TestAIML2 extends TextTest {
 		response = waitForOutput(output);
 		checkResponse(response, "fail6");
 		
-		bot.shutdown();		
+		bot.shutdown();
 	}
 
 	/**

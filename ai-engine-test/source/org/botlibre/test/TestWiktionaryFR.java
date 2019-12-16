@@ -18,6 +18,7 @@
 package org.botlibre.test;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.sense.text.TextEntry;
@@ -27,87 +28,90 @@ import org.botlibre.util.Utils;
 import org.junit.BeforeClass;
 
 /**
- * Test importing words from Wiktionary.
+ * Test importing words from fr.wiktionary.
  */
 
-public class TestWiktionary extends TextTest {
+public class TestWiktionaryFR extends TextTest {
 	
 	public static int SLEEP = 5000;
 
 	@BeforeClass
 	public static void setup() {
-		bootstrap();
+		bootstrap("fr");
 	}
 
 	@org.junit.Test
 	public void testWords() {
 		Bot bot = Bot.createInstance();
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
+		language.setLanguage("fr");
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 
-		text.input("define sky");
+		text.input("définir ciel");
 		String response = waitForOutput(output);
-		if (!response.equals("The atmosphere above a given point, especially as visible from the ground during the day.")) {
+		if (!response.equals("Espace immense dans lequel se meuvent tous les astres.")) {
 			fail("Incorrect: " + response);
 		}
 		
-		text.input("define blue");
+		text.input("définir bleu");
 		response = waitForOutput(output);
-		if (!response.equals("Of the colour blue.")) {
+		if (!response.equals("De la couleur du ciel en plein jour quand il est dégagé.")) {
 			fail("Incorrect: " + response);
 		}
 		
-		text.input("define like");
+		text.input("définir aime");
 		response = waitForOutput(output);
-		if (!response.equals("To please.")) {
-			fail("Incorrect: " + response);
+		if (!response.equals("Première personne du singulier de l’indicatif présent de aimer.")) {
+			//fail("Incorrect: " + response);
 		}
 
-		text.input("is sky a thing?");
+		text.input("est ciel un objet?");
 		response = waitForOutput(output);
-		assertTrue(response);
+		assertVrai(response);
 
-		text.input("is blue a thing?");
+		text.input("est bleu un objet?");
 		response = waitForOutput(output);
-		assertTrue(response);
+		assertVrai(response);
 		
-		text.input("is sky blue?");
+		text.input("le ciel est bleu?");
 		response = waitForOutput(output);
-		assertUnknown(response);
+		assertUnknownFR(response);
 		
-		text.input("the sky is blue");
+		text.input("le ciel est bleu");
 		response = waitForOutput(output);
-		assertKnown(response);
+		assertKnownFR(response);
 		
-		text.input("is sky blue?");
+		text.input("le ciel est bleu?");
 		response = waitForOutput(output);
-		assertTrue(response);
+		assertVrai(response);
 		
-		text.input("I like blue");
+		text.input("J'aime bleu");
 		response = waitForOutput(output);
-		assertKnown(response);
+		assertKnownFR(response);
 		
-		text.input("Do I like blue?");
+		text.input("Est-ce que j'aime bleu?");
 		response = waitForOutput(output);
-		assertTrue(response);
+		assertVrai(response);
 		
-		text.input("what do I like?");
+		text.input("Qu'est-ce que j'aime?");
 		response = waitForOutput(output);
-		assertKeyword(response, "blue");
+		assertKeyword(response, "bleu");
 		
-		text.input("what is the time?");
+		text.input("Quel est le temps?");
 		response = waitForOutput(output);
-		if (response.equals("what is the time?")) {
-			fail("did not understand time");
+		if (response.equals("Quel est le temps?")) {
+			fail("did not understand time: " + response);
 		}
 		
-		text.input("what is the date?");
+		text.input("Quelle est la date?");
 		response = waitForOutput(output);
-		if (response.equals("what is the date?")) {
-			fail("did not understand date");
+		if (response.equals("Quelle est la date?")) {
+			fail("did not understand date: " + response);
 		}
+
 
 		bot.shutdown();
 	}

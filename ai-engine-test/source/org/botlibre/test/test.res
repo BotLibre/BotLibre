@@ -48,6 +48,11 @@ Template("topic cleared{think{conversation.topic = null}}")
 topic
 Template("{if (conversation.topic==null) {""} else {conversation.topic}}")
 
+reset topic
+Template("topic reset")
+think: conversation.topic = null;
+topic: reset
+
 this is a very complicated sentence
 this is a good reply to that
 
@@ -333,3 +338,12 @@ keywords: name
 
 word: 好
 synonyms: 要
+
+word: give up
+
+pattern: ^ give up ^
+Goodbye.
+
+test failed template
+Template("failed: {#self.xxx}")
+Template("failed2: {#self.foobar}")

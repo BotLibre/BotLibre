@@ -67,6 +67,97 @@ public class TestUnderstanding extends TextTest {
 	}
 
 	/**
+	 * Test language understanding is isolated.
+	 */
+	@org.junit.Test
+	public void testRemembering() {
+		Bot bot = Bot.createInstance();
+		//bot.setDebugLevel(Level.FINER);
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("you are blue");
+		String response = waitForOutput(output);
+		assertKnown(response);
+		
+		text.input("are you blue");
+		response = waitForOutput(output);
+		assertTrue(response);
+
+		bot.shutdown();
+		
+		bot = Bot.createInstance();
+		language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		text = bot.awareness().getSense(TextEntry.class);
+		output = registerForOutput(text);
+		
+		text.input("are you blue");
+		response = waitForOutput(output);
+		assertUnknown(response);
+
+		bot.shutdown();
+		
+		bot = Bot.createInstance();
+		language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		text = bot.awareness().getSense(TextEntry.class);
+		output = registerForOutput(text);
+		
+		text.input("you are very blue");
+		response = waitForOutput(output);
+		assertKnown(response);
+		
+		text.input("are you very blue");
+		response = waitForOutput(output);
+		assertTrue(response);
+
+		bot.shutdown();
+		
+		bot = Bot.createInstance();
+		language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		text = bot.awareness().getSense(TextEntry.class);
+		output = registerForOutput(text);
+		
+		text.input("are you very blue");
+		response = waitForOutput(output);
+		assertUnknown(response);
+
+		bot.shutdown();
+		
+		bot = Bot.createInstance();
+		language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		text = bot.awareness().getSense(TextEntry.class);
+		output = registerForOutput(text);
+		
+		text.input("your cat is a dog");
+		response = waitForOutput(output);
+		assertKnown(response);
+		
+		text.input("is your cat a dog?");
+		response = waitForOutput(output);
+		assertTrue(response);
+
+		bot.shutdown();
+		
+		bot = Bot.createInstance();
+		language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		text = bot.awareness().getSense(TextEntry.class);
+		output = registerForOutput(text);
+		
+		text.input("is your cat a dog?");
+		response = waitForOutput(output);
+		assertUncertain(response);
+
+		bot.shutdown();
+	}
+
+	/**
 	 * Test language understanding.
 	 */
 	@org.junit.Test
@@ -156,10 +247,10 @@ public class TestUnderstanding extends TextTest {
 		assertFalse(response);
 		assertKeyword(response, "a cat");
 		
-		text.input("do you think that I am a cat?");
-		response = waitForOutput(output);
-		assertFalse(response);
-		assertKeyword(response, "a cat");
+		//text.input("do you think that I am a cat?");
+		//response = waitForOutput(output);
+		//assertFalse(response);
+		//assertKeyword(response, "a cat");
 		
 		text.input("are you a dog");
 		response = waitForOutput(output);

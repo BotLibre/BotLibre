@@ -29,7 +29,7 @@ import java.nio.file.StandardCopyOption;
 public class ReverseFiles {
 
 	public static void main(String[] args) throws Exception {
-		String dir = "D:/Projects/Paphus/Avatars/Avatars/avatars/katie/blink5";
+		String dir = "D:/Projects/Paphus/Avatars/blink5";
 		File[] files = new File(dir).listFiles();
 		String prefix = "blink";
 		String suffix = ".png";

@@ -140,6 +140,7 @@ public class TestSRAIX extends TextTest {
 		text.input("sraixforge hello");
 		response = waitForOutput(output);
 		if (response.indexOf("Hello") == -1 && response.indexOf("Hi") == -1) {
+			// Offline?
 			fail("Incorrect response: " + response);
 		}
 	}
@@ -204,7 +205,7 @@ public class TestSRAIX extends TextTest {
 		String response = waitForOutput(output);
 		checkResponse(response, "Pong");
 
-		text.input("fetch html https://botlibre.com head/meta[2]/@content");
+		text.input("fetch html https://botlibre.com head/meta[3]/@content");
 		response = waitForOutput(output);
 		checkResponse(response, "Paphus Solutions Inc.");
 

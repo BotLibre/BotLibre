@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -95,9 +95,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Startup failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Startup failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -106,12 +106,12 @@ public class BotFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			String database = (String)JOptionPane.showInputDialog(
 					BotFrame.this,
-                "Enter database name to import:",
-                "Import Dialog",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                "");
+				"Enter database name to import:",
+				"Import Dialog",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				"");
 			if (database == null) {
 				return;
 			}
@@ -120,9 +120,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Import failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Import failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -132,15 +132,15 @@ public class BotFrame extends JFrame {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setDialogTitle("Select chat log file:");
 			if (lastDirectory == null) {
-		        lastDirectory = new File(".");
+				lastDirectory = new File(".");
 			}
 			chooser.setCurrentDirectory(lastDirectory);
-	        int value = chooser.showOpenDialog(BotFrame.this);
-	        if (value != JFileChooser.APPROVE_OPTION) {
-	        	return;
-	        }
-	        File file = chooser.getSelectedFile();
-	        lastDirectory = file.getParentFile();
+			int value = chooser.showOpenDialog(BotFrame.this);
+			if (value != JFileChooser.APPROVE_OPTION) {
+				return;
+			}
+			File file = chooser.getSelectedFile();
+			lastDirectory = file.getParentFile();
 			try {
 				if (file.getName().contains(".aiml")) {
 					Language language = getBot().mind().getThought(Language.class);
@@ -157,9 +157,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Import failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Import failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -169,15 +169,15 @@ public class BotFrame extends JFrame {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setDialogTitle("Select Self file:");
 			if (lastDirectory == null) {
-		        lastDirectory = new File(".");
+				lastDirectory = new File(".");
 			}
 			chooser.setCurrentDirectory(lastDirectory);
-	        int value = chooser.showOpenDialog(BotFrame.this);
-	        if (value != JFileChooser.APPROVE_OPTION) {
-	        	return;
-	        }
-	        File file = chooser.getSelectedFile();
-	        lastDirectory = file.getParentFile();
+			int value = chooser.showOpenDialog(BotFrame.this);
+			if (value != JFileChooser.APPROVE_OPTION) {
+				return;
+			}
+			File file = chooser.getSelectedFile();
+			lastDirectory = file.getParentFile();
 			try {
 				if (file.getName().contains("aiml")) {
 					getBot().mind().getThought(Language.class).loadAIMLFile(file, true, false, "");					
@@ -187,9 +187,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Import failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Import failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -198,12 +198,12 @@ public class BotFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			String database = (String)JOptionPane.showInputDialog(
 					BotFrame.this,
-                "Enter database to switch to:",
-                "Instance Switch Dialog",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                "");
+				"Enter database to switch to:",
+				"Instance Switch Dialog",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				"");
 			if (database == null) {
 				return;
 			}
@@ -212,9 +212,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Switch failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Switch failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -223,12 +223,12 @@ public class BotFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			String database = (String)JOptionPane.showInputDialog(
 					BotFrame.this,
-                "Enter database to create:",
-                "Creation Dialog",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                "");
+				"Enter database to create:",
+				"Creation Dialog",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				"");
 			if (database == null) {
 				return;
 			}
@@ -237,9 +237,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Creation failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Creation failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -248,12 +248,12 @@ public class BotFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			String database = (String)JOptionPane.showInputDialog(
 					BotFrame.this,
-                "Enter database to destoy *** CAUTION THIS WILL DELETE ALL DATA ***:",
-                "Destruction Dialog",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                "");
+				"Enter database to destoy *** CAUTION THIS WILL DELETE ALL DATA ***:",
+				"Destruction Dialog",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				"");
 			if (database == null) {
 				return;
 			}
@@ -262,9 +262,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Destruction failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Destruction failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -276,9 +276,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Bootstrap failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Bootstrap failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -290,9 +290,9 @@ public class BotFrame extends JFrame {
 			} catch (Exception failed) {
 				failed.printStackTrace();
 				JOptionPane.showMessageDialog(BotFrame.this,
-				    failed.toString(),
-				    "Bootstrap failed",
-				    JOptionPane.ERROR_MESSAGE);
+					failed.toString(),
+					"Bootstrap failed",
+					JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -301,9 +301,9 @@ public class BotFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			int option = JOptionPane.showConfirmDialog(
 					BotFrame.this,
-		            "*** CAUTION THIS WILL DELETE ALL DATA ***",
-		            "Delete all content dialog",
-		            JOptionPane.WARNING_MESSAGE);
+					"*** CAUTION THIS WILL DELETE ALL DATA ***",
+					"Delete all content dialog",
+					JOptionPane.WARNING_MESSAGE);
 			if (option != 0) {
 				return;
 			}
@@ -344,40 +344,40 @@ public class BotFrame extends JFrame {
 	}
 	
 	public BotFrame() {	
-        super("Bot");
-        
-        try {
-        	Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
-        } catch (Exception exception) {
-        	DatabaseMemory.RECREATE_DATABASE = true;
-        	Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
-        	DatabaseMemory.RECREATE_DATABASE = false;
-        }
-        try {
-        	setBot(Bot.createInstance());
-        } catch (Exception exception) {
-        	DatabaseMemory.RECREATE_DATABASE = true;
-        	setBot(Bot.createInstance());
-        	DatabaseMemory.RECREATE_DATABASE = false;
-        }
+		super("Bot");
+		
+		try {
+			Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
+		} catch (Exception exception) {
+			DatabaseMemory.RECREATE_DATABASE = true;
+			Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
+			DatabaseMemory.RECREATE_DATABASE = false;
+		}
+		try {
+			setBot(Bot.createInstance());
+		} catch (Exception exception) {
+			DatabaseMemory.RECREATE_DATABASE = true;
+			setBot(Bot.createInstance());
+			DatabaseMemory.RECREATE_DATABASE = false;
+		}
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(screenSize.width / 8, screenSize.height / 8, (int)(screenSize.width / 1.5), (int)(screenSize.height / 1.5));
-		setIconImage(new ImageIcon(getClass().getResource("Bot.gif")).getImage());        
+		setIconImage(new ImageIcon(getClass().getResource("Bot.gif")).getImage());		
 		addWindowListener(new ExitAction());
 		
 		buildMenus();
 		buildContent();
 	}
 		
-    protected void buildContent() {
+	protected void buildContent() {
 		this.BotPanel = new BotPanel(getBot());
-    	getContentPane().setLayout(new GridBagLayout());
-    	getContentPane().add(this.BotPanel, new GridBagConstraints(0,0,1,1, 1.0,1.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));    	
-    }
-    	
-    protected void buildMenus() {
-	    this.menuBar = new JMenuBar();
+		getContentPane().setLayout(new GridBagLayout());
+		getContentPane().add(this.BotPanel, new GridBagConstraints(0,0,1,1, 1.0,1.0, GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));		
+	}
+		
+	protected void buildMenus() {
+		this.menuBar = new JMenuBar();
 		this.menuBar.setOpaque(true);
 		JMenu fileMenu = buildFileMenu();
 		JMenu editMenu = new JMenu("Edit");
@@ -388,9 +388,9 @@ public class BotFrame extends JFrame {
 		this.menuBar.add(helpMenu);
 		
 		setJMenuBar(this.menuBar);	
-    }
+	}
 
-    protected JMenu buildFileMenu() {
+	protected JMenu buildFileMenu() {
 		JMenu fileMenu = new JMenu("Bot");
 
 		JMenuItem spawnMenuItem = new JMenuItem("Spawn");
@@ -451,7 +451,7 @@ public class BotFrame extends JFrame {
 		fileMenu.add(exitMenuItem);
 		
 		return fileMenu;
-    }
+	}
 
 	/**
 	 * Return the associated Bot instance.
@@ -470,11 +470,11 @@ public class BotFrame extends JFrame {
 			this.BotPanel.setBot(bot);
 		}
 	}
-    
-    public void exit() {
-    	dispose();
-        System.exit(0);
-    }
+	
+	public void exit() {
+		dispose();
+		System.exit(0);
+	}
 
 }
 

@@ -167,6 +167,44 @@ public class TestSelf extends TextTest {
 		bot.shutdown();
 	}
 
+	/**
+	 * Test patterns.
+	 */
+	@org.junit.Test
+	public void testPatterns() {
+		Bot bot = Bot.createInstance();
+		try {
+			Language language = bot.mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Disabled);
+			TextEntry text = bot.awareness().getSense(TextEntry.class);
+			//bot.setDebugLevel(Level.FINER);
+			List<String> output = registerForOutput(text);
+
+			text.input("init");
+			String response = waitForOutput(output);
+			checkResponse(response, "success");
+			
+			text.input("I give");
+			response = waitForOutput(output);
+			checkResponse(response, "What?");
+			
+			text.input("I give up!");
+			response = waitForOutput(output);
+			checkResponse(response, "Goodbye.");
+			
+			text.input("give up");
+			response = waitForOutput(output);
+			checkResponse(response, "Goodbye.");
+			
+			text.input("I guess I will have to GIVE uP");
+			response = waitForOutput(output);
+			checkResponse(response, "Goodbye.");
+
+		} finally {
+			bot.shutdown();
+		}
+	}
+
 	@org.junit.Test
 	public void testDate() {
 		Bot bot = Bot.createInstance();
@@ -323,6 +361,7 @@ public class TestSelf extends TextTest {
 			TextEntry text = bot.awareness().getSense(TextEntry.class);
 			List<String> output = registerForOutput(text);
 
+			// Fails on decompile because of JSON literal.
 			text.input("test language");
 			String response = waitForOutput(output);
 			checkResponse(response, "ok");
@@ -425,7 +464,7 @@ public class TestSelf extends TextTest {
 			
 			text.input("lookup Barack Obama");
 			response = waitForOutput(output);
-			checkResponse(response, "44th President of the United States of America");
+			checkResponse(response, "44th president of the United States");
 			
 			text.input("lookup mother on Barack Obama");
 			response = waitForOutput(output);
@@ -480,23 +519,23 @@ public class TestSelf extends TextTest {
 			response = waitForOutput(output);
 			assertKeyword(response, "avatar");
 
-			text.input("html https://botlibre.com head/meta[2]/@content");
+			text.input("html https://botlibre.com head/meta[3]/@content");
 			response = waitForOutput(output);
 			checkResponse(response, "Paphus Solutions Inc.");
 
 			text.input("html https://botlibre.com count(head/meta)");
 			response = waitForOutput(output);
-			checkResponse(response, "6");
+			checkResponse(response, "7");
 
 			text.input("html text https://botlibre.com //h1");
 			response = waitForOutput(output);
-			checkResponse(response, "Bot Libre!");
+			checkResponse(response, "Bot Libre");
 
 			text.input("html list 1 https://botlibre.com //h3/text()");
 			response = waitForOutput(output);
-			checkResponse(response, "Browse");
+			//checkResponse(response, "Browse");
 			
-			text.input("html xml https://botlibre.com head/meta[2]");
+			text.input("html xml https://botlibre.com head/meta[3]");
 			response = waitForOutput(output);
 			assertKeyword(response, "Paphus Solutions Inc.");
 			assertKeyword(response, "<meta");

@@ -50,6 +50,27 @@ public class TestAIML2ChatLog extends TestAIML2 {
 		} catch (Exception exception) {
 			fail(exception.toString());
 		}
+		try {
+			URL url = TestAIML.class.getResource("animal.set");
+			File file = new File(url.toURI());
+			bot.mind().getThought(Language.class).loadAIMLSETFile(file, "animal", "");
+		} catch (Exception exception) {
+			fail(exception.toString());
+		}
+		try {
+			URL url = TestAIML.class.getResource("state2capital.map");
+			File file = new File(url.toURI());
+			bot.mind().getThought(Language.class).loadAIMLMAPFile(file, "state2capital", "");
+		} catch (Exception exception) {
+			fail(exception.toString());
+		}
+		try {
+			URL url = TestAIML.class.getResource("bot.properties");
+			File file = new File(url.toURI());
+			bot.mind().getThought(Language.class).loadAIMLPropertiesFile(file, "");
+		} catch (Exception exception) {
+			fail(exception.toString());
+		}
 		
 		Utils.sleep(5000);
 		

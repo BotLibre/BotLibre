@@ -853,4 +853,76 @@ seconds until Christmas.
 <template>I have no idea what <star/> is.</template>
 </category>
 
+<category>
+<pattern>stars topic</pattern>
+<template>set <set name="topic">stars</set><think><self>Language.word("give up")</self></think></template>
+</category>
+
+<topic name="stars">
+
+<category>
+<pattern>* give up</pattern>
+<template>found give up</template>
+</category>
+
+<category>
+<pattern>* star</pattern>
+<template>one star</template>
+</category>
+
+<category>
+<pattern>* star star</pattern>
+<template>two stars</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<template>no stars</template>
+</category>
+
+</topic>
+
+<category>
+<pattern>condition *</pattern>
+<template>
+	<think><set name="value"><star/></set></think>
+	<condition name="value">
+		<li value="what is *"><star/></li>
+		<li value="* ok"><star/></li>
+		<li value="hello">hi</li>
+		<li>condition default</li>
+	</condition> 
+</template>
+</category>
+
+<category>
+<pattern>is [a an] <set>animal</set> an animal</pattern>
+<template>yes</template>
+</category>
+
+<category>
+<pattern>what is (the) capital of *</pattern>
+<template><srai>capital of <star/></srai></template>
+</category>
+
+<category>
+<pattern>capital of *</pattern>
+<template><map name="state2capital"><star/></map></template>
+</category>
+
+<category>
+<pattern>what do you do for fun</pattern>
+<template>I like to <bot name="for fun"/></template>
+</category>
+
+<category>
+<pattern>what is your favorite song</pattern>
+<template><bot name="favoritesong"/></template>
+</category>
+
+<category>
+<pattern>what is your favorite ice cream</pattern>
+<template><bot name="favorite-ice-cream"/></template>
+</category>
+
 </aiml>

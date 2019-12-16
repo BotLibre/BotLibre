@@ -64,7 +64,7 @@ public class TestLanguageDecompile extends TestLanguage {
 				
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
-		text.input("sky blue red dog cat green grass tall like very loves");
+		text.input("sky blue red dog barks all night the cat green grass tall like very loves good Dirt dirt");
 		waitForOutput(output);
 		Utils.sleep(10000);
 		

@@ -18,6 +18,7 @@
 package org.botlibre.test;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.sense.text.TextEntry;
@@ -30,18 +31,18 @@ import org.junit.BeforeClass;
  * Test importing data from WikiData.
  */
 
-public class TestWikidata extends TextTest {
+public class TestWikidataFR extends TextTest {
 	
 	public static int SLEEP = 5000;
 
 	@BeforeClass
 	public static void setup() {
-		bootstrap();
+		bootstrap("fr");
 	}
 
 	@org.junit.Test
 	public void testImport() throws Exception {
-		Utils.sleep(SLEEP);
+		//Utils.sleep(SLEEP);
 		Bot bot = Bot.createInstance();
 		//Sense sense = bot.awareness().getSense(Http.class.getName());
 		//sense.input(new URL("http://www.freebase.com/physics/particle"));
@@ -54,61 +55,63 @@ public class TestWikidata extends TextTest {
 	public void testWhatIs() {
 		Utils.sleep(SLEEP);
 		Bot bot = Bot.createInstance();
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
+		language.setLanguage("fr");
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 		
-		text.input("what is Uranium?");
+		text.input("Qu'est-ce que l'Uranium?");
 		String response = waitForOutput(output);
-		if (!response.equals("radioactive, metallic element with the atomic number 92")) {
+		if (!response.equals("élément chimique ayant le numéro atomique 92")) {
 			fail("Incorrect: " + response);
 		}
 		
 		Utils.sleep(SLEEP);
-		text.input("tell me about Oxygen");
+		text.input("Qu'est-ce que Oxygène");
 		response = waitForOutput(output);
-		if (!response.equals("element with the atomic number of 8")) {
+		if (!response.equals("élement chimique ayant le numéro atomique 8")) {
 			fail("Incorrect: " + response);
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("define water");
+		text.input("Définir eau");
 		response = waitForOutput(output);
-		if (!response.equals("A substance found at room temperature and pressure as a clear liquid; it is present naturally as rain, and found in rivers, lakes and seas; its solid form is ice and its gaseous form is steam.")) {
+		if (!response.equals("Liquide transparent, incolore, inodore et insipide à l’état pur, qui est le principal constituant des lacs, rivières, mers et océans.")) {
 			fail("Incorrect: " + response);
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("who is Barack Obama?");
+		text.input("Qui est Barack Obama?");
 		response = waitForOutput(output);
-		if (response.indexOf("44th President") == -1) {
+		if (response.indexOf("président des États-Unis de 2009 à 2017") == -1) {
 			fail("Incorrect: " + response);
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("who is his father?");
+		text.input("Qui est son père?");
 		response = waitForOutput(output);
 		if (response.indexOf("Severin Obama") == -1 && response.indexOf("Barack Obama") == -1) {
 			fail("Incorrect: " + response);
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("who is George Bush?");
+		text.input("Qui est George Bush?");
 		response = waitForOutput(output);
-		if (response.indexOf("43rd President") == -1) {
+		if (response.indexOf("homme d'État américain, président des États-Unis de 1989 à 1993") == -1) {
 			fail("Incorrect: " + response);
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("who is Barack Obama?");
+		text.input("Qui est Barack Obama?");
 		response = waitForOutput(output);
-		if (response.indexOf("44th President") == -1) {
+		if (response.indexOf("président des États-Unis de 2009 à 2017") == -1) {
 			fail("Incorrect: " + response);
 		}
 
 		Utils.sleep(SLEEP);
-		text.input("who is his mother?");
+		text.input("Qui est sa mère?");
 		response = waitForOutput(output);
 		if (response.indexOf("Ann Dunham") == -1) {
 			fail("Incorrect: " + response);
@@ -116,65 +119,67 @@ public class TestWikidata extends TextTest {
 
 		bot.shutdown();
 	}
-
+	
 	@org.junit.Test
 	public void testWhereIs() {
 		Utils.sleep(SLEEP);
 		Bot bot = Bot.createInstance();
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
+		language.setLanguage("fr");
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
 
 		Utils.sleep(SLEEP);
-		text.input("where is Montreal?");
+		text.input("Où est Montréal?");
 		String response = waitForOutput(output);
-		checkResponse(response, "Montreal is in Canada.");
+		checkResponse(response, "Montréal est au Canada.");
 
 		Utils.sleep(SLEEP);
-		text.input("where is Edmonton?");
+		text.input("Où est Edmonton?");
 		response = waitForOutput(output);
-		checkResponse(response, "Edmonton is in Canada.");
+		checkResponse(response, "Edmonton est au Canada.");
 		
 		// Test twice for when already known.
 		Utils.sleep(SLEEP);
-		text.input("where is Edmonton?");
+		text.input("Où est Edmonton?");
 		response = waitForOutput(output);
-		checkResponse(response, "Edmonton is in Canada.");
+		checkResponse(response, "Edmonton est au Canada.");
 		
 		text.input("x");
 		response = waitForOutput(output);
 		
 		// Test lower case.
 		Utils.sleep(SLEEP);
-		text.input("where is edmonton?");
+		text.input("Où est edmonton?");
 		response = waitForOutput(output);
-		checkResponse(response, "Edmonton is in Canada.");
+		checkResponse(response, "Edmonton est au Canada.");
 
 		Utils.sleep(SLEEP);
-		text.input("what is Brockville?");
+		text.input("Qu'est-ce que Brockville?");
 		response = waitForOutput(output);
-		checkResponse(response, "city in Ontario, Canada");
+		checkResponse(response, "ville de l'Ontario (Canada)");
 
 		// Test twice for when already known.
 		Utils.sleep(SLEEP);
-		text.input("what is Brockville?");
+		text.input("Qu'est-ce que Brockville?");
 		response = waitForOutput(output);
-		checkResponse(response, "city in Ontario, Canada");
+		checkResponse(response, "ville de l'Ontario (Canada)");
 
 		text.input("x");
 		response = waitForOutput(output);
 		
 		// Test lower case.
 		Utils.sleep(SLEEP);
-		text.input("what is brockville?");
+		text.input("Qu'est-ce que brockville?");
 		response = waitForOutput(output);
-		checkResponse(response, "city in Ontario, Canada");
+		checkResponse(response, "ville de l'Ontario (Canada)");
 
 		Utils.sleep(SLEEP);
-		text.input("where is it?");
+		text.input("Où est-ce?");
 		response = waitForOutput(output);
-		checkResponse(response, "It is in Canada.");
+		checkResponse(response, "C'est au Canada.");
 
 		bot.shutdown();
 	}

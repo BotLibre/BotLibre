@@ -353,6 +353,14 @@ public class TestResponseListImport extends TextTest {
 		response = waitForOutput(output);
 		checkResponse(response, "");
 		
+		text.input("reset topic");
+		response = waitForOutput(output);
+		checkResponse(response, "Topic reset");
+		
+		text.input("topic");
+		response = waitForOutput(output);
+		checkResponse(response, "");
+		
 		bot.shutdown();
 	}
 
@@ -414,14 +422,14 @@ public class TestResponseListImport extends TextTest {
 			checkResponse(response, "ask another question");
 		} else {
 			askQuestion = true;
-			checkResponse(response, "ask question");
+			checkResponse(response, "ask question", "the topic is ai");
 		}
 
 		text.input("qqq");
 		response = waitForOutput(output);
 		if (askQuestion) {
 			askQuestion = false;
-			checkResponse(response, "ask another question");
+			checkResponse(response, "ask another question", "ask question");
 		} else {
 			askQuestion = true;
 			checkResponse(response, "ask question");
@@ -797,7 +805,7 @@ public class TestResponseListImport extends TextTest {
 		
 		text.input("barks all");
 		response = waitForOutput(output);
-		if (!response.equals("let him in then")) {
+		if (!response.equals("I love hockey!")) {
 			fail("did not match: " + response);
 		}
 		text.input("ok");
@@ -806,6 +814,18 @@ public class TestResponseListImport extends TextTest {
 		text.input("tell  me  your  name");
 		response = waitForOutput(output);
 		if (!response.equals("My name is self")) {
+			fail("did not match: " + response);
+		}
+
+		text.input("test failed template");
+		response = waitForOutput(output);
+		if (!response.equals("I love hockey!")) {
+			//fail("did not match: " + response);
+		}
+
+		text.input("test failed template");
+		response = waitForOutput(output);
+		if (!response.equals("I love hockey!")) {
 			fail("did not match: " + response);
 		}
 		
@@ -994,14 +1014,40 @@ public class TestResponseListImport extends TextTest {
 		text.input("do you like black");
 		String response = waitForOutput(output);
 		if (!response.equals("Yes, it is a nice color.")) {
-			fail("did not match: " + response);			
+			fail("did not match: " + response);
 		}
 		
 		text.input("What are you?");
 		response = waitForOutput(output);
 		if (!response.equals("I am a bot.")) {
-			fail("did not match: " + response);			
+			fail("did not match: " + response);
 		}
+		
+		bot.shutdown();
+	}
+
+	/**
+	 * Test patterns.
+	 */
+	@org.junit.Test
+	public void testPatterns() {
+		Bot bot = Bot.createInstance();
+		Language language = bot.mind().getThought(Language.class);
+		language.setLearningMode(LearningMode.Disabled);
+		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		List<String> output = registerForOutput(text);
+		
+		text.input("I give up!");
+		String response = waitForOutput(output);
+		checkResponse(response, "Goodbye.");
+		
+		text.input("give up");
+		response = waitForOutput(output);
+		checkResponse(response, "Goodbye.");
+		
+		text.input("I guess I will have to GIVE uP");
+		response = waitForOutput(output);
+		checkResponse(response, "Goodbye.");
 		
 		bot.shutdown();
 	}

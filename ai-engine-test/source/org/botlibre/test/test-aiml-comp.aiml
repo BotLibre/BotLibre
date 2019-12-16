@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>test spaces *</pattern>
+<template>hello<star/>world</template>
+</category>
+
+<category>
+<pattern>test get default</pattern>
+<template><get name="xyz"/></template>
+</category>
+
+<category>
+<pattern>test map default</pattern>
+<template><map name="state2captial">nowhere</map></template>
+</category>
+
+<category>
+<pattern>set printstring</pattern>
+<template><set name="foo">bar</set></template>
+</category>
+
+<category>
+<pattern>reverse *</pattern>
+<template><star/></template>
+</category>
+
+<category>
+<pattern>reverse * *</pattern>
+<template><srai>reverse <star index="2"/></srai> <star/></template>
+</category>
+
+<category>
+<pattern>date * * *</pattern>
+<template>year: <star/> month: <star index="2"/> day: <star index="3"/></template>
+</category>
+
+</aiml>

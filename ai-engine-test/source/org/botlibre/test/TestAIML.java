@@ -391,31 +391,31 @@ public class TestAIML extends TextTest {
 		text.input("Who, is ALICE Toklas...?");
 		response = waitForOutput(output);
 		if (!response.equals("She was the partner of Gertrude Stein, and inventor of the pot brownie.")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("Is HAL smarter than you?");
 		response = waitForOutput(output);
 		if (!response.equals("The ALICE series is the most intelligent chat robot software.")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("call me alice");
 		response = waitForOutput(output);
 		if (!response.equals("My name is ALICE too!")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("WHERE IS THE DOCUMENTATION");
 		response = waitForOutput(output);
 		if (!response.equals("Try visiting <a href=\"http://www.Botbots.com\" target=\"_new\">Botbots.com</a> or <a href=\"http://www.alicebot.org\" target=\"_new\">Alicebot.org</a>.")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("WHAT DOES A L I C E stand for?");
 		response = waitForOutput(output);
 		if (!response.equals("ALICE = Artificial Linguistic Internet Computer Entity")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 
 		bot.shutdown();
@@ -437,19 +437,19 @@ public class TestAIML extends TextTest {
 		text.input("WHAT YEAR IS THIS");
 		String response = waitForOutput(output);
 		if (!response.equals(date.get(Calendar.YEAR) + ".")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 
 		text.input("What month is it right now?");
 		response = waitForOutput(output);
 		if (!response.equals(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + ".")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 
 		text.input("IS TODAY SUNDAY or saturday?");
 		response = waitForOutput(output);
 		if (!response.equals("Today is " + date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US) + ".")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 
 		bot.shutdown();		

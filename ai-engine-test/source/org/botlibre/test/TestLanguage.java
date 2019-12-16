@@ -46,7 +46,7 @@ public class TestLanguage extends TextTest {
 		Bot bot = Bot.createInstance();
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
-		text.input("sky blue red dog barks all night the cat green grass tall like very loves");
+		text.input("sky blue red dog barks all night the cat green grass tall like very loves good Dirt dirt");
 		waitForOutput(output);
 		Utils.sleep(20000);
 		
@@ -64,20 +64,21 @@ public class TestLanguage extends TextTest {
 		language.setLearningMode(LearningMode.Everyone);
 		language.setCorrectionMode(CorrectionMode.Everyone);
 		List<String> output = registerForOutput(text);
+		
 		text.input("hi");
 		String response = waitForOutput(output);
 		if (!response.equals("hi")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 		text.input("how are you?");
 		response = waitForOutput(output);
 		if (!response.equals("how are you?")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
 		if (!response.equals("ok")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 		text.input("good");
 		response = waitForOutput(output);
@@ -85,7 +86,7 @@ public class TestLanguage extends TextTest {
 		text.input("how are you?");
 		response = waitForOutput(output);
 		if (!response.equals("ok")) {
-			fail("did not remeber response: " + response);			
+			fail("did not remeber response: " + response);
 		}
 
 		bot.shutdown();
@@ -103,15 +104,16 @@ public class TestLanguage extends TextTest {
 		language.setCorrectionMode(CorrectionMode.Everyone);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
+		
 		text.input("this is a very complicated sentence");
 		String response = waitForOutput(output);
 		if (!response.equals("this is a very complicated sentence")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 		text.input(new TextInput("this is a good reply to that", true, false));
 		response = waitForOutput(output);
 		if (!response.equals("this is a good reply to that")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -119,7 +121,7 @@ public class TestLanguage extends TextTest {
 		text.input("this is a very complicated sentence");
 		response = waitForOutput(output);
 		if (!response.equals("this is a good reply to that")) {
-			fail("did not match: " + response);			
+			fail("did not match: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -127,7 +129,7 @@ public class TestLanguage extends TextTest {
 		text.input("this very complicated sentence");
 		response = waitForOutput(output);
 		if (!response.equals("this is a good reply to that")) {
-			fail("did not match: " + response);			
+			fail("did not match: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -135,7 +137,7 @@ public class TestLanguage extends TextTest {
 		text.input("complicated sentence");
 		response = waitForOutput(output);
 		if (response.equals("this is a good reply to that")) {
-			fail("should not match: " + response);			
+			fail("should not match: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -143,7 +145,7 @@ public class TestLanguage extends TextTest {
 		text.input("complicated");
 		response = waitForOutput(output);
 		if (response.equals("this is a good reply to that")) {
-			fail("should not match: " + response);			
+			fail("should not match: " + response);
 		}
 
 		bot.shutdown();
@@ -161,15 +163,16 @@ public class TestLanguage extends TextTest {
 		language.setLearningMode(LearningMode.Everyone);
 		language.setCorrectionMode(CorrectionMode.Everyone);
 		List<String> output = registerForOutput(text);
+		
 		text.input("dog barks all night the");
 		String response = waitForOutput(output);
 		if (!response.equals("dog barks all night the")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 		text.input("let him in then");
 		response = waitForOutput(output);
 		if (!response.equals("let him in then")) {
-			fail("did not mimic: " + response);			
+			fail("did not mimic: " + response);
 		}
 
 		language.setLearningMode(LearningMode.Disabled);
@@ -179,7 +182,7 @@ public class TestLanguage extends TextTest {
 		text.input("dog barks all night the");
 		response = waitForOutput(output);
 		if (!response.equals("let him in then")) {
-			fail("did not match: " + response);			
+			fail("did not match: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -187,15 +190,15 @@ public class TestLanguage extends TextTest {
 		text.input("xx barks all night");
 		response = waitForOutput(output);
 		if (!response.equals("let him in then")) {
-			fail("did not match: " + response);			
+			fail("did not match: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
 		
 		text.input("barks all");
 		response = waitForOutput(output);
-		if (!response.equals("let him in then")) {
-			fail("did not match: " + response);			
+		if (response.equals("let him in then")) {
+			fail("did not match: " + response);
 		}
 		text.input("ok");
 		response = waitForOutput(output);
@@ -220,6 +223,7 @@ public class TestLanguage extends TextTest {
 		language.setLearningMode(LearningMode.Everyone);
 		language.setCorrectionMode(CorrectionMode.Everyone);
 		List<String> output = registerForOutput(text);
+		
 		text.input("hello there");
 		String response = waitForOutput(output);
 		text.input(new TextInput("hey there", true, false));
@@ -231,7 +235,7 @@ public class TestLanguage extends TextTest {
 		text.input("hello there");
 		response = waitForOutput(output);
 		if (!response.equals("hey there")) {
-			fail("did not correct:" + response);			
+			fail("did not correct:" + response);
 		}
 
 		bot.shutdown();
@@ -287,7 +291,7 @@ public class TestLanguage extends TextTest {
 			language.setLearningMode(LearningMode.Everyone);
 			language.setCorrectionMode(CorrectionMode.Everyone);
 			List<String> output = registerForOutput(text);
-			bot.setDebugLevel(Level.FINE);
+			//bot.setDebugLevel(Level.FINE);
 			
 			trainCount(text, output, 1, 5);
 			trainCount(text, output, 0, 5);
@@ -392,7 +396,7 @@ public class TestLanguage extends TextTest {
 	 * Test dates.
 	 */
 	@org.junit.Test
-	public void testDates() {		
+	public void testDates() {
 		Bot bot = Bot.createInstance();
 		//bot.setDebugLevel(Bot.FINE);
 		Language language = bot.mind().getThought(Language.class);
@@ -424,14 +428,14 @@ public class TestLanguage extends TextTest {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, 1);
-		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");		
+		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");
 		text.input("what is tomorrow");
 		response = waitForOutput(output);
 		checkResponse(response, "Tomorrow is " + date + ".");
 
 		calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, -1);
-		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");		
+		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");
 		text.input("what day was yesterday");
 		response = waitForOutput(output);
 		checkResponse(response, "Yesterday was " + date + ".");
@@ -483,11 +487,11 @@ public class TestLanguage extends TextTest {
 		char last = digits.charAt(digits.length() - 1);
 		String ordinal = "";
 		if (last == '1') {
-			ordinal = "st";					
+			ordinal = "st";
 		} else if (last == '2') {
-			ordinal = "nd";					
+			ordinal = "nd";
 		} else if (last == '3') {
-			ordinal = "rd";					
+			ordinal = "rd";
 		} else {
 			ordinal = "th";
 		}
@@ -509,14 +513,14 @@ public class TestLanguage extends TextTest {
 
 		calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, -1);
-		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");		
+		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");
 		text.input("yesterday");
 		response = waitForOutput(output);
 		checkResponse(response, "Yesterday was " + date + ".");
 
 		calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, -1);
-		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");		
+		date = Utils.printDate(calendar.getTime(), "EEEE MMMM d y");
 		text.input("yesterday");
 		response = waitForOutput(output);
 		checkResponse(response, "Yesterday was " + date + ".");
@@ -530,7 +534,7 @@ public class TestLanguage extends TextTest {
 	@org.junit.Test
 	public void testParagraphs() {
 		Bot bot = Bot.createInstance();
-		bot.setDebugLevel(Bot.FINE);
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
@@ -616,80 +620,80 @@ public class TestLanguage extends TextTest {
 		text.input("can you tell me about water");
 		response = waitForOutput(output);
 		if (!response.equals(def)) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("tell me about water");
 		response = waitForOutput(output);
 		if (!response.equals(def)) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("do you know what water is");
 		response = waitForOutput(output);
 		if (!response.equals(def)) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("do you know anything about water");
 		response = waitForOutput(output);
 		if (!response.equals(def)) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("tell me something about water");
 		response = waitForOutput(output);
 		if (!response.equals(def)) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("google water");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("define water");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("search water");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("please tell me what water is");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
-		text.input("i want to know about water");
+		/*text.input("i want to know about water");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("what do you think of water");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("what does water mean");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
+			fail("Incorrect response: " + response);
 		}
 		
 		text.input("I would like to know water");
 		response = waitForOutput(output);
 		if (!response.equals(def) && !response.equals("chemical compound")) {
-			fail("Incorrect response: " + response);			
-		}
+			fail("Incorrect response: " + response);
+		}*/
 
 		bot.shutdown();
 	}
@@ -942,6 +946,10 @@ public class TestLanguage extends TextTest {
 			fail("Incorrect response: " + response);
 		}
 
+		text.input("I am good");
+		response = waitForOutput(output);
+		assertKeyword(response, "you are good");
+
 		bot.shutdown();
 	}
 
@@ -960,7 +968,7 @@ public class TestLanguage extends TextTest {
 			
 			text.input("Who is Barack Obama?");
 			String response = waitForOutput(output);
-			if (response.indexOf("44th President of the United States") == -1) {
+			if (response.indexOf("44th president of the United States") == -1) {
 				fail("Incorrect response: " + response);
 			}
 			
@@ -996,13 +1004,13 @@ public class TestLanguage extends TextTest {
 			
 			text.input("tell me who is Barack Obama?");
 			response = waitForOutput(output);
-			if (response.indexOf("44th President of the United States") == -1) {
+			if (response.indexOf("44th president of the United States") == -1) {
 				fail("Incorrect response: " + response);
 			}
 			
 			text.input("do you know who Barack Obama is");
 			response = waitForOutput(output);
-			if (response.indexOf("44th President of the United States") == -1) {
+			if (response.indexOf("44th president of the United States") == -1) {
 				fail("Incorrect response: " + response);
 			}
 		} finally {
@@ -1061,7 +1069,7 @@ public class TestLanguage extends TextTest {
 	@org.junit.Test
 	public void testUnderstanding() {
 		Bot bot = Bot.createInstance();
-		//bot.setDebugLevel(Bot.FINE);
+		//bot.setDebugLevel(Level.FINER);
 		Language language = bot.mind().getThought(Language.class);
 		language.setLearningMode(LearningMode.Disabled);
 		TextEntry text = bot.awareness().getSense(TextEntry.class);
@@ -1076,6 +1084,26 @@ public class TestLanguage extends TextTest {
 		assertKnown(response);
 		
 		text.input("is the sky blue?");
+		response = waitForOutput(output);
+		assertTrue(response);
+		
+		text.input("I am dirt.");
+		response = waitForOutput(output);
+		assertKnown(response);
+		
+		text.input("Am i dirt?");
+		response = waitForOutput(output);
+		assertTrue(response);
+		
+		text.input("Am i Dirt?");
+		response = waitForOutput(output);
+		assertTrue(response);
+		assertTrue(response);
+		
+		text.input("ok");
+		response = waitForOutput(output);
+		
+		text.input("Am i DIRT?");
 		response = waitForOutput(output);
 		assertTrue(response);
 

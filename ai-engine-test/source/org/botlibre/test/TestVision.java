@@ -17,19 +17,19 @@
  ******************************************************************************/
 package org.botlibre.test;
 
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Vertex;
+import org.botlibre.api.thought.Thought;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
+import org.botlibre.self.SelfDecompiler;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LearningMode;
-import org.botlibre.util.Utils;
 import org.junit.BeforeClass;
 
 /**
@@ -51,12 +51,20 @@ public class TestVision extends TextTest {
 		Bot bot = Bot.createInstance();
 		try {
 			bot.setDebugLevel(Level.FINE);
+			Network network = bot.memory().newMemory();
+			Vertex states = network.createVertex(bot.mind().getThought(Language.class).getPrimitive());
+			Vertex script = SelfCompiler.getCompiler().parseStateMachine(TestWikidata.class.getResource("vision.self"), "", false, network);
+			String code = SelfDecompiler.getDecompiler().decompileStateMachine(script, network);
+			Vertex newState = SelfCompiler.getCompiler().parseStateMachine(code, false, network);
+			states.setRelationship(Primitive.STATE, newState);
+			network.save();
+			
 			Language language = bot.mind().getThought(Language.class);
 			language.setLearningMode(LearningMode.Disabled);
 			TextEntry text = bot.awareness().getSense(TextEntry.class);
 			List<String> output = registerForOutput(text);
 
-			text.input("load image https://www.botlibre.com/avatars/at5018.jpg brainbot");
+			text.input("load image https://www.botlibre.com/avatars/a22225239.jpg brainbot");
 			String response = waitForOutput(output);
 			checkResponse(response, "Image loaded successfully.");
 
@@ -64,7 +72,7 @@ public class TestVision extends TextTest {
 			response = waitForOutput(output);
 			checkResponse(response, "Image loaded successfully.");
 
-			text.input("match image https://www.botlibre.com/avatars/at668040.jpg");
+			text.input("match image https://www.botlibre.com/images/bot.png");
 			response = waitForOutput(output);
 			checkResponse(response, "bot");
 			
@@ -106,9 +114,9 @@ public class TestVision extends TextTest {
 			response = waitForOutput(output);
 			checkResponse(response, "red");
 
-			text.input("match image color https://www.botlibre.com/media/a11675764.png");
+			text.input("match image color https://www.botlibre.com/avatars/a22225239.jpg");
 			response = waitForOutput(output);
-			checkResponse(response, "green");			
+			checkResponse(response, "blue");
 			
 		} finally {
 			bot.shutdown();

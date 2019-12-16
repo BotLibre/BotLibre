@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2014 Paphus Solutions Inc.
+ *  Copyright 2019 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,55 +18,41 @@
 package org.botlibre.test;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import org.botlibre.Bot;
-import org.botlibre.api.knowledge.Network;
-import org.botlibre.knowledge.Bootstrap;
+import org.botlibre.knowledge.database.DatabaseMemory;
 import org.botlibre.sense.text.TextEntry;
-import org.botlibre.thought.forgetfulness.Forgetfulness;
 import org.botlibre.util.Utils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 /**
- * Test the state decompiler.
+ * Test the language cache.
  */
 
-public class TestLanguageForgetfullness extends TestLanguage {
+public class TestLanguageCache extends TestLanguage {
 
 	@BeforeClass
 	public static void setup() {
 		bootstrap();
-		Bot bot = Bot.createInstance();
-		bot.setName("test");
-
-		TextEntry text = bot.awareness().getSense(TextEntry.class);
+		
+		DatabaseMemory.RECREATE_DATABASE = true;
+		Bot.systemCache = Bot.createInstance(Bot.CONFIG_FILE, "cache", false);
+		DatabaseMemory.RECREATE_DATABASE = false;
+		
+		TextEntry text = Bot.systemCache.awareness().getSense(TextEntry.class);
 		List<String> output = registerForOutput(text);
-		text.input("ping");
-		waitForOutput(output);
-
-		Utils.sleep(100);
-		
-		new Bootstrap().rebootstrapMemory(bot.memory());
-		
-		Utils.sleep(500);
-
-		Network network = bot.memory().newMemory();
-		Forgetfulness forgetfulness = bot.mind().getThought(Forgetfulness.class);
-		try {
-			forgetfulness.setMaxRelationships(50);
-			forgetfulness.setMaxSize(100);
-			forgetfulness.forget(network, true, 100);
-			forgetfulness.forget(network, true, 100);
-		} catch (Exception exception) {
-			bot.log(bot, exception);
-		}
-		network.save();
-
 		text.input("sky blue red dog barks all night the cat green grass tall like very loves good Dirt dirt");
 		waitForOutput(output);
-		Utils.sleep(20000);
+		Utils.sleep(10000);
+		
+		Bot bot = Bot.createInstance();
+		
+		text = bot.awareness().getSense(TextEntry.class);
+		output = registerForOutput(text);
+		text.input("sky blue red dog barks all night the cat green grass tall like very loves good Dirt dirt");
+		waitForOutput(output);
+		Utils.sleep(10000);
 		
 		bot.shutdown();
 	}
