@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:gravity="fill_vertical"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp"
+			android:background="@drawable/issue" />
+
+		<TextView
+		    android:id="@+id/title"
+	        android:layout_width="0px"
+	        android:layout_weight="1"
+			android:layout_height="wrap_content"
+            android:textSize="18sp"
+	        android:layout_margin="8sp"
+			android:text="Issue"/>
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+
+	<TextView
+		android:id="@+id/priorityLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="priority"
+		android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	<TextView
+		android:id="@+id/tagsLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="tags"
+		android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <TextView
+        android:id="@+id/creationDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"
+	    android:layout_margin="2sp"
+       	android:textSize="10sp" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        
+	    <WebView
+	       android:id="@+id/detailsLabel"
+	       android:layout_width="match_parent"
+	       android:layout_height="wrap_content"
+	       android:textAppearance="?android:attr/textAppearanceSmall"/>
+	    
+	    </LinearLayout>
+   
+    </ScrollView>
+    
+    <TextView
+        android:id="@+id/flaggedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/this_issue_has_be_flagged"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/red" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="10dip" >
+    </View>
+    
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+
+	    <Button
+	        android:id="@+id/menuButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="1dp"
+	        android:background="@drawable/menu"
+	        android:onClick="menu"
+	        android:text="" />
+
+		<Button
+			android:id="@+id/editButton"
+			android:layout_width="32sp"
+			android:layout_height="32sp"
+			android:layout_margin="1dp"
+			android:background="@drawable/edit2"
+			android:onClick="edit"
+			android:text="" />
+
+	    <Button
+	        android:id="@+id/nextButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="1dp"
+	        android:background="@drawable/up"
+	        android:onClick="viewNext"
+	        android:text="" />
+
+	    <Button
+	        android:id="@+id/previousButton"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="1dp"
+	        android:background="@drawable/down"
+	        android:onClick="viewPrevious"
+	        android:text="" />
+		
+	</LinearLayout>
+
+</LinearLayout>

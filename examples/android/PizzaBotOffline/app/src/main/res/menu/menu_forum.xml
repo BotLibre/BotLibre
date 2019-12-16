@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <item android:id="@+id/menuSearch"
+          android:title="@string/search" />
+    
+    <item android:id="@+id/menuMyPosts"
+          android:title="@string/myPosts" />
+    
+    <item android:id="@+id/menuAdmin"
+          android:title="@string/admin" />
+ 
+    <item android:id="@+id/menuSubscribe"
+          android:title="@string/subscribe" />
+ 
+    <item android:id="@+id/menuUnsubscribe"
+          android:title="@string/unsubscribe" />
+ 
+    <item android:id="@+id/menuFlag"
+          android:title="@string/flag" />
+ 
+    <item android:id="@+id/menuThumbsUp"
+          android:title="@string/voteUp" />
+ 
+    <item android:id="@+id/menuThumbsDown"
+          android:title="@string/voteDown" />
+ 
+    <item android:id="@+id/menuStar"
+          android:title="@string/rate" />
+ 
+    <item android:id="@+id/website"
+          android:title="@string/website" />
+     
+</menu>

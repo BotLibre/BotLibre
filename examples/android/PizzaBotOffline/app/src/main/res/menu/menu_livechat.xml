@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+     
+    <item android:id="@+id/menuSendImage"
+          android:title="@string/sendImage" />
+    
+    <item android:id="@+id/menuSendFile"
+          android:title="@string/sendFile" />
+    
+    <item android:id="@+id/menuPing"
+          android:title="@string/ping" />
+    
+    <item android:id="@+id/menuWhisper"
+          android:title="@string/whisper" />
+    
+    <item android:id="@+id/menuPrivate"
+          android:title="@string/aPrivate" />
+    
+    <item android:id="@+id/menuAccept"
+          android:title="@string/accept" />
+    
+    <item android:id="@+id/menuBoot"
+          android:title="@string/boot" />
+    
+    <item android:id="@+id/menuClear"
+          android:title="@string/clear" />
+ 
+    <item android:id="@+id/menuExit"
+          android:title="@string/exit" />
+ 
+    <item android:id="@+id/menuViewUser"
+          android:title="@string/viewUser"/>
+ 
+    <item android:id="@+id/menuSpeak"
+          android:title="@string/speak"
+          android:checkable="true" />
+ 
+    <item android:id="@+id/menuChime"
+          android:title="@string/chime"
+          android:checkable="true" />
+    
+    <item android:id="@+id/menuKeepAlive"
+          android:title="@string/keepAlive"
+          android:checkable="true" />
+     
+</menu>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+    	android:gravity="fill_horizontal"
+		android:background="#eee">
+	
+	    <ImageView
+	        android:id="@+id/icon"
+	        android:layout_width="32sp"
+	        android:layout_height="32sp"
+	        android:layout_margin="4sp" />
+	    
+		<TextView
+		    android:id="@+id/title"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="8sp"
+		    android:layout_weight="1"
+		    android:text="@string/searchPosts"
+		    android:textSize="18sp" />
+		
+	</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+		android:background="#ddd">
+    </View>
+    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/publicRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/allPosts" />
+
+        <RadioButton
+            android:id="@+id/personalRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/myPosts" />
+        
+    </RadioGroup>
+    
+    <EditText
+        android:id="@+id/filterText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/topic"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+
+    <AutoCompleteTextView
+        android:id="@+id/categoriesText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/categoires"
+        android:imeOptions="actionDone"
+        android:inputType="text" >
+
+        <requestFocus />
+    </AutoCompleteTextView>
+    
+    <AutoCompleteTextView
+        android:id="@+id/tagsText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tags"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+    <TextView
+        android:id="@+id/sortLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sort" />
+    
+    <Spinner
+        android:id="@+id/sortSpin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+    
+    <CheckBox
+        android:id="@+id/imagesCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/showImages" />
+        
+    <View
+        android:id="@+id/filler"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+      	android:layout_weight="1"
+        android:text=""/>
+    
+    <Button
+        android:id="@+id/browseButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@drawable/ok_button"
+        android:onClick="browse"
+        android:text="@string/search"
+        android:textColor="@color/lgrey" />
+    
+        </LinearLayout>
+	</ScrollView>
+
+</LinearLayout>
