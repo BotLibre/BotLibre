@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>common_star_favorite_bookmark_glyph</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path id="path-1" d="M10.9849098,17.1363781 L4.18653734,21.9999998 L6.53637275,13.9875387 L0,8.56176179 L7.9498286,8.49334719 L10.9849102,0 L13.9360342,8.56176759 L22,8.56176759 L15.4334469,14.0403266 L17.7832826,22 L10.9849098,17.1363781 L10.9849098,17.1363781 Z"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="common_star_favorite_bookmark_glyph">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

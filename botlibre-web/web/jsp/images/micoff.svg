@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="12px" height="20px" preserveAspectRatio="none" viewBox="0 0 12 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>device_microphone_sound_recoder_outline_stroke</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M6.4999846,19 L6.49998454,16.5883887 C11.4374705,16.3544507 11.9999716,12.6502973 11.9999716,11.3692308 L11.9999716,8.66153846 C11.9999716,8.66153846 12.0126181,8 11.5040743,8 C10.9955306,8 10.9955306,8.6615385 10.9955306,8.6615385 L10.9955306,11.3076923 C10.9955306,12.6307693 10.395532,15.6179195 5.99998581,15.6179199 C1.60443956,15.6179204 1.0021949,12.6307692 1.0021949,11.3076923 L1.0021949,8.50202636 C1.0021949,8.50202636 0.999997634,8.00000006 0.499998817,8 C0,7.99999994 0,8.50202638 0,8.50202638 L0,11.3692308 C0,12.6502973 0.562501101,16.3544516 5.49998699,16.5883887 L5.49998699,19 L1.89999551,19 L1.89999551,20 L9.89997658,20 L9.89997658,19 L6.4999846,19 Z M6,0 C3,7.85178156e-07 3,2.6 3,2.6 L3,10.4 C3,10.4 3,12.999999 6,13 C9,13.0000012 9,10.4 9,10.4 L9,2.6 C9,2.6 9,-7.85178174e-07 6,0 Z M6,1 C4,1.00000083 4,2.375 4,2.375 L4,10.625 C4,10.625 4,12.0000013 6,12 C8,11.9999987 8,10.625 8,10.625 L8,2.375 C8,2.375 8,0.99999917 6,1 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="device_microphone_sound_recoder_outline_stroke">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

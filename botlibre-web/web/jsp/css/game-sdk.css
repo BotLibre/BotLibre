@@ -1,0 +1,69 @@
+
+#tictactoe {
+    border: 1px solid black;
+    background: #eee;
+    width: 300px;
+    font-size : 80px;
+    margin: auto;
+    margin-left: 5px;
+}
+#tictactoe td {
+    color: #eee;
+    text-align: center;
+    border-style: solid;
+    border-color: black;
+    width: 90px;
+    height: 90px;
+}
+#tictactoe td.blank:hover {
+    cursor: pointer;
+   border-color: green;
+}
+#tictactoe td.X {
+    color: red;
+}
+#tictactoe td.O {
+    color: blue;
+}
+
+#checkers {
+    border: 1px solid black;
+    background: #eee;
+    width: 452px;
+    height: 452px;
+    font-size : 33px;
+    margin: auto;
+    margin-left: 5px;
+}
+#checkers td {
+    background: black;
+    text-align: center;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    width: 50px;
+    height: 45px;
+}
+#checkers td.blank:hover {
+    cursor: pointer;
+   border-color: yellow;
+}
+#checkers td.blank {
+   color: black;
+}
+#checkers td.out {
+   background: red;
+   color: red;
+}
+#checkers td.R {
+    color: red;
+}
+#checkers td.r {
+    color: red;
+}
+#checkers td.B {
+    color: #585858;
+}
+#checkers td.b {
+    color: #404040;
+}

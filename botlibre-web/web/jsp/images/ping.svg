@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="26px" height="22px" preserveAspectRatio="none" viewBox="0 0 26 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>circle_sync_backup_1_glyph</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M23.955157,12 C23.4499283,17.6065003 18.7380429,22 13,22 C8.7376321,22 5.04148823,19.5757082 3.21520553,16.0307617 L5.53623184,16.0307617 C7.15349012,18.4254647 9.89286874,20 13,20 C17.6325539,20 21.447627,16.4999506 21.9450712,12 L20,12 L23,8 L26,12 L23.955157,12 Z M2.1813762,9 C3.12188879,3.87976372 7.60786045,0 13,0 C16.8558099,0 20.2482608,1.9838748 22.2123004,4.98657227 L20.1706543,4.98657227 L19.7841589,5.0858206 C18.1342875,3.19483045 15.7066776,2 13,2 C8.71682499,2 5.13247466,4.99202247 4.2230164,9 L6,9 L3,13 L0,9 L2.1813762,9 L2.1813762,9 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="circle_sync_backup_1_glyph">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

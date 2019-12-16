@@ -1,0 +1,66 @@
+/**
+ * Additional style sheet for Training and Chat Logs page
+ */
+ 
+.dial-input {
+	width: 100%;
+	font-size: 13px !important;
+}
+
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+img.menu-small {
+	width: 16px;
+	height: 16px;
+	margin: 2px;
+	cursor: pointer;
+	vertical-align: middle;
+	color: #585858;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#dialog-add-response-advanced-table td {
+	padding: 5px;
+}
+
+#dialog-add-response-basic-table td {
+	padding: 5px;
+}
+
+#edit-editor-dial {
+	font-size: 13px;
+}
+
+#dialog-add-response-checkbox-div {
+	font-size: 13px;
+	border: solid;
+	border-width: 1px;
+	padding: 5px;
+}
+
+#dialog-add-response-checkbox-div > div {
+	padding: 5px;
+}
+
+#dialog-add-response-checkbox-div > div > span {
+	padding: 5px;
+}
+
+.gear-icon {
+	cursor: pointer;
+	width: 27px;
+	max-width: none;
+}
+
+.edit-previous-tr .edit-repeat-tr .edit-next-tr {
+	display: none;
+	height: 0px;
+}
+
+.meta-table {
+	height: 0px;
+}

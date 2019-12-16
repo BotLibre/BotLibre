@@ -1,0 +1,64 @@
+/**
+ * This style sheet styles user to user e-mail messages.
+ */
+
+#botplatformchatconsole {
+	margin-top: 10px;
+}
+
+.botplatformbox {
+	text-align: left;
+}
+.botplatformchatbox a, .botplatformbox a {
+	text-decoration: underline;
+}
+a.botplatformchatcontactconnect, a.botplatformcontactconnect {
+	text-decoration: none;
+}
+.botplatformmessage-1, .botplatformmessage-2 {
+	padding-left: 4px;
+	padding-top: 4px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformmessage-1-div {
+    padding: 8px;
+    background-color: #e0e0e0;
+    border-radius: 17px;
+    word-wrap: break-word;
+    float: left;
+}
+.botplatformmessage-2-div {
+    padding: 8px;
+    border: 1px solid;
+    background-color: #0077ee;
+    border-radius: 17px;
+    word-wrap: break-word;
+    float: right;
+}
+.botplatformmessage-1 {
+	color: black;
+	font-style: normal;
+	font-weight: 100;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformmessage-2 {
+	color: white;
+	font-style: normal;
+	font-weight: lighter;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformmessage-1-div-2, .botplatformmessage-2-div-2 {
+	font-size: 16px;
+	line-height: normal;
+}
+span.botplatformmessage-user-1, span.botplatformmessage-user-2 {
+    padding-left: 4px;
+    color: white;
+    font-size: small;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformmessage-user {
+	width: 50px;
+	height: 50px;
+	max-width: 50px;
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>facebook</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="soical" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="social" sketch:type="MSArtboardGroup" transform="translate(-273.000000, -138.000000)">
+            <g id="slices" sketch:type="MSLayerGroup" transform="translate(173.000000, 138.000000)"></g>
+            <g id="square-black" sketch:type="MSLayerGroup" transform="translate(173.000000, 138.000000)" fill="#000000">
+                <path d="M102.995937,0 L157.004063,0 C158.658673,0 160,1.33730974 160,2.99593743 L160,57.0040626 C160,58.6586731 158.66269,60 157.004063,60 L102.995937,60 C101.341327,60 100,58.6626903 100,57.0040626 L100,2.99593743 C100,1.34132688 101.33731,0 102.995937,0 Z" id="square-2" sketch:type="MSShapeGroup"></path>
+            </g>
+            <g id="icon" sketch:type="MSLayerGroup" transform="translate(182.000000, 150.000000)" fill="#FFFFFF">
+                <path d="M116.462224,35.314313 L116.462224,17.9989613 L112.943289,17.9989612 L112.943289,12.2593563 L116.462224,12.2593563 L116.462224,8.78838641 C116.462224,4.10664222 117.861995,0.730618986 122.988102,0.730618986 L129.08636,0.730618986 L129.08636,6.45843996 L124.792255,6.45843996 C122.641894,6.45843996 122.151874,7.8873763 122.151874,9.38376095 L122.151874,12.2593553 L128.769423,12.2593558 L127.866173,17.9989613 L122.151874,17.9989613 L122.151874,35.3143123 L116.462224,35.314313 Z" id="facebook" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>pencil_edit_pen_outline_stroke</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M11,22 C17.0751325,22 22,17.0751325 22,11 C22,4.92486745 17.0751325,0 11,0 C4.92486745,0 0,4.92486745 0,11 C0,17.0751325 4.92486745,22 11,22 L11,22 Z M11,21 C16.5228478,21 21,16.5228478 21,11 C21,5.47715225 16.5228478,1 11,1 C5.47715225,1 1,5.47715225 1,11 C1,16.5228478 5.47715225,21 11,21 L11,21 Z M12.897191,6.82541905 L7.04840705,14.3115212 L6.9991002,16.8110349 L9.4124393,16.1585056 L15.2612233,8.6724035 L14.4732125,8.056742 L8.8105098,15.304671 L7.9225924,15.6290188 L8.02249905,14.6890095 L13.6852018,7.44108055 L12.897191,6.82541905 L12.897191,6.82541905 Z M15.2216561,5.4041585 C14.8201655,5.09047965 13.8179838,5.5765078 13.8179838,5.5765078 L13.2023224,6.36451855 L15.5663546,8.21150295 L16.1820161,7.4234922 C16.1820161,7.4234922 16.4132084,6.33510125 16.0096668,6.01982 L15.2216561,5.4041585 L15.2216561,5.4041585 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="circle_edit_pen_pencil_outline_stroke">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

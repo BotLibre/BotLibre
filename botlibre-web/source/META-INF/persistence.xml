@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://java.sun.com/xml/ns/persistence persistence_1_0.xsd"
+				version="1.0">
+	<persistence-unit name="botlibreplatform" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>org.botlibre.web.admin.WebMedium</class>
+		<class>org.botlibre.web.admin.Flaggable</class>
+		<class>org.botlibre.web.admin.User</class>
+		<class>org.botlibre.web.admin.Friendship</class>
+		<class>org.botlibre.web.admin.UserPayment</class>
+		<class>org.botlibre.web.admin.UserMessage</class>
+		<class>org.botlibre.web.admin.ErrorMessage</class>
+		<class>org.botlibre.web.admin.BotInstance</class>
+		<class>org.botlibre.web.admin.BotAttachment</class>
+		<class>org.botlibre.web.admin.Avatar</class>
+		<class>org.botlibre.web.admin.AvatarMedia</class>
+		<class>org.botlibre.web.admin.MediaFile</class>
+		<class>org.botlibre.web.admin.AbstractMedia</class>
+		<class>org.botlibre.web.admin.Media</class>
+		<class>org.botlibre.web.admin.AvatarImage</class>
+		<class>org.botlibre.web.admin.TextDetails</class>
+		<class>org.botlibre.web.admin.Profanity</class>
+		<class>org.botlibre.web.admin.IPBanned</class>
+		<class>org.botlibre.web.admin.Payment</class>
+		<class>org.botlibre.web.admin.Tag</class>
+		<class>org.botlibre.web.admin.Category</class>
+		<class>org.botlibre.web.admin.Vote</class>
+		<class>org.botlibre.web.admin.Domain</class>
+		<class>org.botlibre.web.admin.DomainForwarder</class>
+		<class>org.botlibre.web.admin.Graphic</class>
+		<class>org.botlibre.web.admin.AdminSettings</class>
+		<class>org.botlibre.web.forum.Forum</class>
+		<class>org.botlibre.web.forum.ForumPost</class>
+		<class>org.botlibre.web.forum.ForumAttachment</class>
+		<class>org.botlibre.web.issuetracker.IssueTracker</class>
+		<class>org.botlibre.web.issuetracker.Issue</class>
+		<class>org.botlibre.web.issuetracker.IssueTrackerAttachment</class>
+		<class>org.botlibre.web.chat.ChatChannel</class>
+		<class>org.botlibre.web.chat.ChannelAttachment</class>
+		<class>org.botlibre.web.chat.ChatMessage</class>
+		<class>org.botlibre.web.analytic.Analytic</class>
+		<class>org.botlibre.web.analytic.AnalyticLabel</class>
+		<class>org.botlibre.web.analytic.AnalyticTestMediaLabel</class>
+		<class>org.botlibre.web.analytic.AnalyticMedia</class>
+		<class>org.botlibre.web.analytic.AnalyticTestMedia</class>
+		<class>org.botlibre.web.script.Script</class>
+		<class>org.botlibre.web.script.ScriptSource</class>
+		<class>org.botlibre.web.service.License</class>
+		<class>org.botlibre.web.service.Stats</class>
+		<class>org.botlibre.web.service.IPStats</class>
+		<class>org.botlibre.web.service.AppIDStats</class>
+		<class>org.botlibre.web.service.BotStats</class>
+		<class>org.botlibre.web.service.LiveChatStats</class>
+		<class>org.botlibre.web.service.PageStats</class>
+		<class>org.botlibre.web.service.ReferrerStats</class>
+		<class>org.botlibre.web.service.ErrorStats</class>
+		<class>org.botlibre.web.service.Translation</class>
+		<class>org.botlibre.web.service.BotTranslation</class>
+		<properties>
+		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:botlibreplatform"/>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+			<property name="javax.persistence.jdbc.user" value="postgres"/>
+			<property name="javax.persistence.jdbc.password" value="password"/>
+			<property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<!-- property name="eclipselink.logging.level" value="fine"/-->
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="botlibreplatform_bots" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<properties>
+		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:botlibreplatform_bots"/>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+			<property name="javax.persistence.jdbc.user" value="postgres"/>
+			<property name="javax.persistence.jdbc.password" value="password"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<property name="eclipselink.logging.level" value="fine"/>
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="postgres" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:postgres"/>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+			<property name="javax.persistence.jdbc.user" value="postgres"/>
+			<property name="javax.persistence.jdbc.password" value="password"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<property name="eclipselink.logging.level" value="fine"/>
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22px"
+   height="22px"
+   viewBox="0 0 22 22"
+   version="1.1"
+   id="svg6771"
+   sodipodi:docname="uflag2.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata6775">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>pencil_edit_pen_outline_stroke</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3840"
+     inkscape:window-height="2035"
+     id="namedview6773"
+     showgrid="false"
+     inkscape:zoom="10.727273"
+     inkscape:cx="11.745762"
+     inkscape:cy="11"
+     inkscape:window-x="-13"
+     inkscape:window-y="-13"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6771" />
+  <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title6760">pencil_edit_pen_outline_stroke</title>
+  <description>Created with Sketch.</description>
+  <defs
+     id="defs6763">
+    <path
+       d="M11,22 C17.0751325,22 22,17.0751325 22,11 C22,4.92486745 17.0751325,0 11,0 C4.92486745,0 0,4.92486745 0,11 C0,17.0751325 4.92486745,22 11,22 L11,22 Z M11,21 C16.5228478,21 21,16.5228478 21,11 C21,5.47715225 16.5228478,1 11,1 C5.47715225,1 1,5.47715225 1,11 C1,16.5228478 5.47715225,21 11,21 L11,21 Z M12.897191,6.82541905 L7.04840705,5.4041585 Z"
+       id="path-1" />
+    <path
+       id="path-1-0"
+       d="M1,1.59223492 C0.99253096,1.58417511 0.985123568,1.57609984 0.977777778,1.5680103 L0,1.56970333 L0,22.1886181 L0.977777778,22.1886181 L0.977777778,2.86167581 C0.985171143,2.8668269 0.992578548,2.87195174 0.99999999,2.87705028 L1,1.59223485 Z M2,2.32485825 C3.07377685,2.81741335 4.48627425,2.67072061 6.33961778,1.56970333 C9.21684671,-0.139575436 11.3596387,-0.199610719 13.0795279,0.539905597 C13.438277,0.694159819 13.6870359,0.854576486 13.8266459,0.97459773 L13.9968262,1.12090017 L13.9968262,9.22371186 L13.9968262,10.2887201 L13.1892287,9.5944368 C13.1216202,9.53631475 12.9560071,9.429516 12.6932949,9.31655529 C11.2665856,8.70309995 9.45229071,8.73624586 6.83901044,10.2887203 C5.03069649,11.3629872 3.32692376,11.4182657 2.06787109,11.0943089 L2.06787109,10.077683 C3.10703572,10.4376137 4.63140138,10.4628934 6.33961778,9.44809204 C9.21684671,7.73881328 11.3596387,7.678778 13.0795279,8.41829382 L13.0795283,1.69988004 C13.0795283,1.69988004 12.9560071,1.55112729 12.6932949,1.43816657 C11.2665856,0.82471173 9.45229071,0.857857636 6.83901044,2.41033164 C4.91825031,3.55139931 3.30017499,3.79538465 2,3.37240264 L2,2.32485825 Z" />
+  </defs>
+  <g
+     id="miu"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd"
+     sketch:type="MSPage">
+    <g
+       id="circle_edit_pen_pencil_outline_stroke">
+      <use
+         fill="#000000"
+         fill-rule="evenodd"
+         sketch:type="MSShapeGroup"
+         xlink:href="#path-1"
+         id="use6765" />
+      <use
+         fill="none"
+         xlink:href="#path-1"
+         id="use6767" />
+    </g>
+  </g>
+  <g
+     sketch:type="MSPage"
+     id="miu-8"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1"
+     transform="matrix(0.50643166,0.28686211,-0.24683002,0.60885101,10.974248,3.0933054)">
+    <g
+       id="editor_flag_notification_outline_stroke">
+      <use
+         id="use175"
+         xlink:href="#path-1-0"
+         sketch:type="MSShapeGroup"
+         style="fill:#000000;fill-rule:evenodd"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+      <use
+         id="use177"
+         xlink:href="#path-1-0"
+         style="fill:none"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+    </g>
+  </g>
+</svg>

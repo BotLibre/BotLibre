@@ -1,0 +1,438 @@
+
+.btn {
+	display: inline-block;
+}
+
+/*------------------------------ HEADER ------------------------------*/
+
+#header > div, #footer > div, #topper > div, #admin-topper > div, #admin-topper-banner > div, .admin-topper-banner > div {
+	width: 920px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/** Navigation **/
+#navigation {
+	line-height: 90px;
+}
+
+#navigation li {
+	width: 120px;
+}
+
+#navigation a {
+	line-height: 90px;
+}
+
+#navigation2 {
+	padding-left:16px;
+	padding-right:16px;
+}
+
+#navigation3 {
+	padding-left:16px;
+	padding-right:16px;
+}
+
+#titlebox {
+	min-height: 550px;
+	width: 880px;
+	padding: 44px 10px;
+}
+
+#titlebox > div {
+	width: 880px;
+}
+
+@media screen and (min-width: 1000px) {
+	.shrinkhide1000 {
+		display: none;
+	}
+}
+
+
+@media screen and (min-width: 1000px) {
+	.shrinkhide1200 {
+		display: none;
+	}
+}
+
+/*------------------------------ SLIDES ------------------------------*/
+#titleboxright {
+	width: 465px;
+	min-height: 350px;
+	float: right;
+	margin-left: 20px;
+}
+
+#slide {
+	width: 465px;
+	min-height: 400px;
+    background-color:#fff;
+}
+
+#slidebar {
+	width: 880px;
+	padding: 80px 40px;
+}
+
+#barslide {
+	width: 800px;
+	height: 400px;
+}
+
+#slide h3, #barslide h3 {
+	font-size: 38px;
+	line-height: 40px;
+	margin-bottom: 16px;
+}
+
+#slide p, #barslide p {
+	font-weight: bold;
+	padding: 10px 0 0 34px;
+}
+
+#slide li, #barslide li {
+	margin: 12px 4px 4px 32px;
+}
+
+#nav-left {
+	left:14px;
+}
+
+#titlebox h1, #titlebox h2 {
+	font-size: 60px;
+	line-height: 60px;
+}
+
+#titlebox h2 {              /*Duplicated*/
+	font-size: 30px;
+	line-height: 36px;
+}
+
+#titlebox p span {
+	width: 360px;
+	padding: 16px 24px;
+}
+
+#business {
+	font-size:30px;
+}
+
+.bot-scroller, .botplatformframebot-scroller {
+	height:300px;
+	width:100%;
+}
+
+.editor {
+	width:100%;height:500px;max-width:none;
+}
+.embed-editor {
+	position:fixed;top:24px;bottom:88px;left:4px;right:4px;
+}
+
+.feature {
+	width:260px;
+}
+
+.upgrade {
+	width:230px;
+}
+
+.browse-list-div {
+	width:400px;
+}
+
+.search-div {
+	width:224px;
+}
+
+.chat-div, .botplatformframechat-div {
+	max-height:550px;
+	height:550px;
+}
+
+.online-div {
+	max-width:880px;
+}
+
+.online-user {
+    border-color:grey;
+	padding:2px;
+}
+
+.online-user-label {
+	max-width:200px;
+}
+
+/*------------------------------ HOVER ------------------------------*/
+span.dropt div {
+	max-width:600px;
+	white-space: normal;
+	transition:visibility 0s linear 0.3s, opacity 0.3s linear;
+}
+
+span.dropt:hover div {
+	transition-delay:0.5s;
+}
+
+#title {
+	width:400px;
+}
+
+#program {
+	width:600px;height:450px;margin:0 0 0 2px;
+}
+
+/*------------------------------ CONTENTS ------------------------------*/
+#contents, #contents-full {
+	min-height: 626px;
+	width: 880px;
+	padding: 10px 40px;
+	margin: 0 auto;
+}
+
+img {
+	max-width:100%;
+}
+
+#contents2 {
+	min-height: 626px;
+	width: 880px;
+	margin: 0 auto;
+	padding: 4px 40px;
+}
+h1 {
+	margin-bottom: 15px;
+	margin-top: 12px;
+}
+
+#contents .browse {
+	margin: 0 auto;
+}
+
+/** main **/
+.main {
+	width: 620px;
+}
+
+#about {
+	/*background-color: #fff;*/
+	width: 800px;
+	margin: 0 auto;
+}
+
+#about2 {
+	width: 740px;
+	margin: 0 auto;
+}
+
+.section {
+	width: 600px;
+	margin-left: 60px;
+}
+
+.message input[type='text'] {
+	font-size: 13px;
+	height: 33px;
+	width: 100%;
+	max-width: 700px;
+}
+
+.message input[type='email'] {
+	width: 100%;
+	max-width: 700px;
+}
+
+.message input[type='number'] {
+	font-size: 13px;
+	height: 33px;
+	width: 100%;
+	max-width: 700px;
+}
+
+.message select {
+	font-size: 13px;
+}
+
+.message input[type='checkbox'] {
+	padding: 0 4px;
+}
+
+.message input[type='password'] {
+	font-size: 13px;
+	height: 33px;
+	width: 100%;
+	max-width: 700px;
+}
+
+.message input[type='date'] {
+	font-size: 13px;
+	height: 33px;
+	width: 100%;
+	max-width: 700px;
+}
+
+.message textarea {
+	font-size: 13px;
+	width: 100%;
+	max-width: 700px;
+}
+
+.message input[type='submit'] {
+	padding-right:10px;padding-left:10px;
+}
+
+.message input[type='file'] {
+	font: 13px/30px Arial, Helvetica, sans-serif;
+}
+
+.search input[type='text'] {
+	font-size: 13px;
+	height: 16px;
+}
+
+.search select {
+	height: 20px;
+}
+
+select.users {
+	width: 600px;
+}
+
+input[type='text'].users {
+	width: 600px;
+}
+
+#tabs {
+	width: 100%;
+}
+
+input[type='text'].search {
+	font-size: 13px;
+    height: 16px;
+    width: 150px;
+    max-width: 150px;
+}
+
+select.search {
+	height: 20px;
+}
+
+.contact {
+	width: 270px;
+}
+
+#admin-topper {
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+/*------------------------------ CHAT ------------------------------*/
+td.chat-user, td.botplatformframechat-user {
+    max-width:120px;
+}
+
+.response, .botplatformframeresponse {
+	max-height:60px;
+	margin:3px;
+}
+
+
+/*------------------------------ Avatars ------------------------------*/
+.avatar, .botplatformframeavatar {
+	width:200px;
+	max-width: none; /** 100% give 0 width for some reason */
+}
+
+.avatar-big {
+	max-width:800px;
+	height:400px;
+}
+
+.avatar2, .botplatformframeavatar2 {
+	width:400px;
+}
+
+.avatar-video-div, .botplatformframeavatar-video-div {
+	min-height:200px;
+	min-width:200px;
+	background-size:200px auto;
+}
+
+.avatar-video-div-big {
+	min-height:400px;
+	min-width:400px;
+	background-size:auto 400px;
+}
+
+.avatar-video, .botplatformframeavatar-video {
+	width:200px;
+}
+
+.avatar-video-big {
+	max-width:800px;
+	height:400px;
+}
+
+.avatar-canvas-div-big {
+	min-height:400px;
+	min-width:400px;
+}
+
+.avatar-canvas-big {
+	max-width:800px;
+	height:400px;
+}
+
+/*------------------------------ MESSAGES ------------------------------*/
+.message-message {
+	width:800px;
+}
+
+/*------------------------------ FORUM ------------------------------*/
+.forum-article {
+	width:800px;
+}
+
+/*------------------------------ ISSUE ------------------------------*/
+
+.issue-article {
+	width:800px;
+}
+
+.ui-dialog {
+    min-width:400px;
+}
+
+/*------------------------------ FOOTER ------------------------------*/
+#footer p {
+	line-height: 30px;
+}
+
+#connect {
+	float: right;
+}
+
+/** Browse **/
+img.category-thumb {
+	max-height:73px;max-width:75px;cursor:pointer;
+}
+div.category-thumb {
+	max-width:75px;
+}
+td.category-thumb {
+	height:75px;width:75px;
+}
+
+img.menubar {
+	width:16px;
+	height:16px;
+}
+
+.big-icon {
+	width:400px;
+}
+.small-icon {
+	width:100px;
+}

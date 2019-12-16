@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22px"
+   height="22px"
+   viewBox="0 0 22 22"
+   version="1.1"
+   id="svg38"
+   sodipodi:docname="help.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata42">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3840"
+     inkscape:window-height="2035"
+     id="namedview40"
+     showgrid="false"
+     inkscape:zoom="10.727273"
+     inkscape:cx="11.372881"
+     inkscape:cy="11"
+     inkscape:window-x="-13"
+     inkscape:window-y="-13"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg38" />
+  <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title27">circle_help_question-mark_glyph</title>
+  <description>Created with Sketch.</description>
+  <defs
+     id="defs30">
+    <linearGradient
+       id="linearGradient5998"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#005bff;stop-opacity:1;"
+         offset="0"
+         id="stop5996" />
+    </linearGradient>
+    <path
+       d="M0,11 C0,4.92486745 4.92486745,0 11,0 C17.0751325,0 22,4.92486745 22,11 C22,17.0751325 17.0751325,22 11,22 C4.92486745,22 0,17.0751325 0,11 L0,11 Z M9.8684082,14.9257812 L11.3259277,14.9257812 L11.3259277,16.4492188 L9.8684082,16.4492188 L9.8684082,14.9257812 L9.8684082,14.9257812 Z M8.29370115,6.513916 C8.8894073,5.87182295 9.7072702,5.55078125 10.7473145,5.55078125 C11.7092334,5.55078125 12.4794893,5.8254367 13.0581055,6.37475585 C13.6367217,6.924075 13.9260254,7.6259723 13.9260254,8.48046875 C13.9260254,8.99804945 13.8198253,9.41796715 13.6074219,9.7402344 C13.3950185,10.0625016 12.966556,10.5361297 12.3220215,11.1611328 C11.8532692,11.6152366 11.5493171,11.9997543 11.4101563,12.3146973 C11.2709954,12.6296402 11.201416,13.0947235 11.201416,13.7099609 L9.8977051,13.7099609 C9.8977051,13.0117152 9.98071205,12.4489767 10.1467285,12.0217285 C10.312745,11.5944803 10.6765109,11.1049833 11.2380371,10.5532227 L11.8239746,9.9746094 C11.9997568,9.8085929 12.1413569,9.6352548 12.2487793,9.45458985 C12.4440928,9.13720545 12.5417481,8.8076189 12.5417481,8.4658203 C12.5417481,7.9873023 12.3989272,7.5722674 12.1132813,7.2207031 C11.8276353,6.86913885 11.3552279,6.6933594 10.6960449,6.6933594 C9.88061115,6.6933594 9.31665195,6.9960907 9.0041504,7.6015625 C8.82836825,7.93847825 8.7282716,8.42431325 8.7038574,9.05908205 L7.4001465,9.05908205 C7.4001465,8.00438925 7.69799505,7.15600905 8.29370115,6.513916 C8.29370115,6.513916 7.69799505,7.15600905 8.29370115,6.513916 L8.29370115,6.513916 Z"
+       id="path-1" />
+  </defs>
+  <g
+     id="miu"
+     sketch:type="MSPage"
+     style="fill:#0078D7;fill-rule:evenodd;stroke:none;stroke-width:1;fill-opacity:1;opacity:1;stroke-opacity:1">
+    <g
+       id="circle_help_question-mark_glyph"
+       style="fill:#0078D7;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-opacity:1">
+      <use
+         sketch:type="MSShapeGroup"
+         xlink:href="#path-1"
+         id="use32"
+         style="fill:#0078D7;fill-rule:evenodd;fill-opacity:1;stroke:none;stroke-opacity:1"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#path-1"
+         id="use34"
+         style="fill:#0078D7;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-opacity:1"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+/**
+ * This style sheet changes the live chat style to use blue and grey chat bubbles.
+ * You can style the chat however you wish by making your own style sheet and importing it to your page.
+ */
+#botplatformchatbubble-div {
+    display:none;
+}
+#botplatformchatconsole td.botplatformchatchat-1 {
+    background-color: white;
+}
+.botplatformchatchat-1-div {
+    background-color: #d5d5d5;
+    width: 80%;
+    padding: 4px;
+    border-radius: 6px;
+}
+.botplatformchatchat-2-div {
+    float: right;
+    color: white;
+    background-color: #3385ff;
+    width: 80%;
+    padding: 4px;
+    border-radius: 6px;
+}
+#botplatformchatconsole .botplatformchatchat-user-1 {
+    color: grey;
+    font-size: small;
+}
+#botplatformchatconsole .botplatformchatchat-user-2 {
+    color: #cccccc;
+    font-size: small;
+}

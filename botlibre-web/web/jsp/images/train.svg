@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="24px" height="24px" preserveAspectRatio="none" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>editor_redo_arrow_reload_glyph</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M2.10141872,9.5 C2.83300868,4.1344727 7.43367514,0 13,0 C19.0751325,0 24,4.92486745 24,11 C24,16.9570947 19.2646505,21.8081886 13.3527832,21.9944501 L13.3527832,21.9944501 L13.3527832,19.9932126 C18.1598293,19.8079258 22,15.8524231 22,11 C22,6.02943702 17.970563,2 13,2 C8.54050534,2 4.83855472,5.24342984 4.12443764,9.5 L6,9.5 L3,13 L0,9.5 L2.10141872,9.5 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="editor_redo_arrow_reload_glyph">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" transform="translate(12.000000, 11.500000) scale(-1, 1) translate(-12.000000, -11.500000) " xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

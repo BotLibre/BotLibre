@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>circle_add_plus_glyph</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M4.5,11.5 L4.5,10.5 L10.5,10.5 L10.5,4.5 L11.5,4.5 L11.5,10.5 L17.5,10.5 L17.5,11.5 L11.5,11.5 L11.5,17.5 L10.5,17.5 L10.5,11.5 L4.5,11.5 Z M11,22 C17.0751325,22 22,17.0751325 22,11 C22,4.92486745 17.0751325,0 11,0 C4.92486745,0 0,4.92486745 0,11 C0,17.0751325 4.92486745,22 11,22 L11,22 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="circle_add_plus_glyph">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

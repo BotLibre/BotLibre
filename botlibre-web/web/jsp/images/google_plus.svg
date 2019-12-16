@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>google_plus</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="soical" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="social" sketch:type="MSArtboardGroup" transform="translate(-473.000000, -138.000000)">
+            <g id="slices" sketch:type="MSLayerGroup" transform="translate(173.000000, 138.000000)"></g>
+            <g id="square-black" sketch:type="MSLayerGroup" transform="translate(173.000000, 138.000000)" fill="#000000">
+                <path d="M302.995937,0 L357.004063,0 C358.658673,0 360,1.33730974 360,2.99593743 L360,57.0040626 C360,58.6586731 358.66269,60 357.004063,60 L302.995937,60 C301.341327,60 300,58.6626903 300,57.0040626 L300,2.99593743 C300,1.34132688 301.33731,0 302.995937,0 Z" id="square-4" sketch:type="MSShapeGroup"></path>
+            </g>
+            <g id="icon" sketch:type="MSLayerGroup" transform="translate(182.000000, 150.000000)" fill="#FFFFFF">
+                <path d="M334.125214,16.5574012 L334.125214,12.9488585 L331.552316,12.9488585 L331.552316,16.5574012 L327.847341,16.5574012 L327.847341,19.1349317 L331.552316,19.1349317 L331.552316,22.8465756 L334.125214,22.8465756 L334.125214,19.1349317 L337.727273,19.1349317 L337.727273,16.5574012 L334.125214,16.5574012 Z M315.394511,16.3511988 L315.394511,20.4752475 C315.394511,20.4752475 319.388062,20.4698863 321.014134,20.4698863 C320.133585,23.143404 318.764391,24.5992963 315.394511,24.5992963 C311.984185,24.5992963 309.32247,21.8296882 309.32247,18.4132231 C309.32247,14.996758 311.984185,12.22715 315.394511,12.22715 C317.197599,12.22715 318.362093,12.8620473 319.430257,13.7469651 C320.285283,12.8904001 320.213859,12.7683283 322.389194,10.7103249 C320.542573,9.02647574 318.088233,8 315.394511,8 C309.653756,8 305,12.662134 305,18.4132231 C305,24.1642091 309.653756,28.8264463 315.394511,28.8264463 C323.975334,28.8264463 326.072659,21.3412978 325.377358,16.3511988 L315.394511,16.3511988 Z" id="google_plus" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

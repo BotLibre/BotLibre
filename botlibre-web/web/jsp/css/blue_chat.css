@@ -1,0 +1,549 @@
+/**
+ * This style sheet changes the live chat style to use blue and grey chat bubbles.
+ * You can style the chat however you wish by making your own style sheet and importing it to your page.
+ */
+.botplatformframechatchat-1, .botplatformframechatchat-2, .botplatformchatchat-1, .botplatformchatchat-2 {
+	padding-left: 4px;
+	padding-top: 4px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #585858;
+	font-size: 16px;
+}
+.botplatformchatbox a, .botplatformbox a {
+	text-decoration: underline;
+}
+a.botplatformchatcontactconnect, a.botplatformcontactconnect {
+	text-decoration: none;
+}
+#botplatformbox, #botplatformchatbox {
+	background-image: url("../images/wallpaper_6.png");
+}
+#botplatformchatconsole td.botplatformchatchat-1 {
+	background-color: transparent;
+}
+.botplatformchatboxmenu {
+	height: 25px;
+	opacity: 0.9;
+	background-color: #84a3e1;
+	display: flex;
+	align-items: center;
+}
+.botplatformchatonline-div hr {
+	margin-top: 2px;
+}
+.botplatformonline, .botplatformchatonline-div {
+	align-items: center;
+}
+.botplatformchatchat-1-div {
+	width: 80%;
+	padding: 5px;
+	margin-left: 7px;
+	position: relative;
+	border-radius: 3px;
+	background-color: #84a3e1;
+	word-wrap: break-word;
+	float: left;
+}
+.botplatformchatchat-1-div:after {
+	content: "";
+	position: absolute; 
+	bottom: 16px;
+	left: -5.5px;
+	border-width: 12px 0px 0px 12px;
+	border-style: solid;
+	border-color: #84a3e1 transparent;
+	transform: rotate(225deg);
+}
+.botplatformchatchat-2-div {
+	width: 80%;
+	padding: 5px;
+	position: relative;
+	border-radius: 3px;
+	margin-right: 7px;
+	background-color: #86a5d9;
+	word-wrap: break-word;
+	float: right;
+}
+.botplatformchatchat-2-div:after {
+	content: "";
+	position: absolute;
+	bottom: 16px;
+	left: 236px;
+	border-width: 0px 0px 12px 12px;
+	border-style: solid;
+	border-color: #86a5d9 transparent;
+	transform: rotate(315deg);
+	margin-left: calc(100% - 243px);
+}
+td.botplatformframechat-1, td.botplatformframechat-2, td.botplatformframechatchat-1, td.botplatformframechatchat-2 {
+	background-color: transparent;
+}
+td.botplatformframechatchat-2 {
+	padding-right: 7px;
+}
+td.botplatformchatchat-user-1, td.botplatformchatchat-user-2, td.botplatformframechatchat-user-1, td.botplatformframechatchat-user-2 {
+	display: none;
+}
+span.botplatformchatchat-user-1, span.botplatformchatchat-user-2, span.botplatformframechatchat-user-1, span.botplatformframechatchat-user-2 {
+	color: white;
+	font-size: small;
+	padding-left: 4px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformchat-bot-image {
+	height: 50px;
+}
+.botplatformchat-bot {
+	height: 50px;
+}
+img.botplatformchat-user, img.botplatformchatchat-user, img.botplatformframechat-user, img.botplatformframechatchat-user {
+	height: 40px;
+	max-width: 40px;
+}
+.botplatformboxmenu {
+	height: 25px;
+	opacity: 0.9;
+	background-color: #84a3e1;
+	line-height: 1.2;
+}
+.botplatformscroller, .botplatformchatscroller {
+	width: 300px;
+	height: 320px;
+}
+.botplatformchatonline .online-user {
+    border-style: solid;
+    border-color: grey;
+    border-width: 1px;
+    margin: 2px;
+    display: inline-block;
+}
+.botplatformonline-user {
+	border: none;
+    margin: auto;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    padding-top: 2px;
+    padding-bottom: 4px;
+}
+.online-user-label {
+	color: #818181;
+	font-size: 12px;
+	margin: 2px;
+	overflow: hidden;
+	max-width: 200px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformuser-bot {
+	color: #585858;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	padding-left: 7px;
+	word-break: initial;
+}
+.botplatformchatuser-bot {
+	margin-top: 20px;
+	position: absolute;
+	font-size: 12px;
+	font-weight: bold;
+}
+.botplatformonline hr {
+	margin-top: -2px;
+}
+/**
+ *  Style sheet responsible for Botlibre Live Chat Channel User vs. Bot conversation.
+ */
+.botplatformframescroller {
+    background-image: url("../images/wallpaper_6.png");
+    overflow-x: hidden;
+}
+#console td.chat-1 {
+	background-color: transparent;
+}
+.boxmenu {
+	height: 25px;
+	opacity: 0.7;
+	background-color: #84a3e1;
+}
+.botplatformframechat-1-div {
+    width: 70%;
+    padding: 4px;
+    margin-left: 5px;
+    position: relative;
+    border-radius: 3px;
+    background-color: #84a3e1;
+    word-wrap: break-word;
+}
+.botplatformframechat-1-div:after {
+	content: "";
+	position: absolute; 
+	bottom: 16px;
+	left: -5.5px;
+	border-width: 12px 0px 0px 12px;
+	border-style: solid;
+    border-color: #84a3e1 transparent;
+    transform: rotate(225deg);
+}
+.botplatformframechat-2-div {
+    width: 70%;
+    padding: 4px;
+    margin-right: 10px;
+    position: relative;
+    border-radius: 3px;
+    background-color: #86a5d9;
+    word-wrap: break-word;
+    float: right;
+}
+.botplatformframechat-2-div:after {
+	content: "";
+	position: absolute;
+	bottom: 16px;
+	left: 236px;
+	border-width: 0px 0px 12px 12px;
+	border-style: solid;
+    border-color: #86a5d9 transparent;
+    transform: rotate(315deg);
+    margin-left: calc(100% - 243px);
+}
+td.botpplatformframechat-user-1, td.botplatformframechat-user-2 {
+	display: none;
+}
+.botplatformchat-channel-title {
+	width: 125px;
+	height: 18px;
+	color: white;
+	overflow: hidden;
+	margin: auto;
+	display: block;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformchatpowered, .botplatformchatpowered a {
+	margin: 4px;
+ 	color: white;
+	font-size: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+/**
+ *  Style sheet responsible for Botlibre Embed Tab User vs. Bot frame conversation
+ */
+.chat-div, .botplatformframechat-div {
+	background-image: url("../images/wallpaper_6.png");
+}
+#microtopper {
+	background-image: url("../images/wallpaper_6.png");
+}
+/**
+ *  Style sheet responsible for ChanelEmbedTab User vs. Bot frame conversation
+ */
+.botplatformframechatchat-1-div {
+	width: 80%;
+	padding: 7px;
+	margin-left: 10px;
+	position: relative;
+	border-radius: 3px;
+	background-color: #84a3e1;
+	word-wrap: break-word;
+	float: left;
+}
+.botplatformframechatchat-1-div:after {
+	content: "";
+	position: absolute; 
+	bottom: 16px;
+	left: -5.5px;
+	border-width: 12px 0px 0px 12px;
+	border-style: solid;
+	border-color: #84a3e1 transparent;
+	transform: rotate(225deg);
+}
+.botplatformframechatchat-2-div {
+	width: 80%;
+	padding: 7px;
+	position: relative;
+	border-radius: 3px;
+	background-color: #86a5d9;
+	word-wrap: break-word;
+	float: right;
+}
+.botplatformframechatchat-2-div:after {
+	content: "";
+	position: absolute;
+	bottom: 16px;
+	left: 236px;
+	border-width: 0px 0px 12px 12px;
+	border-style: solid;
+	border-color: #86a5d9 transparent;
+	transform: rotate(315deg);
+	margin-left: calc(100% - 243px);
+}
+/* ########################################  EmbedBotTab  ####################################################### */
+.box:hover, .botplatformbox:hover, .botplatformchatbox:hover {
+	border: 1px;
+	border-style: solid;
+	border-color: black;
+	visibility: visible;
+}
+.botplatformboxclose, .botplatformchatboxclose, .botplatformboxmin, .botplatformchatboxmin, .botplatformboxmax, .botplatformchatboxmax {
+	font-size: 22px;
+	margin: 2px 0px 2px 2px;
+	text-decoration: none;
+	padding: 0px 2px 0px 1px;
+}
+#botplatformcontactboxmin, #botplatformchatcontactboxmin {
+	padding: 4px 4px 1px 4px;
+	float: right;
+	margin-top: -4px;
+}
+.botplatformboxclose:hover, .botplatformchatboxclose:hover, .botplatformcontactboxmin:hover,
+.botplatformchatcontactboxmin:hover, .botplatformboxmin:hover, .botplatformchatboxmin:hover, .botplatformboxmax:hover, .botplatformchatboxmax:hover {
+	color: #fff;
+	background: grey;
+}
+.botplatformframeno-bubble, .botplatformno-bubble, .botplatformchatno-bubble {
+	margin: 4px;
+	padding: 8px;
+	border: 1px;
+	border-style: solid;
+	border-color: black;
+	background-color: white;
+	color: #585858;
+}
+.botplatformframeno-bubble-plain, .botplatformframechatno-bubble-plain, .botplatformno-bubble-plain, .botplatformchatno-bubble-plain {
+	margin: 4px;
+	border: 1px;
+}
+#botplatformcontactinfo span, #botplatformchatcontactinfo span {
+	margin-left: 4px;
+	margin-top: 4px;
+	width: 100%;
+}
+#contactinfo input, #botplatformcontactinfo input, #botplatformchatcontactinfo input {
+	margin: 4px;
+	font-size: 13px;
+	height: 33px;
+	width: 90%;
+	border: 1px solid #d5d5d5;
+}
+.boxbutton, .botplatformboxbutton, .botplatformchatboxbutton {
+	width: 23px;
+	height: 23px;
+	margin: 4px;
+}
+.boxbutton:hover, .botplatformboxbutton:hover, .botplatformchatboxbutton:hover {
+	opacity: 0.5;
+}
+.menupopup div, .botplatformmenupopup div, .botplatformchatmenupopup div {
+	position: absolute;
+	margin: 1px 0 0 0;
+	padding: 3px 3px 3px 3px;
+	background: #fff;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	width: 180px;
+	max-width: 300px;
+	z-index: 152;
+	visibility: hidden;
+	opacity: 0;
+	transition: isibility 0s linear 0.3s, opacity 0.3s linear;
+}
+.menupopup, .botplatformmenupopup, .botplatformchatmenupopup {
+	padding-top: 8px;
+}
+.menupopup:hover div, .botplatformmenupopup:hover div, .botplatformchatmenupopup:hover div {
+	display: inline;
+	visibility: visible;
+	opacity: 1;
+	transition-delay: 0.5s;
+}
+a.menuitem, a.botplatformmenuitem, a.botplatformchatmenuitem {
+	text-decoration: none;
+	display: block;
+	color: #585858;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.menuitem select, .botplatformmenuitem select, .botplatformchatmenuitem select {
+	color: #585858;
+}
+a.botplatformmenuitem:hover, a.botplatformchatmenuitem:hover {
+	color: #fff;
+	background: grey;
+}
+tr.menuitem:hover, tr.botplatformmenuitem:hover, tr.botplatformchatmenuitem:hover {
+	background: grey;
+}
+.yandex, .botplatformyandex {
+	display: none;
+}
+img.menu, img.botplatformmenu, img.botplatformchatmenu {
+	width: 24px;
+	height: 24px;
+	margin: 2px;
+	cursor: pointer;
+	vertical-align: middle;
+	color: #585858;
+	font-family: Arial, Helvetica, sans-serif;
+}
+span.botplatformmenu, span.botplatformchatmenu {
+	color: #818181;
+	font-size: 12px;
+}
+.botplatformframebubble-div, .botplatformbubble-div {
+	padding-bottom: 15px;
+	position: relative;
+}
+.botplatformframebubble, .botplatformbubble, .botplatformchatbubble {
+	margin: 4px;
+	padding: 8px;
+	border: 1px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 10px;
+	background-color: white;
+	color: #585858;
+}
+.botplatformframebubble:before, .botplatformbubble:before, .botplatformchatbubble:before {
+	content: '';
+	position: absolute;
+	bottom: 0px;
+	left: 40px;
+	border-width: 20px 0 0 20px;
+	border-style: solid;
+	border-color: black transparent;
+	display: block;
+	width: 0;
+}
+.botplatformframebubble:after, .botplatformbubble:after, .botplatformchatbubble:after {
+	content: '';
+	position: absolute;
+	bottom: 3px;
+	left: 42px;
+	border-width: 18px 0 0 16px;
+	border-style: solid;
+	border-color: white transparent;
+	display: block;
+	width: 0;
+}
+.box-input-span, .botplatformbox-input-span, .botplatformchatbox-input-span {
+	display: block;
+	overflow: hidden;
+	margin: 4px;
+	padding-right: 4px;
+}
+.botplatformchatbox-input-span {
+	display: block;
+	overflow: hidden;
+	margin: 1px;
+	padding-right: 4px;
+}
+#chat, #botplatformchat, #botplatformchatchat {
+	color: #585858;
+	font: 400 16px Helvetica;
+}
+#boxtable, #botplatformboxtable, #botplatformchatboxtable {
+	background: none;
+	border: none;
+	margin: 0;
+}
+#botplatformbox img {
+	display:inline-block;
+}
+#botplatformbox select {
+	width: auto;
+	display: inline-block;
+	margin: 0;
+}
+#botplatformbox input, #botplatformbox input[type='text'] {
+	display: inline-block;
+	margin: 0;
+}
+/* ###########################################  Botplatform Chat Live Chat  ############################################ */
+.botplatformchatbox img {
+	display: inline;
+}
+.botplatformchatboxbar img {
+	display: inline;
+}
+#emailchatlogdialog span {
+	margin-left: 0px;
+	margin-top: 4px;
+}
+#botplatformemailchatlogdialog span {
+	margin-left: 0px;
+	margin-top: 4px;
+}
+#emailchatlogdialog input {
+	margin: 4px;
+	font-size: 13px;
+	height: 33px;
+	width: 90%;
+	border: 1px solid #d5d5d5;
+}
+#botplatformemailchatlogdialog input {
+	margin: 4px;
+	font-size: 13px;
+	height: 33px;
+	width: 90%;
+	border: 1px solid #d5d5d5;
+}
+.emailconfirm, .botplatformemailconfirm {
+	margin: 4px;
+	padding: 8px;
+	color: white;
+	background-color: grey;
+	text-decoration: none;
+}
+#botplatformcontactinfo input {
+	margin: 4px;
+	font-size: 13px;
+	height: 33px;
+	width: 90%;
+	border: 1px solid #d5d5d5;
+}
+img.botplatformchattoolbar {
+	width: 25px;
+	height: 25px;
+	margin: 1px;
+	padding: 1px;
+	cursor: pointer;
+	vertical-align: middle;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fff;
+}
+img.botplatformchattoolbar:hover {
+	opacity: 0.5;
+}
+td.toolbar, td.botplatformchattoolbar {
+	width: 30px;
+	height: 30px;
+}
+.botplatformchatonline {
+	width: 50px;
+	border: none;
+	margin: auto;
+}
+img.chat-user-thumb {
+	height: 50px;
+}
+a.user {
+	text-decoration: none;
+}
+span.chat-user {
+	color: grey;
+	font-size: small;
+}
+.botplatformframechatbubble-div, .botplatformchatbubble-div {
+	padding-bottom: 15px;
+	position: relative;
+}
+#botplatformbubble-text {
+	font-size: 16px;
+	line-height: normal;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.botplatformchatchat-1-div-2, .botplatformchatchat-2-div-2 {
+	font-size: 16px;
+	line-height: normal;
+}

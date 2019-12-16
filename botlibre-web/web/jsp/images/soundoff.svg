@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="11px" height="16px" preserveAspectRatio="none" viewBox="0 0 11 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>device_volume_loudspeaker_speaker_glyph</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path id="path-1" d="M3.12499999,4.8 L1.04166667,4.8 C0,4.8 0,5.86666667 0,5.86666667 L0,10.1333333 C0,10.1333333 1.55718031e-11,11.2 1.04166667,11.2 L3.12499999,11.2 L11,16 L11,0 L3.12499999,4.8 L3.12499999,4.8 Z"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="device_volume_loudspeaker_speaker_glyph">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

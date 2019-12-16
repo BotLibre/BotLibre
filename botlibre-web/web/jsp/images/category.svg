@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg10"
+   width="75"
+   height="75"
+   viewBox="0 0 75 75"
+   sodipodi:docname="category.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3840"
+     inkscape:window-height="2035"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="23.44"
+     inkscape:cx="37.5"
+     inkscape:cy="37.5"
+     inkscape:window-x="-13"
+     inkscape:window-y="-13"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <path
+     style="fill:#000000"
+     d="M 11.628623,49.893114 C 11.28288,48.164401 11,40.942127 11,33.843615 11,23.293764 11.27388,20.832133 12.5,20.361626 13.325,20.045044 14,18.934167 14,17.893011 14,16.167209 14.847403,16 23.59362,16 c 8.752615,0 9.639468,0.175326 10.116631,2 0.485997,1.858457 1.364016,2 12.40638,2 H 58 v 2.5 c 0,2.25 0.4,2.5 4,2.5 4.48603,0 4.580879,0.253981 2.543969,6.812103 C 63.743153,34.390446 61.987722,40.1 60.643012,44.5 l -2.444927,8 -22.970419,0.268114 -22.97042,0.268115 z M 17.093361,35.5 20.317356,25 H 38.658678 C 50.219559,25 57,24.630319 57,24 57,23.362963 48.833333,23 34.5,23 H 12 v 11.5 c 0,6.46424 0.40929,11.5 0.934683,11.5 0.514075,0 2.38548,-4.725 4.158678,-10.5 z"
+     id="path22"
+     inkscape:connector-curvature="0" />
+</svg>

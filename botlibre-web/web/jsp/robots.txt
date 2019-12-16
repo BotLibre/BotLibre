@@ -1,0 +1,51 @@
+User-agent: *
+Disallow: /embedded
+Disallow: /rest/
+Disallow: /speech/
+Disallow: /chat
+Disallow: /bot
+Disallow: /*proxy*
+Disallow: /*embedded*
+Disallow: /browse?instance-filter=*
+Disallow: /browse?user-filter=*
+Disallow: /avatar?instance-filter=*
+Disallow: /avatar?user-filter=*
+Disallow: /script?instance-filter=*
+Disallow: /script?user-filter=*
+Disallow: /forum?instance-filter=*
+Disallow: /forum?user-filter=*
+Disallow: /forum-post?instance-filter=*
+Disallow: /forum-post?user-filter=*
+Disallow: /livechat?instance-filter=*
+Disallow: /livechat?user-filter=*
+Disallow: /domain?instance-filter=*
+Disallow: /domain?user-filter=*
+Disallow: /login?send-message=*
+Crawl-delay:   20
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: ZmEu
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: spbot
+Disallow: /
+
+User-agent: MegaIndex.ru
+Disallow: /
+
+User-agent: XoviBot
+Disallow: /
+
+User-agent: BUbiNG
+Disallow: /
+
+User-agent: Seekport Crawler
+Disallow: /

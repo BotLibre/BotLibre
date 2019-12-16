@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="24px" height="22px" viewBox="0 0 24 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>circle_backup_time_history_recent_time-machine_glyph</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M2.1813762,9 C3.12188879,3.87976371 7.60786044,0 13,0 C19.0751326,0 24,4.92486744 24,11 C24,17.0751326 19.0751326,22 13,22 C8.72726797,22 5.02351692,19.5639043 3.20191667,16.0048828 L5.51881965,16.0048828 C7.13378331,18.4141145 9.88168984,20 13,20 C17.970563,20 22,15.970563 22,11 C22,6.029437 17.970563,2 13,2 C8.71682497,2 5.13247465,4.99202246 4.22301639,9 L2.1813762,9 L2.1813762,9 Z M12.5,11.3496262 L17.7106847,14.4213293 L18.2185145,13.5598719 L13.5,10.7543945 L13.5,4.03173828 L12.5,4.03173828 L12.5,11.3496262 Z M3,13 L6,9 L0,9 L3,13 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="circle_backup_time_history_recent_time-machine_glyph">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

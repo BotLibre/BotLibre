@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="22px" height="22px" preserveAspectRatio="none" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.1 (7597) - http://www.bohemiancoding.com/sketch -->
+    <title>editor_image_picture_photo_outline_stroke</title>
+    <description>Created with Sketch.</description>
+    <defs>
+        <path d="M0.140487671,0 C0.0628984728,0 0,0.065177679 0,0.14488998 L0,17.85511 C0,17.9351306 0.0631103513,18 0.140487671,18 L21.8595124,18 C21.9371015,18 22,17.9348223 22,17.85511 L22,0.14488998 C22,0.064869454 21.9368896,0 21.8595124,0 L0.140487671,0 Z M1,1 L1,17 L21,17 L21,1 L1,1 Z M8.31146755,3.96557279 L11.5680228,9.58960333 C11.6080958,9.65880899 11.694647,9.6768875 11.7588871,9.63170823 L14.5213939,7.68886831 C14.6506985,7.59792981 14.8228868,7.62965466 14.9092326,7.7648075 L19.9298551,15.6233415 C20.0147479,15.75622 19.9533678,15.8639394 19.8034742,15.8639394 L2.14722686,15.8639394 C1.99212294,15.8639394 1.92473319,15.7514312 1.99797568,15.6102003 L7.71352136,4.58911188 L8.03502924,3.96915944 C8.107704,3.82902321 8.23291348,3.82991093 8.31146755,3.96557279 Z M17.5,6 C18.3284271,6 19,5.32842715 19,4.5 C19,3.67157284 18.3284271,3 17.5,3 C16.6715729,3 16,3.67157284 16,4.5 C16,5.32842715 16.6715729,6 17.5,6 Z" id="path-1"></path>
+    </defs>
+    <g id="miu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="editor_image_picture_photo_outline_stroke">
+            <use fill="#000000" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>
