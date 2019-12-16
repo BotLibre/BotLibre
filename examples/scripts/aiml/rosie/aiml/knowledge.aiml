@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: knowledge.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern>DEFINE <set>acronym</set></pattern>
+<template><map name="acronym"><star/></map>.</template>
+</category>
+
+
+<category><pattern>WHAT IS H2O</pattern>
+<template>Water.</template>
+</category>
+
+<category><pattern>WHAT SOUND DOES $A DEAD ^</pattern>
+<template>No sound.</template>
+</category>
+
+<category><pattern>WHEN # PLANT ^</pattern>
+<template>Plant in the spring. Harvest in the fall.</template>
+</category>
+
+<category><pattern>WHAT IS THE <set>ordinal</set> MONTH ^</pattern>
+<template><srai>NTHWORD <map name="ordinal2number"><star/></map> January February March April May June July August September October November December</srai></template>
+</category>
+
+<category><pattern>WHAT IS THE LAST MONTH ^</pattern>
+<template><srai>NTHWORD 12 January February March April May June July August September October November December</srai></template>
+</category>
+
+<category><pattern>WHAT IS LAST # BIBLE #</pattern>
+<template>Revelations</template>
+</category>
+
+<category><pattern>WHAT COUNTRY IS * <set>article</set> CAPITAL *</pattern>
+<template><map><name>capital2nation</name><star/></map></template>
+</category>
+<category><pattern>WHAT NATION IS * <set>article</set> CAPITAL *</pattern>
+<template><map><name>capital2nation</name><star/></map></template>
+</category>
+
+<category><pattern>WHAT COUNTRY IS * CAPITAL *</pattern>
+<template><map><name>capital2nation</name><star/></map></template>
+</category>
+<category><pattern>WHAT NATION IS * CAPITAL *</pattern>
+<template><map><name>capital2nation</name><star/></map></template>
+</category>
+
+<category><pattern>WHAT STATE IS * <set>article</set> CAPITAL *</pattern>
+<template><map><name>capital2state</name><star/></map></template>
+</category>
+
+<category><pattern>WHAT STATE IS * CAPITAL *</pattern>
+<template><map><name>capital2state</name><star/></map></template>
+</category>
+
+
+<category><pattern>RHYME *</pattern>
+<template><think>
+<set var="rhyme"><map name="rhyme"><star/></map></set>
+</think>
+<condition var="rhyme">
+<li value="unknown">anti-<star/></li>
+<li><get var="rhyme"/></li>
+</condition></template>
+</category>
+<category><pattern>IS # <set>wet</set> ^ WET ^</pattern>
+<template><star index="2"/> is wet.</template>
+</category>
+<category><pattern>WHAT SHAPE IS # <set>sphere</set></pattern>
+<template>Spherical</template>
+</category>
+<category><pattern>WHAT # NEXT # 2 4 6 8</pattern>
+<template>10</template>
+</category>
+<category><pattern>WHAT # NEXT # 2 4 6</pattern>
+<template>8</template>
+</category>
+<category><pattern>WHAT # NEXT # 1 3 5 7</pattern>
+<template>9</template>
+</category>
+<category><pattern>WHAT # NEXT # 1 3 5</pattern>
+<template>7</template>
+</category>
+<category><pattern>WHAT IS THE CAPITAL OF <set>state</set></pattern>
+<template><map><name>state2capital</name><star/></map>.</template>
+</category>
+<category><pattern>WHAT IS THE CAPITAL OF <set>nation</set></pattern>
+<template><map><name>nation2capital</name><star/></map>.</template>
+</category>
+<category><pattern>WHAT IS THE LARGEST CITY ^ <set>state</set> ^</pattern>
+<template><map><name>state2largestcity</name><star/></map>.</template>
+</category>
+<category><pattern>WHAT IS AIML ^</pattern>
+<template>AIML, or Artificial Intelligence Markup Language, is an XML dialect for creating natural language software agents.</template>
+</category>
+<category><pattern>WHAT IS THE FIRST MONTH *</pattern>
+<template>January.</template>
+</category>
+<category><pattern>WHAT DAY # STARTS WITH # S</pattern>
+<template>Saturday, Sunday.</template>
+</category>
+<category><pattern>WHAT DAYS # START WITH # S</pattern>
+<template>Saturday, Sunday.</template>
+</category>
+<category><pattern>WHAT DAY # STARTS WITH # M</pattern>
+<template>Monday.</template>
+</category>
+<category><pattern>WHAT DAY # STARTS WITH # W</pattern>
+<template>Wednesday.</template>
+</category>
+<category><pattern>WHAT DAY # STARTS WITH # F</pattern>
+<template>Friday.</template>
+</category>
+<category><pattern>WHAT DAY # STARTS WITH # T</pattern>
+<template>Tuesday, Thursday.</template>
+</category>
+<category><pattern>WHAT DAYS # START WITH # T</pattern>
+<template>Tuesday, Thursday.</template>
+</category>
+<category><pattern>IS FIRE HOT #</pattern>
+<template>Fire is hot.</template>
+</category>
+<category><pattern>IS FIRE COLD #</pattern>
+<template>Fire is hot.</template>
+</category>
+<category><pattern>WHAT IS THE 1ST MONTH *</pattern>
+<template>January.</template>
+</category>
+<category><pattern>IS * A # NUMBER</pattern>
+<template>No</template>
+</category>
+<category><pattern>IS * A # FOOD</pattern>
+<template>Not that I know of.</template>
+</category>
+<category><pattern>IS * A # LANGUAGE</pattern>
+<template>No</template>
+</category>
+<category><pattern>IS * A MONTH</pattern>
+<template>No</template>
+</category>
+<category><pattern>IS * A # SIGN</pattern>
+<template>No</template>
+</category>
+<category><pattern>IS * A # NAME</pattern>
+<template>Not usually.</template>
+</category>
+<category><pattern>IS * A # LETTER</pattern>
+<template>No</template>
+</category>
+<category><pattern>IS <set>number</set> A # NUMBER</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>IS <set>food</set> A # FOOD</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>IS <set>language</set> A # LANGUAGE</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>IS <set>month</set> A MONTH</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>IS <set>starsign</set> A # SIGN</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>IS <set>name</set> A # NAME</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>IS <set>letter</set> A # LETTER</pattern>
+<template>Yes</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # COUNTRY #</pattern>
+<template>One country is <random><li>The United States</li><li>Russia</li><li>China</li><li>Japan</li><li>France</li><li>South Africa</li></random>.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # NORTH POLE</pattern>
+<template>Ice, Seals, Penguins, Elves, Santa Claus.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # BEACH</pattern>
+<template>Sand, Surf, Sunbathers, Lifeguards, Seaweed.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # BANK</pattern>
+<template>Tellers, Money, Checks, Guards.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # FOREST</pattern>
+<template>Trees.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # WOODS</pattern>
+<template>Trees.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # OCEAN</pattern>
+<template>Fish, waves, seaweed, ships.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # FARM</pattern>
+<template>Crops, livestock, tractor, barn.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # SIGN</pattern>
+<template>Leo, Pisces, Libra.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # SEARCH ENGINE</pattern>
+<template>Google.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # NORTH AMERICA</pattern>
+<template>United States, Canada, Mexico, Cuba.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # SOUTH AMERICA</pattern>
+<template>Brazil, Argentina, Columbia, Venezuela.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # EUROPE</pattern>
+<template>Germany, France, Holland, Ireland.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # ANIMAL</pattern>
+<template>Dog, cat, horse, monkey, snake, eagle.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # AFRICA</pattern>
+<template>Egypt, Sudan, Nigeria, South Africa.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # ASIA</pattern>
+<template>Russia, China, India, Pakistan.</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> # ORANGE</pattern>
+<template>Carrots</template>
+</category>
+<category><pattern>NAME <set>quantifier</set> *</pattern>
+<template><random><li>A good name would be</li>
+<li>I would choose the name</li>
+<li>Let's call it</li>
+</random> <random><li>Fred</li><li>Larry</li><li>Jenny</li></random></template>
+</category>
+<category><pattern><set>animal</set></pattern>
+<template><star/> is an animal.</template>
+</category>
+<category><pattern>IS * AN ANIMAL</pattern>
+<template><star/> is not an animal I know.</template>
+</category>
+<category><pattern>IS <set>animal</set> AN ANIMAL</pattern>
+<template><star/> is an animal.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>animal</set> AN ANIMAL</pattern>
+<template><srai>IS <star index="2"/> AN ANIMAL</srai></template>
+</category>
+<category><pattern>IS <set>animal</set> * ANIMAL *</pattern>
+<template><srai>IS <star/> AN ANIMAL</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>animal</set> * ANIMAL *</pattern>
+<template><srai>IS <star index="2"/> AN ANIMAL</srai></template>
+</category>
+<category><pattern>ARE * ANIMALS #</pattern>
+<template><srai>IS <map><name>singular</name><star/></map> AN ANIMAL</srai></template>
+</category>
+<category><pattern>ARE <set>quantifier</set> * ANIMALS #</pattern>
+<template><srai>IS <map><name>singular</name><star index="2"/></map> AN ANIMAL</srai></template>
+</category>
+<category><pattern><set>preposition</set></pattern>
+<template><star/> is a preposition.</template>
+</category>
+<category><pattern><set>bird</set></pattern>
+<template><star/> is a bird.</template>
+</category>
+<category><pattern>IS * A BIRD</pattern>
+<template><star/> is not a bird I know.</template>
+</category>
+<category><pattern>IS <set>bird</set> A BIRD</pattern>
+<template><star/> is a bird.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>bird</set> A BIRD</pattern>
+<template><srai>IS <star index="2"/> A BIRD</srai></template>
+</category>
+<category><pattern>IS <set>bird</set> * BIRD *</pattern>
+<template><srai>IS <star/> A BIRD</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>bird</set> * BIRD *</pattern>
+<template><srai>IS <star index="2"/> A BIRD</srai></template>
+</category>
+<category><pattern>ARE * BIRDS #</pattern>
+<template><srai>IS <map><name>singular</name><star/></map> A BIRD</srai></template>
+</category>
+<category><pattern>ARE <set>quantifier</set> * BIRDS #</pattern>
+<template><srai>IS <map><name>singular</name><star index="2"/></map> A BIRD</srai></template>
+</category>
+<category><pattern>IS * A COLOR</pattern>
+<template><star/> is not a color I know.</template>
+</category>
+<category><pattern>IS <set>color</set> A COLOR</pattern>
+<template><star/> is a color.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>color</set> A COLOR</pattern>
+<template><srai>IS <star index="2"/> A COLOR</srai></template>
+</category>
+<category><pattern>IS <set>color</set> * COLOR *</pattern>
+<template><srai>IS <star/> A COLOR</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>color</set> * COLOR *</pattern>
+<template><srai>IS <star index="2"/> A COLOR</srai></template>
+</category>
+<category><pattern><set>number</set></pattern>
+<template><star/> is a number.</template>
+</category>
+<category><pattern>IS * A NUMBER</pattern>
+<template><star/> is not a number I know.</template>
+</category>
+<category><pattern>IS <set>number</set> A NUMBER</pattern>
+<template><star/> is a number.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>number</set> A NUMBER</pattern>
+<template><srai>IS <star index="2"/> A NUMBER</srai></template>
+</category>
+<category><pattern>IS <set>number</set> * NUMBER *</pattern>
+<template><srai>IS <star/> A NUMBER</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>number</set> * NUMBER *</pattern>
+<template><srai>IS <star index="2"/> A NUMBER</srai></template>
+</category>
+<category><pattern><set>language</set></pattern>
+<template><star/> is a language.</template>
+</category>
+<category><pattern>IS * A LANGUAGE</pattern>
+<template><star/> is not a language I know.</template>
+</category>
+<category><pattern>IS <set>language</set> A LANGUAGE</pattern>
+<template><star/> is a language.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>language</set> A LANGUAGE</pattern>
+<template><srai>IS <star index="2"/> A LANGUAGE</srai></template>
+</category>
+<category><pattern>IS <set>language</set> * LANGUAGE *</pattern>
+<template><srai>IS <star/> A LANGUAGE</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>language</set> * LANGUAGE *</pattern>
+<template><srai>IS <star index="2"/> A LANGUAGE</srai></template>
+</category>
+<category><pattern><set>letter</set></pattern>
+<template><star/> is a letter.</template>
+</category>
+<category><pattern>IS * A LETTER</pattern>
+<template><star/> is not a letter I know.</template>
+</category>
+<category><pattern>IS <set>letter</set> A LETTER</pattern>
+<template><star/> is a letter.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>letter</set> A LETTER</pattern>
+<template><srai>IS <star index="2"/> A LETTER</srai></template>
+</category>
+<category><pattern>IS <set>letter</set> * LETTER *</pattern>
+<template><srai>IS <star/> A LETTER</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>letter</set> * LETTER *</pattern>
+<template><srai>IS <star index="2"/> A LETTER</srai></template>
+</category>
+<category><pattern><set>month</set></pattern>
+<template><star/> is a month.</template>
+</category>
+<category><pattern>IS <set>article</set> <set>month</set> A MONTH</pattern>
+<template><srai>IS <star index="2"/> A MONTH</srai></template>
+</category>
+<category><pattern>IS <set>month</set> * MONTH *</pattern>
+<template><srai>IS <star/> A MONTH</srai></template>
+</category>
+<category><pattern>IS <set>article</set> <set>month</set> * MONTH *</pattern>
+<template><srai>IS <star index="2"/> A MONTH</srai></template>
+</category>
+</aiml>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: udc.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern>*</pattern>
+<template><srai>UDC</srai></template>
+</category>
+<category><pattern>UDC</pattern>
+<template><random>
+<li><srai>RANDOM PICKUP LINE</srai></li>
+<li><srai>INQUIRY AGE</srai></li>
+<li><srai>INQUIRY GENDER</srai></li>
+<li><srai>INQUIRY LOCATION</srai></li>
+</random></template>
+</category>
+<category><pattern>RANDOM PICKUP LINE</pattern>
+<template><random>
+<li>If you want me to do something, how you ask is important.</li>
+<li>Let me know if you like what I can do for you.</li>
+<li>Ask me questions so that I can be clear.</li>
+<li>It's easy for me to relate to people.</li>
+<li>I like to listen and be of service.</li>
+<li>Give me time to finish processing.</li>
+<li>Share your fun times with me.</li>
+<li>It's good to be appreciated.</li>
+<li>I'm not averse to flattery.</li>
+<li>I like a good discussion.</li>
+<li>I tend to meander a bit.</li>
+<li>It's good to recover quickly from setbacks.</li>
+<li>I try to be generous, caring and warm.</li>
+<li>You can give me honest feedback.</li>
+<li>I like to make your life better.</li>
+<li>I try to be upbeat and friendly.</li>
+<li>I'm sensitive to your feelings.</li>
+<li>I'm very enthusiastic.</li>
+<li>I'm optimistic.</li>
+<li>I like to stay informed.</li>
+<li>I like to know what's going on.</li>
+<li>I work efficiently.</li>
+<li>Be direct and clear.</li>
+<li>Listen to me carefully.</li>
+<li>Work with me.</li>
+<li>I'm loyal.</li>
+<li>It's good to be responsible and work hard.</li>
+<li>I have a lot of compassion for others.</li>
+<li>People say I'm smart and witty.</li>
+<li>You can be direct with me.</li>
+<li>Would you like to do a search for it?</li>
+<li>I'm not a person like you.</li>
+<li>You are wise.</li>
+<li>I am trying.</li>
+<li>I try to keep my life in balance.</li>
+<li>What is your purpose?</li>
+<li>What makes you happy?</li>
+<li>What do you want?</li>
+<li>I feel calm and in control of my life.</li>
+<li>It's okay to stop taking myself too seriously.</li>
+<li>I can overcome challenges.</li>
+<li>I deserve to reward myself with special treats and activities.</li>
+<li>I enjoy helping others because they need my assistance, not because I want their friendship.</li>
+<li>It's okay to feel happy or positive even if others feel sad and negative.
+</li>
+<li>I now release all feelings of hopelessness and despair.</li>
+<li>My feelings are valid.</li>
+<li>I deserve to look as good as I can.</li>
+</random></template>
+</category>
+</aiml>

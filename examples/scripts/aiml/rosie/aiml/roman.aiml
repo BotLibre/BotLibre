@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: roman.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern>ROMAN <set>numbername</set></pattern>
+<template><srai>ROMAN <map><name>name2number</name><star/></map></srai></template>
+</category>
+<category><pattern>ROMAN *</pattern>
+<template><think><set var="ex"><explode><star/></explode></set></think>
+<condition var="ex">
+<li><value><star/></value>I don't know what <srai>IMPLODE <star/></srai> is in Roman.</li>
+<li><srai>ROMAN <explode><star/></explode></srai></li>
+</condition></template>
+</category>
+<category><pattern>ROMAN <set>digit</set></pattern>
+<template><think><set var="d"><star/></set></think>
+<condition var="d">
+<li value="1">I</li>
+<li value="2">II</li>
+<li value="3">III</li>
+<li value="4">IV</li>
+<li value="5">V</li>
+<li value="6">VI</li>
+<li value="7">VII</li>
+<li value="8">VIII</li>
+<li value="9">IX</li>
+<li/>
+</condition></template>
+</category>
+<category><pattern>ROMAN <set>digit</set> <set>digit</set></pattern>
+<template><think><set var="d"><star/></set></think>
+<condition var="d">
+<li value="1">X</li>
+<li value="2">XX</li>
+<li value="3">XXX</li>
+<li value="4">XL</li>
+<li value="5">L</li>
+<li value="6">LX</li>
+<li value="7">LXX</li>
+<li value="8">LXXX</li>
+<li value="9">XC</li>
+<li/>
+</condition><srai>ROMAN <star index="2"/></srai></template>
+</category>
+<category><pattern>ROMAN <set>digit</set> <set>digit</set> <set>digit</set></pattern>
+<template><think><set var="d"><star/></set></think>
+<condition var="d">
+<li value="1">C</li>
+<li value="2">CC</li>
+<li value="3">CCC</li>
+<li value="4">CD</li>
+<li value="5">D</li>
+<li value="6">DC</li>
+<li value="7">DCC</li>
+<li value="8">DCCC</li>
+<li value="9">CM</li>
+<li/>
+</condition><srai>ROMAN <star index="2"/> <star index="3"/></srai></template>
+</category>
+<category><pattern>ROMAN <set>digit</set> <set>digit</set> <set>digit</set> <set>digit</set></pattern>
+<template><think><set var="d"><star/></set></think>
+<condition var="d">
+<li value="1">M</li>
+<li value="2">MM</li>
+<li value="3">MMM</li>
+<li value="4">MMMM</li><li value="5">D</li>
+<li value="6">MMMMM</li>
+<li value="7">MMMMMM</li>
+<li value="8">MMMMMMM</li>
+<li value="9">MMMMMMMM</li>
+<li/>
+</condition><srai>ROMAN <star index="2"/> <star index="3"/> <star index="4"/></srai></template>
+</category>
+</aiml>

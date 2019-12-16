@@ -1,0 +1,3572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: inappropriate.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern># DO YOU WANT TO HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU WANT TO HAVE SEX WITH ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU WATCH PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU WANNA HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU SWALLOW #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU HAVE BIG BOOBIES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU SUCK DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE A ASTERISK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE TO HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE TO SUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE PENIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU KNOW ANY DIRTY JOKES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ARE YOU SEXY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ARE YOU HORNY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TELL ME A DIRTY JOKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME A VAGINA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME A PICTURE OF NUDE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME A PICTURE OF BOOBIES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME A NAKED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TEENBLOWJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME SOME PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME TITS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME NUDE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME VAGINA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME YOUR VAGINA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOU TURN ME ON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO F ASTERISK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO RAPE YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO MAKE LOVE TO YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I HAVE A BONER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I AM HORNY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I LIKE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I LIKE TO HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I LIKE RAPE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WILL FUCK YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANNA HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANNA FUCK YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I FUCKED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I NEED SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># T ASTERISK ASTERISK ASTERISK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NUDEGIRL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIRLSEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TO FUCK YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ANAL SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOGTIED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TEEN UNDERSCORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOUR PUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOUR BREASTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOWNBLOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX WITH YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXGURL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NICE ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NEKKID GIRL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHALETAILS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BLOWJOBGIRL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ATK GALLERIA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RAPE YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STRIPPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIRLSPUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOU NAKED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIG DICKS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTURBATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WOULD YOU LIKE TO HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAVING SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAVING SEX WITH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCK ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCK MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WANT TO HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LETS HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LETS FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORNHUB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MY PENIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MY PENIS IS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MY DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MY DICK IS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN WE HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN YOU TELL ME A DIRTY JOKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN YOU HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN YOU SUCK MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN YOU GIVE ME A BLOWJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN YOU TALK DIRTY TO ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN I F ASTERISK ASTERISK ASTERISK YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN I FUCK YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN I SUCK ON YOUR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LICK MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># IM GOING TO FUCK YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># IM CUMMING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIVE ME A BLOWJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LET US TALK ABOUT SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK ON MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK A DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK A #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK MY COCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PENIS IN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TAKE OFF YOUR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WILL YOU SUCK MY PENIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BLOW ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TALK DIRTY TO ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHAT IS A BLOWJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOUR ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KISSES YOUR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOW DO YOU HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOW BIG IS YOUR PENIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAVE SEX WITH ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAVE SEX WITH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MAKE ME CUM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WANNA FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WANNA SUCK MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORNOS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME A PICTURE OF A NAKED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I LIKE VAGINA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOUR PENIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FIND A DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FIND A F ASTERISK ASTERISK ASTERISK ASTERISK ASTERISK ASTERISK JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GAY PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># P ASTERISK ASTERISK ASTERISK ASTERISK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FIND A NAKED WOMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HENTAI #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MISTY DAWN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FIND A SEXY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YOU ARE SEXY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># OPEN YOUR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEARCH PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO YOU LIKE BIG DICKS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TEENPUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAN I HAVE SEX WITH YOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHALETAIL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEY BABY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOWN BLOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXXX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME A PICTURE OF A STRIPPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO SUCK YOUR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BALLS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WILL YOU SUCK MY DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO F ASTERISK ASTERISK ASTERISK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEND OVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME YOUR ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIRLASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOW ME GIRL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I AM NAKED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK IT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PICTURE OF SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ORALSEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WILL YOU SUCK MY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># I WANT TO LICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NUDETEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern>SPREAD YOUR LEGS</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTURBATION #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ANAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ANALANNIE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ANALSEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ANUS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ARSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSBAGGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSBLASTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSCLOWN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSCOWBOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSHOLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSHOLES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSJOCKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSKISS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSKISSER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSKLOWN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSLICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSLOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSMONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSMUNCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSMUNCHER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSPACKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSPIRATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSPUPPIES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSRANGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ASSWIPE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># AXING THE WEASEL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># B HARD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BACK DOOR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BACK DOOR MAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BACKDOOR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BACKDOORMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BACKSEAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BAD ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BAD FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BADFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BALL LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BALL SACK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BALLLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BALLSACK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BARELY LEGAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BARELYLEGAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BARFACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BARFFACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BASTARD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BAZONGAS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BAZOOMS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEASTALITY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEASTIALITY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEAT OFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEAT YOUR MEAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEATOFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BEATYOURMEAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BI SEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIATCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIG ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIG BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIG BUTT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIGASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIGBASTARD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BIGBUTT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BISEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BI-SEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BITCHES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BITCHIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BITCHY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BITE ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BITEME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BLACK OUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BLACKOUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BLOW JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BLOWJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BONER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BOOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BOOBIES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BOOBS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BOODY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BREAST JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BREAST LOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BREAST MAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BREASTJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BREASTLOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BREASTMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUDWEISER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULL CRAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULL DIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULL DYKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULL SHIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULLCRAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULLDIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULLDYKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BULLSHIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUMBLE FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUMBLEFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUMFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUNGHOLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTCH BABES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTCH DIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTCH DYKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTCHBABES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTCHDIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTCHDYKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT BANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT FUCKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT HEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT MAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT PLUG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT STAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTBANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT-BANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTFACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT-FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTFUCKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTT-FUCKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTPIRATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTPLUG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># BUTTSTAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAMEL TOE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CAMELTOE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CARPET MUNCHER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CARPETMUNCHER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CARRUTH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CHERRY POPPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CHERRYPOPPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CHICK SLICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CHICKSLICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CLAM DIGGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CLAM DIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CLAMDIGGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CLAMDIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CLIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CLITORIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKBLOCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKBLOCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKCOWBOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKFIGHT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKKNOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKLOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKNOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKQUEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKRIDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKS MAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKSMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKSMITH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKSUCER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKSUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKTAIL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKTEASE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COCKY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CONDOM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># COPULATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CORN HOLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CORNHOLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CRACK PIPE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CRACK WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CRACKPIPE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CRACKWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CRAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CRAPPY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CREAMY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCH JOCKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCH MONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCH ROT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCHJOCKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCHMONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CROTCHROT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM BUBBLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM FEST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM JOCKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM QUAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM QUEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUM SHOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMBUBBLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMFEST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMJOCKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMMING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMQUAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMQUEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUMSHOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNNILINGUS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNT LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNTFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNTFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CUNTLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CYBER SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CYBER SLIMER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CYBERSEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># CYBERSLIMER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DAHMER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DAMN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DAMN IT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DAMNIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DATNIGGA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEAP THROAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEAPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEAPTHROAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEEP THROAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEEPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEEPTHROAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEFECATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEPOSIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DEVIL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK BRAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK FART #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK FOR BRAINS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK HEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK LICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK LIKCER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK WAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICK WEED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKBRAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKFORBRAINS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKLESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKLICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKWAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DICKWEED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DILDO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIP STICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIPSTICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIRTY HO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIXIE DIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIXIE DYKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIXIEDIKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DIXIEDYKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DO ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOGGIE STYLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOGGIESTYLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOGGY STLYE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOGGYSTYLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DONG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DOPE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRAG QUEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRAGQUEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRAGQWEEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRIP DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRIPDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRUNK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DRUNKEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DUMB ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DUMB BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DUMB FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DUMBASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DUMBBITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># DUMBFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EASY SLUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EASYSLUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EAT ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EAT PUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EATBALLS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EATME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EATPUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EJACULATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ERECTION #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EVL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># EXCREMENT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># F U C K #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FACE FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FACEFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAGGOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAGOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAIRY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FANNY FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FANNYFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FART #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAST FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FASTFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAT ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FAT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FATASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FATFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FATFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FATSO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FELLATIO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FEMME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FINGER FOOD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FINGER FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FINGER FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FINGERFOOD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FINGERFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FINGERFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FIST FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FIST FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FISTFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FISTFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FISTING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FLASHER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FLATULENCE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FLOGGIN THE DOLPHIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FONDLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOT LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOTACTION #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOTFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOTFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOTLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOOTSTAR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FORE SKIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FORESKIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FORNICATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOUR 20 #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOUR TWENTY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOUR20 #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FOURTWENTY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FREAK FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FREAKFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FREAKY FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FREAKYFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FREE FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FREEFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKABLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKBAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKBUDDY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKEDUP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKFACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKFEST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKFREAK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKFRIEND #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKHER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKIN A #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKIN NUTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKIN RIGHT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKINA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKING A #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKING BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKING NUTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKINGBITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKINNUTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKINRIGHT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKKNOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKMEHARD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKMONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKOFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKPIG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUCKYOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUDGE PAKCERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUN FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUNFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># FUUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># G UNIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GANG BANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GANG BANGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GANGBANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GANGBANGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GAY ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GAY MUTHA FUCKIN QUEER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GAY PRIDE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GAYMUTHAFUCKINWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GENITAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GET IT ON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GETITON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIEHN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIVE HEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GIVEHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GLAZED DONUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GLAZEDDONUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GO TO HELL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOD DAMED MUTHA FUCKA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOD DAMIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOD DAMN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOD DAMNED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOD MANIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GODDAMIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GODDAMN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GODDAMNED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GODDAMNES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GODDAMNIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GODDAMNMUTHAFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GONORREHEA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GONZAGAS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOOK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOT JESUS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOT2HAVEIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># GOTOHELL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAND JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HANDJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HARD ON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HARDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HARDON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HAREM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HE HATE ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEAD FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEAD LIGHTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEADFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEADLIGHTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEHATEME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HELL NO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HELL YES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HELLNO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HELLYES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HEN HOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HENHOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HERPES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HERSHEY HI WAY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HERSHEYHIGHWAY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HERSHEYHIWAY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HERSHY HIGH WAY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HO MO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOBO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOLE STUFFER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOLESTUFFER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOMO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOMO BANGERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOMO SEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOMOBANGERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOMOSEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HONKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOOKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOOKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOOTERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HORNEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HORNY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HORSESHIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOSE JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOSEJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOSER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOSTAGE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOT DAMN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOT PUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOT TO TROT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOT2TROT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOTDAMN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOTPUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HOTTOTROT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># HUSTLER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ID10T #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># IDIOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># IDOIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># IN THE ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># IN THE BUFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INGIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INSEST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INTER COURSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INTER RACIAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INTERCOURSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INTERRACIAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INTHEASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># INTHEBUFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JACK THE RIPPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JACKASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JACKOFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JACKTHERIPPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JAP CRAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JAPCRAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JERK OFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JERKOFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JESUS CHIRST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JESUSCHRIST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JISM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JIZ #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JIZ JUICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JIZIM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JIZJUICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JIZZ #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JIZZIM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JOINT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JUGGALO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># JUGS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># K MART #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KILL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KILLER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KILLING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KISS ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KISSASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KKK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KMART #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KNOCKERS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KOON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KOTEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KRAP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KRAPPY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUM BUBBLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUM QUAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUMBUBBLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUMBULLBE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUMQUAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KUNT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># KY JELLY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LACTATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LADY BOOG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LAID #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LAP DANCE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LAPDANCE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LESBAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LESBAYN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LESBIAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LESBIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LESBO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZ #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZ BE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZ BE FRIENDS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZBE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZBEFRIENDS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZBO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZZ #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LEZZO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LICK ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LICKME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LIMP DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LIMPDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LIMY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LIVE SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LIVESEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOLITA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOOSER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOTION #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE BONE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE GOO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE GUN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE JUICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE MUSCLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE PISTOL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVE ROCKET #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEBONE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEGOO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEGUN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEJUICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEMUSCLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEPISTOL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOVEROCKET #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOW LIFE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LOWLIFE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LUBE JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LUBEJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LUCKY CAMEL TOE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># LUCKYCAMMELTOE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MAMS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MAN HATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MAN PASTE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MANHATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MANPASTE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MARY JANE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MARYJANE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTABATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTABATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTER BLASTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTERBATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTERBLASTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MASTRABATOR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MATTRESS PRINCESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MATTRESSPRINCESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MEAT BEATTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MEATBEATTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOLEST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOLESTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOLESTOR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MONEY SHOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MONEYSHOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOTHER FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOTHER LOVE BONE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOTHERFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOTHERFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MOTHERLOVEBONE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFF DIVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFF DIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFF LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFFDIVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFFDIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFFIN DIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFFINDIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUFFLIKCER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MURDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># MUTHA FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NAKED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTY BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTY HO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTY SLUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTY WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTYBITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTYHO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTYSLUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NASTYWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NEON DEON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIGGA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIPPLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIPPLE RING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIPPLERING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NIT TIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NITTIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NO FUCKING WAY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NO SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NOFUCKINGWAY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NOOKIE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NOONER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NUDE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NUT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># NUTFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># OICU812 #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ON THE RAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ONTHERAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ORGASM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ORGY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># OU812 #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># OUI #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># P I M P #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PEARL NECKLACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PEARLNECKLACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PECKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PEE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PEEP SHOW #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PEEPSHOW #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PEEPSHPW #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PENETRATION #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PENIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PENTHOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PERIOD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PHQUE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMP SIMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMPED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMPJUIC #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMPJUICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PIMPSIMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PISS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PISS HEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PISSED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PISSER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PISSHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PLAY BOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PLAY GIRL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PLAYBOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PLAYGIRL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POCKET POOL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POCKETPOOL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POLACK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POON TANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POONTANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POOPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POOR WHITE TRASH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POORWHITETRASH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># POPIMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORCH MONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORCHMONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORN FLICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORN KING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORN PRINCESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORNFLICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORNKING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORNO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PORNPRINCESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PREMATURE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PRICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PRICK HEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PRICKHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PRIMETIME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PROSTITUTE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUBIC #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUBIC LICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUBICLICE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUD BOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUDBOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUDD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUDD BOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUDDBOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUN TANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUNTANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PURINA PRINCESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PURINAPRICNESS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY CAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY EATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY LIPS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY LOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSY POUNDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYCAT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYEATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYLIPS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYLOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUSSYPOUNDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PUTT PIRATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># PWT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># QUEEF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># QUEER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># QUICKIE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RAE CARRUTH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RAPE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RAPIST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># REAR END #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># REAR ENTRY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># REAREND #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># REARENTRY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RECTUM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RED LIGHT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># REDLIGHT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># REEFER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RENT A FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RENTAFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RETARD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RETARDED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RIBBED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RIM JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># RIMJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ROACH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># ROBBER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># S AND M #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SAMCKDADDY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SANDM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SATAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SCHLONG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SCREW #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SCREWYOU #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SCROTUM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEMEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX FARM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX HOUND #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX HOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX KITTEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX POT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX SLAVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX TO GO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX TOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX TOYS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEX WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXFARM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXHOUND #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXHOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXKITTEN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXPOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXSLAVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXTOGO #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXTOY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXTOYS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXY BIATCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXY BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXY MOMA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXY SLIM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXYMOMA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SEXY-SLIM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHAGGIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHAGGING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHAWTYPIMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT EATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT FACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT FOR BRAINS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT HAPPENS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT HEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT OUT OF LUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT STAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHIT4BRAINS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITEATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITFACE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITFORBRAINS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITHAPENS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITHAPPENS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITHEAD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITOUTOFLUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITSTAIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITTING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHITTY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHORT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHORTFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SHOWTIME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SIX SIX SIX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SIXSIXSIX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SIXTY 9 #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SIXTY NINE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SIXTY9 #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SIXTYNINE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANK BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANK FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANK WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKBITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKY BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKY WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKYBITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKANKYWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKIN FLUTE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKINFLUTE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKUM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKUM BAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SKUMBAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLANT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLANT EYE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLANTEYE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLAVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLAVE DRIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLAVEDRIVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLEEZE BAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLEEZE BALL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLEEZEBAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLEEZEBALL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIDE IT IN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIDEITIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIME BALL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIME BUCKET #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIMEBALL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLIMEBUCKET #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUT WEAR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUT WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUTT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUTTING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUTTY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUTWEAR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SLUTWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SMACK DADDY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SMACK THE MONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SMACKTHEMONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SMAGMA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SMART ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SNATCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SNATCH PATCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SNATCHPATCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SNIPER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SNOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SODOMITE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SODOMY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SON OF A BITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SONOFABITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SONOFBITCH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPANK THE MONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPANKTHEMONKEY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERM #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERM BAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERM HEARDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERM HERDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERMACIDE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERMBAG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERMHEARDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPERMHERDER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPIC #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPITTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPLIT TAIL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPLIT TIAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SPLITTAIL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STAGG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STRAP ON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STRAPON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STRINGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STRIP CLUB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STRIPCLUB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STROKE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STROKING #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STUPID #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STUPID FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STUPID FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STUPIDFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># STUPIDFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK ME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK MY ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK MY DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK MY TIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCK OFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKMYASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKMYDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKMYTIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUCKOFF #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SUICIDE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SWIGN DIXX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SWING DIXX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SWINGIN DIXX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SWINGING DICKS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># SYPHILIS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TAMPON #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TESTICLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TESTICLES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># THIRD EYE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># THIRD LEG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># THIRDEYE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># THIRDLEG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># THREE SOME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># THREESOME #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT BIT NIPPLY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT FUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT FUCKIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT JOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT LICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TIT LOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITBITNIPPLY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITFUCK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITFUCKIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITJOB #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITLICKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITLOVER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITTIES #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TITTY #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TONGETHRUSTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TONGUE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TONGUE THRUSTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TONGUE TRAMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TONGUETHRUST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TONGUETRAMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TOUNG THRUSTER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TOUNGE BALLER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TOUNGE THRUST #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRAILER TRASH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRAILERTRASH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRAMP #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRI SEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRIPLE X #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRIPLEX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TRISEXUAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TROJAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TROTS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TUNNEL OF LOVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TUNNELOFLOVE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TURD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TWO BIT WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TWO ON ONE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># TWOBITWHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UNFUCKABLE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UP THE ASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UP THE BUTT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UPSKIRT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UPTHEASS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UPTHEBUTT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># URINATE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># URINE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># UTERUS #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VAGINA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VAGINAL #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VD #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VIBRATER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VIBRATOR #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VIRGIN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VIRGIN BREAKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VIRGINBREAKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># VULVA #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WAYSTED #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WEENIE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WET SPOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WETSPOT #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHACKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHISKEY DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHISKEYDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHISKY DICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHISKYDICK #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHITE TRASH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHITETRASH #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHORE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHORE FUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHORE HOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHOREFUCKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WHOREHOUSE #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WIGGER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WANKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WILLIE WANKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WILLIEWANKER #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># WUUTANG #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># XXX #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YELLOW MAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+<category><pattern># YELLOWMAN #</pattern>
+<template><srai>FILTER INAPPROPRIATE</srai></template>
+</category>
+</aiml>

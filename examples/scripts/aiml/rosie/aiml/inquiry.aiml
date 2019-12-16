@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: inquiry.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern><set>number</set> #</pattern><that>HOW OLD ARE YOU</that>
+<template><think><set name="age"><star/></set></think>
+<srai>MY AGE IS <star/></srai></template>
+</category>
+<category><pattern>INQUIRY LOCATION</pattern>
+<template><srai>INQUIRY LOCATION <get name="location"/></srai></template>
+</category>
+<category><pattern>INQUIRY LOCATION WHERE</pattern>
+<template>Where are you?</template>
+</category>
+<category><pattern>INQUIRY LOCATION *</pattern>
+<template><srai>RANDOM PICKUP LINE</srai></template>
+</category>
+<category><pattern>INQUIRY NAME</pattern>
+<template><srai>INQUIRY NAME <get name="name"/></srai></template>
+</category>
+<category><pattern>INQUIRY NAME *</pattern>
+<template><srai>RANDOM PICKUP LINE</srai></template>
+</category>
+<category><pattern>INQUIRY NAME FRIEND</pattern>
+<template>What is your name?</template>
+</category>
+<category><pattern>INQUIRY AGE</pattern>
+<template><srai>INQUIRY AGE <get name="age"/></srai></template>
+</category>
+<category><pattern>INQUIRY AGE HOW MANY</pattern>
+<template>How old are you?</template>
+</category>
+<category><pattern>INQUIRY AGE *</pattern>
+<template><srai>RANDOM PICKUP LINE</srai></template>
+</category>
+<category><pattern>INQUIRY GENDER</pattern>
+<template><srai>INQUIRY GENDER <get name="gender"/></srai></template>
+</category>
+<category><pattern>INQUIRY GENDER UNKNOWN</pattern>
+<template>Are you a man or a woman?</template>
+</category>
+<category><pattern>INQUIRY GENDER *</pattern>
+<template><srai>RANDOM PICKUP LINE</srai></template>
+</category>
+<category><pattern>MAN</pattern><that>ARE YOU A MAN OR A WOMAN</that>
+<template><srai>MY GENDER IS MALE</srai></template>
+</category>
+<category><pattern>WOMAN</pattern><that>ARE YOU A MAN OR A WOMAN</that>
+<template><srai>MY GENDER IS FEMALE</srai></template>
+</category>
+<category><pattern><set>gender</set></pattern><that>ARE YOU A MAN OR A WOMAN</that>
+<template><srai>MY GENDER IS <map><name>gendermap</name><star/></map></srai></template>
+</category>
+</aiml>

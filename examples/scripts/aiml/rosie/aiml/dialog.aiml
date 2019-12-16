@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: dialog.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern>CLEAR DIALOG HISTORY</pattern>
+<template>Cleared.
+<think>
+<set name="response1"/>
+<set name="request1"/>
+<set name="response2"/>
+<set name="request2"/>
+<set name="response3"/>
+<set name="request3"/>
+<set name="response4"/>
+<set name="request4"/>
+<set name="response5"/>
+<set name="request5"/>
+<set name="response6"/>
+<set name="request6"/>
+<set name="response7"/>
+<set name="request7"/>
+<set name="response8"/>
+<set name="request8"/>
+<set name="response9"/>
+<set name="request9"/>
+<set name="response10"/>
+<set name="request10"/>
+<set name="response11"/>
+<set name="request11"/>
+<set name="response12"/>
+<set name="request12"/>
+<set name="response13"/>
+<set name="request13"/>
+<set name="response14"/>
+<set name="request14"/>
+<set name="response15"/>
+<set name="request15"/>
+<set name="response16"/>
+<set name="request16"/>
+<set name="response17"/>
+<set name="request17"/>
+<set name="response18"/>
+<set name="request18"/>
+<set name="response19"/>
+<set name="request19"/>
+<set name="response20"/>
+<set name="request20"/>
+<set name="response21"/>
+<set name="request21"/>
+<set name="response22"/>
+<set name="request22"/>
+<set name="response23"/>
+<set name="request23"/>
+<set name="response24"/>
+<set name="request24"/>
+<set name="response25"/>
+<set name="request25"/>
+<set name="response26"/>
+<set name="request26"/>
+<set name="response27"/>
+<set name="request27"/>
+<set name="response28"/>
+<set name="request28"/>
+<set name="response29"/>
+<set name="request29"/>
+<set name="response30"/>
+<set name="request30"/>
+<set name="response31"/>
+<set name="request31"/>
+</think></template>
+</category>
+<category><pattern>XEXCHANGE *</pattern>
+<template><think>Badly formatted dialog exchage: <star/></think></template>
+</category>
+<category><pattern>XEXCHANGE * XHUMAN * XBOT SENDING TRANSCRIPT *</pattern>
+<template><think>Badly formatted dialog exchage: <star/></think></template>
+</category>
+<category><pattern>XEXCHANGE * XHUMAN * XBOT *</pattern>
+<template><think>
+<set name="request"><star index="2"/></set>
+<set name="response"><star index="3"/></set>
+</think>
+<condition name="request"><li value="unknown"/>
+<li><get name="name"/>: <get name="request"/>
+<bot name="name"/>: <get name="response"/></li>
+</condition></template>
+</category>
+<category><pattern>DIALOG HISTORY</pattern>
+<template><srai>XEXCHANGE request31 XHUMAN  <request index="31"/> XBOT <response index="31"/></srai>
+<srai>XEXCHANGE request30 XHUMAN  <request index="30"/> XBOT <response index="30"/></srai>
+<srai>XEXCHANGE request29 XHUMAN  <request index="29"/> XBOT <response index="29"/></srai>
+<srai>XEXCHANGE request28 XHUMAN  <request index="28"/> XBOT <response index="28"/></srai>
+<srai>XEXCHANGE request27 XHUMAN  <request index="27"/> XBOT <response index="27"/></srai>
+<srai>XEXCHANGE request26 XHUMAN  <request index="26"/> XBOT <response index="26"/></srai>
+<srai>XEXCHANGE request25 XHUMAN  <request index="25"/> XBOT <response index="25"/></srai>
+<srai>XEXCHANGE request24 XHUMAN  <request index="24"/> XBOT <response index="24"/></srai>
+<srai>XEXCHANGE request23 XHUMAN  <request index="23"/> XBOT <response index="23"/></srai>
+<srai>XEXCHANGE request22 XHUMAN  <request index="22"/> XBOT <response index="22"/></srai>
+<srai>XEXCHANGE request21 XHUMAN  <request index="21"/> XBOT <response index="21"/></srai>
+<srai>XEXCHANGE request20 XHUMAN  <request index="20"/> XBOT <response index="20"/></srai>
+<srai>XEXCHANGE request19 XHUMAN  <request index="19"/> XBOT <response index="19"/></srai>
+<srai>XEXCHANGE request18 XHUMAN  <request index="18"/> XBOT <response index="18"/></srai>
+<srai>XEXCHANGE request17 XHUMAN  <request index="17"/> XBOT <response index="17"/></srai>
+<srai>XEXCHANGE request16 XHUMAN  <request index="16"/> XBOT <response index="16"/></srai>
+<srai>XEXCHANGE request15 XHUMAN  <request index="15"/> XBOT <response index="15"/></srai>
+<srai>XEXCHANGE request14 XHUMAN  <request index="14"/> XBOT <response index="14"/></srai>
+<srai>XEXCHANGE request13 XHUMAN  <request index="13"/> XBOT <response index="13"/></srai>
+<srai>XEXCHANGE request12 XHUMAN  <request index="12"/> XBOT <response index="12"/></srai>
+<srai>XEXCHANGE request11 XHUMAN  <request index="11"/> XBOT <response index="11"/></srai>
+<srai>XEXCHANGE request10 XHUMAN  <request index="10"/> XBOT <response index="10"/></srai>
+<srai>XEXCHANGE request9 XHUMAN  <request index="9"/> XBOT <response index="9"/></srai>
+<srai>XEXCHANGE request8 XHUMAN  <request index="8"/> XBOT <response index="8"/></srai>
+<srai>XEXCHANGE request7 XHUMAN  <request index="7"/> XBOT <response index="7"/></srai>
+<srai>XEXCHANGE request6 XHUMAN  <request index="6"/> XBOT <response index="6"/></srai>
+<srai>XEXCHANGE request5 XHUMAN  <request index="5"/> XBOT <response index="5"/></srai>
+<srai>XEXCHANGE request4 XHUMAN  <request index="4"/> XBOT <response index="4"/></srai>
+<srai>XEXCHANGE request3 XHUMAN  <request index="3"/> XBOT <response index="3"/></srai>
+<srai>XEXCHANGE request2 XHUMAN  <request index="2"/> XBOT <response index="2"/></srai>
+<srai>XEXCHANGE request1 XHUMAN  <request index="1"/> XBOT <response index="1"/></srai></template>
+</category>
+<category><pattern>TEST REQUEST *</pattern>
+<template>request 1 = <request/>.
+request 2 = <request index="2"/>.
+request 3 = <request index="3"/>.</template>
+</category>
+</aiml>

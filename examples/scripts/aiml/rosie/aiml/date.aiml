@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: date.aiml -->
+<!-- Last modified: September 5, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the Rosie knowledge base. -->
+<!--  -->
+<!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+<!--  -->
+<!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+<!--  -->
+<!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information: -->
+<!-- http://www.pandorabots.com -->
+<!--  http://www.alicebot.org -->
+<!--  -->
+
+<category><pattern>SEASON</pattern>
+<template><think><set var="month"><date format="%B" jformat="MMMMMMMMM"/></set>
+</think>
+<condition var="month">
+<li><value>January</value>Winter</li>
+<li><value>February</value>Winter</li>
+<li><value>March</value>Winter</li>
+<li><value>April</value>Spring</li>
+<li><value>May</value>Spring</li>
+<li><value>June</value>Summer</li>
+<li><value>July</value>Summer</li>
+<li><value>August</value>Summer</li>
+<li><value>September</value>Fall</li>
+<li><value>October</value>Fall</li>
+<li><value>November</value>Winter</li>
+<li><value>December</value>Winter</li>
+<li>unknown</li>
+</condition></template>
+</category>
+<category><pattern>DAY</pattern>
+<template>Today is <date format="%A" jformat="EEEEEEEEEE"/></template>
+</category>
+<category><pattern>TOMORROW ^</pattern>
+<template><think><set var="today"><date format="%A" jformat="EEEEEEEEEE"/></set></think>
+<map name="tomorrow"><get var="today"/></map></template>
+</category>
+<category><pattern>YEAR ^</pattern>
+<template>This is <date format="%Y" jformat="yyyy"/></template>
+</category>
+<category><pattern>NEXT YEAR ^</pattern>
+<template><map><name>successor</name><date format="%Y" jformat="yyyy"/></map></template>
+</category>
+<category><pattern>LAST YEAR ^</pattern>
+<template><map><name>predecessor</name><date format="%Y" jformat="yyyy"/></map></template>
+</category>
+<category><pattern>MONTH</pattern>
+<template>This is <date format="%B" jformat="MMMMMMMMM"/></template>
+</category>
+<category><pattern>TIME</pattern>
+<template>The time is <date format="%I:%M %p" jformat="h:mm a"/></template>
+</category>
+<category><pattern>DATE</pattern>
+<template>Today is <date format="%B %d, %Y" jformat="MMMMMMMMM dd, yyyy"/></template>
+</category>
+<category><pattern>DAY PHASE</pattern>
+<template><think>
+<set var="hour"><date format="%I" jformat="h"/></set>
+<set var="ampm"><date format="%p" jformat="a"/></set>
+</think>
+<condition>
+<li value="AM" var="ampm">Morning</li>
+<li><condition var="hour">
+    <li value="12">Noon</li>
+    <li value="1">Afternoon</li>
+    <li value="2">Afternoon</li>
+    <li value="3">Afternoon</li>
+    <li value="4">Afternoon</li>
+    <li value="5">Afternoon</li>
+    <li value="6">Afternoon</li>
+    <li>Night</li>
+  </condition>
+</li>
+</condition></template>
+</category>
+<category><pattern>DATE AND TIME</pattern>
+<template>The date and time is <date/></template>
+</category>
+<category><pattern>DAYS UNTIL CHRISTMAS</pattern>
+<template><interval format="%B %d" jformat="MMMMMMMMM dd">
+<style>days</style>
+<from><date format="%B %d" jformat="MMMMMMMMM dd"/></from>
+<to>December 25</to>
+</interval> days until Christmas.</template>
+</category>
+<category><pattern>DAYS UNTIL <set>month</set> <set>number</set> <set>number</set></pattern>
+<template><interval format="%B %d %Y" jformat="MMMMMMMMM dd yyyy">
+<style>days</style>
+<from><date format="%B %d %Y" jformat="MMMMMMMMM dd yyyy"/></from>
+<to><star/> <star index="2"/> <star index="3"/></to>
+</interval> days.</template>
+</category>
+<category><pattern>DAYS UNTIL <set>month</set> <set>number</set></pattern>
+<template><interval format="%B %d %Y" jformat="MMMMMMMMM dd yyyy">
+<style>days</style>
+<from><date format="%B %d %Y" jformat="MMMMMMMMM dd yyyy"/></from>
+<to><star/> <star index="2"/> <date format="%Y" jformat="yyyy"/></to>
+</interval> days.</template>
+</category>
+<category><pattern>DATE TOMORROW</pattern>
+<template><srai>TOMORROWDATE <date format="%B %d %Y" jformat="MMMMMMMMM dd yyyy"/></srai></template>
+</category>
+<category><pattern>TOMORROWDATE * <set>number</set> <set>number</set></pattern>
+<template><star/> <map name="successor"><star index="2"/></map>, <star index="3"/></template>
+</category>
+<category><pattern>TOMORROWDATE JANUARY 31 <set>number</set></pattern>
+<template>February 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 28 2012</pattern>
+<template>February 29, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 28 2016</pattern>
+<template>February 29, 2016</template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 28 2020</pattern>
+<template>February 29, 2020</template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 28 2024</pattern>
+<template>February 29, 2024</template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 28 2028</pattern>
+<template>February 29, 2028</template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 28 <set>number</set></pattern>
+<template>March 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE FEBRUARY 29 <set>number</set></pattern>
+<template>March 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE MARCH 31 <set>number</set></pattern>
+<template>April 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE APRIL 30 <set>number</set></pattern>
+<template>May 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE MAY 31 <set>number</set></pattern>
+<template>June 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE JUNE 30 <set>number</set></pattern>
+<template>July 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE JULY 31 <set>number</set></pattern>
+<template>August 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE AUGUST 31 <set>number</set></pattern>
+<template>September 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE SEPTEMBER 30 <set>number</set></pattern>
+<template>October 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE OCTOBER 31 <set>number</set></pattern>
+<template>November 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE NOVEMBER 30 <set>number</set></pattern>
+<template>December 1, <star/></template>
+</category>
+<category><pattern>TOMORROWDATE DECEMBER 31 <set>number</set></pattern>
+<template>January 1, <map name="successor"><star/></map></template>
+</category>
+<category><pattern>DAYAFTERTOMORROWDATE * <set>number</set> <set>number</set></pattern>
+<template><srai>TOMORROWDATE <srai>TOMORROWDATE <star/> <star index="2"/> <star index="3"/></srai></srai></template>
+</category>
+<category><pattern>DAYAFTERTOMORROWDATE</pattern>
+<template><srai>DATE IN 2 DAYS</srai></template>
+</category>
+<category><pattern>DAY AFTER TOMORROW</pattern>
+<template><map name="tomorrow"><map name="tomorrow"><date format="%A" jformat="EEEEEEEEEE"/></map></map></template>
+</category>
+<category><pattern>DATE IN <set>number</set> DAYS</pattern>
+<template><think><set var="days"><star/></set>
+<set var="date"><date format="%B %d %Y" jformat="MMMMMMMMM dd yyyy"/></set>
+</think>
+<condition var="days">
+<li value="0"><get var="date"/></li>
+<li><think><set var="date"><srai>TOMORROWDATE <get var="date"/></srai></set> <set var="days"><map name="predecessor"><get var="days"/></map></set></think> <loop/></li>
+</condition></template>
+</category>
+<category><pattern>DAYS UNTIL <set>weekday</set></pattern>
+<template><think>
+<set var="day"><star/></set>
+<set var="today"><date format="%A" jformat="EEEEEEEEEE"/></set>
+<set var="days">0</set></think>
+<condition var="today">
+<li><value><get var="day"/></value><get var="days"/></li>
+<li><think><set var="today"><map name="tomorrow"><get var="today"/></map></set> <set var="days"><map name="successor"><get var="days"/></map></set></think> <loop/></li>
+</condition></template>
+</category>
+<category><pattern>DATE ON <set>weekday</set></pattern>
+<template><srai>DATE IN <srai>DAYS UNTIL <star/></srai> DAYS</srai></template>
+</category>
+<category><pattern>DATE ON WEEKEND</pattern>
+<template><srai>DATE IN <srai>DAYS UNTIL SATURDAY</srai> DAYS</srai></template>
+</category>
+<category><pattern>DATE A WEEK FROM <set>weekday</set></pattern>
+<template><srai>DATE IN 
+<srai>SUCCESSOR 
+<srai>SUCCESSOR 
+<srai>SUCCESSOR 
+<srai>SUCCESSOR 
+<srai>SUCCESSOR 
+<srai>SUCCESSOR 
+<srai>SUCCESSOR 
+<srai>DAYS UNTIL <star/></srai>
+</srai>
+</srai>
+</srai>
+</srai>
+</srai>
+</srai>
+</srai>
+DAYS</srai></template>
+</category>
+<category><pattern>WEEKDAY IN <set>number</set> DAYS</pattern>
+<template><think>
+<set var="days"><star/></set>
+<set var="day"><date format="%A" jformat="EEEEEEEEEE"/></set>
+</think>
+<condition var="days">
+<li value="0"><get var="day"/></li>
+<li><think><set var="day"><map name="tomorrow"><get var="day"/></map></set>
+<set var="days"><map name="predecessor"><get var="days"/></map></set></think> <loop/></li>
+</condition></template>
+</category>
+</aiml>
