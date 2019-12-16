@@ -33,7 +33,7 @@ public class BotLibreForBusinessCredentials extends Credentials {
 	public BotLibreForBusinessCredentials(String applicationId) {
 		this.host = DOMAIN;
 		this.app = APP;
-		this.url = "http://" + DOMAIN + APP + PATH;
+		this.url = "https://" + DOMAIN + APP + PATH;
 		this.applicationId = applicationId;
 	}
 }

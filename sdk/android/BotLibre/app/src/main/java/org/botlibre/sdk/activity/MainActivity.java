@@ -115,7 +115,7 @@ import android.widget.Toast;
  * You can customize the code and layouts any way you wish for your own app, or just use the SDKConnection, or LiveChatConnection API.
  * <p>
  * You can create an app to access a single bot, forum, or channel instance using this MainActivity class.
- * You will need to create your bot, forum, or channel using your service provider website, or mobile app (Bot Libre, Bot Libre for Business, Forums Libre, Live Chat Libre).
+ * You will need to create your bot, forum, or channel using your service provider website, or mobile app (Bot Libre, Bot Libre for Business).
  * <p>
  * You only need to set the applicationId, launchType, and launchInstanceId or launchInstanceName.
  * You will also want to replace the logo.png in res/drawable and update the application name and version in the AndroidManifest.
@@ -135,7 +135,7 @@ public class MainActivity extends LibreActivity {
 
 	/**
 	 * Enter your application ID here.
-	 * You can get an application ID from any of the services websites (Bot Libre, Bot Libre for Business, Forums Libre, Live Chat Libre)
+	 * You can get an application ID from any of the services websites (Bot Libre, Bot Libre for Business)
 	 */
 	public static String applicationId = "enter your application id here";
 
@@ -159,8 +159,6 @@ public class MainActivity extends LibreActivity {
 	static {
 		connection = new SDKConnection(new BOTlibreCredentials(applicationId));
 		//connection = new SDKConnection(new BotLibreForBusinessCredentials(applicationId));
-		//connection = new SDKConnection(new FORUMSlibreCredentials(applicationId));
-		//connection = new SDKConnection(new LIVECHATlibreCredentials(applicationId));
 		if (domainId != null) {
 			domain = new DomainConfig();
 			domain.id = domainId;

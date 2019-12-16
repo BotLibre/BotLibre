@@ -120,6 +120,9 @@ public class LiveChatConnection {
 	 */
 	public void sendMessage(String message) {
 		checkSocket();
+		if (message == null) {
+			return;
+		}
 		this.socket.sendTextMessage(message);
 	}
 
