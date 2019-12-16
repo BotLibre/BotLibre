@@ -115,7 +115,7 @@ public class RemoteService extends BasicSense {
 			}
 			url = url + "&input=" + Utils.encodeURL(message);
 			log("SERVICE", Level.INFO, url);
-			InputStream stream = Utils.openStream(new URL(url), 20000);
+			InputStream stream = Utils.openStream(Utils.safeURL(url), 20000);
 			String result = Utils.loadTextFile(stream, "UTF-8", 1000000);
 			log("Response", Level.FINE, result);
 			Element dom = parseXML(result);
@@ -338,7 +338,7 @@ public class RemoteService extends BasicSense {
 			}
 			String url = server + "/api?input=" + Utils.encodeURL(message);
 			log("PANNOUS", Level.INFO, url);
-			InputStream stream = Utils.openStream(new URL(url));
+			InputStream stream = Utils.openStream(Utils.safeURL(url));
 			String result = Utils.loadTextFile(stream, "UTF-8", 1000000);
 			log("Response", Level.INFO, result);
 			JSONObject json = (JSONObject)JSONSerializer.toJSON(result);

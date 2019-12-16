@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -442,7 +442,7 @@ public class Telegram extends BasicSense {
 			log("Messages result", Level.FINE, json);
 			JSONObject root = (JSONObject)JSONSerializer.toJSON(json);
 			JSONArray results = root.getJSONArray("result");
-		    if (results != null && results.size() > 0) {
+			if (results != null && results.size() > 0) {
 				Network memory = getBot().memory().newMemory();
 				Vertex telegram = memory.createVertex(getPrimitive());
 				Vertex vertex = telegram.getRelationship(Primitive.LASTDIRECTMESSAGE);
@@ -454,9 +454,9 @@ public class Telegram extends BasicSense {
 				int offest = 0;
 				int count = 0;
 				while (results != null && results.size() > 0 && count < this.maxMessages) {
-				    for (int index = 0; index < results.size(); index++) {
-				    	count++;
-				    	JSONObject result = results.getJSONObject(index);
+					for (int index = 0; index < results.size(); index++) {
+						count++;
+						JSONObject result = results.getJSONObject(index);
 						int updateId = Integer.parseInt(result.getString("update_id"));
 						if (updateId > offest) {
 							offest = updateId;
@@ -464,21 +464,21 @@ public class Telegram extends BasicSense {
 						if (result.get("message") == null) {
 							continue;
 						}
-				    	JSONObject message = result.getJSONObject("message");
-				    	max = checkMessage(message, last, max, memory);
-				    }
+						JSONObject message = result.getJSONObject("message");
+						max = checkMessage(message, last, max, memory);
+					}
 					json = Utils.httpGET("https://api.telegram.org/bot" + this.token + "/getUpdates?offset=" + (offest + 1));
 					log("Messages result", Level.FINE, json);
 					root = (JSONObject)JSONSerializer.toJSON(json);
 					results = root.getJSONArray("result");
 				}
-			    if (max != 0) {
+				if (max != 0) {
 					telegram.setRelationship(Primitive.LASTDIRECTMESSAGE, memory.createVertex(max));
-			    	memory.save();
-			    }
-		    } else {
+					memory.save();
+				}
+			} else {
 				log("No conversations", Level.FINE);
-		    }
+			}
 		} catch (Exception exception) {
 			log(exception);
 			if (exception.getMessage() != null && exception.getMessage().indexOf("Conflict: another webhook is active") != -1) {
@@ -490,7 +490,7 @@ public class Telegram extends BasicSense {
 
 	public String processMessage(JSONObject message, Network memory) {
 		this.responseListener = new ResponseListener();
-		checkMessage(message, 0, 0, memory);	
+		checkMessage(message, 0, 0, memory);
 		memory.save();
 		String reply = null;
 		synchronized (this.responseListener) {
@@ -516,73 +516,73 @@ public class Telegram extends BasicSense {
 	 * join: {"update_id":1234, "message":{"message_id":123,"from":{"id":1234,"first_name":"James","last_name":"Jones","username":"jjones","language_code":"en"},"chat":{"id":-1234,"title":"test","type":"group","all_members_are_administrators":false},"date":1496344627,"new_chat_participant":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"new_chat_member":{"id":1234,"first_name":"Michael","last_name":"Jones","username":"mjones"},"new_chat_members":[{"id":233598213,"first_name":"Michael","last_name":"Jones","username":"mjones"}]}}
 	 */
 	public long checkMessage(JSONObject message, long last, long max, Network network) {
-    	String id = message.getString("message_id");
-    	if (message.get("chat") == null) {
-    		notifyResponseListener();
-    		return max;
+		String id = message.getString("message_id");
+		if (message.get("chat") == null) {
+			notifyResponseListener();
+			return max;
 		}
-    	JSONObject chat = message.getJSONObject("chat");
-    	String chatId = chat.getString("id");
-    	String chatType = chat.getString("type");
-    	boolean group = "group".equals(chatType) || "supergroup".equals(chatType);
-    	if (group && getGroupMode() == LanguageState.Ignore) {
-    		// Ignore messages sent to a group.
-    		notifyResponseListener();
-    		return max;
-    	}
-    	String date = message.getString("date");
-	    Date createdTime = new Date(((long)Integer.parseInt(date)) * 1000L);
-    	if ((System.currentTimeMillis() - createdTime.getTime()) > DAY) {
+		JSONObject chat = message.getJSONObject("chat");
+		String chatId = chat.getString("id");
+		String chatType = chat.getString("type");
+		boolean group = "group".equals(chatType) || "supergroup".equals(chatType);
+		if (group && getGroupMode() == LanguageState.Ignore) {
+			// Ignore messages sent to a group.
+			notifyResponseListener();
+			return max;
+		}
+		String date = message.getString("date");
+		Date createdTime = new Date(((long)Integer.parseInt(date)) * 1000L);
+		if ((System.currentTimeMillis() - createdTime.getTime()) > DAY) {
 			log("Day old message", Level.FINE, createdTime, id, date);
 			notifyResponseListener();
-    		return max;
-    	}
-    	if (createdTime.getTime() > last) {
-    		JSONObject from = message.getJSONObject("from");
-		    String fromUserId = from.getString("id");
-		    if (!fromUserId.equals(this.userId)) {
-			    String fromUser = fromUserId;
-			    if (from.has("first_name")) {
-			    	fromUser = from.getString("first_name");
-			    }
-			    if (from.has("last_name")) {
-			    	fromUser = fromUser + " " + from.getString("last_name");
-			    }
-			    String username = null;
-			    if (from.has("username")) {
-			    	username = from.getString("username");
-			    }
-			    String chatusername = null;
-			    if (chat.has("username")) {
-			    	chatusername = chat.getString("username");
-			    }
-			    String type = null;
-			    if (chat.has("type")) {
-			    	type = chat.getString("type");
-			    }
-			    String title = null;
-			    if (chat.has("title")) {
-			    	title = chat.getString("title");
-			    }
-			    String messageId = null;
-			    if (message.has("message_id")) {
-			    	messageId = message.getString("message_id");
-			    }
-			    String text = "";
-			    boolean join = false;
-		    	if (message.get("text") != null) {
+			return max;
+		}
+		if (createdTime.getTime() > last) {
+			JSONObject from = message.getJSONObject("from");
+			String fromUserId = from.getString("id");
+			if (!fromUserId.equals(this.userId)) {
+				String fromUser = fromUserId;
+				if (from.has("first_name")) {
+					fromUser = from.getString("first_name");
+				}
+				if (from.has("last_name")) {
+					fromUser = fromUser + " " + from.getString("last_name");
+				}
+				String username = null;
+				if (from.has("username")) {
+					username = from.getString("username");
+				}
+				String chatusername = null;
+				if (chat.has("username")) {
+					chatusername = chat.getString("username");
+				}
+				String type = null;
+				if (chat.has("type")) {
+					type = chat.getString("type");
+				}
+				String title = null;
+				if (chat.has("title")) {
+					title = chat.getString("title");
+				}
+				String messageId = null;
+				if (message.has("message_id")) {
+					messageId = message.getString("message_id");
+				}
+				String text = "";
+				boolean join = false;
+				if (message.get("text") != null) {
 					text = message.getString("text").trim();
-		    	} else if (message.get("new_chat_participant") != null) {
-		    		text = "join";
-		    		join = true;
-	    		} else if (message.get("left_chat_participant") != null) {
-		    		text = "leave";
-		    		join = true;
-	    		}
-		    	if (!getTrackMessageObjects() && (join || (text == null || text.isEmpty()))) {
-	    			log("Ignoring empty message", Level.INFO, fromUser, createdTime, chatId);
-		    		notifyResponseListener();
-		    	} else {
+				} else if (message.get("new_chat_participant") != null) {
+					text = "join";
+					join = true;
+				} else if (message.get("left_chat_participant") != null) {
+					text = "leave";
+					join = true;
+				}
+				if (!getTrackMessageObjects() && (join || (text == null || text.isEmpty()))) {
+					log("Ignoring empty message", Level.INFO, fromUser, createdTime, chatId);
+					notifyResponseListener();
+				} else {
 					log("Processing message", Level.INFO, fromUser, createdTime, chatId, text);
 					this.messagesProcessed++;
 					Vertex user = network.createUniqueSpeaker(new Primitive(fromUserId), Primitive.TELEGRAM, fromUser);
@@ -617,18 +617,18 @@ public class Telegram extends BasicSense {
 					}
 					conversation.addRelationship(Primitive.SPEAKER, user);
 					inputSentence(text, user, this.userName, conversation, messageId, group, message, network);
-			    	if (createdTime.getTime() > max) {
-			    		max = createdTime.getTime();
-			    	}
-		    	}
-		    } else {
+					if (createdTime.getTime() > max) {
+						max = createdTime.getTime();
+					}
+				}
+			} else {
 				log("Ignoring own message", Level.FINE, createdTime, chatId);
-	    		notifyResponseListener();
-		    }
-    	} else {
-    		notifyResponseListener();
-    	}
-    	return max;
+				notifyResponseListener();
+			}
+		} else {
+			notifyResponseListener();
+		}
+		return max;
 	}
 	
 	/**
@@ -656,60 +656,60 @@ public class Telegram extends BasicSense {
 				prefix = prefix + " ";
 				String url = stream.nextWord();
 				String postfix = " " + stream.upToEnd().trim();
-				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(new URL(url), last);
-			    if (feed != null) {
+				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(Utils.safeURL(url), last);
+				if (feed != null) {
 					long max = 0;
 					int count = 0;
 					this.errors = 0;
-				    for (int index = feed.size() - 1; index >= 0; index--) {
-				    	Map<String, Object> entry = feed.get(index);
-				    	long time = (Long)entry.get("published");
-				    	if ((System.currentTimeMillis() - time) > DAY) {
-				    		continue;
-				    	}
-				    	if (time > last) {
-					    	if (count > this.maxFeed) {
-					    		break;
-					    	}
-					    	if (this.errors > this.maxErrors) {
-					    		break;
-					    	}
+					for (int index = feed.size() - 1; index >= 0; index--) {
+						Map<String, Object> entry = feed.get(index);
+						long time = (Long)entry.get("published");
+						if ((System.currentTimeMillis() - time) > DAY) {
+							continue;
+						}
+						if (time > last) {
+							if (count > this.maxFeed) {
+								break;
+							}
+							if (this.errors > this.maxErrors) {
+								break;
+							}
 							String text = (String)entry.get("title");
 							if (!getRssKeywords().isEmpty()) {
 								boolean match = false;
 								List<String> words = new TextStream(text.toLowerCase()).allWords();
-					    		for (String keywords : getRssKeywords()) {
+								for (String keywords : getRssKeywords()) {
 									List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
-							    	if (!keyWords.isEmpty()) {
-							    		if (words.containsAll(keyWords)) {
-							    			match = true;
-										    break;
-								    	}
-							    	}
-					    		}
-					    		if (!match) {
+									if (!keyWords.isEmpty()) {
+										if (words.containsAll(keyWords)) {
+											match = true;
+											break;
+										}
+									}
+								}
+								if (!match) {
 									log("Skipping RSS, missing keywords", Level.FINE, text);
-						    		continue;
-					    		}
-				    		}
+									continue;
+								}
+							}
 							log("Posting RSS", Level.FINE, entry.get("title"));
-				    		text = prefix + text + postfix;
+							text = prefix + text + postfix;
 							if (text.length() > 120) {
 								text = text.substring(0, 120);
 							}
 							post(text + " " + entry.get("link"), null);
-					    	Utils.sleep(500);
+							Utils.sleep(500);
 							count++;
-					    	if (time > max) {
-					    		max = time;
-					    	}
-				    	}
-				    }
-				    if (max != 0) {
+							if (time > max) {
+								max = time;
+							}
+						}
+					}
+					if (max != 0) {
 						facebook.setRelationship(Primitive.LASTRSS, memory.createVertex(max));
-				    	memory.save();
-				    }
-			    }
+						memory.save();
+					}
+				}
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -762,9 +762,9 @@ public class Telegram extends BasicSense {
 				if (text != null) {
 					log("Autoposting", Level.INFO, post);
 					post(text, null);
-			    	Utils.sleep(100);
+					Utils.sleep(100);
 					facebook.setRelationship(Primitive.LASTPOST, memory.createTimestamp());
-			    	memory.save();
+					memory.save();
 				}
 			}
 		} catch (Exception exception) {
@@ -841,7 +841,7 @@ public class Telegram extends BasicSense {
 		text = text.replace("</ol>", "\n");
 		if (sanitizer == null) {
 			sanitizer = new HtmlPolicyBuilder().allowElements(
-			        "b", "i", "strong", "code", "em", "pre").toFactory().and(Sanitizers.LINKS);
+					"b", "i", "strong", "code", "em", "pre").toFactory().and(Sanitizers.LINKS);
 		}
 		String result = sanitizer.sanitize(text);
 		if (result.contains("&")) {
@@ -1085,7 +1085,7 @@ public class Telegram extends BasicSense {
 			if (botUserName.equals(target)) {
 				input.addRelationship(Primitive.TARGET, Primitive.SELF);
 			} else if (target != null) {
-				input.addRelationship(Primitive.TARGET, network.createSpeaker(target));
+				input.addRelationship(Primitive.TARGET, network.createUniqueSpeaker(new Primitive(target), Primitive.TELEGRAM, target));
 			}
 		} else {
 			this.languageState = LanguageState.Answering;

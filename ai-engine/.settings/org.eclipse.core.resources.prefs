@@ -1,3 +1,14 @@
 eclipse.preferences.version=1
 encoding//source/org/botlibre/knowledge/Bootstrap.java=UTF-8
+encoding//source/org/botlibre/knowledge/DateAndTime-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/DefineWord-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/Loop-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/Math-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/MyNameIs-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/SayIt-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/Topic-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/Understanding-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/WhatIs-fr.self=UTF-8
+encoding//source/org/botlibre/knowledge/WhereIs-fr.self=UTF-8
+encoding//source/org/botlibre/sense/http/Wiktionary.java=UTF-8
 encoding//source/org/botlibre/util/TextStream.java=UTF-8

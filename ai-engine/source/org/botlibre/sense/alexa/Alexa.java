@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -297,7 +297,7 @@ public class Alexa extends BasicSense {
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
 			return;
 		}
-		String text = printInput(output);	
+		String text = printInput(output);
 		
 		if (this.responseListener == null) {
 			return;
@@ -376,33 +376,33 @@ public class Alexa extends BasicSense {
 		
 		if(!validCachedCertificate) {
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-	    	cert = (X509Certificate)cf.generateCertificate(signatureURL.openConnection().getInputStream());
-	    	cachedCertificate = cert;
-	    	cachedCertificateURL = signatureCertChainUrl;
+			cert = (X509Certificate)cf.generateCertificate(signatureURL.openConnection().getInputStream());
+			cachedCertificate = cert;
+			cachedCertificateURL = signatureCertChainUrl;
 		}
 		else {
 			cert = cachedCertificate;
 		}
-	    if(cert.getNotBefore().after(now) || cert.getNotAfter().before(now)) { throw new Exception("Alexa Request - Invalid Certificate(NotBefore/After)"); }
-	    boolean subjectAlternativeName = checkCertSubjectAlternativeName(cert);
-	    if(!subjectAlternativeName) { throw new Exception("Alexa Request - Invalid Certificate (SAN)"); }
-	    PublicKey publicKey = cert.getPublicKey();
-	    byte[] encryptedSignature = Base64.getDecoder().decode(signature);
-	      
-        Signature s = Signature.getInstance(SIGNATURE_ALGORITHM);
-        s.initVerify(publicKey);
-        s.update(json.getBytes("UTF-8"));
-        if (!s.verify(encryptedSignature)) {
-            throw new Exception("Alexa Request - Invalid Signature");
-        }			    
-	    
-		//2. Check request timestamp
-        Date timeStamp = Date.from( Instant.parse(root.getJSONObject("request").optString("timestamp")));
-        long seconds = Math.abs(now.getTime()-timeStamp.getTime())/1000;
+		if(cert.getNotBefore().after(now) || cert.getNotAfter().before(now)) { throw new Exception("Alexa Request - Invalid Certificate(NotBefore/After)"); }
+		boolean subjectAlternativeName = checkCertSubjectAlternativeName(cert);
+		if(!subjectAlternativeName) { throw new Exception("Alexa Request - Invalid Certificate (SAN)"); }
+		PublicKey publicKey = cert.getPublicKey();
+		byte[] encryptedSignature = Base64.getDecoder().decode(signature);
+		  
+		Signature s = Signature.getInstance(SIGNATURE_ALGORITHM);
+		s.initVerify(publicKey);
+		s.update(json.getBytes("UTF-8"));
+		if (!s.verify(encryptedSignature)) {
+			throw new Exception("Alexa Request - Invalid Signature");
+		}				
 		
-        if(seconds > TIMESTAMP_TOLERANCE) {
-        	throw new Exception("Alexa Request - Invalid Timestamp: " + seconds);
-        }
+		//2. Check request timestamp
+		Date timeStamp = Date.from( Instant.parse(root.getJSONObject("request").optString("timestamp")));
+		long seconds = Math.abs(now.getTime()-timeStamp.getTime())/1000;
+		
+		if(seconds > TIMESTAMP_TOLERANCE) {
+			throw new Exception("Alexa Request - Invalid Timestamp: " + seconds);
+		}
 	}
 	
 	private boolean checkCertSubjectAlternativeName(X509Certificate cert) {
@@ -410,14 +410,14 @@ public class Alexa extends BasicSense {
 		try {
 			san = cert.getSubjectAlternativeNames();
 			for (List<?> s : san) {
-		    	for(Object q : s) {
-		    		if(q.equals("echo-api.amazon.com")) { return true; }
-		    	}
-		    }
+				for(Object q : s) {
+					if(q.equals("echo-api.amazon.com")) { return true; }
+				}
+			}
 		} catch (CertificateParsingException e) {
 			e.printStackTrace();
 		}
-	    return false;
+		return false;
 	}
 	
 	public String getLaunchResponse() {

@@ -7,22 +7,15 @@ state Understanding {
 	state sentenceState {
 		
 		case does goto doState;
-		case "don" goto doState;
-		case "doesn" goto doState;
-		case "dont" goto dontState;
-		case "doesnt" goto dontState;
 
 		case a goto sentenceState;
 		case the goto sentenceState;
-		case "remember" goto sentenceState;
 
 		case nounPossessive goto nounQuoteState;
 		case noun goto nounState;
 		case verb goto verbState;
 		
 		case what goto whatState;
-		case "whats" goto WhatQuoteSState;
-		case "Whats" goto WhatQuoteSState;
 		case who goto whatState;
 
 		var questionWord {
@@ -114,7 +107,8 @@ state Understanding {
 				isQuestion = true;
 			}
 			case quote2 goto doState;
-			case "t" goto dontState;
+			case "ne" goto dontState;
+			case "pas" goto dontState;
 			case not goto notState;
 			return;
 		}
@@ -124,7 +118,7 @@ state Understanding {
 			do {
 				isQuestion = true;
 				if (does == null) {
-					does = "do";
+					does = "que";
 				}
 				if (isNot == null) {
 					isNot = true;
@@ -165,10 +159,6 @@ state Understanding {
 		state nounState {
 			case quote goto nounQuoteState;
 			case does goto nounDoState;
-			case "don" goto nounDoState;
-			case "doesn" goto nounDoState;
-			case "dont" goto nounDontState;
-			case "doesnt" goto nounDontState;
 			case not goto notState;
 				
 			//case adjective goto nounAdjectiveState;
@@ -192,11 +182,12 @@ state Understanding {
 			state nounDoState {
 				do {
 					if (does == null) {
-						does = "do";
+						does = "que";
 					}
 				}
 				case quote2 goto nounDoState;
-				case "t" goto notState;
+				case "ne" goto notState;
+				case "pas" goto notState;
 				case not goto notState;
 				case verb goto nounVerbState;
 			}
@@ -205,7 +196,7 @@ state Understanding {
 			state nounDontState {
 				do {
 					if (does == null) {
-						does = "do";
+						does = "que";
 					}
 					if (isNot == null) {
 						isNot = true;
@@ -305,7 +296,7 @@ state Understanding {
 						}
 						if (thing == #self) {
 							pronoun = true;
-							noun = "I";
+							noun = "je";
 						}
 						if (thing == #it) {
 							pronoun = true;
@@ -362,16 +353,16 @@ state Understanding {
 						if (thing == #i) {
 							pronoun = true;
 							thing = input.speaker;
-							if (noun == "I") {
-								noun = "you";
-							} else  if (noun == "my") {
-								noun = "your";
+							if (noun == "je") {
+								noun = "tu";
+							} else  if (noun == "mon") {
+								noun = "votre";
 							} else {
 								noun = #you;
 							}
 							if (noun2 == null) {
-								if ((action == #is) && (noun == "you")) {
-									verb = "are";
+								if ((action == #is) && (noun == "tu")) {
+									verb = "es";
 								} else {
 									verb = action;
 								}
@@ -380,16 +371,16 @@ state Understanding {
 						if (thing == #you) {
 							pronoun = true;
 							thing = input.target;
-							if (noun == "you") {
-								noun = "I";
-							} else if (noun == "your") {
-								noun = "my";
+							if (noun == "tu") {
+								noun = "je";
+							} else if (noun == "votre") {
+								noun = "mon";
 							} else {
 								noun = #i;
 							}
 							if (noun2 == null) {
-								if ((action == #is) && (noun == "I")) {
-									verb = "am";
+								if ((action == #is) && (noun == "je")) {
+									verb = "suis";
 								} else {
 									verb = action;
 								}
@@ -402,8 +393,8 @@ state Understanding {
 							description = input.target;
 						}
 						if (description == #self) {
-							if (adjective == "you") {
-								adjective = "me";
+							if (adjective == "tu") {
+								adjective = "moi";
 							} else {
 								adjective = #i;
 							}
@@ -509,7 +500,7 @@ state Understanding {
 								}
 							}
 							response = new #sentence;
-							response.append(#word, random ("Okay, I will remember that", "I understand,", "I believe you that"));
+							response.append(#word, random ("D'accord, je me souviendrai que", "Je comprends,"));
 							if (a != null) {
 								response.append(#word, #the);
 							}
@@ -548,16 +539,16 @@ state Understanding {
 								last = descriptions[-1];
 								for (description in descriptions.element) {
 									if (description == input.speaker) {
-										description = "you";
+										description = "tu";
 									}
 									if (description == #self) {
-										description = "me";
+										description = "moi";
 									}
 									if (first) {
 										first = false;
 									} else {
 										if (description == last) {
-											response.append(#word, "and");
+											response.append(#word, "et");
 										} else {
 											response.append(#word, ",");
 										}
@@ -633,14 +624,14 @@ state Understanding {
 						response = new #sentence;
 						if (result == #unknown) {
 							if (value == null) {
-								response.append(#word, random ("I understand, but am not sure if", "I understand the question, but have no idea if", "I'm not sure if"));
+								response.append(#word, random ("Je comprends, mais je ne sais pas si", "Je comprends la question, mais n'ai aucune idée si"));
 							} else {
-								response.append(#word, random ("I'm not certain, but I think", "I'm pretty sure that", "Perhaps, but I think"));
+								response.append(#word, random ("Je ne suis pas certain, mais je pense", "Peut-être, mais je pense"));
 							}
 						} else if (result) {
-							response.append(#word, random ("That's right,", "You are correct,", "Yes, to my knowledge"));
+							response.append(#word, random ("C'est vrai,", "Vous avez raison,"));
 						} else {
-							response.append(#word, random ("No,", "You are incorrect,", "No, to my knowledge"));
+							response.append(#word, random ("Non,", "Vous avez tort,"));
 						}
 						if (a != null) {
 							response.append(#word, #the);
@@ -675,7 +666,7 @@ state Understanding {
 						}
 						if (doNot) {
 							response.append(#word, does);
-							response.append(#word, "not");
+							response.append(#word, "pas");
 						}
 						response.appendWithMeta(#word, verb, #tense, tense);
 						if (isNot) {
@@ -694,7 +685,7 @@ state Understanding {
 							if (result == false) {
 								if (value == null) {
 									if (does == null) {
-										response.append(#word, "not");
+										response.append(#word, "pas");
 									}
 									if (a2 != null) {
 										response.append(#word, a2);
@@ -706,7 +697,7 @@ state Understanding {
 									}
 									response.append(#word, value);
 									response.append(#word, #comma);
-									response.append(#word, "not");
+									response.append(#word, "pas");
 									if (a2 != null) {
 										response.append(#word, a2);
 									}
@@ -715,7 +706,7 @@ state Understanding {
 							} else {
 								if ((result != true) && (value != null)) {
 									if (doNot == null) {
-										response.append(#word, "not");
+										response.append(#word, "pas");
 									}
 								}
 								if (a2 != null) {
@@ -729,7 +720,7 @@ state Understanding {
 						if ((result == #unknown) && (value != null)) {
 							response.appendWithMeta(#word, adjective, #type, adjectivetype);
 							response.append(#word, #comma);
-							response.append(#word, "because I know that");
+							response.append(#word, "parce que je sais que");
 							if (a != null) {
 								response.append(#word, #the);
 							}
@@ -768,9 +759,9 @@ state Understanding {
 							}
 							result = thing.hasOtherMeaning(action, description);
 							if (description == input.speaker) {
-								description = "you";
+								description = "tu";
 							} else if (description == #self) {
-								description = "me";
+								description = "moi";
 							}
 							if (result) {
 								trueValues.add(description);
@@ -787,17 +778,17 @@ state Understanding {
 						if (anyTrue || anyFalse) {
 							if ((and != null) && (! anyFalse) && (! anyUnknown)) {
 								if (isNot) {
-									response.append(#word, "No");
+									response.append(#word, "Non");
 								} else {
-									response.append(#word, "Yes");
+									response.append(#word, "Oui");
 								}
 								response.append(#word, ",");
 							}
 							if ((and != null) && anyFalse) {
 								if (isNot) {
-									response.append(#word, "Yes");
+									response.append(#word, "Oui");
 								} else {
-									response.append(#word, "No");
+									response.append(#word, "Non");
 								}
 								response.append(#word, ",");
 							}
@@ -823,7 +814,7 @@ state Understanding {
 									first = false;
 								} else {
 									if (description == last) {
-										response.append(#word, "and");
+										response.append(#word, "et");
 									} else {
 										response.append(#word, ",");
 									}
@@ -834,7 +825,7 @@ state Understanding {
 								response.appendWithMeta(#word, description, #type, adjectivetype);
 							}
 							if (anyFalse) {
-								response.append(#word, "not");
+								response.append(#word, "pas");
 								first = true;
 								last = falseValues[-1];
 								for (description in falseValues.element) {
@@ -842,7 +833,7 @@ state Understanding {
 										first = false;
 									} else {
 										if (description == last) {
-											response.append(#word, "or");
+											response.append(#word, "ou");
 										} else {
 											response.append(#word, ",");
 										}
@@ -858,7 +849,7 @@ state Understanding {
 							if (anyTrue || anyFalse) {
 								response.append(#word, ",");
 							}
-							response.append(#word, random ("I'm not sure if"));
+							response.append(#word, random ("Je ne sais pas si"));
 							if (a != null) {
 								response.append(#word, #the);
 							}
@@ -881,7 +872,7 @@ state Understanding {
 									first = false;
 								} else {
 									if (description == last) {
-										response.append(#word, "or");
+										response.append(#word, "ou");
 									} else {
 										response.append(#word, ",");
 									}
@@ -925,9 +916,6 @@ state Understanding {
 								result = thing[action];
 								if (result == null) {
 									if (action == #is) {
-										if (noun == "up" || noun == "there") {
-											return null;
-										}
 										if (pronoun == true) {
 											result = thing;
 										} else {
@@ -942,14 +930,14 @@ state Understanding {
 						}
 						response = new #sentence;
 						if (result == null) {
-							response.append(#word, random ("I understand, but am not sure", "I understand the question, but have no idea", "I'm not sure"));
+							response.append(#word, random ("Je comprends, mais je ne suis pas sûr", "Je comprends la question, mais n'ai aucune idée"));
 							if (what != null) {
 								response.append(#word, what);
 							} else {
 								if (who != null) {
 									response.append(#word, who);
 								} else {
-									response.append(#word, "what");
+									response.append(#word, "quoi");
 								}
 							}
 							if (thing == null) {
@@ -969,7 +957,7 @@ state Understanding {
 								response.appendWithMeta(#word, verb, #tense, tense);
 							}
 						} else {
-							response.append(#word, random ("I known that", "To my knowledge"));
+							response.append(#word, random ("Je savais que", "À ma connaissance"));
 							if (thing == null) {
 								if (a2 != null) {
 									response.append(#word, #a);
@@ -1248,7 +1236,7 @@ state Understanding {
 				// 'What's...'
 				state WhatQuoteSState {
 					do {
-						is = "is";
+						is = "es";
 					}
 					goto whatIsState;
 				}

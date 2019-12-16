@@ -615,7 +615,7 @@ public class SelfInterpreter {
 		}
 		template = evaluateEVAL(template, arguments, variables, network, startTime, maxTime, stack);
 		Relationship relationship = pattern.addRelationship(Primitive.RESPONSE, template);
-		template.addRelationship(Primitive.QUESTION, pattern);
+		template.addRelationship(Primitive.RESPONSE_QUESTION, pattern);
 		Vertex that = learning.getRelationship(Primitive.THAT);
 		if (that != null) {
 			that = evaluateEVAL(that, arguments, variables, network, startTime, maxTime, stack);
@@ -2074,6 +2074,40 @@ public class SelfInterpreter {
 		Vertex value = source.getRelationshipType(target);
 		if (value == null) {
 			return source.getNetwork().createVertex(Primitive.NULL);
+		}
+		return value;
+	}
+	
+	public Vertex aimlGet(Vertex source, Vertex type) {
+		Vertex value = source.mostConscious(type);
+		if (value == null) {
+			if (source.getNetwork().getBot().mind().getThought(Language.class).getAimlCompatibility()) {
+				return source.getNetwork().createVertex("unknown");
+			} else {
+				return source.getNetwork().createVertex(Primitive.NULL);
+			}
+		}
+		return value;
+	}
+	
+	public Vertex mapGet(Vertex source, Vertex type) {
+		Vertex value = source.mostConscious(type);
+		if (value == null) {
+			// Check lower case as well.
+			if (source.getData() instanceof String) {
+				Vertex lower = source.getNetwork().findByData(((String)source.getData()).toLowerCase());
+				if (lower != null) {
+					value = lower.mostConscious(type);
+					if (value != null) {
+						return value;
+					}
+				}
+			}
+			if (source.getNetwork().getBot().mind().getThought(Language.class).getAimlCompatibility()) {
+				return source.getNetwork().createVertex("unknown");
+			} else {
+				return source.getNetwork().createVertex(Primitive.NULL);
+			}
 		}
 		return value;
 	}

@@ -60,9 +60,9 @@ import org.w3c.dom.NodeList;
  * and controls module registration, startup and shutdown.
  * It defines a singleton that represents the system.
  */
-public class Bot {	
+public class Bot {
 	public static String PROGRAM = "Bot";
-	public static String VERSION = "7.0.0-2018-07-16";
+	public static String VERSION = "8.0.0-2019-11-05";
 	
 	public static final Level FINE = Level.FINE;
 	public static final Level WARNING = Level.WARNING;
@@ -72,6 +72,7 @@ public class Bot {
 	public static final int EVERYONE = Utils.EVERYONE;
 	public static final int TEEN = Utils.TEEN;
 	public static final int MATURE = Utils.MATURE;
+	public static final int ADULT = Utils.ADULT;
 	
 	public static String CONFIG_FILE = "config.xml";
 	public static int MAX_CACHE = 100000;
@@ -158,13 +159,10 @@ public class Bot {
 	
 	public static Bot fastCreateInstance(String configFile, String memory, boolean isSchema) {
 		Bot bot = new Bot();
-		long start = System.currentTimeMillis();
 		bot.parseConfigFile(configFile);
 		bot.setState(ActiveState.ACTIVE);
 		bot.log(bot, "Fast creating instance:", Level.INFO, configFile, memory, isSchema);
-		start = System.currentTimeMillis();
 		bot.memory().fastRestore(memory, isSchema);
-		start = System.currentTimeMillis();
 		bot.memory().awake();
 		bot.mind().awake();
 		bot.mood().awake();

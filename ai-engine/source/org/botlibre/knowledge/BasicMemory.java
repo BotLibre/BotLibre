@@ -60,7 +60,7 @@ public class BasicMemory implements Memory {
 		this.longTermMemory = new BasicNetwork();
 		this.longTermMemory.setBot(getBot());
 		this.shortTermMemory = new BasicNetwork(this.longTermMemory);
-		this.shortTermMemory.setBot(getBot());		
+		this.shortTermMemory.setBot(getBot());
 	}
 
 	/**

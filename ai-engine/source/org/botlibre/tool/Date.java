@@ -499,6 +499,14 @@ public class Date extends BasicTool {
 		}
 		return source.getNetwork().createVertex(value);
 	}
+
+	public Vertex getMillis(Vertex source, Vertex date) throws Exception {
+		return source.getNetwork().createVertex(((java.util.Date)date.getData()).getTime());
+	}
+
+	public Vertex getMillis(Vertex source) throws Exception {
+		return source.getNetwork().createVertex(System.currentTimeMillis());
+	}
 	
 	public Vertex printDate(Vertex source, Vertex date, Vertex format) {
 		return printDate(source, date, format, null, null);

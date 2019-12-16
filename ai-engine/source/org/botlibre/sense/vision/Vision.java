@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -66,8 +66,8 @@ public class Vision extends BasicSense {
 	 * Load an image from a URL.
 	 */
 	public Vertex loadImage(String urlPath, Network network) {
-	    byte[] image = loadImageBytes(urlPath);
-	    return loadImage(image, network);
+		byte[] image = loadImageBytes(urlPath);
+		return loadImage(image, network);
 	}
 	
 	/**
@@ -75,16 +75,16 @@ public class Vision extends BasicSense {
 	 */
 	public byte[] loadImageBytes(String urlPath) {
 		try {
-			URL url = new URL(urlPath);
+			URL url = Utils.safeURL(urlPath);
 			URLConnection connection = null;
 			try {
 				connection = url.openConnection();
 			} catch (Exception exception) {
 				throw new BotException("Invalid URL");
 			}
-		    byte[] image = Utils.loadBinaryFile(connection.getInputStream(), true, MAX_IMAGE_SIZE);
-		    image = Utils.createThumb(image, IMAGE_SIZE, true);
-		    return image;
+			byte[] image = Utils.loadBinaryFile(connection.getInputStream(), true, MAX_IMAGE_SIZE);
+			image = Utils.createThumb(image, IMAGE_SIZE, true);
+			return image;
 		} catch (Exception error) {
 			log(error);
 			throw new BotException(error);
@@ -98,9 +98,9 @@ public class Vision extends BasicSense {
 		try {
 			File file = new File(filePath);
 			FileInputStream stream = new FileInputStream(file);
-		    byte[] image = Utils.loadBinaryFile(stream, true, MAX_IMAGE_SIZE);
-		    image = Utils.createThumb(image, IMAGE_SIZE, true);
-		    return image;
+			byte[] image = Utils.loadBinaryFile(stream, true, MAX_IMAGE_SIZE);
+			image = Utils.createThumb(image, IMAGE_SIZE, true);
+			return image;
 		} catch (Exception error) {
 			log(error);
 			throw new BotException(error);
@@ -112,8 +112,8 @@ public class Vision extends BasicSense {
 	 */
 	public Vertex loadImageFile(String filePath, Network network) {
 		try {
-		    byte[] image = loadImageFileBytes(filePath);
-		    return loadImage(image, network);
+			byte[] image = loadImageFileBytes(filePath);
+			return loadImage(image, network);
 		} catch (Exception error) {
 			log(error);
 			throw new BotException(error);
@@ -134,8 +134,8 @@ public class Vision extends BasicSense {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vertex matchImage(byte[] image, Vertex tag, double error, Network network) throws IOException {
-    	double[] histogram = coupledHueSat(image);
-    	
+		double[] histogram = coupledHueSat(image);
+		
 		List<double[]> points = new ArrayList<double[]>();
 		List<Vertex> images = tag.orderedRelations(Primitive.IMAGE);
 		for (Vertex vertex : images) {
@@ -144,7 +144,7 @@ public class Vision extends BasicSense {
 				continue;
 			}
 			BinaryData data = (BinaryData)network.findData((BinaryData)value);
-		    points.add(coupledHueSat(data.getBytes()));
+			points.add(coupledHueSat(data.getBytes()));
 		}
 
 		// Use a generic NN search algorithm.  This uses Euclidean distance as a distance metric.
@@ -186,7 +186,7 @@ public class Vision extends BasicSense {
 		// The number of bins is an important parameter.  Try adjusting it
 		Histogram_F64 histogram = new Histogram_F64(12,12);
 		histogram.setRange(0, 0, 2.0 * Math.PI); // range of hue is from 0 to 2PI
-		histogram.setRange(1, 0, 1.0);         // range of saturation is from 0 to 1
+		histogram.setRange(1, 0, 1.0);		 // range of saturation is from 0 to 1
 
 		// Compute the histogram
 		GHistogramFeatureOps.histogram(hs,histogram);
@@ -201,11 +201,11 @@ public class Vision extends BasicSense {
 	 */
 	public Vertex loadImage(Vertex source, Vertex url) {
 		log("Loading image", Level.FINE, url);
-	    try {
-	    	return loadImage(url.printString(), source.getNetwork());
-	    } catch (Exception exception) {
-	    	return null;
-	    }
+		try {
+			return loadImage(url.printString(), source.getNetwork());
+		} catch (Exception exception) {
+			return null;
+		}
 	}
 	
 	/**
@@ -213,12 +213,12 @@ public class Vision extends BasicSense {
 	 */
 	public Vertex matchImage(Vertex source, Vertex url, Vertex tag, Vertex error) {
 		log("Matching image", Level.FINE, url);
-	    try {
-	    	byte[] image = loadImageBytes(url.printString());
-		    image = Utils.createThumb(image, IMAGE_SIZE, true);
-	    	return matchImage(image, tag, ((Number)error.getData()).doubleValue(), source.getNetwork());
-	    } catch (Exception exception) {
-	    	return null;
-	    }
+		try {
+			byte[] image = loadImageBytes(url.printString());
+			image = Utils.createThumb(image, IMAGE_SIZE, true);
+			return matchImage(image, tag, ((Number)error.getData()).doubleValue(), source.getNetwork());
+		} catch (Exception exception) {
+			return null;
+		}
 	}
 }

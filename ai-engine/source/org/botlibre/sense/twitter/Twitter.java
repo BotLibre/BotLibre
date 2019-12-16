@@ -70,6 +70,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class Twitter extends BasicSense {
 	public static int TREND_CHECK = 1000 * 60 * 60 * 1; // 1 hour.
 	public static int MAX_LOOKUP = 100;
+	public static int MAX_TWEET = 280;
 	public static String oauthKey = "key";
 	public static String oauthSecret = "secret";
 	
@@ -1453,7 +1454,7 @@ public class Twitter extends BasicSense {
 			for (String rss : getTweetRSS()) {
 				if (rssIndex < getRssKeywords().size()) {
 					keywordsText = getRssKeywords().get(rssIndex);
-					keywords = new TextStream(keywordsText.toLowerCase()).allWords();				
+					keywords = new TextStream(keywordsText.toLowerCase()).allWords();
 				}
 				rssIndex++;
 				TextStream stream = new TextStream(rss);
@@ -1464,7 +1465,7 @@ public class Twitter extends BasicSense {
 				prefix = prefix + " ";
 				String url = stream.nextWord();
 				String postfix = " " + stream.upToEnd().trim();
-				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(new URL(url), last);
+				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(Utils.safeURL(url), last);
 				if (feed != null) {
 					long max = 0;
 					int count = 0;
@@ -1785,11 +1786,18 @@ public class Twitter extends BasicSense {
 			writer.write(" ");
 			writer.write(friend.getDescription().toLowerCase());
 			writer.write(" ");
-			writer.write(friend.getLocation().toLowerCase());
-			writer.write(" ");
-			writer.write(friend.getLang().toLowerCase());
-			writer.write(" ");
-			writer.write(friend.getName().toLowerCase());
+			if (friend.getLocation() != null) {
+				writer.write(friend.getLocation().toLowerCase());
+			} else {
+				writer.write(" ");
+			}
+			if (friend.getLang() != null) {
+				writer.write(friend.getLang().toLowerCase());
+				writer.write(" ");
+			}
+			if (friend.getName() != null) {
+				writer.write(friend.getName().toLowerCase());
+			}
 			boolean match = false;
 			for (String text : getAutoFollowKeywords()) {
 				List<String> keywords = new TextStream(text.toLowerCase()).allWords();
@@ -1804,7 +1812,7 @@ public class Twitter extends BasicSense {
 			}
 		}
 		Network memory = getBot().memory().newMemory();
-		Vertex speaker = memory.createSpeaker(friend.getScreenName());
+		Vertex speaker = memory.createUniqueSpeaker(new Primitive(friend.getScreenName()), Primitive.TWITTER, friend.getScreenName());
 		speaker.setPinned(true);
 		// Only try to follow a user once.
 		if (!speaker.hasRelationship(Primitive.FOLLOWED)) {
@@ -1882,12 +1890,12 @@ public class Twitter extends BasicSense {
 	 */
 	public void tweet(String html, Long reply) {
 		String text = format(html);
-		if (text.length() > 140) {
+		if (text.length() > MAX_TWEET) {
 			int index =  text.indexOf("http://");
 			if (index == -1) {
-				text = text.substring(0, 140);
-			} else if (index > 120) {
-				text = text.substring(0, 120) + " " + text.substring(index, text.length());
+				text = text.substring(0, MAX_TWEET);
+			} else if (index > (MAX_TWEET - 20)) {
+				text = text.substring(0, MAX_TWEET - 20) + " " + text.substring(index, text.length());
 			}
 		}
 		this.tweets++;
@@ -1932,7 +1940,7 @@ public class Twitter extends BasicSense {
 				}
 				if (media != null) {
 					try {
-						URL url = new URL(media);
+						URL url = Utils.safeURL(media);
 						URLConnection urlConnection = url.openConnection();
 						InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
 						update.setMedia("image.png", stream);
@@ -2041,7 +2049,7 @@ public class Twitter extends BasicSense {
 			return;
 		}
 		try {
-			if (input instanceof Status) {				
+			if (input instanceof Status) {
 				Status tweet = (Status)input;
 				log("Processing status", Bot.FINE, tweet.getText(), tweet.getId());
 				if ((System.currentTimeMillis() - tweet.getCreatedAt().getTime()) > DAY) {
@@ -2164,7 +2172,7 @@ public class Twitter extends BasicSense {
 		Vertex conversation = network.createInstance(Primitive.CONVERSATION);
 		conversation.addRelationship(Primitive.TYPE, Primitive.TWEET);
 		Language.addToConversation(input, conversation);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.TWITTER, userName);
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.SPEAKER, user);
 		if (targetUserName != null) {

@@ -58,6 +58,8 @@ public class Wikidata extends Http { //implements DiscoverySense {
 	protected static Map<String, String> globalPropertiesMap;
 	protected Map<String, String> propertiesMap;
 	
+	protected String lang = "en";
+	
 	static {
 		globalExcludedProperties = new HashSet<String>();
 		globalExcludedProperties.add("P434");
@@ -142,6 +144,26 @@ public class Wikidata extends Http { //implements DiscoverySense {
 		Http http = (Http)getBot().awareness().getSense(Http.class.getName());
 		http.getDomains().put("www.wikidata.org", this);
 	}
+
+	
+	public String getLanguage() {
+		return lang;
+	}
+	
+	/**
+	 * Configure the tags for parsing the Wiktionary language website version.
+	 */
+	public void setLanguage(String lang) {
+		if (lang == null || lang.isEmpty()) {
+			lang = "en";
+		}
+		lang = lang.toLowerCase().trim();
+		if (lang.length() > 2) {
+			lang =  lang.substring(0, 2);
+		}
+		this.lang = lang;
+		
+	}
 	
 	/**
 	 * Get and process the URL.
@@ -170,7 +192,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 		// First query the object's types.
 		JSONObject json = null;
 		try {
-			json = (JSONObject)processQuery("https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&limit=1&language=en&search="
+			json = (JSONObject)processQuery("https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&limit=1&language=" + this.lang + "&search="
 					+ URLEncoder.encode(keywords, "UTF-8"));
 		} catch (IOException exception) {
 			log("https request failed", Level.WARNING, exception);
@@ -203,7 +225,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 		
 		// First query the object's types.
 		JSONObject json = null;
-		String query = "https://www.wikidata.org/w/api.php?action=wbgetentities&languages=en&format=json&ids=" + id;
+		String query = "https://www.wikidata.org/w/api.php?action=wbgetentities&languages=" + this.lang + "&format=json&ids=" + id;
 		if (fork || cascade < 0) {
 			query = query + "&props=labels|descriptions";
 			if (filter != null && !filter.isEmpty()) {
@@ -257,7 +279,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 							valueVertex = network.createObject((String)value);
 							valueVertex.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 						} else if (value instanceof Vertex) {
-							valueVertex = (Vertex)value;							
+							valueVertex = (Vertex)value;
 						} else {
 							valueVertex = network.createVertex(value);
 							valueVertex.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
@@ -292,7 +314,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 								Utils.sleep(500);
 								JSONObject jsonDetails = null;
 								try {
-									jsonDetails = (JSONObject)processQuery("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&props=labels|descriptions|aliases|claims&ids=" + threadId);
+									jsonDetails = (JSONObject)processQuery("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=" + lang + "&props=labels|descriptions|aliases|claims&ids=" + threadId);
 								} catch (IOException exception) {
 									log("https request failed", Level.WARNING, exception.toString());
 									return;
@@ -363,7 +385,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 				continue;
 			}
 			JSONObject json = null;
-			String query = "https://www.wikidata.org/w/api.php?action=wbgetentities&languages=en&format=json&props=labels&ids=" + ids;
+			String query = "https://www.wikidata.org/w/api.php?action=wbgetentities&languages=" + this.lang + "&format=json&props=labels&ids=" + ids;
 			try {
 				json = (JSONObject)processQuery(query);
 			} catch (IOException exception) {
@@ -378,7 +400,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 			for (String property : page) {
 				String mapping = this.propertiesMap.get(property);
 				if (mapping != null) {
-					values.put(property, mapping);					
+					values.put(property, mapping);
 				} else {
 					JSONObject data = json.getJSONObject(property);
 					if (data.isNullObject()) {
@@ -403,13 +425,13 @@ public class Wikidata extends Http { //implements DiscoverySense {
 		if (!(data instanceof JSONObject)) {
 			return values;
 		}
-		Object en = ((JSONObject)data).get("en");
-		if (en == null) {
+		Object text = ((JSONObject)data).get(this.lang);
+		if (text == null) {
 			return values;
-		} else if (en instanceof JSONObject) {
-			values.add(String.valueOf(((JSONObject)en).get("value")));
-		} else if (en instanceof JSONArray) {
-			for (Object value : ((JSONArray)en)) {
+		} else if (text instanceof JSONObject) {
+			values.add(String.valueOf(((JSONObject)text).get("value")));
+		} else if (text instanceof JSONArray) {
+			for (Object value : ((JSONArray)text)) {
 				values.add(String.valueOf(((JSONObject)value).get("value")));
 			}
 		}
@@ -561,7 +583,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 						if (paragraph.instanceOf(Primitive.PARAGRAPH)) {
 							object.addRelationship(Primitive.PARAGRAPH, paragraph);
 							Vertex sentence = paragraph.orderedRelations(Primitive.SENTENCE).get(0);
-							object.addRelationship(Primitive.SENTENCE, sentence);							
+							object.addRelationship(Primitive.SENTENCE, sentence);
 						} else {
 							object.addRelationship(Primitive.SENTENCE, paragraph);
 						}
@@ -650,7 +672,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 						valueVertex = network.createObject((String)value);
 						valueVertex.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 					} else if (value instanceof Vertex) {
-						valueVertex = (Vertex)value;							
+						valueVertex = (Vertex)value;
 					} else {
 						valueVertex = network.createVertex(value);
 						valueVertex.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
@@ -675,7 +697,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 	 */
 	public JSON processQuery(String query) throws IOException {
 		log("API", Level.FINEST, query);
-		URL get = new URL(query);
+		URL get = Utils.safeURL(query);
 		Reader reader = new InputStreamReader(get.openStream(), "UTF-8");
 		StringWriter output = new StringWriter();
 		int next = reader.read();

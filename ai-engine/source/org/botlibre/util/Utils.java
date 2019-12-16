@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -95,6 +97,7 @@ public class Utils {
 	public static final int EVERYONE = 0;
 	public static final int TEEN = 1;
 	public static final int MATURE = 2;
+	public static final int ADULT = 3;
 	
 	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
 	public static long MINUTE = 60L * 1000L;
@@ -112,7 +115,9 @@ public class Utils {
 	
 	public static DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
 	public static PolicyFactory sanitizer;
-
+	public static boolean requireHttps = false;
+	public static boolean requireDomanName = true;
+	
 	public static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	
 	static {
@@ -191,7 +196,7 @@ public class Utils {
 		if (sanitizer == null) {
 			sanitizer = Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.IMAGES).and(Sanitizers.STYLES);
 			PolicyFactory html = new HtmlPolicyBuilder()
-				.allowElements("table", "tr", "td", "thead", "tbody", "th", "font", "button", "input", "select", "option", "video", "audio")
+				.allowElements("table", "tr", "td", "thead", "tbody", "th", "hr", "font", "button", "input", "select", "option", "video", "audio")
 				.allowAttributes("class").globally()
 				.allowAttributes("color").globally()
 				.allowAttributes("bgcolor").globally()
@@ -205,8 +210,9 @@ public class Utils {
 				.allowAttributes("muted").globally()
 				.allowAttributes("loop").globally()
 				.allowAttributes("poster").globally()
-				.allowUrlProtocols("http", "https", "mailto", "chat").allowElements("a")
-				.allowAttributes("href").onElements("a").requireRelNofollowOnLinks()
+				.allowElements("a").requireRelNofollowOnLinks()
+				.allowAttributes("href").onElements("a")
+				.allowUrlProtocols("http", "https", "mailto", "chat")
 				.toFactory();
 			sanitizer = sanitizer.and(html);
 		}
@@ -214,15 +220,18 @@ public class Utils {
 	}
 	
 	public static String sanitize(String html) {
+		if (html == null || html.isEmpty()) {
+			return html;
+		}
 		String result = sanitizer().sanitize(html);
 		if (result.contains("&")) {
 			// The sanitizer is too aggressive and escaping some chars.
 			//result = result.replace("&#34;", "\"");
-			result = result.replace("&#96;", "`");
+			//result = result.replace("&#96;", "`");
 			//result = result.replace("&#39;", "'");
 			result = result.replace("&#64;", "@");
 			result = result.replace("&#61;", "=");
-			result = result.replace("&amp;", "&");
+			//result = result.replace("&amp;", "&");
 		}
 		return result;
 	}
@@ -254,6 +263,14 @@ public class Utils {
 		} catch (Exception exception) {
 			return "";
 		}
+	}
+	
+	public static String upTo(String text, String token) {
+		int index = text.indexOf(token);
+		if (index == -1) {
+			return text;
+		}
+		return text.substring(0, index);
 	}
 	
 	public static int random(int max) {
@@ -738,6 +755,8 @@ public class Utils {
 			map = profanityMapEveryone;
 		} else if (type == MATURE) {
 			map = profanityMapMature;
+		} else if (type == ADULT) {
+			return false;
 		}
 		String lowerText = text.toLowerCase();
 		TextStream stream = new TextStream(lowerText);
@@ -844,10 +863,10 @@ public class Utils {
 				String url = matcher.group();
 				if (url.indexOf(".png") != -1 || url.indexOf(".jpg") != -1 || url.indexOf(".jpeg") != -1 || url.indexOf(".gif") != -1
 						|| url.indexOf(".PNG") != -1 || url.indexOf(".JPG") != -1 || url.indexOf(".JPEG") != -1 || url.indexOf(".GIF") != -1) {
-					url = "<a href='" + url + "' target='_blank'><img src='" + url + "' style='max-height:300;'></a>";
+					url = "<a href='" + url + "' target='_blank'><img src='" + url + "' style='max-height:300px;'></a>";
 				} else if (url.indexOf(".mp4") != -1 || url.indexOf(".webm") != -1 || url.indexOf(".ogg") != -1
 						|| url.indexOf(".MP4") != -1 || url.indexOf(".WEBM") != -1 || url.indexOf(".OGG") != -1) {
-					url = "<a href='" + url + "' target='_blank'><video src='" + url + "' style='max-height:300;'></a>";
+					url = "<a href='" + url + "' target='_blank'><video src='" + url + "' style='max-height:300px;'></a>";
 				} else if (url.indexOf(".wav") != -1 || url.indexOf(".mp3") != -1
 						|| url.indexOf(".WAV") != -1 || url.indexOf(".MP3") != -1) {
 					url = "<a href='" + url + "' target='_blank'><audio src='" + url + "' controls>audio</a>";
@@ -1201,6 +1220,20 @@ public class Utils {
 	}
 	
 	/**
+	 * Return if the string contains any of the characters.
+	 */
+	public static boolean containsAny(String text, String tokens) {
+		for (int index = 0; index < text.length(); index++) {
+			for (int index2 = 0; index2 < tokens.length(); index2++) {
+				if (text.charAt(index) == tokens.charAt(index2)) {
+					return false;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Check if a capitalized word.
 	 */
 	public static boolean isCapitalized(String text) {
@@ -1374,6 +1407,40 @@ public class Utils {
 	
 	public static InputStream openStream(URL url) throws IOException {
 		return openStream(url, URL_TIMEOUT);
+	}
+	
+	/**
+	 * Reject non-http access and local or IP address.
+	 * SSRF security.
+	 */
+	public static URL safeURL(String value) throws MalformedURLException {
+		if (requireHttps && !value.startsWith("https")) {
+			throw new MalformedURLException("Only https URLs are allowed");
+		}
+		if (!value.startsWith("http")) {
+			throw new MalformedURLException("Only http URLs are allowed");
+		}
+		TextStream stream = new TextStream(value);
+		stream.skipToAll("//", true);
+		if (requireDomanName) {
+			if (Character.isDigit(stream.peek())) {
+				throw new MalformedURLException("IP address URL access is not allowed");
+			}
+		}
+		if (stream.peekWord().equalsIgnoreCase("localhost")) {
+			throw new MalformedURLException("Internal IP access is not allowed");
+		}
+		URL url = new URL(value);
+		InetAddress inetAddress = null;
+		try {
+			inetAddress = InetAddress.getByName(url.getHost());
+		} catch (Exception exception) {
+			throw new MalformedURLException(exception.toString());
+		}
+		if (inetAddress.isAnyLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isLinkLocalAddress()) {
+			throw new MalformedURLException("Internal IP access is not allowed");
+		}
+		return url;
 	}
 	
 	public static InputStream openStream(URL url, int timeout) throws IOException {

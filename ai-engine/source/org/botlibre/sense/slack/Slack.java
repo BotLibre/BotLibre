@@ -373,20 +373,20 @@ public class Slack extends BasicSense {
 		slack.pinChildren();
 		memory.save();
 	}
-					
+
 	/**
 	 * Process to the message and reply synchronously.
 	 */
-	public String processMessage(String from, String id, String message, String token) {
+	public String processMessage(String fromId, String from, String id, String message, String token) {
 		log("Processing message", Level.INFO, from, message);
 		
-		if(!token.equals(this.token) && !token.equals(this.appToken))
+		if (!token.equals(this.token) && !token.equals(this.appToken)) {
 			return "";
-			
-		String targetUsername = "";
+		}
 		
-		//Check if message is directed to the bot
-		if(botUsername.contains(" ") && message.toLowerCase().contains(botUsername.toLowerCase())) {
+		String targetUsername = "";
+		// Check if message is directed to the bot.
+		if (botUsername.contains(" ") && message.toLowerCase().contains(botUsername.toLowerCase())) {
 			targetUsername = botUsername;
 		} else {
 			TextStream stream = new TextStream(message);
@@ -405,23 +405,25 @@ public class Slack extends BasicSense {
 			}
 		}
 			
-		//Check if message is directed to someone other than the bot
-		if(targetUsername.isEmpty()) {
-			if(message.startsWith("@") && message.contains(" ")) {
+		// Check if message is directed to someone other than the bot.
+		if (targetUsername.isEmpty()) {
+			if (message.startsWith("@") && message.contains(" ")) {
 				targetUsername = message.substring(1, message.indexOf(" "));
-				if(targetUsername.endsWith(":"))
+				if (targetUsername.endsWith(":")) {
 					targetUsername = targetUsername.substring(0, targetUsername.length()-2);
+				}
 			}
 		}
 		
 		//Check if target is special slack target
-		if(targetUsername.equals("everyone") || targetUsername.equals("here") || targetUsername.equals("channel"))
+		if (targetUsername.equals("everyone") || targetUsername.equals("here") || targetUsername.equals("channel")) {
 			targetUsername = botUsername;
+		}
 		
 		this.responseListener = new ResponseListener();
 		Network memory = bot.memory().newMemory();
 		this.messagesProcessed++;
-		inputSentence(message, from, targetUsername, id, memory);
+		inputSentence(message, fromId, from, targetUsername, id, memory);
 		memory.save();
 		String reply = null;
 		synchronized (this.responseListener) {
@@ -443,16 +445,16 @@ public class Slack extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, String targetUsername, String id, Network network) {
+	public void inputSentence(String text, String userId, String userName, String targetUsername, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.SLACK, userName);
 		Vertex self = network.createVertex(Primitive.SELF);
-		input.addRelationship(Primitive.SPEAKER, user);		
+		input.addRelationship(Primitive.SPEAKER, user);
 		
-		if(targetUsername.equals(botUsername)) {
+		if (targetUsername.equals(this.botUsername)) {
 			input.addRelationship(Primitive.TARGET, self);
-		} else if(!targetUsername.isEmpty()) {
-			input.addRelationship(Primitive.TARGET, network.createSpeaker(targetUsername));
+		} else if (!targetUsername.isEmpty()) {
+			input.addRelationship(Primitive.TARGET, network.createUniqueSpeaker(new Primitive(targetUsername), Primitive.SLACK, targetUsername));
 		}
 
 		Vertex conversationId = network.createVertex(id);
@@ -561,7 +563,7 @@ public class Slack extends BasicSense {
 				prefix = prefix + " ";
 				String url = stream.nextWord();
 				String postfix = " " + stream.upToEnd().trim();
-				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(new URL(url), last);
+				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(Utils.safeURL(url), last);
 			    if (feed != null) {
 					long max = 0;
 					int count = 0;
@@ -793,7 +795,7 @@ public class Slack extends BasicSense {
 			String channel = event.getString("channel");
 			String text = event.getString("text");
 			
-			String reply = this.processMessage(user, channel, text, token);
+			String reply = this.processMessage(null, user, channel, text, token);
 			
 			if (reply == null || reply.isEmpty()) {
 				return;

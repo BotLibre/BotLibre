@@ -278,6 +278,16 @@ public class BasicAvatar implements Avatar {
 	}
 
 	/**
+	 * Self API to get avatar pose.
+	 */
+	public Vertex getPose(Vertex source) {
+		if (getPose() == null) {
+			return source.getNetwork().createVertex(Primitive.NULL);
+		}
+		return source.getNetwork().createVertex(getPose());
+	}
+
+	/**
 	 * Self API to set avatar pose.
 	 */
 	public Vertex setPose(Vertex source, Vertex pose) {

@@ -624,9 +624,9 @@ public class Freebase extends Http { //implements DiscoverySense {
 		log("MQL", Level.FINEST, query);
 		URL get = null;
 		if (KEY.isEmpty()) {
-			get = new URL(query);
+			get = Utils.safeURL(query);
 		} else {
-			get = new URL(query + "&key=" + KEY);
+			get = Utils.safeURL(query + "&key=" + KEY);
 		}
 		Reader reader = new InputStreamReader(get.openStream(), "UTF-8");
 		StringWriter output = new StringWriter();

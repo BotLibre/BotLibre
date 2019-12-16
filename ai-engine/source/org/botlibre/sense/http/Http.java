@@ -130,7 +130,7 @@ public class Http extends BasicSense {
 			}
 			if (attempt == RETRY) {
 				log("Retry failed", Level.WARNING);
-				log(failure);									
+				log(failure);
 			}
 		}
 	}
@@ -440,7 +440,7 @@ public class Http extends BasicSense {
 	public Vertex requestHTML(String url, String xpath, String format, String subformat, Network network) {
 		log("GET HTML", Level.INFO, url, xpath, format, subformat);
 		try {
-			Element element = parseURL(new URL(url));
+			Element element = parseURL(Utils.safeURL(url));
 			if (element == null) {
 				return null;
 			}
@@ -1555,7 +1555,7 @@ public class Http extends BasicSense {
 		log("RSS", Level.INFO, url);
 		try {
 			Network network = source.getNetwork();
-			List<Map<String, Object>> result = parseRSSFeed(new URL(url.printString()), 0);
+			List<Map<String, Object>> result = parseRSSFeed(Utils.safeURL(url.printString()), 0);
 			if (result == null) {
 				return null;
 			}
@@ -1581,7 +1581,7 @@ public class Http extends BasicSense {
 		log("RSS feed", Level.INFO, url);
 		try {
 			Network network = source.getNetwork();
-			List<Map<String, Object>> result = parseRSSFeed(new URL(url.printString()), 0);
+			List<Map<String, Object>> result = parseRSSFeed(Utils.safeURL(url.printString()), 0);
 			Vertex list = network.createInstance(Primitive.ARRAY);
 			int index = 0;
 			for (Map<String, Object> element : result) {

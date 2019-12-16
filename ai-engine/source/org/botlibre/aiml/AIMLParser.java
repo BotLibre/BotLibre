@@ -47,6 +47,7 @@ import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.self.SelfParseException;
 import org.botlibre.thought.language.Language;
+import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -117,13 +118,37 @@ public class AIMLParser {
 	}
 	
 	/**
-	 * Get the contents of the URL to a .aiml file and parse it.
+	 * Parse the .aiml file.
 	 */
 	public Vertex parseAIML(File file, boolean parseAsStateMachine, boolean createStates, boolean pin, boolean indexStatic,
 				Vertex stateMachine, String encoding, Network network) {
 		try {
 			String text = Utils.loadTextFile(new FileInputStream(file), encoding, MAX_FILE_SIZE);
 			return parseAIML(text, parseAsStateMachine, createStates, pin, indexStatic, stateMachine, network);
+		} catch (IOException exception) {
+			throw new SelfParseException("Parsing error occurred", exception);
+		}
+	}
+	
+	/**
+	 * Get the contents of the URL to a .set file and parse it.
+	 */
+	public List<Vertex> parseSET(URL url, String name, boolean pin, String encoding, Network network) {
+		try {
+			String text = Utils.loadTextFile(Utils.openStream(url), encoding, MAX_FILE_SIZE);
+			return parseSET(text, name, pin, network);
+		} catch (IOException exception) {
+			throw new SelfParseException("Parsing error occurred", exception);
+		}
+	}
+	
+	/**
+	 * Parse the AIML .set file.
+	 */
+	public List<Vertex> parseSET(File file, String name, boolean pin, String encoding, Network network) {
+		try {
+			String text = Utils.loadTextFile(new FileInputStream(file), encoding, MAX_FILE_SIZE);
+			return parseSET(text, name, pin, network);
 		} catch (IOException exception) {
 			throw new SelfParseException("Parsing error occurred", exception);
 		}
@@ -178,7 +203,7 @@ public class AIMLParser {
 			List<Element> topics = getLocalElementsByTagName("topic", root);
 			int count = 0;
 			for (Element topic : topics) {
-				String text = getNodeValue(topic, "name", "", false, false, false, new boolean[1], network);
+				String text = getNodeValue(topic, "name", "", false, false, false, false, new boolean[1], network);
 				Vertex topicFilter = null;
 				if (!isPattern(text)) {
 					topicFilter = network.createSentence(text);
@@ -299,7 +324,10 @@ public class AIMLParser {
 		}
 		
 		Element pattern = patterns.get(0);
-		String text = getPattern(pattern, network).toLowerCase();
+		String text = getPattern(pattern, network);
+		if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+			text = text.toLowerCase();
+		}
 		Vertex question = null;
 		boolean isPattern = false;
 		boolean isStarStartPattern = false;
@@ -374,7 +402,7 @@ public class AIMLParser {
 				}
 			}
 		}
-		// <that>		
+		// <that>
 		List<Element> thats = getLocalElementsByTagName("that", category);
 		if (!thats.isEmpty()) {
 			for (Element child : thats) {
@@ -433,26 +461,46 @@ public class AIMLParser {
 			}
 		} else {
 			Relationship relationship = null;
+			Relationship reductionRelationship = null;
 			// Add * to default responses.
 			if (isDefault && !createStates) {
 				Vertex language = network.createVertex(Language.class);
 				relationship = language.addRelationship(Primitive.RESPONSE, response);
+				relationship.setCorrectness(1.0f);
 			} else {
 				relationship = question.addRelationship(Primitive.RESPONSE, response);
+				if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+					network.checkReduction(question);
+					Vertex reduction = question.getRelationship(Primitive.REDUCTION);
+					if (reduction != null) { 
+						reductionRelationship = reduction.addRelationship(Primitive.RESPONSE, response);
+						reductionRelationship.setCorrectness(1.0f);
+					}
+				}
 				if (!question.instanceOf(Primitive.PATTERN)) {
 					question.associateAll(Primitive.WORD, question, Primitive.QUESTION);
 				}
 			}
-			response.addRelationship(Primitive.QUESTION, question);
+			response.addRelationship(Primitive.RESPONSE_QUESTION, question);
 			if (topic != null) {
 				Vertex meta = network.createMeta(relationship);
 				meta.addRelationship(Primitive.TOPIC, topic);
 				meta.addRelationship(Primitive.REQUIRE, Primitive.TOPIC);
+				if (reductionRelationship != null) {
+					meta = network.createMeta(reductionRelationship);
+					meta.addRelationship(Primitive.TOPIC, topic);
+					meta.addRelationship(Primitive.REQUIRE, Primitive.TOPIC);
+				}
 			}
 			if (that != null) {
 				Vertex meta = network.createMeta(relationship);
 				meta.addRelationship(Primitive.PREVIOUS, that);
 				meta.addRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);
+				if (reductionRelationship != null) {
+					meta = network.createMeta(reductionRelationship);
+					meta.addRelationship(Primitive.PREVIOUS, that);
+					meta.addRelationship(Primitive.REQUIRE, Primitive.PREVIOUS);
+				}
 			}
 		}
 		if (parseAsStateMachine && (isPattern || !indexStatic)) {
@@ -462,18 +510,18 @@ public class AIMLParser {
 			}
 			if (isPattern) {
 				if (that != null || topic != null) {
-					state.addRelationship(Primitive.DO, equation, 1);
+					state.addRelationship(Primitive.DO, equation, 11);
 				} else {
 					if (isDollarPattern) {
-						state.addRelationship(Primitive.DO, equation, 2);
+						state.addRelationship(Primitive.DO, equation, 12);
 					} else if (is_Pattern) {
-						state.addRelationship(Primitive.DO, equation, 3);
+						state.addRelationship(Primitive.DO, equation, 13);
 					} else if (isStarStartPattern) {
-						state.addRelationship(Primitive.DO, equation, 8);
+						state.addRelationship(Primitive.DO, equation, 18);
 					} else if (isStarEndPattern) {
-						state.addRelationship(Primitive.DO, equation, 7);
+						state.addRelationship(Primitive.DO, equation, 17);
 					} else {
-						state.addRelationship(Primitive.DO, equation, 6);
+						state.addRelationship(Primitive.DO, equation, 16);
 					}
 				}
 				Collection<Relationship> words = question.getRelationships(Primitive.WORD);
@@ -484,17 +532,17 @@ public class AIMLParser {
 						Vertex regex = element.getRelationship(Primitive.REGEX);
 						if (regex != null && regex.getData() instanceof String) {
 							state = createState(network.createPattern("*"), sentenceState, network);
-							state.addRelationship(Primitive.DO, equation, 7);
+							state.addRelationship(Primitive.DO, equation, 17);
 						}
 					}
 				}
 			} else {
 				if (that != null || topic != null) {
-					state.addRelationship(Primitive.DO, equation, 0);
+					state.addRelationship(Primitive.DO, equation, 10);
 				}  else if (srai[0]) {
-					state.addRelationship(Primitive.DO, equation, 5);
+					state.addRelationship(Primitive.DO, equation, 15);
 				} else {
-					state.addRelationship(Primitive.DO, equation, 4);
+					state.addRelationship(Primitive.DO, equation, 14);
 				}
 			}
 		}
@@ -694,6 +742,9 @@ public class AIMLParser {
 		boolean nameNode = false;
 		StringWriter writer = new StringWriter();
 		NodeList list = element.getChildNodes();
+		//boolean space = false;
+		//boolean code = false;
+		//boolean checkSpace = network.getBot().mind().getThought(Language.class).getAimlCompatibility();
 		for (int index = 0; index < list.getLength(); index++) {
 			Node child = list.item(index);
 			String name = child.getNodeName().toLowerCase();
@@ -730,12 +781,19 @@ public class AIMLParser {
 				if (text.contains("\"")) {
 					text = text.replace("\"", "\\\"");
 				}
+				//if (checkSpace && code && !text.startsWith(" ")) {
+				//	writer.write(" ");
+				//}
 				writer.write(text);
+				//space = !text.endsWith(" ");
+				//code = false;
 			} else if (attributeNodes.contains(name)) {
 				nameNode = true;
 				continue;
 			} else if (htmlTags.contains(name)) {
 				isTemplate = appendHTML(name, (Element)child, multiStar, srai, isTemplate, writer, network);
+				//space = false;
+				//code = false;
 			} else if (child instanceof Element) {
 				if (flattenTemplates && list.getLength() == 1 || (nameNode && list.getLength() == 2)) {
 					//writer.write("(");
@@ -743,10 +801,15 @@ public class AIMLParser {
 					//writer.write(")");
 					return writer.toString().trim();
 				}
+				//if (checkSpace && space) {
+				//	writer.write(" ");
+				//}
 				writer.write("{");
 				appendCode((Element)child, multiStar, srai, writer, network);
 				writer.write("}");
 				isTemplate = true;
+				//space = false;
+				//code = true;
 			}
 		}
 		String text = writer.toString().trim();
@@ -763,7 +826,7 @@ public class AIMLParser {
 		return text;
 	}
 	
-	public String getNodeValue(Element node, String value, String defaulValue, boolean primitive, boolean quote, boolean multiStar, boolean[] srai, Network network) {
+	public String getNodeValue(Element node, String value, String defaulValue, boolean pattern, boolean primitive, boolean quote, boolean multiStar, boolean[] srai, Network network) {
 		List<Element> valueElements = getLocalElementsByTagName(value, node);
 		if (valueElements != null && valueElements.size() > 0) {
 			StringWriter writer = new StringWriter();
@@ -781,19 +844,23 @@ public class AIMLParser {
 			for (int index = 0; index < node.getAttributes().getLength(); index++) {
 				Node attribute = node.getAttributes().item(index);
 				if (attribute.getNodeName().equalsIgnoreCase(value)) {
-					if (primitive) {
+					if (primitive && pattern) {
 						return "#" + attribute.getNodeValue();
+					} else if (primitive) {
+						return "Symbol(\"" + attribute.getNodeValue() + "\")";
 					} else if (quote) {
 						return "\"" + attribute.getNodeValue() + "\"";
 					} else {
-						return attribute.getNodeValue();						
+						return attribute.getNodeValue();
 					}
 				}
 			}
 			return defaulValue;
 		}
-		if (primitive) {
+		if (primitive && pattern) {
 			return "#" + child.getNodeValue();
+		} else if (primitive) {
+			return "Symbol(\"" + child.getNodeValue() + "\")";
 		} else if (quote) {
 			return "\"" + child.getNodeValue() + "\"";
 		} else {
@@ -805,13 +872,13 @@ public class AIMLParser {
 		String name = child.getNodeName().toLowerCase();
 		if (name.equals("bot")) {
 			writer.write("target.get(");
-			writer.write(getNodeValue(child, "name", "#name", true, false, multiStar, srai, network));
+			writer.write(getNodeValue(child, "name", "#name", false, true, false, multiStar, srai, network));
 			writer.write(")");
 		} else if (name.equals("get")) {
-			String value = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+			String value = getNodeValue(child, "name", null, false, true, false, multiStar, srai, network);
 			boolean isLocal = false;
 			if (value == null) {
-				value = getNodeValue(child, "var", null, true, false, multiStar, srai, network);
+				value = getNodeValue(child, "var", null, false, true, false, multiStar, srai, network);
 				if (value != null) {
 					isLocal = true;
 				} else {
@@ -819,20 +886,20 @@ public class AIMLParser {
 				}
 			}
 			if (isLocal) {
-				writer.write("input");				
-			} else if (value.equalsIgnoreCase("#name")) {
+				writer.write("input");
+			} else if (value.equalsIgnoreCase("#name") || value.equalsIgnoreCase("Symbol(\"name\")")) {
 				writer.write("speaker");
 			} else {
 				writer.write("conversation");
 			}
-			writer.write(".get(");
+			writer.write(".aimlGet(");
 			writer.write(value);
 			writer.write(")");
 		} else if (name.equals("set")) {
-			String value = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+			String value = getNodeValue(child, "name", null, false, true, false, multiStar, srai, network);
 			boolean isLocal = false;
 			if (value == null) {
-				value = getNodeValue(child, "var", null, true, false, multiStar, srai, network);
+				value = getNodeValue(child, "var", null, false, true, false, multiStar, srai, network);
 				if (value != null) {
 					isLocal = true;
 				} else {
@@ -840,9 +907,9 @@ public class AIMLParser {
 				}
 			}
 			if (isLocal) {
-				writer.write("input");				
-			} else if (value.equalsIgnoreCase("#name")) {
-				writer.write("speaker");				
+				writer.write("input");
+			} else if (value.equalsIgnoreCase("#name") || value.equalsIgnoreCase("Symbol(\"name\")")) {
+				writer.write("speaker");
 			} else {
 				writer.write("conversation");
 			}
@@ -853,11 +920,11 @@ public class AIMLParser {
 			writer.write(")");
 		} else if (name.equals("map")) {
 			// EXT - value lets the value be set for a map.
-			String value = getNodeValue(child, "value", null, true, false, multiStar, srai, network);
+			String value = getNodeValue(child, "value", null, false, true, false, multiStar, srai, network);
 			appendNestedString((Element)child, multiStar, srai, writer, network);
 			if (value == null) {
-				writer.write(".get(");
-				String type = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+				writer.write(".mapGet(");
+				String type = getNodeValue(child, "name", null, false, true, false, multiStar, srai, network);
 				if (type == null) {
 					type = "#meaning";
 				}
@@ -865,7 +932,7 @@ public class AIMLParser {
 				writer.write(")");
 			} else {
 				writer.write(".set(");
-				String type = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+				String type = getNodeValue(child, "name", null, false, true, false, multiStar, srai, network);
 				if (type == null) {
 					type = "#meaning";
 				}
@@ -876,7 +943,7 @@ public class AIMLParser {
 			}
 		} else if (name.equals("new")) {
 			writer.write("new ");
-			String type = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+			String type = getNodeValue(child, "name", null, false, true, false, multiStar, srai, network);
 			if (type == null) {
 				type = "#thing";
 			}
@@ -964,7 +1031,7 @@ public class AIMLParser {
 			appendNestedString((Element)child, multiStar, srai, writer, network);
 			writer.write(", {");
 			boolean comma = false;
-			String value = getNodeValue(child, "bot", null, false, true, multiStar, srai, network);
+			String value = getNodeValue(child, "bot", null, false, false, true, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -974,7 +1041,7 @@ public class AIMLParser {
 				writer.write(value);
 			} else {
 				// Allow name element, as bot element is already a command.
-				String botname = getNodeValue(child, "botname", null, false, true, multiStar, srai, network);
+				String botname = getNodeValue(child, "botname", null, false, false, true, multiStar, srai, network);
 				if (botname != null) {
 					if (comma) {
 						writer.write(", ");
@@ -984,7 +1051,7 @@ public class AIMLParser {
 					writer.write(botname);
 				}
 			}
-			value = getNodeValue(child, "botid", null, false, true, multiStar, srai, network);
+			value = getNodeValue(child, "botid", null, false, false, true, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -993,7 +1060,7 @@ public class AIMLParser {
 				writer.write("botid: ");
 				writer.write(value);
 			}
-			value = getNodeValue(child, "service", null, true, false, multiStar, srai, network);
+			value = getNodeValue(child, "service", null, false, true, false, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -1002,7 +1069,7 @@ public class AIMLParser {
 				writer.write("service: ");
 				writer.write(value.toLowerCase());
 			}
-			value = getNodeValue(child, "server", null, false, true, multiStar, srai, network);
+			value = getNodeValue(child, "server", null, false, false, true, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -1011,7 +1078,7 @@ public class AIMLParser {
 				writer.write("server: ");
 				writer.write(value);
 			}
-			value = getNodeValue(child, "apikey", null, false, true, multiStar, srai, network);
+			value = getNodeValue(child, "apikey", null, false, false, true, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -1020,7 +1087,7 @@ public class AIMLParser {
 				writer.write("apikey: ");
 				writer.write(value);
 			}
-			value = getNodeValue(child, "limit", null, false, false, multiStar, srai, network);
+			value = getNodeValue(child, "limit", null, false, false, false, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -1029,7 +1096,7 @@ public class AIMLParser {
 				writer.write("limit: ");
 				writer.write(value);
 			}
-			value = getNodeValue(child, "hint", null, false, true, multiStar, srai, network);
+			value = getNodeValue(child, "hint", null, false, false, true, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -1038,7 +1105,7 @@ public class AIMLParser {
 				writer.write("hint: ");
 				writer.write(value);
 			}
-			value = getNodeValue(child, "default", null, false, true, multiStar, srai, network);
+			value = getNodeValue(child, "default", null, false, false, true, multiStar, srai, network);
 			if (value != null) {
 				if (comma) {
 					writer.write(", ");
@@ -1098,7 +1165,7 @@ public class AIMLParser {
 			writer.write("Utils.gender(");
 			if (child.getChildNodes().getLength() == 0) {
 				if (multiStar) {
-					writer.write("star[0]");					
+					writer.write("star[0]");
 				} else {
 					writer.write("star");
 				}
@@ -1110,7 +1177,7 @@ public class AIMLParser {
 			writer.write("Utils.person(");
 			if (child.getChildNodes().getLength() == 0) {
 				if (multiStar) {
-					writer.write("star[0]");					
+					writer.write("star[0]");
 				} else {
 					writer.write("star");
 				}
@@ -1122,7 +1189,7 @@ public class AIMLParser {
 			writer.write("Utils.person2(");
 			if (child.getChildNodes().getLength() == 0) {
 				if (multiStar) {
-					writer.write("star[0]");					
+					writer.write("star[0]");
 				} else {
 					writer.write("star");
 				}
@@ -1147,30 +1214,30 @@ public class AIMLParser {
 			NodeList loop = child.getElementsByTagName("loop");
 			if (loop != null && loop.getLength() > 0) {
 				writer.write("do { result = \"\"; loop = true; while (loop) { loop = false; ");	
-				writer.write("result = Template(\"{result}{");			
+				writer.write("result = Template(\"{result}{");
 			}
-			String conditionName = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+			String conditionName = getNodeValue(child, "name", null, false, true, false, multiStar, srai, network);
 			boolean isLocal = false;
 			if (conditionName == null) {
-				conditionName = getNodeValue(child, "var", null, true, false, multiStar, srai, network);
+				conditionName = getNodeValue(child, "var", null, false, true, false, multiStar, srai, network);
 				if (conditionName != null) {
 					isLocal = true;
 				} else {
 					conditionName = "star";
 				}
 			}
-			String conditionValue = getNodeValue(child, "value", null, false, true, multiStar, srai, network);
+			String conditionValue = getNodeValue(child, "value", null, false, false, true, multiStar, srai, network);
 			int brackets = 0;
 			if (conditionName != null && conditionValue != null) {
 				writer.write("if (");
 				if (isLocal) {
-					writer.write("input");				
-				} else if (conditionName.equalsIgnoreCase("#name")) {
-					writer.write("speaker");				
+					writer.write("input");
+				} else if (conditionName.equalsIgnoreCase("#name") ||  conditionName.equalsIgnoreCase("Symbol(\"name\")")) {
+					writer.write("speaker");
 				} else {
 					writer.write("conversation");
 				}
-				writer.write(".get(");
+				writer.write(".aimlGet(");;
 				writer.write(conditionName);
 				writer.write(") == ");
 				boolean isText = conditionValue.startsWith("\"");
@@ -1190,16 +1257,16 @@ public class AIMLParser {
 				for (Iterator<Element> iterator = children.iterator(); iterator.hasNext(); ) {
 					boolean liLocal = isLocal;
 					Element condition = iterator.next();
-					String liName = getNodeValue(condition, "name", null, true, false, multiStar, srai, network);
+					String liName = getNodeValue(condition, "name", null, false, true, false, multiStar, srai, network);
 					if (liName == null) {
-						liName = getNodeValue(condition, "var", null, true, false, multiStar, srai, network);
+						liName = getNodeValue(condition, "var", null, false, true, false, multiStar, srai, network);
 						if (liName != null) {
 							liLocal = true;
 						}
 					} else {
 						liLocal = false;
 					}
-					String liValue = getNodeValue(condition, "value", null, false, true, multiStar, srai, network);
+					String liValue = getNodeValue(condition, "value", null, false, false, true, multiStar, srai, network);
 					if (liName == null) {
 						liName = conditionName;
 					}
@@ -1213,13 +1280,13 @@ public class AIMLParser {
 					} else {
 						writer.write("if (");
 						if (liLocal) {
-							writer.write("input");				
-						} else if (conditionName.equalsIgnoreCase("#name")) {
-							writer.write("speaker");				
+							writer.write("input");
+						} else if (conditionName.equalsIgnoreCase("#name") ||  conditionName.equalsIgnoreCase("Symbol(\"name\")")) {
+							writer.write("speaker");
 						} else {
 							writer.write("conversation");
 						}
-						writer.write(".get(");
+						writer.write(".aimlGet(");
 						writer.write(liName);
 						writer.write(") == ");
 						boolean isText = liValue.startsWith("\"");
@@ -1248,7 +1315,7 @@ public class AIMLParser {
 				writer.write(" }\"); } }");				
 			}
 		} else if (name.equals("request") || name.equals("input")) {
-			String index = getNodeValue(child, "index", "1", false, false, multiStar, srai, network);
+			String index = getNodeValue(child, "index", "1", false, false, false, multiStar, srai, network);
 			String part = null;
 			if (index != null) {
 				if (index.indexOf(',') != -1) {
@@ -1264,7 +1331,7 @@ public class AIMLParser {
 			}
 			writer.write(")");
 		} else if (name.equals("that") || name.equals("response")) {
-			String index = getNodeValue(child, "index", "1", false, false, multiStar, srai, network);
+			String index = getNodeValue(child, "index", "1", false, false, false, multiStar, srai, network);
 			String part = null;
 			if (index != null) {
 				if (index.indexOf(',') != -1) {
@@ -1280,10 +1347,10 @@ public class AIMLParser {
 			}
 			writer.write(")");
 		} else if (name.equals("date")) {
-			String locale = getNodeValue(child, "locale", null, false, true, multiStar, srai, network);
-			String timezone = getNodeValue(child, "timezone", null, false, true, multiStar, srai, network);
-			String format = getNodeValue(child, "format", null, false, true, multiStar, srai, network);
-			String jformat = getNodeValue(child, "jformat", null, false, true, multiStar, srai, network);
+			String locale = getNodeValue(child, "locale", null, false, false, true, multiStar, srai, network);
+			String timezone = getNodeValue(child, "timezone", null, false, false, true, multiStar, srai, network);
+			String format = getNodeValue(child, "format", null, false, false, true, multiStar, srai, network);
+			String jformat = getNodeValue(child, "jformat", null, false, false, true, multiStar, srai, network);
 			if (timezone != null || locale != null) {
 				if (jformat == null && format == null) {
 					format = "\"%x\"";
@@ -1329,20 +1396,20 @@ public class AIMLParser {
 				writer.write("Date.date()");
 			}
 		} else if (name.equals("interval")) {
-			String format = getNodeValue(child, "jformat", null, false, true, multiStar, srai, network);
-			String from = getNodeValue(child, "from", null, false, true, multiStar, srai, network);
-			String to = getNodeValue(child, "to", null, false, true, multiStar, srai, network);
-			String style = getNodeValue(child, "style", null, false, true, multiStar, srai, network);
+			String format = getNodeValue(child, "jformat", null, false, false, true, multiStar, srai, network);
+			String from = getNodeValue(child, "from", null, false, false, true, multiStar, srai, network);
+			String to = getNodeValue(child, "to", null, false, false, true, multiStar, srai, network);
+			String style = getNodeValue(child, "style", null, false, false, true, multiStar, srai, network);
 			if (format != null) {
 				writer.write("Date.interval(" + style + ", " + from + ", " + to + ", " + format + ")");
 			} else {
-				writer.write("Date.interval(" + style + ", " + from + ", " + to + ")");				
+				writer.write("Date.interval(" + style + ", " + from + ", " + to + ")");
 			}
 		} else if (name.equals("star")) {
-			String index = getNodeValue(child, "index", null, false, false, multiStar, srai, network);
+			String index = getNodeValue(child, "index", null, false, false, false, multiStar, srai, network);
 			if (index == null) {
 				if (multiStar) {
-					writer.write("star[0]");					
+					writer.write("star[0]");
 				} else {
 					writer.write("star");
 				}
@@ -1364,7 +1431,7 @@ public class AIMLParser {
 				writer.write("]");
 			}
 		} else if (name.equals("thatstar")) {
-			String index = getNodeValue(child, "index", null, false, false, multiStar, srai, network);
+			String index = getNodeValue(child, "index", null, false, false, false, multiStar, srai, network);
 			if (index == null) {
 				writer.write("thatstar");
 			} else {
@@ -1385,7 +1452,7 @@ public class AIMLParser {
 				writer.write("]");
 			}
 		} else if (name.equals("topicstar")) {
-			String index = getNodeValue(child, "index", null, false, false, multiStar, srai, network);
+			String index = getNodeValue(child, "index", null, false, false, false, multiStar, srai, network);
 			if (index == null) {
 				writer.write("topicstar");
 			} else {
@@ -1408,20 +1475,21 @@ public class AIMLParser {
 		} else if (name.equals("self")) {
 			writer.write(child.getTextContent());
 		} else {
-			writer.write("think { debug(\"invalid tag: " + name + "\"); }");			
+			writer.write("think { debug(\"invalid tag: " + name + "\"); }");
 		}
 	}
 	public void appendPatternCode(Element child, boolean multiStar, boolean[] srai, StringWriter writer, Network network) {
 		String name = child.getNodeName().toLowerCase();
 		if (name.equals("bot")) {
+			//.write("target.aimlGet("); // lowercase issue
 			writer.write("target.get(");
-			writer.write(getNodeValue(child, "name", "#name", true, false, multiStar, srai, network));
+			writer.write(getNodeValue(child, "name", "#name", true, true, false, multiStar, srai, network));
 			writer.write(")");
-		} else if (name.equals("get")) {	
-			String value = getNodeValue(child, "name", null, true, false, multiStar, srai, network);
+		} else if (name.equals("get")) {
+			String value = getNodeValue(child, "name", null, true, true, false, multiStar, srai, network);
 			boolean isLocal = false;
 			if (value == null) {
-				value = getNodeValue(child, "var", null, true, false, multiStar, srai, network);
+				value = getNodeValue(child, "var", null, true, true, false, multiStar, srai, network);
 				if (value != null) {
 					isLocal = true;
 				} else {
@@ -1429,16 +1497,21 @@ public class AIMLParser {
 				}
 			}
 			if (isLocal) {
-				writer.write("input");				
-			} else if (value.equalsIgnoreCase("#name")) {
-				writer.write("speaker");				
+				writer.write("input");
+			} else if (value.equalsIgnoreCase("#name") ||  value.equalsIgnoreCase("Symbol(\"name\")")) {
+				writer.write("speaker");
 			} else {
 				writer.write("conversation");
 			}
 			writer.write(".get(");
+			//writer.write(".aimlGet("); // lowercase issue
 			writer.write(value);
 			writer.write(")");
 		} else if (name.equals("set")) {
+			String text = child.getTextContent().trim();
+			if (text.isEmpty()) {
+				network.getBot().log(this, "Missing set", Level.WARNING);
+			}
 			writer.write("^");
 			String value = child.getTextContent().trim();
 			writer.write(value);
@@ -1464,6 +1537,317 @@ public class AIMLParser {
 			if (index < elements.size()) {
 				writer.write("; ");
 			}
+		}
+	}
+	
+	/**
+	 * Parse the AIML .set file.
+	 * i.e.
+	 * [["cat"], ["dog"], ["mountain", "goat"]]
+	 */
+	public List<Vertex> parseSET(String code, String name, boolean pin, Network memory) {
+		try {
+			List<Vertex> values = new ArrayList<Vertex>();
+			TextStream stream = new TextStream(code);
+			Vertex set = memory.createVertex(new Primitive(name));
+			while (!stream.atEnd()) {
+				String token = stream.nextWord();
+				if (!"[".equals(token)) {
+					throw new SelfParseException("Invalid .set file format, must start with [", stream);
+				}
+				token = stream.nextWord();
+				while (!stream.atEnd() && "[".equals(token)) {
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .set file format, expected \" not " + token, stream);
+					}
+					token = stream.upTo('\"');
+					if (token != null && !token.isEmpty()) {
+						String text = token;
+						token = stream.nextWord();
+						String peek = stream.peekWord();
+						while (",".equals(peek)) {
+							stream.skipWord();
+							token = stream.nextWord();
+							if (!"\"".equals(token)) {
+								throw new SelfParseException("Invalid .set file format, expected \" not " + token, stream);
+							}
+							token = stream.upTo('\"');
+							text = text + " " + token;
+							token = stream.nextWord();
+							peek = stream.peekWord();
+						}
+						// Create instance
+						if (memory.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+							text = text.toLowerCase();
+						}
+						Vertex word = memory.createWord(text);
+						values.add(word);
+						if (pin) {
+							word.setPinned(true);
+							Collection<Relationship> words = word.getRelationships(Primitive.WORD);
+							if (words != null) {
+								for (Relationship subWord : words) {
+									subWord.getTarget().setPinned(true);
+								}
+							}
+						}
+						Collection<Relationship> meanings = word.getRelationships(Primitive.MEANING);
+						if (meanings == null) {
+							Vertex meaning = memory.createVertex();
+							meaning.setName(text);
+							if (pin) {
+								meaning.setPinned(true);
+							}
+							meaning.addRelationship(Primitive.INSTANTIATION, set);
+							word.addRelationship(Primitive.MEANING, meaning);
+							meaning.addRelationship(Primitive.WORD, word);
+						} else {
+							boolean first = true;
+							for (Relationship meaning : meanings) {
+								meaning.getTarget().addRelationship(Primitive.INSTANTIATION, set);
+								if (first && pin) {
+									meaning.getTarget().setPinned(true);
+								}
+								first = false;
+							}
+						}
+					}
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .set file format, expected \" not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!"]".equals(token)) {
+						throw new SelfParseException("Invalid .set file format, expected ] not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (",".equals(token)) {
+						token = stream.nextWord();
+					}
+				}
+				if (stream.atEnd() && !"]".equals(token)) {
+					throw new SelfParseException("Invalid .set file format, must end with ]", stream);
+				}
+				if (!"]".equals(token)) {
+					throw new SelfParseException("Invalid .set file format, unexpected text - " + token, stream);
+				}
+				token = stream.nextWord();
+				if (token != null) {
+					throw new SelfParseException("Invalid .set file format, unexpected text after end ] - " + token, stream);
+				}
+			}
+			memory.save();
+			return values;
+		} catch (Exception exception) {
+			memory.getBot().log(this, exception);
+			throw new BotException("Parsing error occurred - " + exception.toString(), exception);
+		}
+	}
+	
+	/**
+	 * Get the contents of the URL to a .map file and parse it.
+	 */
+	public List<Vertex> parseMAP(URL url, String name, boolean pin, String encoding, Network network) {
+		try {
+			String text = Utils.loadTextFile(Utils.openStream(url), encoding, MAX_FILE_SIZE);
+			return parseMAP(text, name, pin, network);
+		} catch (IOException exception) {
+			throw new SelfParseException("Parsing error occurred", exception);
+		}
+	}
+	
+	/**
+	 * Parse the AIML .map file.
+	 */
+	public List<Vertex> parseMAP(File file, String name, boolean pin, String encoding, Network network) {
+		try {
+			String text = Utils.loadTextFile(new FileInputStream(file), encoding, MAX_FILE_SIZE);
+			return parseMAP(text, name, pin, network);
+		} catch (IOException exception) {
+			throw new SelfParseException("Parsing error occurred", exception);
+		}
+	}
+	
+	/**
+	 * Parse the AIML .map file.
+	 * i.e.
+	 * [["Canada", "Ottawa"], ["USA", "Washington"]]
+	 */
+	public List<Vertex> parseMAP(String code, String name, boolean pin, Network memory) {
+		try {
+			List<Vertex> values = new ArrayList<Vertex>();
+			TextStream stream = new TextStream(code);
+			Vertex map = memory.createVertex(new Primitive(name));
+			while (!stream.atEnd()) {
+				String token = stream.nextWord();
+				if (!"[".equals(token)) {
+					throw new SelfParseException("Invalid .map file format, must start with [", stream);
+				}
+				token = stream.nextWord();
+				while (!stream.atEnd() && "[".equals(token)) {
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected \" not " + token, stream);
+					}
+					String keyText = stream.upTo('\"');
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected \" not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!",".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected , not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected \" not " + token, stream);
+					}
+					String valueText = stream.upTo('\"');
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected \" not " + token, stream);
+					}
+					if (memory.getBot().mind().getThought(Language.class).getReduceQuestions()) {
+						keyText = keyText.toLowerCase();
+					}
+					Vertex key = memory.createFragment(keyText);
+					values.add(key);
+					Vertex value = memory.createFragment(valueText);
+					if (pin) {
+						key.setPinned(true);
+						value.setPinned(true);
+					}
+					key.setRelationship(map, value);
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected \" not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!"]".equals(token)) {
+						throw new SelfParseException("Invalid .map file format, expected ] not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (",".equals(token)) {
+						token = stream.nextWord();
+					}
+				}
+				if (stream.atEnd() && !"]".equals(token)) {
+					throw new SelfParseException("Invalid .map file format, must end with ]", stream);
+				}
+				if (!"]".equals(token)) {
+					throw new SelfParseException("Invalid .map file format, unexpected text - " + token, stream);
+				}
+				token = stream.nextWord();
+				if (token != null) {
+					throw new SelfParseException("Invalid .map file format, unexpected text after end ] - " + token, stream);
+				}
+			}
+			memory.save();
+			return values;
+		} catch (Exception exception) {
+			memory.getBot().log(this, exception);
+			throw new BotException("Parsing error occurred - " + exception.toString(), exception);
+		}
+	}
+	
+	/**
+	 * Get the contents of the URL to a .properties file and parse it.
+	 */
+	public List<Vertex> parseProperties(URL url, String name, boolean pin, String encoding, Network network) {
+		try {
+			String text = Utils.loadTextFile(Utils.openStream(url), encoding, MAX_FILE_SIZE);
+			return parseProperties(text, pin, network);
+		} catch (IOException exception) {
+			throw new SelfParseException("Parsing error occurred", exception);
+		}
+	}
+	
+	/**
+	 * Parse the AIML .properties file.
+	 */
+	public List<Vertex> parseProperties(File file, String name, boolean pin, String encoding, Network network) {
+		try {
+			String text = Utils.loadTextFile(new FileInputStream(file), encoding, MAX_FILE_SIZE);
+			return parseProperties(text, pin, network);
+		} catch (IOException exception) {
+			throw new SelfParseException("Parsing error occurred", exception);
+		}
+	}
+	
+	/**
+	 * Parse the AIML .properties file.
+	 * i.e.
+	 * [["city", "Ottawa"], ["name", "Brain Bot"]]
+	 */
+	public List<Vertex> parseProperties(String code, boolean pin, Network memory) {
+		try {
+			List<Vertex> values = new ArrayList<Vertex>();
+			TextStream stream = new TextStream(code);
+			Vertex bot = memory.createVertex(Primitive.SELF);
+			while (!stream.atEnd()) {
+				String token = stream.nextWord();
+				if (!"[".equals(token)) {
+					throw new SelfParseException("Invalid .properties file format, must start with [", stream);
+				}
+				token = stream.nextWord();
+				while (!stream.atEnd() && "[".equals(token)) {
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected \" not " + token, stream);
+					}
+					String keyText = stream.upTo('\"');
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected \" not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!",".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected , not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected \" not " + token, stream);
+					}
+					String valueText = stream.upTo('\"');
+					token = stream.nextWord();
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected \" not " + token, stream);
+					}
+					Vertex key = memory.createVertex(new Primitive(keyText));
+					Vertex value = memory.createFragment(valueText);
+					values.add(value);
+					if (pin) {
+						key.setPinned(true);
+						value.setPinned(true);
+					}
+					bot.setRelationship(key, value);
+					if (!"\"".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected \" not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (!"]".equals(token)) {
+						throw new SelfParseException("Invalid .properties file format, expected ] not " + token, stream);
+					}
+					token = stream.nextWord();
+					if (",".equals(token)) {
+						token = stream.nextWord();
+					}
+				}
+				if (stream.atEnd() && !"]".equals(token)) {
+					throw new SelfParseException("Invalid .properties file format, must end with ]", stream);
+				}
+				if (!"]".equals(token)) {
+					throw new SelfParseException("Invalid .properties file format, unexpected text - " + token, stream);
+				}
+				token = stream.nextWord();
+				if (token != null) {
+					throw new SelfParseException("Invalid .properties file format, unexpected text after end ] - " + token, stream);
+				}
+			}
+			memory.save();
+			return values;
+		} catch (Exception exception) {
+			memory.getBot().log(this, exception);
+			throw new BotException("Parsing error occurred - " + exception.toString(), exception);
 		}
 	}
 	

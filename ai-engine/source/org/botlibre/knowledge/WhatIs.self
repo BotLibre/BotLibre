@@ -3,6 +3,11 @@ state WhatIs {
 	case input goto sentenceState for each #word of sentence;
 	
 	pattern "* is what" template (redirect (Template("what is {star}")));
+	pattern "(can) (you) tell me (something) about *" template (redirect (Template("what is {star}")));
+	pattern "(do what) you know (anything) about *" template (redirect (Template("what is {star}")));
+	
+	pattern "(do) (you) (know) (please) (tell) (me) who * is" template (redirect (Template("who is {star}")));
+	pattern "(do) (you) (know) (please) (tell) (me) what * is" template (redirect (Template("what is {star}")));
 
 	state sentenceState {
 		case what goto whatState;

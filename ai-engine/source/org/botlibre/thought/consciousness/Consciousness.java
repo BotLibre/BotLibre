@@ -47,6 +47,7 @@ public class Consciousness extends BasicThought {
 	 * Create a new consciousness.
 	 */
 	public Consciousness() {
+		this.isEnabled = false;
 	}
 
 	/**
@@ -77,7 +78,7 @@ public class Consciousness extends BasicThought {
 		if (lastContext == null) {
 			this.lastContext = null;
 		} else {
-			this.lastContext = lastContext.getId();			
+			this.lastContext = lastContext.getId();
 		}
 	}
 	

@@ -135,7 +135,7 @@ public class GoogleAssistant extends BasicSense {
 		Vertex input = createInput(text != null ? text.trim() : "", network);
 		
 		//Greeting
-		if(text == null || (text!= null && text.isEmpty())) {
+		if (text == null || text.isEmpty()) {
 			input.setRelationship(Primitive.INPUT, Primitive.NULL);
 			input.setRelationship(Primitive.TARGET, Primitive.SELF);
 		}
@@ -161,7 +161,7 @@ public class GoogleAssistant extends BasicSense {
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		conversation.addRelationship(Primitive.SPEAKER, self);
 		
-		if(text != null && !text.isEmpty()) {
+		if (text != null && !text.isEmpty()) {
 			Language.addToConversation(input, conversation);
 		} else {
 			input.addRelationship(Primitive.CONVERSATION, conversation);
@@ -197,7 +197,7 @@ public class GoogleAssistant extends BasicSense {
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
 			return;
 		}
-		String text = printInput(output);	
+		String text = printInput(output);
 		
 		//Strip html tags from response
 		text = Utils.stripTags(text);

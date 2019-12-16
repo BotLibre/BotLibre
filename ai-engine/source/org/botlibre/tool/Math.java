@@ -433,7 +433,7 @@ public class Math extends BasicTool {
 			try {
 				double result = java.lang.Math.floor((((Number)left.getData()).doubleValue()));
 				if (Double.isInfinite(result)) {
-					return left.getNetwork().createVertex(Primitive.INFINITY);				
+					return left.getNetwork().createVertex(Primitive.INFINITY);
 				}
 				BigDecimal decimal = BigDecimal.valueOf(result);
 				return left.getNetwork().createVertex(checkInteger(decimal));

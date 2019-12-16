@@ -225,10 +225,9 @@ public class Kik extends BasicSense {
 	 */
 	public void inputSentence(String text, String userName, String targetUsername, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.KIK, userName);
 		Vertex self = network.createVertex(Primitive.SELF);
-		input.addRelationship(Primitive.SPEAKER, user);		
-		
+		input.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.TARGET, self);
 
 		Vertex conversationId = network.createVertex(id);
@@ -278,7 +277,7 @@ public class Kik extends BasicSense {
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
 			return;
 		}
-		String text = printInput(output);	
+		String text = printInput(output);
 		
 		//Strip html tags from response
 		text = Utils.stripTags(text);

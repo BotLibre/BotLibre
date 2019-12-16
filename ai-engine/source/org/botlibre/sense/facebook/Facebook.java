@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -450,7 +450,7 @@ public class Facebook extends BasicSense {
 	 */
 	public void authorizeComplete(String pin) throws FacebookException {
 		AccessToken token = this.connection.getOAuthAccessToken(pin);
-	    setToken(token.getToken());
+		setToken(token.getToken());
 
 		User user = this.connection.getMe();
 		this.userName = user.getId();
@@ -472,20 +472,20 @@ public class Facebook extends BasicSense {
 		} catch (Exception exception) {
 			log(exception);
 		}
-	    
-	   /* Map<String, String> params = new HashMap<String, String>();
-	    params.put("client_id", this.oauthKey);
-	    params.put("client_secret", this.oauthSecret);
-	    params.put("grant_type", "fb_exchange_token");
-	    params.put("fb_exchange_token", token.getToken());
+		
+		/* Map<String, String> params = new HashMap<String, String>();
+		params.put("client_id", this.oauthKey);
+		params.put("client_secret", this.oauthSecret);
+		params.put("grant_type", "fb_exchange_token");
+		params.put("fb_exchange_token", token.getToken());
 
-	    RawAPIResponse apiResponse = this.connection.callGetAPI("/oauth/access_token", params);
+		RawAPIResponse apiResponse = this.connection.callGetAPI("/oauth/access_token", params);
 
-	    String response = apiResponse.asString();
-	    AccessToken newAccessToken = new AccessToken(response);
+		String response = apiResponse.asString();
+		AccessToken newAccessToken = new AccessToken(response);
 
-	    this.connection.setOAuthAccessToken(newAccessToken);
-	    setToken(newAccessToken.getToken());
+		this.connection.setOAuthAccessToken(newAccessToken);
+		setToken(newAccessToken.getToken());
 
 		this.tokenExpiry = new Date(System.currentTimeMillis() + (newAccessToken.getExpires() * 1000));
 		System.out.println(this.tokenExpiry);*/
@@ -1144,7 +1144,7 @@ public class Facebook extends BasicSense {
 		config.setOAuthAppSecret(secret);
 		config.setOAuthAccessToken(getToken());
 		facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
-        setConnection(facebook);
+		setConnection(facebook);
 	}
 	
 	public void connectAccount() throws FacebookException {
@@ -1182,8 +1182,8 @@ public class Facebook extends BasicSense {
 							config.setOAuthAppSecret(secret);
 							config.setOAuthAccessToken(getToken());
 							facebook = new FacebookFactory(config.build()).getInstance();
-					        setConnection(facebook);
-					        this.pageId = facebook.getPage().getId();
+							setConnection(facebook);
+							this.pageId = facebook.getPage().getId();
 							log("Connected to Facebook page", Level.INFO, facebook.getPage().getId(), facebook.getPage().getName());
 						}
 					}
@@ -1277,201 +1277,201 @@ public class Facebook extends BasicSense {
 					break;
 				}
 				log("Processing posts", Level.INFO, timeline.size());
-			    for (int index = timeline.size() - 1; index >= 0; index--) {
-				    if (count >= this.maxPost) {
+				for (int index = timeline.size() - 1; index >= 0; index--) {
+					if (count >= this.maxPost) {
 						log("Max posts", Level.FINE, count);
-				    	break;
-				    }
-			    	if (this.errors > this.maxErrors) {
+						break;
+					}
+					if (this.errors > this.maxErrors) {
 						log("Max errors", Level.WARNING, this.errors);
-			    		break;
-			    	}
-			    	Post post = timeline.get(index);
-			    	String userId = post.getFrom() == null ? "anonymous" : post.getFrom().getId();
-			    	String userName = post.getFrom() == null ? "anonymous" : post.getFrom().getName();
+						break;
+					}
+					Post post = timeline.get(index);
+					String userId = post.getFrom() == null ? "anonymous" : post.getFrom().getId();
+					String userName = post.getFrom() == null ? "anonymous" : post.getFrom().getName();
 					log("Processing post", Level.FINE, post.getId(), userName, post.getCaption());
-		    		long postTime = post.getCreatedTime().getTime();
-		    		String postId = post.getId();
-			    	if (postTime > max) {
-			    		max = postTime;
-			    	}
-			    	if (!userId.equals(this.userName)) {
-				    	if ((System.currentTimeMillis() - postTime) > DAY) {
+					long postTime = post.getCreatedTime().getTime();
+					String postId = post.getId();
+					if (postTime > max) {
+						max = postTime;
+					}
+					if (!userId.equals(this.userName)) {
+						if ((System.currentTimeMillis() - postTime) > DAY) {
 							log("Day old post", Level.INFO, postId, postTime);
-				    		more = false;
-				    		continue;
-				    	}
-				    	if (postTime > last) {
-					    	boolean match = false;
-					    	String message = post.getMessage();
-					    	if (message == null || message.isEmpty()) {
-					    		message = post.getCaption();
-					    	}
-					    	if (getLikeAllPosts()) {
-							    if (like >= this.maxLike) {
+							more = false;
+							continue;
+						}
+						if (postTime > last) {
+							boolean match = false;
+							String message = post.getMessage();
+							if (message == null || message.isEmpty()) {
+								message = post.getCaption();
+							}
+							if (getLikeAllPosts()) {
+								if (like >= this.maxLike) {
 									log("Max like", Level.FINE, like);
-							    } else {
-						    		like++;
-					    			like(post);
-								    Utils.sleep(500);
-							    }
-					    	}
-					    	if (message != null && !message.isEmpty()) {
-						    	List<String> postWords = new TextStream(message.toLowerCase()).allWords();
-					    		// Like
-						    	if (!getLikeAllPosts()) {
-						    		for (String keywords : getLikeKeywords()) {
+								} else {
+									like++;
+									like(post);
+									Utils.sleep(500);
+								}
+							}
+							if (message != null && !message.isEmpty()) {
+								List<String> postWords = new TextStream(message.toLowerCase()).allWords();
+								// Like
+								if (!getLikeAllPosts()) {
+									for (String keywords : getLikeKeywords()) {
 										List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
-								    	if (!keyWords.isEmpty()) {
-								    		if (postWords.containsAll(keyWords)) {
-											    if (like >= this.maxLike) {
+										if (!keyWords.isEmpty()) {
+											if (postWords.containsAll(keyWords)) {
+												if (like >= this.maxLike) {
 													log("Max like", Level.FINE, like);
-											    } else {
-										    		like++;
-									    			like(post);
-												    Utils.sleep(500);
-											    }
-											    break;
-									    	}
-								    	}
-						    		}
-						    	}
-					    		// Reply.
-						    	for (String text : getPostKeywords()) {
-						    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-						    		if (!keywords.isEmpty() && postWords.containsAll(keywords)) {
-						    			match = true;
-						    			break;
-						    		}
-						    	}
-						    	if (match || getProcessAllPosts()) {
-						    		count++;
-						    		log("Processing post", Level.FINE, post.getCaption(), post.getDescription(), post.getMessage(), userId, userName);
-						    		this.wallPosts.add(post.getId());
-							    	input(post);
-								    Utils.sleep(500);
-						    	} else {
+												} else {
+													like++;
+													like(post);
+													Utils.sleep(500);
+												}
+												break;
+											}
+										}
+									}
+								}
+								// Reply.
+								for (String text : getPostKeywords()) {
+									List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+									if (!keywords.isEmpty() && postWords.containsAll(keywords)) {
+										match = true;
+										break;
+									}
+								}
+								if (match || getProcessAllPosts()) {
+									count++;
+									log("Processing post", Level.FINE, post.getCaption(), post.getDescription(), post.getMessage(), userId, userName);
+									this.wallPosts.add(post.getId());
+									input(post);
+									Utils.sleep(500);
+								} else {
 									log("Skipping post, missing keywords.", Level.FINE, post.getCaption(), post.getDescription(), post.getMessage());
-						    	}
-					    	} else {
+								}
+							} else {
 								log("Empty message", Level.FINE, post);
-					    	}
-				    	} else {
-							log("Old post", Level.INFO, postId, postTime);				    		
-				    	}
-			    	} else {
-						log("Ignoring own post", Level.INFO, postId);				    		
-			    	}
-			    }
+							}
+						} else {
+							log("Old post", Level.INFO, postId, postTime);							
+						}
+					} else {
+						log("Ignoring own post", Level.INFO, postId);							
+					}
+				}
 			}
 			// Process comments.
 			if (count <= this.maxPost) {
 				timeline = getConnection().getFeed(new Reading().fields("id", "from", "created_time", "comments"));
 				if ((timeline != null) && !timeline.isEmpty()) {
 					log("Processing post comments", Level.INFO, timeline.size());
-				    for (int index = timeline.size() - 1; index >= 0; index--) {
-					    if (count >= this.maxPost) {
+					for (int index = timeline.size() - 1; index >= 0; index--) {
+						if (count >= this.maxPost) {
 							log("Max posts", Level.FINE, count);
-					    	break;
-					    }
-				    	if (this.errors > this.maxErrors) {
+							break;
+						}
+						if (this.errors > this.maxErrors) {
 							log("Max errors", Level.WARNING, this.errors);
-				    		break;
-				    	}
-				    	Post post = timeline.get(index);
+							break;
+						}
+						Post post = timeline.get(index);
 						log("Processing post comments", Level.FINE, post.getId(), post.getCaption(), post.getDescription(), post.getMessage());
-				    	PagableList<Comment> comments = post.getComments();
-				    	if (comments != null && !comments.isEmpty()) {
-					    	for (Comment comment : comments) {
-					    		long[] values = processComment(comment, null, memory, count, max, last);
-					    		if (values == null) {
-					    			break;
-					    		}
-					    		count = (int)values[0];
-					    		max = values[1];
-					    		if (count == -1) {
-					    			break;
-					    		}
+						PagableList<Comment> comments = post.getComments();
+						if (comments != null && !comments.isEmpty()) {
+							for (Comment comment : comments) {
+								long[] values = processComment(comment, null, memory, count, max, last);
+								if (values == null) {
+									break;
+								}
+								count = (int)values[0];
+								max = values[1];
+								if (count == -1) {
+									break;
+								}
 								ResponseList<Comment> replies = getConnection().getCommentReplies(comment.getId());
 								if ((replies != null) && !replies.isEmpty()) {
-							    	for (int index2 = replies.size() - 1; index2 >= 0; index2--) {
-							    		Comment reply = replies.get(index2);
-							    		values = processComment(reply, comment, memory, count, max, last);
-							    		if (values == null) {
-							    			break;
-							    		}
-							    		count = (int)values[0];
-							    		max = values[1];
-							    	}
+									for (int index2 = replies.size() - 1; index2 >= 0; index2--) {
+										Comment reply = replies.get(index2);
+										values = processComment(reply, comment, memory, count, max, last);
+										if (values == null) {
+											break;
+										}
+										count = (int)values[0];
+										max = values[1];
+									}
 								}
-					    	}
-				    	} else {
+							}
+						} else {
 							log("No comments", Level.FINE, post.getId());
 						}
-				    }
+					}
 				}
 			} else {
 				log("Max posts", Level.FINE, count);
 			}
-		    if (max != 0) {
+			if (max != 0) {
 				facebook.setRelationship(Primitive.LASTTIMELINE, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
 	}
 
 	public long[] processComment(Comment comment, Comment parent, Network memory, int count, long max, long last) {
-    	String userId = comment.getFrom() == null ? "anonymous" : comment.getFrom().getId();
-    	String userName = comment.getFrom() == null ? "anonymous" : comment.getFrom().getName();
+		String userId = comment.getFrom() == null ? "anonymous" : comment.getFrom().getId();
+		String userName = comment.getFrom() == null ? "anonymous" : comment.getFrom().getName();
 		log("Processing post comment", Level.FINE, comment.getId(), userName, comment.getMessage());
-	    if (count >= this.maxPost) {
+		if (count >= this.maxPost) {
 			log("Max posts", Level.FINE, count);
-    		return null;
-	    }
-    	if (this.errors > this.maxErrors) {
+			return null;
+		}
+		if (this.errors > this.maxErrors) {
 			log("Max errors", Level.WARNING, this.errors);
-    		return null;
-    	}
+			return null;
+		}
 		long postTime = comment.getCreatedTime().getTime();
 		String postId = comment.getId();
-    	if (postTime > max) {
-    		max = postTime;
-    	}
-    	if (!userId.equals(this.userName)) {
-	    	if ((System.currentTimeMillis() - postTime) > DAY) {
+		if (postTime > max) {
+			max = postTime;
+		}
+		if (!userId.equals(this.userName)) {
+			if ((System.currentTimeMillis() - postTime) > DAY) {
 				log("Day old post comment", Level.FINE, postId, postTime);
-	    		return null;
-	    	}
-	    	if (postTime > last) {
-		    	boolean match = false;
-	    		List<String> postWords = new TextStream(comment.getMessage().toLowerCase()).allWords();
-		    	for (String text : getPostKeywords()) {
-		    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-		    		if (!keywords.isEmpty() && postWords.containsAll(keywords)) {
-		    			match = true;
-		    			break;
-		    		}
-		    	}
-		    	if (match || getProcessAllPosts()) {
-		    		count++;
-		    		log("Processing post comment", Level.FINE, comment.getMessage(), userId, userName);
-			    	input(comment, parent, memory);
-				    Utils.sleep(500);
-		    	} else {
+				return null;
+			}
+			if (postTime > last) {
+				boolean match = false;
+				List<String> postWords = new TextStream(comment.getMessage().toLowerCase()).allWords();
+				for (String text : getPostKeywords()) {
+					List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+					if (!keywords.isEmpty() && postWords.containsAll(keywords)) {
+						match = true;
+						break;
+					}
+				}
+				if (match || getProcessAllPosts()) {
+					count++;
+					log("Processing post comment", Level.FINE, comment.getMessage(), userId, userName);
+					input(comment, parent, memory);
+					Utils.sleep(500);
+				} else {
 					log("Skipping post comment, missing keywords.", Level.FINE, comment.getMessage());
-		    	}
-	    	} else {
-				log("Old post comment", Level.INFO, postId, postTime);				    		
-	    	}
-    	} else {
-			log("Ignoring own comment", Level.INFO, postId);				    		
-    	}
-    	long[] values = new long[2];
-    	values[0] = count;
-    	values[1] = max;
-    	return values;
+				}
+			} else {
+				log("Old post comment", Level.INFO, postId, postTime);							
+			}
+		} else {
+			log("Ignoring own comment", Level.INFO, postId);							
+		}
+		long[] values = new long[2];
+		values[0] = count;
+		values[1] = max;
+		return values;
 	}
 
 	/**
@@ -1517,94 +1517,94 @@ public class Facebook extends BasicSense {
 					break;
 				}
 				log("Processing posts", Level.INFO, timeline.size());
-			    for (int index = timeline.size() - 1; index >= 0; index--) {
-				    if (count >= this.maxPost) {
+				for (int index = timeline.size() - 1; index >= 0; index--) {
+					if (count >= this.maxPost) {
 						log("Max posts", Level.FINE, count);
-				    	break;
-				    }
-			    	if (this.errors > this.maxErrors) {
+						break;
+					}
+					if (this.errors > this.maxErrors) {
 						log("Max errors", Level.WARNING, this.errors);
-			    		break;
-			    	}
-			    	Post post = timeline.get(index);
-			    	String userId = post.getFrom() == null ? "anonymous" : post.getFrom().getId();
-			    	String userName = post.getFrom() == null ? "anonymous" : post.getFrom().getName();
+						break;
+					}
+					Post post = timeline.get(index);
+					String userId = post.getFrom() == null ? "anonymous" : post.getFrom().getId();
+					String userName = post.getFrom() == null ? "anonymous" : post.getFrom().getName();
 					log("Processing post", Level.FINE, post.getId(), userName, post.getCaption());
-		    		long postTime = post.getCreatedTime().getTime();
-		    		String postId = post.getId();
-			    	if (postTime > max) {
-			    		max = postTime;
-			    	}
-			    	if (!userId.equals(this.userName)) {
-				    	if ((System.currentTimeMillis() - postTime) > DAY) {
+					long postTime = post.getCreatedTime().getTime();
+					String postId = post.getId();
+					if (postTime > max) {
+						max = postTime;
+					}
+					if (!userId.equals(this.userName)) {
+						if ((System.currentTimeMillis() - postTime) > DAY) {
 							log("Day old post", Level.INFO, postId, postTime);
-				    		more = false;
-				    		continue;
-				    	}
-				    	if (postTime > last) {
-					    	boolean match = false;
-					    	String message = post.getMessage();
-					    	if (message == null || message.isEmpty()) {
-					    		message = post.getCaption();
-					    	}
-					    	if (getLikeAllPosts()) {
-							    if (like >= this.maxLike) {
+							more = false;
+							continue;
+						}
+						if (postTime > last) {
+							boolean match = false;
+							String message = post.getMessage();
+							if (message == null || message.isEmpty()) {
+								message = post.getCaption();
+							}
+							if (getLikeAllPosts()) {
+								if (like >= this.maxLike) {
 									log("Max like", Level.FINE, like);
-							    } else {
-						    		like++;
-					    			like(post);
-								    Utils.sleep(500);
-							    }
-					    	}
-					    	if (message != null && !message.isEmpty()) {
-						    	List<String> postWords = new TextStream(message.toLowerCase()).allWords();
-					    		// Like
-						    	if (getLikeAllPosts()) {
-						    		for (String keywords : getLikeKeywords()) {
+								} else {
+									like++;
+									like(post);
+									Utils.sleep(500);
+								}
+							}
+							if (message != null && !message.isEmpty()) {
+								List<String> postWords = new TextStream(message.toLowerCase()).allWords();
+								// Like
+								if (getLikeAllPosts()) {
+									for (String keywords : getLikeKeywords()) {
 										List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
-								    	if (!keyWords.isEmpty()) {
-								    		if (postWords.containsAll(keyWords)) {
-											    if (like >= this.maxLike) {
+										if (!keyWords.isEmpty()) {
+											if (postWords.containsAll(keyWords)) {
+												if (like >= this.maxLike) {
 													log("Max like", Level.FINE, like);
-											    } else {
-										    		like++;
-									    			like(post);
-												    Utils.sleep(500);
-											    }
-											    break;
-									    	}
-								    	}
-						    		}
-						    	}
-					    		// Reply.
-						    	for (String text : getNewsFeedKeywords()) {
-						    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-						    		if (!keywords.isEmpty() && postWords.containsAll(keywords)) {
-						    			match = true;
-						    			break;
-						    		}
-						    	}
-						    	if (match || getProcessAllNewsFeed()) {
-						    		count++;
-						    		log("Processing post", Level.FINE, post.getCaption(), post.getDescription(), post.getMessage(), userId, userName);
-							    	input(post);
-								    Utils.sleep(500);
-						    	} else {
+												} else {
+													like++;
+													like(post);
+													Utils.sleep(500);
+												}
+												break;
+											}
+										}
+									}
+								}
+								// Reply.
+								for (String text : getNewsFeedKeywords()) {
+									List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+									if (!keywords.isEmpty() && postWords.containsAll(keywords)) {
+										match = true;
+										break;
+									}
+								}
+								if (match || getProcessAllNewsFeed()) {
+									count++;
+									log("Processing post", Level.FINE, post.getCaption(), post.getDescription(), post.getMessage(), userId, userName);
+									input(post);
+									Utils.sleep(500);
+								} else {
 									log("Skipping post, missing keywords.", Level.FINE, post.getCaption(), post.getDescription(), post.getMessage());
-						    	}
-					    	} else {
+								}
+							} else {
 								log("Empty message", Level.FINE, post);
-					    	}
-				    	} else {
-							log("Old post", Level.INFO, postId, postTime);				    		
-				    	}
-			    	}
-			    }
+							}
+						} else {
+							log("Old post", Level.INFO, postId, postTime);
+						}
+					}
+				}
 			}
-		    if (max != 0) {
+			if (max != 0) {
 				facebook.setRelationship(Primitive.LASTNEWSFEED, memory.createVertex(max));
-		    	memory.save();
-		    }
+				memory.save();
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -1635,60 +1635,60 @@ public class Facebook extends BasicSense {
 				prefix = prefix + " ";
 				String url = stream.nextWord();
 				String postfix = " " + stream.upToEnd().trim();
-				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(new URL(url), last);
-			    if (feed != null) {
+				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(Utils.safeURL(url), last);
+				if (feed != null) {
 					long max = 0;
 					int count = 0;
 					this.errors = 0;
-				    for (int index = feed.size() - 1; index >= 0; index--) {
-				    	Map<String, Object> entry = feed.get(index);
-				    	long time = (Long)entry.get("published");
-				    	if ((System.currentTimeMillis() - time) > DAY) {
-				    		continue;
-				    	}
-				    	if (time > last) {
-					    	if (count > this.maxFeed) {
-					    		break;
-					    	}
-					    	if (this.errors > this.maxErrors) {
-					    		break;
-					    	}
+					for (int index = feed.size() - 1; index >= 0; index--) {
+						Map<String, Object> entry = feed.get(index);
+						long time = (Long)entry.get("published");
+						if ((System.currentTimeMillis() - time) > DAY) {
+							continue;
+						}
+						if (time > last) {
+							if (count > this.maxFeed) {
+								break;
+							}
+							if (this.errors > this.maxErrors) {
+								break;
+							}
 							String text = (String)entry.get("title");
 							if (!getRssKeywords().isEmpty()) {
 								boolean match = false;
 								List<String> words = new TextStream(text.toLowerCase()).allWords();
-					    		for (String keywords : getRssKeywords()) {
+								for (String keywords : getRssKeywords()) {
 									List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
-							    	if (!keyWords.isEmpty()) {
-							    		if (words.containsAll(keyWords)) {
-							    			match = true;
-										    break;
-								    	}
-							    	}
-					    		}
-					    		if (!match) {
+									if (!keyWords.isEmpty()) {
+										if (words.containsAll(keyWords)) {
+											match = true;
+											break;
+										}
+									}
+								}
+								if (!match) {
 									log("Skipping RSS, missing keywords", Level.FINE, text);
-						    		continue;
-					    		}
-				    		}
+									continue;
+								}
+							}
 							log("Posting RSS", Level.FINE, entry.get("title"));
-				    		text = prefix + text + postfix;
+							text = prefix + text + postfix;
 							if (text.length() > 120) {
 								text = text.substring(0, 120);
 							}
 							post(text + " " + entry.get("link"), null);
-					    	Utils.sleep(500);
+							Utils.sleep(500);
 							count++;
-					    	if (time > max) {
-					    		max = time;
-					    	}
-				    	}
-				    }
-				    if (max != 0) {
+							if (time > max) {
+								max = time;
+							}
+						}
+					}
+					if (max != 0) {
 						facebook.setRelationship(Primitive.LASTRSS, memory.createVertex(max));
-				    	memory.save();
-				    }
-			    }
+						memory.save();
+					}
+				}
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -1741,9 +1741,9 @@ public class Facebook extends BasicSense {
 				if (text != null) {
 					log("Autoposting", Level.INFO, post);
 					post(text, null);
-			    	Utils.sleep(100);
+					Utils.sleep(100);
 					facebook.setRelationship(Primitive.LASTPOST, memory.createTimestamp());
-			    	memory.save();
+					memory.save();
 				}
 			}
 		} catch (Exception exception) {
@@ -1765,17 +1765,17 @@ public class Facebook extends BasicSense {
 				return friends;
 			}
 			ResponseList<Friend> list = getConnection().getFriends();
-		    for (Friend user : list) {
-		    	friends.add(user.getName());
-		    	if (friends.size() >= 100) {
-				    // Only return first 100.
-				    break;
-		    	}
+			for (Friend user : list) {
+				friends.add(user.getName());
+				if (friends.size() >= 100) {
+					// Only return first 100.
+					break;
+				}
 			}
 		} catch (Exception exception) {
 			log(exception);
 		}
-	    return friends;
+		return friends;
 	}
 
 	/**
@@ -1784,19 +1784,19 @@ public class Facebook extends BasicSense {
 	public List<String> getTimeline() {
 		List<String> timeline = new ArrayList<String>();
 		try {
-		    ResponseList<Post> statuses = getConnection().getFeed();
-		    if (statuses != null) {
-			    for (Post status : statuses) {
-			    	timeline.add(String.valueOf(status.getCreatedTime()) + " - <b>"
-			    			+ (status.getFrom() == null ? "" : String.valueOf(status.getFrom().getName())) + "</b>:  "
-			    			+ String.valueOf(status.getMessage()));
-			    }
-		    }
+			ResponseList<Post> statuses = getConnection().getFeed();
+			if (statuses != null) {
+				for (Post status : statuses) {
+					timeline.add(String.valueOf(status.getCreatedTime()) + " - <b>"
+							+ (status.getFrom() == null ? "" : String.valueOf(status.getFrom().getName())) + "</b>:  "
+							+ String.valueOf(status.getMessage()));
+				}
+			}
 		} catch (Exception exception) {
 			log(exception);
 			throw new BotException(exception);
 		}
-	    return timeline;
+		return timeline;
 	}
 
 	/**
@@ -1826,35 +1826,35 @@ public class Facebook extends BasicSense {
 			writer.write(user.getLang().toLowerCase());
 			writer.write(" ");
 			writer.write(user.getName().toLowerCase());
-	    	boolean match = false;
-	    	for (String text : getAutoFriendKeywords()) {
-	    		List<String> keywords = new TextStream(text.toLowerCase()).allWords();
-	    		if (new TextStream(writer.toString()).allWords().containsAll(keywords)) {
-	    			match = true;
-	    			break;
-	    		}
-	    	}
-	    	if (!match) {
+			boolean match = false;
+			for (String text : getAutoFriendKeywords()) {
+				List<String> keywords = new TextStream(text.toLowerCase()).allWords();
+				if (new TextStream(writer.toString()).allWords().containsAll(keywords)) {
+					match = true;
+					break;
+				}
+			}
+			if (!match) {
 				log("Autofollow skipping friend, does not match keywords", Level.FINE, user.getName());
-	    		return false;
-	    	}
+				return false;
+			}
 		}
 		Network memory = getBot().memory().newMemory();
-    	Vertex speaker = memory.createSpeaker(user.getName());
-    	// Only try to follow a user once.
-    	if (!speaker.hasRelationship(Primitive.FOLLOWED)) {
+		Vertex speaker = memory.createSpeaker(user.getName());
+		// Only try to follow a user once.
+		if (!speaker.hasRelationship(Primitive.FOLLOWED)) {
 			log("Adding autofollow friend.", Level.INFO, user.getName());
-	    	speaker.addRelationship(Primitive.FOLLOWED, memory.createTimestamp());
-	    	memory.save();
+			speaker.addRelationship(Primitive.FOLLOWED, memory.createTimestamp());
+			memory.save();
 			getConnection().createFriendship(friend);
 			Utils.sleep(1000);
 			if (!getWelcomeMessage().isEmpty()) {
 				sendMessage(getWelcomeMessage(), user.getName());
 			}
 			return true;
-    	}
+		}
 		log("Autofollow skipping friend, already followed once", Level.FINE, user.getName());
-    	return false;
+		return false;
 	}*/
 	
 	public void log(FacebookException exception) {
@@ -2410,54 +2410,56 @@ public class Facebook extends BasicSense {
 		try {
 			if (input instanceof Post) {
 				Post post = (Post)input;
-    			log("Processing post", Bot.FINE, post.getCaption(), post.getId());
-		    	if ((System.currentTimeMillis() - post.getCreatedTime().getTime()) > DAY) {
-	    			log("Day old post", Bot.FINE, post.getId(), post.getCreatedTime().getTime());
-		    		return;
-		    	}
-		    	if (this.processedPosts.contains(post.getId())) {
-	    			log("Already processed post", Bot.FINE, post.getCaption(), post.getMessage(), post.getId());
-		    		return;
-		    	}
-	    		this.processedPosts.add(post.getId());
-		    	String name = post.getFrom() == null ? "anonymous" : post.getFrom().getName();
-		    	String message = post.getMessage();
-		    	if (message == null || message.isEmpty()) {
-		    		message = post.getCaption();
-		    	}
-		    	if (message == null || message.isEmpty()) {
-	    			log("Empty post", Bot.FINE, post.getCaption(), post.getMessage(), post.getId());
-		    		return;
-		    	}
-		    	String text = message.trim();
+				log("Processing post", Bot.FINE, post.getCaption(), post.getId());
+				if ((System.currentTimeMillis() - post.getCreatedTime().getTime()) > DAY) {
+					log("Day old post", Bot.FINE, post.getId(), post.getCreatedTime().getTime());
+					return;
+				}
+				if (this.processedPosts.contains(post.getId())) {
+					log("Already processed post", Bot.FINE, post.getCaption(), post.getMessage(), post.getId());
+					return;
+				}
+				this.processedPosts.add(post.getId());
+				String userId = post.getFrom() == null ? "anonymous" : post.getFrom().getId();
+				String userName = post.getFrom() == null ? "anonymous" : post.getFrom().getName();
+				String message = post.getMessage();
+				if (message == null || message.isEmpty()) {
+					message = post.getCaption();
+				}
+				if (message == null || message.isEmpty()) {
+					log("Empty post", Bot.FINE, post.getCaption(), post.getMessage(), post.getId());
+					return;
+				}
+				String text = message.trim();
 				log("Input post", Level.FINE, post.getMessage(), name);
 				this.postsProcessed++;
 				String target = null;
 				if (this.wallPosts.contains(post.getId())) {
 					target = this.userName;
 				}
-				inputSentence(text, name, target, post.getId(), post.getCreatedTime().getTime(), network);
+				inputSentence(text, userId, userName, target, post.getId(), post.getCreatedTime().getTime(), network);
 			} else if (input instanceof Comment) {
 				Comment comment = (Comment)input;
-    			log("Processing post comment", Bot.FINE, comment.getMessage(), comment.getId());
-		    	if ((System.currentTimeMillis() - comment.getCreatedTime().getTime()) > DAY) {
-	    			log("Day old post commentt", Bot.FINE, comment.getId(), comment.getCreatedTime().getTime());
-		    		return;
-		    	}
-		    	if (this.processedPosts.contains(comment)) {
-	    			log("Already processed post comment", Bot.FINE, comment.getMessage(), comment.getId());
-		    		return;
-		    	}
-	    		this.processedPosts.add(comment.getId());
-		    	String name = comment.getFrom() == null ? "anonymous" : comment.getFrom().getName();
-		    	String text = comment.getMessage().trim();
+				log("Processing post comment", Bot.FINE, comment.getMessage(), comment.getId());
+				if ((System.currentTimeMillis() - comment.getCreatedTime().getTime()) > DAY) {
+					log("Day old post commentt", Bot.FINE, comment.getId(), comment.getCreatedTime().getTime());
+					return;
+				}
+				if (this.processedPosts.contains(comment)) {
+					log("Already processed post comment", Bot.FINE, comment.getMessage(), comment.getId());
+					return;
+				}
+				this.processedPosts.add(comment.getId());
+				String userId = comment.getFrom() == null ? "anonymous" : comment.getFrom().getId();
+				String userName = comment.getFrom() == null ? "anonymous" : comment.getFrom().getName();
+				String text = comment.getMessage().trim();
 				log("Input post comment", Level.FINE, comment.getMessage(), name);
 				this.postsProcessed++;
 				String id = comment.getId();
 				if (comment.getParent() != null) {
 					id = comment.getParent().getId();
 				}
-				inputSentence(text, name, this.userName, id, comment.getCreatedTime().getTime(), network);
+				inputSentence(text, userId, userName, this.userName, id, comment.getCreatedTime().getTime(), network);
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -2473,24 +2475,25 @@ public class Facebook extends BasicSense {
 		}
 		try {
 			log("Processing post comment", Bot.FINE, comment.getMessage(), comment.getId());
-	    	if ((System.currentTimeMillis() - comment.getCreatedTime().getTime()) > DAY) {
-    			log("Day old post commentt", Bot.FINE, comment.getId(), comment.getCreatedTime().getTime());
-	    		return;
-	    	}
-	    	if (this.processedPosts.contains(comment)) {
-    			log("Already processed post comment", Bot.FINE, comment.getMessage(), comment.getId());
-	    		return;
-	    	}
-    		this.processedPosts.add(comment.getId());
-	    	String name = comment.getFrom() == null ? "anonymous" : comment.getFrom().getName();
-	    	String text = comment.getMessage().trim();
+			if ((System.currentTimeMillis() - comment.getCreatedTime().getTime()) > DAY) {
+				log("Day old post commentt", Bot.FINE, comment.getId(), comment.getCreatedTime().getTime());
+				return;
+			}
+			if (this.processedPosts.contains(comment)) {
+				log("Already processed post comment", Bot.FINE, comment.getMessage(), comment.getId());
+				return;
+			}
+			this.processedPosts.add(comment.getId());
+			String userId = comment.getFrom() == null ? "anonymous" : comment.getFrom().getId();
+			String userName = comment.getFrom() == null ? "anonymous" : comment.getFrom().getName();
+			String text = comment.getMessage().trim();
 			log("Input post comment", Level.FINE, comment.getMessage(), name);
 			this.postsProcessed++;
 			String id = comment.getId();
 			if (parent != null) {
 				id = parent.getId();
 			}
-			inputSentence(text, name, this.userName, id, comment.getCreatedTime().getTime(), network);
+			inputSentence(text, userId, userName, this.userName, id, comment.getCreatedTime().getTime(), network);
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -2532,12 +2535,12 @@ public class Facebook extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, String targetUserName, String messageId, long time, Network network) {
+	public void inputSentence(String text, String userId, String userName, String targetUserName, String messageId, long time, Network network) {
 		Vertex input = createInput(text.trim(), network);
 		Vertex sentence = input.getRelationship(Primitive.INPUT);
 		Vertex id = network.createVertex(messageId);
 		if (sentence.hasRelationship(Primitive.POST, id)) {
-			log("Post already processed", Bot.FINE, id, time);			
+			log("Post already processed", Bot.FINE, id, time);
 			return;
 		}
 		sentence.addRelationship(Primitive.POST, id);
@@ -2547,7 +2550,7 @@ public class Facebook extends BasicSense {
 		Vertex conversation = network.createInstance(Primitive.CONVERSATION);
 		conversation.addRelationship(Primitive.TYPE, Primitive.POST);
 		Language.addToConversation(input, conversation);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userId), Primitive.FACEBOOK, userName);
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.SPEAKER, user);
 		if (targetUserName != null) {
@@ -2555,7 +2558,7 @@ public class Facebook extends BasicSense {
 			if (targetUserName.equals(getUserName())) {
 				targetUser = network.createVertex(Primitive.SELF);
 			} else {
-				targetUser = network.createSpeaker(targetUserName);
+				targetUser = network.createUniqueSpeaker(new Primitive(targetUserName), Primitive.FACEBOOK);
 			}
 			input.addRelationship(Primitive.TARGET, targetUser);
 			conversation.addRelationship(Primitive.SPEAKER, targetUser);
@@ -2740,7 +2743,7 @@ public class Facebook extends BasicSense {
 	/**
 	 * Check the command JSON for a Facebook attachment object to append to a Facebook Messeneger message.
 	 */
-	public String createJSONAttachment(String command, String id, String text) {		
+	public String createJSONAttachment(String command, String id, String text) {
 		JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
 		if (!root.has("type") || !root.getString("type").equals("facebook")) {
 			return "";
@@ -2755,7 +2758,7 @@ public class Facebook extends BasicSense {
 	/**
 	 * Check the command JSON for a Facebook attachment object to append to a Facebook Messeneger message.
 	 */
-	public String createJSONQuickReply(String command, String id, String text) {		
+	public String createJSONQuickReply(String command, String id, String text) {
 		JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
 		if (!root.has("type") || !root.getString("type").equals("facebook")) {
 			return "";

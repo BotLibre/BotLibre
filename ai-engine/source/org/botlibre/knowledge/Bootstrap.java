@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.BotException;
@@ -70,6 +71,21 @@ public class Bootstrap {
 		bootstrapMemory(Bot.memory(), addStates, true);
 	}
 	
+	public boolean evaluateScript(URL url, Network network) {
+		if (url == null) {
+			return false;
+		}
+		try {
+			InputStream stream = Utils.openStream(url);
+			String text = Utils.loadTextFile(stream, "", 1000000);
+			SelfCompiler.getCompiler().evaluateExpression(text, network.createVertex(Primitive.SELF), network.createVertex(Primitive.SELF), false, false, network);
+		} catch (Exception exception) {
+			network.getBot().log(this, exception);
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Initialize the memory with the basic bootstrap networks.
 	 * These defines basic concepts.
@@ -77,33 +93,50 @@ public class Bootstrap {
 	public void bootstrapMemory(Memory memory, boolean addStates, boolean pin) {
 		synchronized (memory) {
 			long start = System.currentTimeMillis();
-			bootstrapNetwork(memory.getShortTermMemory());
-			languageNetwork(memory.getShortTermMemory());
-			englishNetwork(memory.getShortTermMemory());
-			mathNetwork(memory.getShortTermMemory());
-			for (Vertex vertex : memory.getShortTermMemory().findAll()) {
-				if (vertex.getCreationDate().getTime() > start) {
+			Network network = memory.getShortTermMemory();
+			String lang = network.getBot().mind().getThought(Language.class).getLanguage();
+			memory.getBot().log(memory, "Bootstraping memory", Level.INFO, lang);
+			
+			bootstrapNetwork(network);
+			languageNetwork(network);
+			mathNetwork(network);
+			
+			if (lang == null) {
+				lang = "en";
+			} else if (lang.length() > 2) {
+				lang = lang.substring(0, 2);
+			}
+			if (lang.equals("en")) {
+				englishNetwork(network);
+			}
+			
+			for (Vertex vertex : network.findAll()) {
+				if (vertex.getCreationDate().getTime() >= start) {
 					// Ensure they remain in memory.
 					vertex.setPinned(true);
 				}
 			}
 			if (addStates) {
-				loadScripts(memory.getShortTermMemory());
+				loadScripts(network, lang);
 			}
-			//loadAvatarImages(memory.getShortTermMemory());
+			//loadAvatarImages(network);
 			for (Sense sense : memory.getBot().awareness().getSenses().values()) {
-				memory.getShortTermMemory().createVertex(sense.getPrimitive());
+				network.createVertex(sense.getPrimitive());
 			}
 			for (Tool tool : memory.getBot().awareness().getTools().values()) {
-				memory.getShortTermMemory().createVertex(tool.getPrimitive());
+				network.createVertex(tool.getPrimitive());
 			}
 			if (pin) {
-				for (Vertex vertex : memory.getShortTermMemory().findAll()) {
-					if (vertex.getCreationDate().getTime() > start) {
+				for (Vertex vertex : network.findAll()) {
+					if (vertex.getCreationDate().getTime() >= start) {
 						// Ensure they remain in memory.
 						vertex.setPinned(true);
 					}
 				}
+			}
+
+			if (!lang.equals("en")) {
+				evaluateScript(getClass().getResource("Bootstrap-" + lang + ".self"), network);
 			}
 			
 			memory.save();
@@ -122,24 +155,25 @@ public class Bootstrap {
 	public void renameMemory(Memory memory, String name, boolean clearPrivateData) {
 		synchronized (memory) {
 			// Self
-			Vertex self = memory.getShortTermMemory().createVertex(Primitive.SELF);
+			Network network = memory.getShortTermMemory();
+			Vertex self = network.createVertex(Primitive.SELF);
 			self.internalRemoveRelationships(Primitive.WORD);
 			self.internalRemoveRelationships(Primitive.NAME);
-			Vertex word = createWord(Utils.capitalize(name), self, memory.getShortTermMemory(), Primitive.NAME);
+			Vertex word = createWord(Utils.capitalize(name), self, network, Primitive.NAME);
 			self.addRelationship(Primitive.NAME, word);
 			
-			Vertex birth = memory.getShortTermMemory().createTimestamp();
+			Vertex birth = network.createTimestamp();
 			birth.setPinned(true);
 			self.setRelationship(Primitive.BIRTH, birth);
 			
 			if (clearPrivateData) {
-				Vertex twitter = memory.getShortTermMemory().createVertex(Twitter.class);
+				Vertex twitter = network.createVertex(Twitter.class);
 				twitter.unpinChildren();
 				twitter.internalRemoveAllRelationships();
-				Vertex email = memory.getShortTermMemory().createVertex(Email.class);
+				Vertex email = network.createVertex(Email.class);
 				email.unpinChildren();
 				email.internalRemoveAllRelationships();
-				Vertex facebook = memory.getShortTermMemory().createVertex(Facebook.class);
+				Vertex facebook = network.createVertex(Facebook.class);
 				facebook.unpinChildren();
 				facebook.internalRemoveAllRelationships();
 				
@@ -167,6 +201,8 @@ public class Bootstrap {
 		synchronized (memory) {
 			Network network = memory.newMemory();
 			Vertex language = network.createVertex(new Primitive(Language.class.getName()));
+			String lang = network.getBot().mind().getThought(Language.class).getLanguage();
+			
 			Collection<Relationship> states = language.getRelationships(Primitive.STATE);
 			if (states != null) {
 				states = new ArrayList<Relationship>(language.getRelationships(Primitive.STATE));
@@ -179,10 +215,21 @@ public class Bootstrap {
 					network.save();
 				}
 			}
+			//languageNetwork(network);
 			mathNetwork(network);
-			englishNetwork(network);
 			
-			loadScripts(network);
+			if (lang == null) {
+				lang = "en";
+			} else if (lang.length() > 2) {
+				lang = lang.substring(0, 2);
+			}
+			if (lang.equals("en")) {
+				englishNetwork(network);
+			} else {
+				evaluateScript(getClass().getResource("Bootstrap-" + lang + ".self"), network);
+			}
+			
+			loadScripts(network, lang);
 			
 			network.save();
 		}
@@ -228,6 +275,7 @@ public class Bootstrap {
 		Vertex unknown = network.createVertex(Primitive.UNKNOWN);
 		Vertex self = network.createVertex(Primitive.SELF);
 		Vertex url = network.createVertex(Primitive.URL);
+		Vertex array = network.createVertex(Primitive.ARRAY);
 		
 		// Relations.
 		Vertex specialization = network.createVertex(Primitive.SPECIALIZATION);
@@ -290,55 +338,100 @@ public class Bootstrap {
 	/**
 	 * Defines some basic states.
 	 */
-	public void loadScripts(Network network) {
+	public void loadScripts(Network network, String lang) {
 		Vertex language = network.createVertex(new Primitive(Language.class.getName()));
 		
 		SelfCompiler compiler = SelfCompiler.getCompiler();
 		
 		boolean debug = false;
-		Vertex stateMachine = compiler.parseStateMachine(getClass().getResource("Loop.self"), "", debug, network);
+		if (!lang.equals("fr")) {
+			lang = "";
+		} else {
+			lang = "-" + lang;
+		}
+		URL url = getClass().getResource("Loop" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("Loop.self");
+		}
+		Vertex stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 		
-		stateMachine = compiler.parseStateMachine(getClass().getResource("DefineWord.self"), "", debug, network);
+		url = getClass().getResource("DefineWord" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("DefineWord.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("Math.self"), "", debug, network);
+		url = getClass().getResource("Math" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("Math.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("DateAndTime.self"), "", debug, network);
+		url = getClass().getResource("DateAndTime" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("DateAndTime.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("Topic.self"), "", debug, network);
+		url = getClass().getResource("Topic" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("Topic.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("MyNameIs.self"), "", debug, network);
+		url = getClass().getResource("MyNameIs" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("MyNameIs.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("WhatIs.self"), "", debug, network);
+		url = getClass().getResource("WhatIs" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("WhatIs.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("WhereIs.self"), "", debug, network);
+		url = getClass().getResource("WhereIs" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("WhereIs.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("SayIt.self"), "", debug, network);
+		url = getClass().getResource("SayIt" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("SayIt.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("Understanding.self"), "", debug, network);
+		url = getClass().getResource("Understanding" + lang + ".self");
+		if (url == null) {
+			url = getClass().getResource("Understanding.self");
+		}
+		stateMachine = compiler.parseStateMachine(url, "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
 		compiler.pin(stateMachine);
 
-		stateMachine = compiler.parseStateMachine(getClass().getResource("Reduction.self"), "", debug, network);
-		language.addRelationship(Primitive.STATE, stateMachine);
-		compiler.pin(stateMachine);
+		//stateMachine = compiler.parseStateMachine(getClass().getResource("Reduction" + lang + ".self"), "", debug, network);
+		//language.addRelationship(Primitive.STATE, stateMachine);
+		//compiler.pin(stateMachine);
 		
 		stateMachine = new Self4Compiler().parseStateMachine(getClass().getResource("Self.self"), "", debug, network);
 		language.addRelationship(Primitive.STATE, stateMachine);
@@ -388,7 +481,7 @@ public class Bootstrap {
 	/**
 	 * Defines the basic concepts required for text/language processing.
 	 */
-	public void languageNetwork(Network network) {		
+	public void languageNetwork(Network network) {
 		// Concepts
 		Vertex sentence = network.createVertex(Primitive.SENTENCE);
 		Vertex language = network.createVertex(Primitive.LANGUAGE);
@@ -461,6 +554,171 @@ public class Bootstrap {
 		Vertex date = network.createVertex(Primitive.DATE);
 		date.addRelationship(Primitive.INSTANTIATION, Primitive.REGEX);
 		date.addRelationship(Primitive.REGEX, network.createVertex("\\b\\d+[-/.](0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])\\b"));
+
+		Vertex questionMark = createQuestion("?", Primitive.QUESTION_MARK, network);
+		questionMark.addRelationship(Primitive.INSTANTIATION, Primitive.PUNCTUATION);
+		Relationship relationship = network.createVertex(Primitive.QUESTION_MARK).addRelationship(Primitive.WORD, question);
+		relationship.setCorrectness(2.0f); // Enforce.
+		Vertex questionMark2 = createQuestion("？", Primitive.QUESTION_MARK, network);
+		questionMark2.addRelationship(Primitive.INSTANTIATION, Primitive.PUNCTUATION);
+		
+		// Syntax
+		Vertex comma = network.createVertex(Primitive.COMMA);
+		createPunctuation(",", comma, network);
+		Vertex period = network.createVertex(Primitive.PERIOD);
+		createWord(".", period, true, network, Primitive.PUNCTUATION, null, null, null, null);
+		createPunctuation("。", period, network);
+		Vertex exclamation = network.createVertex(Primitive.EXCLAMATION);
+		createWord("!", exclamation, true, network, Primitive.PUNCTUATION, null, null, null, null);
+		createPunctuation("！", exclamation, network);
+		createPunctuation(";", network.createVertex(), network);
+		createPunctuation(":", network.createVertex(), network);
+		createPunctuation("'", network.createVertex(Primitive.QUOTE), network);
+		createPunctuation("`", network.createVertex(Primitive.QUOTE), network);
+		createPunctuation("\"", network.createVertex(Primitive.QUOTE), network);
+
+		Vertex i = network.createVertex(Primitive.I);
+		i.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		i.addRelationship(Primitive.VARIABLE, Primitive.SPEAKER);
+		
+		Vertex our = network.createVertex(Primitive.OUR);
+		our.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		our.addRelationship(Primitive.ASSOCIATED, Primitive.PLURAL);
+		our.addRelationship(Primitive.VARIABLE, Primitive.SPEAKER);
+		
+		Vertex they = network.createVertex(Primitive.THEY);
+		they.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		they.addRelationship(Primitive.ASSOCIATED, Primitive.PLURAL);
+		Vertex theyVariable = getVariable(they, network);
+		theyVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex you = network.createVertex(Primitive.YOU);
+		you.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		you.addRelationship(Primitive.VARIABLE, Primitive.TARGET);
+		
+		Vertex his = network.createVertex(Primitive.HIS);
+		his.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		his.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+		his.addRelationship(Primitive.GENDER, Primitive.MALE);
+		his.removeRelationship(Primitive.GENDER, Primitive.FEMALE);
+		Vertex hisVariable = getVariable(his, network);
+		hisVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		hisVariable.addRelationship(Primitive.GENDER, Primitive.MALE);
+		hisVariable.removeRelationship(Primitive.GENDER, Primitive.FEMALE);
+		
+		Vertex her = network.createVertex(Primitive.HER);
+		her.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		her.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+		her.addRelationship(Primitive.GENDER, Primitive.FEMALE);
+		her.removeRelationship(Primitive.GENDER, Primitive.MALE);
+		Vertex herVariable = getVariable(her, network);
+		herVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		herVariable.addRelationship(Primitive.GENDER, Primitive.FEMALE);
+		herVariable.removeRelationship(Primitive.GENDER, Primitive.MALE);
+		
+		Vertex thisWord = network.createVertex(Primitive.THIS);
+		thisWord.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		thisWord.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+		Vertex thisVariable = getVariable(thisWord, network);
+		thisVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		thisVariable.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+		
+		Vertex it = network.createVertex(Primitive.IT);
+		it.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		it.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+		Vertex itVariable = getVariable(it, network);
+		itVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		itVariable.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+		
+		// Verbs.
+		Vertex action = network.createVertex(Primitive.ACTION);
+		
+		Vertex toBe = network.createVertex(Primitive.IS);
+		toBe.addRelationship(Primitive.INSTANTIATION, action);
+		
+		Vertex have = network.createVertex(Primitive.HAVE);
+		have.addRelationship(Primitive.INSTANTIATION, action);
+
+		Vertex isA = network.createVertex(Primitive.INSTANTIATION);
+		isA.addRelationship(Primitive.INSTANTIATION, action);
+
+		Vertex means = network.createVertex(Primitive.MEANING);
+		means.addRelationship(Primitive.INSTANTIATION, action);
+		
+		// Nouns
+		Vertex thing = network.createVertex(Primitive.THING);
+		
+		action.addRelationship(Primitive.INSTANTIATION, thing);
+
+		Vertex description = network.createVertex(Primitive.DESCRIPTION);
+		description.addRelationship(Primitive.INSTANTIATION, thing);
+
+		thing.addRelationship(Primitive.INSTANTIATION, thing);
+
+		speaker.addRelationship(Primitive.INSTANTIATION, Primitive.CLASSIFICATION);
+		speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+
+		Vertex gender = network.createVertex(Primitive.GENDER);
+		gender.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+
+		Vertex male = network.createVertex(Primitive.MALE);
+		male.addRelationship(Primitive.INSTANTIATION, Primitive.DESCRIPTION);
+		male.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		male.addRelationship(Primitive.INSTANTIATION, Primitive.CLASSIFICATION);
+
+		Vertex female = network.createVertex(Primitive.FEMALE);
+		female.addRelationship(Primitive.INSTANTIATION, Primitive.DESCRIPTION);
+		female.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		female.addRelationship(Primitive.INSTANTIATION, Primitive.CLASSIFICATION);
+
+		Vertex next = network.createVertex(Primitive.NEXT);
+		next.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
+		
+		Vertex previous = network.createVertex(Primitive.PREVIOUS);
+		previous.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
+		
+		name.addRelationship(Primitive.INSTANTIATION, thing);
+
+		// Date/time
+		Vertex time = network.createVertex(Primitive.TIME);
+		time.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex hour = network.createVertex(Primitive.HOUR);
+		hour.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex minute = network.createVertex(Primitive.MINUTE);
+		minute.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex second = network.createVertex(Primitive.SECOND);
+		second.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex timezone = network.createVertex(Primitive.TIMEZONE);
+		timezone.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex am = network.createVertex(Primitive.AM);
+		am.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex pm = network.createVertex(Primitive.PM);
+		pm.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		date.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex day = network.createVertex(Primitive.DAY);
+		day.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex month = network.createVertex(Primitive.MONTH);
+		month.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		Vertex year = network.createVertex(Primitive.YEAR);
+		year.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		url.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+		
+		// Self
+		Vertex self = network.createVertex(Primitive.SELF);
+		String botName = network.getBot().getName();
+		word = createWord(Utils.capitalize(botName), self, network, Primitive.NAME);
+		self.addRelationship(name, word);
 	}
 	
 	public static void checkInputVariable(Vertex input, Network network) {
@@ -529,14 +787,8 @@ public class Bootstrap {
 	/**
 	 * Defines some key basic English words (to avoid re-learning each bootstrap).
 	 */
-	public void englishNetwork(Network network) {		
+	public void englishNetwork(Network network) {
 		// Questions.
-		Vertex question = createQuestion("?", Primitive.QUESTION_MARK, network);
-		question.addRelationship(Primitive.INSTANTIATION, Primitive.PUNCTUATION);
-		Relationship relationship = network.createVertex(Primitive.QUESTION_MARK).addRelationship(Primitive.WORD, question);
-		relationship.setCorrectness(2.0f); // Enforce.
-		Vertex question2 = createQuestion("？", Primitive.QUESTION_MARK, network);
-		question2.addRelationship(Primitive.INSTANTIATION, Primitive.PUNCTUATION);
 		createQuestion("who", Primitive.WHO, network);
 		createQuestion("what", Primitive.WHAT, network);
 		createQuestion("when", Primitive.WHEN, network);
@@ -579,21 +831,6 @@ public class Bootstrap {
 		createWord("and", and, true, network);
 		createWord("&", and, network);
 		
-		// Syntax
-		Vertex comma = network.createVertex(Primitive.COMMA);
-		createPunctuation(",", comma, network);
-		Vertex period = network.createVertex(Primitive.PERIOD);
-		createWord(".", period, true, network, Primitive.PUNCTUATION, null, null, null, null);
-		createPunctuation("。", period, network);
-		Vertex exclamation = network.createVertex(Primitive.EXCLAMATION);
-		createWord("!", exclamation, true, network, Primitive.PUNCTUATION, null, null, null, null);
-		createPunctuation("！", exclamation, network);
-		createPunctuation(";", network.createVertex(), network);
-		createPunctuation(":", network.createVertex(), network);
-		createPunctuation("'", network.createVertex(Primitive.QUOTE), network);
-		createPunctuation("`", network.createVertex(Primitive.QUOTE), network);
-		createPunctuation("\"", network.createVertex(Primitive.QUOTE), network);
-		
 		// Articles
 		Vertex the = network.createVertex(Primitive.THE);
 		createArticle("the", the, network);
@@ -608,8 +845,6 @@ public class Bootstrap {
 		
 		// Pronouns.
 		Vertex i = network.createVertex(Primitive.I);
-		i.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		i.addRelationship(Primitive.VARIABLE, Primitive.SPEAKER);
 		Vertex word = createPronoun("I", i, network, Primitive.SUBJECTIVE);
 		word = createPronoun("me", i, network, Primitive.OBJECTIVE);
 		word = createPronoun("my", i, network, Primitive.POSSESSIVE);
@@ -618,9 +853,6 @@ public class Bootstrap {
 		createWord("I", i, true, network);
 		
 		Vertex our = network.createVertex(Primitive.OUR);
-		our.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		our.addRelationship(Primitive.ASSOCIATED, Primitive.PLURAL);
-		our.addRelationship(Primitive.VARIABLE, Primitive.SPEAKER);
 		word = createPronoun("we", our, network, Primitive.SUBJECTIVE);
 		word = createPronoun("our", our, network, Primitive.POSSESSIVE);
 		word = createPronoun("us", our, network, Primitive.OBJECTIVE);
@@ -629,10 +861,6 @@ public class Bootstrap {
 		createWord("we", our, true, network);
 		
 		Vertex they = network.createVertex(Primitive.THEY);
-		they.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		they.addRelationship(Primitive.ASSOCIATED, Primitive.PLURAL);
-		Vertex theyVariable = getVariable(they, network);
-		theyVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		
 		word = createPronoun("they", they, network, Primitive.SUBJECTIVE);
 		word = createPronoun("them", they, network, Primitive.OBJECTIVE);
@@ -641,8 +869,6 @@ public class Bootstrap {
 		word = createPronoun("themselves", they, network, Primitive.REFLEXIVE);
 		
 		Vertex you = network.createVertex(Primitive.YOU);
-		you.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		you.addRelationship(Primitive.VARIABLE, Primitive.TARGET);
 		
 		word = createPronoun("your", you, network, Primitive.POSSESSIVE);
 		word = createPronoun("ur", you, network, Primitive.POSSESSIVE);
@@ -656,14 +882,6 @@ public class Bootstrap {
 
 		
 		Vertex his = network.createVertex(Primitive.HIS);
-		his.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		his.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
-		his.addRelationship(Primitive.GENDER, Primitive.MALE);
-		his.removeRelationship(Primitive.GENDER, Primitive.FEMALE);
-		Vertex hisVariable = getVariable(his, network);
-		hisVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		hisVariable.addRelationship(Primitive.GENDER, Primitive.MALE);
-		hisVariable.removeRelationship(Primitive.GENDER, Primitive.FEMALE);
 		
 		word = createPronoun("his", his, network, Primitive.POSSESSIVE, Primitive.POSSESSIVEPRONOUN);
 		word = createPronoun("he", his, network, Primitive.SUBJECTIVE);
@@ -671,14 +889,6 @@ public class Bootstrap {
 		word = createPronoun("himself", his, network, Primitive.REFLEXIVE);
 		
 		Vertex her = network.createVertex(Primitive.HER);
-		her.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		her.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
-		her.addRelationship(Primitive.GENDER, Primitive.FEMALE);
-		her.removeRelationship(Primitive.GENDER, Primitive.MALE);
-		Vertex herVariable = getVariable(her, network);
-		herVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		herVariable.addRelationship(Primitive.GENDER, Primitive.FEMALE);
-		herVariable.removeRelationship(Primitive.GENDER, Primitive.MALE);
 		
 		word = createPronoun("her", her, network, Primitive.OBJECTIVE, Primitive.POSSESSIVE);
 		word = createPronoun("hers", her, network, Primitive.POSSESSIVEPRONOUN);
@@ -686,31 +896,17 @@ public class Bootstrap {
 		word = createPronoun("herself", her, network, Primitive.REFLEXIVE);
 		
 		Vertex thisWord = network.createVertex(Primitive.THIS);
-		thisWord.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		thisWord.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
-		Vertex thisVariable = getVariable(thisWord, network);
-		thisVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		thisVariable.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 		word = createPronoun("this", thisWord, network, null);
 		word = createPronoun("that", thisWord, network, null);
 		word = createPronoun("these", thisWord, network, null);
 		word = createPronoun("those", thisWord, network, null);
 		
 		Vertex it = network.createVertex(Primitive.IT);
-		it.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		it.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
-		Vertex itVariable = getVariable(it, network);
-		itVariable.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		itVariable.removeRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 		word = createPronoun("it", it, network, Primitive.SUBJECTIVE, Primitive.OBJECTIVE);
 		word = createPronoun("its", it, network, Primitive.POSSESSIVE, Primitive.POSSESSIVEPRONOUN);
 		word = createPronoun("itsself", it, network, Primitive.REFLEXIVE);
 		
-		// Verbs.
-		Vertex action = network.createVertex(Primitive.ACTION);
-		
 		Vertex toBe = network.createVertex(Primitive.IS);
-		toBe.addRelationship(Primitive.INSTANTIATION, action);
 		word = createVerb("is", toBe, Primitive.PRESENT, network, new String[]{"mine", "yours", "his", "hers", "thiers", "ours", "he", "she"});
 		word = createVerb("are", toBe, Primitive.PRESENT, network, new String[]{"you", "they", "we"});
 		word = createVerb("was", toBe, Primitive.PAST, network, new String[]{"i", "I", "he", "she", "mine", "yours", "his", "hers", "thiers"});
@@ -721,59 +917,44 @@ public class Bootstrap {
 		createWord("is", toBe, true, network);
 		
 		Vertex have = network.createVertex(Primitive.HAVE);
-		have.addRelationship(Primitive.INSTANTIATION, action);
 		word = createVerb("have", have, Primitive.PRESENT, network, new String[]{"i", "I", "you", "they", "we"});
 		word = createVerb("has", have, Primitive.PRESENT, network, new String[]{"he", "she"});
 		createVerb("had", have, Primitive.PAST, network, null);
 		createVerb("will have", have, Primitive.FUTURE, network, null);
 
 		Vertex isA = network.createVertex(Primitive.INSTANTIATION);
-		isA.addRelationship(Primitive.INSTANTIATION, action);
 		createVerb("instance of", isA, Primitive.PRESENT, network, null);
 		createVerb("instantiation", isA, Primitive.PRESENT, network, null);
 
 		Vertex means = network.createVertex(Primitive.MEANING);
-		means.addRelationship(Primitive.INSTANTIATION, action);
 		createVerb("means", means, Primitive.PRESENT, network, null);
 		
 		// Nouns
-		Vertex thing = network.createVertex(Primitive.THING);
-		
-		action.addRelationship(Primitive.INSTANTIATION, thing);
+		Vertex action = network.createVertex(Primitive.ACTION);
 		createNoun("action", action, network);
 		createNoun("verb", action, network);
 
 		Vertex description = network.createVertex(Primitive.DESCRIPTION);
-		description.addRelationship(Primitive.INSTANTIATION, thing);
 		createNoun("description", description, network);
 		createNoun("adjective", description, network);
 
-		thing.addRelationship(Primitive.INSTANTIATION, thing);
+		Vertex thing = network.createVertex(Primitive.THING);
 		createNoun("thing", thing, network);
 		createNoun("noun", thing, network);
 
 		Vertex speaker = network.createVertex(Primitive.SPEAKER);
-		speaker.addRelationship(Primitive.INSTANTIATION, Primitive.CLASSIFICATION);
-		speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("speaker", speaker, network);
 
 		Vertex gender = network.createVertex(Primitive.GENDER);
-		gender.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("gender", gender, network);
 		createNoun("sex", gender, network);
 
 		Vertex male = network.createVertex(Primitive.MALE);
-		male.addRelationship(Primitive.INSTANTIATION, Primitive.DESCRIPTION);
-		male.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		male.addRelationship(Primitive.INSTANTIATION, Primitive.CLASSIFICATION);
 		createAdjective("male", male, network);
 		createAdjective("boy", male, network);
 		createAdjective("man", male, network);
 
 		Vertex female = network.createVertex(Primitive.FEMALE);
-		female.addRelationship(Primitive.INSTANTIATION, Primitive.DESCRIPTION);
-		female.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
-		female.addRelationship(Primitive.INSTANTIATION, Primitive.CLASSIFICATION);
 		createAdjective("female", female, network);
 		createAdjective("girl", female, network);
 		createAdjective("woman", female, network);
@@ -781,90 +962,69 @@ public class Bootstrap {
 		// Math
 		Vertex next = network.createVertex(Primitive.NEXT);
 		createWord("next", next, network);
-		next.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		
 		Vertex previous = network.createVertex(Primitive.PREVIOUS);
 		createWord("previous", previous, network);
-		previous.addRelationship(Primitive.INSTANTIATION, Primitive.ACTION);
 		
 		Vertex name = network.createVertex(Primitive.NAME);
-		name.addRelationship(Primitive.INSTANTIATION, thing);
 		createNoun("name", name, network);
 		createTypo("nam", name, network);
 		createTypo("naem", name, network);
 
 		// Date/time
 		Vertex time = network.createVertex(Primitive.TIME);
-		time.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("time", time, network);
 		
 		Vertex hour = network.createVertex(Primitive.HOUR);
-		hour.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("hour", hour, network);
 		createNoun("hr", hour, network);
 		
 		Vertex minute = network.createVertex(Primitive.MINUTE);
-		minute.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("minute", minute, network);
 		createNoun("min", minute, network);
 		
 		Vertex second = network.createVertex(Primitive.SECOND);
-		second.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("second", second, network);
 		createNoun("sec", second, network);
 		
 		Vertex timezone = network.createVertex(Primitive.TIMEZONE);
-		timezone.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("timezone", timezone, network);
 		createNoun("tz", timezone, network);
 		
 		Vertex am = network.createVertex(Primitive.AM);
-		am.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("AM", am, network);
 		
 		Vertex pm = network.createVertex(Primitive.PM);
-		pm.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("PM", pm, network);
 		
 		Vertex date = network.createVertex(Primitive.DATE);
-		date.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("date", date, network);
 		
 		Vertex day = network.createVertex(Primitive.DAY);
-		day.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("day", day, network);
 		
 		Vertex month = network.createVertex(Primitive.MONTH);
-		month.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("month", month, network);
 		
 		Vertex year = network.createVertex(Primitive.YEAR);
-		time.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("year", year, network);
 		
-		for (Primitive eachMonth : Primitive.MONTHS) {			
+		for (Primitive eachMonth : Primitive.MONTHS) {
 			month = network.createVertex(eachMonth);
 			time.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			time.addRelationship(Primitive.INSTANTIATION, Primitive.MONTH);
-			createName(Utils.capitalize(eachMonth.getIdentity()), month, network);			
+			createName(Utils.capitalize(eachMonth.getIdentity()), month, network);
 		}
 		
-		for (Primitive eachDayOfWeek : Primitive.DAYS_OF_WEEK) {			
+		for (Primitive eachDayOfWeek : Primitive.DAYS_OF_WEEK) {
 			Vertex dayOfWeek = network.createVertex(eachDayOfWeek);
 			time.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			time.addRelationship(Primitive.INSTANTIATION, Primitive.DAY);
-			createName(Utils.capitalize(eachDayOfWeek.getIdentity()), dayOfWeek, network);			
+			createName(Utils.capitalize(eachDayOfWeek.getIdentity()), dayOfWeek, network);
 		}
 		
 		Vertex url = network.createVertex(Primitive.URL);
-		url.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 		createNoun("URL", url, network);
-		
-		// Self
-		Vertex self = network.createVertex(Primitive.SELF);
-		String botName = network.getBot().getName();
-		word = createWord(Utils.capitalize(botName), self, network, Primitive.NAME);
-		self.addRelationship(name, word);
 	}
 
 	public Vertex getVariable(Vertex source, Network network) {

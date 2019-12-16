@@ -147,6 +147,9 @@ public class Primitive implements Serializable {
 	public static final Primitive CARDINALITY = new Primitive("cardinality");
 	public static final Primitive TYPO = new Primitive("typo");
 
+	public static final Primitive RESPONSE_QUESTION = new Primitive("responsequestion");
+	public static final Primitive TOPIC_QUESTION = new Primitive("topicquestion");
+
 	public static final Primitive TENSE = new Primitive("tense");
 	public static final Primitive PAST = new Primitive("past");
 	public static final Primitive PRESENT = new Primitive("present");
@@ -246,6 +249,7 @@ public class Primitive implements Serializable {
 	public static final Primitive NATIVEVOICENAME = new Primitive("nativevoicename");
 	public static final Primitive NATIVEVOICEAPIKEY = new Primitive("nativevoiceapikey");
 	public static final Primitive NATIVEVOICEAPPID = new Primitive("nativevoiceappid");
+	public static final Primitive VOICEAPIENDPOINT = new Primitive("voiceapiendpoint");
 	public static final Primitive LEARNING = new Primitive("learning");
 	public static final Primitive MAXRESPONSEMATCHPROCESS = new Primitive("maxresponsematchprocess");
 	public static final Primitive MAXSTATEPROCESS = new Primitive("maxstateprocess");
@@ -265,7 +269,7 @@ public class Primitive implements Serializable {
 	public static final Primitive TOPIC = new Primitive("topic");
 	public static final Primitive CONTENT = new Primitive("content");
 	
-	// HTML	
+	// HTML
 	public static final Primitive TAG = new Primitive("tag");	
 	public static final Primitive BR = new Primitive("br");
 	
@@ -466,14 +470,17 @@ public class Primitive implements Serializable {
 	public static final Primitive AUTOFRIENDKEYWORDS = new Primitive("autofriendkeywords");
 	public static final Primitive LASTPOST = new Primitive("lastpost");
 	public static final Primitive PAGE = new Primitive("page");
+
+	public static final Primitive FACEBOOKMESSENGER = new Primitive("facebookmessenger");
+	public static final Primitive FACEBOOK = new Primitive("facebook");
+	public static final Primitive SMS = new Primitive("sms");
+	public static final Primitive TELEGRAM = new Primitive("telegram");
+	public static final Primitive TWITTER = new Primitive("twitter");
 	
 	// Twitter
 	public static final Primitive TWITTERADDRESS = new Primitive("twitteraddress");
 	public static final Primitive TWEET = new Primitive("tweet");
 	public static final Primitive DIRECTMESSAGE = new Primitive("directmessage");
-	public static final Primitive SMS = new Primitive("sms");
-	public static final Primitive FACEBOOKMESSENGER = new Primitive("facebookmessenger");
-	public static final Primitive TELEGRAM = new Primitive("telegram");
 	public static final Primitive TREND = new Primitive("trend");
 	public static final Primitive LASTMENTION = new Primitive("lastmention");
 	public static final Primitive LASTSEARCH = new Primitive("lastsearch");
@@ -586,6 +593,9 @@ public class Primitive implements Serializable {
 	}
   
 	public Primitive(String identity) {
+		if (identity == null) {
+			identity = "null";
+		}
 		this.identity = identity;
 	}
 

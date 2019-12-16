@@ -219,7 +219,7 @@ public class Skype extends BasicSense {
 		SkypeActivity input = new SkypeActivity(json);
 		if (input.type.equals("message")) {
 			try {
-				String message = processMessage(input.fromName, input.recipientName, input.text, input.conversationId);
+				String message = processMessage(input.fromId, input.fromName, input.recipientName, input.text, input.conversationId);
 				if (message != null && !message.isEmpty()) {
 					return sendResponse(input, message);
 				}
@@ -235,13 +235,13 @@ public class Skype extends BasicSense {
 	/**
 	 * Process to the message and reply synchronously.
 	 */
-	public String processMessage(String from, String target, String message, String id) {
+	public String processMessage(String fromId, String from, String target, String message, String id) {
 		log("Processing message", Level.INFO, message);
 		
 		this.responseListener = new ResponseListener();
 		Network memory = bot.memory().newMemory();
 		this.messagesProcessed++;
-		inputSentence(message, from, target, id, memory);
+		inputSentence(message, fromId, from, target, id, memory);
 		memory.save();
 		String reply = null;
 		synchronized (this.responseListener) {
@@ -263,12 +263,11 @@ public class Skype extends BasicSense {
 	/**
 	 * Process the text sentence.
 	 */
-	public void inputSentence(String text, String userName, String targetUsername, String id, Network network) {
+	public void inputSentence(String text, String userId, String userName, String targetUsername, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userId), Primitive.SKYPE, userName);
 		Vertex self = network.createVertex(Primitive.SELF);
-		input.addRelationship(Primitive.SPEAKER, user);		
-		
+		input.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.TARGET, self);
 
 		Vertex conversationId = network.createVertex(id);
@@ -320,7 +319,7 @@ public class Skype extends BasicSense {
 			notifyResponseListener();
 			return;
 		}
-		String text = printInput(output);	
+		String text = printInput(output);
 		
 		//Strip html tags from response
 		text = Utils.stripTags(text);

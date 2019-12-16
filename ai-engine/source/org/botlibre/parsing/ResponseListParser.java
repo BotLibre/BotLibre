@@ -418,6 +418,20 @@ public class ResponseListParser {
 			if (!lineStream.atEnd()) {
 				lineStream.skip();
 				line = lineStream.upToEnd().trim();
+				// Check for quoted multi-line greetings/defaults.
+				if (line.startsWith("\"") &&
+						(command.equals("greeting")
+							|| command.equals("default")
+							|| command.equals("question")
+							|| command.equals("response"))) {
+					String nextLine = line;
+					while (!stream.atEnd() && !nextLine.endsWith("\"")) {
+						nextLine = stream.nextLine().trim();
+						line = line + "\n" + nextLine;
+					}
+					line = line.substring(1, line.length() - 1);
+					originalLine = line;
+				}
 			} else {
 				command = "";
 			}
@@ -442,7 +456,7 @@ public class ResponseListParser {
 					if (pin) {
 						SelfCompiler.getCompiler().pin(question);
 					}
-					language.addRelationship(Primitive.RESPONSE, question);
+					lastResponseRelationship = language.addRelationship(Primitive.RESPONSE, question);
 				} else {
 					// Use a * pattern for conversations.
 					// Conversations are defined by the NEXT relationship on the meta.
@@ -453,7 +467,7 @@ public class ResponseListParser {
 					}
 					Relationship relationship = conversationMeta.addRelationship(Primitive.NEXT, question);
 					Vertex meta = network.createMeta(relationship);
-					meta.addWeakRelationship(Primitive.RESPONSE, answer, 1.0f);
+					lastResponseRelationship = meta.addWeakRelationship(Primitive.RESPONSE, answer, 1.0f);
 				}
 			} else if (command.equalsIgnoreCase("greeting")) {
 				isGreeting = true;
@@ -462,7 +476,7 @@ public class ResponseListParser {
 				if (pin) {
 					SelfCompiler.getCompiler().pin(question);
 				}
-				language.addRelationship(Primitive.GREETING, question);
+				lastResponseRelationship = language.addRelationship(Primitive.GREETING, question);
 			} else if (command.equalsIgnoreCase("phrase")) {
 				question = network.createSentence(line);
 				if (pin) {

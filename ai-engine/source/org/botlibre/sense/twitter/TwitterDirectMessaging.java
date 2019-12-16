@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,7 @@ import org.botlibre.util.TextStream;
 
 import twitter4j.DirectMessage;
 import twitter4j.ResponseList;
+import twitter4j.User;
 
 /**
  * Enables receiving a sending direct messages through Twitter.
@@ -65,8 +66,8 @@ public class TwitterDirectMessaging extends Twitter {
 			if (getConnection() == null) {
 				connect();
 			}
-		    ResponseList<DirectMessage> messages = getConnection().getDirectMessages();
-		    if (!messages.isEmpty()) {
+			ResponseList<DirectMessage> messages = getConnection().getDirectMessages(50);
+			if (!messages.isEmpty()) {
 				Network memory = getBot().memory().newMemory();
 				Vertex twitter = memory.createVertex(getPrimitive());
 				Vertex vertex = twitter.getRelationship(Primitive.LASTDIRECTMESSAGE);
@@ -75,24 +76,24 @@ public class TwitterDirectMessaging extends Twitter {
 					lastMessage = ((Number)vertex.getData()).longValue();
 				}
 				long max = 0;
-			    for (DirectMessage message : messages) {
-			    	if ((System.currentTimeMillis() - message.getCreatedAt().getTime()) > DAY) {
-			    		continue;
-			    	}
-			    	if (message.getCreatedAt().getTime() > lastMessage) {
-			    		if (message.getSenderId() != message.getRecipientId()) {
-			    			input(message);
-			    		}
-				    	if (message.getCreatedAt().getTime() > max) {
-				    		max = message.getCreatedAt().getTime();
-				    	}
-			    	}
-			    }
-			    if (max != 0) {
+				for (DirectMessage message : messages) {
+					if ((System.currentTimeMillis() - message.getCreatedAt().getTime()) > DAY) {
+						continue;
+					}
+					if (message.getCreatedAt().getTime() > lastMessage) {
+						if (message.getSenderId() != message.getRecipientId()) {
+							input(message);
+						}
+						if (message.getCreatedAt().getTime() > max) {
+							max = message.getCreatedAt().getTime();
+						}
+					}
+				}
+				if (max != 0) {
 					twitter.setRelationship(Primitive.LASTDIRECTMESSAGE, memory.createVertex(max));
-			    	memory.save();
-			    }
-		    }
+					memory.save();
+				}
+			}
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -109,20 +110,25 @@ public class TwitterDirectMessaging extends Twitter {
 		try {
 			if (input instanceof DirectMessage) {
 				DirectMessage message = (DirectMessage)input;
-			    String fromUser = message.getSender().getScreenName();
+				long fromId = message.getSenderId();
+				long[] lookup = new long[1];
+				lookup[0] = fromId;
+				ResponseList<User> users = getConnection().lookupUsers(lookup);
+				User friend = users.get(0);
+				String fromUser = friend.getScreenName();
 				String text = message.getText().trim();
 				log("Processing direct message.", Level.INFO, text, fromUser);
-		    	TextStream stream = new TextStream(text);
-		    	String firstWord = stream.nextWord();
-		    	if ("follow".equals(firstWord) && getFollowMessages()) {
+				TextStream stream = new TextStream(text);
+				String firstWord = stream.nextWord();
+				if ("follow".equals(firstWord) && getFollowMessages()) {
 					log("Adding friend.", Level.INFO, fromUser);
-		    		getConnection().createFriendship(message.getSender().getId());
-		    	} else if ("unfollow".equals(firstWord)) {
+					getConnection().createFriendship(message.getSenderId());
+				} else if ("unfollow".equals(firstWord)) {
 					log("Removing friend.", Level.INFO, fromUser);
-		    		getConnection().destroyFriendship(message.getSender().getId());
-			    }
+					getConnection().destroyFriendship(message.getSenderId());
+				}
 				this.tweetsProcessed++;
-				inputSentence(text, fromUser, message.getRecipient().getScreenName(), String.valueOf(message.getSender().getId()), network);
+				inputSentence(text, fromUser, this.userName, String.valueOf(message.getSenderId()), network);
 			}
 		} catch (Exception exception) {
 			log(exception);
@@ -147,9 +153,9 @@ public class TwitterDirectMessaging extends Twitter {
 	 */
 	public void inputSentence(String text, String userName, String targetUserName, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.TWITTER, userName);
 		Vertex self = network.createVertex(Primitive.SELF);
-		input.addRelationship(Primitive.SPEAKER, user);		
+		input.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.TARGET, self);
 		
 		Vertex conversationId = network.createVertex(id);
@@ -162,6 +168,7 @@ public class TwitterDirectMessaging extends Twitter {
 		} else {
 			checkEngaged(conversation);
 		}
+		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
 		conversation.addRelationship(Primitive.TYPE, Primitive.DIRECTMESSAGE);
 		conversation.addRelationship(Primitive.SPEAKER, user);
 		conversation.addRelationship(Primitive.SPEAKER, self);
@@ -191,5 +198,5 @@ public class TwitterDirectMessaging extends Twitter {
 		Vertex target = output.mostConscious(Primitive.TARGET);
 		String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
 		sendMessage(text, replyTo);
-	}	
+	}
 }

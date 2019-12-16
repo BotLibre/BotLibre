@@ -1844,7 +1844,7 @@ public class BasicVertex implements Vertex, Serializable {
 		Vertex pattern = arguments.get(0).getTarget().applyEval(variables, network);
 		Vertex template = arguments.get(1).getTarget().applyEval(variables, network);
 		Relationship relationship = pattern.addRelationship(Primitive.RESPONSE, template);
-		template.addRelationship(Primitive.QUESTION, pattern);
+		template.addRelationship(Primitive.RESPONSE_QUESTION, pattern);
 		Vertex that = getRelationship(Primitive.THAT);
 		if (that != null) {
 			that = that.applyEval(variables, network);
@@ -1878,7 +1878,7 @@ public class BasicVertex implements Vertex, Serializable {
 								break;
 							}
 						}
-					}				
+					}
 				}
 				if (sentenceState != null) {
 					if (sentenceState.getNetwork() != network) {
@@ -2130,7 +2130,7 @@ public class BasicVertex implements Vertex, Serializable {
 					result = checkRelationTargetForAllWords(arguments, variables, network, left, right, relation, words);
 				}
 
-				if (result == null) {					
+				if (result == null) {
 					// Check synonyms as well.
 					Collection<Relationship> words = right.getRelationships(Primitive.SYNONYM);
 					result = checkRelationTargetForAllWords(arguments, variables, network, left, right, relation, words);
@@ -2198,9 +2198,6 @@ public class BasicVertex implements Vertex, Serializable {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public synchronized Boolean matches(Vertex vertex, Map<Vertex, Vertex> variables) {
-		if (vertex.is(Primitive.NUMBER) || this.is(Primitive.NUMBER)) {
-			System.out.println("**matches:" + this + " - " + vertex);
-		}
 		if (this == vertex) {
 			return Boolean.TRUE;
 		}
@@ -2265,7 +2262,7 @@ public class BasicVertex implements Vertex, Serializable {
 				return language.evaluatePattern(this, vertex, Primitive.WILDCARD, new HashMap<Vertex, Vertex>(), this.network);
 			} else if (vertex.instanceOf(Primitive.PATTERN)) {
 				Language language = this.network.getBot().mind().getThought(Language.class);
-				return language.evaluatePattern(vertex, this, Primitive.WILDCARD, new HashMap<Vertex, Vertex>(), this.network);
+				return language.evaluatePattern(vertex, this, Primitive.WILDCARD, variables, this.network);
 			}
 			if (instanceOf(Primitive.REGEX) && vertex.getData() instanceof String) {
 				Vertex regex = getRelationship(Primitive.REGEX);
@@ -4505,10 +4502,14 @@ public class BasicVertex implements Vertex, Serializable {
 			writer.write(this.data.toString());
 		} else if (instanceOf(Primitive.FRAGMENT) || instanceOf(Primitive.SENTENCE)) {
 			return Language.printFragment(this, this.network.createVertex(Primitive.NULL), this.network.createVertex(Primitive.NULL), network);
+		} else if (hasRelationship(Primitive.NAME) && getRelationship(Primitive.NAME).hasData()) {
+			writer.write(mostConscious(Primitive.NAME).getData().toString());
+		} else if (hasRelationship(Primitive.WORD) && getRelationship(Primitive.WORD).hasData()) {
+			writer.write(mostConscious(Primitive.WORD).getData().toString());
 		} else if (getName() != null) {
 			writer.write(getName());
 		} else {
-			writer.write("{" + String.valueOf(getId()) + "}");			
+			writer.write("{" + String.valueOf(getId()) + "}");
 		}
 		return writer.toString();
 	}

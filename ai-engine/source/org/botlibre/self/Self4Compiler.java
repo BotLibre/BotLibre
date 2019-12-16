@@ -708,7 +708,7 @@ public class Self4Compiler extends SelfCompiler {
 							expression = network.createVertex(new BigDecimal(data));
 						} else {
 							expression = network.createVertex(new BigInteger(data));
-						}				
+						}
 					} else {
 						expression = parseElementName(null, stream, elements, debug, network);
 					}
@@ -1182,6 +1182,11 @@ public class Self4Compiler extends SelfCompiler {
 			}
 			stream.skipWhitespace();
 			peek = stream.peek();
+			while (peek == ';') {
+				stream.skip();
+				stream.skipWhitespace();
+				peek = stream.peek();
+			}
 			index++;
 		}
 		ensureNext('}', stream);

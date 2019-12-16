@@ -18,6 +18,7 @@
 
 package org.botlibre.analytics.deeplearning;
 
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Random;
 
@@ -28,7 +29,9 @@ import java.util.Random;
  * For example a Tic Tac Toe game can be represented as an array our double representing X and O values at each position,
  * and the output could represent to index of the position that is the best move.
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable {
+	static final long serialVersionUID = 42L;
+	
 	protected int numberOfLayers;
 	protected double[] learningRates = new double[] { 0.001 };
 	protected double momentum = 0.8;
@@ -42,6 +45,10 @@ public class NeuralNetwork {
 	protected double[][] errorGradient;
 	protected Random random = new Random();
 
+	public NeuralNetwork() {
+		this(new int[] { 2, 2, 2 });
+	}
+	
 	public NeuralNetwork(int[] layerSizes) {
 		this.activationFunctions = new ActivationFunction[] { new TanhActivationFunction() };
 		//this.activationFunctions = new ActivationFunction[] { new SigmoidActivationFunction() };

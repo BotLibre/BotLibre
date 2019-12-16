@@ -365,6 +365,9 @@ public class SelfCompiler {
 	 * Get the contents of the URL to a .self file and parse it.
 	 */
 	public Vertex parseStateMachine(URL url, String encoding, boolean debug, Network network) {
+		if (url == null) {
+			return null;
+		}
 		try {
 			return parseStateMachine(Utils.openStream(url), debug, network, encoding, MAX_FILE_SIZE);
 		} catch (IOException exception) {

@@ -269,10 +269,9 @@ public class WeChat extends BasicSense {
 	 */
 	public void inputSentence(String text, String userName, String targetUsername, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.WECHAT, userName);
 		Vertex self = network.createVertex(Primitive.SELF);
-		input.addRelationship(Primitive.SPEAKER, user);		
-		
+		input.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.TARGET, self);
 
 		Vertex conversationId = network.createVertex(id);

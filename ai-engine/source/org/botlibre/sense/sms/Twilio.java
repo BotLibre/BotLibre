@@ -17,6 +17,7 @@
  ******************************************************************************/
 package org.botlibre.sense.sms;
 
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -30,6 +31,9 @@ import org.botlibre.sense.ResponseListener;
 import org.botlibre.thought.language.Language;
 import org.botlibre.tool.Date;
 import org.botlibre.util.Utils;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * Receive and respond to incoming email.
@@ -109,14 +113,17 @@ public class Twilio extends BasicSense {
 	 */
 	public void inputSentence(String text, String userName, String id, Network network) {
 		Vertex input = createInput(text.trim(), network);
-		Vertex user = network.createSpeaker(userName);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.SMS);
 		Vertex self = network.createVertex(Primitive.SELF);
 		Vertex phone = network.createVertex(id);
-		input.addRelationship(Primitive.SPEAKER, user);		
+		input.addRelationship(Primitive.SPEAKER, user);
 		input.addRelationship(Primitive.TARGET, self);
 		
 		Vertex today = network.getBot().awareness().getTool(Date.class).date(self);
 		Vertex conversation = today.getRelationship(phone);
+		// Start a new conversation if text is empty (new voice call).
+		//if (conversation == null || text.isEmpty()) {
+		//or maybe not, as can recover from disconnect.
 		if (conversation == null) {
 			conversation = network.createVertex();
 			today.setRelationship(phone, conversation);
@@ -162,6 +169,34 @@ public class Twilio extends BasicSense {
 		return reply;
 	}
 
+	/**
+	 * Process to the message and reply synchronously.
+	 */
+	public String processVoice(String from, String speech) {
+		log("Processing voice message", Level.INFO, from, speech);
+		
+		this.responseListener = new ResponseListener();
+		Network memory = bot.memory().newMemory();
+		inputSentence(speech, from, from, memory);
+		memory.save();
+		String reply = null;
+		String command = null;
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
+				try {
+					this.responseListener.wait(MAX_WAIT);
+				} catch (Exception exception) {
+					log(exception);
+					return "";
+				}
+			}
+			reply = this.responseListener.reply;
+			command = this.responseListener.command;
+			this.responseListener = null;
+		}
+		return generateVoiceTwiML(command, reply);
+	}
+
 	public synchronized void notifyExceptionListeners(Exception exception) {
 		if (this.responseListener != null) {
 			this.responseListener.notifyAll();
@@ -182,11 +217,18 @@ public class Twilio extends BasicSense {
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
 			return;
 		}
-		String text = printInput(output);		
+		String text = printInput(output);
+		text = format(text);
+
+		Vertex command = output.mostConscious(Primitive.COMMAND);
+		
 		if (this.responseListener == null) {
 			return;
 		}
 		this.responseListener.reply = text;
+		if (command != null) {
+			this.responseListener.command = command.printString();
+		}
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		if (conversation != null) {
 			this.responseListener.conversation = conversation.getDataValue();
@@ -194,6 +236,78 @@ public class Twilio extends BasicSense {
 		synchronized (this.responseListener) {
 			this.responseListener.notifyAll();
 		}
+	}
+
+	/**
+	 * Generate the voice Twilio TwiML XML string from the reply and command JSON.
+	 */
+	public String generateVoiceTwiML(String command, String reply) {
+		JSONObject json = null;
+		if (command != null && !command.isEmpty()) {
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
+			json = root.optJSONObject("twiml");
+		}
+		
+		StringWriter writer = new StringWriter();
+		writer.write("<Response>");
+		if (json == null) {
+			writer.write("<Gather timeout='3' input='speech dtmf'>");
+			writer.write("<Say>" + reply + "</Say>");
+			writer.write("</Gather>");
+			writer.write("</Response>");
+			return writer.toString();
+		}
+		// If there is a command, then only write the command elements.
+		// Append the reply to the gather.
+		boolean hasSay = false;
+		for (Object key : json.keySet()) {
+			boolean isGather = "Gather".equals(String.valueOf(key));
+			boolean isSay = "Say".equals(String.valueOf(key));
+			writer.write("<");
+			writer.write(String.valueOf(key));
+			Object element = json.opt((String)key);
+			if (element instanceof String) {
+				writer.write(">");
+				writer.write(String.valueOf(element));
+			} else if (element instanceof JSONObject) {
+				boolean hasInput = false;
+				boolean hasTimeout = false;
+				for (Object attribute : ((JSONObject)element).keySet()) {
+					if ("input".equals(String.valueOf(attribute))) {
+						hasInput = true;
+					}
+					if ("timeout".equals(String.valueOf(attribute))) {
+						hasTimeout = true;
+					}
+					writer.write(" ");
+					writer.write(String.valueOf(attribute));
+					writer.write("='");
+					Object value = ((JSONObject)element).opt((String)attribute);
+					writer.write(String.valueOf(value));
+					writer.write("'");
+				}
+				if (!hasInput && isGather) {
+					writer.write(" input='speech dtmf'");
+				}
+				if (!hasTimeout && isGather) {
+					writer.write(" timeout='3'");
+				}
+				writer.write(">");
+				if (isSay) {
+					writer.write(reply);
+					hasSay = true;
+				}
+			}
+			if (isGather && !hasSay) {
+				writer.write("<Say>" + reply + "</Say>");
+			}
+			writer.write("</");
+			writer.write(String.valueOf(key));
+			writer.write(">");
+		}
+		writer.write("</Response>");
+		
+		return writer.toString();
 	}
 	
 	public String getSid() {
@@ -233,7 +347,21 @@ public class Twilio extends BasicSense {
 		Map<String, String> formParams = new HashMap<String, String>();
 		formParams.put("From", getPhone());
 		formParams.put("To", phone);
-		formParams.put("Body", message);
+		formParams.put("Body", format(message));
+		try {
+			Utils.httpAuthPOST(url, getSid(), getSecret(), formParams);
+		} catch (Exception error) {
+			log(error);
+		}
+	}
+
+	public void call(String phone) {
+		log("Voice call", Level.INFO, phone);
+		String url = "https://api.twilio.com/2010-04-01/Accounts/" + getSid() + "/Calls";
+
+		Map<String, String> formParams = new HashMap<String, String>();
+		formParams.put("From", getPhone());
+		formParams.put("To", phone);
 		try {
 			Utils.httpAuthPOST(url, getSid(), getSecret(), formParams);
 		} catch (Exception error) {
@@ -252,8 +380,31 @@ public class Twilio extends BasicSense {
 				return;
 			}
 		}
-		String post = getBot().mind().getThought(Language.class).getWord(message, message.getNetwork()).printString();
+		String text = getBot().mind().getThought(Language.class).getWord(message, message.getNetwork()).printString();
 		getBot().stat("sms");
-		sendSMS(phone.printString(), post);
+		sendSMS(phone.printString(), text);
+	}
+
+	// Self API
+	public void call(Vertex source, Vertex phone) {
+		getBot().stat("call");
+		call(phone.printString());
+	}
+	
+	public String format(String text) {
+		text = text.replace("<br/>", "\n");
+		text = text.replace("<br>", "\n");
+		text = text.replace("</br>", "");
+		text = text.replace("<p/>", "\n");
+		text = text.replace("<p>", "\n");
+		text = text.replace("</p>", "");
+		text = text.replace("<li>", "\n");
+		text = text.replace("</li>", "");
+		text = text.replace("<ul>", "");
+		text = text.replace("</ul>", "\n");
+		text = text.replace("<ol>", "");
+		text = text.replace("</ol>", "\n");
+		text = Utils.stripTags(text);
+		return text;
 	}
 }

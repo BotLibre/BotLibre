@@ -35,7 +35,7 @@ public class InitDatabase  {
 				try {
 					connection.createStatement().executeUpdate("CREATE DATABASE CACHE");
 				} catch (Exception exception) {
-					exception.printStackTrace();					
+					exception.printStackTrace();
                 }
                 try {
                     connection.createStatement().executeUpdate("CREATE DATABASE TEST");

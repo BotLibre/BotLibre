@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -268,22 +268,22 @@ public class Email extends BasicSense {
 	}	
 
 	public void startCheckingEmail() {
-	    this.emailChecker = new Runnable() {
-	    	@Override
-	    	public void run() {
-	    		try {
-	    			while (isEnabled()) {
-		    			checkEmail();
-		    			Thread.sleep(SLEEP);
-	    			}
-	    		} catch (Exception exception) {
-	    			log(exception);
-	    		}
-	    		
-	    	}
-	    };
-	    Thread thread = new Thread(this.emailChecker);
-	    thread.start();
+		this.emailChecker = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while (isEnabled()) {
+						checkEmail();
+						Thread.sleep(SLEEP);
+					}
+				} catch (Exception exception) {
+					log(exception);
+				}
+				
+			}
+		};
+		Thread thread = new Thread(this.emailChecker);
+		thread.start();
 	}
 	
 	public Store connectStore() throws MessagingException {
@@ -295,35 +295,35 @@ public class Email extends BasicSense {
 		properties.put("mail." + getProtocol() + ".timeout", TIMEOUT);
 		properties.put("mail." + getProtocol() + ".connectiontimeout", TIMEOUT);
 		//properties.setProperty("mail.store.protocol", getProtocol());
-	    Session session = Session.getInstance(properties, null);
-	    Store store = session.getStore(getProtocol());
-	    if (getIncomingPort() == 0) {
-	    	store.connect(getIncomingHost(), getUsername(), getPassword());
-	    } else {
-	    	store.connect(getIncomingHost(), getIncomingPort(), getUsername(), getPassword());
-	    }
-	    return store;
+		Session session = Session.getInstance(properties, null);
+		Store store = session.getStore(getProtocol());
+		if (getIncomingPort() == 0) {
+			store.connect(getIncomingHost(), getUsername(), getPassword());
+		} else {
+			store.connect(getIncomingHost(), getIncomingPort(), getUsername(), getPassword());
+		}
+		return store;
 	}
 	
 	public Store connectStoreSSL() throws MessagingException {   
 		Properties properties = System.getProperties();
 		properties.put("mail." + getProtocol() + ".timeout", TIMEOUT);
 		properties.put("mail." + getProtocol() + ".connectiontimeout", TIMEOUT);
-        properties.setProperty("mail." + getProtocol() + ".socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        properties.setProperty("mail." + getProtocol() + ".socketFactory.fallback", "false");
-        properties.setProperty("mail." + getProtocol() + ".port",  String.valueOf(getIncomingPort()));
-        properties.setProperty("mail." + getProtocol() + ".socketFactory.port", String.valueOf(getIncomingPort()));
-        
-        Session session = Session.getInstance(properties, null);        
-        URLName url = new URLName(getProtocol(), getIncomingHost(), getIncomingPort(), "", getUsername(), getPassword());
-        Store store = null;
-        if (getProtocol().equals("pop3")) {
-        	store = new POP3SSLStore(session, url);
-        } else {
-        	store = new IMAPSSLStore(session, url);
-        }
-        store.connect();
-        return store;		
+		properties.setProperty("mail." + getProtocol() + ".socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		properties.setProperty("mail." + getProtocol() + ".socketFactory.fallback", "false");
+		properties.setProperty("mail." + getProtocol() + ".port",  String.valueOf(getIncomingPort()));
+		properties.setProperty("mail." + getProtocol() + ".socketFactory.port", String.valueOf(getIncomingPort()));
+		
+		Session session = Session.getInstance(properties, null);		
+		URLName url = new URLName(getProtocol(), getIncomingHost(), getIncomingPort(), "", getUsername(), getPassword());
+		Store store = null;
+		if (getProtocol().equals("pop3")) {
+			store = new POP3SSLStore(session, url);
+		} else {
+			store = new IMAPSSLStore(session, url);
+		}
+		store.connect();
+		return store;		
 	}
 
 	/**
@@ -332,17 +332,17 @@ public class Email extends BasicSense {
 	public void checkEmail() {
 		try {
 			log("Checking email.", Level.INFO);
-	        Store store = connectStore();		
-		    Folder inbox = store.getFolder("INBOX");
-		    if (inbox == null) {
-		      throw new BotException("Failed to check email, no INBOX.");
-		    }
-		    inbox.open(Folder.READ_WRITE);
-            Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
-            inbox.setFlags(messages, new Flags(Flags.Flag.SEEN), true);
-		    //Message[] messages = inbox.getMessages();
-		    if ((messages != null) && (messages.length > 0)) {
-    			log("Processing emails", Level.INFO, messages.length);
+			Store store = connectStore();		
+			Folder inbox = store.getFolder("INBOX");
+			if (inbox == null) {
+			  throw new BotException("Failed to check email, no INBOX.");
+			}
+			inbox.open(Folder.READ_WRITE);
+			Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+			inbox.setFlags(messages, new Flags(Flags.Flag.SEEN), true);
+			//Message[] messages = inbox.getMessages();
+			if ((messages != null) && (messages.length > 0)) {
+				log("Processing emails", Level.INFO, messages.length);
 				Network memory = getBot().memory().newMemory();
 				Vertex sense = memory.createVertex(getPrimitive());
 				Vertex vertex = sense.getRelationship(Primitive.LASTMESSAGE);
@@ -357,46 +357,46 @@ public class Email extends BasicSense {
 				int timeout = language.getMaxStateProcess();
 				language.setMaxStateProcess(timeout * 2);
 				try {
-				    for (int index = 0; index < messages.length; index++) {
-				    	if (index > (this.maxEmails * 2)) {
-			    			log("Max old email limit reached", Level.WARNING, this.maxEmails * 2);
-				    		break;
-				    	}
-				    	long recievedTime = 0;
-				    	if (messages[index].getReceivedDate() == null) {
-			    			log("Missing received date", Level.FINE, messages[index].getSubject());
-				    		recievedTime = messages[index].getSentDate().getTime();
-				    	} else {
-				    		recievedTime = messages[index].getReceivedDate().getTime();
-				    	}
-				    	if ((System.currentTimeMillis() - recievedTime) > DAY) {
+					for (int index = 0; index < messages.length; index++) {
+						if (index > (this.maxEmails * 2)) {
+							log("Max old email limit reached", Level.WARNING, this.maxEmails * 2);
+							break;
+						}
+						long recievedTime = 0;
+						if (messages[index].getReceivedDate() == null) {
+							log("Missing received date", Level.FINE, messages[index].getSubject());
+							recievedTime = messages[index].getSentDate().getTime();
+						} else {
+							recievedTime = messages[index].getReceivedDate().getTime();
+						}
+						if ((System.currentTimeMillis() - recievedTime) > DAY) {
 							log("Day old email", Level.INFO, messages[index].getSubject());
-				    		continue;
-				    	}
-				    	if (recievedTime > lastMessage) {
-				    		count++;
-				    		if (count > this.maxEmails) {
-				    			log("Max email limit reached", Level.WARNING, this.maxEmails);
-				    			break;
-				    		}
-				    		input(messages[index]);
-					    	Utils.sleep(100);
-					    	if (recievedTime > maxMessage) {
-					    		maxMessage = recievedTime;
-					    	}
-				    	}
-				    }
-				    if (maxMessage != 0) {
+							continue;
+						}
+						if (recievedTime > lastMessage) {
+							count++;
+							if (count > this.maxEmails) {
+								log("Max email limit reached", Level.WARNING, this.maxEmails);
+								break;
+							}
+							input(messages[index]);
+							Utils.sleep(100);
+							if (recievedTime > maxMessage) {
+								maxMessage = recievedTime;
+							}
+						}
+					}
+					if (maxMessage != 0) {
 						sense.setRelationship(Primitive.LASTMESSAGE, memory.createVertex(maxMessage));
-				    	memory.save();
-				    }
+						memory.save();
+					}
 				} finally {
 					language.setMaxStateProcess(timeout);
 				}
-		    }
+			}
 			log("Done checking email.", Level.INFO);
-		    inbox.close(false);
-		    store.close();
+			inbox.close(false);
+			store.close();
 		} catch (MessagingException exception) {
 			log(exception);
 		}
@@ -409,8 +409,8 @@ public class Email extends BasicSense {
 		Store store = null;
 		try {
 			log("Connecting email.", Level.FINER);
-	        store = connectStore();
-	        connectSession();
+			store = connectStore();
+			connectSession();
 			log("Done connecting email.", Level.FINER);
 		} catch (MessagingException messagingException) {
 			BotException exception = new BotException("Failed to connect - " + messagingException.getMessage(), messagingException);
@@ -434,19 +434,19 @@ public class Email extends BasicSense {
 		Folder inbox = null;
 		try {
 			store = connectStore();		
-		    inbox = store.getFolder("INBOX");
-		    if (inbox == null) {
-		      log(new BotException("Failed to access inbox, no INBOX."));
-		    }
-		    inbox.open(Folder.READ_ONLY);
-		    
-            Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
-		    //Message[] messages = inbox.getMessages(1, Math.min(inbox.getMessageCount(), 50));
-		    for (int index = 0; index < 10 && index < messages.length; index++) {
-		      emails.add(0, messages[index].getReceivedDate() + " - " + String.valueOf(getFrom(messages[index])) + ": " + messages[index].getSubject());
-		    }
-		    inbox.close(false);
-		    store.close();
+			inbox = store.getFolder("INBOX");
+			if (inbox == null) {
+			  log(new BotException("Failed to access inbox, no INBOX."));
+			}
+			inbox.open(Folder.READ_ONLY);
+			
+			Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+			//Message[] messages = inbox.getMessages(1, Math.min(inbox.getMessageCount(), 50));
+			for (int index = 0; index < 10 && index < messages.length; index++) {
+			  emails.add(0, messages[index].getReceivedDate() + " - " + String.valueOf(getFrom(messages[index])) + ": " + messages[index].getSubject());
+			}
+			inbox.close(false);
+			store.close();
 		} catch (MessagingException exception) {
 			log(new BotException("Failed to access email: " + exception.getMessage(), exception));
 		} finally {
@@ -472,28 +472,28 @@ public class Email extends BasicSense {
 			Folder sent = null;
 			try {
 				sent = store.getFolder("SENT");
-			    sent.open(Folder.READ_ONLY);
+				sent.open(Folder.READ_ONLY);
 			} catch (Exception ignore) {
 				sent = null;
 			}
-		    if (sent == null) {
+			if (sent == null) {
 				try {
 					sent = store.getFolder("[Gmail]/Sent Mail");
-				    sent.open(Folder.READ_ONLY);
+					sent.open(Folder.READ_ONLY);
 				} catch (Exception ignore) {
 					sent = null;
 				}
-		    }
-		    if (sent == null) {
-		      log(new BotException("Failed to access sent, no SENT."));
-		    } else {
-			    Message[] messages = sent.getMessages(1, Math.min(sent.getMessageCount(), 12));
-			    for (int index = 0; index < messages.length; index++) {
-			      emails.add(0, messages[index].getReceivedDate() + " - " + String.valueOf(getRecipient(messages[index])) + ": " + messages[index].getSubject());
-			    }
-			    sent.close(false);
-		    }
-		    store.close();
+			}
+			if (sent == null) {
+			  log(new BotException("Failed to access sent, no SENT."));
+			} else {
+				Message[] messages = sent.getMessages(1, Math.min(sent.getMessageCount(), 12));
+				for (int index = 0; index < messages.length; index++) {
+				  emails.add(0, messages[index].getReceivedDate() + " - " + String.valueOf(getRecipient(messages[index])) + ": " + messages[index].getSubject());
+				}
+				sent.close(false);
+			}
+			store.close();
 		} catch (MessagingException exception) {
 			log(new BotException("Failed to access sent - " + exception.getMessage(), exception));
 		}
@@ -588,18 +588,18 @@ public class Email extends BasicSense {
 			props.setProperty("mail.smtp.quitwait", "false");*/
 			
 			MimeMessage message = new MimeMessage(session);
-		    message.setFrom(new InternetAddress(getEmailAddress()));
-		    message.addRecipient(Message.RecipientType.TO, new InternetAddress(replyTo));
-		    message.setSubject(subject);
-		    if (Utils.containsHTML(text)) {
-			    message.setContent(text, "text/html; charset=UTF-8");
-		    } else {
-		    	message.setText(text);
-		    }
+			message.setFrom(new InternetAddress(getEmailAddress()));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(replyTo));
+			message.setSubject(subject);
+			if (Utils.containsHTML(text)) {
+				message.setContent(text, "text/html; charset=UTF-8");
+			} else {
+				message.setText(text);
+			}
 
-		    // Send message
-		    this.emails++;
-		    Transport.send(message);
+			// Send message
+			this.emails++;
+			Transport.send(message);
 		} catch (MessagingException exception) {
 			log(new BotException("Failed to send email: " + exception.getMessage(), exception));
 			if (throwException) { throw exception; }
@@ -607,21 +607,21 @@ public class Email extends BasicSense {
 	}
 
 	public String getRecipient(Message message) throws MessagingException {
-	    Address to[] = message.getRecipients(RecipientType.TO);
-	    if ((to != null) && (to.length > 0) && (to[0] instanceof InternetAddress)) {
-	    	return ((InternetAddress)to[0]).getAddress();
-	    }
-	    return null;
+		Address to[] = message.getRecipients(RecipientType.TO);
+		if ((to != null) && (to.length > 0) && (to[0] instanceof InternetAddress)) {
+			return ((InternetAddress)to[0]).getAddress();
+		}
+		return null;
 	}
 
 	public String getFrom(Message message) throws MessagingException {
-	    Address from[] = message.getFrom();
-	    if ((from != null) && (from.length > 0) && (from[0] instanceof InternetAddress)) {
-	    	return ((InternetAddress)from[0]).getAddress();
-	    }
-	    return null;
+		Address from[] = message.getFrom();
+		if ((from != null) && (from.length > 0) && (from[0] instanceof InternetAddress)) {
+			return ((InternetAddress)from[0]).getAddress();
+		}
+		return null;
 	}
-    
+	
 	/**
 	 * Process the email message.
 	 */
@@ -630,103 +630,103 @@ public class Email extends BasicSense {
 		if (!isEnabled()) {
 			return;
 		}
-	    Message message = (Message)input;
-	    String fromUser = getFrom(message);
-	    if (fromUser == null) {
-	    	fromUser = DEFAULT_SPEAKER;
-	    }
-	    String subject = message.getSubject();
-	    if (subject == null) {
-	    	subject = "";
-	    }
-	    subject = subject.trim();
-	    if (fromUser.equals(getEmailAddress())) {
+		Message message = (Message)input;
+		String fromUser = getFrom(message);
+		if (fromUser == null) {
+			fromUser = DEFAULT_SPEAKER;
+		}
+		String subject = message.getSubject();
+		if (subject == null) {
+			subject = "";
+		}
+		subject = subject.trim();
+		if (fromUser.equals(getEmailAddress())) {
 			log("Ignoring email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    if (fromUser.toLowerCase().indexOf("daemon") != -1) {
+			return;
+		}
+		if (fromUser.toLowerCase().indexOf("daemon") != -1) {
 			log("Ignoring daemon email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    if (fromUser.toLowerCase().indexOf("twitter.com") != -1) {
+			return;
+		}
+		if (fromUser.toLowerCase().indexOf("twitter.com") != -1) {
 			log("Ignoring twitter email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    if (fromUser.toLowerCase().indexOf("facebook.com") != -1) {
+			return;
+		}
+		if (fromUser.toLowerCase().indexOf("facebook.com") != -1) {
 			log("Ignoring facebook email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    if (fromUser.toLowerCase().indexOf("google.com") != -1) {
+			return;
+		}
+		if (fromUser.toLowerCase().indexOf("google.com") != -1) {
 			log("Ignoring google email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    if ((fromUser.toLowerCase().indexOf("noreply") != -1) || (fromUser.toLowerCase().indexOf("donotreply") != -1)) {
+			return;
+		}
+		if ((fromUser.toLowerCase().indexOf("noreply") != -1) || (fromUser.toLowerCase().indexOf("donotreply") != -1)) {
 			log("Ignoring noreply email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    if (subject.toLowerCase().indexOf("noreply") != -1) {
+			return;
+		}
+		if (subject.toLowerCase().indexOf("noreply") != -1) {
 			log("Ignoring noreply email", Bot.FINE, subject, fromUser);
-	    	return;
-	    }
-	    this.emailsProcessed++;
+			return;
+		}
+		this.emailsProcessed++;
 		log("Processing email", Level.INFO, subject, fromUser);
-	    String toUser = getRecipient(message);
-	    if (toUser == null) {
-	    	toUser = DEFAULT_SPEAKER;
-	    }
-	    Object content = message.getContent();
-	    String text = "";
-	    if (content instanceof MimeMultipart) {
-	    	MimeMultipart parts = (MimeMultipart)content;
-	    	for (int index = 0; index < parts.getCount(); index++) {
-	    		BodyPart body = parts.getBodyPart(index);
-	    		if (body.getContentType().toLowerCase().indexOf("text/plain") != -1) {
-	    			text = (String)body.getContent();
-	    			break;
-	    		}
-	    	}
-	    	if ((text == null) && (parts.getCount() > 0)) {
-	    		text = (String)parts.getBodyPart(0).getContent();
-	    		if (text.contains("<hr")) {
-	    			text = new TextStream(text).upToAll("<hr");
-	    		}
-	    		text = Utils.stripTags(text);
-	    	}
-	    } else if (content instanceof String) {
-	    	text = (String)content;
-	    	if (message.getContentType().toLowerCase().contains("html")) {
-	    		if (text.contains("<hr")) {
-	    			text = new TextStream(text).upToAll("<hr");
-	    		}
-	    		text = Utils.stripTags(text);	    		
-	    	}
-	    }
-    	text = text.trim();
+		String toUser = getRecipient(message);
+		if (toUser == null) {
+			toUser = DEFAULT_SPEAKER;
+		}
+		Object content = message.getContent();
+		String text = "";
+		if (content instanceof MimeMultipart) {
+			MimeMultipart parts = (MimeMultipart)content;
+			for (int index = 0; index < parts.getCount(); index++) {
+				BodyPart body = parts.getBodyPart(index);
+				if (body.getContentType().toLowerCase().indexOf("text/plain") != -1) {
+					text = (String)body.getContent();
+					break;
+				}
+			}
+			if ((text == null) && (parts.getCount() > 0)) {
+				text = (String)parts.getBodyPart(0).getContent();
+				if (text.contains("<hr")) {
+					text = new TextStream(text).upToAll("<hr");
+				}
+				text = Utils.stripTags(text);
+			}
+		} else if (content instanceof String) {
+			text = (String)content;
+			if (message.getContentType().toLowerCase().contains("html")) {
+				if (text.contains("<hr")) {
+					text = new TextStream(text).upToAll("<hr");
+				}
+				text = Utils.stripTags(text);
+			}
+		}
+		text = text.trim();
 		log("Processing email body", Level.INFO, subject, fromUser, text);
-	    // Parse email chain.
-	    TextStream stream = new TextStream(text);
-	    StringWriter writer = new StringWriter();
-	    while (!stream.atEnd()) {
-	    	String nextLine = stream.nextLine();
-	    	if ((nextLine.length() > 0) && (nextLine.charAt(0) == '-')) {
-		    	if (nextLine.indexOf("---") != -1) {
-		    		// End of message.
-		    		break;
-		    	}
-	    	}
-	    	if ((nextLine.indexOf("@") != -1) && (nextLine.indexOf("wrote") != -1) && (nextLine.length() > 10) && (nextLine.substring(0, 2).equalsIgnoreCase("on"))) {
-	    		break;
-	    	}
-	    	if ((nextLine.length() > 0) && (nextLine.charAt(0) == '>')) {
-	    		// Ignore.
-	    	} else {
-	    		writer.write(nextLine);
-	    	}
-	    }
-	    text = writer.toString();
-	    if (text.length() == 0) {
-	    	text = subject;
-	    }
+		// Parse email chain.
+		TextStream stream = new TextStream(text);
+		StringWriter writer = new StringWriter();
+		while (!stream.atEnd()) {
+			String nextLine = stream.nextLine();
+			if ((nextLine.length() > 0) && (nextLine.charAt(0) == '-')) {
+				if (nextLine.indexOf("---") != -1) {
+					// End of message.
+					break;
+				}
+			}
+			if ((nextLine.indexOf("@") != -1) && (nextLine.indexOf("wrote") != -1) && (nextLine.length() > 10) && (nextLine.substring(0, 2).equalsIgnoreCase("on"))) {
+				break;
+			}
+			if ((nextLine.length() > 0) && (nextLine.charAt(0) == '>')) {
+				// Ignore.
+			} else {
+				writer.write(nextLine);
+			}
+		}
+		text = writer.toString();
+		if (text.length() == 0) {
+			text = subject;
+		}
 		log("Processing email content", Level.INFO, subject, fromUser, text);
 		inputSentence(text.trim(), subject, fromUser, toUser, message, network);
 	}
@@ -744,7 +744,7 @@ public class Email extends BasicSense {
 			return;
 		}
 		Vertex target = output.mostConscious(Primitive.TARGET);
-		String replyTo = target.mostConscious(Primitive.WORD).getData().toString();
+		String replyTo = target.mostConscious(Primitive.EMAIL).getData().toString();
 		if ((replyTo.toLowerCase().indexOf("noreply") != -1) || (replyTo.toLowerCase().indexOf("donotreply") != -1)) {
 			return;
 		}
@@ -770,7 +770,7 @@ public class Email extends BasicSense {
 						TextStream stream = new TextStream(questionText);
 						while (!stream.atEnd()) {
 							writer.write("> ");
-							writer.write(stream.nextLine());							
+							writer.write(stream.nextLine());
 						}
 					} else {
 						writer.write("> ");
@@ -947,7 +947,7 @@ public class Email extends BasicSense {
 	 */
 	public void inputSentence(String text, String subject, String userName, String targetUserName, Message message, Network network) throws MessagingException {
 		Vertex input = createInputParagraph(text.trim(), network);
-		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.EMAIL);
+		Vertex user = network.createUniqueSpeaker(new Primitive(userName), Primitive.EMAIL, Utils.upTo(userName, "@"));
 		user.addRelationship(Primitive.EMAIL, network.createVertex(userName));
 		input.addRelationship(Primitive.INSTANTIATION, Primitive.EMAIL);
 		input.getRelationship(Primitive.INPUT).addRelationship(Primitive.INSTANTIATION, Primitive.EMAIL);
@@ -971,7 +971,7 @@ public class Email extends BasicSense {
 			if (targetUserName.equals(getEmailAddress())) {
 				targetUser = network.createVertex(Primitive.SELF);
 			} else {
-				targetUser = network.createSpeaker(targetUserName);
+				targetUser = network.createUniqueSpeaker(new Primitive(targetUserName), Primitive.EMAIL, Utils.upTo(targetUserName, "@"));
 			}
 			input.addRelationship(Primitive.TARGET, targetUser);
 			conversation.addRelationship(Primitive.SPEAKER, targetUser);

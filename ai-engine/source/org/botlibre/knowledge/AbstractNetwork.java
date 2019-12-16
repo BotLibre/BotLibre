@@ -234,7 +234,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			if (meaning != null) {
 				vertex.addRelationship(Primitive.MEANING, meaning);
 				meaning.addWeakRelationship(Primitive.WORD, vertex, 0.2f);
-				// Associate word type from similar word.				
+				// Associate word type from similar word.
 				Collection<Relationship> relationships = similar.getRelationships(Primitive.INSTANTIATION);
 				if (relationships != null) {
 					for (Relationship type : relationships) {
@@ -271,13 +271,13 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 				char last = digits.charAt(digits.length() - 1);
 				Vertex ordinal = null;
 				if (last == '1') {
-					ordinal = createWord(digits + "st");					
+					ordinal = createWord(digits + "st");
 				} else if (last == '2') {
-					ordinal = createWord(digits + "nd");					
+					ordinal = createWord(digits + "nd");
 				} else if (last == '3') {
-					ordinal = createWord(digits + "rd");					
+					ordinal = createWord(digits + "rd");
 				} else {
-					ordinal = createWord(digits + "th");					
+					ordinal = createWord(digits + "th");
 				}
 				ordinal.addRelationship(Primitive.MEANING, vertex);
 				vertex.addRelationship(Primitive.ORDINAL, ordinal);
@@ -344,8 +344,8 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			if (calendar.get(Calendar.AM_PM) == Calendar.PM) {
 				vertex.addRelationship(Primitive.AM_PM, Primitive.PM);
 			} else {
-				vertex.addRelationship(Primitive.AM_PM, Primitive.AM);				
-			}			
+				vertex.addRelationship(Primitive.AM_PM, Primitive.AM);
+			}
 		}
 		if (data instanceof java.sql.Date) {
 			java.sql.Date date = (java.sql.Date)data;
@@ -362,7 +362,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			vertex.addRelationship(Primitive.DAY, createVertex(BigInteger.valueOf(calendar.get(Calendar.DATE))));
 			vertex.addRelationship(Primitive.DAY_OF_WEEK, createVertex(Primitive.DAYS_OF_WEEK[calendar.get(Calendar.DAY_OF_WEEK) - 1]));
 			vertex.addRelationship(Primitive.MONTH, createVertex(Primitive.MONTHS[calendar.get(Calendar.MONTH)]));
-			vertex.addRelationship(Primitive.YEAR, createVertex(BigInteger.valueOf(calendar.get(Calendar.YEAR))));			
+			vertex.addRelationship(Primitive.YEAR, createVertex(BigInteger.valueOf(calendar.get(Calendar.YEAR))));
 		}
 		return vertex;
 	}
@@ -554,7 +554,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			}
 		} else {
 			compoundWord.addRelationship(Primitive.INSTANTIATION, Primitive.WORD);
-		}		
+		}
 		return compoundWord;
 	}
 
@@ -574,23 +574,27 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	public synchronized void associateCaseInsensitivity(String word, Vertex meaning) {
 		Collection<Relationship> classifications = createVertex(word).getRelationships(Primitive.INSTANTIATION);
 		String lower = word.toLowerCase();
-		Vertex capWord = createWord(Utils.capitalize(lower));
-		capWord.addRelationship(Primitive.MEANING, meaning);
-		meaning.addWeakRelationship(Primitive.WORD, capWord, 0.2f);
-		if (classifications != null) {
-			for (Relationship classification : classifications) {
-				if (!classification.isInverse()) {
-					capWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+		Language language = getBot().mind().getThought(Language.class);
+		if (language.getTrackCase()) {
+			// Old case over sensitivity code.
+			Vertex capWord = createWord(Utils.capitalize(lower));
+			capWord.addRelationship(Primitive.MEANING, meaning);
+			meaning.addWeakRelationship(Primitive.WORD, capWord, 0.2f);
+			if (classifications != null) {
+				for (Relationship classification : classifications) {
+					if (!classification.isInverse()) {
+						capWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+					}
 				}
 			}
-		}
-		Vertex upperWord = createWord(lower.toUpperCase());
-		upperWord.addRelationship(Primitive.MEANING, meaning);
-		meaning.addWeakRelationship(Primitive.WORD, upperWord, 0.2f);
-		if (classifications != null) {
-			for (Relationship classification : classifications) {
-				if (!classification.isInverse()) {
-					upperWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+			Vertex upperWord = createWord(lower.toUpperCase());
+			upperWord.addRelationship(Primitive.MEANING, meaning);
+			meaning.addWeakRelationship(Primitive.WORD, upperWord, 0.2f);
+			if (classifications != null) {
+				for (Relationship classification : classifications) {
+					if (!classification.isInverse()) {
+						upperWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+					}
 				}
 			}
 		}
@@ -617,78 +621,82 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 		Collection<Relationship> tenses = word.getRelationships(Primitive.TENSE);
 		Collection<Relationship> conjugations = word.getRelationships(Primitive.CONJUGATION);
 		String lower = word.getDataValue().toLowerCase();
-		String caps = Utils.capitalize(lower);
-		Vertex capWord = createWord(caps);
-		if (meanings != null) {
-			for (Relationship meaning : meanings) {
-				if (!meaning.isInverse()) {
-					capWord.addRelationship(Primitive.MEANING, meaning.getTarget());
-					meaning.getTarget().addWeakRelationship(Primitive.WORD, capWord, 0.2f);
+		Language language = getBot().mind().getThought(Language.class);
+		if (language.getTrackCase()) {
+			// Old case over sensitivity code.
+			String caps = Utils.capitalize(lower);
+			Vertex capWord = createWord(caps);
+			if (meanings != null) {
+				for (Relationship meaning : meanings) {
+					if (!meaning.isInverse()) {
+						capWord.addRelationship(Primitive.MEANING, meaning.getTarget());
+						meaning.getTarget().addWeakRelationship(Primitive.WORD, capWord, 0.2f);
+					}
 				}
 			}
-		}
-		if (classifications != null) {
-			for (Relationship classification : classifications) {
-				if (!classification.isInverse()) {
-					capWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+			if (classifications != null) {
+				for (Relationship classification : classifications) {
+					if (!classification.isInverse()) {
+						capWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+					}
 				}
 			}
-		}
-		if (types != null) {
-			for (Relationship type : types) {
-				if (!type.isInverse()) {
-					capWord.addRelationship(Primitive.TYPE, type.getTarget());
+			if (types != null) {
+				for (Relationship type : types) {
+					if (!type.isInverse()) {
+						capWord.addRelationship(Primitive.TYPE, type.getTarget());
+					}
 				}
 			}
-		}
-		if (tenses != null) {
-			for (Relationship tense : tenses) {
-				if (!tense.isInverse()) {
-					capWord.addRelationship(Primitive.TENSE, tense.getTarget());
+			if (tenses != null) {
+				for (Relationship tense : tenses) {
+					if (!tense.isInverse()) {
+						capWord.addRelationship(Primitive.TENSE, tense.getTarget());
+					}
 				}
 			}
-		}
-		if (conjugations != null) {
-			for (Relationship conjugation : conjugations) {
-				if (!conjugation.isInverse()) {
-					capWord.addRelationship(Primitive.CONJUGATION, conjugation.getTarget());
+			if (conjugations != null) {
+				for (Relationship conjugation : conjugations) {
+					if (!conjugation.isInverse()) {
+						capWord.addRelationship(Primitive.CONJUGATION, conjugation.getTarget());
+					}
 				}
 			}
-		}
-		Vertex upperWord = createWord(lower.toUpperCase());
-		if (meanings != null) {
-			for (Relationship meaning : meanings) {
-				if (!meaning.isInverse()) {
-					upperWord.addRelationship(Primitive.MEANING, meaning.getTarget());
-					meaning.getTarget().addWeakRelationship(Primitive.WORD, upperWord, 0.2f);
+			Vertex upperWord = createWord(lower.toUpperCase());
+			if (meanings != null) {
+				for (Relationship meaning : meanings) {
+					if (!meaning.isInverse()) {
+						upperWord.addRelationship(Primitive.MEANING, meaning.getTarget());
+						meaning.getTarget().addWeakRelationship(Primitive.WORD, upperWord, 0.2f);
+					}
 				}
 			}
-		}
-		if (classifications != null) {
-			for (Relationship classification : classifications) {
-				if (!classification.isInverse()) {
-					upperWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+			if (classifications != null) {
+				for (Relationship classification : classifications) {
+					if (!classification.isInverse()) {
+						upperWord.addRelationship(Primitive.INSTANTIATION, classification.getTarget());
+					}
 				}
 			}
-		}
-		if (types != null) {
-			for (Relationship type : types) {
-				if (!type.isInverse()) {
-					upperWord.addRelationship(Primitive.TYPE, type.getTarget());
+			if (types != null) {
+				for (Relationship type : types) {
+					if (!type.isInverse()) {
+						upperWord.addRelationship(Primitive.TYPE, type.getTarget());
+					}
 				}
 			}
-		}
-		if (tenses != null) {
-			for (Relationship tense : tenses) {
-				if (!tense.isInverse()) {
-					upperWord.addRelationship(Primitive.TENSE, tense.getTarget());
+			if (tenses != null) {
+				for (Relationship tense : tenses) {
+					if (!tense.isInverse()) {
+						upperWord.addRelationship(Primitive.TENSE, tense.getTarget());
+					}
 				}
 			}
-		}
-		if (conjugations != null) {
-			for (Relationship conjugation : conjugations) {
-				if (!conjugation.isInverse()) {
-					upperWord.addRelationship(Primitive.CONJUGATION, conjugation.getTarget());
+			if (conjugations != null) {
+				for (Relationship conjugation : conjugations) {
+					if (!conjugation.isInverse()) {
+						upperWord.addRelationship(Primitive.CONJUGATION, conjugation.getTarget());
+					}
 				}
 			}
 		}
@@ -915,6 +923,13 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 					element = createInstance(Primitive.REGEX);
 					element.setName(expression);
 					element.addRelationship(Primitive.REGEX, createVertex(expression));
+				} else if (word.equals("\"")) {
+					// Fragment
+					stream.skipQuotes();
+					String fragmentText = stream.nextStringDoubleQuotes();
+					element = createFragment(fragmentText);
+					element.addRelationship(Primitive.PATTERN, pattern);
+					stream.skip();
 				} else {
 					element = createWord(word);
 					element.addRelationship(Primitive.PATTERN, pattern);
@@ -1252,7 +1267,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 		Vertex speaker = null;
 		Vertex word = findByData(name);
 		if (word != null) {
-			speaker = word.mostConscious(createVertex(Primitive.MEANING), createVertex(Primitive.SPEAKER));
+			speaker = word.getRelationship(Primitive.SPEAKER);
 		}
 		if (speaker == null) {
 			speaker = createNewObject(Utils.capitalize(name));
@@ -1260,6 +1275,16 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			if (!name.equals(TextEntry.DEFAULT_SPEAKER)) {
 				speaker.addRelationship(Primitive.NAME, createVertex(Utils.capitalize(name)));
+				word = createFragment(name);
+				speaker.addRelationship(Primitive.WORD, word);
+				word.addRelationship(Primitive.SPEAKER, speaker);
+			}
+		} else if (!speaker.hasRelationship(Primitive.NAME)) {
+			speaker.addRelationship(Primitive.NAME, createFragment(Utils.capitalize(name)));
+			if (!name.equals(TextEntry.DEFAULT_SPEAKER)) {
+				speaker.addRelationship(Primitive.NAME, createVertex(Utils.capitalize(name)));
+				word = createFragment(name);
+				speaker.addRelationship(Primitive.WORD, word);
 			}
 		}
 		return speaker;
@@ -1269,16 +1294,23 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	 * Find or create the speaker from the unique id.
 	 */
 	public synchronized Vertex createUniqueSpeaker(Primitive id, Primitive type) {
-		Vertex speaker = findByData(id);
-		if (speaker != null) {
+		if (id.equals(Primitive.ANONYMOUS)) {
+			Vertex speaker = createVertex();
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+			speaker.addRelationship(Primitive.TYPE, type);
 			return speaker;
 		}
+		Vertex identifier = createVertex(id);
+		Vertex speaker = identifier.getRelationship(type);
 		if (speaker == null) {
-			speaker = createVertex(id);
+			speaker = createVertex();
+			identifier.setRelationship(type, speaker);
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			speaker.addRelationship(Primitive.TYPE, type);
 			speaker.addRelationship(Primitive.ID, createVertex(id.getIdentity()));
+			identifier.setRelationship(type, speaker);
 		}
 		return speaker;
 	}
@@ -1287,12 +1319,21 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 	 * Find or create the speaker from the unique id.
 	 */
 	public synchronized Vertex createUniqueSpeaker(Primitive id, Primitive type, String name) {
-		Vertex speaker = findByData(id);
-		if (speaker != null) {
+		if (id.equals(Primitive.ANONYMOUS)) {
+			Vertex speaker = createVertex();
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
+			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
+			speaker.addRelationship(Primitive.TYPE, type);
+			speaker.addRelationship(Primitive.NAME, createFragment(Utils.capitalize(name)));
+			Vertex word = createFragment(name);
+			speaker.addRelationship(Primitive.WORD, word);
 			return speaker;
 		}
+		Vertex identifier = createVertex(id);
+		Vertex speaker = identifier.getRelationship(type);
 		if (speaker == null) {
-			speaker = createVertex(id);
+			speaker = createVertex();
+			identifier.setRelationship(type, speaker);
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.SPEAKER);
 			speaker.addRelationship(Primitive.INSTANTIATION, Primitive.THING);
 			speaker.addRelationship(Primitive.TYPE, type);
@@ -1302,6 +1343,10 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 			//word.addRelationship(Primitive.MEANING, speaker);
 			speaker.addRelationship(Primitive.WORD, word);
 			//associateCaseInsensitivity(name, speaker);
+		} else if (!speaker.hasRelationship(Primitive.NAME)) {
+			speaker.addRelationship(Primitive.NAME, createFragment(Utils.capitalize(name)));
+			Vertex word = createFragment(name);
+			speaker.addRelationship(Primitive.WORD, word);
 		}
 		return speaker;
 	}

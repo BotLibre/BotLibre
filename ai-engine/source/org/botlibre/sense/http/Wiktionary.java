@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.botlibre.Bot;
 import org.botlibre.BotException;
@@ -44,31 +45,92 @@ import org.w3c.dom.Node;
 public class Wiktionary extends Http implements DiscoverySense {
 	public static int MAX_ERRORS = 5;
 	public static int MAX_WORDS = 50;
-	
+
+	protected boolean cache = true;
 	protected boolean isBatch = true;
 	protected boolean quickProcess = false;
 	protected boolean followNext = true;
-	
-	protected static String NEXT_TAG = "next 200";
-	protected static String NOUN_TAG = "noun";
-	protected static String PROPER_TAG = "proper";
-	protected static String VERB_TAG = "verb";
-	protected static String ADJECTIVE_TAG = "adjective";
-	protected static String INTERJECTION_TAG = "interjection";
-	protected static String PRONOUN_TAG = "pronoun";
-	protected static String DETERMINER_TAG = "Determiner";
-	protected static String NUMERAL_TAG = "Numeral";
-	protected static String ADVERB_TAG = "adverb";
-	protected static String NOUNS_TAG = "nouns";
-	protected static String VERBS_TAG = "verbs";
-	protected static String ADJECTIVES_TAG = "adjectives";
-	protected static String SYNONYMS = "synonyms";
-	protected static String ANTONYMS = "antonyms";
-	protected static String URL_PREFIX = "https://en.wiktionary.org/wiki/";
-	protected static String DOMAIN = "en.wiktionary.org";
+
+	protected String lang = "en";
+	protected String LANG_TAG = "English";
+	protected String NEXT_TAG = "next 200";
+	protected String NOUN_TAG = "noun";
+	protected String PROPER_TAG = "proper";
+	protected String VERB_TAG = "verb";
+	protected String ADJECTIVE_TAG = "adjective";
+	protected String INTERJECTION_TAG = "interjection";
+	protected String PRONOUN_TAG = "pronoun";
+	protected String DETERMINER_TAG = "determiner";
+	protected String NUMERAL_TAG = "numeral";
+	protected String ADVERB_TAG = "adverb";
+	protected String NOUNS_TAG = "nouns";
+	protected String VERBS_TAG = "verbs";
+	protected String ADJECTIVES_TAG = "adjectives";
+	protected String SYNONYMS = "synonyms";
+	protected String ANTONYMS = "antonyms";
+	protected String URL_PREFIX = "https://en.wiktionary.org/wiki/";
+	protected String DOMAIN = "en.wiktionary.org";
 
 	public Wiktionary() {
 		
+	}
+	
+	public String getLanguage() {
+		return lang;
+	}
+	
+	/**
+	 * Configure the tags for parsing the Wiktionary language website version.
+	 */
+	public void setLanguage(String lang) {
+		if (lang == null || lang.isEmpty()) {
+			lang = "en";
+		}
+		lang = lang.toLowerCase().trim();
+		this.lang = lang;
+		if (lang.startsWith("en")) {
+			LANG_TAG = "English";
+			NEXT_TAG = "next 200";
+			NOUN_TAG = "noun";
+			PROPER_TAG = "proper";
+			VERB_TAG = "verb";
+			ADJECTIVE_TAG = "adjective";
+			INTERJECTION_TAG = "interjection";
+			PRONOUN_TAG = "pronoun";
+			DETERMINER_TAG = "determiner";
+			NUMERAL_TAG = "numeral";
+			ADVERB_TAG = "adverb";
+			NOUNS_TAG = "nouns";
+			VERBS_TAG = "verbs";
+			ADJECTIVES_TAG = "adjectives";
+			SYNONYMS = "synonyms";
+			ANTONYMS = "antonyms";
+			URL_PREFIX = "https://en.wiktionary.org/wiki/";
+			DOMAIN = "en.wiktionary.org";
+			cache = true;
+		} else if (lang.startsWith("fr")) {
+			LANG_TAG = "Français";
+			NEXT_TAG = "next 200";
+			NOUN_TAG = "nom";
+			PROPER_TAG = "propre";
+			VERB_TAG = "verbe";
+			ADJECTIVE_TAG = "adjectif";
+			INTERJECTION_TAG = "interjection";
+			PRONOUN_TAG = "pronom";
+			DETERMINER_TAG = "déterminer";
+			NUMERAL_TAG = "numérale";
+			ADVERB_TAG = "adverbe";
+			NOUNS_TAG = "noms";
+			VERBS_TAG = "verbes";
+			ADJECTIVES_TAG = "adjectifs";
+			SYNONYMS = "synonymes";
+			ANTONYMS = "antonymes";
+			URL_PREFIX = "https://fr.wiktionary.org/wiki/";
+			DOMAIN = "fr.wiktionary.org";
+			cache = false;
+		} else {
+			this.isEnabled = false;
+		}
 	}
 	
 	@Override
@@ -126,7 +188,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 				for (int index = 0; index < items.size(); index++) {
 					String item = items.get(index);
 					quickProcessWord(item, category, network);
-				}			
+				}
 			} else {
 				// Load URL and analyze word.
 				List<String> items = getAllURLBullets(header);
@@ -143,7 +205,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 				for (int index = 0; index < items.size(); index++) {
 					String item = items.get(index);
 					try {
-						URL childURL = new URL(item);
+						URL childURL = Utils.safeURL(item);
 						urls.add(childURL);
 					} catch (Exception ioException) {
 						log(ioException);
@@ -171,7 +233,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 						nextURL = host + nextURL;
 					}
 					try {
-						url = new URL(nextURL);
+						url = Utils.safeURL(nextURL);
 						node = parseURL(url);
 					} catch (Exception ioException) {
 						log(ioException);
@@ -206,8 +268,8 @@ public class Wiktionary extends Http implements DiscoverySense {
 			return;
 		}
 		Vertex word = network.createWord(text);
-		word.addRelationship(Primitive.URL, createURL(url, network));
-		word.setRelationship(getPrimitive(), network.createTimestamp());
+		//word.addRelationship(Primitive.URL, createURL(url, network));
+		word.setRelationship(getPrimitive(), network.createVertex(Primitive.TRUE));
 		Relationship unknown = word.getRelationship(Primitive.INSTANTIATION, Primitive.UNKNOWNWORD);
 		word.internalRemoveRelationship(unknown);
 		unknown = word.getRelationship(Primitive.INSTANTIATION, Primitive.UNKOWNWORD);
@@ -218,24 +280,27 @@ public class Wiktionary extends Http implements DiscoverySense {
 		Vertex meaning = word.mostConscious(Primitive.MEANING);
 		if (meaning != null) {
 			if (meaning.instanceOf(Primitive.SPEAKER) && (relationships.size() == 1)) {
-				log("Known as speaker, creating new meaning", Bot.FINE, word);				
-			} else {
-				log("Already known", Bot.FINE, word);
+				meaning = null;
+				log("Known as speaker, creating new meaning", Bot.FINE, word);
+			} else if (meaning.isPrimitive()) {
+				log("Ignoring primitive", Bot.FINE, word);
 				return;
 			}
 		}
-		// Create meaning.
-		meaning = network.createVertex();
-		meaning.setName(text);
+		if (meaning == null) {
+			// Create meaning.
+			meaning = network.createVertex();
+			meaning.setName(text);
+		}
 		//meaning.addRelationship(urlType, url);
-		log("Word", Bot.FINE, word);
+		log("Word", Level.FINE, word, this.lang);
 		word.addRelationship(Primitive.MEANING, meaning);
 		meaning.addRelationship(Primitive.WORD, word);
 		
 		// Filter English.
 		Set<String> headers = new HashSet<String>(1);
 		headers.add("h2");
-		Node header = findTag(headers, "English", h1);
+		Node header = findTag(headers, LANG_TAG, h1);
 		// If no English assume all are English.
 		if (header == null) {
 			header = h1;
@@ -275,7 +340,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 						log("Definition", Bot.FINE, definition);
 						Vertex def = network.createSentence(definition);
 						meaning.addRelationship(Primitive.SENTENCE, def);
-						// Check plural						
+						// Check plural
 						TextStream stream = new TextStream(definition);
 						String first = stream.nextWord();
 						if (first != null && first.equalsIgnoreCase("plural")) {
@@ -304,7 +369,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 				word.addRelationship(Primitive.INSTANTIATION, Primitive.NOUN);
 				if (words.contains(PROPER_TAG)) {
 					log("Name", Bot.FINE, meaning);
-					word.addRelationship(Primitive.INSTANTIATION, Primitive.NAME);					
+					word.addRelationship(Primitive.INSTANTIATION, Primitive.NAME);
 				}
 				multipleMeanings = true;
 			} else if (words.contains(VERB_TAG)) {
@@ -503,6 +568,16 @@ public class Wiktionary extends Http implements DiscoverySense {
 		network.save();
 		return result;
 	}
+	
+	public boolean isPossibleWord(String text) {
+		if (this.lang == null || this.lang.startsWith("en") && !Utils.isEnglish(text)) {
+			return false;
+		}
+		if (Utils.containsAny(text, "1234567890@")) {
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Self API
@@ -512,16 +587,16 @@ public class Wiktionary extends Http implements DiscoverySense {
 	public Vertex define(Vertex source, Vertex word) {
 		String text = word.getDataValue();
 		if (text != null) {
-			Vertex lastChecked = word.getRelationship(getPrimitive());
+			Vertex checked = word.getRelationship(getPrimitive());
 			Collection<Relationship> meanings = word.getRelationships(Primitive.MEANING);
 			// Ignore if already discovered.
 			// Also check if the meaning may have been forgotten.
-			if (lastChecked == null || (meanings == null && (!word.instanceOf(Primitive.UNKNOWNWORD) && !word.instanceOf(Primitive.UNKOWNWORD)))) {
-				if (!Utils.isEnglish(text)) {
+			if (checked == null || (meanings == null && (!word.instanceOf(Primitive.UNKNOWNWORD) && !word.instanceOf(Primitive.UNKOWNWORD)))) {
+				if (!isPossibleWord(text)) {
 					return null;
 				}
 				Network network = word.getNetwork();
-				word.setRelationship(getPrimitive(), network.createTimestamp());
+				word.setRelationship(getPrimitive(), network.createVertex(Primitive.TRUE));
 
 				// TODO handle multiple meanings.
 				Collection<Relationship> relationships = word.getRelationships(Primitive.MEANING);
@@ -534,12 +609,12 @@ public class Wiktionary extends Http implements DiscoverySense {
 				
 				// Check cache first.
 				boolean found = false;
-				if (getBot().getParent() != null) {
+				if (this.cache && getBot().getParent() != null) {
 					Network cache = getBot().getParent().memory().newMemory();
 					Vertex cacheWord = cache.createWord(text);
-					Vertex cacheLastChecked = cacheWord.getRelationship(getPrimitive());
+					Vertex cacheChecked = cacheWord.getRelationship(getPrimitive());
 					meanings = cacheWord.getRelationships(Primitive.MEANING);
-					if (cacheLastChecked != null && (meanings != null || (cacheWord.instanceOf(Primitive.UNKNOWNWORD) || word.instanceOf(Primitive.UNKOWNWORD)))) {
+					if (cacheChecked != null && (meanings != null || (cacheWord.instanceOf(Primitive.UNKNOWNWORD) || word.instanceOf(Primitive.UNKOWNWORD)))) {
 						found = true;
 						log("Importing word from cache", Bot.FINE, text);
 						Vertex newWord = network.createVertex(word);
@@ -565,12 +640,12 @@ public class Wiktionary extends Http implements DiscoverySense {
 								}
 							}
 						}
-						Vertex url = cacheWord.getRelationship(Primitive.URL);
-						if (url != null && url.getData() != null) {
-							newWord.addRelationship(Primitive.URL, network.createVertex(url.getData()));
-						}
+						//Vertex url = cacheWord.getRelationship(Primitive.URL);
+						//if (url != null && url.getData() != null) {
+						//	newWord.addRelationship(Primitive.URL, network.createVertex(url.getData()));
+						//}
 					} else {
-						cacheWord.addRelationship(getPrimitive(), cache.createTimestamp());
+						cacheWord.addRelationship(getPrimitive(), cache.createVertex(Primitive.TRUE));
 						cacheWord.addRelationship(Primitive.INSTANTIATION, Primitive.UNKNOWNWORD);
 						cache.save();
 						Wiktionary wiktionary = getBot().getParent().awareness().getSense(Wiktionary.class);
@@ -624,16 +699,16 @@ public class Wiktionary extends Http implements DiscoverySense {
 				}
 				String text = word.getDataValue();
 				if (text != null) {
-					Vertex lastChecked = word.getRelationship(getPrimitive());
+					Vertex checked = word.getRelationship(getPrimitive());
 					Collection<Relationship> meanings = word.getRelationships(Primitive.MEANING);
 					// Ignore if already discovered.
 					// Also check if the meaning may have been forgotten.
-					if (lastChecked == null || (meanings == null && (!word.instanceOf(Primitive.UNKNOWNWORD) && !word.instanceOf(Primitive.UNKOWNWORD)))) {
-						if (!Utils.isEnglish(text)) {
+					if (checked == null || (meanings == null && (!word.instanceOf(Primitive.UNKNOWNWORD) && !word.instanceOf(Primitive.UNKOWNWORD)))) {
+						if (!isPossibleWord(text)) {
 							count++;
 							continue;
 						}
-						word.setRelationship(getPrimitive(), currentTime);
+						word.setRelationship(getPrimitive(), network.createVertex(Primitive.TRUE));
 
 						// TODO handle multiple meanings.
 						Collection<Relationship> relationships = word.getRelationships(Primitive.MEANING);
@@ -646,14 +721,14 @@ public class Wiktionary extends Http implements DiscoverySense {
 						
 						// Check cache first.
 						boolean found = false;
-						if (getBot().getParent() != null) {
+						if (this.cache && getBot().getParent() != null) {
 							Network cache = getBot().getParent().memory().newMemory();
 							Vertex cacheWord = cache.createWord(text);
-							Vertex cacheLastChecked = cacheWord.getRelationship(getPrimitive());
+							Vertex cacheChecked = cacheWord.getRelationship(getPrimitive());
 							meanings = cacheWord.getRelationships(Primitive.MEANING);
-							if (cacheLastChecked != null && (meanings != null || (cacheWord.instanceOf(Primitive.UNKNOWNWORD) || cacheWord.instanceOf(Primitive.UNKOWNWORD)))) {
+							if (cacheChecked != null && (meanings != null || (cacheWord.instanceOf(Primitive.UNKOWNWORD)))) {
 								found = true;
-								log("Importing word from cache", Bot.FINE, text);
+								log("Importing word from cache", Level.FINE, text);
 								Network newNetwork = getBot().memory().newMemory();
 								Vertex newWord = newNetwork.createVertex(word);
 								copyDataRelationships(cacheWord, Primitive.INSTANTIATION, newWord, newNetwork);
@@ -681,10 +756,10 @@ public class Wiktionary extends Http implements DiscoverySense {
 										}
 									}
 								}
-								Vertex url = cacheWord.getRelationship(Primitive.URL);
-								if (url != null && url.getData() != null) {
-									newWord.addRelationship(Primitive.URL, newNetwork.createVertex(url.getData()));
-								}
+								//Vertex url = cacheWord.getRelationship(Primitive.URL);
+								//if (url != null && url.getData() != null) {
+								//	newWord.addRelationship(Primitive.URL, newNetwork.createVertex(url.getData()));
+								//}
 								if (meanings != null) {
 									// Don't associate case if unknown, other cases may be word (URL).
 									newNetwork.associateCaseInsensitivity(newWord);
@@ -697,7 +772,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 								if (!getBot().mind().isConscious()) {
 									return;
 								}
-								cacheWord.addRelationship(getPrimitive(), cache.createVertex(currentTime.getData()));
+								cacheWord.addRelationship(getPrimitive(), cache.createVertex(Primitive.TRUE));
 								cacheWord.addRelationship(Primitive.INSTANTIATION, Primitive.UNKNOWNWORD);
 								cache.save();
 								Wiktionary wiktionary = getBot().getParent().awareness().getSense(Wiktionary.class);
@@ -715,7 +790,7 @@ public class Wiktionary extends Http implements DiscoverySense {
 										log(failed);
 										errors++;
 									}
-								}								
+								}
 							}
 						}
 						// Lookup locally.

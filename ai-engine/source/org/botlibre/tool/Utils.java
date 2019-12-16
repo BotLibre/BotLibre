@@ -61,6 +61,22 @@ public class Utils extends BasicTool {
 		return text.getNetwork().createVertex(text.printString().toLowerCase());
 	}
 
+	public Vertex isCapitalized(Vertex source, Vertex text) {
+		if (org.botlibre.util.Utils.isCapitalized(text.printString())) {
+			return source.getNetwork().createVertex(Primitive.TRUE);
+		} else {
+			return source.getNetwork().createVertex(Primitive.FALSE);
+		}
+	}
+
+	public Vertex isCaps(Vertex source, Vertex text) {
+		if (org.botlibre.util.Utils.isCaps(text.printString())) {
+			return source.getNetwork().createVertex(Primitive.TRUE);
+		} else {
+			return source.getNetwork().createVertex(Primitive.FALSE);
+		}
+	}
+
 	/**
 	 * Convert the pattern to a regex and return if the text matches the expression.
 	 */
@@ -93,6 +109,26 @@ public class Utils extends BasicTool {
 			Matcher m = p.matcher(text.printString());
 			if (m.find()) {
 				return source.getNetwork().createVertex(m.group());
+			}
+		} catch (Exception exception) { }
+		return null;
+	}
+
+	/**
+	 * Convert the pattern to a regex and extra the first match group from the text.
+	 */
+	public Vertex extractValue(Vertex source, Vertex text, Vertex pattern) {
+		try {
+			if (pattern.isPrimitive()) {
+				pattern = pattern.getRelationship(Primitive.REGEX);
+				if (pattern == null) {
+					return null;
+				}
+			}
+			Pattern p = Pattern.compile(pattern.printString());
+			Matcher m = p.matcher(text.printString());
+			if (m.find()) {
+				return source.getNetwork().createVertex(m.group(1));
 			}
 		} catch (Exception exception) { }
 		return null;

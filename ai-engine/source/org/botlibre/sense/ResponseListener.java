@@ -20,5 +20,6 @@ package org.botlibre.sense;
 
 public class ResponseListener {
 	public String reply;
+	public String command;
 	public String conversation;
 }
