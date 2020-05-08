@@ -756,99 +756,94 @@ public class Checkers {
 	}
 	
 	public List<int[]> validMoves() {
-		List<int[]> simpleMoves = new ArrayList<int[]>();
-		List<int[]> jumpMoves = new ArrayList<int[]>();
+		List<int[]> moves = new ArrayList<int[]>();
 		for (int index = 0; index < this.board.length; index++) {
-			// check if it's possible to simple move here
 			if (this.board[index] == Empty) {
 				if (this.turn == 'R') {
 					if ((0 < index - 9) && (this.board[index - 9] == 'r')) {
-						simpleMoves.add(new int[] {index - 9, index});
+						moves.add(new int[] {index - 9, index});
 					}
 					if ((0 < index - 7) && (this.board[index - 7] == 'r')) {
-						simpleMoves.add(new int[] {index - 7, index});
+						moves.add(new int[] {index - 7, index});
 					}
 					if ((0 < index - 9) && (this.board[index - 9] == 'R')) {
-						simpleMoves.add(new int[] {index - 9, index});
+						moves.add(new int[] {index - 9, index});
 					}
 					if ((0 < index - 7) && (this.board[index - 7] == 'R')) {
-						simpleMoves.add(new int[] {index - 7, index});
+						moves.add(new int[] {index - 7, index});
 					}
 					if ((index + 9 < 64) && (this.board[index + 9] == 'R')) {
-						simpleMoves.add(new int[] {index + 9, index});
+						moves.add(new int[] {index + 9, index});
 					}
 					if ((index + 7 < 64) && (this.board[index + 7] == 'R')) {
-						simpleMoves.add(new int[] {index + 7, index});
+						moves.add(new int[] {index + 7, index});
 					}
 				}
 				if (this.turn == 'B') {
 					if ((index + 9 < 64) && (this.board[index + 9] == 'b')) {
-						simpleMoves.add(new int[] {index + 9, index});
+						moves.add(new int[] {index + 9, index});
 					}
 					if ((index + 7 < 64) && (this.board[index + 7] == 'b')) {
-						simpleMoves.add(new int[] {index + 7, index});
+						moves.add(new int[] {index + 7, index});
 					}
 					if ((index + 9 < 64) && (this.board[index + 9] == 'B')) {
-						simpleMoves.add(new int[] {index + 9, index});
+						moves.add(new int[] {index + 9, index});
 					}
 					if ((index + 7 < 64) && (this.board[index + 7] == 'B')) {
-						simpleMoves.add(new int[] {index + 7, index});
+						moves.add(new int[] {index + 7, index});
 					}
 					if ((0 < index - 9) && (this.board[index - 9] == 'B')) {
-						simpleMoves.add(new int[] {index - 9, index});
+						moves.add(new int[] {index - 9, index});
 					}
 					if ((0 < index - 7) && (this.board[index - 7] == 'B')) {
-						simpleMoves.add(new int[] {index - 7, index});
+						moves.add(new int[] {index - 7, index});
 					}
 				}
 			}
-			// check if black piece can be jumped
-			else if ((this.board[index] == 'b') || (this.board[index] == 'B'))  {
+			if ((this.board[index] == 'b') || (this.board[index] == 'B'))  {
 				if (this.turn == 'R') {
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == 'r') && (this.board[index + 9] == Empty)) {
-						jumpMoves.add(new int[] {index - 9, index + 9});
+						moves.add(new int[] {index - 9, index + 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == 'r') && (this.board[index + 7] == Empty)) {
-						jumpMoves.add(new int[] {index - 7, index + 7});
+						moves.add(new int[] {index - 7, index + 7});
 					}
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == 'R') && (this.board[index + 9] == Empty)) {
-						jumpMoves.add(new int[] {index - 9, index + 9});
+						moves.add(new int[] {index - 9, index + 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == 'R') && (this.board[index + 7] == Empty)) {
-						jumpMoves.add(new int[] {index - 7, index + 7});
+						moves.add(new int[] {index - 7, index + 7});
 					}
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index + 9] == 'R') && (this.board[index - 9] == Empty)) {
-						jumpMoves.add(new int[] {index + 9, index - 9});
+						moves.add(new int[] {index + 9, index - 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index + 7] == 'R') && (this.board[index - 7] == Empty)) {
-						jumpMoves.add(new int[] {index + 7, index - 7});
+						moves.add(new int[] {index + 7, index - 7});
 					}
 				}
 			}
-			// check if red piece can be jumped
-			else if ((this.board[index] == 'r') || (this.board[index] == 'R'))  {
+			if ((this.board[index] == 'r') || (this.board[index] == 'R'))  {
 				if (this.turn == 'B') {
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == Empty)) {
 						if ((this.board[index + 9] == 'b') || (this.board[index + 9] == 'B')) {
-							jumpMoves.add(new int[] {index + 9, index - 9});
+							moves.add(new int[] {index + 9, index - 9});
 						}
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == Empty)) {
 						if ((this.board[index + 7] == 'b') || (this.board[index + 7] == 'B')) {
-							jumpMoves.add(new int[] {index + 7, index - 7});
+							moves.add(new int[] {index + 7, index - 7});
 						}
 					}
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == 'B') && (this.board[index + 9] == Empty)) {
-						jumpMoves.add(new int[] {index - 9, index + 9});
+						moves.add(new int[] {index - 9, index + 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == 'B') && (this.board[index + 7] == Empty)) {
-						jumpMoves.add(new int[] {index - 7, index + 7});
+						moves.add(new int[] {index - 7, index + 7});
 					}
 				}
 			}
 		}
-		// if a jump can be made, be sure not to return simple moves
-		return jumpMoves.isEmpty() ? simpleMoves : jumpMoves;
+		return moves;		
 	}
 	
 	public boolean checkJump(int[] move) {
