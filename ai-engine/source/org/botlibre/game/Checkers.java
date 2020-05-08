@@ -759,122 +759,86 @@ public class Checkers {
 		List<int[]> moves = new ArrayList<int[]>();
 		for (int index = 0; index < this.board.length; index++) {
 			if (this.board[index] == Empty) {
-				int[] move = new int[2];
-				move[1] = index;
 				if (this.turn == 'R') {
 					if ((0 < index - 9) && (this.board[index - 9] == 'r')) {
-						move[0] = index - 9;
-						moves.add(move);
+						moves.add(new int[] {index - 9, index});
 					}
 					if ((0 < index - 7) && (this.board[index - 7] == 'r')) {
-						move[0] = index - 7;
-						moves.add(move);
+						moves.add(new int[] {index - 7, index});
 					}
 					if ((0 < index - 9) && (this.board[index - 9] == 'R')) {
-						move[0] = index - 9;
-						moves.add(move);
+						moves.add(new int[] {index - 9, index});
 					}
 					if ((0 < index - 7) && (this.board[index - 7] == 'R')) {
-						move[0] = index - 7;
-						moves.add(move);
+						moves.add(new int[] {index - 7, index});
 					}
 					if ((index + 9 < 64) && (this.board[index + 9] == 'R')) {
-						move[0] = index + 9;
-						moves.add(move);
+						moves.add(new int[] {index + 9, index});
 					}
 					if ((index + 7 < 64) && (this.board[index + 7] == 'R')) {
-						move[0] = index + 7;
-						moves.add(move);
+						moves.add(new int[] {index + 7, index});
 					}
 				}
 				if (this.turn == 'B') {
 					if ((index + 9 < 64) && (this.board[index + 9] == 'b')) {
-						move[0] = index + 9;
-						moves.add(move);
+						moves.add(new int[] {index + 9, index});
 					}
 					if ((index + 7 < 64) && (this.board[index + 7] == 'b')) {
-							move[0] = index + 7;
-							moves.add(move);
+						moves.add(new int[] {index + 7, index});
 					}
 					if ((index + 9 < 64) && (this.board[index + 9] == 'B')) {
-						move[0] = index + 9;
-						moves.add(move);
+						moves.add(new int[] {index + 9, index});
 					}
 					if ((index + 7 < 64) && (this.board[index + 7] == 'B')) {
-							move[0] = index + 7;
-							moves.add(move);
+						moves.add(new int[] {index + 7, index});
 					}
 					if ((0 < index - 9) && (this.board[index - 9] == 'B')) {
-						move[0] = index - 9;
-						moves.add(move);
+						moves.add(new int[] {index - 9, index});
 					}
 					if ((0 < index - 7) && (this.board[index - 7] == 'B')) {
-						move[0] = index - 7;
-						moves.add(move);
+						moves.add(new int[] {index - 7, index});
 					}
 				}
 			}
 			if ((this.board[index] == 'b') || (this.board[index] == 'B'))  {
-				int[] move = new int[2];
 				if (this.turn == 'R') {
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == 'r') && (this.board[index + 9] == Empty)) {
-							move[0] = index - 9;
-							move[1] = index + 9;
-							moves.add(move);
+						moves.add(new int[] {index - 9, index + 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == 'r') && (this.board[index + 7] == Empty)) {
-						move[0] = index - 7;
-						move[1] = index + 7;
-						moves.add(move);
+						moves.add(new int[] {index - 7, index + 7});
 					}
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == 'R') && (this.board[index + 9] == Empty)) {
-						move[0] = index - 9;
-						move[1] = index + 9;
-						moves.add(move);
+						moves.add(new int[] {index - 9, index + 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == 'R') && (this.board[index + 7] == Empty)) {
-						move[0] = index - 7;
-						move[1] = index + 7;
-						moves.add(move);
+						moves.add(new int[] {index - 7, index + 7});
 					}
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index + 9] == 'R') && (this.board[index - 9] == Empty)) {
-						move[0] = index + 9;
-						move[1] = index - 9;
-						moves.add(move);
+						moves.add(new int[] {index + 9, index - 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index + 7] == 'R') && (this.board[index - 7] == Empty)) {
-						move[0] = index + 7;
-						move[1] = index - 7;
-						moves.add(move);
+						moves.add(new int[] {index + 7, index - 7});
 					}
 				}
 			}
 			if ((this.board[index] == 'r') || (this.board[index] == 'R'))  {
-				int[] move = new int[2];
 				if (this.turn == 'B') {
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == Empty)) {
 						if ((this.board[index + 9] == 'b') || (this.board[index + 9] == 'B')) {
-							move[0] = index + 9;
-							move[1] = index - 9;
-							moves.add(move);
+							moves.add(new int[] {index + 9, index - 9});
 						}
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == Empty)) {
 						if ((this.board[index + 7] == 'b') || (this.board[index + 7] == 'B')) {
-							move[0] = index + 7;
-							move[1] = index - 7;
-							moves.add(move);
+							moves.add(new int[] {index + 7, index - 7});
 						}
 					}
 					if ((0 < index - 9) && (index + 9 < 64) && (this.board[index - 9] == 'B') && (this.board[index + 9] == Empty)) {
-						move[0] = index - 9;
-						move[1] = index + 9;
-						moves.add(move);
+						moves.add(new int[] {index - 9, index + 9});
 					}
 					if ((0 < index - 7) && (index + 7 < 64) && (this.board[index - 7] == 'B') && (this.board[index + 7] == Empty)) {
-						move[0] = index - 7;
-						move[1] = index + 7;
-						moves.add(move);
+						moves.add(new int[] {index - 7, index + 7});
 					}
 				}
 			}
