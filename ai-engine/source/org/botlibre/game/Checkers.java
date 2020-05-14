@@ -64,10 +64,10 @@ public class Checkers {
 	protected boolean learn = true;
 	protected boolean learnR = false;
 	protected boolean learnB = true;
-	protected boolean learnWins = false;
+	protected boolean learnWins = true;
 	protected boolean learnLosses = false;
-	protected boolean learnTies = true;
-	protected boolean remote = true;
+	protected boolean learnTies = false;
+	protected boolean remote = false;
 	
 	public static void main(String[] args) {
 		//System.out.println((19 % 8 == 0));
@@ -75,20 +75,57 @@ public class Checkers {
 		
 		if (game.remote) {
 			try {
-				Utils.httpPOST("http://localhost:9080/botlibre/rest/api/reset-data-analytic", "application/xml", "<analytic></analytic>");
+				Utils.httpPOST("http://localhost:9080/botlibre/rest/api/reset-data-analytic", "application/xml", "<analytic user='q' password='p' application='264437546470004427' id='129252'></analytic>");
 			} catch (Exception exception) {
 				exception.printStackTrace();
 			}
 		}
 		
-		for (int count = 0; count < 100; count++) {
-			game.strategies[0] = Strategy.LookAhead;
+/*		try {
+			double[] inputvalues = network.getInputs();
+			double[] outputvalues = network.getOutputs();
+			StringWriter analyticWriter = new StringWriter();
+			analyticWriter.write("<analytic application='264437546470004427' id='129252'> <input>");
+			for (int count = 0; count < (inputvalues.length); count++ ) {
+				analyticWriter.write(String.valueOf(inputvalues[count]));
+				if (count  == inputvalues.length - 1){
+					break;
+				}
+				analyticWriter.write(",");
+			}
+			analyticWriter.write("</input> <output>");
+			for (int count = 0; count < (outputvalues.length); count++ ) {
+				analyticWriter.write(String.valueOf(outputvalues[count]));
+				if (count  == outputvalues.length - 1){
+					break;
+				}
+				analyticWriter.write(",");
+			}
+			analyticWriter.write("</output> </analytic>");
+			
+			String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/train-data-analytic", "application/xml", analyticWriter.toString());
+			//String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/check-analytic", "application/xml", "<analytic application='264437546470004427' id='129252'></analytic>");
+			System.out.println(result);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}*/
+		
+/*		game.strategies[0] = Strategy.Basic;
+		game.strategies[1] = Strategy.LookAhead;
+		game.learn = true;
+		game.learningStrategy = Strategy.DeepLearning;
+		
+		game.debug = true;
+		game.autoplay();*/
+		
+		for (int count = 0; count < 10; count++) {
+			game.strategies[0] = Strategy.Random;
 			game.strategies[1] = Strategy.LookAhead;
 			game.learn = true;
 			game.breakOnTie = false;
 			game.learningStrategy = Strategy.DeepLearning;
 			
-			int games = 1;
+			int games = 1000;
 			int[] wins = game.autoplay(games);
 	
 			if (count == 0) {
@@ -101,10 +138,10 @@ public class Checkers {
 			}
 			
 			game.learn = false;
-			game.strategies[0] = Strategy.LookAhead;
+			game.strategies[0] = Strategy.Basic;
 			game.strategies[1] = Strategy.DeepLearning;
 			//game.breakOnRWin = true;
-			game.breakOnTie = true;
+			//game.breakOnTie = true;
 			wins = game.autoplay(games);
 			
 			
@@ -279,7 +316,7 @@ public class Checkers {
 				boolean winner = true;
 				boolean tie = this.winner == Empty;
 				StringWriter analyticWriter = new StringWriter();
-				analyticWriter.write("<analytic-training-data> <data> ");
+				analyticWriter.write("<analytic-training-data user='q' password='p' application='264437546470004427' instance='129252'> <data> ");
 				for (int index = this.boards.size(); index > 0; index--) {
 					if ((winner && this.learnWins) || (tie && this.learnTies)) {
 						int player = index % 2;
@@ -333,6 +370,8 @@ public class Checkers {
 									}
 								}
 								if (remote) {
+//									StringWriter analyticWriter = new StringWriter();
+//									analyticWriter.write("<analytic-training-data user='q' password='p' application='264437546470004427' instance='129252'> <data> ");	
 									double[] inputvalues = inputs;
 										double[] outputvalues = expectedOutputs;
 										analyticWriter.write("<input>");
@@ -352,7 +391,15 @@ public class Checkers {
 											analyticWriter.write(",");
 										}
 										analyticWriter.write("</output> ");
-
+										/*try {
+											analyticWriter.write(" </data> </analytic-training-data>");
+											String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/train-data-analytic", "application/xml", analyticWriter.toString());
+											//String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/check-analytic", "application/xml", "<analytic application='264437546470004427' id='129252'></analytic>");
+											//System.out.println(result);
+										} catch (Exception exception) {
+											exception.printStackTrace();
+										}*/
+										
 								} else if (!remote) {
 									network.forwardPropagate();
 									if (debug) {
@@ -371,6 +418,7 @@ public class Checkers {
 									// Only learn if the move was different than the network would have made.
 									// For some reason this improves learning.
 									if (expectedInput != bestPosition) {
+										//System.out.println("backPropagate");
 										network.backPropagate(expectedOutputs);
 									}
 								}
@@ -383,6 +431,7 @@ public class Checkers {
 					try {
 						analyticWriter.write(" </data> </analytic-training-data>");
 						String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/train-data-analytic", "application/xml", analyticWriter.toString());
+						//String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/check-analytic", "application/xml", "<analytic application='264437546470004427' id='129252'></analytic>");
 						System.out.println(result);
 					} catch (Exception exception) {
 						exception.printStackTrace();
@@ -498,7 +547,7 @@ public class Checkers {
 		if (this.turn == 'R') {
 			return moves.get(moves.size() - 1);
 		}
-		return moves.get(0);		
+		return moves.get(0);
 	}
 	
 	public int[] lookAhead() {
@@ -564,7 +613,7 @@ public class Checkers {
 				}
 				if (this.strategies[playerIndex()] == Strategy.RandomLookAhead) {
 					goodMove = Utils.random(goodMoves);
-				}				
+				}
 				
 			}
 			if (goodMoves.isEmpty()) {
@@ -576,7 +625,6 @@ public class Checkers {
 				if (this.strategies[playerIndex()] == Strategy.RandomLookAhead) {
 					goodMove = Utils.random(goodMoves);
 				}
-				
 			}
 		}
 		//lookAheadCache.put(new String(this.board), goodMove[0]);
@@ -719,7 +767,7 @@ public class Checkers {
 			try {
 				double[] inputvalues = inputs;
 				StringWriter analyticWriter = new StringWriter();
-				analyticWriter.write("<analytic> <input>");
+				analyticWriter.write("<analytic user='q' password='p' application='264437546470004427' id='129252'> <input>");
 				for (int inputCount = 0; inputCount < (inputvalues.length); inputCount++ ) {
 					analyticWriter.write(String.valueOf(inputvalues[inputCount]));
 					if (inputCount  == inputvalues.length - 1){
@@ -730,6 +778,7 @@ public class Checkers {
 				analyticWriter.write("</input> </analytic>");
 				
 				String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/test-data-analytic", "application/xml", analyticWriter.toString());
+				//String result = Utils.httpPOST("http://localhost:9080/botlibre/rest/api/check-analytic", "application/xml", "<analytic application='264437546470004427' id='129252'></analytic>");
 				System.out.println(result);
 				String[] stringOutputs = result.split(",");
 				double[] doubleOutputs = new double[stringOutputs.length];
@@ -744,12 +793,21 @@ public class Checkers {
 		
 		double best = -1.0;
 		int[] bestPosition = null;
+		int[] goodMove = lookAhead();
 		List<int[]> positions = validMoves();
 		for (int[] position : positions) {
 			double value = outputs[position[0]];
 			if (value > best) {
 				best = value;
 				bestPosition = position;
+			} else if (value == best) {
+				if (goodMove == null) {
+					continue;
+				}
+				if (position[1] == goodMove[1]) {
+					best = value;
+					bestPosition = position;
+				}
 			}
 		}
 		return bestPosition;
