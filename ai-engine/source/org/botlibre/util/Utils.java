@@ -63,10 +63,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -79,6 +81,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.util.EntityUtils;
 import org.botlibre.BotException;
 import org.eclipse.persistence.internal.helper.Helper;
 import org.owasp.encoder.Encode;
@@ -117,6 +120,8 @@ public class Utils {
 	public static PolicyFactory sanitizer;
 	public static boolean requireHttps = false;
 	public static boolean requireDomanName = true;
+	
+	public static ThreadLocal<HttpClient> client = new ThreadLocal<HttpClient>();
 	
 	public static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	
@@ -175,6 +180,7 @@ public class Utils {
 		
 		profanityMapEveryone.putAll(profanityMap);
 		profanityMapEveryone.put("sex", "gender");
+		profanityMapEveryone.put("sexy", "nice");
 		profanityMapEveryone.put("bastard", "idiot");
 		profanityMapEveryone.put("boobs", "privates");
 	}
@@ -190,6 +196,13 @@ public class Utils {
 			random.set(value);
 		}
 		return value;
+	}
+	
+	public static HttpClient getClient() {
+		if (client.get() == null) {
+			client.set(new DefaultHttpClient());
+		}
+		return client.get();
 	}
 	
 	public static PolicyFactory sanitizer() {
@@ -492,7 +505,7 @@ public class Utils {
 		HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
 		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient(); //new DefaultHttpClient(httpParams);
 		HttpResponse response = client.execute(request, new BasicHttpContext());
 		return fetchResponse(response);
 	}
@@ -588,27 +601,27 @@ public class Utils {
 		HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
 		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient(); //new DefaultHttpClient(httpParams);
 		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
 	public static HttpResponse httpPOSTReturnResponse(String url, String type, String data, Map<String, String> headers) throws Exception {
-        HttpPost request = new HttpPost(url);
+		HttpPost request = new HttpPost(url);
 		if (headers != null) {
 			for (Entry<String, String> header : headers.entrySet()) {
 				request.setHeader(header.getKey(), header.getValue());
 			}
 		}
-        request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-        StringEntity params = new StringEntity(data, "utf-8");
-        request.addHeader("content-type", type);
-        request.setEntity(params);
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
-        HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request);
 		return response;
 	}
 	
@@ -681,20 +694,29 @@ public class Utils {
 		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
 		DefaultHttpClient client = new DefaultHttpClient(httpParams);
 		HttpResponse response = client.execute(request);
-		return fetchResponse(response);
+		try {
+			return fetchResponse(response);
+		} finally {
+			request.releaseConnection();
+			client.getConnectionManager().shutdown();
+		}
 	}
 	
 	public static String fetchResponse(HttpResponse response) throws Exception {
 		HttpEntity entity = response.getEntity();
 		String result = "";
-		if (entity != null) {
-			InputStream stream = entity.getContent();
-			result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
-		}
-		if ((response.getStatusLine().getStatusCode() < 200) || (response.getStatusLine().getStatusCode() > 302)) {
-			throw new RuntimeException(""
-			   + response.getStatusLine().getStatusCode()
-			   + " : " + result);
+		try {
+			if (entity != null) {
+				InputStream stream = entity.getContent();
+				result = Utils.loadTextFile(stream, "UTF-8", MAX_FILE_SIZE);
+			}
+			if ((response.getStatusLine().getStatusCode() < 200) || (response.getStatusLine().getStatusCode() > 302)) {
+				throw new RuntimeException(""
+					+ response.getStatusLine().getStatusCode()
+					+ " : " + result);
+			}
+		} finally {
+			EntityUtils.consume(entity);
 		}
 		return result;
 	}
