@@ -63,7 +63,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
@@ -200,7 +199,10 @@ public class Utils {
 	
 	public static HttpClient getClient() {
 		if (client.get() == null) {
-			client.set(new DefaultHttpClient());
+			HttpParams httpParams = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+			HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+			client.set(new DefaultHttpClient(httpParams));
 		}
 		return client.get();
 	}
@@ -267,7 +269,7 @@ public class Utils {
 			return URLEncoder.encode(url, "UTF-8");
 		} catch (Exception exception) {
 			return "";
-		}		
+		}
 	}
 	
 	public static String decodeURL(String url) {
@@ -513,15 +515,12 @@ public class Utils {
 	public static String httpDELETE(String url) throws Exception {
 		HttpDelete request = new HttpDelete(url);
 		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient();
 		HttpResponse response = client.execute(request, new BasicHttpContext());
 		return fetchResponse(response);
 	}
 	
-	public static String httpAuthGET(String url, String user, String password) throws Exception {		
+	public static String httpAuthGET(String url, String user, String password) throws Exception {
 		HttpGet request = new HttpGet(url);
 		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 		HttpParams httpParams = new BasicHttpParams();
@@ -535,7 +534,7 @@ public class Utils {
 		return fetchResponse(response);
 	}
 	
-	public static String httpAuthGET(String url, String user, String password, String agent) throws Exception {		
+	public static String httpAuthGET(String url, String user, String password, String agent) throws Exception {
 		HttpGet request = new HttpGet(url);
 		request.setHeader("User-Agent", agent);
 		HttpParams httpParams = new BasicHttpParams();
@@ -598,12 +597,14 @@ public class Utils {
 		StringEntity params = new StringEntity(data, "utf-8");
 		request.addHeader("content-type", type);
 		request.setEntity(params);
-		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		HttpClient client = getClient(); //new DefaultHttpClient(httpParams);
+		HttpClient client = getClient();
 		HttpResponse response = client.execute(request);
-		return fetchResponse(response);
+		//try {
+			return fetchResponse(response);
+		/*} finally {
+			request.releaseConnection();
+			client.getConnectionManager().shutdown();
+		}*/
 	}
 	
 	public static HttpResponse httpPOSTReturnResponse(String url, String type, String data, Map<String, String> headers) throws Exception {
@@ -617,10 +618,7 @@ public class Utils {
 		StringEntity params = new StringEntity(data, "utf-8");
 		request.addHeader("content-type", type);
 		request.setEntity(params);
-		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient();
 		HttpResponse response = client.execute(request);
 		return response;
 	}
@@ -631,10 +629,7 @@ public class Utils {
 		StringEntity params = new StringEntity(data, "utf-8");
 		request.addHeader("content-type", type);
 		request.setEntity(params);
-		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient();
 		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
@@ -645,15 +640,12 @@ public class Utils {
 		StringEntity params = new StringEntity(data, "utf-8");
 		request.addHeader("content-type", type);
 		request.setEntity(params);
-		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient();
 		HttpResponse response = client.execute(request);
 		return fetchResponse(response);
 	}
 	
-	public static String httpAuthPOST(String url, String user, String password, Map<String, String> formParams) throws Exception {		
+	public static String httpAuthPOST(String url, String user, String password, Map<String, String> formParams) throws Exception {
 		HttpPost request = new HttpPost(url);
 		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -672,11 +664,11 @@ public class Utils {
 		return fetchResponse(response);
 	}
 	
-	public static String httpPOST(String url, Map<String, String> formParams) throws Exception {		
+	public static String httpPOST(String url, Map<String, String> formParams) throws Exception {
 		return httpPOST(url, formParams, null);
 	}
 	
-	public static String httpPOST(String url, Map<String, String> formParams, Map<String, String> headers) throws Exception {		
+	public static String httpPOST(String url, Map<String, String> formParams, Map<String, String> headers) throws Exception {
 		HttpPost request = new HttpPost(url);
 		if (headers != null) {
 			for (Entry<String, String> header : headers.entrySet()) {
@@ -689,17 +681,14 @@ public class Utils {
 			params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 		}
 		request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		HttpClient client = getClient();
 		HttpResponse response = client.execute(request);
-		try {
+		//try {
 			return fetchResponse(response);
-		} finally {
+		/*} finally {
 			request.releaseConnection();
 			client.getConnectionManager().shutdown();
-		}
+		}*/
 	}
 	
 	public static String fetchResponse(HttpResponse response) throws Exception {
