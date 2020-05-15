@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="lib/httpclient/httpcore-4.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpmime-4.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/twitter/twitter4j-core-4.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/json/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
