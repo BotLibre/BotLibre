@@ -470,10 +470,11 @@ public class Primitive implements Serializable {
 	public static final Primitive AUTOFRIENDKEYWORDS = new Primitive("autofriendkeywords");
 	public static final Primitive LASTPOST = new Primitive("lastpost");
 	public static final Primitive PAGE = new Primitive("page");
-
+	
 	public static final Primitive FACEBOOKMESSENGER = new Primitive("facebookmessenger");
 	public static final Primitive FACEBOOK = new Primitive("facebook");
 	public static final Primitive SMS = new Primitive("sms");
+	public static final Primitive IVR = new Primitive("ivr");
 	public static final Primitive TELEGRAM = new Primitive("telegram");
 	public static final Primitive TWITTER = new Primitive("twitter");
 	
@@ -568,6 +569,9 @@ public class Primitive implements Serializable {
 	// IRC
 	public static final Primitive NICK = new Primitive("nick");
 	public static final Primitive WHISPER = new Primitive("whisper");
+	
+	//WhatsApp
+	public static final Primitive WHATSAPP = new Primitive("whatsapp");
 	
 	//Slack
 	public static final Primitive SLACK = new Primitive("slack");

@@ -107,7 +107,7 @@
 				<implementation-class>org.botlibre.sense.telegram.Telegram</implementation-class>
 			</sense>
 			<sense>
-				<implementation-class>org.botlibre.sense.sms.Twilio</implementation-class>
+				<implementation-class>org.botlibre.sense.twilio.Twilio</implementation-class>
 			</sense>
 			<sense>
 				<implementation-class>org.botlibre.sense.slack.Slack</implementation-class>
