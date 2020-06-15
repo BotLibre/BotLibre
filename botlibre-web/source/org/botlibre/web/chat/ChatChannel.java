@@ -202,7 +202,7 @@ public class ChatChannel extends WebMedium {
 	}
 	
 	public String getDefaultWelcomeMessage() {
-		if (isOneOoOne()) {
+		if (isOneOnOne()) {
 			if (hasBot()) {
 				return "Welcome to :title, you are in position :position in the queue, there are :operators operators online, and :available available.<br/> Type or click 'accept' at any point to speak with :bot, the automated chat bot agent.";
 			} else {
@@ -214,7 +214,7 @@ public class ChatChannel extends WebMedium {
 	}
 	
 	public String getDefaultStatusMessage() {
-		if (isOneOoOne()) {
+		if (isOneOnOne()) {
 			return "You are in position :position in the queue, there are :operators operators online, and :available available.";
 		} else {
 			return "";
@@ -323,7 +323,7 @@ public class ChatChannel extends WebMedium {
 		this.botMode = botMode;
 	}
 
-	public boolean isOneOoOne() {
+	public boolean isOneOnOne() {
 		return this.type == ChannelType.OneOnOne;
 	}
 	

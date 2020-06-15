@@ -243,7 +243,10 @@
 								<tr class="<%= Site.PREFIX %>menuitem">
 									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return web.ping();" href="#"><img class="<%= Site.PREFIX %>menu" src="images/ping.svg" title="<%= loginBean.translate("Verify your connection to the server") %>"> <%= loginBean.translate("Ping server") %></a></td>
 								</tr>
-						 		<% if (!bean.getInstance().isOneOoOne() || bean.isAdmin()) { %>
+								<tr class="<%= Site.PREFIX %>menuitem">
+									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return toggleKeepAlive();" href="#"><img id="keepalive" class="<%= Site.PREFIX %>menu" src="images/empty.png" title="<%= loginBean.translate("Ping the server every minute to keep the connection alive") %>"> <%= loginBean.translate("Keep Alive") %></a></td>
+								</tr>
+						 		<% if (!bean.getInstance().isOneOnOne() || bean.isAdmin()) { %>
 									<tr class="<%= Site.PREFIX %>menuitem">
 										<td><a class="<%= Site.PREFIX %>menuitem" onClick="return web.flag();" href="#"><img class="<%= Site.PREFIX %>menu" src="images/flag2.svg" title="<%= loginBean.translate("Flag a user for offensive content") %>"> <%= loginBean.translate("Flag user") %></a></td>
 									</tr>
@@ -380,6 +383,17 @@
 	<script>
 		SDK.registerSpeechRecognition(document.getElementById(web.prefix + 'chat'), document.getElementById('sendicon'));
 		var listen = false;
+		
+		function toggleKeepAlive() {
+			web.toggleKeepAlive();
+			if (web.connection.keepAlive) {
+				document.getElementById('keepalive').src = "images/ping.svg";
+			} else {
+				document.getElementById('keepalive').src = "images/empty.png";
+			}
+			return false;
+		}
+		
 		function toggleListen() {
 			listen = !listen;
 			if (listen) {

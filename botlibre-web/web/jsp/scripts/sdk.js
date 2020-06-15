@@ -2281,6 +2281,9 @@ function WebLiveChatListener() {
 					+ "<table>\n"
 					+ "<tr class='" + this.prefix + "menuitem'>"
 					+ "<td><a id='" + this.prefix + "ping' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img class='" + this.prefix + "menu' src='" + SDK.url + "/images/ping.svg' title='" + SDK.translate("Verify your connection to the server") + "'> " + SDK.translate("Ping server") + "</a></td>"
+					+ "</tr>\n"
+					+ "<tr class='" + this.prefix + "menuitem'>"
+					+ "<td><a id='" + this.prefix + "toggleKeepAlive' class='" + this.prefix + "menuitem' onclick='return false;' href='#'><img id='boxkeepalive' class='" + this.prefix + "menu' src='" + SDK.url + "/images/empty.png' title='" + SDK.translate("Ping the server every minute to keep the connection alive") + "'> " + SDK.translate("Keep Alive") + "</a></td>"
 					+ "</tr>\n";
 				if (this.chatroom) {
 					html = html
@@ -2583,6 +2586,16 @@ function WebLiveChatListener() {
 			menu.addEventListener("click", function() {
 				self.pvt();
 				return false;
+			});
+		}
+		if (document.getElementById(this.prefix + "toggleKeepAlive") != null) {
+			document.getElementById(this.prefix + "toggleKeepAlive").addEventListener("click", function() {
+				self.toggleKeepAlive();
+				if (self.connection.keepAlive) {
+					document.getElementById('boxkeepalive').src = SDK.url + "/images/ping.svg";
+				} else {
+					document.getElementById('boxkeepalive').src = SDK.url + "/images/empty.png";
+				}
 			});
 		}
 		if (document.getElementById(this.prefix + "toggleChime") != null) {
@@ -6313,7 +6326,7 @@ function LiveChatConnection() {
 				}
 				self.socket.send(connectString);
 			}
-			self.setKeepAlive(this.keepAlive);
+			self.setKeepAlive(self.keepAlive);
 		};
 		
 		this.socket.onclose = function () {
@@ -6368,7 +6381,7 @@ function LiveChatConnection() {
 				return;
 			}
 			
-			if (self.keepAlive && user == "Info" && text.contains("pong")) {
+			if (self.keepAlive && user == "Info" && text.includes("pong")) {
 				return;
 			}
 			if (user == "Info") {
@@ -6697,15 +6710,16 @@ function LiveChatConnection() {
 	}
 
 	this.setKeepAlive = function(keepAlive) {
+		var self = this;
 		this.keepAlive = keepAlive;
 		if (!keepAlive && this.keepAliveInterval != null) {
 			clearInterval(this.keepAliveInterval);
 		} else if (keepAlive && this.keepAliveInterval == null) {
 			this.keepAliveInterval = setInterval(
 					function() {
-						this.ping()
+						self.ping()
 					},
-					600000);
+					60000);
 		}
 	}
 }
@@ -6771,7 +6785,7 @@ function SDKConnection() {
 	 * Connect to the domain.
 	 * A domain is an isolated content space.
 	 * Any browse or query request will be specific to the domain's content.
-	 */	
+	 */
 	this.switchDomain = function(config, processor) {
 		var self = this;
 		this.fetch(config, function(domain) {
@@ -6783,7 +6797,7 @@ function SDKConnection() {
 	/**
 	 * Disconnect from the connection.
 	 * An SDKConnection does not keep a live connection, but this resets its connected user and domain.
-	 */	
+	 */
 	this.disconnect = function() {
 		this.user = null;
 		this.domain = null;
