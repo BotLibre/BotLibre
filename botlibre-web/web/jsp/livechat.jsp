@@ -2,7 +2,8 @@
 <%@page import="org.botlibre.web.admin.AdminDatabase"%>
 <%@page import="org.botlibre.web.Site"%>
 <%@page import="org.botlibre.web.bean.LiveChatBean"%>
-
+<%@ page import="org.botlibre.web.bean.ChatBean"%>
+<%@ page import="org.botlibre.web.bean.VoiceBean"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 
 <jsp:useBean id="proxy" class="org.botlibre.web.bean.SessionProxyBean" scope="session"/>
@@ -11,6 +12,9 @@
 	loginBean = proxy.checkLoginBean(loginBean);
 	boolean embed = loginBean.isEmbedded() || loginBean.isFullScreen() || loginBean.isMobile();
 	LiveChatBean bean = loginBean.getBean(LiveChatBean.class);
+	
+	VoiceBean voiceBean = loginBean.getBean(VoiceBean.class);
+	ChatBean chatBean = loginBean.getBean(ChatBean.class);
 	
 	String title = "Live Chat";
 	if (bean.getInstance() != null) {
@@ -150,6 +154,9 @@
 				</p>
 			</div>
 		</span>
+	<% } %>
+	<% if (voiceBean.getResponsiveVoice()) { %>
+		<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 	<% } %>
 	<script>
 		SDK.applicationId = "<%= AdminDatabase.getTemporaryApplicationId() %>";

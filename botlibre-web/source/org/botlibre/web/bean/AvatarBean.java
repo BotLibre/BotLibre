@@ -1034,14 +1034,14 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 		StringWriter writer = new StringWriter();
 		writer.write("<script type='text/javascript' src=\""+ Site.SECUREURLLINK + "/scripts/sdk.js\"></script>\n");
 		if (this.embedResponsiveVoice) {
-			writer.write("<script src='https://code.responsivevoice.org/responsivevoice.js'></script>\n");
+			writer.write("<script src='https://code.responsivevoice.org/responsivevoice.js?key=" + Site.RESPONSIVEVOICE_KEY + "'></script>\n");
 		}
 		writer.write("<script type='text/javascript'>\n");
 		if (isLoggedIn()) {
 			getUser().checkApplicationId();
 		}
 		if (isLoggedIn() && hasValidApplicationId()) {
-			writer.write("SDK.applicationId = \"" + getUser().getApplicationId() + "\";\n");			
+			writer.write("SDK.applicationId = \"" + getUser().getApplicationId() + "\";\n");
 		} else {
 			writer.write("SDK.applicationId = \"" + AdminDatabase.getTemporaryApplicationId() + "\";\n");
 		}

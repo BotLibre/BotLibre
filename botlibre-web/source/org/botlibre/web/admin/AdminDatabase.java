@@ -3996,6 +3996,21 @@ public class AdminDatabase {
 						}
 					}
 					
+					if (root.getElementsByTagName("RESPONSIVEVOICE_KEY").getLength() > 0) {
+						Element element = (Element) root.getElementsByTagName("RESPONSIVEVOICE_KEY").item(0);
+						String value = element.getTextContent().trim();
+						// Check if encrypted from && prefix.
+						if (value.startsWith("__")) {
+							try {
+								Site.RESPONSIVEVOICE_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+							} catch (Exception exception) {
+								Site.RESPONSIVEVOICE_KEY = value;
+							}
+						} else {
+							Site.RESPONSIVEVOICE_KEY = value;
+						}
+					}
+					
 					if (root.getElementsByTagName("YANDEX_KEY").getLength() > 0) {
 						Element element = (Element) root.getElementsByTagName("YANDEX_KEY").item(0);
 						String value = element.getTextContent().trim();
@@ -4380,6 +4395,10 @@ public class AdminDatabase {
 			writer.write("\t<MICROSOFT_SPEECH_KEY>");
 			writer.write("__" + Utils.encrypt(Site.KEY2, Site.MICROSOFT_SPEECH_KEY));
 			writer.write("</MICROSOFT_SPEECH_KEY>\n");
+			
+			writer.write("\t<RESPONSIVEVOICE_KEY>");
+			writer.write("__" + Utils.encrypt(Site.KEY2, Site.RESPONSIVEVOICE_KEY));
+			writer.write("</RESPONSIVEVOICE_KEY>\n");
 			
 			writer.write("\t<YANDEX_KEY>");
 			writer.write("__" + Utils.encrypt(Site.KEY2, Site.YANDEX_KEY));

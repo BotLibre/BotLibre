@@ -518,14 +518,14 @@ public class EmbedTabBean extends EmbedWebMediumBean {
 			if (this.allowSpeech) {
 				VoiceBean voiceBean = this.loginBean.getBean(VoiceBean.class);
 				if (voiceBean.getResponsiveVoice()) {
-					writer.write("<script src='https://code.responsivevoice.org/responsivevoice.js'></script>\n");
+					writer.write("<script src='https://code.responsivevoice.org/responsivevoice.js?key=" + Site.RESPONSIVEVOICE_KEY + "'></script>\n");
 				}
 			}
 			writer.write("<script type='text/javascript' src='" + Site.SECUREURLLINK + "/scripts/sdk.js'></script>\n");
 			writer.write("<script type='text/javascript'>\n");
 			if (isLoggedIn() && getUser().getApplicationId() != null) {
 				writer.write("SDK.applicationId = \"" + getUser().getApplicationId() + "\";\n");
-				writer.write("SDK.backlinkURL = \"" + Site.URLLINK + "/login?affiliate=" + getUserId() + "\";\n");			
+				writer.write("SDK.backlinkURL = \"" + Site.URLLINK + "/login?affiliate=" + getUserId() + "\";\n");
 			}
 			if (!this.language.trim().isEmpty()) {
 				writer.write("SDK.lang = \"" + this.language + "\";\n");

@@ -600,7 +600,7 @@
 	</script>
 
 	<% if (voiceBean.getResponsiveVoice()) { %>
-		<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+		<script src='https://code.responsivevoice.org/responsivevoice.js?key=<%= Site.RESPONSIVEVOICE_KEY %>'></script>
 	<% } %>
 	<script type="text/javascript">
 		<% if (loginBean.isEmbedded()) { %>

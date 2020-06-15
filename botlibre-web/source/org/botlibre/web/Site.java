@@ -200,6 +200,8 @@ public class Site {
 	public static String MICROSOFT_SPEECH_KEY = "";
 	public static String MICROSOFT_SPEECH_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/sts/v1.0/issueToken";
 	
+	public static String RESPONSIVEVOICE_KEY = "";
+	
 	public static String YANDEX_KEY = "";
 	
 	public static String DATABASEPASSWORD = "password";

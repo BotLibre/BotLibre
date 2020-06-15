@@ -268,6 +268,7 @@ public class SuperServlet extends BeanServlet {
 				Site.GOOGLECLIENTID = request.getParameter("GOOGLECLIENTID");
 				Site.GOOGLECLIENTSECRET = request.getParameter("GOOGLECLIENTSECRET");
 				Site.MICROSOFT_SPEECH_KEY = request.getParameter("MICROSOFT_SPEECH_KEY");
+				Site.RESPONSIVEVOICE_KEY = request.getParameter("RESPONSIVEVOICE_KEY");
 				Site.YANDEX_KEY = request.getParameter("YANDEX_KEY");
 				
 				AdminDatabase.instance().updatePlatformSettings();

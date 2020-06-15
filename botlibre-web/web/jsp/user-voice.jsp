@@ -228,7 +228,7 @@
 						<!-- Begin Responsive Voice -->
 						
 						<tr id="responsiveVoiceTr" style="display:none">
-							<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+							<script src='https://code.responsivevoice.org/responsivevoice.js?key=<%= Site.RESPONSIVEVOICE_KEY %>'></script>
 							<script>
 								var initResponsiveVoice = function() {
 									document.getElementById("responsive-voice-div").style.display = "inline";
