@@ -3245,12 +3245,6 @@ public class ChatLogBean extends ServletBean {
 		this.responses = null;
 		this.isPhrase = true;
 	}
-	
-	public void checkMemory() {
-		if ((getBotBean().getInstance().getMemoryLimit() > 0) && (getBot().memory().getLongTermMemory().size() > getBotBean().getInstance().getMemoryLimit() * 1.5)) {
-			throw new BotException("Memory size exceeded, importing has been disable until nightly forgetfullness task runs");
-		}
-	}
 
 	public void importFile(InputStream stream, String format, String encoding, boolean processUnderstanding, boolean pin, boolean autoReduce) {
 		checkMemory();

@@ -950,12 +950,6 @@ public class MemoryBean extends ServletBean {
 		writer.flush();
 	}
 
-	public void checkMemory() {
-		if ((getBotBean().getInstance().getMemoryLimit() > 0) && (getBot().memory().getLongTermMemory().size() > getBotBean().getInstance().getMemoryLimit() * 1.2)) {
-			throw new BotException("Memory size exceeded, importing has been disable until nightly forgetfullness task runs");
-		}
-	}
-
 	public void importFile(String fileName, InputStream inputStream, String format, String encoding, boolean pin) {
 		String text = Utils.loadTextFile(inputStream, encoding, Site.MAX_UPLOAD_SIZE);
 		importData(fileName, text, format, pin);

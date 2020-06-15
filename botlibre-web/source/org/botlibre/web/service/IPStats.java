@@ -75,7 +75,14 @@ public class IPStats implements Comparable<IPStats> {
 	
 	public static IPStats getStats(String ip) {
 		if (stats.size() > MAX_SIZE) {
+			// Clear bottom half from map.
+			List<IPStats> copy = new ArrayList<IPStats>(stats.values());
 			stats.clear();
+			Collections.sort(copy);
+			for (int index = copy.size() - 1; index > (copy.size() / 2); index--) {
+				IPStats stat = (IPStats)copy.get(index);
+				stats.put(stat.ip, stat);
+			}
 		}
 		IPStats stat = stats.get(ip);
 		if (stat == null) {
@@ -92,7 +99,7 @@ public class IPStats implements Comparable<IPStats> {
 		return sorted;
 	}
 	
-	public static void botConnect(HttpServletRequest request) {		
+	public static void botConnect(HttpServletRequest request) {
 		if (request == null) {
 			return;
 		}
@@ -113,10 +120,10 @@ public class IPStats implements Comparable<IPStats> {
 			return;
 		}
 		IPStats stat = getStats(ip);
-		stat.botConnects++;		
+		stat.botConnects++;
 	}
 	
-	public static void botChats(HttpServletRequest request) {		
+	public static void botChats(HttpServletRequest request) {
 		if (request == null) {
 			return;
 		}
@@ -125,10 +132,10 @@ public class IPStats implements Comparable<IPStats> {
 			return;
 		}
 		IPStats stat = getStats(ip);
-		stat.botChats++;		
+		stat.botChats++;
 	}
 	
-	public static IPStats api(HttpServletRequest request) {		
+	public static IPStats api(HttpServletRequest request) {
 		if (request == null) {
 			return null;
 		}
@@ -141,7 +148,7 @@ public class IPStats implements Comparable<IPStats> {
 		return stat;
 	}
 	
-	public static void page(HttpServletRequest request) {		
+	public static void page(HttpServletRequest request) {
 		if (request == null) {
 			return;
 		}

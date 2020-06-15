@@ -117,7 +117,14 @@ public class AppIDStats implements Comparable<AppIDStats> {
 			appID = "";
 		}
 		if (stats.size() > MAX_SIZE) {
+			// Clear bottom half from map.
+			List<AppIDStats> copy = new ArrayList<AppIDStats>(stats.values());
 			stats.clear();
+			Collections.sort(copy);
+			for (int index = copy.size() - 1; index > (copy.size() / 2); index--) {
+				AppIDStats stat = (AppIDStats)copy.get(index);
+				stats.put(stat.appID, stat);
+			}
 		}
 		AppIDStats stat = stats.get(appID);
 		if (stat == null) {

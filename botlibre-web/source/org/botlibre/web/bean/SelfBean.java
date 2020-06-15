@@ -294,12 +294,6 @@ public class SelfBean extends ScriptBean {
 		setStateCode(Bootstrap.getNewStateText());
 		setSelectedState(null);
 	}
-	
-	public void checkMemory() {
-		if ((getBotBean().getInstance().getMemoryLimit() > 0) && (getBot().memory().getLongTermMemory().size() > getBotBean().getInstance().getMemoryLimit() * 1.5)) {
-			throw new BotException("Memory size exceeded, importing has been disable until nightly forgetfullness task runs");
-		}
-	}
 
 	/**
 	 * Compile the uploaded self file.

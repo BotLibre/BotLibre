@@ -428,10 +428,24 @@ public class LearningBean extends ServletBean {
 			getBot().mood().saveProperties();
 		}
 		
+		if (comprehend) {
+			if (!this.loginBean.isSuper()) {
+				if (!Site.DEDICATED) {
+					throw new BotException("Comprehension is only supported for dedicated servers");
+				}
+			}
+		}
 		Comprehension comprehension = getBot().mind().getThought(Comprehension.class);
 		comprehension.setEnabled(comprehend);
 		comprehension.saveProperties();
-		
+
+		if (conscious) {
+			if (!this.loginBean.isSuper()) {
+				if (!Site.DEDICATED) {
+					throw new BotException("Consciousness is only supported for dedicated servers");
+				}
+			}
+		}
 		Consciousness consciousness = getBot().mind().getThought(Consciousness.class);
 		consciousness.setEnabled(conscious);
 		consciousness.saveProperties();

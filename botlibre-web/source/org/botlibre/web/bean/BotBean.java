@@ -1444,7 +1444,7 @@ public class BotBean extends WebMediumBean<BotInstance> {
 	
 	@Override
 	public void writeBrowseStats(StringWriter writer, BotInstance instance) {
-		if (!Site.COMMERCIAL && (!instance.isExternal() || instance.hasAPI())) {
+		if (!Site.COMMERCIAL && !Site.DEDICATED && (!instance.isExternal() || instance.hasAPI())) {
 			writer.write("Chat Bot Wars: rank " + instance.getRank() + ", wins " + instance.getWins() + ", losses " + instance.getLosses() + "<br/>\n");
 		}
 		writer.write("Knowledge: " + instance.getMemorySize() + " objects<br/>\n");
@@ -1479,7 +1479,7 @@ public class BotBean extends WebMediumBean<BotInstance> {
 
 	@Override
 	public void writeToolbarPostExtraHTML(SessionProxyBean proxy, boolean embed, Writer out) {
-		if (Site.COMMERCIAL || this.instance == null || embed
+		if (Site.COMMERCIAL || Site.DEDICATED || this.instance == null || embed
 					|| (this.instance.isExternal() && !this.instance.hasAPI()) || this.instance.isArchived()) {
 			return;
 		}
@@ -1563,7 +1563,7 @@ public class BotBean extends WebMediumBean<BotInstance> {
 	@Override
 	public void writeStatsTabExtraHTML(SessionProxyBean proxy, boolean embed, Writer out) {
 		try {
-			if (!Site.COMMERCIAL && (!getDisplayInstance().isExternal() || getDisplayInstance().hasAPI())) {
+			if (!Site.COMMERCIAL && !Site.DEDICATED && (!getDisplayInstance().isExternal() || getDisplayInstance().hasAPI())) {
 				out.write("Chat Bot Wars: wins: ");
 				out.write(String.valueOf(getDisplayInstance().getWins()));
 				out.write(", losses: ");

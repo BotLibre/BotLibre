@@ -303,7 +303,7 @@ Website
 						<div>
 							<%= loginBean.translate("Maximum posts to process per cycle (max is 20).") %><br/>
 							<!-- Likes are not included.<br/-->
-							<% if (!Site.COMMERCIAL) { %>
+							<% if (!Site.COMMERCIAL && !Site.DEDICATED) { %>
 								<%= loginBean.translate("Larger limits are available for commercial accounts at") %>, <a target="_blank" href="https://www.botlibre.biz">www.botlibre.biz</a><br/>
 							<% } %>
 							<%= loginBean.translate("The bot will only read posts that match one of the post keywords sets below.") %><br/>

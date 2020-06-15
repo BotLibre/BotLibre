@@ -110,7 +110,7 @@ public abstract class WebMedium extends Flaggable {
 	protected int restWeeklyConnects;
 	protected int restMonthlyConnects;
 	@OneToOne(fetch=FetchType.LAZY)
-	protected User creator;	
+	protected User creator;
 	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	@PrivateOwned
 	protected DomainForwarder domainForwarder;	
@@ -774,10 +774,17 @@ public abstract class WebMedium extends Flaggable {
 		this.avatar = avatar;
 	}
 
-	public String getTagsString() {
+	/**
+	 * Return the cache tags string for editing or creating a new object.
+	 */
+	public String getEditTagsString() {
 		if (this.tagsString != null) {
-			return tagsString;
+			return this.tagsString;
 		}
+		return getTagsString();
+	}
+
+	public String getTagsString() {
 		if (this.tags.isEmpty()) {
 			return "";
 		}
@@ -790,7 +797,8 @@ public abstract class WebMedium extends Flaggable {
 				writer.write(", ");
 			}
 		}
-		return writer.toString();
+		this.tagsString = writer.toString();
+		return this.tagsString;
 	}
 
 	public void setTagsString(String tagsString) {
@@ -869,6 +877,7 @@ public abstract class WebMedium extends Flaggable {
 		}
 		if (csv == null || csv.length() == 0) {
 			this.tags = new ArrayList<Tag>();
+			this.tagsString = null;
 			return;
 		}
 		List<Tag> newTags = new ArrayList<Tag>();
@@ -942,9 +951,6 @@ public abstract class WebMedium extends Flaggable {
 			if (!newCategories.contains(category)) {
 				newCategories.add(category);
 			}
-		}
-		if (!Site.COMMERCIAL && newCategories.isEmpty() && !(this instanceof Domain)) {
-			throw new BotException("You must choose at least one category");
 		}
 		List<Category> ancestors = new ArrayList<Category>();
 		for (Category category : newCategories) {

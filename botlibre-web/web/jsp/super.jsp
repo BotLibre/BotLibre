@@ -109,6 +109,8 @@
 									<br/>
 									Secure URL Link<br/>
 									<input type="text" name="SECUREURLLINK" value="<%= Site.SECUREURLLINK %>"/>
+									Sandbox URL Link<br/>
+									<input type="text" name="SANDBOXURLLINK" value="<%= Site.SANDBOXURLLINK %>"/>
 									<br/>
 									Redirect<br/>
 									<input type="text" name="REDIRECT" value="<%= Site.REDIRECT %>"/>

@@ -182,6 +182,7 @@ public class SuperServlet extends BeanServlet {
 				Site.URL = request.getParameter("URL");
 				Site.URLLINK = request.getParameter("URLLINK");
 				Site.SECUREURLLINK = request.getParameter("SECUREURLLINK");
+				Site.SANDBOXURLLINK = request.getParameter("SANDBOXURLLINK");
 				Site.REDIRECT = request.getParameter("REDIRECT");
 				Site.HTTPS = "on".equals(request.getParameter("HTTPS"));
 				

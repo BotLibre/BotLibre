@@ -24,11 +24,14 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import org.botlibre.util.Utils;
+
 @Entity
 public class AvatarImage {
 	@Id
 	@GeneratedValue
 	protected long id;
+	protected long token;
 	@Lob
 	protected byte[] image;
 	@Lob
@@ -41,7 +44,9 @@ public class AvatarImage {
 	@OneToOne(fetch=FetchType.LAZY)
 	protected Domain domain;
 	
-	public AvatarImage() { }
+	public AvatarImage() {
+		this.token = Utils.random().nextLong();
+	}
 
 	public long getId() {
 		return id;
@@ -113,6 +118,14 @@ public class AvatarImage {
 
 	public void setDomain(Domain domain) {
 		this.domain = domain;
+	}
+
+	public long getToken() {
+		return token;
+	}
+
+	public void setToken(long token) {
+		this.token = token;
 	}
 
 }

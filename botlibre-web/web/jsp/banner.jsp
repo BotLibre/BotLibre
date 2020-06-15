@@ -69,7 +69,7 @@
 				<a href="enterprise-bot-platform.jsp"><%= loginBean.translate("Enterprise Bot Platform") %></a>
 				<a href="download.jsp"><%= loginBean.translate("Download") %></a>
 				<a href="browse?browse-type=Desktop"><%= loginBean.translate("Desktop Download") %></a>
-				<% if (!Site.COMMERCIAL) { %>
+				<% if (!Site.COMMERCIAL && !Site.DEDICATED) { %>
 					<a href="browse?browse-type=ChatWar"><%= loginBean.translate("Chat Bot Wars") %></a>
 				<% } %>
 				<a href="doc.jsp"><%= loginBean.translate("Docs") %></a>
@@ -133,7 +133,7 @@
 		<% if (!Site.DEDICATED) { %>
 			<a href="freetrial.jsp" class="main-link2" style="float: left"> <img src="images/freetrial2.png" alt="" title="<%= loginBean.translate("Free Trial") %>"><span><%= loginBean.translate("Free Trial") %></span></a>
 		<% } %>
-	<% } else {%>
+	<% } else if (!Site.DEDICATED) {%>
 		<a href="upgrade.jsp" class="main-link2" style="float: left"> <img src="images/dollar2.png" alt="" title="<%= loginBean.translate("Upgrade") %>"><span><%= loginBean.translate("Upgrade") %></span></a>
 	<% } %>
 </div>

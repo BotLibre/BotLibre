@@ -28,6 +28,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.botlibre.BotException;
+import org.botlibre.util.Utils;
 import org.botlibre.web.bean.LoginBean;
 
 @MappedSuperclass
@@ -40,12 +41,15 @@ public class AbstractMedia implements Cloneable {
 
 	@Id
 	protected long mediaId;
+	protected long token;
 	protected String name = "";
 	protected String type = "image/jpeg";
 	@Transient
 	protected String fileName;
 	
-	public AbstractMedia() { }
+	public AbstractMedia() {
+		this.token = Utils.random().nextLong();
+	}
 	
 	public AbstractMedia clone() {
 		try {
@@ -91,6 +95,14 @@ public class AbstractMedia implements Cloneable {
 		this.mediaId = mediaId;
 	}
 	
+	public long getToken() {
+		return token;
+	}
+
+	public void setToken(long token) {
+		this.token = token;
+	}
+
 	/**
 	 * Secure: Verify the attachment type is an allowed type.
 	 */
@@ -160,7 +172,7 @@ public class AbstractMedia implements Cloneable {
 					throw new BotException("Unsupported media type - " + this.type);
 				}
 			}
-			String fileName = "media/" + "a" + this.mediaId + "." + ext;
+			String fileName = "media/" + "a" + this.mediaId + "-" + this.token + "." + ext;
 			String path = LoginBean.outputFilePath + "/" + fileName;
 			File file = new File(path);
 			if (!file.exists()) {

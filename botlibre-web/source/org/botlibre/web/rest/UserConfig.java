@@ -157,7 +157,7 @@ public class UserConfig extends Config {
 			this.voiceApiEndpoint = user.getVoiceApiEndpoint();
 		}
 		if (allFields || user.isPublic()) {
-			if (user.getShouldDisplayName()) {
+			if (allFields || user.getShouldDisplayName()) {
 				this.name = user.getName();
 			}
 			this.showName = user.getShouldDisplayName();
@@ -187,6 +187,7 @@ public class UserConfig extends Config {
 		}
 		this.isFlagged = user.isFlagged();
 		
+		this.tags = user.getTagsString();
 		this.isBot = user.isBot();
 		this.voice = user.getVoice();
 		this.voiceMod = user.getVoiceMod();

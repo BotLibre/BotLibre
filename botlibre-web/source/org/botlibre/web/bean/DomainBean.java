@@ -225,7 +225,7 @@ public class DomainBean extends WebMediumBean<Domain> {
 	
 	public List<Domain> getUserInstances() {
 		try {
-			List<Domain> results = AdminDatabase.instance().getUserDomains(getUser());			
+			List<Domain> results = AdminDatabase.instance().getUserDomains(getUser());
 			return results;
 		} catch (Exception failed) {
 			error(failed);
@@ -350,6 +350,7 @@ public class DomainBean extends WebMediumBean<Domain> {
 		}
 		return true;
 	}
+	
 	public void upgradeDomain(UpgradeConfig upgrade) {
 		if (!isLoggedIn()) {
 			throw new BotException("You must sign in first");
@@ -708,63 +709,63 @@ public class DomainBean extends WebMediumBean<Domain> {
 			checkAdminOrSuper();
 			List instances = AdminDatabase.instance().getAllAvatars(instance);
 			if (!instances.isEmpty()) {
-				if (isSuper()) {
+				/*if (isSuper()) {
 					for (WebMedium content : (List<WebMedium>)instances) {
 						AdminDatabase.instance().delete(content);
 					}
-				} else {
+				} else {*/
 					throw new BotException("Workspace content must be deleted first. Workspace still has avatars.");
-				}
+				//}
 			}
 			instances = AdminDatabase.instance().getAllInstances(instance);
 			if (!instances.isEmpty()) {
-				if (isSuper()) {
+				/*if (isSuper()) {
 					for (WebMedium content : (List<WebMedium>)instances) {
 						AdminDatabase.instance().delete(content);
 					}
-				} else {
+				} else {*/ // Must delete bot's database as well.
 					throw new BotException("Workspace content must be deleted first. Workspace still has bots.");
-				}
+				//}
 			}
 			instances = AdminDatabase.instance().getAllForums(instance);
 			if (!instances.isEmpty()) {
-				if (isSuper()) {
+				/*if (isSuper()) {
 					for (WebMedium content : (List<WebMedium>)instances) {
 						AdminDatabase.instance().delete(content);
 					}
-				} else {
+				} else {*/
 					throw new BotException("Workspace content must be deleted first. Workspace still has forums.");
-				}
+				//}
 			}
 			instances = AdminDatabase.instance().getAllChannels(instance);
 			if (!instances.isEmpty()) {
-				if (isSuper()) {
+				/*if (isSuper()) {
 					for (WebMedium content : (List<WebMedium>)instances) {
 						AdminDatabase.instance().delete(content);
 					}
-				} else {
+				} else {*/
 					throw new BotException("Workspace content must be deleted first. Workspace still has channels.");
-				}
+				//}
 			}
 			instances = AdminDatabase.instance().getAllScripts(instance);
 			if (!instances.isEmpty()) {
-				if (isSuper()) {
+				/*if (isSuper()) {
 					for (WebMedium content : (List<WebMedium>)instances) {
 						AdminDatabase.instance().delete(content);
 					}
-				} else {
+				} else {*/
 					throw new BotException("Workspace content must be deleted first. Workspace still has scripts.");
-				}
+				//}
 			}
 			instances = AdminDatabase.instance().getAllGraphics(instance);
 			if (!instances.isEmpty()) {
-				if (isSuper()) {
+				/*if (isSuper()) {
 					for (WebMedium content : (List<WebMedium>)instances) {
 						AdminDatabase.instance().delete(content);
 					}
-				} else {
+				} else {*/
 					throw new BotException("Workspace content must be deleted first. Workspace still has graphics.");
-				}
+				//}
 			}
 			AdminDatabase.instance().delete(instance);
 			this.instance = null;

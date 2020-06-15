@@ -280,7 +280,7 @@ public class Domain extends WebMedium {
 	@Override
 	public void setCategoriesFromString(String csv, EntityManager em) {
 		if (csv == null) {
-			throw new BotException("You must choose at least one category");			
+			throw new BotException("You must choose at least one category");
 		}
 		List<Category> newCategories = new ArrayList<Category>();
 		for (String word : Utils.csv(csv)) {
@@ -303,7 +303,7 @@ public class Domain extends WebMedium {
 			}
 		}
 		if (newCategories.isEmpty() && !(this instanceof Domain)) {
-			throw new BotException("You must choose at least one category");			
+			throw new BotException("You must choose at least one category");
 		}
 		List<Category> ancestors = new ArrayList<Category>();
 		for (Category category : newCategories) {

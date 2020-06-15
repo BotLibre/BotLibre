@@ -95,20 +95,24 @@
 		<% } %>
 		
 		<% if (bean.getInstance() != null) { %>
-			<form action="bot" method="post" class="message">
-				<%= loginBean.postTokenInput() %>
-				<%= proxy.proxyInput() %>
+			<form action="bot" method="get" class="message">
 				<%= bean.instanceInput() %>
 				<% if (!bean.getDisplayInstance().isArchived()) { %>
-					<input id="ok" formmethod="get" name="dynamicChat" <%= (bean.getInstance().isExternal() && !bean.getInstance().hasAPI()) ? "formtarget=\"_blank\"" : "" %> type="submit" value="<%= loginBean.translate("Chat") %>" title="<%= loginBean.translate("Chat with the bot on the web") %>"/>
+					<input id="ok" name="dynamicChat" <%= (bean.getInstance().isExternal() && !bean.getInstance().hasAPI()) ? "formtarget=\"_blank\"" : "" %> type="submit" value="<%= loginBean.translate("Chat") %>" title="<%= loginBean.translate("Chat with the bot on the web") %>"/>
 				<% } %>
 				<% if (!embed) { %>
 					<% if (!bean.getDisplayInstance().isExternal() && !bean.getDisplayInstance().isArchived()) { %>
 						<!--input id="ok" formmethod="get" name="chat" type="submit" value="Web Chat" title="Chat with the bot on the web using static HTML"/-->
-						<input id="ok" formmethod="get" name="livechat" type="submit" value="<%= loginBean.translate("Live Chat") %>" title="<%= loginBean.translate("Connect to the bot's live chat channel to chat with it, or its administrator") %>"/>
-						<input id="ok" formmethod="get" name="chatroom" type="submit" value="<%= loginBean.translate("Chat Room") %>" title="<%= loginBean.translate("Connect to the bot's chat room channel to chat with it and other users") %>"/>
+						<input id="ok" name="livechat" type="submit" value="<%= loginBean.translate("Live Chat") %>" title="<%= loginBean.translate("Connect to the bot's live chat channel to chat with it, or its administrator") %>"/>
+						<input id="ok" name="chatroom" type="submit" value="<%= loginBean.translate("Chat Room") %>" title="<%= loginBean.translate("Connect to the bot's chat room channel to chat with it and other users") %>"/>
 					<% } %>
-					<br/>
+				<% } %>
+			</form>
+			<form action="bot" method="post" class="message">
+				<%= loginBean.postTokenInput() %>
+				<%= proxy.proxyInput() %>
+				<%= bean.instanceInput() %>
+				<% if (!embed) { %>
 					<% if (!embed && bean.isMember() && !bean.getDisplayInstance().isExternal() && !bean.getDisplayInstance().isArchived() && (bean.getDisplayInstance().getAllowForking() || bean.isAdmin())) { %>
 						<% if (bean.isLoggedIn()) { %>
 							<input name="fork" type="submit" value="Fork" title="<%= loginBean.translate("Create a clone of this bot that you will own and administer") %>"/>

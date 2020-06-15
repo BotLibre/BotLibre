@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.botlibre.BotException;
 import org.botlibre.util.Utils;
-
+import org.botlibre.web.Site;
 import org.botlibre.web.admin.ClientType;
 import org.botlibre.web.bean.BrowseBean.InstanceFilter;
 import org.botlibre.web.bean.DomainBean;
@@ -75,7 +75,7 @@ public class ScriptServlet extends BeanServlet {
 				}
 				if (file != null) {
 					bean.incrementConnects(ClientType.WEB);
-					if (!loginBean.isSandbox()) {
+					if (Site.LOCK && !loginBean.isSandbox()) {
 						throw new BotException("Must use sandbox domain");
 					}
 					if (bean.getInstance().getLanguage().equals("HTML")) {

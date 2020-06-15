@@ -20,6 +20,7 @@ package org.botlibre.web.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.botlibre.util.Utils;
 import org.botlibre.web.admin.AdminDatabase;
+
+import com.google.common.collect.Lists;
 
 @Entity
 public class PageStats implements Comparable<PageStats> {
@@ -51,7 +54,14 @@ public class PageStats implements Comparable<PageStats> {
 	
 	public static PageStats getStats(String url) {
 		if (stats.size() > MAX_SIZE) {
+			// Clear bottom half from map.
+			List<PageStats> copy = new ArrayList<PageStats>(stats.values());
 			stats.clear();
+			Collections.sort(copy);
+			for (int index = copy.size() - 1; index > (copy.size() / 2); index--) {
+				PageStats stat = (PageStats)copy.get(index);
+				stats.put(stat.page, stat);
+			}
 		}
 		url = Utils.sanitize(url);
 		PageStats stat = stats.get(url);

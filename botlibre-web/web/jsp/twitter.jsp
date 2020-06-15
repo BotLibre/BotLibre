@@ -110,11 +110,6 @@
 					<input id="cancel" type="submit" name="cancel" value="<%= loginBean.translate("Cancel") %>"/>
 				</form>
 			<% } else { %>
-				<% if (!Site.COMMERCIAL) { %>
-					<p>
-						<b><%= loginBean.translate("Please create Twitter bots on our dedicated Twitter bot server") %> <a href="http://twitter.botlibre.com">twitter.botlibre.com</a>.</b>
-					</p>
-				<% } %>
 				<p>
 					<%= loginBean.translate("Please use with caution, you are not allowed to use your bot for spam, or to violate the Twitter terms of service.") %><br/>
 					<%= loginBean.translate("Please review the") %> <a target="_blank" href="http://support.twitter.com/articles/76915-automation-rules-and-best-practices"><%= loginBean.translate("Automation rules and best practices") %></a>
@@ -236,7 +231,7 @@
 						<div>
 							<%= loginBean.translate("Maximum status updates to read per cycle (max is 20).") %><br/>
 							<%= loginBean.translate("Retweets are not included.") %><br/>
-							<% if (!Site.COMMERCIAL) { %>
+							<% if (!Site.COMMERCIAL && !Site.DEDICATED) { %>
 								<%= loginBean.translate("Larger limits are available for commercial accounts at") %>, <a target="_blank" href="https://www.botlibre.biz">www.botlibre.biz</a><br/>
 							<% } %>
 							<%= loginBean.translate("The bot will only read the status updates that match one of the Status Keywords sets below.") %><br/>
@@ -312,7 +307,7 @@ chatterbot
 						<img id="help-mini" src="images/help.svg"/>
 						<div>
 							<%= loginBean.translate("Maximum tweet search result to process or retweets per cycle (max is 20).") %><br/>
-							<% if (!Site.COMMERCIAL) { %>
+							<% if (!Site.COMMERCIAL && !Site.DEDICATED) { %>
 								<%= loginBean.translate("Larger limits are available for commercial accounts at,") %> <a target="_blank" href="https://www.botlibre.biz">www.botlibre.biz</a>
 							<% } %>
 						</div>

@@ -427,7 +427,7 @@
 							<p class="help"><%= loginBean.translate("Configure if the bot should attempt to identify language rules from conversations.") %><br/>
 							<%= loginBean.translate("Comprehension allows the bot to self learn template or scripted responses, such as learning to count, or inferring learned phrases like 'What is your name?' -> 'I am Jim' as Template('I am {speaker}').") %><br/>
 							<%= loginBean.translate("When enabled comprehension will enable the bot to extend its last script with its own code.") %><br/>
-							<%= loginBean.translate("Disabling comprehension can improve performance, and ensure the boy only responds exactly as you have train it.") %></p>
+							<%= loginBean.translate("Disabling comprehension can improve performance, and ensure the bot only responds exactly as you have train it.") %></p>
 						</div>
 					</span>
 					<input name="comprehension" type="checkbox" <% if (bean.getEnableComprehension()) { %>checked<% } %>

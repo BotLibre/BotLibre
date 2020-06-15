@@ -671,25 +671,25 @@ public class AdminDatabase {
 					count = ((Number)em.createQuery("Select count(b) from BotInstance b where b.enableGoogleAssistant = true").getSingleResult()).intValue();
 					Stats.stats.googleAssistantBots = count;
 					em.persist(Stats.stats);
-					for (AppIDStats stat : AppIDStats.stats.values()) {
+					for (AppIDStats stat : new HashMap<String, AppIDStats>(AppIDStats.stats).values()) {
 						em.persist(stat);
 					}
-					for (IPStats stat : IPStats.stats.values()) {
+					for (IPStats stat : new HashMap<String, IPStats>(IPStats.stats).values()) {
 						em.persist(stat);
 					}
-					for (PageStats stat : PageStats.stats.values()) {
+					for (PageStats stat : new HashMap<String, PageStats>(PageStats.stats).values()) {
 						em.persist(stat);
 					}
-					for (BotStats stat : BotStats.stats.values()) {
+					for (BotStats stat : new HashMap<Long, BotStats>(BotStats.stats).values()) {
 						em.persist(stat);
 					}
-					for (LiveChatStats stat : LiveChatStats.stats.values()) {
+					for (LiveChatStats stat : new HashMap<Long, LiveChatStats>(LiveChatStats.stats).values()) {
 						em.persist(stat);
 					}
-					for (ReferrerStats stat : ReferrerStats.stats.values()) {
+					for (ReferrerStats stat : new HashMap<String, ReferrerStats>(ReferrerStats.stats).values()) {
 						em.persist(stat);
 					}
-					for (ErrorStats stat : ErrorStats.stats.values()) {
+					for (ErrorStats stat : new HashMap<String, ErrorStats>(ErrorStats.stats).values()) {
 						em.persist(stat);
 					}
 					em.getTransaction().commit();
@@ -4088,6 +4088,10 @@ public class AdminDatabase {
 			writer.write(Site.SECUREURLLINK);
 			writer.write("</SECUREURLLINK>\n");
 			
+			writer.write("\t<SANDBOXURLLINK>");
+			writer.write(Site.SANDBOXURLLINK);
+			writer.write("</SANDBOXURLLINK>\n");
+			
 			writer.write("\t<REDIRECT>");
 			writer.write(Site.REDIRECT);
 			writer.write("</REDIRECT>\n");
@@ -7061,6 +7065,23 @@ public class AdminDatabase {
 			query.setParameter("user", instance.detach());
 			query.executeUpdate();
 			
+			query = em.createQuery("Delete from BotAttachment m where m.creator = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			query = em.createQuery("Delete from ChannelAttachment m where m.creator = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			query = em.createQuery("Delete from ForumAttachment m where m.creator = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			query = em.createQuery("Delete from IssueTrackerAttachment m where m.creator = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			
+			query = em.createQuery("Delete from Vote m where m.user = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			
 			query = em.createQuery("Delete from Friendship fr where fr.userId = :userId or fr.friend = :userId");
 			query.setParameter("userId", userId);
 			query.executeUpdate();
@@ -9088,7 +9109,9 @@ public class AdminDatabase {
 				this.defaultDomain = validateDomain(Site.DOMAIN);
 			} catch (Exception missing) {
 				log(Level.INFO, "Creating default domain");
-				this.defaultDomain = createDomain(new Domain(Site.DOMAIN), "admin", "", "", null);
+				Domain domain = new Domain(Site.DOMAIN);
+				domain.alias = Site.DOMAIN;
+				this.defaultDomain = createDomain(domain, "admin", "", "", null);
 				
 				User user = new User();
 				user.setUserId("admin");
@@ -9573,7 +9596,7 @@ public class AdminDatabase {
 
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			Query query = em.createQuery("Select distinct d from Domain d where d.active = true");
+			Query query = em.createQuery("Select distinct d from Domain d where d.isActive = true");
 			query.setHint("eclipselink.read-only", "true");
 			domains = query.getResultList();
 		} finally {

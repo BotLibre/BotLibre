@@ -1,3 +1,5 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="java.util.Collection"%>
 <%@page import="org.botlibre.web.Site"%>
 <%@page import="org.botlibre.web.bean.BotBean"%>
@@ -2325,6 +2327,9 @@
 							<input id="cancel" type="submit" name="cancel" value="<%= loginBean.translate("Cancel") %>"><br/>
 							
 						<% } else { %>
+							<%
+								DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+							%>
 								
 							<h3><%= loginBean.translate("Conversations") %></h3>
 							<% for (Vertex conversation : bean.getResults()) { %>
@@ -2354,7 +2359,7 @@
 											<% boolean isInvalid = (relationship != null) && (relationship.getCorrectness() < 0); %>
 											<tr>
 											<td valign="top"><input type=checkbox name=<%= "input:" + input.getId() %> title="<%= loginBean.translate("Select response for correction, validation, invalidation, flagging, or deletion") %>"></td>
-											<td valign="top" nowrap  class="chat-user"><span class="menu"><%= Utils.displayTime(input.getCreationDate()) %></span>
+											<td valign="top" nowrap  class="chat-user"><span class="menu"><%= timeFormat.format(input.getCreationDate()) %></span>
 											<% if (loginBean.isMobile()) { %>
 												<br/>
 											<% } else { %>

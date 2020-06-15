@@ -104,6 +104,12 @@ SDK.useCanvas = null;
 SDK.useVideo = null;
 
 /**
+ * Set the background for video avatars.
+ * @static
+ */
+SDK.videoBackground = true;
+
+/**
  * Attempt to fix grey mp4 video background (only used for Chrome).
  * @static
  */
@@ -276,7 +282,7 @@ SDK.play = function(file, channelaudio) {
 				SDK.canPlayAudio = false;
 				SDK.playInitAudio = function() {
 					if (SDK.playInitVideo != null) {
-						playInitVideo();
+						SDK.playInitVideo();
 					} else {
 						SDK.audio = new Audio(file);
 						SDK.currentAudio = SDK.audio;
@@ -7493,7 +7499,7 @@ function SDKConnection() {
 			}
 			var config = new ForumPostConfig();
 			config.parseXML(xml);
-			processor(config);			
+			processor(config);
 		});
 	}
 	
@@ -7725,7 +7731,7 @@ function SDKConnection() {
 					tags[tags.length] = (xml.childNodes[index].getAttribute("name"));
 				}
 			}
-			processor(tags);			
+			processor(tags);
 		});
 	}
 	
@@ -7828,7 +7834,6 @@ function SDKConnection() {
 	 */
 	this.deleteQuestionResponse = function(config, processor) {
 		config.addCredentials(this);
-		console.log("sdk delete next question response function call");
 		this.POST(this.credentials.rest + "/delete-response", config.toXML(), function(xml) {
 			if (processor != null) {
 				processor();
@@ -8423,7 +8428,6 @@ function UserMessageConfig() {
 	this.parseXML = function(element) {
 		var userMessageNode = element.getElementsByTagName("user-message")[0];
 		if (userMessageNode != null) {
-			console.log(userMessageNode);
 			this.id = userMessageNode.getAttribute("id");
 			this.creationDate = userMessageNode.getAttribute("creationDate");
 			this.owner = userMessageNode.getAttribute("owner");
@@ -9703,10 +9707,10 @@ ChannelConfig.constructor = ChannelConfig;
  * @class
  * @property type
  */
-function ContentConfig() {	
-	this.type;	
+function ContentConfig() {
+	this.type;
 	
-	this.parseXML = function(element) {		
+	this.parseXML = function(element) {
 		this.type = element.getAttribute("type");
 	}
 
@@ -10280,7 +10284,7 @@ InstanceConfig.constructor = InstanceConfig;
  * @property key
  */
 function MediaConfig() {
-	this.id;	
+	this.id;
 	this.name;
 	this.type;
 	this.file;

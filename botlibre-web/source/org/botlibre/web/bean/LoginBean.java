@@ -899,7 +899,7 @@ public class LoginBean extends ServletBean {
 
 	public String getAvatarThumb(AvatarImage avatar, int size) {
 		if (avatar != null) {
-			String fileName = "avatars/" + "at" + avatar.getId() + ".jpg";
+			String fileName = "avatars/" + "at" + avatar.getId() + "-" + avatar.getToken() + ".jpg";
 			String path = LoginBean.outputFilePath + "/" + fileName;
 			byte[] image = avatar.getThumb();
 			if (image == null && avatar.getImage() != null) {
@@ -998,6 +998,9 @@ public class LoginBean extends ServletBean {
 			}
 			this.isHttps = request.isSecure();
 			String server = request.getServerName().toLowerCase();
+			if (server.startsWith("www.")) {
+				server = server.substring(server.indexOf('.') + 1, server.length());
+			}
 			if (!server.equals(Site.SERVER_NAME) && !server.equals(Site.SERVER_NAME2)) {
 				this.isSandbox = true;
 			}
@@ -2897,8 +2900,8 @@ public class LoginBean extends ServletBean {
 			return true;
 		}
 		String server = request.getServerName().toLowerCase();
-		if (server.startsWith("www.") || server.startsWith(Site.SANDBOX + ".") ||
-					server.startsWith("email.") || server.startsWith("twitter.") || server.startsWith("facebook.")) {
+		if (server.startsWith("www.") || server.startsWith(Site.SANDBOX + ".")
+					|| server.startsWith("twitter.")) {
 			server = server.substring(server.indexOf('.') + 1, server.length());
 		}
 		if (Site.LOCK && !server.equals(Site.SERVER_NAME) && !server.equals(Site.SERVER_NAME2) && !server.equals(Site.URL)) {
@@ -2934,7 +2937,7 @@ public class LoginBean extends ServletBean {
 		}
 		String server = request.getServerName().toLowerCase();
 		if (server.startsWith("www.") || server.startsWith(Site.SANDBOX + ".")
-					|| server.startsWith("email.") || server.startsWith("twitter.") || server.startsWith("facebook.")) {
+					|| server.startsWith("twitter.")) {
 			server = server.substring(server.indexOf('.') + 1, server.length());
 		}
 		if (Site.LOCK && !server.equals(Site.SERVER_NAME) && !server.equals(Site.SERVER_NAME2) && !server.equals(Site.URL)) {
@@ -2986,7 +2989,7 @@ public class LoginBean extends ServletBean {
 		}
 		String server = request.getServerName().toLowerCase();
 		if (server.startsWith("www.") || server.startsWith(Site.SANDBOX + ".")
-					|| server.startsWith("email.") || server.startsWith("twitter.") || server.startsWith("facebook.")) {
+					|| server.startsWith("twitter.")) {
 			server = server.substring(server.indexOf('.') + 1, server.length());
 		}
 		if (Site.LOCK && !server.equals(Site.SERVER_NAME) && !server.equals(Site.SERVER_NAME2) && !server.equals(Site.URL)) {

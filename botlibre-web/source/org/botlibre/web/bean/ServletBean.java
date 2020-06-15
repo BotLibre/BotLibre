@@ -26,6 +26,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import org.botlibre.Bot;
+import org.botlibre.BotException;
 import org.botlibre.emotion.EmotionalState;
 
 import org.botlibre.web.Site;
@@ -372,6 +373,13 @@ public abstract class ServletBean implements Cloneable {
 			}
 		} catch (Exception exception) {
 			AdminDatabase.instance().log(exception);
+		}
+	}
+
+	
+	public void checkMemory() {
+		if ((getBotBean().getInstance().getMemoryLimit() > 0) && (getBot().memory().getLongTermMemory().size() > getBotBean().getInstance().getMemoryLimit() * 1.2)) {
+			throw new BotException("Memory size exceeded, importing has been disable until nightly forgetfullness task runs");
 		}
 	}
 }

@@ -564,7 +564,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			out.write("<span class='required'>");
 			out.write(this.loginBean.translate("Categories"));
 			out.write("</span><br/>\n");
-			out.write("<input class='required' id='categories' name='categories' type='text' value='");
+			out.write("<input id='categories' name='categories' type='text' value='");
 			out.write((!error) ? getCategoryString() : this.instance.getCategoriesString());
 			out.write("' placeholder='");
 			out.write(this.loginBean.translate("comma seperated list of categories to categorize the " + Utils.camelCaseToLowerCase(getDisplayName()) + " under"));
@@ -582,7 +582,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			out.write("<br/>\n");
 			out.write("<input id='tags' name='tags' type='text' value='");
 			if (error) {
-				out.write(this.instance.getTagsString());
+				out.write(this.instance.getEditTagsString());
 			}
 			out.write("' placeholder='");
 			out.write(this.loginBean.translate("optional comma seperated list of tags to tag the " + Utils.camelCaseToLowerCase(getDisplayName()) + " under"));
@@ -899,7 +899,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			out.write("<span class='required'>");
 			out.write(this.loginBean.translate("Categories"));
 			out.write("</span><br/>\n");
-			out.write("<input class='required' id='categories' name='categories' type='text' value='");
+			out.write("<input id='categories' name='categories' type='text' value='");
 			out.write(getEditInstance().getCategoriesString());
 			out.write("' placeholder='");
 			out.write(this.loginBean.translate("comma seperated list of categories to categorize the " + getTypeName().toLowerCase()
@@ -917,7 +917,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			out.write(this.loginBean.translate("Tags"));
 			out.write("<br/>\n");
 			out.write("<input id='tags' name='tags' type='text' value='");
-			out.write(getEditInstance().getTagsString());
+			out.write(getEditInstance().getEditTagsString());
 			out.write("' placeholder='");
 			out.write(this.loginBean.translate("optional comma seperated list of tags to tag the " + getTypeName().toLowerCase()
 					+ " under"));
@@ -2209,7 +2209,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		}
 		try {
 			if (grid) {
-				if (!loginBean.isMobile()) {
+				if (!this.loginBean.isMobile()) {
 					writer.write("<span class='dropt'>\n");
 				}
 				writer.write("<table style='border-style:solid;border-color:grey;border-width:1px'>\n");
@@ -2224,7 +2224,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			} else {
 				writer.write("<td style='border-style:solid;border-color:grey;border-width:1px'>");
 			}
-			if (!grid || !loginBean.isMobile()) {
+			if (!grid || !this.loginBean.isMobile()) {
 				writer.write("<div style='text-align:left'>\n");
 				writeBrowseLink(writer, instance, true);
 				writer.write("<br/>\n");

@@ -86,7 +86,14 @@ public class BotStats implements Comparable<BotStats> {
 	
 	public static BotStats getStats(Long botId, String name) {
 		if (stats.size() > MAX_SIZE) {
+			// Clear bottom half from map.
+			List<BotStats> copy = new ArrayList<BotStats>(stats.values());
 			stats.clear();
+			Collections.sort(copy);
+			for (int index = copy.size() - 1; index > (copy.size() / 2); index--) {
+				BotStats stat = (BotStats)copy.get(index);
+				stats.put(stat.botId, stat);
+			}
 		}
 		BotStats stat = stats.get(botId);
 		if (stat == null) {

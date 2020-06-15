@@ -160,14 +160,14 @@
 			<% } else if (newMessages > 1) { %>
 				<br/><%= loginBean.translate("You have") %> <%= newMessages %> <%= loginBean.translate("new") %> <a href="<%= "login?browse-user-messages"	+ proxy.proxyString() %>"><%= loginBean.translate("messages") %></a>.
 			<% } %>
-			<% if (!Site.COMMERCIAL && loginBean.getUser().isExpired()) { %>
+			<% if (!Site.COMMERCIAL && !Site.DEDICATED && loginBean.getUser().isExpired()) { %>
 				<b style="color:red"><%= loginBean.translate("Your account has expired please renew your upgrade") %> <a href="upgrade.jsp"><%= loginBean.translate("here") %></a></b><br/>
 			<% } %>
 			<% if (!loginBean.getUser().isVerified()) { %>
 				<b style="color:red"><%= loginBean.translate("Please verify your email address") %> 
 				<a href="<%= "login?send-verify" + proxy.proxyString() + loginBean.postTokenString() %>" title="<%= loginBean.translate("Send a verification email to your email address") %>"><%= loginBean.translate("resend verify") %></a></b><br/>
 			<% } %>
-			<% if (!Site.COMMERCIAL) { %>
+			<% if (!Site.COMMERCIAL && !Site.DEDICATED) { %>
 				<br/>
 				<b><%= loginBean.translate("Are you using Bot Libre for Business? We strongly recommend you upgrade to Bot Libre for Business") %> <a href="https://www.botlibre.biz"><%= loginBean.translate("www.botlibre.biz") %></a></b><br/>
 			<% } %>
