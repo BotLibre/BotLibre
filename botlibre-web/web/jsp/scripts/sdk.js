@@ -7489,6 +7489,16 @@ function SDKConnection() {
 	}
 	
 	/**
+	 * Update the content of the graphic.
+	 */
+	this.updateGraphic = function(config) {
+		config.addCredentials(this);
+		this.POST(this.credentials.rest + "/update-graphic", config.toXML(), function(xml) {
+			return;
+		});
+	}
+	
+	/**
 	 * Update the forum post.
 	 */
 	this.updateForumPost = function(config, processor) {
@@ -8332,7 +8342,7 @@ function UserConfig() {
 	this.parseXML = function(element) {
 		this.user = element.getAttribute("user");
 		this.name = element.getAttribute("name");
-		this.showName = element.getAttribute("showName");
+		this.showName = element.getAttribute("showName") == "true";
 		this.token = element.getAttribute("token");
 		this.email = element.getAttribute("email");
 		this.hint = element.getAttribute("hint");
@@ -8341,7 +8351,7 @@ function UserConfig() {
 		this.bots = element.getAttribute("bots");
 		this.posts = element.getAttribute("posts");
 		this.messages = element.getAttribute("messages");
-		this.joined = element.getAttribute("joined");
+		this.joined = element.getAttribute("joined") == "true";
 		this.lastConnect = element.getAttribute("lastConnect");
 		
 		var node = element.getElementsByTagName("bio")[0];
@@ -8585,12 +8595,12 @@ function ResponseConfig() {
 		this.noRepeat = element.getAttribute("noRepeat");
 		this.requirePrevious = element.getAttribute("requirePrevious");
 		this.requireTopic = element.getAttribute("requireTopic");
-		this.flagged = element.getAttribute("flagged");
+		this.flagged = element.getAttribute("flagged") == "true";
 		this.correctness = element.getAttribute("correctness");
 		this.sentiment = element.getAttribute("sentiment");
 		this.exclusiveTopic = element.getAttribute("exclusiveTopic");
-		this.displayHTML = element.getAttribute("displayHTML");
-		this.autoReduce = element.getAttribute("autoReduce");
+		this.displayHTML = element.getAttribute("displayHTML") == "true";
+		this.autoReduce = element.getAttribute("autoReduce") == "true";
 		
 		var node = element.getElementsByTagName("question")[0];
 		if (node != null) {
@@ -9595,12 +9605,12 @@ function WebMediumConfig() {
 		this.id = element.getAttribute("id");
 		this.name = element.getAttribute("name");
 		this.creationDate = element.getAttribute("creationDate");
-		this.isPrivate = element.getAttribute("isPrivate");
-		this.isHidden = element.getAttribute("isHidden");
+		this.isPrivate = element.getAttribute("isPrivate") == "true";
+		this.isHidden = element.getAttribute("isHidden") == "true";
 		this.accessMode = element.getAttribute("accessMode");
-		this.isAdmin = element.getAttribute("isAdmin");
-		this.isAdult = element.getAttribute("isAdult");
-		this.isFlagged = element.getAttribute("isFlagged");
+		this.isAdmin = element.getAttribute("isAdmin") == "true";
+		this.isAdult = element.getAttribute("isAdult") == "true";
+		this.isFlagged = element.getAttribute("isFlagged") == "true";
 		this.creator = element.getAttribute("creator");
 		this.creationDate = element.getAttribute("creationDate");
 		this.connects = element.getAttribute("connects");
@@ -10164,10 +10174,10 @@ function ForumPostConfig() {
 		this.dailyViews = element.getAttribute("dailyViews");
 		this.weeklyViews = element.getAttribute("weeklyViews");
 		this.monthlyViews = element.getAttribute("monthlyViews");
-		this.isAdmin = element.getAttribute("isAdmin");
+		this.isAdmin = element.getAttribute("isAdmin") == "true";
 		this.replyCount = element.getAttribute("replyCount");
-		this.isFlagged = element.getAttribute("isFlagged");
-		this.isFeatured = element.getAttribute("isFeatured");
+		this.isFlagged = element.getAttribute("isFlagged") == "true";
+		this.isFeatured = element.getAttribute("isFeatured") == "true";
 		this.creator = element.getAttribute("creator");
 		this.creationDate = element.getAttribute("creationDate");
 		
@@ -10258,7 +10268,7 @@ function InstanceConfig() {
 	
 	this.parseXML = function(element) {
 		this.parseWebMediumXML(element);
-		this.allowForking = element.getAttribute("allowForking");
+		this.allowForking = element.getAttribute("allowForking") == "true";
 		this.size = element.getAttribute("size");
 		
 		var node = element.getElementsByTagName("template")[0];
@@ -10347,11 +10357,11 @@ function AnalyticConfig() {
 		this.analyticFetch = element.getAttribute("analyticFetch");
 		this.imageSize = element.getAttribute("imageSize");
 		this.trainingStatus = element.getAttribute("trainingStatus");
-		this.isTraining = element.getAttribute("isTraining");
+		this.isTraining = element.getAttribute("isTraining") == "true";
 		this.audioInputName = element.getAttribute("audioInputName");
 		this.audioOutputName = element.getAttribute("audioOutputName");
 		this.processingTestMediaStatus = element.getAttribute("processingTestMediaStatus");
-		this.isProcessingMedia = element.getAttribute("isProcessingMedia");
+		this.isProcessingMedia = element.getAttribute("isProcessingMedia") == "true";
 	}
 
 	this.credentials = function() {
