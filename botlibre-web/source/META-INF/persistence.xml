@@ -31,6 +31,7 @@
 		<class>org.botlibre.web.admin.DomainForwarder</class>
 		<class>org.botlibre.web.admin.Graphic</class>
 		<class>org.botlibre.web.admin.AdminSettings</class>
+		<class>org.botlibre.web.admin.BotPlatform</class>
 		<class>org.botlibre.web.forum.Forum</class>
 		<class>org.botlibre.web.forum.ForumPost</class>
 		<class>org.botlibre.web.forum.ForumAttachment</class>
@@ -59,7 +60,7 @@
 		<class>org.botlibre.web.service.Translation</class>
 		<class>org.botlibre.web.service.BotTranslation</class>
 		<properties>
-		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:botlibreplatform"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://app-db:5432/botlibreplatform"/>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 			<property name="javax.persistence.jdbc.user" value="postgres"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>
@@ -72,7 +73,7 @@
 	<persistence-unit name="botlibreplatform_bots" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<properties>
-		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:botlibreplatform_bots"/>
+		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://app-db:5432/botlibreplatform_bots"/>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 			<property name="javax.persistence.jdbc.user" value="postgres"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>
@@ -84,7 +85,7 @@
 	<persistence-unit name="postgres" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql:postgres"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://app-db:5432/postgres"/>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 			<property name="javax.persistence.jdbc.user" value="postgres"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>

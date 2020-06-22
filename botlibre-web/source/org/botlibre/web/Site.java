@@ -90,6 +90,8 @@ public class Site {
 	public static String PREFIX = "botplatform";
 	// JPA persistence unit.
 	public static String PERSISTENCE_UNIT = "botlibreplatform";
+	// JPA connection protocol to porsgres running on container
+	public static String PERSISTENCE_PROTOCOL = "jdbc:postgresql://app-db:5432/";
 	// Twitter hash tag.
 	public static String HASHTAG = "botlibre";
 	// Default content type.

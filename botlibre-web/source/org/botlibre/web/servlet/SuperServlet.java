@@ -198,6 +198,7 @@ public class SuperServlet extends BeanServlet {
 				Site.ID = request.getParameter("ID");
 				Site.PREFIX = request.getParameter("PREFIX");
 				Site.PERSISTENCE_UNIT = request.getParameter("PERSISTENCE_UNIT");
+				Site.PERSISTENCE_PROTOCOL = request.getParameter("PERSISTENCE_PROTOCOL");
 				Site.HASHTAG = request.getParameter("HASHTAG");
 				Site.TYPE = request.getParameter("TYPE");
 

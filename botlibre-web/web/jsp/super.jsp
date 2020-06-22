@@ -150,6 +150,9 @@
 									Persistence Unit<br/>
 									<input type="text" name="PERSISTENCE_UNIT" value="<%= Site.PERSISTENCE_UNIT %>"/>
 									<br/>
+									Persistence Protocol<br/>
+									<input type="text" name="PERSISTENCE_PROTOCOL" value="<%= Site.PERSISTENCE_PROTOCOL %>"/>
+									<br/>
 									Twitter Hashtag<br/>
 									<input type="text" name="HASHTAG" value="<%= Site.HASHTAG %>"/>
 									<br/>
