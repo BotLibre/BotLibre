@@ -1,0 +1,5 @@
+<platform-settings>
+	<DATABASEPASSWORD>password</DATABASEPASSWORD>
+	<PERSISTENCE_UNIT>botlibreplatform</PERSISTENCE_UNIT>
+	<PERSISTENCE_PROTOCOL>jdbc:postgresql://app-db:5432/</PERSISTENCE_PROTOCOL>
+</platform-settings>
