@@ -6083,6 +6083,19 @@ public class AdminDatabase {
 		}
 	}
 	
+	public boolean domainExists(String alias) {
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			Query query = em.createQuery("Select p from Domain p where p.alias = :alias");
+			query.setHint("eclipselink.read-only", "true");
+			query.setParameter("alias", alias);
+			List<BotInstance> results = query.getResultList();
+			return !results.isEmpty();
+		} finally {
+			em.close();
+		}
+	}
+	
 	public Forum updateForum(Forum updatedInstance, String categories, String tags) {
 		log(Level.INFO, "update", updatedInstance);
 		checkConstraints(updatedInstance, tags);
@@ -9060,111 +9073,121 @@ public class AdminDatabase {
 	
 	public Domain getDefaultDomain() {
 		if (this.defaultDomain == null) {
-			try {
-				this.defaultDomain = validateDomain(Site.DOMAIN);
-			} catch (Exception missing) {
-				log(Level.INFO, "Creating default domain");
-				Domain domain = new Domain(Site.DOMAIN);
-				domain.alias = Site.DOMAIN;
-				this.defaultDomain = createDomain(domain, "admin", "", "", null);
-				
-				User user = new User();
-				user.setUserId("admin");
-				user.setSuperUser(true);
-				user.setType(UserType.Admin);
-
-				Category category = new Category();
-				category.setName("Misc");
-				category.setDescription("Bots that have not been categorized");
-				category.setType("Bot");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Forums that have not been categorized");
-				category.setType("Forum");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Issue trackers that have not been categorized");
-				category.setType("IssueTracker");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Channels that have not been categorized");
-				category.setType("Channel");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Scripts that have not been categorized");
-				category.setType("Script");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Analytics that have not been categorized");
-				category.setType("Analytic");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Avatars that have not been categorized");
-				category.setType("Avatar");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Graphics that have not been categorized");
-				category.setType("Graphic");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-
-				log(Level.INFO, "Creating default template");
-				try {
-					// Create default template.
-					LoginBean bean = new LoginBean();
-					bean.setUser(user);
-					bean.setLoggedIn(true);
-					bean.setDomain(this.defaultDomain);
-					BotBean botBean = bean.getBotBean();
-					InstanceConfig config = new InstanceConfig();
-					config.name = "template";
-					config.categories = "";
-					config.tags = "template";
-					botBean.createInstance(config, true, true,"");
-				
-					// Initialize.
-					botBean.connect(ClientType.WEB);
-					if (bean.getError() != null) {
-						throw bean.getError();
+			synchronized(this) {
+				if (this.defaultDomain == null) {
+					try {
+						log(Level.INFO, "Site.DOMAIN: " + Site.DOMAIN);
+						this.defaultDomain = validateDomain(Site.DOMAIN);
+					} catch (Exception missing) {
+						missing.printStackTrace();
+						log(Level.INFO, "Creating default domain");
+						Domain domain = new Domain(Site.DOMAIN);
+						domain.alias = Site.DOMAIN;
+						this.defaultDomain = createDomain(domain, "admin", "", "", null);
+						
+						User user = new User();
+						user.setUserId("admin");
+						user.setSuperUser(true);
+						user.setType(UserType.Admin);
+		
+						Category category = new Category();
+						category.setName("Misc");
+						category.setDescription("Bots that have not been categorized");
+						category.setType("Bot");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Forums that have not been categorized");
+						category.setType("Forum");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Issue trackers that have not been categorized");
+						category.setType("IssueTracker");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Channels that have not been categorized");
+						category.setType("Channel");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Scripts that have not been categorized");
+						category.setType("Script");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Analytics that have not been categorized");
+						category.setType("Analytic");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Avatars that have not been categorized");
+						category.setType("Avatar");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Graphics that have not been categorized");
+						category.setType("Graphic");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+		
+						log(Level.INFO, "Creating default template");
+						try {
+							// Create default template.
+							LoginBean bean = new LoginBean();
+							bean.setUser(user);
+							bean.setLoggedIn(true);
+							bean.setDomain(this.defaultDomain);
+							BotBean botBean = bean.getBotBean();
+							InstanceConfig config = new InstanceConfig();
+							config.name = "template";
+							config.categories = "";
+							config.tags = "template";
+							botBean.createInstance(config, true, true,"");
+						
+							// Initialize.
+							botBean.connect(ClientType.WEB);
+							if (bean.getError() != null) {
+								throw bean.getError();
+							}
+							log(Level.INFO, "Initializing template database");
+							bean.getBean(MemoryBean.class).processDeleteAll();
+							if (bean.getError() != null) {
+								throw bean.getError();
+							}
+							log(Level.INFO, "Initializing template scripts");
+							bean.getBean(SelfBean.class).processRebootstrap();
+							if (bean.getError() != null) {
+								throw bean.getError();
+							}
+						} catch (Throwable exception) {
+							exception.printStackTrace();
+							log(exception);
+						}
 					}
-					log(Level.INFO, "Initializing template database");
-					bean.getBean(MemoryBean.class).processDeleteAll();
-					if (bean.getError() != null) {
-						throw bean.getError();
-					}
-					log(Level.INFO, "Initializing template scripts");
-					bean.getBean(SelfBean.class).processRebootstrap();
-					if (bean.getError() != null) {
-						throw bean.getError();
-					}
-				} catch (Throwable exception) {
-					exception.printStackTrace();
-					log(exception);
 				}
 			}
 		}
 		return this.defaultDomain;
+	}
+	
+	public void setDefaultDomain(Domain domain) {
+		this.defaultDomain = domain;
 	}
 	
 	public Domain validateDomain(String alias) {

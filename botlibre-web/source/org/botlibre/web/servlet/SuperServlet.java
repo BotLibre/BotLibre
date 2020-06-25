@@ -18,6 +18,7 @@
 package org.botlibre.web.servlet;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.botlibre.web.Site;
 import org.botlibre.web.admin.AdminDatabase;
 import org.botlibre.web.admin.ContentRating;
+import org.botlibre.web.admin.Domain;
+import org.botlibre.web.bean.DomainBean;
 import org.botlibre.web.bean.IRCBean;
 import org.botlibre.web.bean.LoginBean;
+import org.botlibre.web.rest.DomainConfig;
 import org.botlibre.web.service.EmailService;
 import org.botlibre.web.service.ForgetfulnessService;
 import org.botlibre.web.service.PageStats;
@@ -194,7 +198,34 @@ public class SuperServlet extends BeanServlet {
 				
 				Site.CONTENT_RATING = ContentRating.valueOf(request.getParameter("CONTENT_RATING"));
 				Site.NAME = request.getParameter("NAME");
-				Site.DOMAIN = request.getParameter("DOMAIN");
+				
+				String newDomainName = request.getParameter("DOMAIN");
+				if (!Site.DOMAIN.equals(newDomainName)) {
+					AdminDatabase adminDatabase = AdminDatabase.instance();
+					if (!adminDatabase.domainExists(newDomainName) && adminDatabase.domainExists(Site.DOMAIN)) {
+						// Alter current default domain's name & alias if alias not already taken
+						AdminDatabase.instance().log(Level.INFO, "Changing current default domain's name & alias");
+						Domain newDefaultDomain = (Domain) adminDatabase.getDefaultDomain().clone();
+						newDefaultDomain.setName(newDomainName);
+						newDefaultDomain.setAlias(newDomainName);
+						DomainConfig defaultDomainConfig = newDefaultDomain.buildConfig();
+						adminDatabase.updateDomain(newDefaultDomain, defaultDomainConfig.tags, defaultDomainConfig.categories);
+						adminDatabase.setDefaultDomain(newDefaultDomain);
+						Site.DOMAIN = newDefaultDomain.getAlias();
+					}
+					else if (adminDatabase.domainExists(newDomainName)) {
+						// Set the default domain to be the existing one with matching alias
+						AdminDatabase.instance().log(Level.INFO, "Set default domain to a different existing domain");
+						Domain newDefaultDomain = AdminDatabase.instance().validateDomain(newDomainName);
+						adminDatabase.setDefaultDomain(newDefaultDomain);
+						Site.DOMAIN = newDomainName;
+					}
+					else {
+						Site.DOMAIN = newDomainName;
+					}
+				}
+				AdminDatabase.instance().log(Level.INFO, "New domain name: " + Site.DOMAIN);
+				
 				Site.ID = request.getParameter("ID");
 				Site.PREFIX = request.getParameter("PREFIX");
 				Site.PERSISTENCE_UNIT = request.getParameter("PERSISTENCE_UNIT");
