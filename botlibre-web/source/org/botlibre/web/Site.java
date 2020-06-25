@@ -41,15 +41,15 @@ public class Site {
 	public static String REDIRECT = "";
 	public static boolean HTTPS = true;*/
 	
-	public static String URL_PREFIX = "/botlibreplatform";
-	public static String URL_SUFFIX = ":9080/botlibreplatform";
+	public static String URL_PREFIX = "";
+	public static String URL_SUFFIX = "";
 	public static String SERVER_NAME = "localhost";
 	public static String SERVER_NAME2 = "localhost";
-	public static String URL = "localhost:9080/botlibreplatform";
-	public static String URLLINK = "http://localhost:9080/botlibreplatform";
-	public static String SECUREURLLINK = "http://localhost:9080/botlibreplatform";
+	public static String URL = "localhost";
+	public static String URLLINK = "http://localhost";
+	public static String SECUREURLLINK = "http://localhost";
 	public static String SANDBOX = "sandbox";
-	public static String SANDBOXURLLINK = "http://sandbox.localhost:9080/botlibreplatform";
+	public static String SANDBOXURLLINK = "http://sandbox.localhost";
 	public static String REDIRECT = "";
 	public static boolean HTTPS = false;
 	
@@ -67,7 +67,7 @@ public class Site {
 	
 	public static boolean HTTPS_WILDCARD = false;
 
-	public static String PYTHONSERVER = "http://localhost:6777/";
+	public static String PYTHONSERVER = "";
 
 	// Allow the server to be bootstrapped if it fails to connect to the database.
 	public static boolean BOOTSTRAP = true;
