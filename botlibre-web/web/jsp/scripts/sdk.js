@@ -49,7 +49,7 @@ SDK.APP = "";
 
 SDK.DOMAIN = window.location.host;
 //SDK.DOMAIN = "192.168.0.16:9080";
-SDK.APP = "/botlibreplatform";
+//SDK.APP = "/botlibreplatform";
 
 SDK.PATH = "/rest/api";
 SDK.MAX_FILE_UPLOAD = 5000000;
