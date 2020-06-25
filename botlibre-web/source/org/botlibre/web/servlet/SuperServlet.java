@@ -223,8 +223,8 @@ public class SuperServlet extends BeanServlet {
 					else {
 						Site.DOMAIN = newDomainName;
 					}
+					AdminDatabase.instance().log(Level.INFO, "New domain name: " + Site.DOMAIN);
 				}
-				AdminDatabase.instance().log(Level.INFO, "New domain name: " + Site.DOMAIN);
 				
 				Site.ID = request.getParameter("ID");
 				Site.PREFIX = request.getParameter("PREFIX");
