@@ -9079,7 +9079,6 @@ public class AdminDatabase {
 						log(Level.INFO, "Site.DOMAIN: " + Site.DOMAIN);
 						this.defaultDomain = validateDomain(Site.DOMAIN);
 					} catch (Exception missing) {
-						missing.printStackTrace();
 						log(Level.INFO, "Creating default domain");
 						Domain domain = new Domain(Site.DOMAIN);
 						domain.alias = Site.DOMAIN;
