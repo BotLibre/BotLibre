@@ -41,15 +41,15 @@ public class Site {
 	public static String REDIRECT = "";
 	public static boolean HTTPS = true;*/
 	
-	public static String URL_PREFIX = "";
-	public static String URL_SUFFIX = "";
+	public static String URL_PREFIX = "/botlibreplatform";
+	public static String URL_SUFFIX = ":9080/botlibreplatform";
 	public static String SERVER_NAME = "localhost";
 	public static String SERVER_NAME2 = "localhost";
-	public static String URL = "localhost";
-	public static String URLLINK = "http://localhost";
-	public static String SECUREURLLINK = "http://localhost";
+	public static String URL = "localhost:9080/botlibreplatform";
+	public static String URLLINK = "http://localhost:9080/botlibreplatform";
+	public static String SECUREURLLINK = "http://localhost:9080/botlibreplatform";
 	public static String SANDBOX = "sandbox";
-	public static String SANDBOXURLLINK = "http://sandbox.localhost";
+	public static String SANDBOXURLLINK = "http://sandbox.localhost:9080/botlibreplatform";
 	public static String REDIRECT = "";
 	public static boolean HTTPS = false;
 	
@@ -62,6 +62,19 @@ public class Site {
 	public static String SECUREURLLINK = "http://192.168.0.16";
 	public static String SANDBOX = "sandbox";
 	public static String SANDBOXURLLINK = "http://192.168.0.16";
+	public static String REDIRECT = "";
+	public static boolean HTTPS = false;*/
+	
+	// Docker Settings:
+	/*public static String URL_PREFIX = "";
+	public static String URL_SUFFIX = "";
+	public static String SERVER_NAME = "localhost";
+	public static String SERVER_NAME2 = "localhost";
+	public static String URL = "localhost";
+	public static String URLLINK = "http://localhost";
+	public static String SECUREURLLINK = "http://localhost";
+	public static String SANDBOX = "sandbox";
+	public static String SANDBOXURLLINK = "http://sandbox.localhost";
 	public static String REDIRECT = "";
 	public static boolean HTTPS = false;*/
 	
@@ -88,10 +101,16 @@ public class Site {
 	public static String ID = "botlibreplatform";
 	// JavaScript embed prefix.
 	public static String PREFIX = "botplatform";
+
+	// JPA connection protocol to postgres.
+	public static String PERSISTENCE_PROTOCOL = "jdbc:postgresql://";
+	// JPA connection host.
+	public static String PERSISTENCE_HOST = "localhost";
+//	public static String PERSISTENCE_HOST = "app-db"; // Database host name for Docker
+	// JPA connection port.
+	public static String PERSISTENCE_PORT = "5432";
 	// JPA persistence unit.
 	public static String PERSISTENCE_UNIT = "botlibreplatform";
-	// JPA connection protocol to porsgres running on container
-	public static String PERSISTENCE_PROTOCOL = "jdbc:postgresql://app-db:5432/";
 	// Twitter hash tag.
 	public static String HASHTAG = "botlibre";
 	// Default content type.
@@ -208,6 +227,8 @@ public class Site {
 	
 	public static String DATABASEPASSWORD = "password";
 	public static String OBFUSCATE_DATABASEPASSWORD = "";
+	
+	public static String DATABASEUSER = "postgres";
 
 	@SuppressWarnings("rawtypes")
 	public static BrowseBean defaultBean() {
@@ -219,5 +240,9 @@ public class Site {
 			return "";
 		}
 		return type.toString();
+	}
+	
+	public static String getDatabaseUrl() {
+		return Site.PERSISTENCE_PROTOCOL + Site.PERSISTENCE_HOST + ":" + Site.PERSISTENCE_PORT + "/";
 	}
 }

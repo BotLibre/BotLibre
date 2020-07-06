@@ -148,11 +148,17 @@
 									JavaScript/css prefix<br/>
 									<input type="text" name="PREFIX" value="<%= Site.PREFIX %>"/>
 									<br/>
-									Persistence Unit<br/>
-									<input type="text" name="PERSISTENCE_UNIT" value="<%= Site.PERSISTENCE_UNIT %>"/>
-									<br/>
 									Persistence Protocol<br/>
 									<input type="text" name="PERSISTENCE_PROTOCOL" value="<%= Site.PERSISTENCE_PROTOCOL %>"/>
+									<br/>
+									Persistence Host<br/>
+									<input type="text" name="PERSISTENCE_HOST" value="<%= Site.PERSISTENCE_HOST %>"/>
+									<br/>
+									Persistence Port<br/>
+									<input type="text" name="PERSISTENCE_PORT" value="<%= Site.PERSISTENCE_PORT %>"/>
+									<br/>
+									Persistence Unit<br/>
+									<input type="text" name="PERSISTENCE_UNIT" value="<%= Site.PERSISTENCE_UNIT %>"/>
 									<br/>
 									Twitter Hashtag<br/>
 									<input type="text" name="HASHTAG" value="<%= Site.HASHTAG %>"/>

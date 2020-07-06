@@ -358,12 +358,16 @@ public class AdminDatabase {
 					System.setProperty("http.agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 					
 					restorePlatformDatabaseSettings();
-					DatabaseMemory.SCHEMA_URL_PREFIX = Site.PERSISTENCE_PROTOCOL + Site.PERSISTENCE_UNIT + "_bots" + "?currentSchema=";
-					DatabaseMemory.DATABASE_URL = Site.PERSISTENCE_PROTOCOL + Site.PERSISTENCE_UNIT + "_bots";
+					DatabaseMemory.SCHEMA_URL_PREFIX = Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT + "_bots" + "?currentSchema=";
+					DatabaseMemory.DATABASE_URL = Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT + "_bots";
+					DatabaseMemory.DATABASE_USER = Site.DATABASEUSER;
 					DatabaseMemory.DATABASE_PASSWORD = Site.DATABASEPASSWORD;
 					
 					Map<String, String> properties = new HashMap<String, String>();
+					properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+					properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 					properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
+					
 					/**properties.put(PersistenceUnitProperties.JDBC_DRIVER, DATABASE_DRIVER);
 					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_URL);
 					properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
@@ -492,16 +496,30 @@ public class AdminDatabase {
 						AdminDatabase.instance().log(Level.INFO, "Checking python database");
 						String result = "";
 						// setting up database, send xml to python with user and pass.
-						String user = obfuscate(Site.PERSISTENCE_UNIT);
+						String host = obfuscate(Site.PERSISTENCE_HOST);
+						String dbname = obfuscate(Site.PERSISTENCE_UNIT);
+						String port = obfuscate(Site.PERSISTENCE_PORT);
+						String user = obfuscate(Site.DATABASEUSER);
 						String password = null;
 						if (Site.OBFUSCATE_DATABASEPASSWORD == null || Site.OBFUSCATE_DATABASEPASSWORD.isEmpty()) {
 							password = obfuscate(Site.DATABASEPASSWORD);
 						} else {
 							password = Site.OBFUSCATE_DATABASEPASSWORD;
 						}
+						
 						StringWriter writer = new StringWriter();
-						writer.write("<database user=\"" + user + "\" password=\"" + password + "\" />");
-
+						writer.write("<database host=\"");
+						writer.write(host);
+						writer.write("\" dbname=\"");
+						writer.write(dbname);
+						writer.write("\" port=\"");
+						writer.write(port);
+						writer.write("\" user=\"");
+						writer.write(user);
+						writer.write("\" password=\"");
+						writer.write(password);
+						writer.write("\" />");
+						
 						MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 						multipartEntity.addPart("xml", new StringBody(writer.toString(), "text/xml", Charset.defaultCharset()));
 
@@ -3374,6 +3392,12 @@ public class AdminDatabase {
 			// Parse and initialize settings.
 	
 			try {
+				if (root.getElementsByTagName("DATABASEUSER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DATABASEUSER").item(0);
+					String value = element.getTextContent().trim();
+					Site.DATABASEUSER = value;
+				}
+				
 				if (root.getElementsByTagName("DATABASEPASSWORD").getLength() > 0) {
 					Element element = (Element) root.getElementsByTagName("DATABASEPASSWORD").item(0);
 					String value = element.getTextContent().trim();
@@ -3507,6 +3531,18 @@ public class AdminDatabase {
 					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PROTOCOL").item(0);
 					String value = element.getTextContent().trim();
 					Site.PERSISTENCE_PROTOCOL = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_HOST").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_HOST").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_HOST = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_PORT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PORT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_PORT = value;
 				}
 				
 				if (root.getElementsByTagName("PERSISTENCE_UNIT").getLength() > 0) {
@@ -4073,23 +4109,41 @@ public class AdminDatabase {
 				Element root = document.getDocumentElement();
 		
 				// Parse and initialize settings.
-		
+				
+				if (root.getElementsByTagName("DATABASEUSER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DATABASEUSER").item(0);
+					String value = element.getTextContent().trim();
+					Site.DATABASEUSER = value;
+				}
+				
 				if (root.getElementsByTagName("DATABASEPASSWORD").getLength() > 0) {
 					Element element = (Element) root.getElementsByTagName("DATABASEPASSWORD").item(0);
 					String value = element.getTextContent().trim();
 					Site.DATABASEPASSWORD = decryptIfEncrypted(value);
 				}
 				
-				if (root.getElementsByTagName("PERSISTENCE_UNIT").getLength() > 0) {
-					Element element = (Element) root.getElementsByTagName("PERSISTENCE_UNIT").item(0);
-					String value = element.getTextContent().trim();
-					Site.PERSISTENCE_UNIT = value;
-				}
-				
 				if (root.getElementsByTagName("PERSISTENCE_PROTOCOL").getLength() > 0) {
 					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PROTOCOL").item(0);
 					String value = element.getTextContent().trim();
 					Site.PERSISTENCE_PROTOCOL = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_HOST").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_HOST").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_HOST = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_PORT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PORT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_PORT = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_UNIT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_UNIT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_UNIT = value;
 				}
 				
 			} catch (Exception exception) {
@@ -4257,17 +4311,29 @@ public class AdminDatabase {
 		try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
 			writer.write("<platform-settings>\n");
 			
+			writer.write("\t<DATABASEUSER>");
+			writer.write(Site.DATABASEUSER);
+			writer.write("</DATABASEUSER>\n");
+			
 			writer.write("\t<DATABASEPASSWORD>");
 			writer.write("__" + Utils.encrypt(Site.KEY2, Site.DATABASEPASSWORD));
 			writer.write("</DATABASEPASSWORD>\n");
 			
-			writer.write("\t<PERSISTENCE_UNIT>");
-			writer.write(Site.PERSISTENCE_UNIT);
-			writer.write("</PERSISTENCE_UNIT>\n");
-			
 			writer.write("\t<PERSISTENCE_PROTOCOL>");
 			writer.write(Site.PERSISTENCE_PROTOCOL);
 			writer.write("</PERSISTENCE_PROTOCOL>\n");
+			
+			writer.write("\t<PERSISTENCE_HOST>");
+			writer.write(Site.PERSISTENCE_HOST);
+			writer.write("</PERSISTENCE_HOST>\n");
+			
+			writer.write("\t<PERSISTENCE_PORT>");
+			writer.write(Site.PERSISTENCE_PORT);
+			writer.write("</PERSISTENCE_PORT>\n");
+			
+			writer.write("\t<PERSISTENCE_UNIT>");
+			writer.write(Site.PERSISTENCE_UNIT);
+			writer.write("</PERSISTENCE_UNIT>\n");
 			
 			writer.write("</platform-settings>\n");
 			
@@ -4281,7 +4347,6 @@ public class AdminDatabase {
 		log(Level.INFO, "Saving platform settings to database");
 		
 		BotPlatform botPlatform = new BotPlatform();
-//		botPlatform.DATABASEPASSWORD = "__" + Utils.encrypt(Site.KEY2, Site.DATABASEPASSWORD);
 		botPlatform.URL_PREFIX = Site.URL_PREFIX;
 		botPlatform.URL_SUFFIX = Site.URL_SUFFIX;
 		botPlatform.SERVER_NAME = Site.SERVER_NAME;
