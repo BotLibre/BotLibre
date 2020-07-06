@@ -14,10 +14,15 @@ RUN wget --no-cookies --no-check-certificate \
 FROM alpine as tomcat-builder
 WORKDIR /root/
 
-RUN wget https://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.56/bin/apache-tomcat-8.5.56.tar.gz && \
-	tar xzf apache-tomcat-8.5.56.tar.gz && \
-	rm apache-tomcat-8.5.56.tar.gz && \
-	mv apache-tomcat-8.5.56/ tomcat/
+RUN TOMCAT_VERSION=$(wget -q -O - https://downloads.apache.org/tomcat/tomcat-8/ | grep v8 | grep -oE "8\.5\.[0-9]+" | head -n 1) && \
+	wget "https://downloads.apache.org/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" && \
+	tar xzf apache-tomcat-8.5.*.tar.gz && \
+	rm apache-tomcat-8.5.*.tar.gz && \
+	mv apache-tomcat-8.5.*/ tomcat/
+# RUN wget https://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.56/bin/apache-tomcat-8.5.56.tar.gz && \
+# 	tar xzf apache-tomcat-8.5.56.tar.gz && \
+# 	rm apache-tomcat-8.5.56.tar.gz && \
+# 	mv apache-tomcat-8.5.56/ tomcat/
 RUN rm -rf tomcat/webapps/*
 RUN mv tomcat/conf/ tomcat/default-conf/
 
@@ -36,6 +41,8 @@ RUN wget https://www.botlibre.biz/download/lib.zip  && \
 
 
 FROM centos:centos7
+RUN yum -y update && yum -y clean all
+
 COPY --from=java-builder /root/jdk1.8.0_131 /opt/jdk1.8.0_131
 RUN alternatives --install /usr/bin/java java /opt/jdk1.8.0_131/bin/java 2 && \
 	export JAVA_HOME=/opt/jdk1.8.0_131
@@ -54,5 +61,4 @@ COPY *.war /opt/tomcat/webapps/
 EXPOSE 80 443 25 5901-5902 465 110 995 143 993 6665
 
 WORKDIR /opt/tomcat/bin
-ENTRYPOINT [ "./setup-conf.sh" ]
-CMD [ "./catalina.sh", "run" ]
+ENTRYPOINT [ "./setup-conf.sh", "./catalina.sh", "run" ]

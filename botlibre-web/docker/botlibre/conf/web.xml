@@ -487,23 +487,62 @@
         <async-supported>true</async-supported>
     </filter>
 -->
- <filter>
-            <filter-name>CorsFilter</filter-name>
-            <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
-            <init-param>
-                   <param-name>cors.support.credentials</param-name>
-                   <param-value>false</param-value>
-             </init-param>
-     </filter>
-     <filter-mapping>
-             <filter-name>CorsFilter</filter-name>
-             <url-pattern>/rest/*</url-pattern>
-      </filter-mapping>
-      <error-page>
-             <error-code>404</error-code>
-             <location>/404.jsp</location>
-      </error-page>
-
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+        <init-param>
+            <param-name>cors.support.credentials</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>cors.allowed.origins</param-name>
+            <param-value>*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/rest/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>FrameResourceFilter</filter-name>
+        <filter-class>org.botlibre.web.servlet.FrameResourceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FrameResourceFilter</filter-name>
+        <url-pattern>/chat</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FrameResourceFilter</filter-name>
+        <url-pattern>/livechat</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FrameResourceFilter</filter-name>
+        <url-pattern>/forum</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FrameResourceFilter</filter-name>
+        <url-pattern>/forum-post</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FrameResourceFilter</filter-name>
+        <url-pattern>/browse-post</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FrameResourceFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>HeaderSecurityFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.HttpHeaderSecurityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HeaderSecurityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
   <!-- A filter that sets character encoding that is used to decode -->
   <!-- parameters in a POST request -->
 <!--
