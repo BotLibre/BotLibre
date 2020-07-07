@@ -1,6 +1,6 @@
 # About
 
-This folder contains the required Dockerfiles for building the docker containers (paphussolutions/botlibre-enterprise and paphussolutions/botlibre-analytics).
+This folder contains the required Dockerfiles for building the docker container (paphussolutions/botlibre).
 
 A docker-compose file is also included for running the containers. If the required containers are all available online in a Docker registry, then only the docker-compose file is necessary for running the containers.
 
@@ -18,11 +18,11 @@ Before building the .war file, ensure that the code is correctly configured for 
 
 In addition to these changes, the following changes must be made to `Site.java`: the database host needs to be `"app-db"` instead of `"localhost"`, and the Python server URL needs to be `"http://app-py:6777/"` instead of `"http://localhost:6777/"`).
 
-Perform the Ant build, and save the .war file in the `botlibre-enterprise` directory as `ROOT.war`.
+Perform the Ant build, and save the .war file in the `docker/botlibre` directory as `ROOT.war`.
 
 To build the botlibre-enterprise container using the Dockerfile, run the following command from the botlibre-enterprise directory:
 \
-`$ sudo docker build -it paphussolutions/botlibre-enterprise .`
+`$ sudo docker build -it paphussolutions/botlibre .`
 
 # How to Run
 
@@ -31,5 +31,3 @@ Before running, ensure that Docker and Docker Compose are working.
 To start the containers using Docker Compose, run the following command from the same directory as the `docker-compose.yml` file:
 \
 `$ sudo docker-compose up`
-
-For more instructions on how to use the Docker Compose CLI, see [Technology/Docker/Docker_Compose_CLI.md](../../Technology/Docker/Docker_Compose_CLI.md).
