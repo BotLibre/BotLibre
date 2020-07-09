@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  app-web:
+    image: paphussolutions/botlibre:latest
+    restart: on-failure
+    environment:
+      - JAVA_OPTS=-server -Xmx8g -Dblhostname=localhost
+    ports:
+      - "80:80"
+      - "443:443"
+      # - "25:25"
+      - "5901-5902:5901-5902"
+      - "465:465"
+      - "110:110"
+      - "995:995"
+      - "143:143"
+      - "993:993"
+      - "6665:6665"
+    links:
+      - "app-db"
+    volumes:
+      - type: volume
+        source: botlibreconf
+        target: /opt/tomcat/conf
+  
+  app-db:
+    image: postgres:9.4
+    restart: on-failure
+    environment:
+      - POSTGRES_PASSWORD=password
+    expose:
+      - "5432"
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgresql/data
+
+volumes:
+  botlibreconf:
+  pgdata:

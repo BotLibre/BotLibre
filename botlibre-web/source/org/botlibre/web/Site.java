@@ -65,9 +65,22 @@ public class Site {
 	public static String REDIRECT = "";
 	public static boolean HTTPS = false;*/
 	
+	// Docker Settings:
+	/*public static String URL_PREFIX = "";
+	public static String URL_SUFFIX = "";
+	public static String SERVER_NAME = "localhost";
+	public static String SERVER_NAME2 = "localhost";
+	public static String URL = "localhost";
+	public static String URLLINK = "http://localhost";
+	public static String SECUREURLLINK = "http://localhost";
+	public static String SANDBOX = "sandbox";
+	public static String SANDBOXURLLINK = "http://sandbox.localhost";
+	public static String REDIRECT = "";
+	public static boolean HTTPS = false;*/
+	
 	public static boolean HTTPS_WILDCARD = false;
 
-	public static String PYTHONSERVER = "http://localhost:6777/";
+	public static String PYTHONSERVER = "";
 
 	// Allow the server to be bootstrapped if it fails to connect to the database.
 	public static boolean BOOTSTRAP = true;
@@ -88,6 +101,14 @@ public class Site {
 	public static String ID = "botlibreplatform";
 	// JavaScript embed prefix.
 	public static String PREFIX = "botplatform";
+
+	// JPA connection protocol to postgres.
+	public static String PERSISTENCE_PROTOCOL = "jdbc:postgresql://";
+	// JPA connection host.
+	public static String PERSISTENCE_HOST = "localhost";
+//	public static String PERSISTENCE_HOST = "app-db"; // Database host name for Docker
+	// JPA connection port.
+	public static String PERSISTENCE_PORT = "5432";
 	// JPA persistence unit.
 	public static String PERSISTENCE_UNIT = "botlibreplatform";
 	// Twitter hash tag.
@@ -206,6 +227,8 @@ public class Site {
 	
 	public static String DATABASEPASSWORD = "password";
 	public static String OBFUSCATE_DATABASEPASSWORD = "";
+	
+	public static String DATABASEUSER = "postgres";
 
 	@SuppressWarnings("rawtypes")
 	public static BrowseBean defaultBean() {
@@ -217,5 +240,9 @@ public class Site {
 			return "";
 		}
 		return type.toString();
+	}
+	
+	public static String getDatabaseUrl() {
+		return Site.PERSISTENCE_PROTOCOL + Site.PERSISTENCE_HOST + ":" + Site.PERSISTENCE_PORT + "/";
 	}
 }

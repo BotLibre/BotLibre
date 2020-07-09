@@ -66,6 +66,8 @@ public class Migrate  {
 
 	public void initDatabase() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + "postgres");
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 		EntityManagerFactory postgres = Persistence.createEntityManagerFactory("postgres", properties);

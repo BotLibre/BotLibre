@@ -147,12 +147,12 @@ import org.botlibre.web.service.WeChatService;
 @SuppressWarnings("unchecked")
 public class AdminDatabase {
 	public static boolean DATABASEFAILURE = false;
-	public static boolean RECREATE_DATABASE = true;
-	public static String DATABASE_USER = "postgres";
-	public static String DATABASE_PASSWORD = "password";
-	public static String IMPORT_URL = "jdbc:postgresql:";
-	public static String DATABASE_URL = "jdbc:postgresql:botlibre";
-	public static String DATABASE_DRIVER = "org.postgresql.Driver";
+//	public static boolean RECREATE_DATABASE = true;
+//	public static String DATABASE_USER = "postgres";
+//	public static String DATABASE_PASSWORD = "password";
+//	public static String IMPORT_URL = "jdbc:postgresql:";
+//	public static String DATABASE_URL = "jdbc:postgresql:botlibre";
+//	public static String DATABASE_DRIVER = "org.postgresql.Driver";
 	
 	public static Map<String, String> bannedIPs = new HashMap<String, String>();
 	
@@ -222,17 +222,17 @@ public class AdminDatabase {
 		//System.out.println(new AdminDatabase().obfuscate("password"));
 	}
 	
-	public static void createAdminDatabase() {
-		try {
-			Class.forName(DATABASE_DRIVER);
-			Connection connection = DriverManager.getConnection(IMPORT_URL, DATABASE_USER, DATABASE_PASSWORD);
-			connection.createStatement().execute("create database botlibre");
-			connection.close();
-		} catch (Exception failed) {
-			failed.printStackTrace();
-			throw new RuntimeException(failed);
-		}
-	}
+//	public static void createAdminDatabase() {
+//		try {
+//			Class.forName(DATABASE_DRIVER);
+//			Connection connection = DriverManager.getConnection(IMPORT_URL, DATABASE_USER, DATABASE_PASSWORD);
+//			connection.createStatement().execute("create database botlibre");
+//			connection.close();
+//		} catch (Exception failed) {
+//			failed.printStackTrace();
+//			throw new RuntimeException(failed);
+//		}
+//	}
 	
 	public static void outOfMemory() {
 		outOfMemory = true;
@@ -355,29 +355,19 @@ public class AdminDatabase {
 					log(Level.INFO, "Bot Libre - starting", Site.VERSION);
 					log(Level.INFO, "Bot Libre AI - starting", Bot.VERSION);
 					
-					// Read botplatform.xml to initialize server configuration.
-					restorePlatformSettings();
-					
 					System.setProperty("http.agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 					
-					Forgetfulness.MAX_SIZE = Site.MEMORYLIMIT;
-					Language.MAX_PROCCESS_TIME = Site.MAX_PROCCESS_TIME;
-					Utils.KEY = Site.KEY;
-					Utils.URL_TIMEOUT = Site.URL_TIMEOUT;
-					Email.SIGNATURE = Site.SIGNATURE;
-					Freebase.KEY = Site.GOOGLEKEY;
-					Google.KEY = Site.GOOGLEKEY;
-					Google.CLIENTID = Site.GOOGLECLIENTID;
-					Google.CLIENTSECRET = Site.GOOGLECLIENTSECRET;
-					Bot.PROGRAM = Site.NAME;
-					Bot.VERSION = Site.VERSION;
-					Bot.POOL_SIZE = Site.MAX_BOT_POOL_SIZE;
-					DatabaseMemory.SCHEMA_URL_PREFIX = "jdbc:postgresql:" + Site.PERSISTENCE_UNIT + "_bots" + "?currentSchema=";
-					DatabaseMemory.DATABASE_URL = "jdbc:postgresql:" + Site.PERSISTENCE_UNIT + "_bots";
+					restorePlatformDatabaseSettings();
+					DatabaseMemory.SCHEMA_URL_PREFIX = Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT + "_bots" + "?currentSchema=";
+					DatabaseMemory.DATABASE_URL = Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT + "_bots";
+					DatabaseMemory.DATABASE_USER = Site.DATABASEUSER;
 					DatabaseMemory.DATABASE_PASSWORD = Site.DATABASEPASSWORD;
 					
 					Map<String, String> properties = new HashMap<String, String>();
+					properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+					properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 					properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
+					
 					/**properties.put(PersistenceUnitProperties.JDBC_DRIVER, DATABASE_DRIVER);
 					properties.put(PersistenceUnitProperties.JDBC_URL, DATABASE_URL);
 					properties.put(PersistenceUnitProperties.JDBC_USER, DATABASE_USER);
@@ -408,6 +398,22 @@ public class AdminDatabase {
 						}
 					}
 					DATABASEFAILURE = false;
+					
+					// Read botplatform.xml to initialize server configuration.
+					restorePlatformOtherSettings();
+					
+					Forgetfulness.MAX_SIZE = Site.MEMORYLIMIT;
+					Language.MAX_PROCCESS_TIME = Site.MAX_PROCCESS_TIME;
+					Utils.KEY = Site.KEY;
+					Utils.URL_TIMEOUT = Site.URL_TIMEOUT;
+					Email.SIGNATURE = Site.SIGNATURE;
+					Freebase.KEY = Site.GOOGLEKEY;
+					Google.KEY = Site.GOOGLEKEY;
+					Google.CLIENTID = Site.GOOGLECLIENTID;
+					Google.CLIENTSECRET = Site.GOOGLECLIENTSECRET;
+					Bot.PROGRAM = Site.NAME;
+					Bot.VERSION = Site.VERSION;
+					Bot.POOL_SIZE = Site.MAX_BOT_POOL_SIZE;
 					
 					List<Profanity> profanity = em.createQuery("Select p from Profanity p").getResultList();
 					for (Profanity word : profanity) {
@@ -490,16 +496,30 @@ public class AdminDatabase {
 						AdminDatabase.instance().log(Level.INFO, "Checking python database");
 						String result = "";
 						// setting up database, send xml to python with user and pass.
-						String user = obfuscate(Site.PERSISTENCE_UNIT);
+						String host = obfuscate(Site.PERSISTENCE_HOST);
+						String dbname = obfuscate(Site.PERSISTENCE_UNIT);
+						String port = obfuscate(Site.PERSISTENCE_PORT);
+						String user = obfuscate(Site.DATABASEUSER);
 						String password = null;
 						if (Site.OBFUSCATE_DATABASEPASSWORD == null || Site.OBFUSCATE_DATABASEPASSWORD.isEmpty()) {
 							password = obfuscate(Site.DATABASEPASSWORD);
 						} else {
 							password = Site.OBFUSCATE_DATABASEPASSWORD;
 						}
+						
 						StringWriter writer = new StringWriter();
-						writer.write("<database user=\"" + user + "\" password=\"" + password + "\" />");
-
+						writer.write("<database host=\"");
+						writer.write(host);
+						writer.write("\" dbname=\"");
+						writer.write(dbname);
+						writer.write("\" port=\"");
+						writer.write(port);
+						writer.write("\" user=\"");
+						writer.write(user);
+						writer.write("\" password=\"");
+						writer.write(password);
+						writer.write("\" />");
+						
 						MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 						multipartEntity.addPart("xml", new StringBody(writer.toString(), "text/xml", Charset.defaultCharset()));
 
@@ -3354,688 +3374,925 @@ public class AdminDatabase {
 	}
 
 	/**
-	 * Load the server configuration properties from the local xml file "botplatform.xml".
+	 * Old method to load the server configuration properties from the local xml file "botplatform.xml".
 	 * This allows the server configuration to be changed without requiring rebuilding/deploying.
 	 * Basic encryption is used for passwords/keys.
 	 */
-	public void restorePlatformSettings() {
-		// Read config xml to initialize plugins.
+	public void oldRestorePlatformSettings() {
 		try {
 			File file = new File("botplatform.xml");
-			if (file.exists()) {
-				log(Level.INFO, "Loading bootstrap file botplatform.xml");
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder parser = factory.newDocumentBuilder();
-				Document document = parser.parse(file);
-				Element root = document.getDocumentElement();
-
-				// Parse and initialize settings.
-
-				try {
-					if (root.getElementsByTagName("DATABASEPASSWORD").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("DATABASEPASSWORD").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.DATABASEPASSWORD = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.DATABASEPASSWORD = value;
-							}
-						} else {
+			// Read config xml to initialize plugins.
+			log(Level.INFO, "Loading legacy bootstrap file botplatform.xml");
+			
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder parser = factory.newDocumentBuilder();
+			Document document = parser.parse(file);
+			Element root = document.getDocumentElement();
+	
+			// Parse and initialize settings.
+	
+			try {
+				if (root.getElementsByTagName("DATABASEUSER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DATABASEUSER").item(0);
+					String value = element.getTextContent().trim();
+					Site.DATABASEUSER = value;
+				}
+				
+				if (root.getElementsByTagName("DATABASEPASSWORD").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DATABASEPASSWORD").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.DATABASEPASSWORD = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.DATABASEPASSWORD = value;
 						}
+					} else {
+						Site.DATABASEPASSWORD = value;
 					}
-					
-					if (root.getElementsByTagName("URL_PREFIX").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("URL_PREFIX").item(0);
-						String value = element.getTextContent().trim();
-						Site.URL_PREFIX = value;
-					}
-					
-					if (root.getElementsByTagName("URL_SUFFIX").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("URL_SUFFIX").item(0);
-						String value = element.getTextContent().trim();
-						Site.URL_SUFFIX = value;
-					}
-					
-					if (root.getElementsByTagName("SERVER_NAME").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SERVER_NAME").item(0);
-						String value = element.getTextContent().trim();
-						Site.SERVER_NAME = value;
-					}
-					
-					if (root.getElementsByTagName("SERVER_NAME2").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SERVER_NAME2").item(0);
-						String value = element.getTextContent().trim();
-						Site.SERVER_NAME2 = value;
-					}
-					
-					if (root.getElementsByTagName("URL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("URL").item(0);
-						String value = element.getTextContent().trim();
-						Site.URL = value;
-					}
-					
-					if (root.getElementsByTagName("URLLINK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("URLLINK").item(0);
-						String value = element.getTextContent().trim();
-						Site.URLLINK = value;
-					}
-					
-					if (root.getElementsByTagName("SECUREURLLINK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SECUREURLLINK").item(0);
-						String value = element.getTextContent().trim();
-						Site.SECUREURLLINK = value;
-					}
-					
-					if (root.getElementsByTagName("REDIRECT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("REDIRECT").item(0);
-						String value = element.getTextContent().trim();
-						Site.REDIRECT = value;
-					}
+				}
+				
+				if (root.getElementsByTagName("URL_PREFIX").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("URL_PREFIX").item(0);
+					String value = element.getTextContent().trim();
+					Site.URL_PREFIX = value;
+				}
+				
+				if (root.getElementsByTagName("URL_SUFFIX").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("URL_SUFFIX").item(0);
+					String value = element.getTextContent().trim();
+					Site.URL_SUFFIX = value;
+				}
+				
+				if (root.getElementsByTagName("SERVER_NAME").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SERVER_NAME").item(0);
+					String value = element.getTextContent().trim();
+					Site.SERVER_NAME = value;
+				}
+				
+				if (root.getElementsByTagName("SERVER_NAME2").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SERVER_NAME2").item(0);
+					String value = element.getTextContent().trim();
+					Site.SERVER_NAME2 = value;
+				}
+				
+				if (root.getElementsByTagName("URL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("URL").item(0);
+					String value = element.getTextContent().trim();
+					Site.URL = value;
+				}
+				
+				if (root.getElementsByTagName("URLLINK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("URLLINK").item(0);
+					String value = element.getTextContent().trim();
+					Site.URLLINK = value;
+				}
+				
+				if (root.getElementsByTagName("SECUREURLLINK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SECUREURLLINK").item(0);
+					String value = element.getTextContent().trim();
+					Site.SECUREURLLINK = value;
+				}
+				
+				if (root.getElementsByTagName("REDIRECT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("REDIRECT").item(0);
+					String value = element.getTextContent().trim();
+					Site.REDIRECT = value;
+				}
 	
-					if (root.getElementsByTagName("HTTPS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("HTTPS").item(0);
-						String value = element.getTextContent().trim();
-						Site.HTTPS = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("PYTHONSERVER").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("PYTHONSERVER").item(0);
-						String value = element.getTextContent().trim();
-						Site.PYTHONSERVER = value;
-					}
+				if (root.getElementsByTagName("HTTPS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("HTTPS").item(0);
+					String value = element.getTextContent().trim();
+					Site.HTTPS = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("PYTHONSERVER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PYTHONSERVER").item(0);
+					String value = element.getTextContent().trim();
+					Site.PYTHONSERVER = value;
+				}
 	
-					if (root.getElementsByTagName("BOOTSTRAP").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("BOOTSTRAP").item(0);
-						String value = element.getTextContent().trim();
-						Site.BOOTSTRAP = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("BOOTSTRAP").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("BOOTSTRAP").item(0);
+					String value = element.getTextContent().trim();
+					Site.BOOTSTRAP = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("LOCK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("LOCK").item(0);
-						String value = element.getTextContent().trim();
-						Site.LOCK = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("LOCK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("LOCK").item(0);
+					String value = element.getTextContent().trim();
+					Site.LOCK = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("READONLY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("READONLY").item(0);
-						String value = element.getTextContent().trim();
-						Site.READONLY = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("READONLY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("READONLY").item(0);
+					String value = element.getTextContent().trim();
+					Site.READONLY = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("ADULT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("ADULT").item(0);
-						String value = element.getTextContent().trim();
-						Site.ADULT = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("CONTENT_RATING").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("CONTENT_RATING").item(0);
-						String value = element.getTextContent().trim();
-						Site.CONTENT_RATING = ContentRating.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("NAME").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("NAME").item(0);
-						String value = element.getTextContent().trim();
-						Site.NAME = value;
-					}
-					
-					if (root.getElementsByTagName("DOMAIN").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("DOMAIN").item(0);
-						String value = element.getTextContent().trim();
-						Site.DOMAIN = value;
-					}
-					
-					if (root.getElementsByTagName("ID").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("ID").item(0);
-						String value = element.getTextContent().trim();
-						Site.ID = value;
-					}
-					
-					if (root.getElementsByTagName("PREFIX").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("PREFIX").item(0);
-						String value = element.getTextContent().trim();
-						Site.PREFIX = value;
-					}
-					
-					if (root.getElementsByTagName("PERSISTENCE_UNIT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("PERSISTENCE_UNIT").item(0);
-						String value = element.getTextContent().trim();
-						Site.PERSISTENCE_UNIT = value;
-					}
-					
-					if (root.getElementsByTagName("HASHTAG").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("HASHTAG").item(0);
-						String value = element.getTextContent().trim();
-						Site.HASHTAG = value;
-					}
-					
-					if (root.getElementsByTagName("TYPE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("TYPE").item(0);
-						String value = element.getTextContent().trim();
-						Site.TYPE = value;
-					}
-					
-					if (root.getElementsByTagName("TWITTER").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("TWITTER").item(0);
-						String value = element.getTextContent().trim();
-						Site.TWITTER = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("FACEBOOK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("FACEBOOK").item(0);
-						String value = element.getTextContent().trim();
-						Site.FACEBOOK = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("TELEGRAM").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("TELEGRAM").item(0);
-						String value = element.getTextContent().trim();
-						Site.TELEGRAM = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("SLACK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SLACK").item(0);
-						String value = element.getTextContent().trim();
-						Site.SLACK = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("SLACK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SLACK").item(0);
-						String value = element.getTextContent().trim();
-						Site.SLACK = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("SKYPE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SKYPE").item(0);
-						String value = element.getTextContent().trim();
-						Site.SKYPE = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("WECHAT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("WECHAT").item(0);
-						String value = element.getTextContent().trim();
-						Site.WECHAT = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("KIK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("KIK").item(0);
-						String value = element.getTextContent().trim();
-						Site.KIK = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("EMAIL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAIL").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAIL = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("TIMERS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("TIMERS").item(0);
-						String value = element.getTextContent().trim();
-						Site.TIMERS = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("FORGET").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("FORGET").item(0);
-						String value = element.getTextContent().trim();
-						Site.FORGET = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("ADMIN").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("ADMIN").item(0);
-						String value = element.getTextContent().trim();
-						Site.ADMIN = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("ADULT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("ADULT").item(0);
+					String value = element.getTextContent().trim();
+					Site.ADULT = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("CONTENT_RATING").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("CONTENT_RATING").item(0);
+					String value = element.getTextContent().trim();
+					Site.CONTENT_RATING = ContentRating.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("NAME").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("NAME").item(0);
+					String value = element.getTextContent().trim();
+					Site.NAME = value;
+				}
+				
+				if (root.getElementsByTagName("DOMAIN").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DOMAIN").item(0);
+					String value = element.getTextContent().trim();
+					Site.DOMAIN = value;
+				}
+				
+				if (root.getElementsByTagName("ID").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("ID").item(0);
+					String value = element.getTextContent().trim();
+					Site.ID = value;
+				}
+				
+				if (root.getElementsByTagName("PREFIX").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PREFIX").item(0);
+					String value = element.getTextContent().trim();
+					Site.PREFIX = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_PROTOCOL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PROTOCOL").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_PROTOCOL = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_HOST").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_HOST").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_HOST = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_PORT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PORT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_PORT = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_UNIT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_UNIT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_UNIT = value;
+				}
+				
+				if (root.getElementsByTagName("HASHTAG").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("HASHTAG").item(0);
+					String value = element.getTextContent().trim();
+					Site.HASHTAG = value;
+				}
+				
+				if (root.getElementsByTagName("TYPE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("TYPE").item(0);
+					String value = element.getTextContent().trim();
+					Site.TYPE = value;
+				}
+				
+				if (root.getElementsByTagName("TWITTER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("TWITTER").item(0);
+					String value = element.getTextContent().trim();
+					Site.TWITTER = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("FACEBOOK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("FACEBOOK").item(0);
+					String value = element.getTextContent().trim();
+					Site.FACEBOOK = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("TELEGRAM").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("TELEGRAM").item(0);
+					String value = element.getTextContent().trim();
+					Site.TELEGRAM = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("SLACK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SLACK").item(0);
+					String value = element.getTextContent().trim();
+					Site.SLACK = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("SLACK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SLACK").item(0);
+					String value = element.getTextContent().trim();
+					Site.SLACK = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("SKYPE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SKYPE").item(0);
+					String value = element.getTextContent().trim();
+					Site.SKYPE = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("WECHAT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("WECHAT").item(0);
+					String value = element.getTextContent().trim();
+					Site.WECHAT = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("KIK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("KIK").item(0);
+					String value = element.getTextContent().trim();
+					Site.KIK = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("EMAIL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAIL").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAIL = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("TIMERS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("TIMERS").item(0);
+					String value = element.getTextContent().trim();
+					Site.TIMERS = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("FORGET").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("FORGET").item(0);
+					String value = element.getTextContent().trim();
+					Site.FORGET = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("ADMIN").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("ADMIN").item(0);
+					String value = element.getTextContent().trim();
+					Site.ADMIN = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("VERIFYUSERS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("VERIFYUSERS").item(0);
-						String value = element.getTextContent().trim();
-						Site.VERIFYUSERS = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("VERIFYUSERS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("VERIFYUSERS").item(0);
+					String value = element.getTextContent().trim();
+					Site.VERIFYUSERS = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("DEDICATED").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("DEDICATED").item(0);
-						String value = element.getTextContent().trim();
-						Site.DEDICATED = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("DEDICATED").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DEDICATED").item(0);
+					String value = element.getTextContent().trim();
+					Site.DEDICATED = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("CLOUD").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("CLOUD").item(0);
-						String value = element.getTextContent().trim();
-						Site.CLOUD = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("CLOUD").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("CLOUD").item(0);
+					String value = element.getTextContent().trim();
+					Site.CLOUD = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("COMMERCIAL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("COMMERCIAL").item(0);
-						String value = element.getTextContent().trim();
-						Site.COMMERCIAL = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("COMMERCIAL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("COMMERCIAL").item(0);
+					String value = element.getTextContent().trim();
+					Site.COMMERCIAL = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("ALLOW_SIGNUP").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("ALLOW_SIGNUP").item(0);
-						String value = element.getTextContent().trim();
-						Site.ALLOW_SIGNUP = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("ALLOW_SIGNUP").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("ALLOW_SIGNUP").item(0);
+					String value = element.getTextContent().trim();
+					Site.ALLOW_SIGNUP = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("VERIFY_EMAIL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("VERIFY_EMAIL").item(0);
-						String value = element.getTextContent().trim();
-						Site.VERIFY_EMAIL = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("VERIFY_EMAIL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("VERIFY_EMAIL").item(0);
+					String value = element.getTextContent().trim();
+					Site.VERIFY_EMAIL = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("ANONYMOUS_CHAT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("ANONYMOUS_CHAT").item(0);
-						String value = element.getTextContent().trim();
-						Site.ANONYMOUS_CHAT = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("ANONYMOUS_CHAT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("ANONYMOUS_CHAT").item(0);
+					String value = element.getTextContent().trim();
+					Site.ANONYMOUS_CHAT = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("REQUIRE_TERMS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("REQUIRE_TERMS").item(0);
-						String value = element.getTextContent().trim();
-						Site.REQUIRE_TERMS = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("REQUIRE_TERMS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("REQUIRE_TERMS").item(0);
+					String value = element.getTextContent().trim();
+					Site.REQUIRE_TERMS = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("AGE_RESTRICT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("AGE_RESTRICT").item(0);
-						String value = element.getTextContent().trim();
-						Site.AGE_RESTRICT = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("AGE_RESTRICT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("AGE_RESTRICT").item(0);
+					String value = element.getTextContent().trim();
+					Site.AGE_RESTRICT = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("BACKLINK").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("BACKLINK").item(0);
-						String value = element.getTextContent().trim();
-						Site.BACKLINK = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("BACKLINK").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("BACKLINK").item(0);
+					String value = element.getTextContent().trim();
+					Site.BACKLINK = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("WEEKLYEMAIL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("WEEKLYEMAIL").item(0);
-						String value = element.getTextContent().trim();
-						Site.WEEKLYEMAIL = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("WEEKLYEMAIL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("WEEKLYEMAIL").item(0);
+					String value = element.getTextContent().trim();
+					Site.WEEKLYEMAIL = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("WEEKLYEMAILBOTS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("WEEKLYEMAILBOTS").item(0);
-						String value = element.getTextContent().trim();
-						Site.WEEKLYEMAILBOTS = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("WEEKLYEMAILBOTS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("WEEKLYEMAILBOTS").item(0);
+					String value = element.getTextContent().trim();
+					Site.WEEKLYEMAILBOTS = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("WEEKLYEMAILCHANNELS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("WEEKLYEMAILCHANNELS").item(0);
-						String value = element.getTextContent().trim();
-						Site.WEEKLYEMAILCHANNELS = Boolean.valueOf(value);
-					}
+				if (root.getElementsByTagName("WEEKLYEMAILCHANNELS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("WEEKLYEMAILCHANNELS").item(0);
+					String value = element.getTextContent().trim();
+					Site.WEEKLYEMAILCHANNELS = Boolean.valueOf(value);
+				}
 	
-					if (root.getElementsByTagName("WEEKLYEMAILFORUMS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("WEEKLYEMAILFORUMS").item(0);
-						String value = element.getTextContent().trim();
-						Site.WEEKLYEMAILFORUMS = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("EMAILHOST").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILHOST").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILHOST = value;
-					}
-					
-					if (root.getElementsByTagName("EMAILSALES").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILSALES").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILSALES = value;
-					}
-					
-					if (root.getElementsByTagName("EMAILPAYPAL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILPAYPAL").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILPAYPAL = value;
-					}
-					
-					if (root.getElementsByTagName("SIGNATURE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("SIGNATURE").item(0);
-						String value = element.getTextContent().trim();
-						Site.SIGNATURE = value;
-					}
-					
-					if (root.getElementsByTagName("EMAILBOT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILBOT").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILBOT = value;
-					}
-					
-					if (root.getElementsByTagName("EMAILSMTPHost").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILSMTPHost").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILSMTPHost = value;
-					}
-					
-					if (root.getElementsByTagName("EMAILSMTPPORT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILSMTPPORT").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILSMTPPORT = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("EMAILUSER").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILUSER").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILUSER = value;
-					}
-					
-					if (root.getElementsByTagName("EMAILPASSWORD").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILPASSWORD").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.EMAILPASSWORD = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.EMAILPASSWORD = value;
-							}
-						} else {
+				if (root.getElementsByTagName("WEEKLYEMAILFORUMS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("WEEKLYEMAILFORUMS").item(0);
+					String value = element.getTextContent().trim();
+					Site.WEEKLYEMAILFORUMS = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("EMAILHOST").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILHOST").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILHOST = value;
+				}
+				
+				if (root.getElementsByTagName("EMAILSALES").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILSALES").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILSALES = value;
+				}
+				
+				if (root.getElementsByTagName("EMAILPAYPAL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILPAYPAL").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILPAYPAL = value;
+				}
+				
+				if (root.getElementsByTagName("SIGNATURE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("SIGNATURE").item(0);
+					String value = element.getTextContent().trim();
+					Site.SIGNATURE = value;
+				}
+				
+				if (root.getElementsByTagName("EMAILBOT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILBOT").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILBOT = value;
+				}
+				
+				if (root.getElementsByTagName("EMAILSMTPHost").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILSMTPHost").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILSMTPHost = value;
+				}
+				
+				if (root.getElementsByTagName("EMAILSMTPPORT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILSMTPPORT").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILSMTPPORT = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("EMAILUSER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILUSER").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILUSER = value;
+				}
+				
+				if (root.getElementsByTagName("EMAILPASSWORD").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILPASSWORD").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.EMAILPASSWORD = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.EMAILPASSWORD = value;
 						}
+					} else {
+						Site.EMAILPASSWORD = value;
 					}
+				}
 	
-					if (root.getElementsByTagName("EMAILSSL").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("EMAILSSL").item(0);
-						String value = element.getTextContent().trim();
-						Site.EMAILSSL = Boolean.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MEMORYLIMIT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MEMORYLIMIT").item(0);
-						String value = element.getTextContent().trim();
-						Site.MEMORYLIMIT = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_PROCCESS_TIME").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_PROCCESS_TIME").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_PROCCESS_TIME = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("CONTENT_LIMIT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("CONTENT_LIMIT").item(0);
-						String value = element.getTextContent().trim();
-						Site.CONTENT_LIMIT = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_CREATES_PER_IP").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_CREATES_PER_IP").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_CREATES_PER_IP = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_USER_MESSAGES").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_USER_MESSAGES").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_USER_MESSAGES = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_UPLOAD_SIZE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_UPLOAD_SIZE").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_UPLOAD_SIZE = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_LIVECHAT_MESSAGES").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_LIVECHAT_MESSAGES").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_LIVECHAT_MESSAGES = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_ATTACHMENTS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_ATTACHMENTS").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_ATTACHMENTS = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_TRANSLATIONS").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_TRANSLATIONS").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_TRANSLATIONS = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("URL_TIMEOUT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("URL_TIMEOUT").item(0);
-						String value = element.getTextContent().trim();
-						Site.URL_TIMEOUT = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_API").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_API").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_API = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_BRONZE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_BRONZE").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_BRONZE = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_GOLD").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_GOLD").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_GOLD = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_PLATINUM").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_PLATINUM").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_PLATINUM = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_BOT_CACHE_SIZE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_BOT_CACHE_SIZE").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_BOT_CACHE_SIZE = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAX_BOT_POOL_SIZE").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAX_BOT_POOL_SIZE").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAX_BOT_POOL_SIZE = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("MAXTWEETIMPORT").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MAXTWEETIMPORT").item(0);
-						String value = element.getTextContent().trim();
-						Site.MAXTWEETIMPORT = Integer.valueOf(value);
-					}
-					
-					if (root.getElementsByTagName("TWITTER_OAUTHKEY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("TWITTER_OAUTHKEY").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.TWITTER_OAUTHKEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.TWITTER_OAUTHKEY = value;
-							}
-						} else {
+				if (root.getElementsByTagName("EMAILSSL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("EMAILSSL").item(0);
+					String value = element.getTextContent().trim();
+					Site.EMAILSSL = Boolean.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MEMORYLIMIT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MEMORYLIMIT").item(0);
+					String value = element.getTextContent().trim();
+					Site.MEMORYLIMIT = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_PROCCESS_TIME").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_PROCCESS_TIME").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_PROCCESS_TIME = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("CONTENT_LIMIT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("CONTENT_LIMIT").item(0);
+					String value = element.getTextContent().trim();
+					Site.CONTENT_LIMIT = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_CREATES_PER_IP").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_CREATES_PER_IP").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_CREATES_PER_IP = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_USER_MESSAGES").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_USER_MESSAGES").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_USER_MESSAGES = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_UPLOAD_SIZE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_UPLOAD_SIZE").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_UPLOAD_SIZE = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_LIVECHAT_MESSAGES").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_LIVECHAT_MESSAGES").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_LIVECHAT_MESSAGES = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_ATTACHMENTS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_ATTACHMENTS").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_ATTACHMENTS = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_TRANSLATIONS").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_TRANSLATIONS").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_TRANSLATIONS = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("URL_TIMEOUT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("URL_TIMEOUT").item(0);
+					String value = element.getTextContent().trim();
+					Site.URL_TIMEOUT = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_API").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_API").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_API = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_BRONZE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_BRONZE").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_BRONZE = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_GOLD").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_GOLD").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_GOLD = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_PLATINUM").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_PLATINUM").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_PLATINUM = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_BOT_CACHE_SIZE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_BOT_CACHE_SIZE").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_BOT_CACHE_SIZE = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAX_BOT_POOL_SIZE").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAX_BOT_POOL_SIZE").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAX_BOT_POOL_SIZE = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("MAXTWEETIMPORT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MAXTWEETIMPORT").item(0);
+					String value = element.getTextContent().trim();
+					Site.MAXTWEETIMPORT = Integer.valueOf(value);
+				}
+				
+				if (root.getElementsByTagName("TWITTER_OAUTHKEY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("TWITTER_OAUTHKEY").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.TWITTER_OAUTHKEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.TWITTER_OAUTHKEY = value;
 						}
+					} else {
+						Site.TWITTER_OAUTHKEY = value;
 					}
-					
-					if (root.getElementsByTagName("TWITTER_OAUTHSECRET").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("TWITTER_OAUTHSECRET").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.TWITTER_OAUTHSECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.TWITTER_OAUTHSECRET = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("TWITTER_OAUTHSECRET").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("TWITTER_OAUTHSECRET").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.TWITTER_OAUTHSECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.TWITTER_OAUTHSECRET = value;
 						}
+					} else {
+						Site.TWITTER_OAUTHSECRET = value;
 					}
-					
-					if (root.getElementsByTagName("FACEBOOK_APPID").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("FACEBOOK_APPID").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.FACEBOOK_APPID = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.FACEBOOK_APPID = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("FACEBOOK_APPID").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("FACEBOOK_APPID").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.FACEBOOK_APPID = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.FACEBOOK_APPID = value;
 						}
+					} else {
+						Site.FACEBOOK_APPID = value;
 					}
-					
-					if (root.getElementsByTagName("FACEBOOK_APPSECRET").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("FACEBOOK_APPSECRET").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.FACEBOOK_APPSECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.FACEBOOK_APPSECRET = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("FACEBOOK_APPSECRET").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("FACEBOOK_APPSECRET").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.FACEBOOK_APPSECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.FACEBOOK_APPSECRET = value;
 						}
+					} else {
+						Site.FACEBOOK_APPSECRET = value;
 					}
-					
-					if (root.getElementsByTagName("KEY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("KEY").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.KEY = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("KEY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("KEY").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.KEY = value;
 						}
+					} else {
+						Site.KEY = value;
 					}
-					
-					if (root.getElementsByTagName("UPGRADE_SECRET").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("UPGRADE_SECRET").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.UPGRADE_SECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.UPGRADE_SECRET = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("UPGRADE_SECRET").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("UPGRADE_SECRET").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.UPGRADE_SECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.UPGRADE_SECRET = value;
 						}
+					} else {
+						Site.UPGRADE_SECRET = value;
 					}
-					
-					if (root.getElementsByTagName("GOOGLEKEY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("GOOGLEKEY").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.GOOGLEKEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.GOOGLEKEY = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("GOOGLEKEY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("GOOGLEKEY").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.GOOGLEKEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.GOOGLEKEY = value;
 						}
+					} else {
+						Site.GOOGLEKEY = value;
 					}
-					
-					if (root.getElementsByTagName("GOOGLECLIENTID").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("GOOGLECLIENTID").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.GOOGLECLIENTID = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.GOOGLECLIENTID = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("GOOGLECLIENTID").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("GOOGLECLIENTID").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.GOOGLECLIENTID = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.GOOGLECLIENTID = value;
 						}
+					} else {
+						Site.GOOGLECLIENTID = value;
 					}
-					
-					if (root.getElementsByTagName("GOOGLECLIENTSECRET").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("GOOGLECLIENTSECRET").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.GOOGLECLIENTSECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.GOOGLECLIENTSECRET = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("GOOGLECLIENTSECRET").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("GOOGLECLIENTSECRET").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.GOOGLECLIENTSECRET = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.GOOGLECLIENTSECRET = value;
 						}
+					} else {
+						Site.GOOGLECLIENTSECRET = value;
 					}
-					
-					if (root.getElementsByTagName("MICROSOFT_SPEECH_KEY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("MICROSOFT_SPEECH_KEY").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.MICROSOFT_SPEECH_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.MICROSOFT_SPEECH_KEY = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("MICROSOFT_SPEECH_KEY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("MICROSOFT_SPEECH_KEY").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.MICROSOFT_SPEECH_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.MICROSOFT_SPEECH_KEY = value;
 						}
+					} else {
+						Site.MICROSOFT_SPEECH_KEY = value;
 					}
-					
-					if (root.getElementsByTagName("RESPONSIVEVOICE_KEY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("RESPONSIVEVOICE_KEY").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.RESPONSIVEVOICE_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.RESPONSIVEVOICE_KEY = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("RESPONSIVEVOICE_KEY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("RESPONSIVEVOICE_KEY").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.RESPONSIVEVOICE_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.RESPONSIVEVOICE_KEY = value;
 						}
+					} else {
+						Site.RESPONSIVEVOICE_KEY = value;
 					}
-					
-					if (root.getElementsByTagName("YANDEX_KEY").getLength() > 0) {
-						Element element = (Element) root.getElementsByTagName("YANDEX_KEY").item(0);
-						String value = element.getTextContent().trim();
-						// Check if encrypted from && prefix.
-						if (value.startsWith("__")) {
-							try {
-								Site.YANDEX_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
-							} catch (Exception exception) {
-								Site.YANDEX_KEY = value;
-							}
-						} else {
+				}
+				
+				if (root.getElementsByTagName("YANDEX_KEY").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("YANDEX_KEY").item(0);
+					String value = element.getTextContent().trim();
+					// Check if encrypted from && prefix.
+					if (value.startsWith("__")) {
+						try {
+							Site.YANDEX_KEY = Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
+						} catch (Exception exception) {
 							Site.YANDEX_KEY = value;
 						}
+					} else {
+						Site.YANDEX_KEY = value;
 					}
-					
-				} catch (Exception exception) {
-					log(Level.SEVERE, "Parsing botplatform.xml bootstrap file failed");
-					log(exception);
 				}
-			} else {
-				log(Level.INFO, "Missing botplatform.xml bootstrap file, using default settings");
+				
+			} catch (Exception exception) {
+				log(Level.SEVERE, "Parsing botplatform.xml bootstrap file failed");
+				log(exception);
 			}
 		} catch (Exception exception) {
 			log(Level.INFO, "Invalid botplatform.xml bootstrap file, using default settings");
 			log(exception);
+		}
+	}
+	
+	/**
+	 * Load the server database settings from "conf/botlibre.xml".
+	 * This allows the server configuration to be changed without requiring rebuilding/deploying.
+	 * Basic encryption is used for the server password.
+	 */
+	public void restorePlatformDatabaseSettings() {
+		// use legacy botplatform.xml if it exists
+		File oldFile = new File("botplatform.xml");
+		if (oldFile.exists()) {
+			oldRestorePlatformSettings();
+			return;
+		}
+		
+		// load database password and persistence unit from conf/botlibre.xml
+		File confFile = new File("../conf/botplatform.xml");
+		if (!confFile.exists()) {
+			log(Level.INFO, "conf/botplatform.xml not found, using default database password settings");
+		}
+		else {
+			try {
+				// Read config xml to initialize plugins.
+				log(Level.INFO, "Loading file conf/botplatform.xml");
+				
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder parser = factory.newDocumentBuilder();
+				Document document = parser.parse(confFile);
+				Element root = document.getDocumentElement();
+		
+				// Parse and initialize settings.
+				
+				if (root.getElementsByTagName("DATABASEUSER").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DATABASEUSER").item(0);
+					String value = element.getTextContent().trim();
+					Site.DATABASEUSER = value;
+				}
+				
+				if (root.getElementsByTagName("DATABASEPASSWORD").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("DATABASEPASSWORD").item(0);
+					String value = element.getTextContent().trim();
+					Site.DATABASEPASSWORD = decryptIfEncrypted(value);
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_PROTOCOL").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PROTOCOL").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_PROTOCOL = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_HOST").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_HOST").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_HOST = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_PORT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_PORT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_PORT = value;
+				}
+				
+				if (root.getElementsByTagName("PERSISTENCE_UNIT").getLength() > 0) {
+					Element element = (Element) root.getElementsByTagName("PERSISTENCE_UNIT").item(0);
+					String value = element.getTextContent().trim();
+					Site.PERSISTENCE_UNIT = value;
+				}
+				
+			} catch (Exception exception) {
+				log(Level.INFO, "Invalid conf/botplatform.xml file, using default database settings");
+				log(exception);
+			}
+		}
+	}
+	
+	/**
+	 * Load the server configuration properties from the database.
+	 * This allows the server configuration to be changed without requiring rebuilding/deploying.
+	 * Basic encryption is used for passwords/keys.
+	 */
+	public void restorePlatformOtherSettings() {
+		// use legacy botplatform.xml if it exists
+		File oldFile = new File("botplatform.xml");
+		if (oldFile.exists()) {
+			oldRestorePlatformSettings();
+			return;
+		}
+		
+		log(Level.INFO, "Loading platform settings from database");
+		
+		EntityManager em = getFactory().createEntityManager();
+		BotPlatform botPlatform = em.find(BotPlatform.class, 1);
+		
+		if (botPlatform == null) {
+			log(Level.INFO, "Missing database entry for platform settings, using default settings");
+			return;
+		}
+		
+		if (DATABASEFAILURE) {
+			log(Level.INFO, "Database failure, using default setings");
+			return;
+		}
+		
+		try {
+			Site.URL_PREFIX = botPlatform.URL_PREFIX;
+			Site.URL_SUFFIX = botPlatform.URL_SUFFIX;
+			Site.SERVER_NAME = botPlatform.SERVER_NAME;
+			Site.SERVER_NAME2 = botPlatform.SERVER_NAME2;
+			Site.URL = botPlatform.URL;
+			Site.URLLINK = botPlatform.URLLINK;
+			Site.SECUREURLLINK = botPlatform.SECUREURLLINK;
+			Site.REDIRECT = botPlatform.REDIRECT;
+			Site.HTTPS = botPlatform.HTTPS;
+			Site.PYTHONSERVER = botPlatform.PYTHONSERVER;
+			Site.BOOTSTRAP = botPlatform.BOOTSTRAP;
+			Site.LOCK = botPlatform.LOCK;
+			Site.READONLY = botPlatform.READONLY;
+			Site.ADULT = botPlatform.ADULT;
+			Site.CONTENT_RATING = ContentRating.valueOf(botPlatform.CONTENT_RATING);
+			Site.NAME = botPlatform.NAME;
+			Site.DOMAIN = botPlatform.DOMAIN;
+			Site.ID = botPlatform.ID;
+			Site.PREFIX = botPlatform.PREFIX;
+			Site.HASHTAG = botPlatform.HASHTAG;
+			Site.TYPE = botPlatform.TYPE;
+			Site.TWITTER = botPlatform.TWITTER;
+			Site.FACEBOOK = botPlatform.FACEBOOK;
+			Site.TELEGRAM = botPlatform.TELEGRAM;
+			Site.SLACK = botPlatform.SLACK;
+			Site.SLACK = botPlatform.SLACK;
+			Site.SKYPE = botPlatform.SKYPE;
+			Site.WECHAT = botPlatform.WECHAT;
+			Site.KIK = botPlatform.KIK;
+			Site.EMAIL = botPlatform.EMAIL;
+			Site.TIMERS = botPlatform.TIMERS;
+			Site.FORGET = botPlatform.FORGET;
+			Site.ADMIN = botPlatform.ADMIN;
+			Site.VERIFYUSERS = botPlatform.VERIFYUSERS;
+			Site.DEDICATED = botPlatform.DEDICATED;
+			Site.CLOUD = botPlatform.CLOUD;
+			Site.COMMERCIAL = botPlatform.COMMERCIAL;
+			Site.ALLOW_SIGNUP = botPlatform.ALLOW_SIGNUP;
+			Site.VERIFY_EMAIL = botPlatform.VERIFY_EMAIL;
+			Site.ANONYMOUS_CHAT = botPlatform.ANONYMOUS_CHAT;
+			Site.REQUIRE_TERMS = botPlatform.REQUIRE_TERMS;
+			Site.AGE_RESTRICT = botPlatform.AGE_RESTRICT;
+			Site.BACKLINK = botPlatform.BACKLINK;
+			Site.WEEKLYEMAIL = botPlatform.WEEKLYEMAIL;
+			Site.WEEKLYEMAILBOTS = botPlatform.WEEKLYEMAILBOTS;
+			Site.WEEKLYEMAILCHANNELS = botPlatform.WEEKLYEMAILCHANNELS;
+			Site.WEEKLYEMAILFORUMS = botPlatform.WEEKLYEMAILFORUMS;
+			Site.EMAILHOST = botPlatform.EMAILHOST;
+			Site.EMAILSALES = botPlatform.EMAILSALES;
+			Site.EMAILPAYPAL = botPlatform.EMAILPAYPAL;
+			Site.SIGNATURE = botPlatform.SIGNATURE;
+			Site.EMAILBOT = botPlatform.EMAILBOT;
+			Site.EMAILSMTPHost = botPlatform.EMAILSMTPHost;
+			Site.EMAILSMTPPORT = botPlatform.EMAILSMTPPORT;
+			Site.EMAILUSER = botPlatform.EMAILUSER;
+			Site.EMAILPASSWORD = decryptIfEncrypted(botPlatform.EMAILPASSWORD);
+			Site.EMAILSSL = botPlatform.EMAILSSL;
+			Site.MEMORYLIMIT = botPlatform.MEMORYLIMIT;
+			Site.MAX_PROCCESS_TIME = botPlatform.MAX_PROCCESS_TIME;
+			Site.CONTENT_LIMIT = botPlatform.CONTENT_LIMIT;
+			Site.MAX_CREATES_PER_IP = botPlatform.MAX_CREATES_PER_IP;
+			Site.MAX_USER_MESSAGES = botPlatform.MAX_USER_MESSAGES;
+			Site.MAX_UPLOAD_SIZE = botPlatform.MAX_UPLOAD_SIZE;
+			Site.MAX_LIVECHAT_MESSAGES = botPlatform.MAX_LIVECHAT_MESSAGES;
+			Site.MAX_ATTACHMENTS = botPlatform.MAX_ATTACHMENTS;
+			Site.MAX_TRANSLATIONS = botPlatform.MAX_TRANSLATIONS;
+			Site.URL_TIMEOUT = botPlatform.URL_TIMEOUT;
+			Site.MAX_API = botPlatform.MAX_API;
+			Site.MAX_BRONZE = botPlatform.MAX_BRONZE;
+			Site.MAX_GOLD = botPlatform.MAX_GOLD;
+			Site.MAX_PLATINUM = botPlatform.MAX_PLATINUM;
+			Site.MAX_BOT_CACHE_SIZE = botPlatform.MAX_BOT_CACHE_SIZE;
+			Site.MAX_BOT_POOL_SIZE = botPlatform.MAX_BOT_POOL_SIZE;
+			Site.MAXTWEETIMPORT = botPlatform.MAXTWEETIMPORT;
+			Site.TWITTER_OAUTHKEY = decryptIfEncrypted(botPlatform.TWITTER_OAUTHKEY);
+			Site.TWITTER_OAUTHSECRET = decryptIfEncrypted(botPlatform.TWITTER_OAUTHSECRET);
+			Site.FACEBOOK_APPID = decryptIfEncrypted(botPlatform.FACEBOOK_APPID);
+			Site.FACEBOOK_APPSECRET = decryptIfEncrypted(botPlatform.FACEBOOK_APPSECRET);
+			Site.KEY = decryptIfEncrypted(botPlatform.KEY);
+			Site.UPGRADE_SECRET = decryptIfEncrypted(botPlatform.UPGRADE_SECRET);
+			Site.GOOGLEKEY = decryptIfEncrypted(botPlatform.GOOGLEKEY);
+			Site.GOOGLECLIENTID = decryptIfEncrypted(botPlatform.GOOGLECLIENTID);
+			Site.GOOGLECLIENTSECRET = decryptIfEncrypted(botPlatform.GOOGLECLIENTSECRET);
+			Site.MICROSOFT_SPEECH_KEY = decryptIfEncrypted(botPlatform.MICROSOFT_SPEECH_KEY);
+			Site.RESPONSIVEVOICE_KEY = decryptIfEncrypted(botPlatform.RESPONSIVEVOICE_KEY);
+			Site.YANDEX_KEY = decryptIfEncrypted(botPlatform.YANDEX_KEY);
+			
+		} catch (Exception exception) {
+			log(Level.INFO, "Invalid database entry for platform settings, using default settings");
+			log(exception);
+		}
+	}
+	
+	/**
+	 * Load the server configuration properties from the database, and database settings from "conf/botlibre.xml".
+	 * This allows the server configuration to be changed without requiring rebuilding/deploying.
+	 * Basic encryption is used for passwords/keys.
+	 */
+	public void restorePlatformSettings() {
+		restorePlatformDatabaseSettings();
+		restorePlatformOtherSettings();
+	}
+	
+	private String decryptIfEncrypted(String inp) {
+		if (!inp.startsWith("__")) {
+			return inp;
+		}
+		try {
+			return Utils.decrypt(Site.KEY2, inp.substring(2, inp.length()));
+		} catch (Exception exception) {
+			return inp;
 		}
 	}
 	
@@ -4045,382 +4302,145 @@ public class AdminDatabase {
 	 * Basic encryption is used for passwords/keys.
 	 */
 	public void updatePlatformSettings() {
-		log(Level.INFO, "Saving platform settings to botplatform.xml");
-
-		PrintWriter writer = null;
-		try {
-			File file = new File("botplatform.xml");
-			if (file.exists()) {
-				file.delete();
-			}
-			writer = new PrintWriter(file, "UTF-8");
+		log(Level.INFO, "Saving database password and persistence unit to conf/botplatform.xml");
+		
+		File file = new File("../conf/botplatform.xml");
+		if (file.exists()) {
+			file.delete();
+		}
+		try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
 			writer.write("<platform-settings>\n");
+			
+			writer.write("\t<DATABASEUSER>");
+			writer.write(Site.DATABASEUSER);
+			writer.write("</DATABASEUSER>\n");
 			
 			writer.write("\t<DATABASEPASSWORD>");
 			writer.write("__" + Utils.encrypt(Site.KEY2, Site.DATABASEPASSWORD));
 			writer.write("</DATABASEPASSWORD>\n");
 			
-			writer.write("\t<URL_PREFIX>");
-			writer.write(Site.URL_PREFIX);
-			writer.write("</URL_PREFIX>\n");
+			writer.write("\t<PERSISTENCE_PROTOCOL>");
+			writer.write(Site.PERSISTENCE_PROTOCOL);
+			writer.write("</PERSISTENCE_PROTOCOL>\n");
 			
-			writer.write("\t<URL_SUFFIX>");
-			writer.write(Site.URL_SUFFIX);
-			writer.write("</URL_SUFFIX>\n");
+			writer.write("\t<PERSISTENCE_HOST>");
+			writer.write(Site.PERSISTENCE_HOST);
+			writer.write("</PERSISTENCE_HOST>\n");
 			
-			writer.write("\t<SERVER_NAME>");
-			writer.write(Site.SERVER_NAME);
-			writer.write("</SERVER_NAME>\n");
-			
-			writer.write("\t<SERVER_NAME2>");
-			writer.write(Site.SERVER_NAME2);
-			writer.write("</SERVER_NAME2>\n");
-			
-			writer.write("\t<URL>");
-			writer.write(Site.URL);
-			writer.write("</URL>\n");
-			
-			writer.write("\t<URLLINK>");
-			writer.write(Site.URLLINK);
-			writer.write("</URLLINK>\n");
-			
-			writer.write("\t<SECUREURLLINK>");
-			writer.write(Site.SECUREURLLINK);
-			writer.write("</SECUREURLLINK>\n");
-			
-			writer.write("\t<SANDBOXURLLINK>");
-			writer.write(Site.SANDBOXURLLINK);
-			writer.write("</SANDBOXURLLINK>\n");
-			
-			writer.write("\t<REDIRECT>");
-			writer.write(Site.REDIRECT);
-			writer.write("</REDIRECT>\n");
-			
-			writer.write("\t<HTTPS>");
-			writer.write(String.valueOf(Site.HTTPS));
-			writer.write("</HTTPS>\n");
-			
-			writer.write("\t<PYTHONSERVER>");
-			writer.write(Site.PYTHONSERVER);
-			writer.write("</PYTHONSERVER>\n");
-			
-			writer.write("\t<BOOTSTRAP>");
-			writer.write(String.valueOf(Site.BOOTSTRAP));
-			writer.write("</BOOTSTRAP>\n");
-			
-			writer.write("\t<LOCK>");
-			writer.write(String.valueOf(Site.LOCK));
-			writer.write("</LOCK>\n");
-			
-			writer.write("\t<READONLY>");
-			writer.write(String.valueOf(Site.READONLY));
-			writer.write("</READONLY>\n");
-			
-			writer.write("\t<ADULT>");
-			writer.write(String.valueOf(Site.ADULT));
-			writer.write("</ADULT>\n");
-			
-			writer.write("\t<CONTENT_RATING>");
-			writer.write(Site.CONTENT_RATING.toString());
-			writer.write("</CONTENT_RATING>\n");
-			
-			writer.write("\t<NAME>");
-			writer.write(Site.NAME);
-			writer.write("</NAME>\n");
-			
-			writer.write("\t<DOMAIN>");
-			writer.write(Site.DOMAIN);
-			writer.write("</DOMAIN>\n");
-			
-			writer.write("\t<ID>");
-			writer.write(Site.ID);
-			writer.write("</ID>\n");
-			
-			writer.write("\t<PREFIX>");
-			writer.write(Site.PREFIX);
-			writer.write("</PREFIX>\n");
+			writer.write("\t<PERSISTENCE_PORT>");
+			writer.write(Site.PERSISTENCE_PORT);
+			writer.write("</PERSISTENCE_PORT>\n");
 			
 			writer.write("\t<PERSISTENCE_UNIT>");
 			writer.write(Site.PERSISTENCE_UNIT);
 			writer.write("</PERSISTENCE_UNIT>\n");
 			
-			writer.write("\t<HASHTAG>");
-			writer.write(Site.HASHTAG);
-			writer.write("</HASHTAG>\n");
-			
-			writer.write("\t<TYPE>");
-			writer.write(Site.TYPE);
-			writer.write("</TYPE>\n");
-			
-			writer.write("\t<TWITTER>");
-			writer.write(String.valueOf(Site.TWITTER));
-			writer.write("</TWITTER>\n");
-			
-			writer.write("\t<FACEBOOK>");
-			writer.write(String.valueOf(Site.FACEBOOK));
-			writer.write("</FACEBOOK>\n");
-			
-			writer.write("\t<TELEGRAM>");
-			writer.write(String.valueOf(Site.TELEGRAM));
-			writer.write("</TELEGRAM>\n");
-			
-			writer.write("\t<SLACK>");
-			writer.write(String.valueOf(Site.SLACK));
-			writer.write("</SLACK>\n");
-			
-			writer.write("\t<SKYPE>");
-			writer.write(String.valueOf(Site.SKYPE));
-			writer.write("</SKYPE>\n");
-			
-			writer.write("\t<WECHAT>");
-			writer.write(String.valueOf(Site.WECHAT));
-			writer.write("</WECHAT>\n");
-			
-			writer.write("\t<KIK>");
-			writer.write(String.valueOf(Site.KIK));
-			writer.write("</KIK>\n");
-			
-			writer.write("\t<EMAIL>");
-			writer.write(String.valueOf(Site.EMAIL));
-			writer.write("</EMAIL>\n");
-			
-			writer.write("\t<TIMERS>");
-			writer.write(String.valueOf(Site.TIMERS));
-			writer.write("</TIMERS>\n");
-			
-			writer.write("\t<FORGET>");
-			writer.write(String.valueOf(Site.FORGET));
-			writer.write("</FORGET>\n");
-			
-			writer.write("\t<ADMIN>");
-			writer.write(String.valueOf(Site.ADMIN));
-			writer.write("</ADMIN>\n");
-			
-			writer.write("\t<VERIFYUSERS>");
-			writer.write(String.valueOf(Site.VERIFYUSERS));
-			writer.write("</VERIFYUSERS>\n");
-			
-			writer.write("\t<DEDICATED>");
-			writer.write(String.valueOf(Site.DEDICATED));
-			writer.write("</DEDICATED>\n");
-			
-			writer.write("\t<CLOUD>");
-			writer.write(String.valueOf(Site.CLOUD));
-			writer.write("</CLOUD>\n");
-			
-			writer.write("\t<COMMERCIAL>");
-			writer.write(String.valueOf(Site.COMMERCIAL));
-			writer.write("</COMMERCIAL>\n");
-			
-			writer.write("\t<ALLOW_SIGNUP>");
-			writer.write(String.valueOf(Site.ALLOW_SIGNUP));
-			writer.write("</ALLOW_SIGNUP>\n");
-			
-			writer.write("\t<VERIFY_EMAIL>");
-			writer.write(String.valueOf(Site.VERIFY_EMAIL));
-			writer.write("</VERIFY_EMAIL>\n");
-			
-			writer.write("\t<ANONYMOUS_CHAT>");
-			writer.write(String.valueOf(Site.ANONYMOUS_CHAT));
-			writer.write("</ANONYMOUS_CHAT>\n");
-			
-			writer.write("\t<REQUIRE_TERMS>");
-			writer.write(String.valueOf(Site.REQUIRE_TERMS));
-			writer.write("</REQUIRE_TERMS>\n");
-			
-			writer.write("\t<AGE_RESTRICT>");
-			writer.write(String.valueOf(Site.AGE_RESTRICT));
-			writer.write("</AGE_RESTRICT>\n");
-			
-			writer.write("\t<BACKLINK>");
-			writer.write(String.valueOf(Site.BACKLINK));
-			writer.write("</BACKLINK>\n");
-			
-			writer.write("\t<WEEKLYEMAIL>");
-			writer.write(String.valueOf(Site.WEEKLYEMAIL));
-			writer.write("</WEEKLYEMAIL>\n");
-			
-			writer.write("\t<WEEKLYEMAILBOTS>");
-			writer.write(String.valueOf(Site.WEEKLYEMAILBOTS));
-			writer.write("</WEEKLYEMAILBOTS>\n");
-			
-			writer.write("\t<WEEKLYEMAILCHANNELS>");
-			writer.write(String.valueOf(Site.WEEKLYEMAILCHANNELS));
-			writer.write("</WEEKLYEMAILCHANNELS>\n");
-			
-			writer.write("\t<WEEKLYEMAILFORUMS>");
-			writer.write(String.valueOf(Site.WEEKLYEMAILFORUMS));
-			writer.write("</WEEKLYEMAILFORUMS>\n");
-			
-			writer.write("\t<EMAILHOST>");
-			writer.write(Site.EMAILHOST);
-			writer.write("</EMAILHOST>\n");
-			
-			writer.write("\t<EMAILSALES>");
-			writer.write(Site.EMAILSALES);
-			writer.write("</EMAILSALES>\n");
-			
-			writer.write("\t<EMAILPAYPAL>");
-			writer.write(Site.EMAILPAYPAL);
-			writer.write("</EMAILPAYPAL>\n");
-			
-			writer.write("\t<SIGNATURE>");
-			writer.write(Site.SIGNATURE);
-			writer.write("</SIGNATURE>\n");
-			
-			writer.write("\t<EMAILBOT>");
-			writer.write(Site.EMAILBOT);
-			writer.write("</EMAILBOT>\n");
-			
-			writer.write("\t<EMAILSMTPHost>");
-			writer.write(Site.EMAILSMTPHost);
-			writer.write("</EMAILSMTPHost>\n");
-			
-			writer.write("\t<EMAILSMTPPORT>");
-			writer.write(String.valueOf(Site.EMAILSMTPPORT));
-			writer.write("</EMAILSMTPPORT>\n");
-			
-			writer.write("\t<EMAILUSER>");
-			writer.write(Site.EMAILUSER);
-			writer.write("</EMAILUSER>\n");
-			
-			writer.write("\t<EMAILPASSWORD>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.EMAILPASSWORD));
-			writer.write("</EMAILPASSWORD>\n");
-			
-			writer.write("\t<EMAILSSL>");
-			writer.write(String.valueOf(Site.EMAILSSL));
-			writer.write("</EMAILSSL>\n");
-			
-			writer.write("\t<MEMORYLIMIT>");
-			writer.write(String.valueOf(Site.MEMORYLIMIT));
-			writer.write("</MEMORYLIMIT>\n");
-			
-			writer.write("\t<MAX_PROCCESS_TIME>");
-			writer.write(String.valueOf(Site.MAX_PROCCESS_TIME));
-			writer.write("</MAX_PROCCESS_TIME>\n");
-			
-			writer.write("\t<CONTENT_LIMIT>");
-			writer.write(String.valueOf(Site.CONTENT_LIMIT));
-			writer.write("</CONTENT_LIMIT>\n");
-			
-			writer.write("\t<MAX_CREATES_PER_IP>");
-			writer.write(String.valueOf(Site.MAX_CREATES_PER_IP));
-			writer.write("</MAX_CREATES_PER_IP>\n");
-			
-			writer.write("\t<MAX_USER_MESSAGES>");
-			writer.write(String.valueOf(Site.MAX_USER_MESSAGES));
-			writer.write("</MAX_USER_MESSAGES>\n");
-			
-			writer.write("\t<MAX_UPLOAD_SIZE>");
-			writer.write(String.valueOf(Site.MAX_UPLOAD_SIZE));
-			writer.write("</MAX_UPLOAD_SIZE>\n");
-			
-			writer.write("\t<MAX_LIVECHAT_MESSAGES>");
-			writer.write(String.valueOf(Site.MAX_LIVECHAT_MESSAGES));
-			writer.write("</MAX_LIVECHAT_MESSAGES>\n");
-			
-			writer.write("\t<MAX_ATTACHMENTS>");
-			writer.write(String.valueOf(Site.MAX_ATTACHMENTS));
-			writer.write("</MAX_ATTACHMENTS>\n");
-			
-			writer.write("\t<MAX_TRANSLATIONS>");
-			writer.write(String.valueOf(Site.MAX_TRANSLATIONS));
-			writer.write("</MAX_TRANSLATIONS>\n");
-			
-			writer.write("\t<URL_TIMEOUT>");
-			writer.write(String.valueOf(Site.URL_TIMEOUT));
-			writer.write("</URL_TIMEOUT>\n");
-			
-			writer.write("\t<MAX_API>");
-			writer.write(String.valueOf(Site.MAX_API));
-			writer.write("</MAX_API>\n");
-			
-			writer.write("\t<MAX_BRONZE>");
-			writer.write(String.valueOf(Site.MAX_BRONZE));
-			writer.write("</MAX_BRONZE>\n");
-			
-			writer.write("\t<MAX_GOLD>");
-			writer.write(String.valueOf(Site.MAX_GOLD));
-			writer.write("</MAX_GOLD>\n");
-			
-			writer.write("\t<MAX_PLATINUM>");
-			writer.write(String.valueOf(Site.MAX_PLATINUM));
-			writer.write("</MAX_PLATINUM>\n");
-			
-			writer.write("\t<MAX_BOT_CACHE_SIZE>");
-			writer.write(String.valueOf(Site.MAX_BOT_CACHE_SIZE));
-			writer.write("</MAX_BOT_CACHE_SIZE>\n");
-			
-			writer.write("\t<MAX_BOT_POOL_SIZE>");
-			writer.write(String.valueOf(Site.MAX_BOT_POOL_SIZE));
-			writer.write("</MAX_BOT_POOL_SIZE>\n");
-			
-			writer.write("\t<MAXTWEETIMPORT>");
-			writer.write(String.valueOf(Site.MAXTWEETIMPORT));
-			writer.write("</MAXTWEETIMPORT>\n");
-			
-			writer.write("\t<TWITTER_OAUTHKEY>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.TWITTER_OAUTHKEY));
-			writer.write("</TWITTER_OAUTHKEY>\n");
-			
-			writer.write("\t<TWITTER_OAUTHSECRET>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.TWITTER_OAUTHSECRET));
-			writer.write("</TWITTER_OAUTHSECRET>\n");
-			
-			writer.write("\t<FACEBOOK_APPID>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.FACEBOOK_APPID));
-			writer.write("</FACEBOOK_APPID>\n");
-			
-			writer.write("\t<FACEBOOK_APPSECRET>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.FACEBOOK_APPSECRET));
-			writer.write("</FACEBOOK_APPSECRET>\n");
-			
-			writer.write("\t<KEY>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.KEY));
-			writer.write("</KEY>\n");
-			
-			writer.write("\t<UPGRADE_SECRET>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.UPGRADE_SECRET));
-			writer.write("</UPGRADE_SECRET>\n");
-			
-			writer.write("\t<GOOGLEKEY>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.GOOGLEKEY));
-			writer.write("</GOOGLEKEY>\n");
-			
-			writer.write("\t<GOOGLECLIENTID>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.GOOGLECLIENTID));
-			writer.write("</GOOGLECLIENTID>\n");
-			
-			writer.write("\t<GOOGLECLIENTSECRET>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.GOOGLECLIENTSECRET));
-			writer.write("</GOOGLECLIENTSECRET>\n");
-			
-			writer.write("\t<MICROSOFT_SPEECH_KEY>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.MICROSOFT_SPEECH_KEY));
-			writer.write("</MICROSOFT_SPEECH_KEY>\n");
-			
-			writer.write("\t<RESPONSIVEVOICE_KEY>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.RESPONSIVEVOICE_KEY));
-			writer.write("</RESPONSIVEVOICE_KEY>\n");
-			
-			writer.write("\t<YANDEX_KEY>");
-			writer.write("__" + Utils.encrypt(Site.KEY2, Site.YANDEX_KEY));
-			writer.write("</YANDEX_KEY>\n");
-			
 			writer.write("</platform-settings>\n");
+			
 			writer.flush();
 		} catch (Exception exception) {
-			AdminDatabase.instance().log(Level.SEVERE, "Error writing botplatform.xml bootstrap file");
-			AdminDatabase.instance().log(exception);
+			log(Level.SEVERE, "Error writing conf/botplatform.xml");
+			log(exception);
+		}
+		
+		
+		log(Level.INFO, "Saving platform settings to database");
+		
+		BotPlatform botPlatform = new BotPlatform();
+		botPlatform.URL_PREFIX = Site.URL_PREFIX;
+		botPlatform.URL_SUFFIX = Site.URL_SUFFIX;
+		botPlatform.SERVER_NAME = Site.SERVER_NAME;
+		botPlatform.SERVER_NAME2 = Site.SERVER_NAME2;
+		botPlatform.URL = Site.URL;
+		botPlatform.URLLINK = Site.URLLINK;
+		botPlatform.SECUREURLLINK = Site.SECUREURLLINK;
+		botPlatform.SANDBOXURLLINK = Site.SANDBOXURLLINK;
+		botPlatform.REDIRECT = Site.REDIRECT;
+		botPlatform.HTTPS = Site.HTTPS;
+		botPlatform.PYTHONSERVER = Site.PYTHONSERVER;
+		botPlatform.BOOTSTRAP = Site.BOOTSTRAP;
+		botPlatform.LOCK = Site.LOCK;
+		botPlatform.READONLY = Site.READONLY;
+		botPlatform.ADULT = Site.ADULT;
+		botPlatform.CONTENT_RATING = Site.CONTENT_RATING.toString();
+		botPlatform.NAME = Site.NAME;
+		botPlatform.DOMAIN = Site.DOMAIN;
+		botPlatform.ID = Site.ID;
+		botPlatform.PREFIX = Site.PREFIX;
+		botPlatform.HASHTAG = Site.HASHTAG;
+		botPlatform.TYPE = Site.TYPE;
+		botPlatform.TWITTER = Site.TWITTER;
+		botPlatform.FACEBOOK = Site.FACEBOOK;
+		botPlatform.TELEGRAM = Site.TELEGRAM;
+		botPlatform.SLACK = Site.SLACK;
+		botPlatform.SKYPE = Site.SKYPE;
+		botPlatform.WECHAT = Site.WECHAT;
+		botPlatform.KIK = Site.KIK;
+		botPlatform.EMAIL = Site.EMAIL;
+		botPlatform.TIMERS = Site.TIMERS;
+		botPlatform.FORGET = Site.FORGET;
+		botPlatform.ADMIN = Site.ADMIN;
+		botPlatform.VERIFYUSERS = Site.VERIFYUSERS;
+		botPlatform.DEDICATED = Site.DEDICATED;
+		botPlatform.CLOUD = Site.CLOUD;
+		botPlatform.COMMERCIAL = Site.COMMERCIAL;
+		botPlatform.ALLOW_SIGNUP = Site.ALLOW_SIGNUP;
+		botPlatform.VERIFY_EMAIL = Site.VERIFY_EMAIL;
+		botPlatform.ANONYMOUS_CHAT = Site.ANONYMOUS_CHAT;
+		botPlatform.REQUIRE_TERMS = Site.REQUIRE_TERMS;
+		botPlatform.AGE_RESTRICT = Site.AGE_RESTRICT;
+		botPlatform.BACKLINK = Site.BACKLINK;
+		botPlatform.WEEKLYEMAIL = Site.WEEKLYEMAIL;
+		botPlatform.WEEKLYEMAILBOTS = Site.WEEKLYEMAILBOTS;
+		botPlatform.WEEKLYEMAILCHANNELS = Site.WEEKLYEMAILCHANNELS;
+		botPlatform.WEEKLYEMAILFORUMS = Site.WEEKLYEMAILFORUMS;
+		botPlatform.EMAILHOST = Site.EMAILHOST;
+		botPlatform.EMAILSALES = Site.EMAILSALES;
+		botPlatform.EMAILPAYPAL = Site.EMAILPAYPAL;
+		botPlatform.SIGNATURE = Site.SIGNATURE;
+		botPlatform.EMAILBOT = Site.EMAILBOT;
+		botPlatform.EMAILSMTPHost = Site.EMAILSMTPHost;
+		botPlatform.EMAILSMTPPORT = Site.EMAILSMTPPORT;
+		botPlatform.EMAILUSER = Site.EMAILUSER;
+		botPlatform.EMAILPASSWORD = "__" + Utils.encrypt(Site.KEY2, Site.EMAILPASSWORD);
+		botPlatform.EMAILSSL = Site.EMAILSSL;
+		botPlatform.MEMORYLIMIT = Site.MEMORYLIMIT;
+		botPlatform.MAX_PROCCESS_TIME = Site.MAX_PROCCESS_TIME;
+		botPlatform.CONTENT_LIMIT = Site.CONTENT_LIMIT;
+		botPlatform.MAX_CREATES_PER_IP = Site.MAX_CREATES_PER_IP;
+		botPlatform.MAX_USER_MESSAGES = Site.MAX_USER_MESSAGES;
+		botPlatform.MAX_UPLOAD_SIZE = Site.MAX_UPLOAD_SIZE;
+		botPlatform.MAX_LIVECHAT_MESSAGES = Site.MAX_LIVECHAT_MESSAGES;
+		botPlatform.MAX_ATTACHMENTS = Site.MAX_ATTACHMENTS;
+		botPlatform.MAX_TRANSLATIONS = Site.MAX_TRANSLATIONS;
+		botPlatform.URL_TIMEOUT = Site.URL_TIMEOUT;
+		botPlatform.MAX_API = Site.MAX_API;
+		botPlatform.MAX_BRONZE = Site.MAX_BRONZE;
+		botPlatform.MAX_GOLD = Site.MAX_GOLD;
+		botPlatform.MAX_PLATINUM = Site.MAX_PLATINUM;
+		botPlatform.MAX_BOT_CACHE_SIZE = Site.MAX_BOT_CACHE_SIZE;
+		botPlatform.MAX_BOT_POOL_SIZE = Site.MAX_BOT_POOL_SIZE;
+		botPlatform.MAXTWEETIMPORT = Site.MAXTWEETIMPORT;
+		botPlatform.TWITTER_OAUTHKEY = "__" + Utils.encrypt(Site.KEY2, Site.TWITTER_OAUTHKEY);
+		botPlatform.TWITTER_OAUTHSECRET = "__" + Utils.encrypt(Site.KEY2, Site.TWITTER_OAUTHSECRET);
+		botPlatform.FACEBOOK_APPID = "__" + Utils.encrypt(Site.KEY2, Site.FACEBOOK_APPID);
+		botPlatform.FACEBOOK_APPSECRET = "__" + Utils.encrypt(Site.KEY2, Site.FACEBOOK_APPSECRET);
+		botPlatform.KEY = "__" + Utils.encrypt(Site.KEY2, Site.KEY);
+		botPlatform.UPGRADE_SECRET = "__" + Utils.encrypt(Site.KEY2, Site.UPGRADE_SECRET);
+		botPlatform.GOOGLEKEY = "__" + Utils.encrypt(Site.KEY2, Site.GOOGLEKEY);
+		botPlatform.GOOGLECLIENTID = "__" + Utils.encrypt(Site.KEY2, Site.GOOGLECLIENTID);
+		botPlatform.GOOGLECLIENTSECRET = "__" + Utils.encrypt(Site.KEY2, Site.GOOGLECLIENTSECRET);
+		botPlatform.MICROSOFT_SPEECH_KEY = "__" + Utils.encrypt(Site.KEY2, Site.MICROSOFT_SPEECH_KEY);
+		botPlatform.RESPONSIVEVOICE_KEY = "__" + Utils.encrypt(Site.KEY2, Site.RESPONSIVEVOICE_KEY);
+		botPlatform.YANDEX_KEY = "__" + Utils.encrypt(Site.KEY2, Site.YANDEX_KEY);
+		
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(botPlatform);
+			em.getTransaction().commit();
 		} finally {
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (Exception exception) {
-				AdminDatabase.instance().log(exception);
-			}
+			em.close();
 		}
 	}
 	
@@ -6124,6 +6144,19 @@ public class AdminDatabase {
 			if (em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
+			em.close();
+		}
+	}
+	
+	public boolean domainExists(String alias) {
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			Query query = em.createQuery("Select p from Domain p where p.alias = :alias");
+			query.setHint("eclipselink.read-only", "true");
+			query.setParameter("alias", alias);
+			List<BotInstance> results = query.getResultList();
+			return !results.isEmpty();
+		} finally {
 			em.close();
 		}
 	}
@@ -9105,111 +9138,120 @@ public class AdminDatabase {
 	
 	public Domain getDefaultDomain() {
 		if (this.defaultDomain == null) {
-			try {
-				this.defaultDomain = validateDomain(Site.DOMAIN);
-			} catch (Exception missing) {
-				log(Level.INFO, "Creating default domain");
-				Domain domain = new Domain(Site.DOMAIN);
-				domain.alias = Site.DOMAIN;
-				this.defaultDomain = createDomain(domain, "admin", "", "", null);
-				
-				User user = new User();
-				user.setUserId("admin");
-				user.setSuperUser(true);
-				user.setType(UserType.Admin);
-
-				Category category = new Category();
-				category.setName("Misc");
-				category.setDescription("Bots that have not been categorized");
-				category.setType("Bot");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Forums that have not been categorized");
-				category.setType("Forum");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Issue trackers that have not been categorized");
-				category.setType("IssueTracker");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Channels that have not been categorized");
-				category.setType("Channel");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Scripts that have not been categorized");
-				category.setType("Script");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Analytics that have not been categorized");
-				category.setType("Analytic");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Avatars that have not been categorized");
-				category.setType("Avatar");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-				
-				category = new Category();
-				category.setName("Misc");
-				category.setDescription("Graphics that have not been categorized");
-				category.setType("Graphic");
-				category.setDomain(this.defaultDomain);
-				AdminDatabase.instance().createCategory(category, user, "");
-
-				log(Level.INFO, "Creating default template");
-				try {
-					// Create default template.
-					LoginBean bean = new LoginBean();
-					bean.setUser(user);
-					bean.setLoggedIn(true);
-					bean.setDomain(this.defaultDomain);
-					BotBean botBean = bean.getBotBean();
-					InstanceConfig config = new InstanceConfig();
-					config.name = "template";
-					config.categories = "";
-					config.tags = "template";
-					botBean.createInstance(config, true, true,"");
-				
-					// Initialize.
-					botBean.connect(ClientType.WEB);
-					if (bean.getError() != null) {
-						throw bean.getError();
+			synchronized(this) {
+				if (this.defaultDomain == null) {
+					try {
+						log(Level.INFO, "Site.DOMAIN: " + Site.DOMAIN);
+						this.defaultDomain = validateDomain(Site.DOMAIN);
+					} catch (Exception missing) {
+						log(Level.INFO, "Creating default domain");
+						Domain domain = new Domain(Site.DOMAIN);
+						domain.alias = Site.DOMAIN;
+						this.defaultDomain = createDomain(domain, "admin", "", "", null);
+						
+						User user = new User();
+						user.setUserId("admin");
+						user.setSuperUser(true);
+						user.setType(UserType.Admin);
+		
+						Category category = new Category();
+						category.setName("Misc");
+						category.setDescription("Bots that have not been categorized");
+						category.setType("Bot");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Forums that have not been categorized");
+						category.setType("Forum");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Issue trackers that have not been categorized");
+						category.setType("IssueTracker");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Channels that have not been categorized");
+						category.setType("Channel");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Scripts that have not been categorized");
+						category.setType("Script");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Analytics that have not been categorized");
+						category.setType("Analytic");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Avatars that have not been categorized");
+						category.setType("Avatar");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+						
+						category = new Category();
+						category.setName("Misc");
+						category.setDescription("Graphics that have not been categorized");
+						category.setType("Graphic");
+						category.setDomain(this.defaultDomain);
+						AdminDatabase.instance().createCategory(category, user, "");
+		
+						log(Level.INFO, "Creating default template");
+						try {
+							// Create default template.
+							LoginBean bean = new LoginBean();
+							bean.setUser(user);
+							bean.setLoggedIn(true);
+							bean.setDomain(this.defaultDomain);
+							BotBean botBean = bean.getBotBean();
+							InstanceConfig config = new InstanceConfig();
+							config.name = "template";
+							config.categories = "";
+							config.tags = "template";
+							botBean.createInstance(config, true, true,"");
+						
+							// Initialize.
+							botBean.connect(ClientType.WEB);
+							if (bean.getError() != null) {
+								throw bean.getError();
+							}
+							log(Level.INFO, "Initializing template database");
+							bean.getBean(MemoryBean.class).processDeleteAll();
+							if (bean.getError() != null) {
+								throw bean.getError();
+							}
+							log(Level.INFO, "Initializing template scripts");
+							bean.getBean(SelfBean.class).processRebootstrap();
+							if (bean.getError() != null) {
+								throw bean.getError();
+							}
+						} catch (Throwable exception) {
+							exception.printStackTrace();
+							log(exception);
+						}
 					}
-					log(Level.INFO, "Initializing template database");
-					bean.getBean(MemoryBean.class).processDeleteAll();
-					if (bean.getError() != null) {
-						throw bean.getError();
-					}
-					log(Level.INFO, "Initializing template scripts");
-					bean.getBean(SelfBean.class).processRebootstrap();
-					if (bean.getError() != null) {
-						throw bean.getError();
-					}
-				} catch (Throwable exception) {
-					exception.printStackTrace();
-					log(exception);
 				}
 			}
 		}
 		return this.defaultDomain;
+	}
+	
+	public void setDefaultDomain(Domain domain) {
+		this.defaultDomain = domain;
 	}
 	
 	public Domain validateDomain(String alias) {

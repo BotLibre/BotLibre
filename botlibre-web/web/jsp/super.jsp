@@ -109,6 +109,7 @@
 									<br/>
 									Secure URL Link<br/>
 									<input type="text" name="SECUREURLLINK" value="<%= Site.SECUREURLLINK %>"/>
+									<br/>
 									Sandbox URL Link<br/>
 									<input type="text" name="SANDBOXURLLINK" value="<%= Site.SANDBOXURLLINK %>"/>
 									<br/>
@@ -146,6 +147,15 @@
 									<br/>
 									JavaScript/css prefix<br/>
 									<input type="text" name="PREFIX" value="<%= Site.PREFIX %>"/>
+									<br/>
+									Persistence Protocol<br/>
+									<input type="text" name="PERSISTENCE_PROTOCOL" value="<%= Site.PERSISTENCE_PROTOCOL %>"/>
+									<br/>
+									Persistence Host<br/>
+									<input type="text" name="PERSISTENCE_HOST" value="<%= Site.PERSISTENCE_HOST %>"/>
+									<br/>
+									Persistence Port<br/>
+									<input type="text" name="PERSISTENCE_PORT" value="<%= Site.PERSISTENCE_PORT %>"/>
 									<br/>
 									Persistence Unit<br/>
 									<input type="text" name="PERSISTENCE_UNIT" value="<%= Site.PERSISTENCE_UNIT %>"/>

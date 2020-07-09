@@ -168,7 +168,12 @@
 				</a>
 			</div>
 		<% } else { %>
-			<div style="margin:auto;width:192px"><a href="index.jsp" alt="Bots"><img src="images/banner.png" alt="Logo"  style="width: 190px; margin-bottom: 10px; margin-top: 10px"> </a></div>
+			<div style="margin:auto;width:192px">
+				<a href="index.jsp" alt="Bots">
+					<% String domainAvatarImage = domainBean.getAvatarImage(loginBean.getDomain()); %>
+					<img src="<%= Site.DEDICATED && !domainAvatarImage.equals(domainBean.getAvatarImage((Domain) null)) ? domainAvatarImage : "images/banner.png" %>" alt="Logo"  style="width: 190px; margin-bottom: 10px; margin-top: 10px">
+				</a>
+			</div>
 		<% } %>
 
 		<% if (!Site.DEDICATED || Site.CLOUD || loginBean.isLoggedIn()) { %>
