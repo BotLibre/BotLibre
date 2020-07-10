@@ -47,18 +47,18 @@ COPY --from=java-builder /root/jdk1.8.0_131 /opt/jdk1.8.0_131
 RUN alternatives --install /usr/bin/java java /opt/jdk1.8.0_131/bin/java 2 && \
 	export JAVA_HOME=/opt/jdk1.8.0_131
 
-COPY --from=tomcat-builder /root/tomcat /opt/tomcat/
-VOLUME /opt/tomcat/conf/
+COPY --from=tomcat-builder /root/tomcat /usr/local/tomcat8/
+VOLUME /usr/local/tomcat8/conf/
 
-COPY --from=botlibre-files-builder /root/voices/ /opt/tomcat/bin/lib/voices/
-COPY --from=botlibre-files-builder /root/lib/ /opt/tomcat/lib/
+COPY --from=botlibre-files-builder /root/voices/ /usr/local/tomcat8/bin/lib/voices/
+COPY --from=botlibre-files-builder /root/lib/ /usr/local/tomcat8/lib/
 
-COPY setup-conf.sh /opt/tomcat/bin/setup-conf.sh
-RUN [ "chmod", "750", "/opt/tomcat/bin/setup-conf.sh" ]
-COPY conf/* /opt/tomcat/default-conf/
-COPY *.war /opt/tomcat/webapps/
+COPY setup-conf.sh /usr/local/tomcat8/bin/setup-conf.sh
+RUN [ "chmod", "750", "/usr/local/tomcat8/bin/setup-conf.sh" ]
+COPY conf/* /usr/local/tomcat8/default-conf/
+COPY *.war /usr/local/tomcat8/webapps/
 
 EXPOSE 80 443 25 5901-5902 465 110 995 143 993 6665
 
-WORKDIR /opt/tomcat/bin
+WORKDIR /usr/local/tomcat8/bin
 ENTRYPOINT [ "./setup-conf.sh", "./catalina.sh", "run" ]

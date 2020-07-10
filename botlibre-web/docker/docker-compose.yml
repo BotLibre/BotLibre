@@ -21,7 +21,7 @@ services:
     volumes:
       - type: volume
         source: botlibreconf
-        target: /opt/tomcat/conf
+        target: /usr/local/tomcat8/conf
   
   app-db:
     image: postgres:9.4
