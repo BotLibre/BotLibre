@@ -74,7 +74,7 @@
     <Connector port="443" protocol="org.apache.coyote.http11.Http11NioProtocol"
                maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
                clientAuth="false" sslProtocol="TLS"
-               keyAlias="tomcat" keystoreFile="/opt/tomcat/conf/.keystore"
+               keyAlias="tomcat" keystoreFile="conf/.keystore"
                keystorePass="password" />
      
     <!-- A "Connector" using the shared thread pool-->
