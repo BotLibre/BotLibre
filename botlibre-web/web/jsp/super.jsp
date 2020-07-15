@@ -41,6 +41,13 @@
 	<title>Sys Admin Console - <%= Site.NAME %></title>
 	<%= loginBean.getJQueryHeader() %>
 	<link rel="stylesheet" href="scripts/tablesorter/tablesorter.css" type="text/css">
+	<style type="text/css">
+		.setting-labels {
+		    color: #585858;
+		    font-size: 16px;
+		    line-height: 24px;
+		}
+	</style>
 	<script type="text/javascript" src="scripts/tablesorter/tablesorter.js"></script>
 </head>
 <body>
@@ -88,7 +95,7 @@
 									Changing some settings may require a web server restart.
 								</p>
 								<h3>URL Settings</h3>
-								<p>
+								<div class="setting-labels">
 									URL Prefix<br/>
 									<input type="text" name="URL_PREFIX" value="<%= Site.URL_PREFIX %>"/>
 									<br/>
@@ -123,10 +130,10 @@
 									Python Server URL<br/>
 									<input type="text" name="PYTHONSERVER" value="<%= Site.PYTHONSERVER %>"/>
 									<br/>
-								</p>
+								</div>
 								
 								<h3>Platform Settings</h3>
-								<p>
+								<div class="setting-labels">
 									<input type="checkbox" name="BOOTSTRAP" <%= Site.BOOTSTRAP ? "checked" : "" %>/> Allow Bootstrap
 									<br/>
 									<input type="checkbox" name="READONLY" <%= Site.READONLY ? "checked" : "" %>/> Read-only
@@ -186,9 +193,9 @@
 									<br/>
 									<input type="checkbox" name="BACKLINK" <%= Site.BACKLINK ? "checked" : "" %>/> Require Embedding Backlink
 									<br/>
-								</p>
+								</div>
 								<h3>Services Settings</h3>
-								<p>
+								<div class="setting-labels">
 									<input type="checkbox" name="TWITTER" <%= Site.TWITTER ? "checked" : "" %>/> Twitter
 									<br/>
 									<input type="checkbox" name="FACEBOOK" <%= Site.FACEBOOK ? "checked" : "" %>/> Facebook
@@ -211,10 +218,10 @@
 									<br/>
 									<input type="checkbox" name="ADMIN" <%= Site.ADMIN ? "checked" : "" %>/> Admin
 									<br/>
-								</p>
+								</div>
 								
 								<h3>Email Settings</h3>
-								<p>
+								<div class="setting-labels">
 									<input type="checkbox" name="WEEKLYEMAIL" <%= Site.WEEKLYEMAIL ? "checked" : "" %>/> Weekly Email (summary of active content)
 									<br/>
 									<input type="checkbox" name="WEEKLYEMAILBOTS" <%= Site.WEEKLYEMAILBOTS ? "checked" : "" %>/> Weekly Email Bots (include active bots in weekly email)
@@ -252,10 +259,10 @@
 									<br/>
 									<input type="checkbox" name="EMAILSSL" <%= Site.EMAILSSL ? "checked" : "" %>/> SSL (website bot email)
 									<br/>
-								</p>
+								</div>
 								
 								<h3>Limits</h3>
-								<p>
+								<div class="setting-labels">
 									Bot Knowledge Limit<br/>
 									<input type="text" name="MEMORYLIMIT" value="<%= Site.MEMORYLIMIT %>"/>
 									<br/>
@@ -307,10 +314,10 @@
 									Max Tweet Import<br/>
 									<input type="text" name="MAXTWEETIMPORT" value="<%= Site.MAXTWEETIMPORT %>"/>
 									<br/>
-								</p>
+								</div>
 								
 								<h3>API & Service Keys</h3>
-								<p>
+								<div class="setting-labels">
 									Platform Encryption Key<br/>
 									<input type="password" name="KEY" value="<%= Site.KEY %>"/>
 									<br/>
@@ -344,7 +351,7 @@
 									Yandex API Key<br/>
 									<input type="password" name="YANDEX_KEY" value="<%= Site.YANDEX_KEY %>"/>
 									<br/>
-								</p>
+								</div>
 				
 								<input type="submit" name="settings" value="Save"/>
 							</form>
