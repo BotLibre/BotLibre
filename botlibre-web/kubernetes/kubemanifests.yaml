@@ -134,7 +134,7 @@ items:
       - containerPort: 6665
       resources: {}
       volumeMounts:
-      - mountPath: /opt/tomcat/conf
+      - mountPath: /usr/local/tomcat8/conf
         name: botlibreconf
     restartPolicy: OnFailure
     volumes:
