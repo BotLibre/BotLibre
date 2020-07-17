@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8994,7 +8995,24 @@ public class AdminDatabase {
 					user = new User("admin");
 					user.setSuperUser(true);
 					user.setType(UserType.Admin);
+					
 					user.setPassword("password");
+					
+					// Use random default password for admin:
+					/*
+					int passwordLength = 32;
+					String passwordChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+					StringBuilder passwordBuilder = new StringBuilder(passwordLength);
+					for (int i = 0; i < passwordLength; i++) {
+						Random random = new Random();
+						int randomIndex = random.nextInt(passwordChars.length());
+						passwordBuilder.append(passwordChars.charAt(randomIndex));
+					}
+					String password = passwordBuilder.toString();
+					log(Level.INFO, "\n\n========================================================\n\nDEFAULT ADMIN PASSWORD: " + password + "\n\n========================================================\n");
+					user.setPassword(password);
+					*/
+					
 					createUser(user);
 				} else {
 					throw new BotException("Invalid user - " + id);
