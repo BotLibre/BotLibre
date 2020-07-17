@@ -27,7 +27,7 @@ import org.botlibre.web.bean.BotBean;
  * You can configure settings here, or bootstrap through the botplatform.xml file.
  */
 public class Site {
-	public static String VERSION = "8.0.4-2020-03-26";
+	public static String VERSION = "8.1.0-2020-07-09";
 	
 	/*public static String URL_SUFFIX = "";
 	public static String URL_PREFIX = "";
