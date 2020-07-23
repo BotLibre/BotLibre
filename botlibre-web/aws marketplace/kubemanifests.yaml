@@ -1,0 +1,160 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o kubemanifests.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: app-db
+    name: app-db
+  spec:
+    ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+    selector:
+      io.kompose.service: app-db
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -o kubemanifests.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: app-web
+    name: app-web
+  spec:
+    type: LoadBalancer
+    ports:
+    - name: "80"
+      port: 80
+      targetPort: 80
+    - name: "443"
+      port: 443
+      targetPort: 443
+    - name: "5901"
+      port: 5901
+      targetPort: 5901
+    - name: "5902"
+      port: 5902
+      targetPort: 5902
+    - name: "465"
+      port: 465
+      targetPort: 465
+    - name: "110"
+      port: 110
+      targetPort: 110
+    - name: "995"
+      port: 995
+      targetPort: 995
+    - name: "143"
+      port: 143
+      targetPort: 143
+    - name: "993"
+      port: 993
+      targetPort: 993
+    - name: "6665"
+      port: 6665
+      targetPort: 6665
+    selector:
+      io.kompose.service: app-web
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: app-db
+    name: app-db
+  spec:
+    containers:
+    - env:
+      - name: POSTGRES_PASSWORD
+        value: password
+      image: postgres:9.4.26-alpine
+      name: app-db
+      ports:
+      - containerPort: 5432
+      resources: {}
+      volumeMounts:
+      - mountPath: /var/lib/postgresql/data
+        name: pgdata
+    restartPolicy: OnFailure
+    volumes:
+    - name: pgdata
+      persistentVolumeClaim:
+        claimName: pgdata
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: pgdata
+    name: pgdata
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+  status: {}
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: app-web
+    name: app-web
+  spec:
+    containers:
+    - env:
+      - name: JAVA_OPTS
+        value: -server -Xmx8g -Dblhostname=localhost
+      image: paphussolutions/botlibre
+      name: app-web
+      ports:
+      - containerPort: 80
+      - containerPort: 443
+      - containerPort: 5901
+      - containerPort: 5902
+      - containerPort: 465
+      - containerPort: 110
+      - containerPort: 995
+      - containerPort: 143
+      - containerPort: 993
+      - containerPort: 6665
+      resources: {}
+      volumeMounts:
+      - mountPath: /usr/local/tomcat8/conf
+        name: botlibreconf
+    restartPolicy: OnFailure
+    volumes:
+    - name: botlibreconf
+      persistentVolumeClaim:
+        claimName: botlibreconf
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: botlibreconf
+    name: botlibreconf
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+  status: {}
+kind: List
+metadata: {}
+
