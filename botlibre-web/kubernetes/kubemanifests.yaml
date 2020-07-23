@@ -78,7 +78,7 @@ items:
     - env:
       - name: POSTGRES_PASSWORD
         value: password
-      image: postgres:9.4
+      image: postgres:9.4.26-alpine
       name: app-db
       ports:
       - containerPort: 5432
@@ -86,7 +86,6 @@ items:
       volumeMounts:
       - mountPath: /var/lib/postgresql/data
         name: pgdata
-        subPath: postgres
     restartPolicy: OnFailure
     volumes:
     - name: pgdata
@@ -118,8 +117,8 @@ items:
     containers:
     - env:
       - name: JAVA_OPTS
-        value: -server -Xmx6g -Dblhostname=localhost
-      image: paphussolutions/botlibre:latest
+        value: -server -Xmx8g -Dblhostname=localhost
+      image: paphussolutions/botlibre
       name: app-web
       ports:
       - containerPort: 80
