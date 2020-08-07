@@ -52,7 +52,7 @@ import org.xml.sax.InputSource;
 
 public class RemoteService extends BasicSense {
 	public static String PANNOUS = "http://weannie.pannous.com";
-	public static String SERVER = "http://www.botlibre.com";
+	public static String SERVER = "https://www.botlibre.com";
 	
 	protected ThreadLocal<DocumentBuilder> parser = new ThreadLocal<DocumentBuilder>();
 
@@ -72,11 +72,11 @@ public class RemoteService extends BasicSense {
 				if (service.equals(Primitive.PANNOUS)) {
 					return requestPannous(message, botid, server, apikey, limit);
 				} else if (service.equals(Primitive.BOTLIBRE)) {
-					server = SERVER;					
+					server = SERVER;
 				} else if (service.equals(Primitive.BOTLIBRETWITTER)) {
-					server = "http://twitter.botlibre.com";					
+					server = "https://twitter.botlibre.com";
 				} else if (service.equals(Primitive.PAPHUS)) {
-					server = "http://www.botlibre.biz";					
+					server = "https://www.botlibre.biz";
 				} else if (service.equals(Primitive.WIKIDATA)) {
 					return requestWikidata(message, botid, server, apikey, limit, hint, network);
 				} else if (service.equals(Primitive.FREEBASE)) {
