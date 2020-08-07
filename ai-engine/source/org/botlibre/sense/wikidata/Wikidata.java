@@ -468,7 +468,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 											if (!valuesSet.contains(label)) {
 												valuesSet.add(label);
 												values.add(label);
-											}											
+											}
 										}
 									}
 									continue;
@@ -482,8 +482,15 @@ public class Wikidata extends Http { //implements DiscoverySense {
 										} catch (Exception exception) {}
 									}
 								} else if (propertyValue instanceof String) {
-									// Text is normally a name or word.
-									propertyValue = network.createWord((String)propertyValue);
+									// Check language matches.
+									Object language = ((JSONObject)value).get("language");
+									if (language == null || language.equals(this.lang)) {
+										// Text is normally a name or word.
+										propertyValue = network.createWord((String)propertyValue);
+									} else {
+										// Ignore other language.
+										propertyValue = null;
+									}
 								}
 								if (propertyValue != null) {
 									if (!valuesSet.contains(propertyValue)) {
@@ -650,7 +657,7 @@ public class Wikidata extends Http { //implements DiscoverySense {
 									word.addRelationship(Primitive.INSTANTIATION, Primitive.NAME);
 									object.addRelationship(Primitive.NAME, word);
 								}
-							}	
+							}
 						}
 					}
 				}
