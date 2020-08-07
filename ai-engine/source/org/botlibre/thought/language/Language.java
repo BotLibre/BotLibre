@@ -796,7 +796,7 @@ public class Language extends BasicThought {
 		if (required != null && !required.isEmpty()) {
 			Language.addSentenceRequiredMeta(question, answer, required, network);
 		}
-		Language.addSentenceFragmentMeta(question, answer, true, network);
+		Language.addSentenceFragmentMeta(question, answer, answer.isPinned(), network);
 		
 		return relationship;
 	}
@@ -838,7 +838,7 @@ public class Language extends BasicThought {
 			Relationship relationship = question.getRelationship(responseType, answer);
 			if (relationship != null) {
 				Vertex meta = network.createMeta(relationship);
-				meta.setPinned(true);
+				meta.setPinned(pin);
 				meta.setRelationship(Primitive.COMMAND, expression);
 			}
 			if (network.getBot().mind().getThought(Language.class).getReduceQuestions()) {
@@ -4475,7 +4475,7 @@ public class Language extends BasicThought {
 				} else {
 					// Associate response.
 					// Associate previous question as meta info.
-					if (getReduceQuestions() && !lastSentence.hasRelationship(Primitive.RESPONSE)) {
+					if (getReduceQuestions() && !lastSentence.hasRelationship(Primitive.RESPONSE) && lastSentence.getDataValue() != null) {
 						lastSentence = network.createSentence(Utils.reduce(lastSentence.getDataValue()));
 					}
 					Vertex previousQuestionInput = lastInput.getRelationship(Primitive.QUESTION);
@@ -4634,12 +4634,10 @@ public class Language extends BasicThought {
 				}
 				if (found) {
 					int value = fragmentScores.get(fragment.getTarget());
-					
 					max = max + value;
 				}
 			}
 		}
-		
 		return max;
 	}
 	
@@ -5687,6 +5685,7 @@ public class Language extends BasicThought {
 		if (states == null || this.abort) {
 			return null;
 		}
+		
 		// Dead code: Compound words are now handled inside checkState
 		//if (hasCompoundWords && root != null && root.hasRelationship(Primitive.LANGUAGE, Primitive.AIML)) {
 			// AIML does not support compound words... AIML now requires compound words for sets
@@ -5808,6 +5807,11 @@ public class Language extends BasicThought {
 										if (caseVariable != null) {
 											// First check for compound words.
 											Collection<Relationship> compoundWords = currentInput.getRelationships(Primitive.COMPOUND_WORD);
+											if (compoundWords == null && (currentInput.getData() instanceof String)) {
+												// Check case.
+												Vertex lowercase = network.createVertex(((String)currentInput.getData()).toLowerCase());
+												compoundWords = lowercase.getRelationships(Primitive.COMPOUND_WORD);
+											}
 											if (compoundWords != null) {
 												for (Relationship compoundWord :  compoundWords) {
 													int checkIndex = index;
@@ -5971,7 +5975,7 @@ public class Language extends BasicThought {
 										List<Relationship> arguments = equation.orderedRelationships(Primitive.FOR);
 										List<Vertex> newInputs = inputs;
 										int newIndex = index + 1;
-										if (arguments != null) {
+										if (arguments != null && arguments.size() >= 2) {
 											Vertex variable = arguments.get(1).getTarget();
 											Vertex value = arguments.get(0).getTarget();
 											newInputs = new ArrayList<Vertex>();
@@ -6247,7 +6251,7 @@ public class Language extends BasicThought {
 			if (getBot().isDebugFiner()) {
 				processTime = processTime * 10;
 			}
-			log("Evaluating answer", Level.FINE, answer, state);			
+			log("Evaluating answer", Level.FINE, answer, state);
 			response = SelfInterpreter.getInterpreter().evaluateExpression(answer, localVariables, network, this.startTime, processTime, 0);
 			localVariables.remove(network.createVertex(Primitive.RETURN));
 			log("Answer result", Level.FINE, response);
@@ -6911,7 +6915,7 @@ public class Language extends BasicThought {
 			}
 			fragmentScores.put(word, score);
 			lastScore = sortedFragmentScores.get(word);
-			position++;	
+			position++;
 		}
 
 		return fragmentScores;
@@ -6922,7 +6926,8 @@ public class Language extends BasicThought {
 		for (int i = 0; i < words.size() - 1; i++) {
 			String fragmentText = ((Relationship)words.toArray()[i]).getTarget().getDataValue() + " " + ((Relationship)words.toArray()[i + 1]).getTarget().getDataValue();
 			Vertex fragment = network.createFragment(fragmentText);
-			fragment.addRelationship(Primitive.QUESTION, sentence);
+			// TODO These should not be persisted on the input sentence, pass in-memory list.
+			//fragment.addRelationship(Primitive.QUESTION, sentence);
 			sentence.addRelationship(Primitive.FRAGMENT, fragment);
 		}
 		

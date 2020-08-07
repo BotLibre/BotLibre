@@ -218,7 +218,7 @@ public class GoogleAssistant extends BasicSense {
 	}
 	
 	public JSONObject getJSONResponse(String message, boolean expectResponse) {
-		JSONObject body = new JSONObject();		
+		JSONObject body = new JSONObject();
 		body.put("fulfillmentText", message);
 		JSONObject payload = new JSONObject();
 		JSONObject google = new JSONObject();

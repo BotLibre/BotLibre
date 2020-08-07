@@ -198,7 +198,7 @@ public class DatabaseNetwork extends AbstractNetwork {
 	}
 	
 	public void resetSize() {
-		this.size = -1;		
+		this.size = -1;
 	}
 	
 	public synchronized void clear() {

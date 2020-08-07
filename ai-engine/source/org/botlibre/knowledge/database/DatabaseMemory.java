@@ -422,7 +422,7 @@ public class DatabaseMemory extends BasicMemory {
 						field.setAccessible(true);
 						field.set(null, null);
 					}
-				}				
+				}
 			} catch (Exception exception) {
 				this.bot.log(this, exception);
 			}
@@ -430,7 +430,7 @@ public class DatabaseMemory extends BasicMemory {
 			
 			if (recreateDatabase) {
 				this.entityManager.getTransaction().begin();
-				try {					
+				try {
 					Query query = this.entityManager.createNativeQuery("ALTER TABLE relationship DROP CONSTRAINT fk_relationship_source_id");
 					query.executeUpdate();
 					query = this.entityManager.createNativeQuery("ALTER TABLE relationship ADD CONSTRAINT fk_relationship_source_id FOREIGN KEY (source_id) " +
@@ -455,10 +455,10 @@ public class DatabaseMemory extends BasicMemory {
 						query = this.entityManager.createNativeQuery("create table schema_version (version int)");
 						query.executeUpdate();
 					} catch (Exception ignore) {
-						this.entityManager.getTransaction().rollback();						
+						this.entityManager.getTransaction().rollback();
 					}
 					if (this.entityManager.getTransaction().isActive()) {
-						this.entityManager.getTransaction().commit();						
+						this.entityManager.getTransaction().commit();
 					}
 					this.entityManager.getTransaction().begin();
 					
@@ -476,7 +476,7 @@ public class DatabaseMemory extends BasicMemory {
 							this.entityManager.getTransaction().rollback();
 						}
 					} catch (Exception failed2) {
-						this.bot.log(this, failed2);					
+						this.bot.log(this, failed2);
 					}				
 				}
 				this.entityManager.getTransaction().begin();
@@ -497,7 +497,7 @@ public class DatabaseMemory extends BasicMemory {
 							this.entityManager.getTransaction().rollback();
 						}
 					} catch (Exception failed2) {
-						this.bot.log(this, failed2);					
+						this.bot.log(this, failed2);
 					}				
 				}
 			}
@@ -539,7 +539,7 @@ public class DatabaseMemory extends BasicMemory {
 				}
 	
 				@Override
-				public void log(Throwable error) {			
+				public void log(Throwable error) {
 				}
 			};
 			
@@ -742,7 +742,7 @@ public class DatabaseMemory extends BasicMemory {
 					this.entityManager.getTransaction().rollback();
 				}
 			} catch (Exception failed2) {
-				this.bot.log(this, failed2);					
+				this.bot.log(this, failed2);
 			}
 		}
 		return false;
@@ -786,7 +786,7 @@ public class DatabaseMemory extends BasicMemory {
 			if (schema) {
 				statement.executeUpdate("CREATE SCHEMA " + database);
 			} else {
-				statement.executeUpdate("CREATE DATABASE " + database);				
+				statement.executeUpdate("CREATE DATABASE " + database);
 			}
 			statement.close();
 			((JpaEntityManagerFactory)getFactory()).getServerSession().getReadConnectionPool().releaseConnection(accessor);

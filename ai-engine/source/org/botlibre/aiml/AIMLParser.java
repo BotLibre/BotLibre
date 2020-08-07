@@ -342,9 +342,10 @@ public class AIMLParser {
 		boolean isDollarPattern = text.indexOf('$') != -1;
 		if (!isPattern(text)) {
 			question = network.createSentence(text);
-			pin =  pin || (parseAsStateMachine && indexStatic);
+			pin = pin || (parseAsStateMachine && indexStatic);
 			if (pin) {
-				getSelfCompiler().pin(question);
+				// TODO: pin causing OOM crash, not sure why...
+				//getSelfCompiler().pin(question);
 			}
 		} else {
 			if (text.trim().length() == 1) {
@@ -352,7 +353,8 @@ public class AIMLParser {
 			}
 			question = network.createPattern(text, getSelfCompiler());
 			if (pin) {
-				getSelfCompiler().pin(question);
+				// TODO: pin causing OOM crash, not sure why...
+				//getSelfCompiler().pin(question);
 			}
 			isPattern = true;
 			if (underscoreIndex != -1) {
@@ -395,7 +397,8 @@ public class AIMLParser {
 						topic = network.createSentence(Utils.reduce(text), false, true);
 					}
 					if (pin) {
-						getSelfCompiler().pin(topic);
+						// TODO: pin causing OOM crash, not sure why...
+						//getSelfCompiler().pin(topic);
 					}
 					network.getBot().log(this, "Topic", Level.INFO, topic);
 					checkSupportedChildren(child, Collections.EMPTY_LIST, network);
@@ -442,7 +445,8 @@ public class AIMLParser {
 			if (response == null) {
 				response = network.createTemplate(templateText);
 				if (pin) {
-					getSelfCompiler().pin(response);
+					// TODO: pin causing OOM crash, not sure why...
+					//getSelfCompiler().pin(response);
 				}
 				cache.put(templateText, response);
 			}

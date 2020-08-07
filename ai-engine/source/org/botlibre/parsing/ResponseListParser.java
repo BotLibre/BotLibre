@@ -53,6 +53,7 @@ import org.botlibre.util.Utils;
  */
 public class ResponseListParser {
 	public static int MAX_FILE_SIZE = 10000000;  // 10 meg
+	public static int PAGE = 100;
 	
 	protected static ResponseListParser parser = new ResponseListParser();
 
@@ -350,6 +351,7 @@ public class ResponseListParser {
 		int indent = 0;
 		List<Relationship> conversationStack = new ArrayList<>();
 		Relationship lastResponseRelationship = null;
+		int pageCount = 0;
 		while (!stream.atEnd()) {
 			String fullLine = stream.nextLine();
 			String line = fullLine.trim();
@@ -361,7 +363,7 @@ public class ResponseListParser {
 			// Skip blank lines.
 			while (line.isEmpty()) {
 				if (stream.atEnd()) {
-					return;
+					break;
 				}
 				question = null;
 				answer = null;
@@ -369,7 +371,13 @@ public class ResponseListParser {
 				line = fullLine.trim();
 				originalLine = line;
 				if (!line.isEmpty()) {
-					network = bot.memory().newMemory();
+					pageCount++;
+					if (pageCount >= PAGE) {
+						network.save();
+						// Clear memory.
+						network = bot.memory().newMemory();
+						pageCount = 0;
+					}
 				}
 			}
 			bot.log(this, "Processing response log", Level.INFO, line);
@@ -904,7 +912,6 @@ public class ResponseListParser {
 					}
 				}
 			}
-			network.save();
 		}
 		network.save();
 	}
