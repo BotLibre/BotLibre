@@ -548,6 +548,29 @@ public class Utils {
 		return fetchResponse(response);
 	}
 	
+	public static String httpAuthGET(String url, String user, String password, String agent, Map<String, String> headers) throws Exception {
+		if (agent == null || agent.equals("")) {
+			agent = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
+		}
+		
+		HttpGet request = new HttpGet(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
+		request.setHeader("User-Agent", agent);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
 	public static String httpAuthPOST(String url, String user, String password, String type, String data) throws Exception {
 		HttpPost request = new HttpPost(url);
 		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
@@ -567,6 +590,32 @@ public class Utils {
 	
 	public static String httpAuthPOST(String url, String user, String password, String agent, String type, String data) throws Exception {
 		HttpPost request = new HttpPost(url);
+		request.setHeader("User-Agent", agent);
+		StringEntity params = new StringEntity(data, "utf-8");
+		request.addHeader("content-type", type);
+		request.setEntity(params);
+		HttpParams httpParams = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
+		DefaultHttpClient client = new DefaultHttpClient(httpParams);
+		client.getCredentialsProvider().setCredentials(
+				new AuthScope(AuthScope.ANY),
+				new UsernamePasswordCredentials(user, password));
+		HttpResponse response = client.execute(request);
+		return fetchResponse(response);
+	}
+	
+	public static String httpAuthPOST(String url, String user, String password, String agent, String type, String data, Map<String, String> headers) throws Exception {
+		if (agent == null || agent.equals("")) {
+			agent = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
+		}
+		
+		HttpPost request = new HttpPost(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
 		request.setHeader("User-Agent", agent);
 		StringEntity params = new StringEntity(data, "utf-8");
 		request.addHeader("content-type", type);

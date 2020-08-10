@@ -523,6 +523,21 @@ public class Http extends BasicSense {
 		Network network = source.getNetwork();
 		return requestJSONAuth(url.printString(), user.printString(), password.printString(), agent.printString(), network);
 	}
+	
+	/**
+	 * Self API.
+	 * Return the JSON data object from the URL.
+	 */
+	public Vertex requestJSONAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex agent, Vertex headerObject) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		return requestJSONAuth(url.printString(), user.printString(), password.printString(), agent.printString(), headers, network);
+	}
 
 	/**
 	 * Self API.
@@ -778,6 +793,21 @@ public class Http extends BasicSense {
 		Network network = source.getNetwork();
 		return postJSONAuth(url.printString(), user.printString(), password.printString(), agent.printString(), jsonObject, network);
 	}
+	
+	/**
+	 * Self API.
+	 * Post the JSON object and return the JSON data from the URL.
+	 */
+	public Vertex postJSONAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex agent, Vertex jsonObject, Vertex headerObject) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		return postJSONAuth(url.printString(), user.printString(), password.printString(), agent.printString(), jsonObject, headers, network);
+	}
 
 	/**
 	 * Self API.
@@ -852,6 +882,38 @@ public class Http extends BasicSense {
 			String data = convertToXML(xmlObject);
 			log("POST XML", Level.FINE, data);
 			String xml = Utils.httpAuthPOST(url, user, password, agent, "application/xml", data);
+			log("XML", Level.FINE, xml);
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
+			Element element = parseXML(stream);
+			if (element == null) {
+				return null;
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+	
+	/**
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXMLAuth(String url, String user, String password, String agent, Vertex xmlObject, String xpath, Map<String, String> headers, Network network) {
+		log("POST XML Auth", Level.INFO, url);
+		try {
+			String data = convertToXML(xmlObject);
+			log("POST XML", Level.FINE, data);
+			String xml = Utils.httpAuthPOST(url, user, password, agent, "application/xml", data, headers);
 			log("XML", Level.FINE, xml);
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
 			Element element = parseXML(stream);
@@ -962,6 +1024,28 @@ public class Http extends BasicSense {
 			return null;
 		}
 	}
+	
+	/**
+	 * Post the JSON object and return the JSON data from the URL.
+	 */
+	public Vertex postJSONAuth(String url, String user, String password, String agent, Vertex jsonObject, Map<String, String> headers, Network network) {
+		log("POST JSON Auth", Level.INFO, url);
+		try {
+			String data = convertToJSON(jsonObject);
+			log("POST JSON", Level.FINE, data);
+			String json = Utils.httpAuthPOST(url, user, password, agent, "application/json", data, headers);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json.trim());
+			if (root == null) {
+				return null;
+			}
+			Vertex object = convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
 
 	/**
 	 * GET the JSON data from the URL.
@@ -990,6 +1074,26 @@ public class Http extends BasicSense {
 		log("GET JSON Auth", Level.INFO, url);
 		try {
 			String json = Utils.httpAuthGET(url, user, password, agent);
+			log("JSON", Level.FINE, json);
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(json.trim());
+			if (root == null) {
+				return null;
+			}
+			Vertex object = convertElement(root, network);
+			return object;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+	
+	/**
+	 * GET the JSON data from the URL.
+	 */
+	public Vertex requestJSONAuth(String url, String user, String password, String agent, Map<String, String> headers, Network network) {
+		log("GET JSON Auth", Level.INFO, url);
+		try {
+			String json = Utils.httpAuthGET(url, user, password, agent, headers);
 			log("JSON", Level.FINE, json);
 			JSONObject root = (JSONObject)JSONSerializer.toJSON(json.trim());
 			if (root == null) {
@@ -1043,6 +1147,39 @@ public class Http extends BasicSense {
 		log("GET XML Auth", Level.INFO, url);
 		try {
 			String xml = Utils.httpAuthGET(url, user, password, agent);
+			log("XML", Level.FINE, xml);
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
+			Element element = parseXML(stream);
+			if (element == null) {
+				return null;
+			}
+			if (xpath == null) {
+				return convertElement(element, network);
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+	
+	/**
+	 * GET the XML data from the URL.
+	 */
+	public Vertex requestXMLAuth(String url, String user, String password, String agent, String xpath, Map<String, String> headers, Network network) {
+		log("GET XML Auth", Level.INFO, url);
+		try {
+			String xml = Utils.httpAuthGET(url, user, password, agent, headers);
 			log("XML", Level.FINE, xml);
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
 			Element element = parseXML(stream);
@@ -1165,6 +1302,21 @@ public class Http extends BasicSense {
 	public Vertex postXMLAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex agent, Vertex xmlObject, Vertex xpath) {
 		Network network = source.getNetwork();
 		return postXMLAuth(url.printString(), user.printString(), password.printString(), agent.printString(), xmlObject, xpath.printString(), network);
+	}
+	
+	/**
+	 * Self API.
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXMLAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex agent, Vertex xmlObject, Vertex xpath, Vertex headerObject) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		return postXMLAuth(url.printString(), user.printString(), password.printString(), agent.printString(), xmlObject, xpath.printString(), headers, network);
 	}
 
 	/**
