@@ -78,7 +78,7 @@ items:
     - env:
       - name: POSTGRES_PASSWORD
         value: password
-      image: postgres:9.4.26-alpine
+      image: 117940112483.dkr.ecr.us-east-1.amazonaws.com/e1cd28d6-071f-43ae-a889-24859b60e895/cg-643190366/postgres:CentOS7PostgreSQL9.4Java8ApacheTomcat8.5-latest
       name: app-db
       ports:
       - containerPort: 5432
@@ -118,7 +118,7 @@ items:
     - env:
       - name: JAVA_OPTS
         value: -server -Xmx8g -Dblhostname=localhost
-      image: paphussolutions/botlibre
+      image: 117940112483.dkr.ecr.us-east-1.amazonaws.com/e1cd28d6-071f-43ae-a889-24859b60e895/cg-643190366/botlibre:CentOS7PostgreSQL9.4Java8ApacheTomcat8.5-latest
       name: app-web
       ports:
       - containerPort: 80
