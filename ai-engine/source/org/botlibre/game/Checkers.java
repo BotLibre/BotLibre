@@ -62,18 +62,18 @@ import org.botlibre.util.Utils;
 public class Checkers {
 	public static void main(String[] args) throws Exception {
 		// Edit these details as necessary:
-		final String[] apiDetails = new String[] { "http://localhost:8080/botlibreplatform/rest/api", "admin",
+		final String[] apiDetails = new String[] { "http://www.botlibre.com/rest/api", "admin",
 				"password", "2477650835389014032", "13" };
 
 		// Some strategies you may want to use:
 		final Strategy randomStrategy = new Strategy.RandomStrategy();
-//		final Strategy randomLookAheadStrategy = new Strategy.RandomLookAheadStrategy();
+		final Strategy randomLookAheadStrategy = new Strategy.RandomLookAheadStrategy();
 		final Strategy remoteDeepLearningStrategy = new Strategy.RemoteDeepLearningStrategy(apiDetails);
 //		final Strategy combineRandomAndDeepLearning = new Strategy.randomCombinationStrategy(randomStrategy, 0.1,
 //				remoteDeepLearningStrategy, 0.9);
 
 		// Trainer for the analytic network
-//		final AnalyticTrainer trainer = new AnalyticTrainer(apiDetails);
+		final Analytic trainer = new Analytic(apiDetails);
 
 		// Reset the analytic network (THIS WILL PERMANENTLY RESET THE NETWORK)
 //		trainer.reset();
@@ -85,8 +85,8 @@ public class Checkers {
 //		showResults(learnGames(500, randomLookAheadStrategy, randomLookAheadStrategy, trainer));
 
 		// Play some games
-		showResults(playGames(100, remoteDeepLearningStrategy, randomStrategy));
-		showResults(playGames(100, randomStrategy, remoteDeepLearningStrategy));
+//		showResults(playGames(100, remoteDeepLearningStrategy, randomStrategy));
+//		showResults(playGames(100, randomStrategy, remoteDeepLearningStrategy));
 //		showResults(playGames(100, remoteDeepLearningStrategy, randomLookAheadStrategy));
 //		showResults(playGames(100, randomLookAheadStrategy, remoteDeepLearningStrategy));
 	}
