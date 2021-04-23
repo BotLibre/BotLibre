@@ -476,6 +476,7 @@ public class Primitive implements Serializable {
 	public static final Primitive SMS = new Primitive("sms");
 	public static final Primitive IVR = new Primitive("ivr");
 	public static final Primitive TELEGRAM = new Primitive("telegram");
+	public static final Primitive DISCORD = new Primitive("discord");
 	public static final Primitive TWITTER = new Primitive("twitter");
 	
 	// Twitter
