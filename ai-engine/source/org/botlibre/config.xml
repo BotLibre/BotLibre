@@ -104,6 +104,9 @@
 				<implementation-class>org.botlibre.sense.facebook.FacebookMessaging</implementation-class>
 			</sense>
 			<sense>
+			    <implementation-class>org.botlibre.sense.instagram.Instagram</implementation-class>
+			</sense>
+			<sense>
 				<implementation-class>org.botlibre.sense.telegram.Telegram</implementation-class>
 			</sense>
 			<sense>

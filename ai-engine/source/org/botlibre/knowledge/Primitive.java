@@ -478,6 +478,13 @@ public class Primitive implements Serializable {
 	public static final Primitive TELEGRAM = new Primitive("telegram");
 	public static final Primitive TWITTER = new Primitive("twitter");
 	
+	//Instagram
+	public static final Primitive IMAGEURLS = new Primitive("imageURLS");
+	public static final Primitive CAPTIONS = new Primitive("captions");
+	public static final Primitive ANSWEREDCOMMENTS = new Primitive("answeredComments");
+	
+	public static final Primitive INSTAGRAM = new Primitive("instagram");
+	
 	// Twitter
 	public static final Primitive TWITTERADDRESS = new Primitive("twitteraddress");
 	public static final Primitive TWEET = new Primitive("tweet");
