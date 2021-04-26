@@ -288,7 +288,7 @@ public class Forgetfulness extends BasicThought {
 					} else {
 						log("Removing vertex", Level.FINE, vertex);
 						memory.removeVertex(vertex);
-					}					
+					}
 				} catch (Exception failure) {
 					errors++;
 					failures++;
@@ -350,7 +350,7 @@ public class Forgetfulness extends BasicThought {
 		if (!force) {
 			max = (int)(max * 1.5);
 		}
-		log("Current number of vetices (current, max, threshold)", Level.INFO, count, this.maxSize, max);
+		log("Current number of vertices (current, max, threshold)", Level.INFO, count, this.maxSize, max);
 		if (count > max) {
 			int numberToDelete = count - this.maxSize + (this.maxSize / 20);
 			log("Max number of vertices exceeded (max, current, deletions)", Level.WARNING, this.maxSize, count, numberToDelete);
@@ -470,12 +470,16 @@ public class Forgetfulness extends BasicThought {
 								}
 							}
 						});
-						for (int index = 0; index < numberToDelete; index++) {
+						for (int index = 0; index < sorted.size(); index++) {
 							if (this.isStopped) {
+								break;
+							}
+							if (numberToDelete <= 0) {
 								break;
 							}
 							Relationship toBeDeleted = sorted.get(index);
 							if (!toBeDeleted.isPinned()) {
+								numberToDelete--;
 								log("Removing relationship with least correctness", Level.FINER, toBeDeleted);
 								toBeDeleted.getSource().internalRemoveRelationship(toBeDeleted);
 							}

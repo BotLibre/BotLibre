@@ -27,6 +27,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,6 +82,7 @@ import net.sf.json.JSONSerializer;
  */
 
 public class Http extends BasicSense {
+	public static int MAX_FILE_SIZE = 5000000; // 5meg
 	public static int WORKER_THREADS = 1;
 	
 	protected ThreadLocal<DocumentBuilder> parser = new ThreadLocal<DocumentBuilder>();
@@ -826,6 +828,9 @@ public class Http extends BasicSense {
 			if (element == null) {
 				return null;
 			}
+			if ("#null".equals(xpath)) {
+				return convertElement(element, network);
+			}
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath path = factory.newXPath();
 			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
@@ -857,6 +862,9 @@ public class Http extends BasicSense {
 			Element element = parseXML(stream);
 			if (element == null) {
 				return null;
+			}
+			if ("#null".equals(xpath)) {
+				return convertElement(element, network);
 			}
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath path = factory.newXPath();
@@ -1153,6 +1161,22 @@ public class Http extends BasicSense {
 	 * Self API.
 	 * Post the XML document object and return the XML data from the URL.
 	 */
+	public Vertex postXML(Vertex source, Vertex url, Vertex xmlObject, Vertex xpath, Vertex headerObject, Vertex fileURL, Vertex fileName) {
+		Network network = source.getNetwork();
+		Map<String, String> headers = new HashMap<>();
+		for (Relationship relationship : headerObject.getAllRelationships()) {
+			if (relationship.getType().getData() instanceof String) {
+				headers.put((String)relationship.getType().getData(), relationship.getTarget().printString());
+			}
+		}
+		byte[] data = loadFileBytes(fileURL.printString(), MAX_FILE_SIZE);
+		return postXML(url.printString(), xmlObject, xpath.printString(), headers, data, fileName.printString(), network);
+	}
+
+	/**
+	 * Self API.
+	 * Post the XML document object and return the XML data from the URL.
+	 */
 	public Vertex postXMLAuth(Vertex source, Vertex url, Vertex user, Vertex password, Vertex xmlObject, Vertex xpath) {
 		Network network = source.getNetwork();
 		return postXMLAuth(url.printString(), user.printString(), password.printString(), xmlObject, xpath.printString(), network);
@@ -1219,6 +1243,44 @@ public class Http extends BasicSense {
 			Element element = parseXML(stream);
 			if (element == null) {
 				return null;
+			}
+			if ("#null".equals(xpath)) {
+				return convertElement(element, network);
+			}
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath path = factory.newXPath();
+			Object node = path.evaluate(xpath, element, XPathConstants.NODE);
+			if (node instanceof Element) {
+				return convertElement((Element)node, network);
+			} else if (node instanceof Attr) {
+				return network.createVertex(((Attr)node).getValue());
+			} else if (node instanceof org.w3c.dom.Text) {
+				return network.createVertex(((org.w3c.dom.Text)node).getTextContent());
+			}
+			return null;
+		} catch (Exception exception) {
+			log(exception);
+			return null;
+		}
+	}
+
+	/**
+	 * Post the XML document object and return the XML data from the URL.
+	 */
+	public Vertex postXML(String url, Vertex xmlObject, String xpath, Map<String, String> headers, byte[] file, String fileName, Network network) {
+		log("POST XML", Level.INFO, url, xpath);
+		try {
+			String data = convertToXML(xmlObject);
+			log("POST XML", Level.FINE, data);
+			String xml = Utils.httpPOST(url, "application/xml", data, headers, file, fileName);
+			log("XML", Level.FINE, xml);
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("utf-8"));
+			Element element = parseXML(stream);
+			if (element == null) {
+				return null;
+			}
+			if ("#null".equals(xpath)) {
+				return convertElement(element, network);
 			}
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath path = factory.newXPath();
@@ -1630,16 +1692,20 @@ public class Http extends BasicSense {
 									time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss X").getTimeInMillis();
 								} catch (Exception exception3) {
 									try {
-										time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+										time = Utils.parseDate(date, "EEE, dd MMM yyyy HH:mm:ss z").getTimeInMillis();
 									} catch (Exception exception4) {
-										log(exception);
+										try {
+											time = Utils.parseDate(date, "EEE, dd MMM yyyy").getTimeInMillis();
+										} catch (Exception exception5) {
+											log(exception);
+										}
 									}
 								}
 							}
 						}
-				    	if (time <= fromTime) {
-				    		break;
-				    	}
+						if (time <= fromTime) {
+							break;
+						}
 						map.put("published", time);
 					} else {
 						continue;
@@ -2043,6 +2109,21 @@ public class Http extends BasicSense {
 			return vertex;
 		} catch (URISyntaxException exception) {
 			throw new RuntimeException(exception);
+		}
+	}
+	
+	/**
+	 * Load data from a URL.
+	 */
+	public byte[] loadFileBytes(String urlPath, int maxSize) {
+		try {
+			URL url = Utils.safeURL(urlPath);
+			InputStream stream = Utils.openStream(url);
+			byte[] data = Utils.loadBinaryFile(stream, true, maxSize);
+			return data;
+		} catch (Exception error) {
+			log(error);
+			throw new BotException(error);
 		}
 	}
 

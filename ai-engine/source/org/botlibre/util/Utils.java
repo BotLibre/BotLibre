@@ -22,6 +22,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,6 +34,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -74,6 +76,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -198,13 +204,16 @@ public class Utils {
 	}
 	
 	public static HttpClient getClient() {
-		if (client.get() == null) {
+		// For some reason get occasional errors of "Invalid use of BasicClientConnManager: connection still allocated"
+		// when thread local caching the connection, even though entity is consumed in finally...
+		//if (client.get() == null) {
 			HttpParams httpParams = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpParams, URL_TIMEOUT);
 			HttpConnectionParams.setSoTimeout(httpParams, URL_TIMEOUT);
-			client.set(new DefaultHttpClient(httpParams));
-		}
-		return client.get();
+			return new DefaultHttpClient(httpParams);
+		//	client.set(new DefaultHttpClient(httpParams));
+		//}
+		//return client.get();
 	}
 	
 	public static PolicyFactory sanitizer() {
@@ -307,7 +316,7 @@ public class Utils {
 		int index = 0;
 		for (T element : collection) {
 			if (index == value) {
-				return element;				
+				return element;
 			}
 			index++;
 		}
@@ -597,6 +606,32 @@ public class Utils {
 		StringEntity params = new StringEntity(data, "utf-8");
 		request.addHeader("content-type", type);
 		request.setEntity(params);
+		HttpClient client = getClient();
+		HttpResponse response = client.execute(request);
+		//try {
+			return fetchResponse(response);
+		/*} finally {
+			request.releaseConnection();
+			client.getConnectionManager().shutdown();
+		}*/
+	}
+	
+	public static String httpPOST(String url, String type, String data, Map<String, String> headers, byte[] file, String fileName) throws Exception {
+		HttpPost request = new HttpPost(url);
+		if (headers != null) {
+			for (Entry<String, String> header : headers.entrySet()) {
+				request.setHeader(header.getKey(), header.getValue());
+			}
+		}
+		request.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+
+		ByteArrayBody fileBody = new ByteArrayBody(file, fileName);
+		
+		MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+		multipartEntity.addPart("file", fileBody);
+		multipartEntity.addPart("xml", new StringBody(data, type, Charset.forName("UTF-8")));
+		
+		request.setEntity(multipartEntity);
 		HttpClient client = getClient();
 		HttpResponse response = client.execute(request);
 		//try {
@@ -998,7 +1033,7 @@ public class Utils {
 	 */
 	public static Calendar parseDate(String value, String format) throws ParseException {
 		Calendar date = Calendar.getInstance();
-		date.setTime(new SimpleDateFormat(format).parse(value));
+		date.setTime(new SimpleDateFormat(format).parse(value.trim()));
 		return date;
 	}
 
@@ -1299,7 +1334,7 @@ public class Utils {
 	
 	public static boolean isAlphaNumeric(String text) {
 		TextStream stream = new TextStream(text);
-		stream.skipToAny("!@#$%^&*()+={}[]|\'\" \t\n`~<>?/:;");
+		stream.skipToAny("!@#$%^&*()+={}[]|\'\" \t\n`~<>?/:;,");
 		if (!stream.atEnd()) {
 			return false;
 		}
@@ -1471,7 +1506,7 @@ public class Utils {
 			BufferedImage source = ImageIO.read(new ByteArrayInputStream(image));
 			if (source == null) {
 				return null;
-			}			
+			}
 			float height = source.getHeight();
 			float width = source.getWidth();
 			float max = size;
@@ -1610,7 +1645,7 @@ public class Utils {
 							lineStream = new TextStream(line);
 							while (lineStream.peek() == ':') {
 								lineStream.next();
-								writer.write("&nbsp;&nbsp;&nbsp;&nbsp;");								
+								writer.write("&nbsp;&nbsp;&nbsp;&nbsp;");
 							}
 							code = lineStream.upToAll("[code]");
 							if (code.indexOf('<') != -1) {

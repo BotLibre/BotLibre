@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2014 Paphus Solutions Inc.
+ *  Copyright 2021 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.

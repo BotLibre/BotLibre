@@ -3508,7 +3508,7 @@ public class Language extends BasicThought {
 					if (relationships != null) {
 						previous = Utils.random(relationships).getTarget();
 						if (loop && usedWords.contains(previous)) {
-							previous = Utils.random(relationships).getTarget();							
+							previous = Utils.random(relationships).getTarget();
 						}
 					}
 				} else {
@@ -3542,7 +3542,7 @@ public class Language extends BasicThought {
 						if (relationships != null) {
 							previous = Utils.random(relationships).getTarget();
 							if (loop && usedWords.contains(previous)) {
-								previous = Utils.random(relationships).getTarget();							
+								previous = Utils.random(relationships).getTarget();
 							}
 						}
 					} else {

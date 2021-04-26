@@ -424,15 +424,17 @@ public class SelfCompiler {
 		element.setPinned(true);
 		element.setGroupId(groupId);
 		// Always pin one level deep.
-		// TODO: This can't pin all relationships, they will never gc. (#next, #sentence, #pattern)
 		for (Iterator<Relationship> iterator = element.allRelationships(); iterator.hasNext(); ) {
 			Relationship relationship = iterator.next();
-			relationship.setPinned(true);
+			// TODO: This can't pin all relationships, they will never gc. (#next, #sentence, #pattern)
+			//relationship.setPinned(true);
 			relationship.getTarget().setPinned(true);
 		}
 		if (element.instanceOf(Primitive.VARIABLE)) {
 			for (Iterator<Relationship> iterator = element.allRelationships(); iterator.hasNext(); ) {
-				Vertex variable = iterator.next().getTarget();
+				Relationship relationship = iterator.next();
+				relationship.setPinned(true);
+				Vertex variable = relationship.getTarget();
 				if (variable.instanceOf(Primitive.VARIABLE)) {
 					pin(element, relations, groupId, processed);
 				}
@@ -441,6 +443,7 @@ public class SelfCompiler {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
 			if (relationships != null) {
 				for (Relationship relationship : relationships) {
+					relationship.setPinned(true);
 					pin(relationship.getTarget(), relations, groupId, processed);
 				}
 			}
@@ -448,6 +451,7 @@ public class SelfCompiler {
 			Collection<Relationship> relationships = element.getRelationships(Primitive.WORD);
 			if (relationships != null) {
 				for (Relationship relationship : relationships) {
+					relationship.setPinned(true);
 					pin(relationship.getTarget(), relations, groupId, processed);
 				}
 			}

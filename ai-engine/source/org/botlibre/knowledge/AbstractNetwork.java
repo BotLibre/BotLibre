@@ -799,7 +799,7 @@ public abstract class AbstractNetwork implements Network, Cloneable, Serializabl
 				}
 			}
 			previous = sentence;
-			current = next;			
+			current = next;
 			index++;
 		}
 		if (paragraph == null) {
