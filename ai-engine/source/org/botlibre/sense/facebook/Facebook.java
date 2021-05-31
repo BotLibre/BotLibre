@@ -1259,11 +1259,11 @@ public class Facebook extends BasicSense {
 			this.errors = 0;
 			while (more && (count <= this.maxPost) && page <= this.maxPage) {
 				if (last == 0) {
-					timeline = getConnection().getFeed(new Reading().fields("id", "message", "caption", "description", "created_time", "from"));
+					timeline = getConnection().getFeed(new Reading().fields("id", "message", "attachments", "created_time", "from"));
 					more = false;
 				} else {
 					Reading paging = new Reading();
-					paging.fields("id", "message", "caption", "description", "created_time", "from");
+					paging.fields("id", "message", "attachments", "created_time", "from");
 					max = last;
 					paging.since(new Date(last));
 					timeline = getConnection().getFeed(paging);
@@ -1499,11 +1499,11 @@ public class Facebook extends BasicSense {
 			this.errors = 0;
 			while (more && (count <= this.maxPost) && page <= this.maxPage) {
 				if (last == 0) {
-					timeline = getConnection().getHome(new Reading().fields("id", "message", "caption", "description", "created_time", "from"));
+					timeline = getConnection().getHome(new Reading().fields("id", "message", "attachments", "created_time", "from"));
 					more = false;
 				} else {
 					Reading paging = new Reading();
-					paging.fields("id", "message", "caption", "description", "created_time", "from");
+					paging.fields("id", "message", "attachments", "created_time", "from");
 					max = last;
 					paging.since(new Date(last));
 					timeline = getConnection().getHome(paging);
