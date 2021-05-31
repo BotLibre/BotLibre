@@ -49,7 +49,7 @@
 	<classpathentry kind="lib" path="lib/boof/xmlpull-1.1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/boof/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/boof/xstream-1.4.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/xianj.DESKTOP-8VHR0EC/Desktop/paphus/BotLibre/ai-engine/lib/facebook/facebook4j-core-2.4.13.jar"/>
+	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.13.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpclient-4.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpclient-cache-4.2.5.jar"/>
