@@ -437,9 +437,9 @@ public class Facebook extends BasicSense {
 		}
 		this.connection.setOAuthAppId(key, secret);
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-			this.connection.setOAuthPermissions("manage_pages,publish_pages");
+			this.connection.setOAuthPermissions("pages_show_list,pages_manage_engagement,pages_manage_posts,pages_read_engagement,pages_read_user_content,pages_messaging");
 		} else {
-			this.connection.setOAuthPermissions("manage_pages,publish_pages");
+			this.connection.setOAuthPermissions("pages_show_list,pages_manage_engagement,pages_manage_posts,pages_read_engagement,pages_read_user_content,pages_messaging");
 		}
 		//this.connection.setOAuthPermissions("read_stream, manage_pages, publish_pages, publish_actions, read_mailbox, read_page_mailboxes");
 		return this.connection.getOAuthAuthorizationURL(callbackURL);
