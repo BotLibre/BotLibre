@@ -22,11 +22,9 @@
 </head>
 <body>
 	<script>
-	$(document).ready(function() 
-	    { 
-	        $("#stats").tablesorter({widgets: ['zebra']});
-	    } 
-	);
+	$(document).ready(function() {
+		$("#stats").tablesorter({widgets: ['zebra']});
+	});
 	</script>
 	<jsp:include page="banner.jsp"/>
 	<div id="mainbody">

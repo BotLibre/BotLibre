@@ -46,7 +46,7 @@ public class ChatWarServlet extends BeanServlet {
 				loginBean = new LoginBean();
 				request.getSession().setAttribute("loginBean", loginBean);
 			}
-			if  (!loginBean.checkDomain(request, response)) {
+			if (!loginBean.checkDomain(request, response)) {
 				return;
 			}
 			String postToken = (String)request.getParameter("postToken");
@@ -57,7 +57,7 @@ public class ChatWarServlet extends BeanServlet {
 			if (vote != null) {
 				loginBean.verifyPostToken(postToken);
 				if (token == null || !token.equals(String.valueOf(bean.hashCode()))) {
-					AdminDatabase.instance().log(Level.WARNING, "hack", request.getRemoteAddr());
+					AdminDatabase.instance().log(Level.WARNING, "hack", BeanServlet.extractIP(request));
 					request.getRequestDispatcher("chatwar-start.jsp").forward(request, response);
 					return;
 				}

@@ -50,7 +50,7 @@
 						<a href="browse?browse-type=Channel<%= domainBean.domainURL() %>"><%= loginBean.translate("Live Chat") %></a><br>
 						<a href="browse?browse-type=Graphic<%= domainBean.domainURL() %>"><%= loginBean.translate("Graphics") %></a><br>
 						<a href="browse?browse-type=Domain<%= domainBean.domainURL() %>"><%= loginBean.translate("Workspaces") %></a><br>
-						<% if (!Site.COMMERCIAL) { %>
+						<% if (!Site.COMMERCIAL && !Site.DEDICATED) { %>
 							<a href="browse?browse-type=ChatWar<%= domainBean.domainURL() %>"><%= loginBean.translate("Chat Bot Wars") %></a><br>
 						<% } %>
 						<% if (!Site.COMMERCIAL || loginBean.isSuper()) { %>
@@ -67,7 +67,7 @@
 <!-- Footer -->
 <footer>
 	<div class="container">
-	
+
 		<div class="row">
 			<div class="col-md-12">
 				<p>
@@ -77,11 +77,8 @@
 						 <a class="lang" href="http://<%= language + "." + Site.SERVER_NAME %>"><%= language %></a>
 					<% } %>
 					<br/><br/>
-					<% if (loginBean.isTranslationRequired()) { %>
-						<a target="_blank" href="http://translate.yandex.com/">Powered by Yandex.Translate</a><br/>
-					<% } %>
 					Version: <%= Site.VERSION %>
-					<%= loginBean.isMobile() ? "<br/>" : " - " %>© 2013-2019
+					<%= loginBean.isMobile() ? "<br/>" : " - " %>&copy; 2013-2021
 					<% if (Site.HTTPS && !loginBean.isHttps()) { %>
 						:	<a style="color:#00BB00;font-weight:bold" href="<%= Site.SECUREURLLINK %>">https</a><br/>
 					<% } %>

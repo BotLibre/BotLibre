@@ -84,7 +84,7 @@ public class QQSpeech {
 			if(data!=null) {
 				String speech = data.getString("speech");
 				if(speech != null && !speech.isEmpty()) {
-					File path = new File(file + ".mp3");
+					File path = new File(file);
 					new File(path.getParent()).mkdirs();
 					
 					byte[] audioData = Base64.decode(speech);

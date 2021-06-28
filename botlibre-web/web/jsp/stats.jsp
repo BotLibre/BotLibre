@@ -1,3 +1,4 @@
+<%@page import="org.botlibre.web.service.AgentStats"%>
 <%@page import="org.botlibre.web.service.ErrorStats"%>
 <%@page import="org.botlibre.web.service.LiveChatStats"%>
 <%@page import="org.botlibre.util.Utils"%>
@@ -32,6 +33,7 @@
 			$("#botstats").tablesorter({widgets: ['zebra']});
 			$("#livechatstats").tablesorter({widgets: ['zebra']});
 			$("#ipstats").tablesorter({widgets: ['zebra']});
+			$("#agentstats").tablesorter({widgets: ['zebra']});
 			$("#pagestats").tablesorter({widgets: ['zebra']});
 			$("#referstats").tablesorter({widgets: ['zebra']});
 			$("#errortats").tablesorter({widgets: ['zebra']});
@@ -61,6 +63,13 @@
 					Free Memory: <%= Runtime.getRuntime().freeMemory() %><br/>
 					Web Downloads: <%= Stats.stats.webDownloads %><br/>
 					Desktop Downloads: <%= Stats.stats.desktopDownloads %><br/>
+					Cached Translations: <%= Stats.stats.cachedTranslations %><br/>
+					Translations: <%= Stats.stats.translations %><br/>
+					Translation Errors: <%= Stats.stats.translationErrors %><br/>
+					Cached Bot Translations: <%= Stats.stats.cachedBotTranslations %><br/>
+					Bot Translations: <%= Stats.stats.botTranslations %><br/>
+					Bot Translation Errors: <%= Stats.stats.botTranslationErrors %><br/>
+					Speech API: <%= Stats.stats.speechAPI %><br/>
 					
 					<h3>Twitter</h3>
 					Twitterbots: <%= AdminDatabase.instance().getAllTwitterInstances().size() %><br/>
@@ -156,6 +165,9 @@
 					Voice Calls: <%= Stats.stats.botTwilioVoiceCalls %><br/>
 					Voice Processed: <%= Stats.stats.botTwilioVoiceProcessed %><br/>
 					Voice API: <%= Stats.stats.botTwilioVoiceAPI %><br/>
+					WhatsApp Sent: <%= Stats.stats.botWhatsAppSent %><br/>
+					WhatsApp Processed: <%= Stats.stats.botWhatsAppProcessed %><br/>
+					WhatsApp API: <%= Stats.stats.botWhatsAppAPI %><br/>
 					
 					<h3>Alexa</h3>
 					Alexabots: <%= AdminDatabase.instance().getAllAlexaInstances().size() %><br/>
@@ -363,6 +375,27 @@
 						<% } %>
 						</tbody>
 					</table>
+					<h3>Agent Stats</h3>
+					<table id="agentstats" class="tablesorter">
+						<thead>
+						<tr>
+							<th>Agent</th>
+							<th>Sessions</th>
+							<th>Pages</th>
+							<th>API Calls</th>
+						</tr>
+						</thead>
+						<tbody>
+						<% for (AgentStats stat : AgentStats.sortedStats()) { %>
+							<tr>
+								<td><a href="super?agentstats=<%= Utils.encodeURL(Utils.sanitize(stat.agent)) %>"><%= Utils.sanitize(stat.agent) %></a></td>
+								<td><%= stat.sessions %></td>
+								<td><%= stat.pages %></td>
+								<td><%= stat.api %></td>
+							</tr>
+						<% } %>
+						</tbody>
+					</table>
 					<h3>Page Stats</h3>
 					<table id="pagestats" class="tablesorter">
 						<thead>
@@ -408,7 +441,7 @@
 						<tbody>
 						<% for (ErrorStats stat : ErrorStats.sortedStats()) { %>
 							<tr>
-								<td><a href="super?errorstats=<%= Utils.sanitize(stat.message) %>"><%= Utils.sanitize(stat.message) %></a></td>
+								<td><a href="super?errorstats=<%= Utils.encodeURL(Utils.sanitize(stat.message)) %>"><%= Utils.escapeHTML(Utils.sanitize(stat.message)) %></a></td>
 								<td><%= stat.errors %></td>
 							</tr>
 						<% } %>

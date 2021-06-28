@@ -62,7 +62,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/chatlog1.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/chatlog1.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("The chat logs tab allows you to monitor your channel.") %><br/>

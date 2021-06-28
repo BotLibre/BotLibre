@@ -40,6 +40,10 @@ public class UpgradeConfig extends Config {
 	public String sku;
 	@XmlAttribute
 	public String secret;
+	@XmlAttribute
+	public String months;
+	@XmlAttribute
+	public boolean subscription;
 	
 	public UpgradeConfig() {
 		

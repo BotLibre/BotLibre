@@ -33,6 +33,7 @@ import org.botlibre.web.admin.AdminDatabase;
 import org.botlibre.web.admin.User;
 import org.botlibre.web.admin.UserMessage;
 import org.botlibre.web.rest.UserMessageConfig;
+import org.botlibre.web.servlet.BeanServlet;
 
 
 public class UserToUserMessageBean  extends ServletBean {
@@ -333,18 +334,25 @@ public class UserToUserMessageBean  extends ServletBean {
 	public UserMessageConfig createUserMessage(UserMessageConfig config, @Context HttpServletRequest requestContext) {
 		try {
 			checkLogin();
-			User target = AdminDatabase.instance().getUser(config.target);
-			if ((target != null && target.isPrivate()) && (!loginBean.isAdmin() && !target.getUserId().equals(loginBean.getUser().getUserId()))) {
-				throw new BotException("Cannot message private profiles - " + config.target);
+			if (config.target.startsWith("@")) {
+				User botUser = this.loginBean.checkBotUser(config.target);
+				if (botUser != null) {
+					config.target = botUser.getUserId();
+				}
+			} else {
+				User target = AdminDatabase.instance().getUser(config.target);
+				if ((target != null && target.isPrivate()) && (!this.loginBean.isAdmin() && !target.getUserId().equals(this.loginBean.getUser().getUserId()))) {
+					throw new BotException("Cannot send messages to private users - " + config.target);
+				}
 			}
 			UserMessage message = null;
 			UserMessageConfig messageConfig = null;
 			if (config.parent != null) {
 				UserMessage parentMessage = AdminDatabase.instance().getUserMessage(Long.parseLong(config.parent));
-				loginBean.setUserMessage(parentMessage);
-				message = loginBean.createUserMessageReply(config.message);
+				this.loginBean.setUserMessage(parentMessage);
+				message = this.loginBean.createUserMessageReply(config.message);
 			} else {
-				message = loginBean.createUserMessage(config.target, config.subject, config.message, requestContext.getRemoteAddr());
+				message = this.loginBean.createUserMessage(config.target, config.subject, config.message, BeanServlet.extractIP(requestContext));
 			}
 			if (message != null) {
 				messageConfig = new UserMessageConfig();
@@ -366,7 +374,7 @@ public class UserToUserMessageBean  extends ServletBean {
 			return null;
 		}
 	}
-	
+
 	public boolean deleteUserToUserMessages(boolean confirm, String targetUserId) {
 		try {
 			if (!confirm) {

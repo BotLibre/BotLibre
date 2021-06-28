@@ -56,7 +56,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/tag.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/tag.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("The tags tab allows you to remove tags from your workspace.") %><br/>

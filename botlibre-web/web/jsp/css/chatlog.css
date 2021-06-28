@@ -109,7 +109,7 @@ span.botplatformchatchat-user-1, span.botplatformchatchat-user-2, span.botplatfo
 }
 .botplatformscroller, .botplatformchatscroller {
 	width: 300px;
-	max-height: 320px;
+	height: 320px;
 }
 #botplatformframeonline-div {
 	display: inline-block;
@@ -137,6 +137,8 @@ span.botplatformchatchat-user-1, span.botplatformchatchat-user-2, span.botplatfo
 	border-width: 1px;
 	margin: 2px;
 	display: inline-block;
+	text-align: center;
+	width: 72px;
 }
 .botplatformonline-user {
 	border: none;

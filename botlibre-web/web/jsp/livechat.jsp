@@ -2,8 +2,7 @@
 <%@page import="org.botlibre.web.admin.AdminDatabase"%>
 <%@page import="org.botlibre.web.Site"%>
 <%@page import="org.botlibre.web.bean.LiveChatBean"%>
-<%@ page import="org.botlibre.web.bean.ChatBean"%>
-<%@ page import="org.botlibre.web.bean.VoiceBean"%>
+
 <%@page contentType="text/html; charset=UTF-8" %>
 
 <jsp:useBean id="proxy" class="org.botlibre.web.bean.SessionProxyBean" scope="session"/>
@@ -12,9 +11,6 @@
 	loginBean = proxy.checkLoginBean(loginBean);
 	boolean embed = loginBean.isEmbedded() || loginBean.isFullScreen() || loginBean.isMobile();
 	LiveChatBean bean = loginBean.getBean(LiveChatBean.class);
-	
-	VoiceBean voiceBean = loginBean.getBean(VoiceBean.class);
-	ChatBean chatBean = loginBean.getBean(ChatBean.class);
 	
 	String title = "Live Chat";
 	if (bean.getInstance() != null) {
@@ -36,9 +32,10 @@
 		<link rel="stylesheet" href="css/chatroom.css" type="text/css">
 	<% } %>
 	<script src="scripts/RTCMultiConnection.js"></script>
+	<script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
 </head>
 <% if (embed) { %>
-	<body class="full" style="background-color: <%= loginBean.getBackgroundColor() %>;">
+	<body class="full" style="background-color: <%= loginBean.getBackgroundColor() %>;overflow-y:hidden;">
 	<table style="background-color: <%= loginBean.getBackgroundColor() %>;" class="<%= Site.PREFIX %>framechat-div">
 	<tr><td>
 	<% loginBean.embedHTML(loginBean.getBannerURL(), out); %>
@@ -155,9 +152,6 @@
 			</div>
 		</span>
 	<% } %>
-	<% if (voiceBean.getResponsiveVoice()) { %>
-		<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
-	<% } %>
 	<script>
 		SDK.applicationId = "<%= AdminDatabase.getTemporaryApplicationId() %>";
 		var sdk = new SDKConnection();
@@ -165,6 +159,7 @@
 		chat.sdk = sdk;
 		chat.contactInfo = "<%= Utils.escapeQuotes(bean.getInfo()) %>";
 		var web = new WebLiveChatListener();
+		web.sdk = sdk;
 		<% if (loginBean.isEmbedded()) { %>
 			web.linkUsers = false;
 			web.onlineBar = true;
@@ -204,9 +199,31 @@
 		</div>
 	</td></tr>
 	<tr height="100%"><td valign="top">
-		<div id="<%= Site.PREFIX %>framescroller" class="<%= Site.PREFIX %>framescroller">
-		<table id="<%= Site.PREFIX %>frameconsole" cellspacing=2 style="width:100%"></table>
-		</div>
+		<table id="<%= Site.PREFIX %>frametable-scroll" cellspacing="8" width="100%">
+			<tr height="100%">
+				<td align="left" valign="top">
+					<div id="<%= Site.PREFIX %>frameavatar-div" class="<%= Site.PREFIX %>frameavatar-div" style="display:none;">
+						<div id="<%= Site.PREFIX %>frameavatar-image-div">
+							<img id="<%= Site.PREFIX %>frameavatar" class="<%= Site.PREFIX %>frameavatar"/>
+						</div>
+						<div id="<%= Site.PREFIX %>frameavatar-video-div" class="<%= Site.PREFIX %>frameavatar-video-div">
+							<video muted='true' id="<%= Site.PREFIX %>frameavatar-video" class="<%= Site.PREFIX %>frameavatar-video" preload="auto">
+								Video format not supported by your browser (try Chrome)
+							</video>
+						</div>
+						<div id="<%= Site.PREFIX %>frameavatar-canvas-div" class="<%= Site.PREFIX %>frameavatar-canvas-div" style="display:none;">
+							<canvas id="<%= Site.PREFIX %>frameavatar-canvas" class="<%= Site.PREFIX %>frameavatar-canvas">
+								Canvas not supported by your browser (try Chrome)
+							</canvas>
+						</div>
+						<div id="<%= Site.PREFIX %>frameavatar-game-div" class="avatar-game-div" style="display:none"></div>
+					</div>
+		<td valign="top" align="left" class="<%= Site.PREFIX %>framebot-scroller" width="100%">
+			<div id="<%= Site.PREFIX %>framescroller" class="<%= Site.PREFIX %>framescroller" style="max-height:340px;">
+				<table id="<%= Site.PREFIX %>frameconsole" cellspacing=2 style="width:100%"></table>
+			</div>
+	</td>
+	</td></tr></table>
 	</td></tr>
 	<tr><td>
 		<div id="<%= Site.PREFIX %>framebubble-div" class="<%= Site.PREFIX %>framebubble-div">
@@ -279,16 +296,23 @@
 								<tr class="<%= Site.PREFIX %>menuitem">
 									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return web.sendAttachment();" href="#"><img class="<%= Site.PREFIX %>menu" src="images/attach.svg" title="<%= loginBean.translate("Send an image or file attachment") %>"> <%= loginBean.translate("Send file") %></a></td>
 								</tr>
+								<tr id="<%= Site.PREFIX %>frameChatLogRow" class="<%= Site.PREFIX %>menuitem" style="display:none;">
+									<td><a id="<%= Site.PREFIX %>frameChatLogLink" class="<%= Site.PREFIX %>menuitem" onClick="hideAvatar();" href="#">
+										<img class="<%= Site.PREFIX %>menu" src="images/chat_log.svg" title="<%= loginBean.translate("Show Chat Log") %>"> <%= loginBean.translate("Chat Log") %></a>
+									</td>
+								</tr>
+								<tr id="<%= Site.PREFIX %>frameAvatarRow" class="<%= Site.PREFIX %>menuitem">
+									<td><a id="<%= Site.PREFIX %>frameAvatarLink" class="<%= Site.PREFIX %>menuitem" onClick="showAvatar();" href="#">
+										<img class="<%= Site.PREFIX %>menu" src="images/avatar-icon.png" title="<%= loginBean.translate("Show Avatar") %>"> <%= loginBean.translate("Avatar") %></a>
+									</td>
+								</tr>
 								<% if (bean.allowsMedia() && (bean.getInstance().isChatRoom())) { %>
 									<tr class="<%= Site.PREFIX %>menuitem">
 										<td><a class="<%= Site.PREFIX %>menuitem" onClick="return configureMedia();" href="#"><img id="media" class="<%= Site.PREFIX %>menu" src="images/video.svg" title="<%= loginBean.translate("Configure audio and video sharing and options") %>"> <%= loginBean.translate("Media settings") %></a></td>
 									</tr>
 								<% } %>
 								<tr class="<%= Site.PREFIX %>menuitem">
-									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return toggleChime();" href="#"><img id="chime" class="<%= Site.PREFIX %>menu" src="images/sound.svg" title="<%= loginBean.translate("Play a chime when a message is recieved") %>"> <%= loginBean.translate("Chime") %></a></td>
-								</tr>
-								<tr class="<%= Site.PREFIX %>menuitem">
-									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return toggleSpeak();" href="#"><img id="talk" class="<%= Site.PREFIX %>menu" src="images/talkoff.svg" title="<%= loginBean.translate("Speak each message using voice synthesis") %>"> <%= loginBean.translate("Text to speech") %></a></td>
+									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return toggleSound();" href="#"><img id="sound" class="<%= Site.PREFIX %>menu" src="images/sound.svg" title="<%= loginBean.translate("Toggle sound") %>"> <%= loginBean.translate("Sound") %></a></td>
 								</tr>
 								<tr class="<%= Site.PREFIX %>menuitem">
 									<td><a class="<%= Site.PREFIX %>menuitem" onClick="return toggleListen();" href="#">
@@ -321,7 +345,10 @@
 					<% if (bean.allowsMedia() && (bean.getInstance().isChatRoom())) { %>
 						<a onClick="return configureMedia();" href="#"><img id="media" class="<%= Site.PREFIX %>toolbar" src="images/video.svg" title="<%= loginBean.translate("Configure audio and video sharing and options") %>"></a>
 					<% } %>
+					<a id="<%= Site.PREFIX %>soundButton" onClick="toggleSound();" href="#"><img id="soundButton" class="<%= Site.PREFIX %>toolbar" src="images/sound.svg" title="<%= loginBean.translate("Sound") %>"></a>
 					<a onClick="return web.exit();" href="#"><img class="<%= Site.PREFIX %>toolbar" src="images/quit.svg" title="<%= loginBean.translate("Exit the channel or active private channel") %>"></a>
+					<a id="<%= Site.PREFIX %>frameChatLogButton" onClick="hideAvatar();" href="#" style="display:none;"><img class="toolbar" src="images/chat_log.svg" title="<%= loginBean.translate("Show Chat Log") %>"></a>
+					<a id="<%= Site.PREFIX %>frameAvatarButton" onClick="showAvatar();" href="#"><img class="toolbar" src="images/avatar-icon.png" title="<%= loginBean.translate("Show Avatar") %>"></a>
 					<% if (!loginBean.isEmbedded()) { %>
 						<a href="#" onclick="document.getElementById('disconnect').click()"><img class="<%= Site.PREFIX %>toolbar" src="images/logout.svg" title="<%= loginBean.translate("Exit the channel, and go back to the channel page") %>"></a>
 					<% } %>
@@ -340,6 +367,25 @@
 	<% bean.writeAd(out); %>
 	
 	<script>
+		function showAvatar() {
+			web.toggleAvatar = true;
+			document.getElementById(web.prefix + "avatar-div").style.display = "block";
+			document.getElementById(web.prefix + "ChatLogRow").style.display = "block";
+			document.getElementById(web.prefix + "ChatLogButton").style.display = "inline-block";
+			document.getElementById(web.prefix + "AvatarButton").style.display = "none";
+			document.getElementById(web.prefix + "AvatarRow").style.display = "none";
+		}
+		
+		function hideAvatar() {
+			web.toggleAvatar = false;
+			document.getElementById(web.prefix + "avatar-div").style.display = "none";
+			document.getElementById(web.prefix + "ChatLogRow").style.display = "none";
+			document.getElementById(web.prefix + "ChatLogButton").style.display = "none";
+			document.getElementById(web.prefix + "AvatarButton").style.display = "inline-block";
+			document.getElementById(web.prefix + "AvatarRow").style.display = "block";
+
+		}
+		
 		<% if (embed) { %>
 			var onlineDiv = document.getElementById(web.prefix + 'online-div');
 			onlineDiv.style.maxWidth = (window.innerWidth - 10) + "px";
@@ -349,36 +395,38 @@
 			onlineDiv.style.whiteSpace = "nowrap";
 			onlineDiv.style.width = "100%";
 			window.onresize = function() {
-		        var max = Math.min(screen.width, window.innerWidth);
+				var max = Math.min(screen.width, window.innerWidth);
 				onlineDiv.style.maxWidth = (max - 10) + "px";
 			};
 		<% } %>
 		<% if (bean.getChatLog()) { %>
-		    if (web.bubble) {
-			    document.getElementById(web.prefix + 'response').style.display = "inline-block";
+			if (web.bubble) {
+				document.getElementById(web.prefix + 'response').style.display = "inline-block";
 			} else {
 				document.getElementById(web.prefix + 'bubble-div').style.display = "none";
-			    document.getElementById(web.prefix + 'response').style.display = "none";
+				document.getElementById(web.prefix + 'response').style.display = "none";
 			}
 		<% } else { %>
-		    document.getElementById(web.prefix + 'scroller').style.display = "none";
-		    document.getElementById(web.prefix + 'response').style.display = "inline-block";
+			document.getElementById(web.prefix + 'scroller').style.display = "none";
+			document.getElementById(web.prefix + 'response').style.display = "inline-block";
 		<% } %>
 		var scroller = document.getElementById(web.prefix + 'scroller');
 		scroller.style.maxHeight = scroller.parentNode.offsetHeight + "px";
+		var tableScroll = document.getElementById(web.prefix + 'table-scroll');
 		var reset = true;
 		var resize = function() {
-		    scroller.style.maxHeight = "100px";
-		    if (reset) {
-		        reset = false;
-		        setTimeout(function() {
-		            reset = true;
-		            scroller.style.maxHeight = (scroller.parentNode.offsetHeight - 4) + "px";
-		        }, 100);
-		    }
+			scroller.style.maxHeight = "200px";
+			if (reset) {
+				reset = false;
+				setTimeout(function() {
+					reset = true;
+					//scroller.style.maxHeight = (scroller.parentNode.offsetHeight - 4) + "px";
+					scroller.style.maxHeight = (tableScroll.parentNode.offsetHeight - 48) + "px";
+				}, 100);
+			}
 		}
 		window.onresize = resize;
-	    setTimeout(resize, 1000);
+		setTimeout(resize, 1000);
 	</script>
 	<script>
 		SDK.registerSpeechRecognition(document.getElementById(web.prefix + 'chat'), document.getElementById('sendicon'));
@@ -406,25 +454,18 @@
 			return false;
 		}
 		
-		function toggleChime() {
-			web.toggleChime();
-			if (web.playChime) {
-				document.getElementById('chime').src = "images/sound.svg";
+		function toggleSound() {
+			web.toggleSound();
+			if (web.sound) {
+				document.getElementById('sound').src = "images/sound.svg";
+				document.getElementById('soundButton').src = "images/sound.svg";
 			} else {
-				document.getElementById('chime').src = "images/mute.svg";
+				document.getElementById('sound').src = "images/mute.svg";
+				document.getElementById('soundButton').src = "images/mute.svg";
 			}
 			return false;
 		}
 		
-		function toggleSpeak() {
-			web.toggleSpeak();
-			if (web.speak) {
-				document.getElementById('talk').src = "images/talk.svg";
-			} else {
-				document.getElementById('talk').src = "images/talkoff.svg";
-			}
-			return false;
-		}
 	</script>
 	<script>
 		var shareVideo = false;
@@ -450,7 +491,8 @@
 					e.mediaElement.removeAttribute("controls");
 				}
 			    e.mediaElement.height = <%= loginBean.isMobile() ? "100" : "200" %>;
-			    var id = 'user-' + encodeURIComponent(e.userid);
+			    var id = encodeURIComponent(e.userid);
+			    var userid = e.userid.substring(5);
 			    var userdiv = document.getElementById(id);
 			    var nameLabel;
 			    if (userdiv != null) {
@@ -477,26 +519,27 @@
 			    if (nameLabel == null) {
 				    nameLabel = document.createElement('div');
 				    nameLabel.className = web.prefix + "online-user-label";
-				    nameLabel.innerHTML = e.userid;
+				    nameLabel.innerHTML = userid;
 				}
 			    videobox.appendChild(nameLabel);
 			    var menu = document.createElement('div');
+			    var muteUserImgSrc = "user-"+web.nick == e.userid ? "images/mute.svg" : "images/sound.svg" ;
 			    menu.innerHTML = "<div style='inline-block;position:relative'><div><span class='dropt'>"
 					+ "<div style='text-align:left;bottom:22px'><table>"
-					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.muteAudio('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/mute.svg' title='<%= loginBean.translate("Mute user") %>'> <%= loginBean.translate("Mute user") %></a></td></tr>"
-					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.muteVideo('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/mutevideo.svg' title='<%= loginBean.translate("Stop video") %>'> <%= loginBean.translate("Stop video") %></a></td></tr>"
+					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return muteAudio('" + e.userid + "');\" href='#'><img id='" + e.userid + "muteAudio' class='<%= Site.PREFIX %>menu' src='" + muteUserImgSrc + "' title='<%= loginBean.translate("Mute user") %>'> <%= loginBean.translate("Mute user") %></a></td></tr>"
+					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return muteVideo('" + e.userid + "');\" href='#'><img id='" + e.userid + "muteVideo' class='<%= Site.PREFIX %>menu' src='images/video.svg' title='<%= loginBean.translate("Stop video") %>'> <%= loginBean.translate("Stop video") %></a></td></tr>"
 					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.expandVideo('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/zoomin.svg' title='<%= loginBean.translate("Increase the video size") %>'> <%= loginBean.translate("Expand video") %></a></td></tr>"
 					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.shrinkVideo('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/zoomout.svg' title='<%= loginBean.translate("Shrink the video size") %>'> <%= loginBean.translate("Shrink video") %></a></td></tr>"
-					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.pvt('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/accept.svg' title='<%= loginBean.translate("Invite user to a private channel") %>'> <%= loginBean.translate("Private user") %></a></td></tr>"
-					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.whisper('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/whisper.png' title='<%= loginBean.translate("Send private message to user") %>'> <%= loginBean.translate("Whipser user") %></a></td></tr>"
-					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.flag('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/flag2.svg' title='<%= loginBean.translate("Flag the user for offensive content") %>'> <%= loginBean.translate("Flag user") %></a></td></tr>"
+					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.pvt('" + userid  + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/accept.svg' title='<%= loginBean.translate("Invite user to a private channel") %>'> <%= loginBean.translate("Private user") %></a></td></tr>"
+					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.whisper('" + userid  + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/whisper.png' title='<%= loginBean.translate("Send private message to user") %>'> <%= loginBean.translate("Whipser user") %></a></td></tr>"
+					+ "<tr class='<%= Site.PREFIX %>menuitem'><td><a class='<%= Site.PREFIX %>menuitem' onClick=\"return web.flag('" + userid  + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/flag2.svg' title='<%= loginBean.translate("Flag the user for offensive content") %>'> <%= loginBean.translate("Flag user") %></a></td></tr>"
 					+ "</table></div><img class='<%= Site.PREFIX %>menu' src='images/menu.png'></span>"
-			    	+ "<a onClick=\"return web.muteAudio('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/mute.svg' title='<%= loginBean.translate("Mute user") %>'></a>"
-			    	+ "<a onClick=\"return web.muteVideo('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/mutevideo.png' title='<%= loginBean.translate("Stop video") %>'></a>"
+			    	+ "<a onClick=\"return muteAudio('" + e.userid + "');\" href='#'><img id='" + e.userid + "muteAudioButton' class='<%= Site.PREFIX %>menu' src='" + muteUserImgSrc + "' title='<%= loginBean.translate("Mute user") %>'></a>"
+			    	+ "<a onClick=\"return muteVideo('" + e.userid + "');\" href='#'><img id='" + e.userid + "muteVideoButton' class='<%= Site.PREFIX %>menu' src='images/video.svg' title='<%= loginBean.translate("Stop video") %>'></a>"
 			    	+ "<a onClick=\"return web.expandVideo('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/zoomin.svg' title='<%= loginBean.translate("Increase the video size") %>'></a>"
 			    	+ "<a onClick=\"return web.shrinkVideo('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/zoomout.svg' title='<%= loginBean.translate("Shrink the video size") %>'></a>"
-			    	//+ "<a onClick=\"return web.pvt('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/accept.svg' title='<%= loginBean.translate("Invite user to a private channel") %>'></a>"
-			    	//+ "<a onClick=\"return web.whisper('" + e.userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/whisper.png' title='<%= loginBean.translate("Send private message to user") %>'></a>"
+			    	//+ "<a onClick=\"return web.pvt('" + userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/accept.svg' title='<%= loginBean.translate("Invite user to a private channel") %>'></a>"
+			    	//+ "<a onClick=\"return web.whisper('" + userid + "');\" href='#'><img class='<%= Site.PREFIX %>menu' src='images/whisper.png' title='<%= loginBean.translate("Send private message to user") %>'></a>"
 			    	+ "</div></div>";
 			    videobox.appendChild(menu);
 			    videosContainer.insertBefore(videobox, videosContainer.firstChild);
@@ -526,14 +569,38 @@
 			}
 		<% } %>
 	</script>
+	<script>
+		function muteAudio(userid) {
+			var muted = web.muteAudio(userid);
+			if (muted) {
+				document.getElementById(userid + 'muteAudio').src = "images/mute.svg";
+				document.getElementById(userid + 'muteAudioButton').src = "images/mute.svg";
+			} else {
+				document.getElementById(userid + 'muteAudio').src = "images/sound.svg";
+				document.getElementById(userid + 'muteAudioButton').src = "images/sound.svg";
+			}
+			return false;
+		}
+		function muteVideo(userid) {
+			var muted = web.muteVideo(userid);
+			if (muted) {
+				document.getElementById(userid + 'muteVideo').src = "images/mutevideo.png";
+				document.getElementById(userid + 'muteVideoButton').src = "images/mutevideo.png";
+			} else {
+				document.getElementById(userid + 'muteVideo').src = "images/video.svg";
+				document.getElementById(userid + 'muteVideoButton').src = "images/video.svg";
+			}
+			return false;
+		}
+	</script>
 	<div id="dialog-media" title="Media Permission" class="dialog">
 		<p><%= loginBean.translate("This channel allows audio and video chat.  Please select your media preference.") %></p>
 		<input type="checkbox" checked id="allow-media" title="<%= loginBean.translate("Allow viewing, listening to, and sharing channel audio and video media") %>"><%= loginBean.translate("Allow media") %></input><br/>
 		<% if (bean.allowAudio()) { %>
-			<input type="checkbox" checked id="share-audio" title="<%= loginBean.translate("Share audio using your microphone. Ensure your broadcast complies with our terams of service and is not adult, or offensive.") %>"><%= loginBean.translate("Share your audio") %></input><br/>
+			<input type="checkbox" id="share-audio" title="<%= loginBean.translate("Share audio using your microphone. Ensure your broadcast complies with our terams of service and is not adult, or offensive.") %>"><%= loginBean.translate("Share your audio") %></input><br/>
 		<% } %>
 		<% if (bean.allowVideo()) { %>
-			<input type="checkbox" checked id="share-video" title="<%= loginBean.translate("Share video using your webcam. Ensure your broadcast complies with our terams of service and is not adult, or offensive.") %>"><%= loginBean.translate("Share your video") %></input><br/>
+			<input type="checkbox" id="share-video" title="<%= loginBean.translate("Share video using your webcam. Ensure your broadcast complies with our terams of service and is not adult, or offensive.") %>"><%= loginBean.translate("Share your video") %></input><br/>
 		<% } %>
 		<input type="checkbox" checked id="media-controls" title="<%= loginBean.translate("Show audio/video controls") %>"><%= loginBean.translate("Show media controls") %></input><br/>
 		<% if (!loginBean.isEmbedded()) { %>

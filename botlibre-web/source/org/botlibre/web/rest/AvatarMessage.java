@@ -47,6 +47,14 @@ public class AvatarMessage extends Config {
 	public String format;
 	@XmlAttribute
 	public boolean hd;
+	@XmlAttribute
+	public String voiceProvider;
+	@XmlAttribute
+	public String apiKey;
+	@XmlAttribute
+	public String apiToken;
+	@XmlAttribute
+	public String apiEndpoint;
 	
 	public String toString() {
 		return this.message + " : " + this.avatar;

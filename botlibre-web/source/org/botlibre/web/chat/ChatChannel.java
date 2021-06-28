@@ -60,6 +60,7 @@ public class ChatChannel extends WebMedium {
 	protected BotMode botMode = BotMode.AnswerAndListen;
 	protected AccessMode videoAccessMode = AccessMode.Users;
 	protected AccessMode audioAccessMode = AccessMode.Users;
+	protected AccessMode inviteAccessMode = AccessMode.Administrators;
 	@Column(length=1024)
 	protected String welcomeMessage = "";
 	@Column(length=1024)
@@ -257,6 +258,13 @@ public class ChatChannel extends WebMedium {
 		}
 		return videoAccessMode;
 	}
+	
+	public AccessMode getInviteAccessMode() {
+		if (inviteAccessMode == null) {
+			return AccessMode.Administrators;
+		}
+		return inviteAccessMode;
+	}
 
 	public String getForwarderAddress() {
 		return "/livechat?id=" + getId() + "&chat=true";
@@ -264,6 +272,10 @@ public class ChatChannel extends WebMedium {
 
 	public void setVideoAccessMode(AccessMode videoAccessMode) {
 		this.videoAccessMode = videoAccessMode;
+	}
+	
+	public void setInviteAccessMode(AccessMode inviteAccessMode) {
+		this.inviteAccessMode = inviteAccessMode;
 	}
 
 	public AccessMode getAudioAccessMode() {
@@ -297,6 +309,7 @@ public class ChatChannel extends WebMedium {
 		config.type = this.type.name();
 		config.videoAccessMode = getVideoAccessMode().name();
 		config.audioAccessMode = getAudioAccessMode().name();
+		config.inviteAccessMode = getInviteAccessMode().name();
 		config.messages = String.valueOf(this.messages);
 		config.usersOnline = String.valueOf(this.connectedUsersCount);
 		config.adminsOnline = String.valueOf(this.connectedAdminsCount);

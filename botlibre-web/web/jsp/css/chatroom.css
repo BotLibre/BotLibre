@@ -82,6 +82,8 @@ td.botplatformframechat-1, td.botplatformframechat-2, td.botplatformframechatcha
 	border-width: 1px;
 	margin: 2px;
 	display: inline-block;
+	text-align: center;
+	width: 72px;
 }
 .botplatformonline-user {
 	border: none;

@@ -54,7 +54,7 @@ public class Translation {
 		return "Translation(" + this.text + ")";
 	}
 	
-	public void parseXML(Element element) {		
+	public void parseXML(Element element) {
 		this.sourceLanguage = element.getAttribute("sourceLanguage");
 		this.targetLanguage = element.getAttribute("targetLanguage");
 		

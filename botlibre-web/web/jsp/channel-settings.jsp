@@ -59,7 +59,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/learning.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/learning.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("The settings page lets your configure your channel including linking an automated chat bot agent to service your channel, and configuring your welcome and status messages.") %><br/>

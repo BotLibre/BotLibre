@@ -36,6 +36,7 @@ import org.botlibre.web.bean.LoginBean;
 import org.botlibre.web.bean.LoginBean.Page;
 import org.botlibre.web.bean.SessionProxyBean;
 import org.botlibre.web.rest.ForumConfig;
+import org.botlibre.web.service.PageStats;
 
 @javax.servlet.annotation.WebServlet("/forum")
 @SuppressWarnings("serial")
@@ -45,11 +46,18 @@ public class ForumServlet extends BeanServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 
+		// TODO: Temp fix to prevent crawler dos attack.
+		if (request.getParameter("proxy") != null) {
+			PageStats.page(request);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
 		LoginBean loginBean = getEmbeddedLoginBean(request, response);
 		SessionProxyBean proxy = (SessionProxyBean)request.getSession().getAttribute("proxy");
 		ForumBean bean = loginBean.getBean(ForumBean.class);
 		loginBean.setActiveBean(bean);
-		if  (!loginBean.checkDomain(request, response)) {
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 		
@@ -380,16 +388,7 @@ public class ForumServlet extends BeanServlet {
 				return;
 			}
 
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("forum-search.jsp").forward(request, response);
-				return;
-			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("forum-search.jsp").forward(request, response);
+			if (checkSearchCommon(bean, "forum-search.jsp", request, response)) {
 				return;
 			}
 

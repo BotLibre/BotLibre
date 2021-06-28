@@ -273,13 +273,13 @@ public class ForumBean extends WebMediumBean<Forum> {
 	public List<Forum> getAllInstances(Domain domain) {
 		try {
 			List<Forum> results = AdminDatabase.instance().getAllForums(this.page, this.pageSize, this.categoryFilter, this.nameFilter, this.userFilter, 
-					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain);
+					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllForumsCount(this.categoryFilter, this.nameFilter, this.userFilter, this.instanceFilter, 
-							this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain);
+							this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 				}
 			}
 			return results;
@@ -292,7 +292,7 @@ public class ForumBean extends WebMediumBean<Forum> {
 	public List<Forum> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllForums(
-					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain());
+					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain());
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<Forum>();

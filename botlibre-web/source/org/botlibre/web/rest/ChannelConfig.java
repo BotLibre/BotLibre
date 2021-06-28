@@ -46,6 +46,8 @@ public class ChannelConfig extends WebMediumConfig {
 	public String videoAccessMode;
 	@XmlAttribute
 	public String audioAccessMode;
+	@XmlAttribute
+	public String inviteAccessMode;
 	
 	public String getChannelType() {
 		if (this.type == null || this.type.isEmpty()) {
@@ -65,5 +67,6 @@ public class ChannelConfig extends WebMediumConfig {
 		adminsOnline = Utils.sanitize(adminsOnline);
 		videoAccessMode = Utils.sanitize(videoAccessMode);
 		audioAccessMode = Utils.sanitize(audioAccessMode);
+		inviteAccessMode = Utils.sanitize(inviteAccessMode);
 	}
 }

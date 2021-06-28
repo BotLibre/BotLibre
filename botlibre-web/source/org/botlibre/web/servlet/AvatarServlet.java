@@ -45,7 +45,7 @@ public class AvatarServlet extends BeanServlet {
 		SessionProxyBean proxy = (SessionProxyBean)request.getSession().getAttribute("proxy");
 		AvatarBean bean = loginBean.getBean(AvatarBean.class);
 		loginBean.setActiveBean(bean);
-		if  (!loginBean.checkDomain(request, response)) {
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 
@@ -85,7 +85,7 @@ public class AvatarServlet extends BeanServlet {
 		
 		try {
 			String postToken = (String)request.getParameter("postToken");
-			if  (!loginBean.checkDomain(request, response)) {
+			if (!loginBean.checkDomain(request, response)) {
 				return;
 			}
 			String domain = (String)request.getParameter("domain");
@@ -391,18 +391,10 @@ public class AvatarServlet extends BeanServlet {
 				return;
 			}
 
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("avatar-search.jsp").forward(request, response);
+			if (checkSearchCommon(bean, "avatar-search.jsp", request, response)) {
 				return;
 			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("avatar-search.jsp").forward(request, response);
-				return;
-			}
+			
 			setSearchFields(request, bean);
 		} catch (Throwable failed) {
 			loginBean.error(failed);

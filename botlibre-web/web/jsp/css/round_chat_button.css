@@ -4,12 +4,12 @@
  */
  
 #botplatformboxbar, #botplatformchatboxbar {
+	display: inline-block;
 	height: 25px;
 	border: 1px solid;
 	border-radius: 19px;
 	border-color: black;
 	background-color: white;
-	display: inline-block;
 	bottom: 2px;
 }
 

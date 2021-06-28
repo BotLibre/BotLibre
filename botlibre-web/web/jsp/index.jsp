@@ -1,5 +1,3 @@
-<%@page import="org.botlibre.web.admin.Domain"%>
-<%@page import="org.botlibre.web.admin.Payment"%>
 <%@page import="org.botlibre.web.admin.AdminDatabase"%>
 <%@page import="org.botlibre.web.bean.DomainBean"%>
 <%@page import="org.botlibre.web.Site"%>
@@ -45,9 +43,6 @@ try {
 	<link href="css/simpletextrotator.css" rel="stylesheet" media="screen">
 	<link href="css/overwrite.css" rel="stylesheet" media="screen">
 	<link href="css/animate.css" rel="stylesheet" media="screen">
-	
-
-
 </head>
 
 <% if (databaseFailure) { %>

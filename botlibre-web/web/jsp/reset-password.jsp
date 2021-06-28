@@ -34,14 +34,12 @@
 	<jsp:include page="error.jsp"/>
 	<h1><%= loginBean.translate("Password Reset") %></h1>
 	<p>
-		<%= loginBean.translate("To request a password reset enter your user id and email address associated with the account.") %>
-		<%= loginBean.translate("If you forget your user id/email, or did not setup and email address, please contact") %> <a href="mailto:support@<%= Site.EMAILHOST %>">support@<%= Site.EMAILHOST %></a>
+		<%= loginBean.translate("To request a password reset enter your email address associated with the account.") %>
+		<%= loginBean.translate("If you forget your user email, or did not setup an email address, please contact") %> <a href="mailto:support@<%= Site.EMAILHOST %>">support@<%= Site.EMAILHOST %></a>
 	</p>
 	<form action="login" method="post" class="message">
 		<%= loginBean.postTokenInput() %>
 		<%= proxy.proxyInput() %>
-		<%= loginBean.translate("User") %><br/>
-		<input autofocus name="user" type="text" /><br/>
 		<%= loginBean.translate("Email") %><br/>
 		<input autofocus name="email" type="text" /><br/>
 		<input id="ok" name="reset-password" type="submit" value="<%= loginBean.translate("Reset") %>"/>

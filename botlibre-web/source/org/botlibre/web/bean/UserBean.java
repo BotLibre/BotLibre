@@ -17,12 +17,15 @@
  ******************************************************************************/
 package org.botlibre.web.bean;
 
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.botlibre.util.Utils;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.botlibre.util.Utils;
 import org.botlibre.web.Site;
 import org.botlibre.web.admin.AdminDatabase;
 import org.botlibre.web.admin.ClientType;
@@ -31,7 +34,7 @@ import org.botlibre.web.admin.User;
 public class UserBean extends ServletBean {
 	public enum UserFilter { Public, Friends, Private, Bot }
 	
-	public enum UserSort { Date, Name, LastConnect, Connects, Affiliates }
+	public enum UserSort { Date, Name, LastConnect, Connects, Followers, Friends, Affiliates }
 		
 	public enum UserRestrict { None, Website, Flagged, Banned,
 			Admin, Partner, Diamond, Platinum, Gold, Bronze,
@@ -256,9 +259,11 @@ public class UserBean extends ServletBean {
 		newWriter.write("<option value='Date' " + getInstanceSortCheckedString(UserSort.Date) + ">date</option>\n");
 		if (isSuperUser) {
 			newWriter.write("<option value='Affiliates' " + getInstanceSortCheckedString(UserSort.Affiliates) + ">affiliates</option>\n");
+			newWriter.write("<option value='Friends' " + getInstanceSortCheckedString(UserSort.Friends) + ">friends</option>\n");
 		}
 		newWriter.write("<option value='LastConnect' " + getInstanceSortCheckedString(UserSort.LastConnect) + ">last connect</option>\n");
 		newWriter.write("<option value='Connects' " + getInstanceSortCheckedString(UserSort.Connects) + ">connects</option>\n");
+		newWriter.write("<option value='Followers' " + getInstanceSortCheckedString(UserSort.Followers) + ">followers</option>\n");
 		newWriter.write("</select>\n");
 		newWriter.write("</div>\n");
 		
@@ -272,6 +277,19 @@ public class UserBean extends ServletBean {
 
 	public String searchHTML() {
 		StringWriter writer = new StringWriter();
+		
+		if (this.loginBean.isSuper()) {
+			// Add admin form.
+			writer.write("<form action='" + getPostAction() + "' method='post' class='message'>\n");
+			writer.write(loginBean.postTokenInput());
+			writer.write("<input name='export-all' type='submit' value='");
+			writer.write(this.loginBean.translate("Export"));
+			writer.write("' title='");
+			writer.write(this.loginBean.translate("Export all users to a file"));
+			writer.write("'/>\n");
+			writer.write("<br>\n");
+		}
+	
 		List<User> instances = getAllInstances();
 		writer.write("<span class='menu'>");
 		writer.write(getResultsSize() + " ");
@@ -287,6 +305,11 @@ public class UserBean extends ServletBean {
 		writer.write("<span class = menu>");
 		writePagingString(writer, instances);
 		writer.write("</span>");
+
+		if (this.loginBean.isSuper()) {
+			writer.write("</form>\n");
+		}
+		
 		return writer.toString();
 	}
 	
@@ -298,7 +321,7 @@ public class UserBean extends ServletBean {
 		if (grid) {
 			writer.write("<div class='browse-div'>\n");
 		} else {
-			writer.write("<div class='browse-list-div'>\n");			
+			writer.write("<div class='browse-list-div'>\n");
 		}
 		if (grid) {
 			if (!loginBean.isMobile()) {
@@ -348,21 +371,21 @@ public class UserBean extends ServletBean {
 			writeBrowseLink(writer, instance, false);
 			writer.write("</div>\n");
 		} else {
-			writer.write("</td>\n");			
+			writer.write("</td>\n");
 		}
 		writer.write("</div>\n");
 	}
 	
 	public void writeBrowseImage(StringWriter writer, User instance) {
 		writer.write("<a href='" + getBrowseAction() + "?id=" + instance.getUserId() + "'>");
-		writer.write("<img class='browse-thumb' src='" + this.getLoginBean().getAvatarThumb(instance) + "' alt='" + instance.getName() + "'/>");
+		writer.write("<img class='browse-thumb' src='" + this.getLoginBean().getAvatarThumb(instance) + "' alt='" + instance.getUserId() + "'/>");
 		writer.write("</a>\n");
 	}
 	
 	public void writeBrowseLink(StringWriter writer, User instance, boolean bold) {
 		if (instance.isFlagged()) {
 			writer.write("<a class='menu' href='" + getBrowseAction() + "?id=" + instance.getUserId() + "'>");
-			writer.write("<span style='color:red;" + (bold ? "font-weight:bold' class='browse-thumb'" : "margin: 0 0 0;'" ) + ">" + instance.getName() + "</span>");
+			writer.write("<span style='color:red;" + (bold ? "font-weight:bold' class='browse-thumb'" : "margin: 0 0 0;'" ) + ">" + instance.getUserId() + "</span>");
 			writer.write("</a>\n");
 		} else {
 			writer.write("<a class='menu' href='" + getBrowseAction() + "?id=" + instance.getUserId() + "'>");
@@ -477,4 +500,61 @@ public class UserBean extends ServletBean {
 		return User.QQSPEECH.equals(getUser().getNativeVoiceProvider());
 	}
 
+	/**
+	 * Download all of the user information to a csv file.
+	 */
+	public boolean exportAll(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			this.loginBean.checkSuper();
+
+			response.setContentType("text/plain");
+			response.setHeader("Content-disposition","attachment; filename=" + encodeURI("Exported_Users.csv"));
+
+			PrintWriter writer = response.getWriter();
+			writer.write("User ID, Name, Gender, Email, EmailNotices, Date of Birth, Upgrade Date, Expiry Date, Creation Date\n");
+			this.page = 0;
+			List<User> instances = getAllInstances();
+			int count = 0;
+			int total = this.resultsSize;
+			while (count < total) {
+				count = count + instances.size();
+				for (User user : instances) {
+					writer.write(user.getUserId());
+					writer.write(", ");
+					writer.write(user.getName().replace(",", " "));
+					writer.write(", ");
+					writer.write(user.getGender());
+					writer.write(", ");
+					writer.write(user.getEmail().replace(",", " "));
+					writer.write(", ");
+					writer.write(String.valueOf(user.getEmailNotices()));
+					writer.write(", ");
+					if (user.getDateOfBirth() != null) {
+						writer.write(new java.sql.Date(user.getDateOfBirth().getTime()).toString());
+					}
+					writer.write(", ");
+					if (user.getUpgradeDate() != null) {
+						writer.write(new java.sql.Date(user.getUpgradeDate().getTime()).toString());
+					}
+					writer.write(", ");
+					if (user.getExpiryDate() != null) {
+						writer.write(new java.sql.Date(user.getExpiryDate().getTime()).toString());
+					}
+					writer.write(", ");
+					writer.write(new java.sql.Date(user.getCreationDate().getTime()).toString());
+					writer.write("\n");
+				}
+				if (count < total) {
+					this.page++;
+					instances = getAllInstances();
+				}
+			}
+			this.page = 0;
+			writer.flush();
+		} catch (Exception exception) {
+			error(exception);
+			return false;
+		}
+		return true;
+	}
 }

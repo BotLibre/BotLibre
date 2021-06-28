@@ -106,7 +106,7 @@ public class GraphicServlet extends BeanServlet {
 		
 		try {
 			String postToken = (String)request.getParameter("postToken");
-			if  (!loginBean.checkDomain(request, response)) {
+			if (!loginBean.checkDomain(request, response)) {
 				return;
 			}
 			String domain = (String)request.getParameter("domain");
@@ -137,6 +137,14 @@ public class GraphicServlet extends BeanServlet {
 				loginBean.verifyPostToken(postToken);
 				if (!bean.export(response)) {
 					response.sendRedirect("graphic?id=" + bean.getInstanceId() + proxy.proxyString());
+				}
+				return;
+			}
+			String exportAll = (String)request.getParameter("export-all");
+			if (exportAll != null) {
+				loginBean.verifyPostToken(postToken);
+				if (!bean.exportAll(request, response)) {
+					response.sendRedirect("graphic-search.jsp");
 				}
 				return;
 			}
@@ -287,19 +295,11 @@ public class GraphicServlet extends BeanServlet {
 				request.getRequestDispatcher("admin-graphic.jsp").forward(request, response);
 				return;
 			}
-						
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("graphic-search.jsp").forward(request, response);
+
+			if (checkSearchCommon(bean, "graphic-search.jsp", request, response)) {
 				return;
 			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("graphic-search.jsp").forward(request, response);
-				return;
-			}
+			
 			setSearchFields(request, bean);
 		} catch (Throwable failed) {
 			loginBean.error(failed);

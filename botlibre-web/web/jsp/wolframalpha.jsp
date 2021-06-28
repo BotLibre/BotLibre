@@ -38,7 +38,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt">
-					<img src="images/wolframalpha1.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/wolframalpha1.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow your bot use Wolfram Alpha to respond to messages.") %><br/>

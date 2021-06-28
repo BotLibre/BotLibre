@@ -44,7 +44,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/facebook4.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/facebook4.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow your bot to manage a Facebook account or page and interact with other Facebook users.") %><br/>

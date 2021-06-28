@@ -83,6 +83,7 @@
 		
 		<% bean.writeExternalHTML(out); %>
 		<% bean.writeFlaggedHTML(out); %>
+		<% bean.writeReviewHTML(out); %>
 		
 		<% if (bean.getDisplayInstance().isArchived()) { %>
 			<p><span><%= loginBean.translate("This bot has been archived due to over 3 months of inactivity, to recover this bot please email") %> support@botlibre.com.</span></p>
@@ -97,11 +98,11 @@
 		<% if (bean.getInstance() != null) { %>
 			<form action="bot" method="get" class="message">
 				<%= bean.instanceInput() %>
-				<% if (!bean.getDisplayInstance().isArchived()) { %>
+				<% if (!bean.getDisplayInstance().isArchived()  && !bean.getDisplayInstance().isTemplate()) { %>
 					<input id="ok" name="dynamicChat" <%= (bean.getInstance().isExternal() && !bean.getInstance().hasAPI()) ? "formtarget=\"_blank\"" : "" %> type="submit" value="<%= loginBean.translate("Chat") %>" title="<%= loginBean.translate("Chat with the bot on the web") %>"/>
 				<% } %>
 				<% if (!embed) { %>
-					<% if (!bean.getDisplayInstance().isExternal() && !bean.getDisplayInstance().isArchived()) { %>
+					<% if (!bean.getDisplayInstance().isExternal() && !bean.getDisplayInstance().isArchived() && !bean.getDisplayInstance().isTemplate()) { %>
 						<!--input id="ok" formmethod="get" name="chat" type="submit" value="Web Chat" title="Chat with the bot on the web using static HTML"/-->
 						<input id="ok" name="livechat" type="submit" value="<%= loginBean.translate("Live Chat") %>" title="<%= loginBean.translate("Connect to the bot's live chat channel to chat with it, or its administrator") %>"/>
 						<input id="ok" name="chatroom" type="submit" value="<%= loginBean.translate("Chat Room") %>" title="<%= loginBean.translate("Connect to the bot's chat room channel to chat with it and other users") %>"/>
@@ -120,7 +121,7 @@
 							<input id="disabled" name="fork" type="submit" value="<%= loginBean.translate("Fork") %>" disabled="disabled" title="<%= loginBean.translate("You must sign in first") %>"/>
 						<% } %>
 					<% } %>
-					<% if (!embed && bean.isMember() && !bean.getDisplayInstance().isExternal() && !bean.getDisplayInstance().isArchived()) { %>
+					<% if (!embed && bean.isMember() && !bean.getDisplayInstance().isExternal() && !bean.getDisplayInstance().isArchived() && !bean.getDisplayInstance().isTemplate()) { %>
 						<% if (bean.isLoggedIn()) { %>
 							<input name="embed-instance" type="submit" value="<%= loginBean.translate("Embed") %>" title="<%= loginBean.translate("Generate embedding code to add the bot to your own website") %>"/>
 						<% } else { %>

@@ -54,6 +54,8 @@ public abstract class WebMediumConfig extends Config {
 	@XmlAttribute
 	public boolean isFlagged;
 	@XmlAttribute
+	public boolean isReviewed;
+	@XmlAttribute
 	public boolean isFeatured;
 	@XmlAttribute
 	public boolean isAdmin;
@@ -90,6 +92,7 @@ public abstract class WebMediumConfig extends Config {
 	public String categories;
 	public String tags;
 	public String flaggedReason;
+	public String reviewRejectionComments;
 	public String lastConnectedUser;
 	public String license;
 	public String avatar;
@@ -152,6 +155,7 @@ public abstract class WebMediumConfig extends Config {
 		disclaimer = Utils.sanitize(disclaimer);
 		categories = Utils.sanitize(categories);
 		tags = Utils.sanitize(tags);
+		reviewRejectionComments = Utils.sanitize(reviewRejectionComments);
 		flaggedReason = Utils.sanitize(flaggedReason);
 		lastConnectedUser = Utils.sanitize(lastConnectedUser);
 		license = Utils.sanitize(license);

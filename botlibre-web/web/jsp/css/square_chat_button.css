@@ -4,6 +4,7 @@
  */
 
 #botplatformboxbar, #botplatformchatboxbar {
+	display: inline;
 	height: 25px;
 	bottom: 2px;
 }

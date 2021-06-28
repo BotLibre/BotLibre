@@ -39,7 +39,8 @@
 		</div>
 	<% } else { %>
 			<h1><%= loginBean.translate("Missing Page") %></h1>
-			<%= loginBean.translate("Sorry the URL you have entered is not correct, or has moved.") %><br/>	
+			<%= loginBean.translate("Sorry the URL you have entered is not correct, or has moved.") %><br/>
+			<%= loginBean.translate("This error may also occur if you are using an invalid browser.") %>
 	<% } %>
 </body>
 </html>

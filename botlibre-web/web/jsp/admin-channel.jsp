@@ -50,6 +50,7 @@
 			<a href="channel-users.jsp"><img src="images/user1.png" class="admin-pic"></a> <a href="channel-users.jsp"><%= loginBean.translate("Users") %></a> - <span><%= loginBean.translate("Configure users, operators, and administrators of the channel.") %></span><br/>
 			<a href="channel-settings.jsp"><img src="images/learning.png" class="admin-pic"></a> <a href="channel-settings.jsp"><%= loginBean.translate("Settings") %></a> - <span><%= loginBean.translate("Configure settings including welcome messages, email, and an automated chat bot to service the channel.") %></span><br/>
 			<a href="channel-logs.jsp"><img src="images/chatlog1.png" class="admin-pic"></a> <a href="channel-logs.jsp"><%= loginBean.translate("Chat Logs") %></a> - <span><%= loginBean.translate("View the channel chat logs.") %></span><br/>
+			<a href="channel-stats.jsp"><img src="images/stats.svg" class="admin-pic"></a> <a href="channel-stats.jsp"><%= loginBean.translate("Analytics") %></a> - <span><%= loginBean.translate("View the channel analytics.") %></span><br/>
 		</p>
 	</div>
 	</div>

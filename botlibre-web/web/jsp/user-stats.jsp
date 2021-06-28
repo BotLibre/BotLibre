@@ -135,7 +135,7 @@
 					<% } else { %>
 						<h1>
 							<span class="dropt-banner">
-								<img src="images/stats.svg" class="admin-banner-pic" style="vertical-align:middle">
+								<img src="images/stats.svg" class="admin-banner-pic">
 								<div>
 									<p class="help">
 										<%= loginBean.translate("View the user's analytics and charts.") %><br/>

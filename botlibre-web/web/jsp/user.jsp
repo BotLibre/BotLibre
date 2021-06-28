@@ -103,8 +103,12 @@
 		<h1><%= loginBean.getViewUser().getUserHTML() %></h1>
 		<% boolean admin = loginBean.isLoggedIn() && (loginBean.isSuper() || loginBean.getViewUser().equals(loginBean.getUser())); %>
 		
-		<% if (!admin && !loginBean.getViewUser().isPublic()) { %>
+		<% if (!admin && !loginBean.getViewUser().isActive()) { %>
+			<h5><%= loginBean.translate("This user is not active.") %></h5>
+		<% } else if (!admin && loginBean.getViewUser().isPrivate()) { %>
 			<h5><%= loginBean.translate("This user's profile is private.") %></h5>
+		<% } else if (!admin && !loginBean.getViewUser().isPublic() && !loginBean.isFollower(loginBean.getViewUser().getUserId())) { %>
+			<h5><%= loginBean.translate("This user's profile is only visible to friends.") %></h5>
 		<% } else if (!admin && !loginBean.getViewUser().isVerified() && !loginBean.getViewUser().isBot()) { %>
 			<h5><%= loginBean.translate("This user's profile is hidden until they have verified their email address.") %></h5>
 		<% } else { %>
@@ -162,7 +166,12 @@
 						<% if (loginBean.getViewUser().getShouldDisplayName() || admin) { %>
 							<span><%= loginBean.translate("Name") %>:</span> <%= loginBean.getViewUser().getName() %><br/>
 						<% } %>
+						<% if (admin && !loginBean.getViewUser().getGender().isEmpty()) { %>
+							<span><%= loginBean.translate("Gender") %>:</span> <%= loginBean.getViewUser().getGender() %><br/>
+						<% } %>
 						<% if (loginBean.isSuper()) { %>
+							<span><%= loginBean.translate("Active") %>:</span> <%= loginBean.getViewUser().isActive() %><br/>
+							<span><%= loginBean.translate("Properties") %>:</span> <%= loginBean.getViewUser().getProperties() %><br/>
 							<span><%= loginBean.translate("IP") %>:</span> <%= loginBean.getViewUser().getIP() %><br/>
 							<span><%= loginBean.translate("Source") %>:</span> <%= loginBean.getViewUser().getSource() %><br/>
 						<% } %>
@@ -192,8 +201,16 @@
 								<a href="partners.jsp"><%= loginBean.translate("Affiliate Link") %></a><br/>
 							<% } %>
 						<% } %>
-						<% if (!Site.COMMERCIAL) { %>
-							<%= loginBean.translate("Account Type") %>: <%= loginBean.getViewUser().getType() %><br/>
+						<%= loginBean.translate("Account Type") %>: <%= loginBean.getViewUser().getType() %><br/>
+						<% if (admin && !Site.COMMERCIAL || (Site.DEDICATED && !Site.CLOUD)) { %>
+							<%= loginBean.translate("Payment Type") %>:
+							 
+							<% if (loginBean.getViewUser().isSubscribed()) { %>
+									<%= loginBean.translate("Monthly Subscription Plan") %> 
+							<%	} else { %>
+									<%= loginBean.translate("No Subscription Plan") %>
+							<%  } %><br/>
+							
 							<% if (admin && loginBean.getViewUser().getUpgradeDate() != null) { %>
 								<%= loginBean.translate("Upgrade Date") %>: <%= Utils.displayDate(loginBean.getViewUser().getUpgradeDate()) %><br/>
 								<%= loginBean.translate("Expiry Date") %>: <%= Utils.displayDate(loginBean.getViewUser().getExpiryDate()) %><br/>
@@ -262,12 +279,12 @@
 							<% } %>
 							<% if (admin) { %>
 								Affiliates: <%= loginBean.getViewUser().getAffiliates() %><br/>
-								<% if (!Site.COMMERCIAL) { %>
+								<% if (!Site.COMMERCIAL || (Site.DEDICATED && !Site.CLOUD)) { %>
 									<% if (!loginBean.getViewUser().getPayments().isEmpty()) { %>
 										Payments:
 										<% for (UserPayment payment : loginBean.getViewUser().getPayments()) { %>
 											<br/>
-											<%= payment.getPaymentDate() %> : <%= payment.getType() %> : <%= payment.getStatus() %> : <%= payment.getPaypalAmt() %> - <%= payment.getPaypalTx() %> - <%= payment.getPaypalCc() %> - <%= payment.getPaypalSt() %> - <%= payment.getUserId() %>
+											<%= payment.getPaymentDate() %> : <%= payment.getType() %> : <%= payment.isSubscription() ? "subscription" : "" %> : <%= payment.getUserType() %> : <%= payment.getPaymentDuration() %> : <%= payment.getStatus() %> : <%= payment.getPaypalAmt() %> - <%= payment.getPaypalTx() %> - <%= payment.getPaypalCc() %> - <%= payment.getPaypalSt() %> - <%= payment.getUserId() %>
 										<% } %>
 									<% } %>
 								<% } %>

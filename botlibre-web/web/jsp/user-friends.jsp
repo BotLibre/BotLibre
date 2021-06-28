@@ -119,7 +119,7 @@
 		userFriendsConfig.userFriend = friendName;
 		userFriendsConfig.instance = "<%= bean.getInstanceId() %>";
 		sdkConnection.userFriendship(userFriendsConfig, function(friendConfig) {
-			var newRow = "<tr id='" + friendConfig.friendship + "'><td><input name='selected-friend' value='" + friendConfig.userFriend + "' type='checkbox'></td><td><a class='friend-link' href='login?view-user=" + friendConfig.userFriend + "'>" + friendConfig.userFriend + "</a></td></tr>";
+			var newRow = "<tr id='" + friendConfig.user + "'><td><input name='selected-friend' value='" + friendConfig.user + "' type='checkbox'></td><td><a class='friend-link' href='login?view-user=" + friendConfig.user + "'>" + friendConfig.user + "</a></td></tr>";
 			var row = $('#user-friends-table tbody:last-child');
 			row.append(newRow);
 		});
@@ -159,7 +159,7 @@
 			if (i == friends.length - 1) {
 				sourceId = sourceId.concat(friends[i]);
 			} else {
-				sourceId = sourceId.concat(friends[i] + ",");
+				sourceId = sourceId.concat(friends[i] + ", ");
 			}
 		}
 		let userFriendsConfig = new UserFriendsConfig();
@@ -168,7 +168,12 @@
 		userFriendsConfig.instance = "<%=bean.getInstanceId()%>";
 		sdkConnection.userFriendship(userFriendsConfig, function() {
 			for (let item in friendIds) {
-				$('#user-friends-table tbody').find('tr#' + friendIds[item]).remove();
+				let friendId = friendIds[item];
+				if (friendId.startsWith("@")) {
+					$('#user-friends-table tbody').find('tr#\\' + friendIds[item]).remove();
+				} else {
+					$('#user-friends-table tbody').find('tr#' + friendIds[item]).remove();
+				}
 			}
 		});
 	});

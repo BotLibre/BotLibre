@@ -78,6 +78,12 @@ public class EmailService extends Service {
 		this.username = Site.EMAILUSER;
 		this.password = Site.EMAILPASSWORD;
 		this.ssl = Site.EMAILSSL;
+		
+		//this.outgoingHost = "";
+		//this.outgoingPort = 587;
+		//this.username = "";
+		//this.password = "";
+		//this.ssl = false;
 	}
 	
 	public static void main(String[] args) {
@@ -150,7 +156,7 @@ public class EmailService extends Service {
 		thread.start();
 	}
 	
-	public Session connectSession() {			 
+	public Session connectSession() {
 		Properties props = new Properties();
 		Session session = null;
 		if (ssl) {
@@ -160,6 +166,7 @@ public class EmailService extends Service {
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.auth", "true");
 			props.put("mail.smtp.ssl.trust", this.outgoingHost);
+			//props.put("mail.smtp.localhost", "botlibre.com");
 			 
 			session = Session.getInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
@@ -167,17 +174,20 @@ public class EmailService extends Service {
 				}
 			});
 		} else {
+			//props.put("mail.debug", "true");
 			props.put("mail.smtp.auth", "true");
 			props.put("mail.smtp.starttls.enable", "true");
 			props.put("mail.smtp.host", this.outgoingHost);
 			props.put("mail.smtp.port", this.outgoingPort);
 			props.put("mail.smtp.ssl.trust", this.outgoingHost);
+			//props.put("mail.smtp.socketFactory.fallback", "true");
 			 
 			session = Session.getInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(username, password);
 				}
 			});
+			//session.setDebug(true);
 		}
 		return session;
 	}

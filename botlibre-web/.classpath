@@ -60,5 +60,11 @@
 	<classpathentry kind="lib" path="lib/facebook/facebook4j-core-2.4.8.jar"/>
 	<classpathentry kind="lib" path="lib/twitter/twitter4j-core-4.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient/httpclient-4.2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/paypal/paypal-core-1.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/paypal/rest-api-sdk-1.14.0.jar"/>
+	<classpathentry kind="lib" path="lib/paypal/gson-2.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/paypal/slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="lib/json/json-20200518.jar"/>
+	<classpathentry kind="lib" path="lib/paypal/braintree-java-3.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

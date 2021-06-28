@@ -39,7 +39,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/alexa1.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/alexa1.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow your bot to connect with Alexa.") %><br/>

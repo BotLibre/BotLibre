@@ -63,6 +63,7 @@
 		
 		<% bean.writeExternalHTML(out); %>
 		<% bean.writeFlaggedHTML(out); %>
+		<% bean.writeReviewHTML(out); %>
 		
 		<% if (bean.getDisplayInstance().isExpired()) { %>
 			<p style="color:red;font-weight:bold;"><%= loginBean.translate("This workspace has expired") %></p>

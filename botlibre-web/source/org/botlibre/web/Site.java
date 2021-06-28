@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2021 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.botlibre.web.bean.BotBean;
  * You can configure settings here, or bootstrap through the botplatform.xml file.
  */
 public class Site {
-	public static String VERSION = "8.1.0-2020-07-09";
+	public static String VERSION = "8.7.2-2021-06-24";
 	
 	/*public static String URL_SUFFIX = "";
 	public static String URL_PREFIX = "";
@@ -42,14 +42,14 @@ public class Site {
 	public static boolean HTTPS = true;*/
 	
 	public static String URL_PREFIX = "/botlibreplatform";
-	public static String URL_SUFFIX = ":9080/botlibreplatform";
+	public static String URL_SUFFIX = ":8080/botlibreplatform";
 	public static String SERVER_NAME = "localhost";
 	public static String SERVER_NAME2 = "localhost";
-	public static String URL = "localhost:9080/botlibreplatform";
-	public static String URLLINK = "http://localhost:9080/botlibreplatform";
-	public static String SECUREURLLINK = "http://localhost:9080/botlibreplatform";
+	public static String URL = "localhost:8080/botlibreplatform";
+	public static String URLLINK = "http://localhost:8080/botlibreplatform";
+	public static String SECUREURLLINK = "http://localhost:8080/botlibreplatform";
 	public static String SANDBOX = "sandbox";
-	public static String SANDBOXURLLINK = "http://sandbox.localhost:9080/botlibreplatform";
+	public static String SANDBOXURLLINK = "http://sandbox.localhost:8080/botlibreplatform";
 	public static String REDIRECT = "";
 	public static boolean HTTPS = false;
 	
@@ -92,6 +92,8 @@ public class Site {
 	public static boolean ADULT = false;
 	// Allows disable of profanity filter for private content.
 	public static boolean ALLOW_ADULT = true;
+	// Requires all public content to be reviewed before visible to users.
+	public static boolean REVIEW_CONTENT = false;
 	// Default content rating.
 	public static ContentRating CONTENT_RATING = ContentRating.Teen;
 	public static String NAME = "Bot Libre Platform";
@@ -111,6 +113,7 @@ public class Site {
 	public static String PERSISTENCE_PORT = "5432";
 	// JPA persistence unit.
 	public static String PERSISTENCE_UNIT = "botlibreplatform";
+
 	// Twitter hash tag.
 	public static String HASHTAG = "botlibre";
 	// Default content type.
@@ -190,7 +193,10 @@ public class Site {
 	public static int MAX_UPLOAD_SIZE = 5000000; // 5meg
 	public static int MAX_LIVECHAT_MESSAGES = 1000000;
 	public static int MAX_ATTACHMENTS = 5000;
-	public static int MAX_TRANSLATIONS = 1000000;
+	public static int MAX_TRANSLATIONS = 2000000;
+	public static int MAX_TRANSLATION_API = 5000;
+	public static int MAX_SPEECH_API = 5000;
+	public static int MAX_CHAT_INVITE = 5;
 	public static int URL_TIMEOUT = 20000; // 20 seconds
 	
 	public static int MAX_API = 2500;
@@ -200,8 +206,11 @@ public class Site {
 	public static int MAX_BOT_CACHE_SIZE = 120;
 	public static int MAX_BOT_POOL_SIZE = 30;
 	public static int MAXTWEETIMPORT = 500;
+
+	/** Return a 404 error to the web agent string to block a specific web crawler. */
+	public static String BLOCK_AGENT = "";
 	
-	//Disable Telegram supergroups as they can DOS server with too many messages.
+	/** Disable Telegram supergroups as they can DOS server with too many messages. */
 	public static boolean DISABLE_SUPERGROUP = false;
 	
 	public static String TWITTER_OAUTHKEY = "";
@@ -225,10 +234,18 @@ public class Site {
 	
 	public static String YANDEX_KEY = "";
 	
+	public static String MICROSOFT_TRANSLATION_KEY = "";
+	public static String MICROSOFT_TRANSLATION_ENDPOINT = "https://eastus.api.cognitive.microsofttranslator.com/translate?api-version=3.0";
+	
 	public static String DATABASEPASSWORD = "password";
 	public static String OBFUSCATE_DATABASEPASSWORD = "";
 	
 	public static String DATABASEUSER = "postgres";
+	
+	public static String BRAINTREE_PUBLIC_KEY = "";
+	public static String BRAINTREE_PRIVATE_KEY = "";
+	public static String BRAINTREE_MERCHANT_ID = "";
+	
 
 	@SuppressWarnings("rawtypes")
 	public static BrowseBean defaultBean() {

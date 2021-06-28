@@ -110,7 +110,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/web.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/web.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("The web tab allows you to import data from websites and webservices such as Wiktionary, and WikiData.") %><br/>

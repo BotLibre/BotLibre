@@ -42,10 +42,12 @@ import org.botlibre.util.Utils;
 
 import org.botlibre.web.Site;
 import org.botlibre.web.admin.AdminDatabase;
+import org.botlibre.web.admin.BotInstance;
 import org.botlibre.web.admin.Flaggable;
 import org.botlibre.web.service.BingSpeech;
 import org.botlibre.web.service.BotStats;
 import org.botlibre.web.service.BotTranslationService;
+import org.botlibre.web.service.MaryVoice;
 import org.botlibre.web.service.QQSpeech;
 import org.botlibre.web.service.Stats;
 import org.botlibre.web.service.Voice;
@@ -367,7 +369,10 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 		this.response = response;
 	}
 	
-	public static String getSpeechFileName(String voice, String mod, String response) {
+	public static String getSpeechFileName(String voice, String mod, String response, String speechProvider) {
+		if (speechProvider == null || speechProvider.isEmpty()) {
+			speechProvider = BotInstance.MARY;
+		}
 		if (response == null) {
 			return null;
 		}
@@ -389,12 +394,18 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 			return null;
 		}
 		if (voice == null) {
-			voice = Voice.instance().getDefault();
+			voice = MaryVoice.DEFAULT;
 		}
 		if (mod != null) {
 			voice = voice + mod;
 		}
-		return "speech/" + voice + "/" + file;
+		String ext = ".wav";
+		if (speechProvider.equals(BotInstance.BINGSPEECH) || speechProvider.equals(BotInstance.QQSPEECH)) {
+			ext = ".mp3";
+		}
+		voice = voice.replace(" ", "");
+		voice = voice.replace(",", "");
+		return "speech/" + speechProvider + "/" + voice + "/" + file + ext;
 	}
 	
 	public String getResponseFileName() {
@@ -701,9 +712,20 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 		if (this.speak && this.loginBean.getBotBean().isConnected()) {
 			VoiceBean voiceBean = getLoginBean().getBean(VoiceBean.class);
 			if (getVoice() != null && getMod() != null && !getVoice().equals("") && !getMod().equals("")) {
-				this.responseFileName = speak(prepareSpeechText(getResponse()), getVoice(), getMod());
+				this.responseFileName = speak(prepareSpeechText(getResponse()), getVoice(), getMod(), BotInstance.MARY, null, null, null);
 			} else {
-				this.responseFileName = speak(prepareSpeechText(getResponse()), voiceBean.getVoice(), voiceBean.getVoiceMod());
+				String voice = voiceBean.getVoice();
+				if (voiceBean.getNativeVoiceProvider() != null && !voiceBean.getNativeVoiceProvider().equals(BotInstance.MARY)) {
+					voice = voiceBean.getNativeVoiceName();
+				}
+				this.responseFileName = speak(
+						prepareSpeechText(getResponse()),
+						voice,
+						voiceBean.getVoiceMod(),
+						voiceBean.getNativeVoiceProvider(),
+						voiceBean.getNativeVoiceApiKey(),
+						voiceBean.getNativeVoiceApiToken(),
+						voiceBean.getVoiceApiEndpoint());
 			}
 		}
 	}
@@ -760,7 +782,7 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 		return writer.toString();
 	}
 	
-	public static String speak(String text, String voice, String mod) {
+	public static String speak(String text, String voice, String mod, String speechProvider, String apiKey, String apiToken, String apiEndpoint) {
 		if (text == null) {
 			return null;
 		}
@@ -769,17 +791,18 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 			voice = voice.trim();
 		}
 		String path = LoginBean.outputFilePath;
-		String filePath = getSpeechFileName(voice, mod, text);
+		Voice providerVoice = Voice.instance(speechProvider);
+		String filePath = getSpeechFileName(voice, mod, text, speechProvider);
 		if (filePath == null) {
 			return null;
 		}
 		File file = new File(path + "/" + filePath);
 		if (!file.exists()) {
-			if (!Voice.instance().speak(voice, mod, text, path + "/" + filePath)) {
+			if (!providerVoice.speak(voice, mod, text, path + "/" + filePath, apiKey, apiToken, apiEndpoint)) {
 				return null;
 			}
 		}
-		return filePath + ".wav";
+		return filePath;
 	}
 	
 	public static String speakQQ(String text, String voice, String apiKey, String appId) {
@@ -791,17 +814,17 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 			voice = voice.trim();
 		}
 	    String path = LoginBean.outputFilePath;
-	    String filePath = getSpeechFileName(voice, "QQ", text);
+	    String filePath = getSpeechFileName(voice, null, text, BotInstance.QQSPEECH);
 	    if (filePath == null) {
 	    	return null;
 	    }
-	    File file = new File(path + "/" + filePath + ".mp3");
-        if (!file.exists()) {       
+	    File file = new File(path + "/" + filePath);
+        if (!file.exists()) {
         	if (!QQSpeech.speak(voice, text, path + "/" + filePath, apiKey, appId)) {
         		return null;
         	}
         }
-        return filePath + ".mp3";
+        return filePath;
 	}
 	
 	public static String speakBing(String text, String voice, String apiKey, String token, String apiEndpoint) {
@@ -813,17 +836,17 @@ public class ChatBean extends ServletBean implements ExceptionEventListener {
 			voice = voice.trim();
 		}
 	    String path = LoginBean.outputFilePath;
-	    String filePath = getSpeechFileName(voice, "Bing", text);
+	    String filePath = getSpeechFileName(voice, null, text, BotInstance.BINGSPEECH);
 	    if (filePath == null) {
 	    	return null;
 	    }
-	    File file = new File(path + "/" + filePath + ".mp3");
-        if (!file.exists()) {       
+	    File file = new File(path + "/" + filePath);
+        if (!file.exists()) {
         	if (!BingSpeech.speak(voice, text, path + "/" + filePath, apiKey, token, apiEndpoint, false)) {
         		return null;
         	}
         }
-        return filePath + ".mp3";
+        return filePath;
 	}
 
 	public synchronized void processInfo(String info) {

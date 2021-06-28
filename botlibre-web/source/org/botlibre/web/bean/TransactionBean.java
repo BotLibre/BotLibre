@@ -242,7 +242,7 @@ public class TransactionBean extends ServletBean {
 		writer.write("<br/>");
 		writer.write("<table id='user' class='tablesorter'>\n");
 		writer.write("<thead>\n");
-		writer.write("<tr><th>User</th><th>Type</th><th>Status</th><th>UserType</th><th>PaypalTx</th><th>PaymentDate</th><th>PaypalAmt</th>");
+		writer.write("<tr><th>User</th><th>Type</th><th>Status</th><th>UserType</th><th>Duration</th><th>Subscription</th><th>PaypalTx</th><th>PaymentDate</th><th>PaypalAmt</th>");
 		writer.write("<th>PaypalCc</th><th>PaypalSt</th><th>Token</th><th>Id</th><th>BitCoinJSON</th></tr>\n");
 		writer.write("</thead>\n");
 		writer.write("<tbody>\n");
@@ -258,6 +258,10 @@ public class TransactionBean extends ServletBean {
 			writer.write(String.valueOf(payment.getStatus()));
 			writer.write("</td><td>");
 			writer.write(String.valueOf(payment.getUserType()));
+			writer.write("</td><td>");
+			writer.write(String.valueOf(payment.getPaymentDuration()));
+			writer.write("</td><td>");
+			writer.write(String.valueOf(payment.isSubscription()));
 			writer.write("</td><td>");
 			writer.write(String.valueOf(payment.getPaypalTx()));
 			writer.write("</td><td>");
@@ -297,8 +301,8 @@ public class TransactionBean extends ServletBean {
 		writer.write("<br/>");
 		writer.write("<table id='user' class='tablesorter'>\n");
 		writer.write("<thead>\n");
-		writer.write("<tr><th>User</th><th>AccountType</th><th>Status</th><th>PaypalTx</th><th>PaymentDate</th><th>PaymentDuration</th><th>PaypalAmt</th>");
-		writer.write("<th>PaypalCc</th><th>PaypalSt</th><th>Token</th><th>Domain</th></tr>\n");
+		writer.write("<tr><th>User</th><th>AccountType</th><th>Status</th><th>Duration</th><th>Subscription</th><th>PaypalTx</th><th>PaymentDate</th><th>PaypalAmt</th>");
+		writer.write("<th>PaypalCc</th><th>PaypalSt</th><th>Token</th><th>ID</th><th>Domain</th></tr>\n");
 		writer.write("</thead>\n");
 		writer.write("<tbody>\n");
 		for (Payment payment : instances) {
@@ -312,11 +316,13 @@ public class TransactionBean extends ServletBean {
 			writer.write("</td><td>");
 			writer.write(String.valueOf(payment.getStatus()));
 			writer.write("</td><td>");
+			writer.write(String.valueOf(payment.getPaymentDuration()));
+			writer.write("</td><td>");
+			writer.write(String.valueOf(payment.isSubscription()));
+			writer.write("</td><td>");
 			writer.write(String.valueOf(payment.getPaypalTx()));
 			writer.write("</td><td>");
 			writer.write(String.valueOf(payment.getPaymentDate()));
-			writer.write("</td><td>");
-			writer.write(String.valueOf(payment.getPaymentDuration()));
 			writer.write("</td><td>");
 			writer.write(String.valueOf(payment.getPaypalAmt()));
 			writer.write("</td><td>");
@@ -388,6 +394,7 @@ public class TransactionBean extends ServletBean {
 		newWriter.write("<option value='' " + getUserPaymentStatusCheckedString(null) + "></option>\n");
 		newWriter.write("<option value='Complete' " + getUserPaymentStatusCheckedString(UserPaymentStatus.Complete) + ">Complete</option>\n");
 		newWriter.write("<option value='WaitingForPayment' " + getUserPaymentStatusCheckedString(UserPaymentStatus.WaitingForPayment) + ">WaitingForPayment</option>\n");
+		newWriter.write("<option value='Rejected' " + getUserPaymentStatusCheckedString(UserPaymentStatus.Rejected) + ">Rejected</option>\n");
 		newWriter.write("</select>\n");
 		newWriter.write("</div>\n");
 
@@ -473,6 +480,7 @@ public class TransactionBean extends ServletBean {
 		newWriter.write("<option value='' " + getPaymentStatusCheckedString(null) + "></option>\n");
 		newWriter.write("<option value='Complete' " + getPaymentStatusCheckedString(PaymentStatus.Complete) + ">Complete</option>\n");
 		newWriter.write("<option value='WaitingForPayment' " + getPaymentStatusCheckedString(PaymentStatus.WaitingForPayment) + ">WaitingForPayment</option>\n");
+		newWriter.write("<option value='Rejected' " + getPaymentStatusCheckedString(PaymentStatus.Rejected) + ">Rejected</option>\n");
 		newWriter.write("</select>\n");
 		newWriter.write("</div>\n");
 

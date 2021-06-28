@@ -260,6 +260,40 @@
 						</td>
 					</tr>
 					<tr>
+					<td>
+						<span class="dropt-banner">
+							<img id="help-mini" src="images/help.svg">
+							<div>
+								<p class="help">
+									<%= loginBean.translate("Display the bot's avatar in the chat.") %>
+								</p>
+							</div>
+						</span>
+						<%= loginBean.translate("Show Avatar") %>
+					</td>
+					<td>
+						<input name="avatar" type="checkbox" title="<%= loginBean.translate("Choose if the bot's avatar should be displayed") %>"
+							<% if (bean.getAvatar()) { %>checked<% } %>><br/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="dropt-banner">
+							<img id="help-mini" src="images/help.svg">
+							<div>
+								<p class="help">
+									<%= loginBean.translate("Display the chat log (or chat log toggle button) in the chat.") %>
+								</p>
+							</div>
+						</span>
+						<%= loginBean.translate("Show Chat Log") %>
+					</td>
+					<td>
+						<input name="chatlog" type="checkbox" title="<%= loginBean.translate("Show chat log") %>"
+							<% if (bean.getShowChatLog()) { %>checked<% } %>><br/>
+					</td>
+				</tr>
+					<tr>
 						<td>
 							<span class="dropt-banner">
 								<img id="help-mini" src="images/help.svg">
@@ -428,16 +462,6 @@
 					</span>			
 					<%= loginBean.translate("Prompt") %><br/>
 					<input type="text" name="prompt" value="<%= Utils.escapeHTML(bean.getPrompt()) %>" title="<%= loginBean.translate("Set chat input text prompt") %> (default is 'You say')" /><br/>
-					<span class="dropt-banner">
-						<img id="help-mini" src="images/help.svg">
-						<div>
-							<p class="help">
-								<%= loginBean.translate("Display the chat log") %>
-							</p>
-						</div>
-					</span>
-					<input name="chatlog" type="checkbox" title="<%= loginBean.translate("Display the chat log") %>"
-						<% if (bean.getChatLog()) { %>checked<% } %>><%= loginBean.translate("Chat Log") %></input><br/>
 					<span class="dropt-banner">
 						<img id="help-mini" src="images/help.svg">
 						<div>

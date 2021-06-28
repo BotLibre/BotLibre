@@ -251,7 +251,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/knowledge.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/knowledge.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Browse your bot's knowledge database.") %><br/>
@@ -451,6 +451,7 @@
 											<th><%= loginBean.translate("Type") %></th>
 											<th><%= loginBean.translate("Target") %></th>
 											<th><%= loginBean.translate("Meta") %></th>
+											<th><%= loginBean.translate("Pinned") %></th>
 											<th><%= loginBean.translate("Correctness") %></th>
 											<th><%= loginBean.translate("Access count") %></th>
 											<th><%= loginBean.translate("Access date") %></th>
@@ -482,6 +483,7 @@
 													</input>
 												<% } %>
 												</td>
+												<td><%= relationship.isPinned() %></td>
 												<td><%= relationship.getCorrectness() %></td>
 												<td><%= relationship.getAccessCount() %></td>
 												<td><%= Utils.printDate(relationship.getAccessDate()) %></td>

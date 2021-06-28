@@ -178,13 +178,13 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 	public List<Avatar> getAllInstances(Domain domain) {
 		try {
 			List<Avatar> results = AdminDatabase.instance().getAllAvatars(this.page, this.pageSize, this.categoryFilter, this.nameFilter, 
-					this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+					this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllAvatarsCount(this.categoryFilter, this.nameFilter, this.userFilter, 
-							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 				}
 			}
 			return results;
@@ -197,9 +197,9 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 	public List<Avatar> getAllLinkableInstances() {
 		try {
 			List<Avatar> privateAvatars = AdminDatabase.instance().getAllAvatars(0, 50, "", "", null, InstanceFilter.Personal, 
-					InstanceRestrict.None, InstanceSort.MonthlyConnects, ContentRating.Adult, "", getUser(), getDomain(), true);
+					InstanceRestrict.None, InstanceSort.MonthlyConnects, ContentRating.Adult, "", "", "", getUser(), getDomain(), true);
 			List<Avatar> publicAvatars = AdminDatabase.instance().getAllAvatars(
-					0, 50, "", "", null, InstanceFilter.Public, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", getUser(), getDomain(), true);
+					0, 50, "", "", null, InstanceFilter.Public, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", getUser(), getDomain(), true);
 			List<Avatar> results = new ArrayList<Avatar>(privateAvatars);
 			results.addAll(publicAvatars);
 			return results;
@@ -212,7 +212,7 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 	public List<Avatar> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllAvatars(
-					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain(), false);
+					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain(), false);
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<Avatar>();
@@ -283,6 +283,7 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 			}
 			
 			OutputStream out = response.getOutputStream();
+			zip.finish();
 			zip.flush();
 			byte[] bytes = stream.toByteArray();
 			out.write(bytes, 0, bytes.length);
@@ -1057,6 +1058,8 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 			}
 			writer.write("sdk.connect(user, function() {\n");
 		}
+
+		writer.write("web.version = 8.5;\n");
 		writer.write("web.connection = sdk;\n");
 		writer.write("web.avatar = \"" + getInstanceId() + "\";\n");
 		writer.write("web.voice = \"" + getEmbedVoice() + "\";\n");
@@ -1183,7 +1186,7 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 	}
 	
 	public String getEmbedNativeVoiceApiKey() {
-		if(instance != null) {
+		if (instance != null) {
 			return instance.getNativeVoiceApiKey();
 		}
 		else return "";
@@ -1194,7 +1197,7 @@ public class AvatarBean extends WebMediumBean<Avatar> {
 	}
 	
 	public String getEmbedVoiceApiEndpoint() {
-		if(instance != null) {
+		if (instance != null) {
 			return instance.getVoiceApiEndpoint();
 		}
 		else return "https://eastus.api.cognitive.microsoft.com/sts/v1.0/issueToken";

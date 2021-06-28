@@ -59,7 +59,7 @@
 				</form>
 			<% } %>
 			<% if (!Site.DEDICATED) { %>
-				<a href="http://botlibre.blogspot.com/" target="_blank"><%= loginBean.translate("Visit Blog") %></a>
+				<a href="https://botlibre.blogspot.com/" target="_blank"><%= loginBean.translate("Visit Blog") %></a>
 				<a href="search.jsp"><%= loginBean.translate("Search Website") %></a>
 			<% } %>
 			<a href="login?language=language"><%= loginBean.translate("Choose Language") %></a>

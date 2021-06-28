@@ -34,38 +34,38 @@ public class AdminService extends Service {
 
 	public void startChecking() {
 		setEnabled(true);
-	    this.checker = new Thread() {
-	    	@Override
-	    	public void run() {
+		this.checker = new Thread() {
+			@Override
+			public void run() {
 				try {
-	    			while (isEnabled()) {
-	    				Calendar calendar = Calendar.getInstance();
-	    				if (calendar.get(Calendar.HOUR_OF_DAY) == 1) {
-		    				long start = System.currentTimeMillis();
-		    				try {
-		    	    			AdminDatabase.instance().log(Level.INFO, "Checking admin");
-		    	    			AdminDatabase.instance().checkDailyReset();
-		    				} catch (Throwable exception) {
-		    	    			AdminDatabase.instance().log(Level.INFO, "Admin exception");
-		    					AdminDatabase.instance().log(exception);
-		    				}
-		    				long time = (System.currentTimeMillis() - start) / 1000;
-			    			AdminDatabase.instance().log(Level.INFO, "Done checking admin", time);
-	    				}
-	    	    		Utils.sleep(SLEEP);
-	    	    		if (checker != this) {
-	    	    			break;
-	    	    		}
-	    			}
+					while (isEnabled()) {
+						Calendar calendar = Calendar.getInstance();
+						if (calendar.get(Calendar.HOUR_OF_DAY) == 1) {
+							long start = System.currentTimeMillis();
+							try {
+								AdminDatabase.instance().log(Level.INFO, "Checking admin");
+								AdminDatabase.instance().checkDailyReset();
+							} catch (Throwable exception) {
+								AdminDatabase.instance().log(Level.INFO, "Admin exception");
+								AdminDatabase.instance().log(exception);
+							}
+							long time = (System.currentTimeMillis() - start) / 1000;
+							AdminDatabase.instance().log(Level.INFO, "Done checking admin", time);
+						}
+						Utils.sleep(SLEEP);
+						if (checker != this) {
+							break;
+						}
+					}
 				} catch (Throwable exception) {
-	    			AdminDatabase.instance().log(Level.SEVERE, "Admin checker failure");  
+					AdminDatabase.instance().log(Level.SEVERE, "Admin checker failure");  
 					AdminDatabase.instance().log(exception);
 				}
-    			AdminDatabase.instance().log(Level.INFO, "Admin checker stopped");   		
-	    	}
-	    };
-	    AdminDatabase.instance().log(Level.INFO, "Admin checker running");
-	    this.checker.start();
+				AdminDatabase.instance().log(Level.INFO, "Admin checker stopped");
+			}
+		};
+		AdminDatabase.instance().log(Level.INFO, "Admin checker running");
+		this.checker.start();
 	}
 
 	public static AdminService instance() {

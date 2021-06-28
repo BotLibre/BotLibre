@@ -30,7 +30,7 @@
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
 				<% if (bean.getCategory() == null) { %>
-					<h1><img src="images/bot.png" class="admin-banner-pic" style="vertical-align:middle"><%= loginBean.translate(" Bots") %></h1>
+					<h1><img src="images/bot.png" class="admin-banner-pic"><%= loginBean.translate(" Bots") %></h1>
 					<% if (domainBean.hasValidInstance()) { %>
 						<p><%= loginBean.translate("Create a bot for the web, mobile, or social media.") %></p>
 					<% } else { %>

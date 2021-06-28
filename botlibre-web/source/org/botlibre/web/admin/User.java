@@ -63,6 +63,9 @@ public class User implements Cloneable {
 	protected Long applicationId;
 	protected String hint = "";
 	protected String name = "";
+	protected String gender = "";
+	@Column(length=1024)
+	protected String properties = "";
 	protected String ip = "";
 	protected String source = "";
 	protected String affiliate = "";
@@ -76,6 +79,7 @@ public class User implements Cloneable {
 	protected boolean emailNotices = true;
 	protected boolean emailMessages = true;
 	protected boolean emailSummary = true;
+	protected boolean isSubscribed;
 	protected String website = "";
 	@Column(length=1024)
 	protected String bio = "";
@@ -117,8 +121,11 @@ public class User implements Cloneable {
 	protected int issueTrackers;
 	protected int issues;
 	protected int affiliates;
+	protected int friends;
+	protected int followers;
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date upgradeDate;
+	protected int upgradeDuration = 12;
 	@ManyToMany
 	@JoinTable(name = "USER_PAYMENTS")
 	protected List<UserPayment> payments = new ArrayList<UserPayment>();
@@ -137,11 +144,31 @@ public class User implements Cloneable {
 	protected String speechRate;
 	protected String pitch;
 	protected Avatar instanceAvatar;
+	protected boolean active = true;
 	
 	@ManyToMany
 	@JoinTable(name = "USER_TAGS")
 	protected List<Tag> tags = new ArrayList<Tag>();
 
+	public enum UserType {Basic, Bronze, Gold, Platinum, Diamond, Partner, Admin, Avatar }
+
+	public enum UserAccess {Private, Friends, Everyone}
+	
+	public enum CredentialsType {Facebook, Google, Apple}
+	
+	public User() { }
+
+	public User(String userId, String password) {
+		this.userId = userId;
+		this.password = password;
+		this.lastConnected = new Date();
+		this.connects = 0;
+	}
+	
+	public User(String userId) {
+		this.userId = userId;
+	}
+	
 	public void setLanguage(String language) {
 		this.language = language;
 	}
@@ -152,6 +179,29 @@ public class User implements Cloneable {
 		}
 		return language;
 	}
+	
+	public String getGender() {
+		if (gender == null) {
+			return "";
+		}
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getProperties() {
+		if (gender == null) {
+			return "";
+		}
+		return properties;
+	}
+
+	public void setProperties(String properties) {
+		this.properties = properties;
+	}
+	
 	public String getVoice() {
 		return voice;
 	}
@@ -251,21 +301,6 @@ public class User implements Cloneable {
 	public void setInstanceAvatar(Avatar instanceAvatar) {
 		this.instanceAvatar = instanceAvatar;
 	}
-
-	public enum UserType {Basic, Bronze, Gold, Platinum, Diamond, Partner, Admin }
-
-	public enum UserAccess {Private, Friends, Everyone}
-	
-	public enum CredentialsType {Facebook, Google}
-	
-	public User() { }
-
-	public User(String userId, String password) {
-		this.userId = userId;
-		this.password = password;
-		this.lastConnected = new Date();
-		this.connects = 0;
-	}
 	
 	public Date getDateOfBirth() {
 		return dateOfBirth;
@@ -284,6 +319,14 @@ public class User implements Cloneable {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+	
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public UserAccess getAccess() {
@@ -326,7 +369,7 @@ public class User implements Cloneable {
 		}
 		Calendar date = Calendar.getInstance();
 		date.setTime(this.upgradeDate);
-		date.add(Calendar.YEAR, 1);
+		date.add(Calendar.MONTH, getUpgradeDuration());
 		return date.getTime();
 	}
 
@@ -337,7 +380,7 @@ public class User implements Cloneable {
 		if (this.upgradeDate == null) {
 			long time = 0;
 			for (UserPayment payment : getPayments()) {
-				if (payment.paymentDate != null && payment.paymentDate.getTime() > time) {
+				if (payment.paymentDate != null && payment.paymentDate.getTime() > time && !payment.userType.equals(UserType.Avatar)) {
 					time = payment.paymentDate.getTime();
 				}
 			}
@@ -348,12 +391,23 @@ public class User implements Cloneable {
 		}
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(this.upgradeDate);
-		calendar.add(Calendar.YEAR, 1);
+		calendar.add(Calendar.MONTH, getUpgradeDuration());
 		return new Date().getTime() > calendar.getTime().getTime();
 	}
 
 	public void setUpgradeDate(Date upgradeDate) {
 		this.upgradeDate = upgradeDate;
+	}
+
+	public int getUpgradeDuration() {
+		if (upgradeDuration == 0) {
+			return 12;
+		}
+		return upgradeDuration;
+	}
+
+	public void setUpgradeDuration(int upgradeDuration) {
+		this.upgradeDuration = upgradeDuration;
 	}
 
 	public boolean isAdCodeVerified() {
@@ -414,22 +468,22 @@ public class User implements Cloneable {
 	}
 
 	public String getUserHTML(String text) {
-		if (this.type == UserType.Bronze) {
+		UserType type = getType();
+		if (type == UserType.Bronze) {
 			return "<span class='bronze-user'>" + text + "</span>";
-		} else if (this.type == UserType.Gold) {
+		} else if (type == UserType.Gold) {
 			return "<span class='gold-user'>" + text + "</span>";
-		} else if (this.type == UserType.Platinum) {
+		} else if (type == UserType.Platinum) {
 			return "<span class='platinum-user'>" + text + "</span>";
-		} else if (this.type == UserType.Diamond) {
+		} else if (type == UserType.Diamond) {
 			return "<span class='diamond-user'>" + text + "</span>";
 		} else if (this.type == UserType.Partner) {
 			return "<span class='partner-user'>" + text + "</span>";
 		} else if (this.type == UserType.Admin) {
 			return "<span class='admin-user'>" + text + "</span>";
-		} else if (this.type == UserType.Basic) {
+		} else {
 			return "<span class='basic-user'>" + text + "</span>";
 		}
-		return text;
 	}
 
 	public int getContentLimit() {
@@ -439,24 +493,21 @@ public class User implements Cloneable {
 		if (Site.COMMERCIAL) {
 			return Site.CONTENT_LIMIT;
 		}
-		if (this.type == UserType.Bronze) {
+		UserType type = getType();
+		if (type == UserType.Bronze) {
 			return 20;
-		} else if (this.type == UserType.Gold) {
+		} else if (type == UserType.Gold) {
 			return 50;
-		} else if (this.type == UserType.Platinum) {
+		} else if (type == UserType.Platinum) {
 			return 100;
-		} else if (this.type == UserType.Diamond) {
+		} else if (type == UserType.Diamond) {
 			return 200;
 		}
 		return 10;
 	}
 	
-	public User(String userId) {
-		this.userId = userId;
-	}
-	
 	public UserType getType() {
-		if (this.type == null) {
+		if (this.type == null || isExpired()) {
 			return UserType.Basic;
 		}
 		return type;
@@ -504,7 +555,15 @@ public class User implements Cloneable {
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+	
+	public boolean isSubscribed() {
+		return isSubscribed;
+	}
 
+	public void setSubscribed(boolean isSubscribed) {
+		this.isSubscribed = isSubscribed;
+	}
+	
 	public boolean getEmailNotices() {
 		return emailNotices;
 	}
@@ -554,27 +613,27 @@ public class User implements Cloneable {
 	}
 
 	public boolean isVerified() {
-		return isVerified;
+		return isVerified && active;
 	}
 
 	public boolean isBasic() {
-		return this.type == UserType.Basic;
+		return getType() == UserType.Basic;
 	}
 
 	public boolean isBronze() {
-		return this.type == UserType.Bronze;
+		return getType() == UserType.Bronze;
 	}
 
 	public boolean isGold() {
-		return this.type == UserType.Gold;
+		return getType() == UserType.Gold;
 	}
 
 	public boolean isPlatinum() {
-		return this.type == UserType.Platinum;
+		return getType() == UserType.Platinum;
 	}
 
 	public boolean isDiamond() {
-		return this.type == UserType.Diamond;
+		return getType() == UserType.Diamond;
 	}
 
 	public void setVerified(boolean isVerified) {
@@ -802,11 +861,11 @@ public class User implements Cloneable {
 	}
 	
 	public boolean isAdminUser() {
-		return type == UserType.Admin || this.superUser;
+		return this.type == UserType.Admin || this.superUser;
 	}
 	
 	public boolean isPartnerUser() {
-		return type == UserType.Partner;
+		return this.type == UserType.Partner;
 	}
 
 	public void setSuperUser(boolean superUser) {
@@ -879,7 +938,7 @@ public class User implements Cloneable {
 		return shouldDisplayName;
 	}
 
-	public void setShoulsDisplayName(boolean displayName) {
+	public void setShouldDisplayName(boolean displayName) {
 		this.shouldDisplayName = displayName;
 	}
 
@@ -981,7 +1040,26 @@ public class User implements Cloneable {
 	public User detach() {
 		User user = new User(this.userId);
 		user.type = this.type;
+		if (this.shouldDisplayName) {
+			user.name = this.name;
+		}
 		return user;
+	}
+	
+	public int getFriends() {
+		return friends;
+	}
+
+	public void setFriends(int friends) {
+		this.friends = friends;
+	}
+
+	public int getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(int followers) {
+		this.followers = followers;
 	}
 
 	public int getAffiliates() {

@@ -18,6 +18,7 @@
 package org.botlibre.web.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.servlet.ServletException;
@@ -29,10 +30,12 @@ import org.botlibre.BotException;
 import org.botlibre.util.Utils;
 
 import org.botlibre.web.admin.AdminDatabase;
+import org.botlibre.web.admin.User;
+import org.botlibre.web.admin.UserPayment;
 import org.botlibre.web.admin.User.UserType;
-import org.botlibre.web.admin.UserPayment.UserPaymentType;
 import org.botlibre.web.bean.LoginBean;
 import org.botlibre.web.bean.SessionProxyBean;
+import org.botlibre.web.service.PageStats;
 import org.botlibre.web.service.Stats;
 import org.botlibre.web.service.TranslationService;
 
@@ -40,10 +43,18 @@ import org.botlibre.web.service.TranslationService;
 @SuppressWarnings("serial")
 public class LoginServlet extends BeanServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		// TODO: Temp fix to prevent crawler dos attack.
+		if (request.getParameter("proxy") != null) {
+			PageStats.page(request);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
 		doPost(request, response);
 	}
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		LoginBean bean = getLoginBean(request, response);
@@ -188,45 +199,35 @@ public class LoginServlet extends BeanServlet {
 			String upgradePlatinum = (String)request.getParameter("upgradePlatinum");
 			String upgradeDiamond = (String)request.getParameter("upgradeDiamond");
 			if (upgradeBronze != null) {
-				bean.beginPayment(UserType.Bronze, UserPaymentType.PayPal, "", "", "", "");
+				bean.setPayment(new UserPayment());
+				bean.getPayment().setUserType(UserType.Bronze);
+				bean.getPayment().setPaymentDuration(1);
+				bean.getPayment().updateCost();
 				response.sendRedirect("upgrade-payment.jsp");
 				return;
 			} else if (upgradeGold != null) {
-				bean.beginPayment(UserType.Gold, UserPaymentType.PayPal, "", "", "", "");
+				bean.setPayment(new UserPayment());
+				bean.getPayment().setUserType(UserType.Gold);
+				bean.getPayment().setPaymentDuration(1);
+				bean.getPayment().updateCost();
 				response.sendRedirect("upgrade-payment.jsp");
 				return;
 			} else if (upgradePlatinum != null) {
-				bean.beginPayment(UserType.Platinum, UserPaymentType.PayPal, "", "", "", "");
+				bean.setPayment(new UserPayment());
+				bean.getPayment().setUserType(UserType.Platinum);
+				bean.getPayment().setPaymentDuration(1);
+				bean.getPayment().updateCost();
 				response.sendRedirect("upgrade-payment.jsp");
 				return;
 			} else if (upgradeDiamond != null) {
-				bean.beginPayment(UserType.Diamond, UserPaymentType.PayPal, "", "", "", "");
+				bean.setPayment(new UserPayment());
+				bean.getPayment().setUserType(UserType.Diamond);
+				bean.getPayment().setPaymentDuration(1);
+				bean.getPayment().updateCost();
 				response.sendRedirect("upgrade-payment.jsp");
 				return;
 			}
-			
-			String checkPayment = (String)request.getParameter("checkPayment");
-			if (checkPayment != null) {
-				if (bean.checkPayment()) {
-					response.sendRedirect("upgrade-confirm.jsp");
-				} else {
-					response.sendRedirect("upgrade-payment.jsp");
-				}
-				return;
-			}
-			
-			String tx = Utils.sanitize((String)request.getParameter("tx"));
-			String amt = Utils.sanitize((String)request.getParameter("amt"));
-			String st = Utils.sanitize((String)request.getParameter("st"));
-			String cc = Utils.sanitize((String)request.getParameter("cc"));
-			String custom = Utils.sanitize((String)request.getParameter("cm"));
-			
-			if (tx != null) {
-				bean.confirmPayment(tx, amt, st, cc, custom);
-				response.sendRedirect("upgrade-confirm.jsp");
-				return;
-			}
-			
+
 			String user = (String)request.getParameter("user");
 			String password = (String)request.getParameter("password");
 			String password2 = (String)request.getParameter("password2");
@@ -300,7 +301,14 @@ public class LoginServlet extends BeanServlet {
 			}
 			String resetUser = (String)request.getParameter("reset-password");
 			if (resetUser != null) {
-				bean.resetPassword(user.trim(), email.trim());
+				try {
+					List<User> users = AdminDatabase.instance().findUserByEmail(email.trim());
+					for (User usr : users) {
+						bean.resetPassword(usr.getUserId().trim(), email.trim());
+					}
+				} catch (Exception e) {
+					bean.error(e);
+				}
 				request.getRequestDispatcher("reset-password.jsp").forward(request, response);
 				return;
 			}
@@ -397,11 +405,11 @@ public class LoginServlet extends BeanServlet {
 				bean.verifyPostToken(postToken);
 				String token = (String)request.getParameter("token");
 				if (token == null || !token.equals(String.valueOf(bean.hashCode()))) {
-					AdminDatabase.instance().log(Level.WARNING, "spam", request.getRemoteAddr());
+					AdminDatabase.instance().log(Level.WARNING, "spam", BeanServlet.extractIP(request));
 					response.sendRedirect("banned.html");
 					return;
 				}
-				if (bean.createUserMessage(target, subject, message, request.getRemoteAddr()) != null) {
+				if (bean.createUserMessage(target, subject, message, BeanServlet.extractIP(request)) != null) {
 					request.getRequestDispatcher("browse-user-message.jsp").forward(request, response);
 				} else {
 					request.getRequestDispatcher("create-user-message.jsp").forward(request, response);
@@ -568,22 +576,24 @@ public class LoginServlet extends BeanServlet {
 			
 			if (createUser != null) {
 				bean.verifyPostToken(postToken);
-				String ip = request.getRemoteAddr();
+				String ip = BeanServlet.extractIP(request);
 				AdminDatabase.instance().log(Level.INFO, "create user", ip);
-				if (AdminDatabase.bannedIPs.containsKey(request.getRemoteAddr())) {
+				if (AdminDatabase.bannedIPs.containsKey(BeanServlet.extractIP(request))) {
 					AdminDatabase.instance().log(Level.WARNING, "banned", ip);
 					response.sendRedirect("banned.html");
 					return;
 				}
 				String token = (String)request.getParameter("token");
 				if (token == null || !token.equals(String.valueOf(bean.hashCode()))) {
-					AdminDatabase.instance().log(Level.WARNING, "banned", request.getRemoteAddr());
+					AdminDatabase.instance().log(Level.WARNING, "banned", BeanServlet.extractIP(request));
 					response.sendRedirect("banned.html");
 					return;
 				}
 				String terms = (String)request.getParameter("terms");
-				if (!bean.createUser(user, password, password2, dateOfBirth, hint, name, ip, "web", "", userAccess, email, website, bio, "on".equals(displayName), "on".equals(over18),
-							credentialsType, credentialsUserID, credentialsToken, "on".equals(terms))) {
+				if (!bean.createUser(user, password, password2, dateOfBirth, hint, name, "", "", ip, "web", "", userAccess, email, website, bio, "on".equals(displayName), "on".equals(over18),
+							credentialsType, credentialsUserID, credentialsToken,
+							null, null, null,
+							"on".equals(terms))) {
 					request.getRequestDispatcher("create-user.jsp").forward(request, response);
 				} else {
 					request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -604,11 +614,20 @@ public class LoginServlet extends BeanServlet {
 			String emailMessages = (String)request.getParameter("email-messages");
 			String emailSummary = (String)request.getParameter("email-summary");
 			String type = (String)request.getParameter("type");
+			String plan = (String)request.getParameter("plan");
 			String verifiedPayment = (String)request.getParameter("verifiedPayment");
+			Boolean isSubscribed = null;
+			if (plan != null) {
+				if (!plan.equals("onetime")) {
+					isSubscribed = true;
+				} else {
+					isSubscribed = false;
+				}
+			}
 			if (saveUser != null) {
 				bean.verifyPostToken(postToken);
-				if (!bean.updateUser(oldPassword, newPassword, newPassword2, hint, name, userAccess, userTags, email, "web", "on".equals(emailNotices), "on".equals(emailMessages), "on".equals(emailSummary),
-							website, bio, "on".equals(displayName), "on".equals(over18), adCode, "on".equals(verifiedPayment), type)) {
+				if (!bean.updateUser(oldPassword, newPassword, newPassword2, hint, name, null, null, userAccess, userTags, email, "web", "on".equals(emailNotices), "on".equals(emailMessages), "on".equals(emailSummary),
+							website, bio, "on".equals(displayName), "on".equals(over18), adCode, "on".equals(verifiedPayment), type, isSubscribed)) {
 					request.getRequestDispatcher("edit-user.jsp").forward(request, response);
 				} else {
 					response.sendRedirect("login?view-user=" + bean.getViewUser().getUserId() + proxy.proxyString());
@@ -656,7 +675,7 @@ public class LoginServlet extends BeanServlet {
 				if (bean.isLoggedIn()) {
 					bean.setAgeConfirmed(true);
 					if (bean.getUser().getIP() == null) {
-						bean.updateIP(request.getRemoteAddr());
+						bean.updateIP(BeanServlet.extractIP(request));
 					}
 				}
 				request.getRequestDispatcher("login.jsp").forward(request, response);

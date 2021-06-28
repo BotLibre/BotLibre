@@ -421,50 +421,6 @@ public class EmbedTabBean extends EmbedWebMediumBean {
 		}
 		StringWriter writer = new StringWriter();
 		
-		if (this.css.equals("chatlog")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/chatlog.css' type='text/css'>\n");
-		} else if (this.css.equals("social_chat")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/social_chat.css' type='text/css'>\n");
-		} else if (this.css.equals("chatroom")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/chatroom.css' type='text/css'>\n");
-		} else if (this.css.equals("blue_chat")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_chat.css' type='text/css'>\n");
-		} else if (this.css.equals("pink_chat")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/pink_chat.css' type='text/css'>\n");
-		} else if (this.css.equals("custom_chat")) {
-			if (this.customCss != "" && this.customCss.startsWith("http") || this.customCss.startsWith("https")) {
-				writer.write("<link rel='stylesheet' href='" + this.customCss + "' type='text/css'>\n");
-			}
-		} else {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/chatlog.css' type='text/css'>\n");
-		}
-		
-		if (this.buttoncss.equals("blue_round_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_round_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("red_round_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/red_round_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("green_round_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/green_round_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("blue_bot_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_bot_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("red_bot_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/red_bot_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("green_bot_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/green_bot_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("purple_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/purple_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("red_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/red_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("green_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/green_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("square_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/square_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("round_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/round_chat_button.css' type='text/css'>\n");
-		} else {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_round_button.css' type='text/css'>\n");
-		}
-		
 		if (type.equals("link")) {
 			writer.write("<script>\n");
 			writer.write("function popupwindow(url, title, w, h) {\n");
@@ -511,10 +467,6 @@ public class EmbedTabBean extends EmbedWebMediumBean {
 			if (isLoggedIn() && getUser().getApplicationId() == null) {
 				getLoginBean().setUser(AdminDatabase.instance().resetAppId(getUser().getUserId()));
 			}
-			writer.write("<style>\n");
-			writer.write("// You can customize the css styles here\n");
-			writer.write("#" + Site.PREFIX + "box {} #" + Site.PREFIX + "boxbar {} #" + Site.PREFIX + "boxbarmax {} #" + Site.PREFIX + "boxmin {} #" + Site.PREFIX + "boxmax {} #" + Site.PREFIX + "boxclose {} #" + Site.PREFIX + "bubble-text {} #" + Site.PREFIX + "box-input {}\n");
-			writer.write("</style>\n");
 			if (this.allowSpeech) {
 				VoiceBean voiceBean = this.loginBean.getBean(VoiceBean.class);
 				if (voiceBean.getResponsiveVoice()) {
@@ -591,7 +543,34 @@ public class EmbedTabBean extends EmbedWebMediumBean {
 			} else {
 				writer.write("web.css = \"" + Site.SECUREURLLINK + "/css/chatlog.css" + "\";\n");
 			}
-			writer.write("web.version = 6.0;\n");
+			
+			if (this.buttoncss.equals("blue_round_button")) {
+				writer.write("web.buttoncss =\"" + Site.SECUREURLLINK + "/css/blue_round_button.css\"; \n");
+			} else if (this.buttoncss.equals("red_round_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/red_round_button.css\"; \n");
+			} else if (this.buttoncss.equals("green_round_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/green_round_button.css\"; \n");
+			} else if (this.buttoncss.equals("blue_bot_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/blue_bot_button.css\"; \n");
+			} else if (this.buttoncss.equals("red_bot_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/red_bot_button.css\"; \n");
+			} else if (this.buttoncss.equals("green_bot_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/green_bot_button.css\"; \n");
+			} else if (this.buttoncss.equals("purple_chat_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/purple_chat_button.css\"; \n");
+			} else if (this.buttoncss.equals("red_chat_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/red_chat_button.css\"; \n");
+			} else if (this.buttoncss.equals("green_chat_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/green_chat_button.css\"; \n");
+			} else if (this.buttoncss.equals("square_chat_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/square_chat_button.css\"; \n");
+			} else if (this.buttoncss.equals("round_chat_button")) {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/round_chat_button.css\"; \n");
+			} else {
+				writer.write("web.buttoncss = \"" + Site.SECUREURLLINK + "/css/blue_round_button.css\"; \n");
+			}
+			
+			writer.write("web.version = 8.5;\n");
 			if (this.bubble) {
 				writer.write("web.bubble = true;\n");
 			}
@@ -643,13 +622,14 @@ public class EmbedTabBean extends EmbedWebMediumBean {
 					writer.write("SDK.initBingSpeech('" + this.loginBean.getBotBean().getInstanceId() + "');\n");
 				}
 			}
-			if (!this.avatar) {
+			if (this.avatar) {
+				writer.write("web.avatar = true;\n");
+			} else {
 				writer.write("web.avatar = false;\n");
 			}
 			if (this.showChatLog) {
 				writer.write("web.chatLog = true;\n");
-			} 
-			else {
+			} else {
 				writer.write("web.chatLog = false;\n");
 			}
 			writer.write("web.popupURL = \"");

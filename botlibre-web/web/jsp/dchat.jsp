@@ -502,8 +502,6 @@
 		</td></tr>
 		</table>
 	<% } %>
-	
-	<div id='<%= Site.PREFIX %>yandex' style="display:none"><br/><span>Powered by <a target='_blank' href='http://translate.yandex.com/'>Yandex.Translate</a></span></div>
 
 	<% botBean.writeAd(out); %>
 	
@@ -880,11 +878,9 @@
 				web.lang = element.value;
 				var prefix = "<%= Site.PREFIX %>";
 				if (web.lang != "none") {
-					document.getElementById(prefix + 'yandex').style.display = "inline";
 					web.nativeVoice = true;
 					web.translate = true;
 				} else {
-					document.getElementById(prefix + 'yandex').style.display = "none";
 					web.translate = false;
 					web.lang = langOrig;
 					web.nativeVoice = nativeVoiceOrig;

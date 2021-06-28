@@ -62,7 +62,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/graphic1.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/graphic1.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("The attachments tab allows you to view image and file attachments in your bot's database.") %><br/>

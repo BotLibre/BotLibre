@@ -39,7 +39,7 @@ public abstract class BrowseBean<T extends Flaggable> extends ServletBean {
 		Rank, Wins, Losses,
 		ThumbsUp, ThumbsDown, Stars, Posts, Messages, Users,
 		LastConnect, Connects, DailyConnects, WeeklyConnects, MonthlyConnects }
-	public enum InstanceRestrict { None, Link, Website, Subdomain, Hidden, Flagged, Icon, Adult,
+	public enum InstanceRestrict { None, Link, Website, Subdomain, Hidden, Review, Flagged, Icon, Adult,
 			Admin, Partner, Diamond, Platinum, Gold, Bronze,
 			Ad, AdUnverified,
 			Twitter, Facebook, Telegram, Email, Slack, Skype, WeChat, Kik, Timer,
@@ -55,6 +55,8 @@ public abstract class BrowseBean<T extends Flaggable> extends ServletBean {
 	protected String nameFilter = "";
 	protected String categoryFilter = "";
 	protected String tagFilter = "";
+	protected String startFilter = "";
+	protected String endFilter = "";
 	protected boolean forking = false;
 	
 	protected T instance;
@@ -105,6 +107,36 @@ public abstract class BrowseBean<T extends Flaggable> extends ServletBean {
 		return this.category.getName();
 	}
 	
+	public String getStartFilter() {
+		if (startFilter == null) {
+			return "";
+		}
+		return startFilter;
+	}
+
+	public void setStartFilter(String startFilter) {
+		if (startFilter == null) {
+			startFilter = "";
+			return;
+		}
+		this.startFilter = startFilter;
+	}
+
+	public String getEndFilter() {
+		if (endFilter == null) {
+			return "";
+		}
+		return endFilter;
+	}
+
+	public void setEndFilter(String endFilter) {
+		if (endFilter == null) {
+			endFilter = "";
+			return;
+		}
+		this.endFilter = endFilter;
+	}
+
 	public static String getColorsString() {
 		return "'white', 'ivory', 'red', 'pink', 'green', 'blue', 'navy', 'teal', 'purple', 'yellow', 'lightyellow', 'darkyellow', 'brown', 'tan', 'grey', 'lightgrey', 'darkgrey', 'silver', 'black', '#fff', '#000'";
 	}
@@ -144,6 +176,9 @@ public abstract class BrowseBean<T extends Flaggable> extends ServletBean {
 		this.categoryFilter = "";
 		this.nameFilter = "";
 		this.tagFilter = "";
+		this.startFilter = "";
+		this.endFilter = "";
+		this.pageSize = 56;
 		this.page = 0;
 		this.resultsSize = 0;
 	}
@@ -157,6 +192,9 @@ public abstract class BrowseBean<T extends Flaggable> extends ServletBean {
 			&& this.categoryFilter.isEmpty()
 			&& this.nameFilter.isEmpty()
 			&& this.tagFilter.isEmpty()
+			&& this.startFilter.isEmpty()
+			&& this.endFilter.isEmpty()
+			&& this.pageSize == 56
 			&& this.page == 0;
 	}
 	
@@ -613,6 +651,36 @@ public abstract class BrowseBean<T extends Flaggable> extends ServletBean {
 			out.write("if (document.getElementById('delete-confirm').checked) {\nreturn true;\n} else {\nSDK.showError(\"");
 			out.write(this.loginBean.translate("You must click 'I\'m sure' ").replace('"', '\''));
 			out.write("\");\nreturn false;\n}\n}\n");
+			out.write("$(function() { $('#dialog-delete').dialog({ autoOpen: false, modal: true }); });\n");
+			out.write("</script>\n");
+		} catch (Exception exception) {
+			error(exception);
+		}
+	}
+	
+	public void writeDeleteAllDialogHTML(SessionProxyBean proxy, Writer out) {
+		try {
+			out.write("<div id='dialog-delete' title='");
+			out.write(this.loginBean.translate("Delete"));
+			out.write("' class='dialog message'>\n");
+			out.write("<input id='confirm-delete-confirm' type='checkbox' name='confirm-delete-confirm' title='");
+			out.write(this.loginBean.translate("Caution, this will permently delete the " + Utils.camelCaseToLowerCase(getDisplayName())
+					+ " and all of its data."));
+			out.write("'>");
+			out.write(this.loginBean.translate("I'm sure"));
+			out.write("</input><br/>\n");
+			out.write("<input class='delete' onclick='return deleteInstance()' name='delete-instance' type='submit' value='");
+			out.write(this.loginBean.translate("Delete"));
+			out.write("' title='");
+			out.write(this.loginBean.translate("Permently delete the " + Utils.camelCaseToLowerCase(getDisplayName())
+					+ " and all of its data."));
+			out.write("'/>\n");
+			out.write("<input id='cancel-delete' onclick=\"$('#dialog-delete').dialog('close'); return false;\" class='cancel' name='cancel' type='submit' value='");
+			out.write(this.loginBean.translate("Cancel"));
+			out.write("'/>\n");
+			out.write("</div>\n");
+
+			out.write("<script>\n");
 			out.write("$(function() { $('#dialog-delete').dialog({ autoOpen: false, modal: true }); });\n");
 			out.write("</script>\n");
 		} catch (Exception exception) {

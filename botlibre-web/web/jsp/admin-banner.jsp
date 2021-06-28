@@ -79,6 +79,11 @@
 								</td>
 							</tr>
 							<tr class="menuitem">
+								<td><a href="whatsapp.jsp" title="<%= loginBean.translate("Allow your bot to send, receive, and reply to WhatsApp messages") %>" class="menuitem">
+									<img src="images/whatsapp7.png" class="menu"/> <%= loginBean.translate("WhatsApp") %></a>
+								</td>
+							</tr>
+							<tr class="menuitem">
 								<td><a href="telegram.jsp" title="<%= loginBean.translate("Allow bot to manage a Telegram channel, group, or chat on Telegram") %>" class="menuitem">
 									<img src="images/telegram1.png" class="menu"/> <%= loginBean.translate("Telegram") %></a>
 								</td>
@@ -158,6 +163,11 @@
 									<img src="images/log.png" class="menu"/> <%= loginBean.translate("Log") %></a>
 								</td>
 							</tr>
+							<tr class="menuitem">
+								<td><a href="instance-stats.jsp" title="<%= loginBean.translate("View the bot's statistics and charts") %>" class="menuitem">
+									<img src="images/stats.svg" class="menu"/> <%= loginBean.translate("Analytics") %></a>
+								</td>
+							</tr>
 						<% } else { %>
 							<tr class="menuitem">
 								<td><a href="instance-avatar.jsp" title="<%= loginBean.translate("Upload and configure images for bots emotions and responses") %>" class="menuitem">
@@ -183,6 +193,7 @@
 				<a href="self.jsp" title="<%= loginBean.translate("Add, create, edit, import, and export scripting programs") %>"><img src="images/script1.png" class="admin-banner-pic"></a> 
 				<a href="twitter.jsp" class="shrinkhide1200" title="<%= loginBean.translate("Allow bot to manage a Twitter account and interact with other Twitter users") %>"><img src="images/twitter1.png" class="admin-banner-pic"></a> 
 				<a href="facebook.jsp" class="shrinkhide1200" title="<%= loginBean.translate("Allow bot to manage a Facebook account or page and interact with other Facebook users") %>"><img src="images/facebook4.png" class="admin-banner-pic"></a> 
+				<a href="whatsapp.jsp" class="shrinkhide1200" title="<%= loginBean.translate("Allow your bot to send, receive, and reply to WhatsApp messages") %>"><img src="images/whatsapp7.png" class="admin-banner-pic"></a>
 				<a href="telegram.jsp" class="shrinkhide1200" title="<%= loginBean.translate("Allow bot to manage a Telegram channel or chat on Telegram") %>"><img src="images/telegram1.png" class="admin-banner-pic"></a> 
 				<a href="slack.jsp" class="shrinkhide1200" title="<%= loginBean.translate("Allow your bot to send, receive, and reply to Slack messages") %>"><img src="images/slack1.png" class="admin-banner-pic"></a> 
 				<a href="skype.jsp" class="shrinkhide1200" title="<%= loginBean.translate("Allow your bot to send, receive, and reply to Skype messages") %>"><img src="images/skype1.png" class="admin-banner-pic"></a>
@@ -199,6 +210,7 @@
 				<a href="import.jsp" class="shrinkhide1000" title="<%= loginBean.translate("Import data from the web") %>"><img src="images/web.png" class="admin-banner-pic"></a> 
 				<a href="memory.jsp" title="<%= loginBean.translate("Browse the bot's knowledge database") %>"><img src="images/knowledge.png" class="admin-banner-pic"></a> 
 				<a href="log.jsp" title="<%= loginBean.translate("View the bot's log for errors and debugging info") %>"><img src="images/log.png" class="admin-banner-pic"></a>
+				<a href="instance-stats.jsp" title="<%= loginBean.translate("View the bot's statistics and charts") %>"><img src="images/stats.svg" class="admin-banner-pic"></a>
 				<a href="#" onclick="testBot(); return false;" title="<%= loginBean.translate("Test chatting with the bot") %>"><img src="images/green_bot_button128.png" class="admin-banner-pic"></a>
 			<% } else { %>
 				<a href="instance-avatar.jsp" title="<%= loginBean.translate("Upload and configure images for bots emotions and responses") %>"><img src="images/avatar1.png" class="admin-banner-pic"></a> 
@@ -215,6 +227,7 @@
 				<a href="chatlogs.jsp" title="<%= loginBean.translate("Train your bot's responses, view its converstions, import and export chat logs") %>"><img src="images/chatlog1.png" class="admin-banner-pic"></a> 
 				<a href="self.jsp" title="<%= loginBean.translate("Add, create, edit, import, and export scripting programs") %>"><img src="images/script1.png" class="admin-banner-pic"></a> 
 				<a href="memory.jsp" title="<%= loginBean.translate("Browse the bot's knowledge database") %>"><img src="images/knowledge.png" class="admin-banner-pic"></a> 
+				<a href="instance-stats.jsp" title="<%= loginBean.translate("View the bot's statistics and charts") %>"><img src="images/stats.svg" class="admin-banner-pic"></a>
 				<a href="#" onclick="testBot(); return false;" title="<%= loginBean.translate("Test chatting with the bot") %>"><img src="images/green_bot_button128.png" class="admin-banner-pic"></a>
 			</div>
 		</div>

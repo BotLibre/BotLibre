@@ -8,7 +8,7 @@ body {
 }
 
 pre {
-  white-space: pre-wrap;
+	white-space: pre-wrap;
 }
 
 /* #################### Manual Embed Style Sheets ############################# */
@@ -480,6 +480,8 @@ button.okbutton:hover {
 	border-width:1px;
 	margin:2px;
 	display:inline-block;
+	text-align: center;
+	width: 72px;
 }
 
 .online-user-label {
@@ -881,6 +883,20 @@ a {
 	margin: 0 2px 0 0;
 }
 
+.search input[type='number'] {
+	width: 150px;
+	max-width: 150px;
+	border: 1px solid #d5d5d5;
+	margin: 0 2px 0 0;
+}
+
+.search input[type='date'] {
+	width: 150px;
+	max-width: 150px;
+	border: 1px solid #d5d5d5;
+	margin: 0 2px 0 0;
+}
+
 .search input[type='radio'] {
 	margin-right: 4px;
 	margin-left: 4px;
@@ -888,8 +904,8 @@ a {
 }
 
 .search select {
-	width: 152px;
-	max-width: 152px;
+	width: 150px;
+	max-width: 150px;
 	border: 1px solid #d5d5d5;
 	margin: 0 2px 0 0;
 }
@@ -974,9 +990,25 @@ input[type='text'].search {
 	margin: 0 2px 0 0;
 }
 
+input[type='number'].search {
+	height: 16px;
+	width: 150px;
+	max-width: 150px;
+	border: 1px solid #d5d5d5;
+	margin: 0 2px 0 0;
+}
+
+input[type='date'].search {
+	height: 16px;
+	width: 150px;
+	max-width: 150px;
+	border: 1px solid #d5d5d5;
+	margin: 0 2px 0 0;
+}
+
 select.search {
-	width: 152px;
-	max-width: 152px;
+	width: 150px;
+	max-width: 150px;
 	border: 1px solid #d5d5d5;
 	margin: 0 2px 0 0;
 }
@@ -995,7 +1027,7 @@ select.search {
 
 #cancel, #cancel-insert-button, .cancel, .message input[type='submit'].cancel {
 	color: #333;
-	background-color: #FFD700;
+	background-color: #BBB; /*#FFD700;*/
 	cursor: pointer;
 	font: 13px/30px Arial, Helvetica, sans-serif;
 	height: 40px;
@@ -1161,7 +1193,7 @@ img.admin-banner-pic:hover {
 
 img.admin-banner-pic {
 	width:32px;
-	vertical-align: middle;
+	vertical-align: bottom;
 }
 
 img.admin-pic {
@@ -1290,7 +1322,6 @@ span.chat-label {
 	font-family:arial;
 	font-size:80%;
 	color:maroon;
-	display:none;
 }
 
 span.chat-response {
@@ -1742,6 +1773,10 @@ td.user-thumb {
 	opacity: 0.5;
 }
 
+.clickable {
+	cursor: pointer;
+}
+
 #help-icon {
 	height: 24px;
 	width: 24px;
@@ -1957,4 +1992,8 @@ div.toolbar a:hover {
 	cursor: pointer;
 	color: #fff;
 	opacity: 0.5;
+}
+
+.admin-mode {
+	display: none;
 }

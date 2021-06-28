@@ -68,6 +68,7 @@
 		  	
 			<input id="ok" name="save-instance" type="submit" value="<%= loginBean.translate("Save") %>"/><input id="cancel" name="cancel-instance" type="submit" value="<%= loginBean.translate("Cancel") %>"/><br/>
 		</form>
+		<% bean.writePublishDialogHTML(proxy, out); %>
 	<% } %>
 	</div>
 <% if (!embed) { %>

@@ -30,7 +30,7 @@
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
 				<% if (bean.getCategory() == null) { %>
-					<h1><img src="images/graphic.png" class="admin-banner-pic" style="vertical-align:middle"><%= loginBean.translate(" Graphics") %></h1>
+					<h1><img src="images/graphic.png" class="admin-banner-pic"><%= loginBean.translate(" Graphics") %></h1>
 					<% if (domainBean.hasValidInstance() || Site.COMMERCIAL) { %>
 						<p><%= loginBean.translate("Share graphic files for the web or mobile.") %></p>
 					<% } else { %>
@@ -45,10 +45,10 @@
 							<input name="my-instances" type="submit" value="<%= loginBean.translate("My Graphics") %>"/>
 						<% } %>
 						<% if (loginBean.getDomain().isCreationAllowed(loginBean.getUser())) { %>
-							<input name="create-graphic" type="submit" value="<%= loginBean.translate("New Graphic") %>" title="Create a new graphic"/>
-							<input name="create-graphic-link" type="submit" value="<%= loginBean.translate("New Link") %>" title="Add a link to an external graphic or website to the graphics directory"/>
+							<input name="create-graphic" type="submit" value="<%= loginBean.translate("New Graphic") %>" title="<%= loginBean.translate("Create a new graphic")%>"/>
+							<input name="create-graphic-link" type="submit" value="<%= loginBean.translate("New Link") %>" title="<%= loginBean.translate("Add a link to an external graphic or website to the graphics directory")%>"/>
 							<% if (loginBean.isLoggedIn()) { %>
-								<input name="import-graphic" type="submit" value="<%= loginBean.translate("Import") %>" onclick="document.getElementById('upload-file').click(); return false;" title="Import a graphic export file"/>
+								<input name="import-graphic" type="submit" value="<%= loginBean.translate("Import") %>" onclick="document.getElementById('upload-file').click(); return false;" title="<%= loginBean.translate("Import a graphic export file") %>"/>
 							<% } %>
 						<% } %>
 						<br/>

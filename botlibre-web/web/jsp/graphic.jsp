@@ -57,6 +57,7 @@
 		
 		<% bean.writeExternalHTML(out); %>
 		<% bean.writeFlaggedHTML(out); %>
+		<% bean.writeReviewHTML(out); %>
 		
 		<% if (bean.isValidUser() && (bean.getInstance() != null) && (!bean.getInstance().isExternal()) && bean.getInstance().getMedia() != null) { %>
 			<% MediaFile media = bean.getInstance().getMedia(); %>

@@ -331,13 +331,17 @@
 		sdkConnection.getQuestionResponse(config, function(config) {
 
 			question.value = config.question;
-			document.getElementById("answer-dial").value = config.response;
-			tinyMCE.activeEditor.setContent($("#answer-dial").val());
-			
+			// Switch to markup before setting response value.
 			if(config.response.startsWith("Template(\"")) {
 				$('#edit-editor-dial').val("markup");
 				$('#edit-editor-dial').change();
 			}
+			var response = config.response;
+			response = response.replace(/&lt;/g, "<");
+			response = response.replace(/&gt;/g, ">");
+			response = response.replace(/&amp;/g, "&");
+			document.getElementById("answer-dial").value = response;
+			tinyMCE.activeEditor.setContent($("#answer-dial").val());
 			
 			sentiment.value = config.sentiment;
 			if(config.condition != null) {
@@ -767,7 +771,7 @@
 	
 	function refreshTags() {
 		$(".chat-topic").toggle($("#check-topic").prop('checked'));
-		$(".chat-label").toggle($("#check-label").prop('checked'));
+		//$(".chat-label").toggle($("#check-label").prop('checked')); - use for response, not meta
 		$(".chat-keyword").toggle($("#check-keywords").prop('checked'));
 		$(".chat-required").toggle($("#check-required").prop('checked'));
 		$(".chat-emote").toggle($("#check-emotes").prop('checked'));

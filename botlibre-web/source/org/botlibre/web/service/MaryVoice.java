@@ -123,7 +123,7 @@ public class MaryVoice extends Voice {
 	}
 
 	@Override
-	public synchronized boolean speak(String voice, String mod, String text, String file) {
+	public synchronized boolean speak(String voice, String mod, String text, String file, String apiKey, String apiToken, String apiEndpoint) {
 		if ((text == null) || text.isEmpty()) {
 			return false;
 		}
@@ -132,9 +132,9 @@ public class MaryVoice extends Voice {
 		}
 		try {
 	        AudioInputStream audio = getVoice(voice, mod).generateAudio(text);
-	        File path = new File(file + ".wav");
+	        File path = new File(file);
 	        new File(path.getParent()).mkdirs();
-	        MaryAudioUtils.writeWavFile(MaryAudioUtils.getSamplesAsDoubleArray(audio), file + ".wav", audio.getFormat());
+	        MaryAudioUtils.writeWavFile(MaryAudioUtils.getSamplesAsDoubleArray(audio), file, audio.getFormat());
 		} catch (Exception exception) {
 			AdminDatabase.instance().log(exception);
 			return false;

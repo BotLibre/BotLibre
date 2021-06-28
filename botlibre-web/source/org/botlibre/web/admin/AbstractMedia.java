@@ -186,6 +186,7 @@ public class AbstractMedia implements Cloneable {
 							stream.flush();
 							stream.close();
 						} catch (IOException exception) {
+							// Path is wrong until you access the website.
 							AdminDatabase.instance().log(exception);
 						}
 					}

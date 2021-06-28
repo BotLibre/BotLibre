@@ -93,6 +93,7 @@ public class Migrate  {
 				((JpaEntityManagerFactory)postgres).getServerSession().getReadConnectionPool().releaseConnection(accessor);
 				
 				properties = new HashMap<String, String>();
+				properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 				properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 				properties.put(PersistenceUnitProperties.JDBC_URL, DatabaseMemory.DATABASE_URL);
 				properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
@@ -146,6 +147,8 @@ public class Migrate  {
 	@SuppressWarnings("unchecked")
 	public void migrate() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
@@ -210,6 +213,8 @@ public class Migrate  {
 	@SuppressWarnings("unchecked")
 	public void migrate6() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
@@ -239,6 +244,8 @@ public class Migrate  {
 	@SuppressWarnings("unchecked")
 	public void migrate5() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
@@ -291,11 +298,13 @@ public class Migrate  {
 				AdminDatabase.instance().log(exception);
 			}
 		}
-		AdminDatabase.instance().log(Level.INFO, "Migration complete", count);		
+		AdminDatabase.instance().log(Level.INFO, "Migration complete", count);
 	}
 
 	public void migrate7() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "fine");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
@@ -327,6 +336,8 @@ public class Migrate  {
 	public void dropDead() {
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + "postgres");
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 			EntityManagerFactory postgres = Persistence.createEntityManagerFactory("postgres", properties);
@@ -335,7 +346,11 @@ public class Migrate  {
 			databases.remove(Site.PERSISTENCE_UNIT + "_template");
 			databases.remove(Site.PERSISTENCE_UNIT + "_migration");
 			databases.remove(Site.PERSISTENCE_UNIT + "_bots");
-			
+
+			properties = new HashMap<String, String>();
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
+			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			EntityManagerFactory factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
 			EntityManager em = factory.createEntityManager();
 			List<BotInstance> instances = em.createQuery("Select p from BotInstance p").getResultList(); // Must be all
@@ -392,7 +407,8 @@ public class Migrate  {
 	public void dropDeadSchemas() {
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
-			properties.put(PersistenceUnitProperties.JDBC_URL, DatabaseMemory.DATABASE_URL);
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + "postgres");
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 			EntityManagerFactory postgres = Persistence.createEntityManagerFactory("postgres", properties);
@@ -403,6 +419,9 @@ public class Migrate  {
 			Set<String> schemas = new HashSet<String>(pg.createNativeQuery("select nspname from pg_catalog.pg_namespace where nspname like '" + Site.PERSISTENCE_UNIT + "_%'").getResultList());
 
 			properties = new HashMap<String, String>();
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
+			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			EntityManagerFactory factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
 			EntityManager em = factory.createEntityManager();
 			List<BotInstance> instances = em.createQuery("Select p from BotInstance p").getResultList(); // Must be all
@@ -456,17 +475,29 @@ public class Migrate  {
 
 	@SuppressWarnings("unchecked")
 	public void archiveInactive() {
-		EntityManagerFactory postgres = null;		
+		EntityManagerFactory postgres = null;
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		EntityManagerFactory botsFactory = null;
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
 			properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + "postgres");
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			postgres = Persistence.createEntityManagerFactory("postgres", properties);
+			properties = new HashMap<String, String>();
+			properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT + "_bots");
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
+			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			botsFactory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT + "_bots", properties);
 			botsFactory.createEntityManager().close();
+			properties = new HashMap<String, String>();
+			properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
+			properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+			properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
+			properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 			factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
 			em = factory.createEntityManager();
 			Query query = em.createQuery("Select p from BotInstance p "
@@ -533,6 +564,8 @@ public class Migrate  {
 	@SuppressWarnings("unchecked")
 	public void migrate4() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		//properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("botlibre", properties);
@@ -567,6 +600,8 @@ public class Migrate  {
 
 	public void migrate3() {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "fine");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("botlibre", properties);
@@ -593,6 +628,8 @@ public class Migrate  {
 	public void migrate2() {
 		EntityManagerFactory sourceFactory = Persistence.createEntityManagerFactory("migration");
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put(PersistenceUnitProperties.JDBC_URL, Site.getDatabaseUrl() + Site.PERSISTENCE_UNIT);
+		properties.put(PersistenceUnitProperties.JDBC_USER, Site.DATABASEUSER);
 		properties.put(PersistenceUnitProperties.JDBC_PASSWORD, Site.DATABASEPASSWORD);
 		properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
 		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "fine");

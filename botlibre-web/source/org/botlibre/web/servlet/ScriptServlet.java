@@ -48,7 +48,7 @@ public class ScriptServlet extends BeanServlet {
 		SessionProxyBean proxy = (SessionProxyBean)request.getSession().getAttribute("proxy");
 		ScriptBean bean = loginBean.getBean(ScriptBean.class);
 		loginBean.setActiveBean(bean);
-		if  (!loginBean.checkDomain(request, response)) {
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 
@@ -358,17 +358,8 @@ public class ScriptServlet extends BeanServlet {
 				request.getRequestDispatcher("admin-script.jsp").forward(request, response);
 				return;
 			}
-						
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("script-search.jsp").forward(request, response);
-				return;
-			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("script-search.jsp").forward(request, response);
+
+			if (checkSearchCommon(bean, "script-search.jsp", request, response)) {
 				return;
 			}
 

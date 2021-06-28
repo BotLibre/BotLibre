@@ -955,7 +955,6 @@ public class Facebook extends BasicSense {
 				json = "{ \"fields\":[ \"get_started\" ] }";
 				String response = Utils.httpDELETE(url, "application/json", json);
 				log("Response", Level.INFO, response);
-				log("BUTTON EMPTY", Level.INFO);
 			} else {
 				String json = null;
 				if (getStartedButton.startsWith("{")) {
@@ -966,7 +965,6 @@ public class Facebook extends BasicSense {
 				} else {
 					json = "{ \"get_started\":{ \"payload\":\"" + getStartedButton + "\" } }";
 				}
-				log("BUTTON FULL", Level.INFO);
 				log("POST", Level.INFO, url, json);
 				String response = Utils.httpPOST(url, "application/json", json);
 				log("Response", Level.INFO, response);
@@ -985,18 +983,7 @@ public class Facebook extends BasicSense {
 				String json = null;
 				if (persistentMenu.startsWith("{")) {
 					// Allow raw JSON
-					if (getStartedButton.startsWith("{")) {
-						// Allow raw JSON
-						json = getStartedButton;
-						json = json.replaceAll("&#34;", "\"");
-						json = json.replaceAll("&#39;", "\'");
-						int index = json.lastIndexOf("}");
-						json = json.substring(0, index) + "," + json.substring(index+1);
-					} else {
-						json = "{ \"get_started\":{ \"payload\":\"" + getStartedButton + "\" },";
-					}
-					//json = "{ \"get_started\":{ \"payload\":\"" + getStartedButton + "\" },";
-					json = json + persistentMenu.substring(1, persistentMenu.length());
+					json = persistentMenu;
 					json = json.replaceAll("&#34;", "\"");
 					json = json.replaceAll("&#39;", "\'");
 				} else {

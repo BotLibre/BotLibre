@@ -17,7 +17,7 @@
  ******************************************************************************/
 package org.botlibre.web.bean;
 
-import org.botlibre.sense.sms.Twilio;
+import org.botlibre.sense.twilio.Twilio;
 import org.botlibre.util.Utils;
 
 import org.botlibre.web.Site;
@@ -82,7 +82,22 @@ public class SMSBean extends ServletBean {
 		hook = hook + "/" + getBotBean().getInstanceId();
 		return hook;
 	}
-
+	
+	public String getWhatsAppWebhook() {
+		String hook = null;
+		if (Site.HTTPS) {
+			hook = Site.SECUREURLLINK + "/rest/api/twilio/whatsapp/";
+		} else {
+			hook = Site.URLLINK + "/rest/api/twilio/whatsapp/";
+		}
+		if (getUser().getApplicationId() == null) {
+			getLoginBean().setUser(AdminDatabase.instance().resetAppId(getUser().getUserId()));
+		}
+		hook = hook + getUser().getApplicationId();
+		hook = hook + "/" + getBotBean().getInstanceId();
+		return hook;
+	}
+	
 	public void clear() {
 		Twilio sense = getBot().awareness().getSense(Twilio.class);
 		sense.setSid("");

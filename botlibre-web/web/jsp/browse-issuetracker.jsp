@@ -36,7 +36,7 @@
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
 				<% if (bean.getCategory() == null) { %>
-					<h1><img src="images/issuetracker.png" class="admin-banner-pic" style="vertical-align:middle"><%= loginBean.translate(" Issue Tracking") %></h1>
+					<h1><img src="images/issuetracker.png" class="admin-banner-pic"><%= loginBean.translate(" Issue Tracking") %></h1>
 					<% if (domainBean.hasValidInstance()) { %>
 						<p><%= loginBean.translate("Create an issue tracker for the web or mobile.") %></p>
 					<% } else { %>

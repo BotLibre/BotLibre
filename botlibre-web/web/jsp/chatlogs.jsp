@@ -164,7 +164,7 @@
 		});
 		
 		$("#check-label").change(function() {
-			$(".chat-label").toggle(this.checked);
+			//$(".chat-label").toggle(this.checked); - hide row not all labels
 			$(".edit-label-tr").toggle(this.checked);
 			$("#dial-check-label").prop('checked', this.checked);
 		});
@@ -638,6 +638,8 @@
 									<option value="slack" <%= bean.getTypeCheckedString("slack") %>><%= loginBean.translate("Slack") %></option>
 									<option value="email" <%= bean.getTypeCheckedString("email") %>><%= loginBean.translate("email") %></option>
 									<option value="sms" <%= bean.getTypeCheckedString("sms") %>><%= loginBean.translate("sms") %></option>
+									<option value="ivr" <%= bean.getTypeCheckedString("ivr") %>><%= loginBean.translate("ivr") %></option>
+									<option value="whatsapp" <%= bean.getTypeCheckedString("whatsapp") %>><%= loginBean.translate("WhatsApp") %></option>
 									<option value="alexa" <%= bean.getTypeCheckedString("alexa") %>><%= loginBean.translate("Alexa") %></option>
 									<option value="googleAssistant" <%= bean.getTypeCheckedString("googleAssistant") %>><%= loginBean.translate("Google Assistant") %></option>
 									<option value="command" <%= bean.getTypeCheckedString("command") %>><%= loginBean.translate("command") %></option>
@@ -2634,7 +2636,7 @@
 						</form>
 					</div>
 					
-					<div id="dialog-add-response" title="<%= loginBean.translate("Add Response") %>" class="dialog">			
+					<div id="dialog-add-response" title="<%= loginBean.translate("Add Response") %>" class="dialog">
 						<div id="dialog-add-response-basic">
 							<table id="dialog-add-response-basic-table">
 								<tr id="dial-question-tr">

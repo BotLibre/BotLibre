@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2020 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,8 +22,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.botlibre.Bot;
 import org.botlibre.BotException;
@@ -52,6 +57,10 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 	public WebMediumBean() {
 	}
 
+	public boolean isImport() {
+		return false;
+	}
+	
 	public String getInstanceName() {
 		if (this.instance == null) {
 			return "";
@@ -111,6 +120,14 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		if (config.categories != null) {
 			instance.setCategoriesString(config.categories);
 		}
+		if (isSuper()) {
+			instance.setReviewed(config.isReviewed);
+			instance.setReviewRejectionComments(config.reviewRejectionComments);
+		} else {
+			// Mark for review.
+			instance.setReviewed(false);
+			instance.setReviewRejectionComments("");
+		}
 		if (Site.ADULT) {
 			instance.setAdult(true);
 		} else if (isSuper()) {
@@ -123,7 +140,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			instance.setShowAds(config.showAds);
 			instance.setAdCode(config.adCode);
 		}
-		if (config.name.equals("")) {
+		if (config.name == null || config.name.equals("")) {
 			throw new BotException("Invalid name");
 		}
 	}
@@ -561,7 +578,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				out.write("\" /><br/>\n");
 			}
 
-			out.write("<span class='required'>");
+			out.write("<span>");
 			out.write(this.loginBean.translate("Categories"));
 			out.write("</span><br/>\n");
 			out.write("<input id='categories' name='categories' type='text' value='");
@@ -607,15 +624,28 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				out.write("'>");
 				out.write(this.loginBean.translate("Private"));
 				out.write("<br/>\n");
-				out.write("<input name='hidden' type='checkbox' ");
-				if (error && instance.isHidden()) {
-					out.write("checked");
+				// Default content to hidden unless a private domain.
+				if (!Site.COMMERCIAL && !getDomain().isPrivate() && !getDomain().isHidden()) {
+					out.write("<input name='hidden' type='hidden' value='on'>");
+					
+					out.write("<input name='hidden-disabled' type='checkbox' ");
+					out.write("checked disabled");
+					out.write(" title=\"");
+					out.write(this.loginBean.translate("A hidden " + Utils.camelCaseToLowerCase(getDisplayName())
+								+ " is not published to the browse directory (your " + Utils.camelCaseToLowerCase(getDisplayName()) + " is not ready to publish yet)"));
+					out.write("\">");
+					out.write(this.loginBean.translate("Hidden"));
+				} else {
+					out.write("<input name='hidden' type='checkbox' ");
+					if (error && instance.isHidden()) {
+						out.write("checked");
+					}
+					out.write(" title='");
+					out.write(this.loginBean.translate("A hidden " + Utils.camelCaseToLowerCase(getDisplayName())
+								+ " is not published to the browse directory"));
+					out.write("'>");
+					out.write(this.loginBean.translate("Hidden"));
 				}
-				out.write(" title='");
-				out.write(this.loginBean.translate("A hidden " + Utils.camelCaseToLowerCase(getDisplayName())
-							+ " is not displayed in the browse directory"));
-				out.write("'>");
-				out.write(this.loginBean.translate("Hidden"));
 				out.write("<br/>\n");
 				
 				out.write("<table>\n");
@@ -896,7 +926,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				out.write("\" /><br/>");
 			}
 			
-			out.write("<span class='required'>");
+			out.write("<span>");
 			out.write(this.loginBean.translate("Categories"));
 			out.write("</span><br/>\n");
 			out.write("<input id='categories' name='categories' type='text' value='");
@@ -958,6 +988,24 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 					out.write(this.loginBean.translate("Subscription"));
 					out.write("<br/>\n");
 				}
+				if (Site.REVIEW_CONTENT) {
+					out.write("<input name='isReviewed' type='checkbox' ");
+					if (getEditInstance().isReviewed()) {
+						out.write("checked");
+					}
+					out.write(" title='");
+					out.write(this.loginBean.translate("Public content must be reviewed before being published"));
+					out.write("'/>");
+					out.write(this.loginBean.translate("Reviewed"));
+					out.write("<br/>\n");
+					
+					out.write("<span>");
+					out.write(this.loginBean.translate("Review comments"));
+					out.write("</span><br/>\n");
+					out.write("<input id='reviewRejectionComments' name='reviewRejectionComments' type='text' value=\"");
+					out.write(getEditInstance().getReviewRejectionComments());
+					out.write("\" /><br/>");
+				}
 			}
 			
 			if (!link) {
@@ -971,13 +1019,18 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				out.write("'/>");
 				out.write(this.loginBean.translate("Private"));
 				out.write("<br/>\n");
-				out.write("<input name='hidden' type='checkbox' ");
+				// Require publish check.
+				if (!Site.COMMERCIAL && !getDomain().isPrivate() && !getDomain().isHidden()) {
+					out.write("<input id='hidden' name='hidden' type='checkbox' onclick=\"checkPublish(); return true;\"");
+				} else {
+					out.write("<input id='hidden' name='hidden' type='checkbox'");
+				}
 				if (getEditInstance().isHidden()) {
 					out.write("checked");
 				}
 				out.write(" title='");
 				out.write(this.loginBean.translate("A hidden " + getTypeName().toLowerCase()
-						+ " is not displayed in the browse directory"));
+						+ " is not published to the browse directory"));
 				out.write("'/>");
 				out.write(this.loginBean.translate("Hidden"));
 				out.write("<br/>\n");
@@ -1084,6 +1137,43 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 
 			if (link) {
 				out.write("</table>\n");
+			}
+		} catch (Exception exception) {
+			error(exception);
+		}
+	}
+	
+	public void writePublishDialogHTML(SessionProxyBean proxy, Writer out) {
+		if (getInstance() == null) {
+			return;
+		}
+		if (!Site.REVIEW_CONTENT || getDomain().isPrivate() || getDomain().isHidden()) {
+			return;
+		}
+		try {
+			if (this.loginBean.isAdmin()) {
+				out.write("<script>\n");
+				out.write("var checkPublish = function() { };\n");
+				out.write("</script>\n");
+			} else {
+				out.write("<div id='dialog-publish' title='");
+				out.write(this.loginBean.translate("Publish"));
+				out.write("' class='dialog'>\n");
+				out.write("<p>");
+				out.write(this.loginBean.translate("All published content will be reviewed by an administrator."));
+				out.write(" ");
+				out.write(this.loginBean.translate("Offensive content, sexual content, and child oriented content are not allowed."));
+				out.write(" ");
+				out.write(this.loginBean.translate("Content must not violate copyrights, personality rights, or any other laws."));
+				out.write("</p>");
+				out.write("</div>\n");
+	
+				out.write("<script>\n");
+				out.write("var checkPublish = function() { if (!document.getElementById('hidden').checked) { $('#dialog-publish').dialog('open'); } };\n");
+				out.write("$(function() { $('#dialog-publish').dialog({ autoOpen: false, modal: true, buttons: [{ text: '"
+						+ loginBean.translate("Accept")
+						+ "', click: function() { $(this).dialog('close'); }, class: 'okbutton' } ] }); });\n");
+				out.write("</script>\n");
 			}
 		} catch (Exception exception) {
 			error(exception);
@@ -1618,7 +1708,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 	public List<BotInstance> getBots() {
 		try {
 			return AdminDatabase.instance().getAllInstances(
-						0, this.pageSize, "", "", getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", getUser(), null, false);
+						0, this.pageSize, "", "", getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", getUser(), null, false);
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<BotInstance>();
@@ -1819,7 +1909,124 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 			return false;
 		}
 		return true;
-		
+	}
+	
+	public boolean deleteAll(HttpServletRequest request, boolean confirm) {
+		try {
+			Set<Long> ids = new HashSet<Long>();
+			for (Object parameter : request.getParameterMap().entrySet()) {
+				Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>)parameter;
+				String key = entry.getKey();
+				try {
+					ids.add(Long.valueOf(key));
+				} catch (NumberFormatException ignore) {}
+			}
+			if (ids.isEmpty()) {
+				throw new BotException("Missing selection");
+			}
+			if (!confirm) {
+				throw new BotException("Must check 'I'm sure'");
+			}
+			for (Long id : ids) {
+				validateInstance(String.valueOf(id));
+				checkInstance();
+				if (this.loginBean.validateUser(getUser().getUserId(), getUser().getPassword(), getUser().getToken(), false, false) == 0) {
+					return false;
+				}
+				T instance = (T)AdminDatabase.instance().validate(this.instance.getClass(), this.instance.getId(), getUser().getUserId());
+				checkAdminOrSuper();
+				AdminDatabase.instance().delete(instance);
+				this.instance = null;
+			}
+			return true;
+		} catch (Exception exception) {
+			error(exception);
+			return false;
+		}
+	}
+	
+	public boolean reviewAll(HttpServletRequest request) {
+		try {
+			Set<Long> ids = new HashSet<Long>();
+			for (Object parameter : request.getParameterMap().entrySet()) {
+				Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>)parameter;
+				String key = entry.getKey();
+				try {
+					ids.add(Long.valueOf(key));
+				} catch (NumberFormatException ignore) {}
+			}
+			if (ids.isEmpty()) {
+				throw new BotException("Missing selection");
+			}
+			for (Long id : ids) {
+				validateInstance(String.valueOf(id));
+				checkInstance();
+				T instance = (T)AdminDatabase.instance().validate(this.instance.getClass(), this.instance.getId(), getUser().getUserId());
+				checkAdminOrSuper();
+				AdminDatabase.instance().updateReviewed(instance);
+				this.instance = null;
+			}
+			return true;
+		} catch (Exception exception) {
+			error(exception);
+			return false;
+		}
+	}
+	
+	public boolean hideAll(HttpServletRequest request) {
+		try {
+			Set<Long> ids = new HashSet<Long>();
+			for (Object parameter : request.getParameterMap().entrySet()) {
+				Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>)parameter;
+				String key = entry.getKey();
+				try {
+					ids.add(Long.valueOf(key));
+				} catch (NumberFormatException ignore) {}
+			}
+			if (ids.isEmpty()) {
+				throw new BotException("Missing selection");
+			}
+			for (Long id : ids) {
+				validateInstance(String.valueOf(id));
+				checkInstance();
+				T instance = (T)AdminDatabase.instance().validate(this.instance.getClass(), this.instance.getId(), getUser().getUserId());
+				checkAdminOrSuper();
+				AdminDatabase.instance().updateHidden(instance);
+				this.instance = null;
+			}
+			return true;
+		} catch (Exception exception) {
+			error(exception);
+			return false;
+		}
+	}
+	
+	public boolean privateAll(HttpServletRequest request) {
+		try {
+			Set<Long> ids = new HashSet<Long>();
+			for (Object parameter : request.getParameterMap().entrySet()) {
+				Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>)parameter;
+				String key = entry.getKey();
+				try {
+					ids.add(Long.valueOf(key));
+				} catch (NumberFormatException ignore) {}
+			}
+			if (ids.isEmpty()) {
+				throw new BotException("Missing selection");
+			}
+			for (Long id : ids) {
+				validateInstance(String.valueOf(id));
+				checkInstance();
+				T instance = (T)AdminDatabase.instance().validate(this.instance.getClass(), this.instance.getId(), getUser().getUserId());
+				checkAdminOrSuper();
+				AdminDatabase.instance().updatePrivate(instance);
+				this.instance = null;
+			}
+			return true;
+		} catch (Exception exception) {
+			error(exception);
+			return false;
+		}
 	}
 	
 	/**
@@ -2126,15 +2333,15 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		writer.write("<span class='menu'>");
 		writer.write(getResultsSize() + " ");
 		writer.write(loginBean.translate("results"));
-		writer.write(".<br/>");
+		writer.write(".<br/>\n");
 		writePagingString(writer, instances);
 		writer.write("</span>");
 
-		writer.write("<br/>");
+		writer.write("<br/>\n");
 		for (T instance : instances) {
 			writeBrowseThumb(writer, instance, getDisplayOption() == DisplayOption.Grid);
 		}
-		writer.write("<br/>");
+		writer.write("<br/>\n");
 		
 		writer.write("<span class = menu>");
 		writePagingString(writer, instances);
@@ -2147,6 +2354,100 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		StringWriter writer = new StringWriter();
 		List<T> instances = getAllSearchInstances();
 		
+		if (!isImport()) {
+			// Add admin form.
+			writer.write("<form action='" + getPostAction() + "' method='post' class='message'>\n");
+			writer.write(loginBean.postTokenInput());
+			if (this.loginBean.isSuper()) {
+				writer.write("<script>\n");
+				writer.write("function adminMode() {\n");
+				writer.write("$('.admin-mode').css('display','inline-block')\n");
+				writer.write("$('#admin').css('display','none')\n");
+				writer.write("}\n");
+				writer.write("function selectAll() {\n");
+				writer.write("var elements = document.getElementsByTagName('input');\n");
+				// If all selected, then unselect.
+				writer.write("var allSelected = true;\n");
+				writer.write("for (var index = 0; index < elements.length; index++) {\n");
+				writer.write("if (elements[index].type == 'checkbox') {\n");
+				writer.write("if (!elements[index].checked) {\n");
+				writer.write("allSelected = false;\n");
+				writer.write("}\n");
+				writer.write("}\n");
+				writer.write("}\n");
+				writer.write("for (var index = 0; index < elements.length; index++) {\n");
+				writer.write("if (elements[index].type == 'checkbox') {\n");
+				writer.write("if (elements[index].checked == allSelected) {\n");
+				writer.write("elements[index].checked = !allSelected;\n");
+				writer.write("}\n");
+				writer.write("}\n");
+				writer.write("}\n");
+				writer.write("}\n");
+				writer.write("var deleteInstance = function() {\n");
+				writer.write("if (document.getElementById('confirm-delete-confirm').checked) {\n");
+				writer.write("document.getElementById('delete-confirm').checked = true;\n");
+				writer.write("document.getElementById('delete-all').click();\n");
+				writer.write("} else {\n");
+				writer.write("SDK.showError(\"");
+				writer.write(this.loginBean.translate("You must click 'I\'m sure'").replace('"', '\''));
+				writer.write("\");\n");
+				writer.write("return false;\n");
+				writer.write("}\n");
+				writer.write("}\n");
+				writer.write("</script>\n");
+				
+				writer.write("<input id='admin' name='admin' type='submit' value='");
+				writer.write(this.loginBean.translate("Admin"));
+				writer.write("' onclick='adminMode(); return false;' title='");
+				writer.write(this.loginBean.translate("Switch to admin mode"));
+				writer.write("'/>\n");
+				
+				writer.write("<input class='admin-mode' name='select-all' type='submit' value='");
+				writer.write(this.loginBean.translate("Select"));
+				writer.write("' onclick='selectAll(); return false;' title='");
+				writer.write(this.loginBean.translate("Select all the " + Utils.camelCaseToLowerCase(getDisplayName()) + "s"));
+				writer.write("'/>\n");
+				
+				writer.write("<input class='admin-mode' name='review-all' type='submit' value='");
+				writer.write(this.loginBean.translate("Review"));
+				writer.write("' title='");
+				writer.write(this.loginBean.translate("Mark the " + Utils.camelCaseToLowerCase(getDisplayName()) + "s as reviewed"));
+				writer.write("'/>\n");
+				
+				writer.write("<input class='admin-mode' name='hide-all' type='submit' value='");
+				writer.write(this.loginBean.translate("Hide"));
+				writer.write("' title='");
+				writer.write(this.loginBean.translate("Mark the " + Utils.camelCaseToLowerCase(getDisplayName()) + "s as hidden"));
+				writer.write("'/>\n");
+				
+				writer.write("<input class='admin-mode' name='private-all' type='submit' value='");
+				writer.write(this.loginBean.translate("Private"));
+				writer.write("' title='");
+				writer.write(this.loginBean.translate("Mark the " + Utils.camelCaseToLowerCase(getDisplayName()) + "s as private"));
+				writer.write("'/>\n");
+				
+				writer.write("<input class='admin-mode delete' name='confirm-delete-all' type='submit' onclick=\"$('#dialog-delete').dialog('open'); return false;\" value='");
+				writer.write(this.loginBean.translate("Delete"));
+				writer.write("' title='");
+				writer.write(this.loginBean.translate("Delete all selected " + Utils.camelCaseToLowerCase(getDisplayName()) + "s"));
+				writer.write("'/>\n");
+				
+				writer.write("<input style='display:none' id='delete-all' name='delete-all' type='submit'/>\n");
+				writer.write("<input style='display:none' id='delete-confirm' name='delete-confirm' type='checkbox'/>\n");
+				
+				if (this instanceof GraphicBean) {
+					writer.write("<input class='admin-mode' name='export-all' type='submit' value='");
+					writer.write(this.loginBean.translate("Export"));
+					writer.write("' title='");
+					writer.write(this.loginBean.translate("Export all selected " + Utils.camelCaseToLowerCase(getDisplayName()) + "s"));
+					writer.write("'/>\n");
+				}
+				writeDeleteAllDialogHTML(null, writer);
+			}
+			writer.write("<br>\n");
+		}
+		
+		// Add search results.
 		writer.write("<span class='menu'>");
 		writer.write(getResultsSize() + " ");
 		writer.write(loginBean.translate("results"));
@@ -2154,15 +2455,19 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		writePagingString(writer, instances);
 		writer.write("</span>");
 
-		writer.write("<br/>");
+		writer.write("<br/>\n");
 		for (T instance : instances) {
 			writeBrowseThumb(writer, instance, getDisplayOption() == DisplayOption.Grid);
 		}
-		writer.write("<br/>");
+		writer.write("<br/>\n");
 		
 		writer.write("<span class = menu>");
 		writePagingString(writer, instances);
-		writer.write("</span>");
+		writer.write("</span>\n");
+
+		if (!isImport()) {
+			writer.write("</form>\n");
+		}
 		
 		return writer.toString();
 	}
@@ -2183,16 +2488,51 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		
 	}
 	
-	public void writeBrowseLink(StringWriter writer, T instance, boolean bold) {
-		if (instance.isFlagged()) {
-			writer.write("<a class='menu' href='" + getBrowseAction() + "?id=" + instance.getId() + "'>");
-			writer.write("<span style='color:red;" + (bold ? "font-weight:bold' class='browse-thumb'" : "margin: 0 0 0;'" ) + ">" + instance.getName() + "</span>");
-			writer.write("</a>\n");
-		} else {
-			writer.write("<a class='menu' href='" + getBrowseAction() + "?id=" + instance.getId() + "'>");
-			writer.write("<span " + (bold ? "class='browse-thumb' style='font-weight:bold'" : "style='margin: 0 0 0;'" ) + ">" + instance.getNameHTML() + "</span>");
-			writer.write("</a>\n");
+	public void writeReviewHTML(Writer out) {
+		if (!Site.REVIEW_CONTENT || getDomain().isHidden() || getDomain().isPrivate()) {
+			return;
 		}
+		if (getDisplayInstance() == null || getDisplayInstance().isReviewed() || getDisplayInstance().isPrivate()) {
+			return;
+		}
+		if (!isAdmin()) {
+			return;
+		}
+		try {
+			if (!getDisplayInstance().isHidden() || !getDisplayInstance().getReviewRejectionComments().isEmpty()) {
+				out.write("<p style='color:orange;font-weight:bold;'>");
+				out.write(this.loginBean.translate("Publish Status: "));
+				if (!getDisplayInstance().getReviewRejectionComments().isEmpty()) {
+					out.write(this.loginBean.translate("This " + Utils.camelCaseToLowerCase(getDisplayName())
+							+ " has been rejected because"));
+					out.write(":<br/>");
+					out.write(getDisplayInstance().getReviewRejectionComments());
+					out.write("<br/>");
+					out.write(this.loginBean.translate("For more information message to"));
+					out.write(" <a href='login?send-message=" + getDisplayInstance().getName() + "&user=admin'>admin</a><br>");
+					out.write("To resubmit unclick 'hidden' from 'Edit Details'");
+				} else {
+					out.write(this.loginBean.translate("This " + Utils.camelCaseToLowerCase(getDisplayName())
+							+ " is under review"));
+				}
+				out.write(".</p>\n");
+			}
+		} catch (Exception exception) {
+			error(exception);
+		}
+	}
+	
+	public void writeBrowseLink(StringWriter writer, T instance, boolean bold) {
+		writer.write("<a class='menu' href='" + getBrowseAction() + "?id=" + instance.getId() + "'>");
+		if (this.loginBean.isAdmin()) {
+			writer.write("<input class='admin-mode' type='checkbox' name='" + instance.getId() + "'> ");
+		}
+		if (instance.isFlagged()) {
+			writer.write("<span style='color:red;" + (bold ? "font-weight:bold' class='browse-thumb'" : "margin: 0 0 0;'" ) + ">" + instance.getName() + "</span>");
+		} else {
+			writer.write("<span " + (bold ? "class='browse-thumb' style='font-weight:bold'" : "style='margin: 0 0 0;'" ) + ">" + instance.getNameHTML() + "</span>");
+		}
+		writer.write("</a>\n");
 	}
 	
 	public void writeBrowseImage(StringWriter writer, T instance) {
@@ -2212,7 +2552,15 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				if (!this.loginBean.isMobile()) {
 					writer.write("<span class='dropt'>\n");
 				}
-				writer.write("<table style='border-style:solid;border-color:grey;border-width:1px'>\n");
+				String color = "grey";
+				if (instance.isFlagged()) {
+					color = "red";
+				} else if (instance.isHidden() || instance.isPrivate()) {
+					color = "lightgrey";
+				} else if (Site.REVIEW_CONTENT && !getDomain().isPrivate() && !getDomain().isHidden() && !instance.isReviewed()) {
+					color = "orange";
+				}
+				writer.write("<table style='border-style:solid;border-color:"+ color + ";border-width:1px'>\n");
 				writer.write("<tr><td class='browse-thumb' align='center' valign='middle'>\n");
 			} else {
 				writer.write("<td class='browse-thumb' align='center' valign='top'>");
@@ -2302,45 +2650,62 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		writer.write("<span class='menu'>\n");
 		writer.write("<input type='radio' name='instance-filter' ");
 		writer.write(getInstanceFilterCheckedString(InstanceFilter.Public));
-		writer.write(" title='Show all public " + Utils.camelCaseToLowerCase(getDisplayName()) + "s create by all users' value='public' onClick='this.form.submit()'>");
+		writer.write(" title='");
+		writer.write(this.loginBean.translate("Show all public " + Utils.camelCaseToLowerCase(getDisplayName()) + "s create by all users"));
+		writer.write("' value='public' onClick='this.form.submit()'>");
 		writer.write(this.loginBean.translate("public " + Utils.camelCaseToLowerCase(getDisplayName()) + "s"));
 		writer.write("</input>\n");
 		writer.write("<input type='radio' name='instance-filter' ");
 		writer.write(getInstanceFilterCheckedString(InstanceFilter.Private));
-		writer.write(" title='Show all private " + Utils.camelCaseToLowerCase(getDisplayName()) + "s this user has access to' value='private' onClick='this.form.submit()'>");
+		writer.write(" title='");
+		writer.write(this.loginBean.translate("Show all private " + Utils.camelCaseToLowerCase(getDisplayName()) + "s this user has access to"));
+		writer.write("' value='private' onClick='this.form.submit()'>");
 		writer.write(this.loginBean.translate("private " + Utils.camelCaseToLowerCase(getDisplayName()) + "s"));
 		writer.write("</input>\n");
 		writer.write("<input type='radio' name='instance-filter' ");
 		writer.write(getInstanceFilterCheckedString(InstanceFilter.Personal));
-		writer.write(" title='Show all " + Utils.camelCaseToLowerCase(getDisplayName()) + "s this user is the administrator for' value='personal' onClick='this.form.submit()'>");
+		writer.write(" title='");
+		writer.write(this.loginBean.translate("Show all " + Utils.camelCaseToLowerCase(getDisplayName()) + "s this user is the administrator for"));
+		writer.write("' value='personal' onClick='this.form.submit()'>");
 		writer.write(this.loginBean.translate("my " + Utils.camelCaseToLowerCase(getDisplayName()) + "s"));
 		writer.write("</input>\n");
 		writer.write("<br/>\n");
 		
 		writer.write("<div class='search-div'>\n");
-		writer.write("<span class='search-span'>Name</span>\n");
-		writer.write("<input id='searchtext' name='name-filter' type='text' value='" + getNameFilter() + "' title='Filter by any name containing the text' /></td>\n");
+		writer.write("<span class='search-span'>");
+		writer.write(this.loginBean.translate("Search"));
+		writer.write("</span>\n");
+		writer.write("<input id='searchtext' name='name-filter' type='text' value='" + getNameFilter() + "' title='");
+		writer.write(this.loginBean.translate("Filter by any name containing the text"));
+		writer.write("' /></td>\n");
 		writer.write("</div>\n");
 		
 		writer.write("<div class='search-div'>\n");
 		writer.write("<span class='search-span'>");
 		writer.write(this.loginBean.translate("Categories"));
 		writer.write("</span>\n");
-		writer.write("<input id='categories' name='category-filter' type='text' value='" + getCategoryFilter() + "' title='Filter by a comma seperated list of category names' onfocus='this.searchfocus = true;' onmouseup='if(this.searchfocus) {this.select(); this.searchfocus = false;}'/></td>\n");
+		writer.write("<input id='categories' name='category-filter' type='text' value='" + getCategoryFilter() + "' title='");
+		writer.write(this.loginBean.translate("Filter by a comma seperated list of category names"));
+		writer.write("' onfocus='this.searchfocus = true;' onmouseup='if(this.searchfocus) {this.select(); this.searchfocus = false;}'/></td>\n");
 		writer.write("<script>\n");
 		writer.write("$( '#categories' ).autocomplete({ source: [" + getAllCategoriesString() + "], minLength: 0 }).on('focus', function(event) { var self = this; $(self).autocomplete('search', ''); });");
 		writer.write("</script>\n");
 		writer.write("</div>\n");
+		
 		writer.write("<div class='search-div'>\n");
 		writer.write("<span class='search-span'>");
 		writer.write(this.loginBean.translate("Tags"));
 		writer.write("</span>\n");
-		writer.write("<input id='tags' name='tag-filter' type='text' value='" + getTagFilter() + "' title='Filter by a comma seperated list of tag names' onfocus='this.searchfocus = true;' onmouseup='if(this.searchfocus) {this.select(); this.searchfocus = false;}'/></td>\n");
+		writer.write("<input id='tags' name='tag-filter' type='text' value='" + getTagFilter() + "' title='");
+		writer.write(this.loginBean.translate("Filter by a comma seperated list of tag names"));
+		writer.write("' onfocus='this.searchfocus = true;' onmouseup='if(this.searchfocus) {this.select(); this.searchfocus = false;}'/></td>\n");
 		writer.write("<script>\n");
 		writer.write("$( '#tags' ).autocomplete({ source: [" + getAllTagsString() + "], minLength: 0 }).on('focus', function(event) { var self = this; $(self).autocomplete('search', ''); });");
 		writer.write("</script>\n");
 		writer.write("</div>\n");
+		
 		writeSearchFields(writer);
+		
 		writer.write("<div class='search-div'>\n");
 		writer.write("<span class='search-span'>");
 		writer.write(this.loginBean.translate("Display"));
@@ -2387,6 +2752,9 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				writer.write("</option>\n");
 			}
 			if (isSuper()) {
+				writer.write("<option value='review' " + getInstanceRestrictCheckedString(InstanceRestrict.Review) + ">");
+				writer.write(this.loginBean.translate("under review"));
+				writer.write("</option>\n");
 				writer.write("<option value='Hidden' " + getInstanceRestrictCheckedString(InstanceRestrict.Hidden) + ">");
 				writer.write(this.loginBean.translate("hidden"));
 				writer.write("</option>\n");
@@ -2407,6 +2775,35 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 				writer.write("</option>\n");
 			}
 			writer.write("</select>\n");
+			writer.write("</div>\n");
+		}
+		
+		if (isSuper()) {
+			writer.write("<div class='search-div'>\n");
+			writer.write("<span class='search-span'>");
+			writer.write(this.loginBean.translate("Start"));
+			writer.write("</span>\n");
+			writer.write("<input id='searchstart' name='start-filter' type='date' value='" + getStartFilter() + "' title='");
+			writer.write(this.loginBean.translate("Filter after start date"));
+			writer.write("' /></td>\n");
+			writer.write("</div>\n");
+			
+			writer.write("<div class='search-div'>\n");
+			writer.write("<span class='search-span'>");
+			writer.write(this.loginBean.translate("End"));
+			writer.write("</span>\n");
+			writer.write("<input id='searchend' name='end-filter' type='date' value='" + getEndFilter() + "' title='");
+			writer.write(this.loginBean.translate("Filter before end date"));
+			writer.write("' /></td>\n");
+			writer.write("</div>\n");
+		
+			writer.write("<div class='search-div'>\n");
+			writer.write("<span class='search-span'>");
+			writer.write(this.loginBean.translate("Results"));
+			writer.write("</span>\n");
+			writer.write("<input id='pagesize' name='page-size' type='number' value='" + getPageSize() + "' title='");
+			writer.write(this.loginBean.translate("Number of results per page"));
+			writer.write("' /></td>\n");
 			writer.write("</div>\n");
 		}
 		
@@ -2466,7 +2863,7 @@ public abstract class WebMediumBean<T extends WebMedium> extends BrowseBean<T> {
 		writer.write("</select>\n");
 		writer.write("</div>\n");
 		
-		writer.write("<input style='display:none;position:absolute;' type='submit' name='search' value='");
+		writer.write("<input style='display:none;position:absolute;' type='submit' id='search' name='search' value='");
 		writer.write(this.loginBean.translate("Search"));
 		writer.write("'>\n");
 		writer.write("</span>\n");

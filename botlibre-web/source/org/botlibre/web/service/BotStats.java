@@ -72,6 +72,8 @@ public class BotStats implements Comparable<BotStats> {
 	public int smsProcessed;
 	public int twilioVoiceCalls;
 	public int twilioVoiceProcessed;
+	public int whatsappSent;
+	public int whatsappProcessed;
 	
 	public int conversations;
 	public int messages;

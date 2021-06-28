@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2020 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,12 +28,12 @@ import org.botlibre.web.Site;
 import org.botlibre.web.admin.AdminDatabase;
 import org.botlibre.web.admin.ContentRating;
 import org.botlibre.web.admin.Domain;
-import org.botlibre.web.bean.DomainBean;
 import org.botlibre.web.bean.IRCBean;
 import org.botlibre.web.bean.LoginBean;
 import org.botlibre.web.rest.DomainConfig;
 import org.botlibre.web.service.EmailService;
 import org.botlibre.web.service.ForgetfulnessService;
+import org.botlibre.web.service.IPStats;
 import org.botlibre.web.service.PageStats;
 
 @javax.servlet.annotation.WebServlet("/super")
@@ -100,6 +100,13 @@ public class SuperServlet extends BeanServlet {
 				loginBean.verifyPostToken(postToken);
 				loginBean.cleanupJunk();
 			}
+			String transferUser = (String)request.getParameter("transferUser");
+			String fromUser = (String)request.getParameter("transferUserFrom");
+			String toUser = (String)request.getParameter("transferUserTo");
+			if (transferUser != null) {
+				loginBean.verifyPostToken(postToken);
+				loginBean.transferUser(fromUser, toUser);
+			}
 			String verifyEmail = (String)request.getParameter("verifyEmail");
 			if (verifyEmail != null) {
 				loginBean.verifyPostToken(postToken);
@@ -121,6 +128,7 @@ public class SuperServlet extends BeanServlet {
 			if (clearBanned != null) {
 				loginBean.verifyPostToken(postToken);
 				AdminDatabase.instance().clearBannedUsers();
+				IPStats.reset();
 			}
 			String botstats = (String)request.getParameter("botstats");
 			if (botstats != null) {
@@ -195,6 +203,9 @@ public class SuperServlet extends BeanServlet {
 				Site.LOCK = "on".equals(request.getParameter("LOCK"));
 				Site.READONLY = "on".equals(request.getParameter("READONLY"));
 				Site.ADULT = "on".equals(request.getParameter("ADULT"));
+				Site.REVIEW_CONTENT = "on".equals(request.getParameter("REVIEW_CONTENT"));
+				Site.DISABLE_SUPERGROUP = "on".equals(request.getParameter("DISABLE_SUPERGROUP"));
+				Site.BLOCK_AGENT = request.getParameter("BLOCK_AGENT");
 				
 				Site.CONTENT_RATING = ContentRating.valueOf(request.getParameter("CONTENT_RATING"));
 				Site.NAME = request.getParameter("NAME");
@@ -305,6 +316,7 @@ public class SuperServlet extends BeanServlet {
 				Site.MICROSOFT_SPEECH_KEY = request.getParameter("MICROSOFT_SPEECH_KEY");
 				Site.RESPONSIVEVOICE_KEY = request.getParameter("RESPONSIVEVOICE_KEY");
 				Site.YANDEX_KEY = request.getParameter("YANDEX_KEY");
+				Site.MICROSOFT_TRANSLATION_KEY = request.getParameter("MICROSOFT_TRANSLATION_KEY");
 				
 				AdminDatabase.instance().updatePlatformSettings();
 			}

@@ -157,8 +157,8 @@ public class DomainServlet extends BeanServlet {
 		SessionProxyBean proxy = (SessionProxyBean)request.getSession().getAttribute("proxy");
 		LoginBean loginBean = getLoginBean(request, response);
 		if (loginBean == null) {
-			httpSessionTimeout(request, response);
-			return;
+			loginBean = new LoginBean();
+			request.getSession().setAttribute("loginBean", loginBean);
 		}
 		DomainBean bean = loginBean.getBean(DomainBean.class);
 		loginBean.setActiveBean(bean);
@@ -250,21 +250,44 @@ public class DomainServlet extends BeanServlet {
 			String delete = (String)request.getParameter("delete");
 			config.creationMode = (String)request.getParameter("creationMode");
 			config.subdomain = (String)request.getParameter("subdomain");
+			String paymentType = Utils.sanitize((String)request.getParameter("paymentType"));
 			String accountType = Utils.sanitize((String)request.getParameter("accountType"));
 			String duration = Utils.sanitize((String)request.getParameter("duration"));
+			boolean isSubscribed = false;
+			if (paymentType != null) {
+				if (paymentType.equalsIgnoreCase("subscription")) {
+					isSubscribed = true;
+					duration = "1";
+				}
+			}
 			
 			String tx = Utils.sanitize((String)request.getParameter("tx"));
 			String amt = Utils.sanitize((String)request.getParameter("amt"));
 			String st = Utils.sanitize((String)request.getParameter("st"));
 			String cc = Utils.sanitize((String)request.getParameter("cc"));
 			String custom = Utils.sanitize((String)request.getParameter("cm"));
+			if (tx == null) {
+				tx = Utils.sanitize((String)request.getParameter("txn_id"));
+			}
+			if (amt == null) {
+				amt = Utils.sanitize((String)request.getParameter("mc_gross")); 
+			}
+			if (st == null) {
+				st = Utils.sanitize((String)request.getParameter("payment_status")); 
+			}
+			if (cc == null) {
+				cc = Utils.sanitize((String)request.getParameter("mc_currency")); 
+			}
+			if (custom == null) {
+				custom = Utils.sanitize((String)request.getParameter("custom"));  
+			}
 			
 			String next = (String)request.getParameter("next");
 			if ((next != null) || (tx != null)) {
 				//loginBean.verifyPostToken(postToken);
-				if (!bean.wizard(user, password, password2, dateOfBirth, hint, name, request.getRemoteAddr(), email, credentialsType, credentialsUserID, credentialsToken,
+				if (!bean.wizard(user, password, password2, dateOfBirth, hint, name, BeanServlet.extractIP(request), email, credentialsType, credentialsUserID, credentialsToken,
 						newInstance, Utils.sanitize(config.description), config.isPrivate, config.isHidden, Utils.sanitize(config.accessMode), Utils.sanitize(config.creationMode),
-						accountType, duration,
+						accountType, duration, isSubscribed,
 						tx, st, amt, cc, custom)) {
 					response.sendRedirect("create-domain.jsp");
 				} else {
@@ -378,19 +401,8 @@ public class DomainServlet extends BeanServlet {
 				request.getRequestDispatcher("domain-tags.jsp").forward(request, response);
 				return;
 			}
-			
-			String page = (String)request.getParameter("page");
-			String userFilter = (String)request.getParameter("user-filter");
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("domain-search.jsp").forward(request, response);
-				return;
-			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("domain-search.jsp").forward(request, response);
+
+			if (checkSearchCommon(bean, "domain-search.jsp", request, response)) {
 				return;
 			}
 

@@ -48,7 +48,10 @@ public class UserServlet extends BeanServlet {
 		LoginBean loginBean = (LoginBean)request.getSession().getAttribute("loginBean");
 		if (loginBean == null) {
 			// Do not allow web crawlers into the user directory.
-			response.sendRedirect("index.jsp");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 		UserBean bean = loginBean.getBean(UserBean.class);
@@ -62,10 +65,19 @@ public class UserServlet extends BeanServlet {
 			String displayOption = (String)request.getParameter("display");
 			String page = (String) request.getParameter("page");
 			String id = (String)request.getParameter("id");
+			String postToken = (String)request.getParameter("postToken");
 			
 			if (id != null) {
 				loginBean.viewUser(id);
 				request.getRequestDispatcher("user.jsp").forward(request, response);
+				return;
+			}
+			String exportAll = (String)request.getParameter("export-all");
+			if (exportAll != null) {
+				loginBean.verifyPostToken(postToken);
+				if (!bean.exportAll(request, response)) {
+					response.sendRedirect("browse-user.jsp");
+				}
 				return;
 			}
 			if (nameFilter != null) {

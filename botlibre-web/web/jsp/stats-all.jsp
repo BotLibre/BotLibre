@@ -51,6 +51,15 @@
 							<th>Free Memory</th>
 							<th>Web Downloads</th>
 							<th>Desktop Downloads</th>
+							
+							<th>Cached Translations</th>
+							<th>Translations</th>
+							<th>Translation Errors</th>
+							<th>Cached Bot Translations</th>
+							<th>Bot Translations</th>
+							<th>Bot Translation Errors</th>
+							<th>Speech API</th>
+							
 							<th>Bots</th>
 							<th>Active Bots</th>
 							<th>Bot Messages</th>
@@ -113,22 +122,37 @@
 							<th>Voice Calls</th>
 							<th>Voice Processed</th>
 							<th>Voice API</th>
+							<th>WhatsApp Sent</th>
+							<th>WhatsApp Processed</th>
+							<th>WhatsApp API</th>
 							<th>Alexa Bots</th>
 							<th>Alexa Messages</th>
 							<th>Alexa API</th>
 							<th>Google Assistant Bots</th>
 							<th>Google Assistant Messages</th>
 							<th>Google Assistant API</th>
+							
 							<th>User Creates</th>
 							<th>User Connects</th>
 							<th>User Messages</th>
+							
 							<th>Forum Creates</th>
 							<th>Forum Posts</th>
 							<th>Forum Views</th>
+							
 							<th>Live Chat Creates</th>
 							<th>Live Chat Rooms</th>
 							<th>Live Chat Connects</th>
 							<th>Live Chat Messages</th>
+							
+							<th>Analytic Image Uploads</th>
+							<th>Analytic Binary Upload</th>
+							<th>Analytic Test Image Upload</th>
+							<th>Analytic Test</th>
+							<th>Analytic Train</th>
+							<th>Analytic Train Busy</th>
+							<th>Analytic Test Media</th>
+							<th>Analytic Test Media Busy</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -148,6 +172,15 @@
 								<td><%= stat.freeMemory %></td>
 								<td><%= stat.webDownloads %></td>
 								<td><%= stat.desktopDownloads %></td>
+								
+								<td><%= stat.cachedTranslations %></td>
+								<td><%= stat.translations %></td>
+								<td><%= stat.translationErrors %></td>
+								<td><%= stat.cachedBotTranslations %></td>
+								<td><%= stat.botTranslations %></td>
+								<td><%= stat.botTranslationErrors %></td>
+								<td><%= stat.speechAPI %></td>
+								
 								<td><%= stat.bots %></td>
 								<td><%= stat.activeBots %></td>
 								<td><%= stat.botMessages %></td>
@@ -210,22 +243,38 @@
 								<td><%= stat.botTwilioVoiceCalls %></td>
 								<td><%= stat.botTwilioVoiceProcessed %></td>
 								<td><%= stat.botTwilioVoiceAPI %></td>
+								<td><%= stat.botWhatsAppSent %></td>
+								<td><%= stat.botWhatsAppProcessed %></td>
+								<td><%= stat.botWhatsAppAPI %></td>
 								<td><%= stat.alexaBots %></td>
 								<td><%= stat.botAlexaMessagesProcessed %></td>
 								<td><%= stat.botAlexaAPI %></td>
 								<td><%= stat.googleAssistantBots %></td>
 								<td><%= stat.botGoogleAssistantMessagesProcessed %></td>
 								<td><%= stat.botGoogleAssistantAPI %></td>
+								
 								<td><%= stat.userCreates %></td>
 								<td><%= stat.userConnects %></td>
 								<td><%= stat.userMessages %></td>
+								
 								<td><%= stat.forumCreates %></td>
 								<td><%= stat.forumPosts %></td>
 								<td><%= stat.forumPostViews %></td>
+								
 								<td><%= stat.chatCreates %></td>
 								<td><%= stat.chatRooms %></td>
 								<td><%= stat.chatConnects %></td>
 								<td><%= stat.chatMessages %></td>
+								
+								<td><%= stat.analyticImageUpload %></td>
+								<td><%= stat.analyticBinaryUpload %></td>
+								<td><%= stat.analyticTestImageUpload %></td>
+								<td><%= stat.analyticTest %></td>
+								<td><%= stat.analyticTraining %></td>
+								<td><%= stat.analyticTrainingBusy %></td>
+								<td><%= stat.analyticTestMediaProcessing %></td>
+								<td><%= stat.analyticTestMediaBusy %></td>
+								
 							</tr>
 						<% } %>
 						</tbody>

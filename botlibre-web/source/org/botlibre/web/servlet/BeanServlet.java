@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2020 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -102,6 +102,15 @@ public abstract class BeanServlet extends HttpServlet {
 			return true;
 		}
 		return false;
+	}
+	
+	public static String extractIP(HttpServletRequest requestContext) {
+		// Support CloudFlare proxy IP.
+		String ip = requestContext.getHeader("CF-Connecting-IP");
+		if (ip != null && !ip.isEmpty()) {
+			return ip;
+		}
+		return requestContext.getRemoteAddr();
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -348,6 +357,56 @@ public abstract class BeanServlet extends HttpServlet {
 		}
 		return false;
 	}
+
+	@SuppressWarnings("rawtypes")
+	public boolean checkSearchCommon(WebMediumBean bean, String url, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		String postToken = (String)request.getParameter("postToken");
+		String deleteAll = (String)request.getParameter("delete-all");
+		boolean deleteConfirm = "on".equals(request.getParameter("delete-confirm"));
+		if (deleteAll != null) {
+			bean.getLoginBean().verifyPostToken(postToken);
+			bean.deleteAll(request, deleteConfirm);
+			response.sendRedirect(url);
+			return true;
+		}
+		String reviewAll = (String)request.getParameter("review-all");
+		if (reviewAll != null) {
+			bean.getLoginBean().verifyPostToken(postToken);
+			bean.reviewAll(request);
+			response.sendRedirect(url);
+			return true;
+		}
+		String hideAll = (String)request.getParameter("hide-all");
+		if (hideAll != null) {
+			bean.getLoginBean().verifyPostToken(postToken);
+			bean.hideAll(request);
+			response.sendRedirect(url);
+			return true;
+		}
+		String privateAll = (String)request.getParameter("private-all");
+		if (privateAll != null) {
+			bean.getLoginBean().verifyPostToken(postToken);
+			bean.privateAll(request);
+			response.sendRedirect(url);
+			return true;
+		}
+
+		String page = (String)request.getParameter("page");
+		String userFilter = (String)request.getParameter("user-filter");
+		if (page != null) {
+			bean.setPage(Integer.valueOf(page));
+			request.getRequestDispatcher(url).forward(request, response);
+			return true;
+		}
+		if (userFilter != null) {
+			bean.resetSearch();
+			bean.setUserFilter(userFilter);
+			bean.setInstanceFilter(InstanceFilter.Personal);
+			request.getRequestDispatcher(url).forward(request, response);
+			return true;
+		}
+		return false;
+	}
 	
 	@SuppressWarnings("rawtypes")
 	public boolean checkUserAdmin(WebMediumBean bean, String url, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -394,6 +453,9 @@ public abstract class BeanServlet extends HttpServlet {
 		String nameFilter = Utils.sanitize((String)request.getParameter("name-filter"));
 		String categoryFilter = Utils.sanitize((String)request.getParameter("category-filter"));
 		String tagFilter = Utils.sanitize((String)request.getParameter("tag-filter"));
+		String startFilter = Utils.sanitize((String)request.getParameter("start-filter"));
+		String endFilter = Utils.sanitize((String)request.getParameter("end-filter"));
+		String pageSize = Utils.sanitize((String)request.getParameter("page-size"));
 		String instanceSort = Utils.sanitize((String)request.getParameter("instance-sort"));
 		String contentRating = Utils.sanitize((String)request.getParameter("content-rating"));  
 		String displayOption = Utils.sanitize((String)request.getParameter("display"));
@@ -440,6 +502,15 @@ public abstract class BeanServlet extends HttpServlet {
 		if (nameFilter != null) {
 			bean.setNameFilter(nameFilter);
 		}
+		if (startFilter != null) {
+			bean.setStartFilter(startFilter);
+		}
+		if (endFilter != null) {
+			bean.setEndFilter(endFilter);
+		}
+		if (pageSize != null && bean.isSuper()) {
+			bean.setPageSize(Integer.valueOf(pageSize));
+		}
 		if ("grid".equals(displayOption)) {
 			bean.setDisplayOption(DisplayOption.Grid);
 		} else if ("details".equals(displayOption)) {
@@ -466,6 +537,8 @@ public abstract class BeanServlet extends HttpServlet {
 		config.accessMode = (String)request.getParameter("accessMode");
 		config.forkAccessMode = (String)request.getParameter("forkAccessMode");
 		config.contentRating = (String)request.getParameter("contentRating");
+		config.isReviewed = "on".equals((String)request.getParameter("isReviewed"));
+		config.reviewRejectionComments = (String)request.getParameter("reviewRejectionComments");
 		config.showAds = "on".equals((String)request.getParameter("showAds"));
 		config.adCode = (String)request.getParameter("adCode");
 	}

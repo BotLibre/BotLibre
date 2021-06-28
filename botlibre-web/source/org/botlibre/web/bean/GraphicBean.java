@@ -23,11 +23,15 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -120,13 +124,13 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 	public List<Graphic> getAllInstances(Domain domain) {
 		try {
 			List<Graphic> results = AdminDatabase.instance().getAllGraphics(this.page, this.pageSize, this.categoryFilter, this.nameFilter, this.userFilter, 
-					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllGraphicsCount(this.categoryFilter, this.nameFilter, this.userFilter, this.instanceFilter, 
-							this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+							this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 				}
 			}
 			return results;
@@ -139,9 +143,9 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 	public List<Graphic> getAllLinkableInstances() {
 		try {
 			List<Graphic> privateGraphics = AdminDatabase.instance().getAllGraphics(
-					0, 100, "", "", "", InstanceFilter.Private, InstanceRestrict.None, InstanceSort.MonthlyConnects, ContentRating.Everyone, "", getUser(), getDomain(), true);
+					0, 100, "", "", "", InstanceFilter.Private, InstanceRestrict.None, InstanceSort.MonthlyConnects, ContentRating.Everyone, "", "", "", getUser(), getDomain(), true);
 			List<Graphic> publicGraphics = AdminDatabase.instance().getAllGraphics(
-					0, 100, "", "", "", InstanceFilter.Public, InstanceRestrict.None, InstanceSort.MonthlyConnects, ContentRating.Everyone, "", getUser(), getDomain(), true);
+					0, 100, "", "", "", InstanceFilter.Public, InstanceRestrict.None, InstanceSort.MonthlyConnects, ContentRating.Everyone, "", "", "", getUser(), getDomain(), true);
 			List<Graphic> results = new ArrayList<Graphic>(privateGraphics);
 			results.addAll(publicGraphics);
 			return results;
@@ -154,7 +158,7 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 	public List<Graphic> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllGraphics(
-					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain(), false);
+					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain(), false);
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<Graphic>();
@@ -422,6 +426,7 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 			zip.closeEntry();
 			
 			OutputStream out = response.getOutputStream();
+			zip.finish();
 			zip.flush();
 			byte[] bytes = stream.toByteArray();
 			out.write(bytes, 0, bytes.length);
@@ -435,7 +440,88 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 	}
 	
 	/**
-	 * Import the graphic from a zip file.
+	 * Download all of the graphics media on a page as a zip file.
+	 */
+	public boolean exportAll(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			checkSuper();
+			Set<Long> ids = new HashSet<Long>();
+			for (Object parameter : request.getParameterMap().entrySet()) {
+				Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>)parameter;
+				String key = entry.getKey();
+				try {
+					ids.add(Long.valueOf(key));
+				} catch (NumberFormatException ignore) {}
+			}
+			if (ids.isEmpty()) {
+				throw new BotException("Missing selection");
+			}
+			
+			response.setContentType("application/zip");
+			response.setHeader("Content-disposition","attachment; filename=" + encodeURI("Exported_Graphics.zip"));
+
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			ZipOutputStream zip = new ZipOutputStream(stream);
+			for (Long id : ids) {
+				Graphic graphic = AdminDatabase.instance().validate(Graphic.class, id, getUserId());
+				ZipEntry entry = new ZipEntry(graphic.getId() + "_meta.xml");
+				zip.putNextEntry(entry);
+				GraphicConfig config = graphic.buildConfig();
+				JAXBContext context = JAXBContext.newInstance(GraphicConfig.class);
+				StringWriter writer = new StringWriter();
+				Marshaller marshaller = context.createMarshaller();
+				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+				marshaller.marshal(config, writer);
+				zip.write(writer.toString().getBytes("UTF-8"));
+				zip.closeEntry();
+	
+				if (graphic.getAvatar() != null) {
+					entry = new ZipEntry(graphic.getId() + "_icon.jpg");
+					zip.putNextEntry(entry);
+					zip.write(graphic.getAvatar().getImage());
+					zip.closeEntry();
+				}
+				MediaFile media = graphic.getMedia();
+				if (media != null) {
+					String ext = "mp4";
+					int index = media.getFileName().indexOf('.');
+					if (index != -1) {
+						ext = media.getFileName().substring(index + 1, media.getFileName().length());
+					}
+					entry = new ZipEntry(graphic.getId() + "_media." + ext);
+					zip.putNextEntry(entry);
+					Media data = AdminDatabase.instance().findMedia(media.getMediaId());
+					zip.write(data.getMedia());
+					zip.closeEntry();
+		
+					entry = new ZipEntry(String.valueOf(graphic.getId() + "_mediafile.xml"));
+					zip.putNextEntry(entry);
+					MediaFileConfig mediaConfig = media.toConfig();
+					context = JAXBContext.newInstance(MediaFileConfig.class);
+					writer = new StringWriter();
+					marshaller = context.createMarshaller();
+					marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+					marshaller.marshal(mediaConfig, writer);
+					zip.write(writer.toString().getBytes("UTF-8"));
+					zip.closeEntry();
+				}
+			}
+			OutputStream out = response.getOutputStream();
+			zip.finish();
+			zip.flush();
+			byte[] bytes = stream.toByteArray();
+			out.write(bytes, 0, bytes.length);
+			out.flush();
+			
+		} catch (Exception exception) {
+			error(exception);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Import one or multiple graphics from a zip file.
 	 */
 	public boolean importGraphic(byte[] bytes) {
 		try {
@@ -445,14 +531,15 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 			ZipInputStream zip = new ZipInputStream(stream);
 			
 			ZipEntry entry = zip.getNextEntry();
-			byte[] icon = null;
-			byte[] media = null;
 			boolean found = false;
-			String name = "media";
-			String type = "jpg";
 			while (entry != null) {
-				byte[] fileBytes = BotBean.loadImageFile(zip, false);
-				if (entry.getName().equals("meta.xml")) {
+				byte[] icon = null;
+				byte[] media = null;
+				String name = "media";
+				String type = "jpg";
+				if (entry.getName().equals("meta.xml") || entry.getName().endsWith("_meta.xml")) {
+					byte[] fileBytes = BotBean.loadImageFile(zip, false, isSuperUser() ? Site.MAX_UPLOAD_SIZE * 100 : Site.MAX_UPLOAD_SIZE);
+					name = entry.getName().replaceAll("_meta", "").replaceAll(".xml", "");
 					JAXBContext context = JAXBContext.newInstance(GraphicConfig.class);
 					Unmarshaller marshaller = context.createUnmarshaller();
 					ByteArrayInputStream fileStream = new ByteArrayInputStream(fileBytes);
@@ -461,17 +548,36 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 						return false;
 					}
 					found = true;
-				} else if (entry.getName().equals("icon.jpg")) {
-					icon = fileBytes;
-				} else if (entry.getName().equals("media.xml")) {
-					JAXBContext context = JAXBContext.newInstance(MediaFileConfig.class);
-					Unmarshaller marshaller = context.createUnmarshaller();
-					ByteArrayInputStream fileStream = new ByteArrayInputStream(fileBytes);
-					MediaFileConfig mediaConfig = (MediaFileConfig)marshaller.unmarshal(fileStream);
-					type = mediaConfig.type;
-					name = mediaConfig.name;
-				} else if (entry.getName().startsWith("media")) {
-					media = fileBytes;
+
+					ByteArrayInputStream innerStream = new ByteArrayInputStream(bytes);
+					ZipInputStream innerZip = new ZipInputStream(innerStream);
+					
+					ZipEntry innerEntry = innerZip.getNextEntry();
+					// For each graphic meta file find the icon and media files.
+					for(;innerEntry!=null; innerEntry = innerZip.getNextEntry()) {
+						if (innerEntry.getName().equals("icon.jpg") || innerEntry.getName().endsWith(name + "_icon.jpg")) {
+							fileBytes = BotBean.loadImageFile(innerZip, false);
+							icon = fileBytes;
+						} else if (innerEntry.getName().equals("media.xml") || innerEntry.getName().endsWith(name + "_mediafile.xml")) {
+							fileBytes = BotBean.loadImageFile(innerZip, false);
+							context = JAXBContext.newInstance(MediaFileConfig.class);
+							marshaller = context.createUnmarshaller();
+							fileStream = new ByteArrayInputStream(fileBytes);
+							MediaFileConfig mediaConfig = (MediaFileConfig)marshaller.unmarshal(fileStream);
+							type = mediaConfig.type;
+							name = mediaConfig.name;
+						} else if (innerEntry.getName().startsWith("media") || innerEntry.getName().contains(name + "_media")) {
+							fileBytes = BotBean.loadImageFile(innerZip, false);
+							media = fileBytes;
+						}
+						innerZip.closeEntry();
+					}
+					if (icon != null) {
+						update(icon);
+					}
+					if (media != null) {
+						saveMedia(media, name, type);
+					}
 				}
 				zip.closeEntry();
 				entry = zip.getNextEntry();
@@ -480,14 +586,9 @@ public class GraphicBean extends WebMediumBean<Graphic> {
 			stream.close();
 			
 			if (!found) {
-				throw new BotException("Missing meta.xml file in export archive");
+				throw new BotException("Missing meta.xml or [id]_meta.xml file in export archive");
 			}
-			if (icon != null) {
-				update(icon);
-			}
-			if (media != null) {
-				saveMedia(media, name, type);
-			}
+			
 		} catch (Exception exception) {
 			error(exception);
 			return false;

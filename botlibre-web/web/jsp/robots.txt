@@ -49,3 +49,6 @@ Disallow: /
 
 User-agent: Seekport Crawler
 Disallow: /
+
+User-agent: dotbot
+Disallow: /

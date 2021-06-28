@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2020 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import org.botlibre.BotException;
 import org.botlibre.util.Utils;
 import org.botlibre.web.Site;
 import org.botlibre.web.admin.AdminDatabase;
+import org.botlibre.web.servlet.BeanServlet;
 
 @Entity
 public class IPStats implements Comparable<IPStats> {
@@ -103,19 +104,14 @@ public class IPStats implements Comparable<IPStats> {
 		if (request == null) {
 			return;
 		}
-		String agent = request.getHeader("user-agent");
-		if (agent == null) {
-			agent = "unknown";
-		} else if (agent.length() > 150) {
-			agent = agent.substring(0, 150);
-		}
+		String agent = AgentStats.extractAgent(request);
 		String referer = request.getHeader("referer");
 		if (referer == null) {
 			referer = "unknown";
 		}
 		AdminDatabase.instance().getLog().log(Level.INFO, "user-agent: " + agent);
 		AdminDatabase.instance().getLog().log(Level.INFO, "referer: " + referer);
-		String ip = request.getRemoteAddr();
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return;
 		}
@@ -127,7 +123,7 @@ public class IPStats implements Comparable<IPStats> {
 		if (request == null) {
 			return;
 		}
-		String ip = request.getRemoteAddr();
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return;
 		}
@@ -139,7 +135,8 @@ public class IPStats implements Comparable<IPStats> {
 		if (request == null) {
 			return null;
 		}
-		String ip = request.getRemoteAddr();
+		AgentStats.api(request);
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
@@ -152,7 +149,8 @@ public class IPStats implements Comparable<IPStats> {
 		if (request == null) {
 			return;
 		}
-		String ip = request.getRemoteAddr();
+		AgentStats.page(request);
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return;
 		}
@@ -164,14 +162,9 @@ public class IPStats implements Comparable<IPStats> {
 		if (request == null) {
 			return;
 		}
-		String agent = request.getHeader("user-agent");
-		if (agent == null) {
-			agent = "unknown";
-		}
-		if (agent.length() >= 255) {
-			agent = agent.substring(0, 252);
-		}
-		String ip = request.getRemoteAddr();
+		AgentStats.session(request);
+		String agent = AgentStats.extractAgent(request);
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return;
 		}

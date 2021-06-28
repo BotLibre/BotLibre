@@ -40,7 +40,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/twilio.svg" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/twilio.svg" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow your bot to send, receive, and reply to SMS messages and voice calls.") %><br/>
@@ -94,7 +94,7 @@
 				<form action="sms" method="post" class="message">
 					<%= loginBean.postTokenInput() %>
 					<%= botBean.instanceInput() %>
-					<h3>SMS Properties</h3>
+					<h3>Twilio Properties</h3>
 					<span class="dropt-banner">
 						<img id="help-mini" src="images/help.svg"/>
 						<div>

@@ -46,6 +46,7 @@ import org.botlibre.web.rest.WebMediumConfig;
 	@AssociationOverride(name="errors", joinTable=@JoinTable(name="BOT_ERRORS"))
 })
 public class BotInstance extends WebMedium {
+	public static final String MARY = "Mary";
 	public static final String RESPONSIVEVOICE = "ResponsiveVoice";
 	public static final String BINGSPEECH = "BingSpeech";
 	public static final String QQSPEECH = "QQSpeech";
@@ -177,7 +178,7 @@ public class BotInstance extends WebMedium {
 	}
 	
 	public String getNativeVoiceApiKey() {
-		if(nativeVoiceApiKey == null) {
+		if (nativeVoiceApiKey == null) {
 			return "";
 		}
 		return nativeVoiceApiKey;
@@ -188,7 +189,7 @@ public class BotInstance extends WebMedium {
 	}
 	
 	public String getVoiceApiEndpoint() {
-		if(voiceApiEndpoint == null || voiceApiEndpoint.isEmpty()) {
+		if (voiceApiEndpoint == null || voiceApiEndpoint.isEmpty()) {
 			return "https://eastus.api.cognitive.microsoft.com/sts/v1.0/issueToken";
 		}
 		return voiceApiEndpoint;

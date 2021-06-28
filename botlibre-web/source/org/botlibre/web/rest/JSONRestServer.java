@@ -18,7 +18,6 @@
 package org.botlibre.web.rest;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,7 +52,7 @@ import org.botlibre.sense.http.Http;
 import org.botlibre.sense.kik.Kik;
 import org.botlibre.sense.skype.Skype;
 import org.botlibre.sense.slack.Slack;
-import org.botlibre.sense.sms.Twilio;
+import org.botlibre.sense.twilio.Twilio;
 import org.botlibre.sense.telegram.Telegram;
 import org.botlibre.sense.text.TextEntry;
 import org.botlibre.sense.wechat.WeChat;
@@ -135,14 +134,18 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 /**
- * Defines a REST (JAXRS) server to provide web clients a set of BOTlibre
+ * Defines a REST (JAXRS) server to provide web clients a set of Bot Libre
  * services for chat. The can be used from mobile or other client to interact
- * with a BOTlibre instance.
+ * with a Bot Libre instance.
  */
 @Path("/json")
 public class JSONRestServer {
 	
 	public JSONRestServer() {
+	}
+	
+	public static String extractIP(HttpServletRequest requestContext) {
+		return BeanServlet.extractIP(requestContext);
 	}
 
 	public void error(Throwable exception) {
@@ -417,7 +420,96 @@ public class JSONRestServer {
 		}
 		return null;
 	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_XML)
+	@Path("/twilio/whatsapp/{application}/{instance}")
+	public TwilioSMSResponse twilioWhatsApp(
+			@PathParam("application") String application,
+			@PathParam("instance") String instance,
+			@FormParam("MessageSid") String messageSid,
+			@FormParam("SmsSid") String smsSid,
+			@FormParam("AccountSid") String accountSid,
+			@FormParam("messagingServiceSid") String messagingServiceSid,
+			@FormParam("From") String from,
+			@FormParam("To") String to,
+			@FormParam("Body") String body,
+			@FormParam("numMedia") String numMedia,
+			@FormParam("MediaContentType") String mediaContentType,
+			@FormParam("MediaUrl") String mediaUrl,
+			@FormParam("FromCity") String fromCity,
+			@FormParam("FromState") String fromState,
+			@FormParam("FromZip") String fromZip,
+			@FormParam("FromCountry") String fromCountry,
+			@FormParam("ToCity") String toCity,
+			@FormParam("ToState") String toState,
+			@FormParam("ToZip") String toZip,
+			@FormParam("ToCountry") String toCountry,
+			@Context HttpServletRequest requestContext) {
+		
+		AdminDatabase.instance().log(Level.INFO, "API Twilio WhatsApp", accountSid, from, to, body);
 
+		Stats.stats.botWhatsAppAPI++;
+		LoginBean loginBean = new LoginBean();
+		BotBean bean = null;
+		Bot bot = null;
+		InstanceConfig config = new InstanceConfig();
+		config.id = instance;
+		config.application = application;
+		try {
+			config.validateApplication(loginBean, null);
+			config.user = loginBean.getAppUser();
+			loginBean.setUser(new User(config.user, null));
+			loginBean.validateUser(config.user, null, 0, false, true);
+			loginBean.setLoggedIn(true);
+			bean = loginBean.getBotBean();
+			bean.validateInstance(config.id);
+		} catch (Throwable exception) {
+			error(exception);
+			return null;
+		}
+		try {
+			if (body == null) {
+				body = "";
+			}
+			bot = bean.connectInstance();
+			BotStats stats = BotStats.getStats(bean.getInstanceId(), bean.getInstanceName());
+			Twilio message = bot.awareness().getSense(Twilio.class);
+			Language language = bot.mind().getThought(Language.class);
+			resetStats(stats, message, language);
+			stats.whatsappProcessed++;
+			Stats.stats.botWhatsAppProcessed++;
+			long startTime = System.currentTimeMillis();
+			String reply = message.processWhatsAppMessage(from, body);
+			TwilioSMSResponse response = new TwilioSMSResponse();
+			if (reply == null) {
+				return null;
+			} else if (reply.length() > 1600) {
+				reply = reply.substring(0, 1600);
+			}
+			updateStats(stats, message, language, startTime);
+			resetStats(stats, message, language);
+			response.Message = reply;
+			stats.whatsappSent++;
+			Stats.stats.botWhatsAppSent++;
+			return response;
+		} catch (Exception exception) {
+			AdminDatabase.instance().log(exception);
+		} finally {
+			if (bot != null) {
+				int count = 0;
+				while ((count < 50) && !bot.memory().getActiveMemory().isEmpty()) {
+					count++;
+					Utils.sleep(100);
+				}
+			}
+			bean.disconnectInstance();
+			loginBean.disconnect();
+		}
+		return null;
+	}
+	
 	@GET
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
@@ -1792,7 +1884,7 @@ public class JSONRestServer {
 			try {
 				String[] scriptArray = config.id.split(",");
 				for (String scriptId : scriptArray) {
-					selfBean.removeSelectedState(scriptId);
+					selfBean.removeSelectedState(scriptId.trim());
 				}
 			} finally {
 				loginBean.disconnect();
@@ -1825,7 +1917,7 @@ public class JSONRestServer {
 			try {
 				String[] scriptArray = config.id.split(",");
 				for (String scriptId : scriptArray) {
-					selfBean.moveSelectStateUp(scriptId);
+					selfBean.moveSelectStateUp(scriptId.trim());
 				}
 			} finally {
 				loginBean.disconnect();
@@ -1858,7 +1950,7 @@ public class JSONRestServer {
 			try {
 				String[] scriptArray = config.id.split(",");
 				for (String scriptId : scriptArray) {
-					selfBean.moveSelectStateDown(scriptId);
+					selfBean.moveSelectStateDown(scriptId.trim());
 				}
 			} finally {
 				loginBean.disconnect();
@@ -2325,7 +2417,7 @@ public class JSONRestServer {
 				} else if (config.operation.equals("RemoveUser")) {
 					String[] userIdArray = config.operationUser.split(",");
 					for (String id : userIdArray) {
-						bean.removeUser(id);
+						bean.removeUser(id.trim());
 					}
 				} else if (config.operation.equals("AddAdmin")) {
 					bean.addAdmin(config.operationUser);
@@ -2336,7 +2428,7 @@ public class JSONRestServer {
 				} else if (config.operation.equals("RemoveOperator")) {
 					String[] userIdArray = config.operationUser.split(",");
 					for (String id : userIdArray) {
-						((LiveChatBean) bean).removeOperator(id);
+						((LiveChatBean) bean).removeOperator(id.trim());
 					}
 				}
 				if (loginBean.getError() != null) {
@@ -2926,7 +3018,7 @@ public class JSONRestServer {
 				if (loginBean.getError() != null) {
 					throw loginBean.getError();
 				}
-				UserConfig user = new UserConfig(loginBean.getUser(), true);
+				UserConfig user = new UserConfig(loginBean.getUser(), true, false);
 				user.avatar = loginBean.getAvatarImage(loginBean.getUser());
 				return user;
 			} finally {
@@ -3027,7 +3119,7 @@ public class JSONRestServer {
 			@QueryParam("language") String language,
 			@Context HttpServletRequest requestContext) {
 		
-		AdminDatabase.instance().log(Level.INFO, "API FORM chat", message, application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API FORM chat", message, application, extractIP(requestContext));
 		if (store != null && store.equals("0")) {
 			Stats.stats.badAPICalls++;
 			error(new BotException("Invalid request"));
@@ -3067,7 +3159,7 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/post-chat")
 	public JSONChatResponse postChat(JSONChatMessage message, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API chat", message, message.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API chat", message, message.application, extractIP(requestContext));
 		return new JSONChatResponse(chatMessage(new ChatMessage(message), requestContext, false));
 	}
 
@@ -3076,7 +3168,7 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/chat")
 	public JSONChatResponse chat(JSONChatMessage message, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API chat", message, message.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API chat", message, message.application, extractIP(requestContext));
 		return new JSONChatResponse(chatMessage(new ChatMessage(message), requestContext, false));
 	}
 
@@ -3090,7 +3182,7 @@ public class JSONRestServer {
 			String json,
 			@Context HttpServletRequest requestContext) {
 		
-		AdminDatabase.instance().log(Level.INFO, "API JSON command", application, instance, json, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API JSON command", application, instance, json, extractIP(requestContext));
 		try {
 			CommandMessage message = new CommandMessage();
 			message.application = application;
@@ -3109,7 +3201,7 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/command")
 	public ChatResponse command(CommandMessage message, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API command", message, message.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API command", message, message.application, extractIP(requestContext));
 		try {
 			return processCommand(message, requestContext);
 		} catch (Throwable failed) {
@@ -3564,7 +3656,14 @@ public class JSONRestServer {
 			}
 			if (message.speak) {
 				VoiceBean voiceBean = bean.getLoginBean().getBean(VoiceBean.class);
-				response.speech = ChatBean.speak(ChatBean.prepareSpeechText(responseText), voiceBean.getVoice(), voiceBean.getVoiceMod());
+				response.speech = ChatBean.speak(
+						ChatBean.prepareSpeechText(responseText),
+						voiceBean.getVoice(),
+						voiceBean.getVoiceMod(),
+						voiceBean.getNativeVoiceProvider(),
+						voiceBean.getNativeVoiceApiKey(),
+						voiceBean.getNativeVoiceApiToken(),
+						voiceBean.getVoiceApiEndpoint());
 			}
 			if (message.includeQuestion) {
 				response.question = message.message;
@@ -3616,9 +3715,65 @@ public class JSONRestServer {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/user-avatar-message")
+	public ChatResponse userAvatarMessage(UserAvatarMessage message, @Context HttpServletRequest requestContext) throws Throwable {
+		AdminDatabase.instance().log(Level.INFO, "API user avatar message", message, message.application, extractIP(requestContext));
+		try {
+			LoginBean loginBean = new LoginBean();
+			message.connect(loginBean, requestContext);
+			User user = loginBean.getUserAvatarMessage(message.userAvatar);
+			AvatarMessage avatarMessage = new AvatarMessage();
+			avatarMessage.message = message.message;
+			avatarMessage.speak = true;
+			avatarMessage.emote = message.emote;
+			avatarMessage.action = message.action;
+			avatarMessage.pose = message.pose;
+			if (user == null) {
+				// Default voice.
+			} else if (user.isBot()) {
+				String botId = message.userAvatar.substring(1, message.userAvatar.length());
+				BotBean botBean = loginBean.getBotBean();
+				botBean.validateInstance(botId, true);
+				if (loginBean.getError() != null) {
+					throw loginBean.getError();
+				}
+				if (botBean.getInstance().getInstanceAvatar() != null) {
+					avatarMessage.avatar = String.valueOf(botBean.getInstance().getInstanceAvatar().getId());
+				}
+				avatarMessage.voice = botBean.getInstance().getVoice();
+				avatarMessage.voiceMod = botBean.getInstance().getVoiceMod();
+			} else {
+				if (user.getInstanceAvatar() != null) {
+					avatarMessage.avatar = String.valueOf(user.getInstanceAvatar().getId());
+				}
+				avatarMessage.voice = user.getVoice();
+				avatarMessage.voiceMod = user.getVoiceMod();
+			}
+			AvatarBean bean = loginBean.getBean(AvatarBean.class);
+			if (avatarMessage.avatar != null) {
+				bean.validateInstance(avatarMessage.avatar, true);
+			}
+			if (loginBean.getError() != null) {
+				throw loginBean.getError();
+			}
+			ChatResponse response = bean.processMessage(avatarMessage);
+			if (response.avatar == null) {
+				response.avatar = loginBean.getAvatarImage(user);
+			}
+			response.speech = ChatBean.speak(ChatBean.prepareSpeechText(avatarMessage.message), avatarMessage.voice, avatarMessage.voiceMod, BotInstance.MARY, null, null , null);
+			return response;
+		} catch(Exception failed) {
+			error(failed);
+			return null;
+		}
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/avatar-message")
 	public ChatResponse avatarMessage(AvatarMessage message, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API avatar message", message, message.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API avatar message", message, message.application, extractIP(requestContext));
 		try {
 			LoginBean loginBean = new LoginBean();
 			message.connect(loginBean, requestContext);
@@ -3634,7 +3789,7 @@ public class JSONRestServer {
 				response.avatar = message.avatar;
 			}
 			if (message.speak) {
-				response.speech = ChatBean.speak(ChatBean.prepareSpeechText(message.message), message.voice, message.voiceMod);
+				response.speech = ChatBean.speak(ChatBean.prepareSpeechText(message.message), message.voice, message.voiceMod, BotInstance.MARY, null, null , null);
 			}
 			return response;
 		} catch (Throwable failed) {
@@ -3655,7 +3810,7 @@ public class JSONRestServer {
 			BotBean bean = loginBean.getBotBean();
 			config.categories = config.getCategories();
 			config.accessMode = config.getAccessMode();
-			bean.createInstance(config, false, false, requestContext.getRemoteAddr());
+			bean.createInstance(config, false, false, extractIP(requestContext));
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
@@ -3872,9 +4027,9 @@ public class JSONRestServer {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("user-friendship")
-	public UserFriendsConfig userFriendship(UserFriendsConfig config, @Context HttpServletRequest requestContext) {
+	public UserConfig userFriendship(UserFriendsConfig config, @Context HttpServletRequest requestContext) {
 		AdminDatabase.instance().log(Level.INFO, "API user-friendship", "user friendship");
-		UserFriendsConfig userFriendConfig = null;
+		UserConfig userConfig = null;
 		LoginBean loginBean = new LoginBean();
 		try {
 			config.connect(loginBean, requestContext);
@@ -3883,19 +4038,28 @@ public class JSONRestServer {
 				if (loginBean.getError() != null) {
 					throw loginBean.getError();
 				}
-				userFriendConfig = new UserFriendsConfig();
 				if (friendship != null) {
-					userFriendConfig.action = "AddFriendship";
-					userFriendConfig.friendship = String.valueOf(friendship.getId());
-					userFriendConfig.userFriend = friendship.getFriend();
+					loginBean.viewUser(friendship.getFriend());
+					User user = loginBean.getViewUser();
+					userConfig = new UserConfig(user, false, false);
+					userConfig.avatar = loginBean.getAvatarImage(user);
+					userConfig.avatarThumb = loginBean.getAvatarThumb(user);
 				}
 			} else if ("RemoveFriendship".equals(config.action)) {
-				String[] friendshipArray = config.userFriend.split(",");
-				for (String friendId : friendshipArray) {
-					loginBean.deleteUserFriendship(friendId);
+				String[] friendshipArray = config.userFriend.split(", ");
+				if (friendshipArray.length > 1) {
+					// Possible users with commas in names.
+					for (String friendId : friendshipArray) {
+						loginBean.deleteUserFriendship(friendId.trim());
+					}
+				} else {
+					friendshipArray = config.userFriend.split(",");
+					for (String friendId : friendshipArray) {
+						loginBean.deleteUserFriendship(friendId.trim());
+					}
 				}
 			}
-			return userFriendConfig;
+			return userConfig;
 		} catch (Throwable failed) {
 			error(failed);
 			return null;
@@ -3908,11 +4072,11 @@ public class JSONRestServer {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("get-user-friendships")
-	public List<UserFriendsConfig> getUserFrienships(UserFriendsConfig config, @Context HttpServletRequest requestContext) {
+	public List<UserConfig> getUserFrienships(UserFriendsConfig config, @Context HttpServletRequest requestContext) {
 		LoginBean loginBean = new LoginBean();
 		try {
 			config.connect(loginBean, requestContext);
-			List<UserFriendsConfig> friendsList = loginBean.getUserFriendships(config);
+			List<UserConfig> friendsList = loginBean.getUserFriendships(config);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
@@ -3929,12 +4093,12 @@ public class JSONRestServer {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("get-user-followers")
-	public List<UserFriendsConfig> getUserFollowers(UserFriendsConfig config, @Context HttpServletRequest requestContext) {
+	public List<UserConfig> getUserFollowers(UserFriendsConfig config, @Context HttpServletRequest requestContext) {
 		AdminDatabase.instance().log(Level.INFO, "API get-user-followers", "get user followers");
 		LoginBean loginBean = new LoginBean();
 		try {
 			config.connect(loginBean, requestContext);
-			List<UserFriendsConfig> followersList = loginBean.getUserFollowers(config);
+			List<UserConfig> followersList = loginBean.getUserFollowers(config);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
@@ -3970,7 +4134,7 @@ public class JSONRestServer {
 				browseConfig.sort = ((BrowseUserConfig) config).sort;
 				browseConfig.page = ((BrowseUserConfig) config).page;
 				List<WebMediumConfig> botList = getInstances(browseConfig, requestContext);
-				for(WebMediumConfig botConfig : botList) {
+				for (WebMediumConfig botConfig : botList) {
 					UserConfig publicUserConfig = new UserConfig();
 					publicUserConfig.user = "@" + botConfig.alias;
 					publicUserConfig.name = botConfig.name;
@@ -4021,7 +4185,9 @@ public class JSONRestServer {
 			for (User user : usersList) {
 				UserConfig publicUserConfig = new UserConfig();
 				publicUserConfig.user = user.getUserId();
-				publicUserConfig.name = user.getName();
+				if (user.getShouldDisplayName()) {
+					publicUserConfig.name = user.getName();
+				}
 				publicUserConfig.bio = user.getBio();
 				publicUserConfig.connects = String.valueOf(user.getConnects());
 				publicUserConfig.lastConnect = String.valueOf(user.getLastConnected());
@@ -4690,9 +4856,10 @@ public class JSONRestServer {
 			if (config.affiliate == null || config.affiliate.isEmpty()) {
 				config.affiliate = loginBean.getAppUser();
 			}
-			loginBean.createUser(config.user, config.password, config.password, config.dateOfBirth, config.hint, config.name, requestContext.getRemoteAddr(), config.source, config.affiliate,
-					config.userAccess, config.email, config.website, config.bio, config.displayName, config.over18,
+			loginBean.createUser(config.user, config.password, config.password, config.dateOfBirth, config.hint, config.name, config.gender, config.properties, extractIP(requestContext), config.source, config.affiliate,
+					config.userAccess, config.email, config.website, config.bio, config.showName, config.over18,
 					config.credentialsType, config.credentialsUserID, config.credentialsToken,
+					config.emailMessages, config.emailNotices, config.emailSummary,
 					true);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
@@ -4700,10 +4867,10 @@ public class JSONRestServer {
 			User user = loginBean.getUser();
 			AppIDStats stats = AppIDStats.getStats(loginBean.getApplicationId(), user.getUserId());
 			stats.userCreates++;
-			config.password = null;
-			config.token = String.valueOf(user.getToken());
-			config.avatar = loginBean.getAvatarImage(user);
-			return config;
+			UserConfig result = new UserConfig(user, true, false);
+			result.avatar = loginBean.getAvatarImage(user);
+			result.newMessage = hasNewMessage(user);
+			return result;
 		} catch (Throwable failed) {
 			error(failed);
 			return null;
@@ -4726,7 +4893,7 @@ public class JSONRestServer {
 			User user = loginBean.getUser();
 			user.checkApplicationId();
 			loginBean.sendEmailVerify(user);
-			UserConfig result = new UserConfig(user, true);
+			UserConfig result = new UserConfig(user, true, false);
 			return result;
 		} catch (Throwable failed) {
 			error(failed);
@@ -5436,7 +5603,8 @@ public class JSONRestServer {
 		try {
 			LoginBean loginBean = new LoginBean();
 			try {
-				loginBean.flagUser("");
+				config.connect(loginBean, requestContext);
+				loginBean.flagUser(config.flaggedReason, config.flaggedUser);
 				if (loginBean.getError() != null) {
 					throw loginBean.getError();
 				}
@@ -5630,13 +5798,14 @@ public class JSONRestServer {
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
-			loginBean.updateUser(config.password, config.newPassword, config.newPassword, config.hint, config.name, config.userAccess, config.tags, config.email, config.source, null, null, null,
-					config.website, config.bio, config.showName, config.over18, config.adCode, null, "");
+			loginBean.updateUser(config.password, config.newPassword, config.newPassword, config.hint, config.name, config.gender, config.properties, config.userAccess, config.tags,
+					config.email, config.source, config.emailNotices, config.emailMessages, config.emailSummary,
+					config.website, config.bio, config.showName, config.over18, config.adCode, null, "", null);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
 			User user = loginBean.getUser();
-			UserConfig result = new UserConfig(user, true);
+			UserConfig result = new UserConfig(user, true, false);
 			result.avatar = loginBean.getAvatarImage(user);
 			return result;
 		} catch (Throwable failed) {
@@ -5650,14 +5819,14 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("upgrade-user")
 	public UserConfig upgradeUser(UpgradeConfig config, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API upgrade-user", config.user);
+		AdminDatabase.instance().log(Level.INFO, "PAYMENT: API upgrade-user", config.user);
 		try {
 			LoginBean loginBean = new LoginBean();
 			config.connect(loginBean, requestContext);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
-			if (Site.COMMERCIAL) {
+			if (Site.COMMERCIAL && (!Site.DEDICATED || Site.CLOUD)) {
 				DomainBean domainBean = loginBean.getBean(DomainBean.class);
 				domainBean.upgradeDomain(config);
 			} else {
@@ -5667,11 +5836,11 @@ public class JSONRestServer {
 				throw loginBean.getError();
 			}
 			User user = loginBean.getUser();
-			UserConfig result = new UserConfig(user, true);
+			UserConfig result = new UserConfig(user, true, false);
 			result.avatar = loginBean.getAvatarImage(user);
 			return result;
 		} catch (Throwable failed) {
-			AdminDatabase.instance().log(Level.WARNING, "Upgrade failed: exception", config.orderId, failed);
+			AdminDatabase.instance().log(Level.WARNING, "PAYMENT: Upgrade failed: exception", config.orderId, failed);
 			error(failed);
 			return null;
 		}
@@ -5716,7 +5885,7 @@ public class JSONRestServer {
 			@QueryParam("token") String token,
 			@Context HttpServletRequest requestContext) {
 		
-		AdminDatabase.instance().log(Level.INFO, "API FORM check-user", user, application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API FORM check-user", user, application, extractIP(requestContext));
 		UserConfig config = new UserConfig();
 		config.application = application;
 		config.user = user;
@@ -5730,34 +5899,31 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/get-bot-channel")
 	public ChannelConfig getBotChannel(InstanceConfig config, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API get-bot-channel", config.user, config.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API get-bot-channel", config.user, config.application, extractIP(requestContext));
 		ChatChannel chatChannel  = null;
 		ChannelConfig channelConfig = new ChannelConfig();
 		try {
 			LoginBean loginBean = new LoginBean();
-			if (config.user != null) {
-				loginBean.connect(config.user, config.password, config.getToken());
-			}
+			BotBean bean = (BotBean)config.validate(loginBean, requestContext);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
 			LiveChatBean livechatBean = loginBean.getBean(LiveChatBean.class);
-			BotBean botBean = loginBean.getBotBean();
-			botBean.validateInstance(config.id);
+			ChannelType type = null;
 			if ("live-chat".equals(config.channelType)) {
-				if (botBean.getInstance() != null && !livechatBean.validateInstance(botBean.getInstanceName() + " Live Chat", botBean.getInstance().getDomain())) {
-					loginBean.setError(null);
-					livechatBean.createInstance(botBean.getInstanceName() + " Live Chat", ChannelType.OneOnOne, botBean.getBotBean());
-				}
-			} else if ("chat-room".equals(config.channelType)) {
-				if (botBean.getInstance() != null && !livechatBean.validateInstance(botBean.getInstanceName() + " Chat Room", botBean.getInstance().getDomain())) {
-					loginBean.setError(null);
-					livechatBean.createInstance(botBean.getInstanceName() + " Chat Room", ChannelType.ChatRoom, botBean.getBotBean());
-				}
-			}			
+				type = ChannelType.OneOnOne;
+			} else {
+				type = ChannelType.ChatRoom;
+			}
+			livechatBean.checkBotChannel(type, bean);
+			if (loginBean.getError() != null) {
+				throw loginBean.getError();
+			}
 			chatChannel = livechatBean.getInstance();
 			if (chatChannel != null) {
 				channelConfig = (ChannelConfig) chatChannel.buildConfig();
+			} else {
+				throw new BotException("Invalid channel");
 			}
 		} catch (Throwable error) {
 			error(error);
@@ -5771,96 +5937,92 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/get-user-channel")
 	public ChannelConfig getUserChannel(UserConfig config, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API get-user-channel", config.user, config.application, requestContext.getRemoteAddr());
-		ChatChannel chatChannel  = null;
-		ChannelConfig channelConfig = new ChannelConfig();
+		AdminDatabase.instance().log(Level.INFO, "API get-user-channel", config.user, config.application, extractIP(requestContext));
 		LoginBean loginBean = new LoginBean();
 		try {
-			config.validateApplication(loginBean, requestContext);
 			User user = null;
-			if (config.password != null || config.token != null) {
-				loginBean.connect(config.user, config.password, config.getToken());
+			if (config.token != null || config.password != null && !config.token.isEmpty() || !config.password.isEmpty()) {
+				config.connect(loginBean, requestContext);
 				user = loginBean.getUser();
-				user.checkApplicationId();
 			} else {
+				config.validateApplication(loginBean, requestContext);
 				loginBean.viewUser(config.user);
 				user = loginBean.getViewUser();
-				user.checkApplicationId();
-				if (config.user.startsWith("@")) {
-					String botName = config.user.substring(1);
-					if (!loginBean.getBotBean().validateInstance(botName)) {
-						throw new BotException("User bot - " + botName + " doesn't exist");
-					}
-					BotInstance botInstance = loginBean.getBotBean().getInstance();
-					InstanceConfig instanceConfig = new InstanceConfig();
-					instanceConfig.id = botInstance.getId().toString();
-					instanceConfig.user = config.user; 
-					instanceConfig.name = botName;
-					instanceConfig.password = user.getPassword();
-					Long token = user.getToken();
-					if (token != null) {
-						instanceConfig.token = token.toString();
-					}
-					instanceConfig.channelType = config.channelType;
-					channelConfig = getBotChannel(instanceConfig, requestContext);
-					return channelConfig;
-				}
-				loginBean.connect(user.getUserId(), user.getPassword(), user.getToken());
 			}
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
-			LiveChatBean livechatBean = loginBean.getBean(LiveChatBean.class);
-			Domain domain = loginBean.getDomain();
-			BotInstance botInstance = null;
-			if (config.user.startsWith("@")) {
-				config.user = config.user.substring(1);
-				if (loginBean.getBotBean().validateInstance(config.user)) {
-					botInstance = loginBean.getBotBean().getInstance();
-				}
-			} else {
-				if (loginBean.getBotBean().validateInstance(config.user + " Bot")) {
-					botInstance = loginBean.getBotBean().getInstance();
-				}
-			}
-			if (botInstance == null) {
-				InstanceConfig instanceConfig = new InstanceConfig();
-				instanceConfig.user = config.user;
-				instanceConfig.name = config.user + " Bot";
-				instanceConfig.application = config.applicationId;
-				instanceConfig.token = config.token;
-				instanceConfig.domain = domain.getId().toString();
-				instanceConfig.categories = "Personal";
-				BotBean botBean = loginBean.getBotBean();
-				boolean createInstance = botBean.createInstance(instanceConfig, false, false, requestContext.getRemoteAddr());
-				if (createInstance) {
-					botInstance = botBean.getInstance();
-				}
-			}
-			if (botInstance == null) {
-				return null;
-			}
-			Long botId = botInstance.getId();
+			BotBean botBean = loginBean.getBotBean();
+			LiveChatBean liveChatBean = loginBean.getBean(LiveChatBean.class);
+			ChannelType type = null;
 			if ("live-chat".equals(config.channelType)) {
-				if (user != null && !livechatBean.validateInstance(user.getUserId() + " Live Chat", domain)) {
-					loginBean.setError(null);
-					livechatBean.createUserChannelInstance(user.getUserId() + " Live Chat", ChannelType.OneOnOne, user, domain, botId);
-				}
-			} else if ("chat-room".equals(config.channelType)) {
-				if (user != null && !livechatBean.validateInstance(user.getUserId() + " Chat Room", domain)) {
-					loginBean.setError(null);
-					livechatBean.createUserChannelInstance(user.getUserId() + " Chat Room", ChannelType.ChatRoom, user, domain, botId);
-				}
+				type = ChannelType.OneOnOne;
+			} else {
+				type = ChannelType.ChatRoom;
 			}
-			chatChannel = livechatBean.getInstance();
-			if (chatChannel != null) {
-				channelConfig = (ChannelConfig) chatChannel.buildConfig();
+			if (config.user.startsWith("@")) {
+				String botName = config.user.substring(1);
+				if (!loginBean.getBotBean().validateInstance(botName)) {
+					throw loginBean.getError();
+				}
+				liveChatBean.checkBotChannel(type, botBean);
+			} else {
+				botBean.checkUserInstance(user, extractIP(requestContext));
+				if (loginBean.getError() != null) {
+					throw loginBean.getError();
+				}
+				liveChatBean.checkUserChannel(user, type, botBean);
 			}
+			if (loginBean.getError() != null) {
+				throw loginBean.getError();
+			}
+			return liveChatBean.getInstance().buildConfig();
 		} catch (Throwable error) {
 			error(error);
 			return null;
-		}	
-		return channelConfig;
+		}
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/get-user-bot")
+	/**
+	 * Return the personal bot for the user if it exists, create the bot if the user credentials are passed, otherwise give error.
+	 */
+	public InstanceConfig getUserBot(UserConfig config, @Context HttpServletRequest requestContext) {
+		AdminDatabase.instance().log(Level.INFO, "API get-user-bot", config.user, config.application, extractIP(requestContext));
+		LoginBean loginBean = new LoginBean();
+		try {
+			User user = null;
+			if (config.token != null || config.password != null && !config.token.isEmpty() || !config.password.isEmpty()) {
+				config.connect(loginBean, requestContext);
+				user = loginBean.getUser();
+			} else {
+				config.validateApplication(loginBean, requestContext);
+				loginBean.viewUser(config.user);
+				user = loginBean.getViewUser();
+			}
+			if (loginBean.getError() != null) {
+				throw loginBean.getError();
+			}
+			if (config.user.startsWith("@")) {
+				String botName = config.user.substring(1);
+				if (!loginBean.getBotBean().validateInstance(botName)) {
+					throw loginBean.getError();
+				}
+				return loginBean.getBotBean().getInstance().buildConfig();
+			}
+			BotBean botBean = loginBean.getBotBean();
+			botBean.checkUserInstance(user, extractIP(requestContext));
+			if (loginBean.getError() != null) {
+				throw loginBean.getError();
+			}
+			return botBean.getInstance().buildConfig();
+		} catch (Throwable error) {
+			error(error);
+			return null;
+		}
 	}
 	
 	@POST
@@ -5868,7 +6030,7 @@ public class JSONRestServer {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("check-user")
 	public UserConfig checkUser(UserConfig config, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API check-user", config.user, config.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API check-user", config.user, config.application, extractIP(requestContext));
 		return processCheckUser(config, requestContext);
 	}
 	
@@ -5885,7 +6047,7 @@ public class JSONRestServer {
 			}
 			User user = loginBean.getUser();
 			user.checkApplicationId();
-			UserConfig result = new UserConfig(user, true);
+			UserConfig result = new UserConfig(user, true, false);
 			result.avatar = loginBean.getAvatarImage(user);
 			result.newMessage = hasNewMessage(user);
 			return result;
@@ -5921,7 +6083,7 @@ public class JSONRestServer {
 				throw loginBean.getError();
 			}
 			User user = loginBean.getViewUser();
-			UserConfig result = new UserConfig(user, false);
+			UserConfig result = new UserConfig(user, false, false);
 			result.avatar = loginBean.getAvatarImage(user);
 			result.avatarThumb = loginBean.getAvatarThumb(user);
 			return result;
@@ -5943,14 +6105,21 @@ public class JSONRestServer {
 				AppIDStats.getStats(config.application, appUser).apiCalls++;
 			}
 			LoginBean loginBean = new LoginBean();
-			config.checkDomain(loginBean);
-			List<User> users = loginBean.getUsers(config.user);
+			String csv = config.users;
+			// Support backward compatibility to allow using user field.
+			if (csv == null || csv.isEmpty()) {
+				csv = config.user;
+				config.checkDomain(loginBean);
+			} else {
+				config.connect(loginBean, requestContext);
+			}
+			List<User> users = loginBean.getUsers(csv);
 			if (loginBean.getError() != null) {
 				throw loginBean.getError();
 			}
 			List<UserConfig> configs = new ArrayList<UserConfig>();
 			for (User user : users) {
-				UserConfig userConfig = new UserConfig(user, false);
+				UserConfig userConfig = new UserConfig(user, false, false);
 				if (user.getUserId().startsWith("anonymous")) {
 					userConfig.avatar = loginBean.getAvatarThumb((User)null);
 				} else {
@@ -6155,7 +6324,7 @@ public class JSONRestServer {
 			@QueryParam("from") String from,
 			@QueryParam("to") String to,
 			@Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API translate", text, application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API translate", text, application, extractIP(requestContext));
 		try {
 			LoginBean loginBean = new LoginBean();
 			try {
@@ -6188,7 +6357,7 @@ public class JSONRestServer {
 			@QueryParam("instance") String instance,
 			@QueryParam("embeddedAvatar") boolean embeddedAvatar,
 			@Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API FORM speak", text, application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API FORM speak", text, application, extractIP(requestContext));
 		SpeechConfig config = new SpeechConfig();
 		config.application = application;
 		config.text = text;
@@ -6212,17 +6381,17 @@ public class JSONRestServer {
 	@Produces(MediaType.TEXT_HTML)
 	@Path("speak")
 	public String speak(SpeechConfig config, @Context HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API speak", config.text, config.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API speak", config.text, config.application, extractIP(requestContext));
 		return processSpeak(config, requestContext);
 	}
 
 	public String processSpeak(SpeechConfig config, HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API speak", config.text, config.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API speak", config.text, config.application, extractIP(requestContext));
 		try {
 			LoginBean loginBean = new LoginBean();
 			try {
 				config.connect(loginBean, requestContext);
-				return ChatBean.speak(ChatBean.prepareSpeechText(config.text), config.voice, config.mod);
+				return ChatBean.speak(ChatBean.prepareSpeechText(config.text), config.voice, config.mod, BotInstance.MARY, null, null , null);
 			} finally {
 				loginBean.disconnect();
 			}
@@ -6551,7 +6720,6 @@ public class JSONRestServer {
 							String imageUrl = null;
 							String imageTitle = "...";
 							String imageDesc = "...";
-							int count = 0;
 							for (int index = 0; index  < nodes.getLength(); index++) {
 								Element node = (Element)nodes.item(index);
 								NodeList imageNodes = node.getElementsByTagName("img");
@@ -6810,7 +6978,7 @@ public class JSONRestServer {
 	}
 	
 	public String processSpeakQQ(SpeechConfig config, boolean avatar, HttpServletRequest requestContext) {	
-		AdminDatabase.instance().log(Level.INFO, "API speak QQ", config.text, config.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API speak QQ", config.text, config.application, extractIP(requestContext));
 		try {
 			LoginBean loginBean = new LoginBean();
 			try {
@@ -6838,7 +7006,7 @@ public class JSONRestServer {
 	}
 	
 	public String processSpeakBing(SpeechConfig config, boolean avatar, HttpServletRequest requestContext) {
-		AdminDatabase.instance().log(Level.INFO, "API speak bing", config.text, config.application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "API speak bing", config.text, config.application, extractIP(requestContext));
 		try {
 			LoginBean loginBean = new LoginBean();
 			try {
@@ -6846,7 +7014,7 @@ public class JSONRestServer {
 				String apiEndpoint;
 				VoiceBean voiceBean = null;
 				AvatarBean avatarBean = null;
-				if(!avatar) {
+				if (!avatar) {
 					InstanceConfig instanceConfig = new InstanceConfig();
 					instanceConfig.application = config.application;
 					instanceConfig.id = config.instance;
@@ -7014,8 +7182,7 @@ public class JSONRestServer {
 							}
 							
 							JSONObject slots = intent.optJSONObject("slots");
-							Iterator<String> i = slots.keys();
-							String slotName = i.next();
+							String slotName = (String)slots.keys().next();
 							String slotValue = slots.optJSONObject(slotName).optString("value");
 							
 							long startTime = System.currentTimeMillis();
@@ -7134,7 +7301,7 @@ public class JSONRestServer {
 							if (input != null) {
 								intentString = input.optString("intent");
 								JSONArray rawInputs = input.optJSONArray("rawInputs");
-								if (rawInputs != null && !intentString.equals("actions.intent.MAIN")) {
+								if (rawInputs != null && !"actions.intent.MAIN".equals(intentString)) {
 									message = rawInputs.getJSONObject(0).optString("query");
 								}
 							}
@@ -7150,7 +7317,7 @@ public class JSONRestServer {
 				resetStats(stats, googleAssistant, language);
 				JSONObject jsonResponse = googleAssistant.getJSONResponse(
 						response,
-						!intentString.equals("actions.intent.CANCEL") && !googleAssistant.isStopPhrase(message));
+						!"actions.intent.CANCEL".equals(intentString) && !googleAssistant.isStopPhrase(message));
 				return jsonResponse.toString();
 			} 
 			return null;

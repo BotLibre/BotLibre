@@ -59,7 +59,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/user1.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/user1.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("The users tab allows you to add users, operators, and administrators to your channel.") %><br/>

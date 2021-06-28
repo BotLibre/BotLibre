@@ -38,7 +38,6 @@ import org.botlibre.web.admin.Payment;
 import org.botlibre.web.admin.Payment.PaymentStatus;
 import org.botlibre.web.admin.Tag;
 import org.botlibre.web.admin.User;
-import org.botlibre.web.admin.WebMedium;
 import org.botlibre.web.rest.DomainConfig;
 import org.botlibre.web.rest.UpgradeConfig;
 import org.botlibre.web.service.EmailService;
@@ -258,13 +257,13 @@ public class DomainBean extends WebMediumBean<Domain> {
 	public List<Domain> getAllSearchInstances() {
 		try {
 			List<Domain> results = AdminDatabase.instance().getAllDomains(this.page, this.pageSize, this.categoryFilter, this.nameFilter, this.userFilter, 
-					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser());
+					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser());
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllDomainsCount(this.categoryFilter, this.nameFilter, this.userFilter, 
-							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser());
+							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser());
 				}
 			}
 			if (this.instanceRestrict == InstanceRestrict.Active) {
@@ -411,13 +410,13 @@ public class DomainBean extends WebMediumBean<Domain> {
 
 	public boolean wizard(String userId, String password, String password2, String dateOfBirth, String hint, String name, String ip, String email, String credentialsType, String credentialsUserID, String credentialsToken,
 			String instance, String description, boolean isPrivate, boolean isHidden, String accessMode, String creationMode,
-			String accountType, String duration,
+			String accountType, String duration, boolean isSubscribed,
 			String tx, String st, String amt, String cc, String token) {
 		try {
 			if (!isLoggedIn() || (this.wizardState == WizardState.User)) {
 				this.wizardState = WizardState.User;
-				boolean success = this.loginBean.createUser(userId, password, password2, dateOfBirth, hint, name, ip, "web", "", "Private", email, "", "", false, Site.ADULT,
-						credentialsType, credentialsUserID, credentialsToken, true);
+				boolean success = this.loginBean.createUser(userId, password, password2, dateOfBirth, hint, name, "", "", ip, "web", "", "Private", email, "", "", false, Site.ADULT,
+						credentialsType, credentialsUserID, credentialsToken, null, null, null, true);
 				if (success) {
 					this.wizardState = WizardState.Domain;
 				}
@@ -438,98 +437,175 @@ public class DomainBean extends WebMediumBean<Domain> {
 				AdminDatabase.instance().validateNewDomain(newInstance.getAlias(), description, "", Site.ADULT);
 				this.wizardState = WizardState.Payment;
 			} else if (this.wizardState == WizardState.Payment) {
-				Date date = new Date();
-				AccountType type = AccountType.valueOf(accountType);
-				int value = 1;
-				if (type != AccountType.Trial) {
-					value = Integer.valueOf(duration);
-				}
-				if ((getWizardDomain().getId() != null) && (type == AccountType.Trial)) {
-					throw new BotException("Free trial accounts must upgrade to paid accounts to renew");
-				}
-				Payment payment = new Payment();
-				payment.setAccountType(type);
-				payment.setPaymentDate(date);
-				payment.setPaymentDuration(value);
-				payment.setToken(String.valueOf(Math.abs(Utils.random().nextLong())));
-				payment.setUserId(getUser().getUserId());
-				payment.setStatus(PaymentStatus.WaitingForPayment);
-				AdminDatabase.instance().createPayment(payment);
-				setPayment(payment);
-
-				Domain  domain = null;
-				if (getWizardDomain().getId() == null) {
-					getWizardDomain().setAccountType(AccountType.Trial);
-					getWizardDomain().setPaymentDate(getPayment().getPaymentDate());
-					getWizardDomain().setPaymentDuration(1);
-					
-					domain = AdminDatabase.instance().createDomain(getWizardDomain(), getUser().getUserId(), "", "", this.loginBean);
-
-					Category category = new Category();
-					category.setName("Misc");
-					category.setDescription("Bots that have not been categorized");
-					category.setType("Bot");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Forums that have not been categorized");
-					category.setType("Forum");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Channels that have not been categorized");
-					category.setType("Channel");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Scripts that have not been categorized");
-					category.setType("Script");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Avatars that have not been categorized");
-					category.setType("Avatar");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Graphics that have not been categorized");
-					category.setType("Graphic");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Issue trackers that have not been categorized");
-					category.setType("IssueTracker");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-					
-					category = new Category();
-					category.setName("Misc");
-					category.setDescription("Analytics that have not been categorized");
-					category.setType("Analytic");
-					category.setDomain(domain);
-					AdminDatabase.instance().createCategory(category, getUser(), "");
-				}
+				beginPayment(accountType, duration, isSubscribed);
+			}
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+		return false;
+	}
+	
+	public boolean beginPayment(String accountType, String duration, boolean isSubscribed) {
+		try {
+			AdminDatabase.instance().log(Level.INFO, "processing payment requirements: AccountType "+accountType+" subscription: "+isSubscribed+" duration: "+duration);
+			Date date = new Date();
+		
+			AccountType type = AccountType.valueOf(accountType);
+			int value = 1;
+			if (type != AccountType.Trial && !isSubscribed) {
+				value = Integer.valueOf(duration);
+			}
+			if ((getWizardDomain().getId() != null) && (type == AccountType.Trial)) {
+				throw new BotException("Free trial accounts must upgrade to paid accounts to renew");
+			}
+			Payment payment = new Payment();
+			payment.setAccountType(type);
+			payment.setPaymentDate(date);
+			payment.setPaymentDuration(value);
+			payment.setToken(String.valueOf(Math.abs(Utils.random().nextLong())));
+			payment.setUserId(getUser().getUserId());
+			payment.setSubscription(isSubscribed);
+			payment.setStatus(PaymentStatus.WaitingForPayment);
+			AdminDatabase.instance().createPayment(payment);
+			setPayment(payment);
+	
+			Domain  domain = null;
+			if ((getWizardDomain() != null) && getWizardDomain().getId() == null) {
+				getWizardDomain().setAccountType(AccountType.Trial);
+				getWizardDomain().setPaymentDate(getPayment().getPaymentDate());
+				getWizardDomain().setPaymentDuration(1);
 				
-				this.wizardState = WizardState.Confirm;
-			} else if (this.wizardState == WizardState.Confirm) {
+				domain = AdminDatabase.instance().createDomain(getWizardDomain(), getUser().getUserId(), "", "", this.loginBean);
+	
+				Category category = new Category();
+				category.setName("Misc");
+				category.setDescription("Bots that have not been categorized");
+				category.setType("Bot");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Forums that have not been categorized");
+				category.setType("Forum");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Channels that have not been categorized");
+				category.setType("Channel");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Scripts that have not been categorized");
+				category.setType("Script");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Avatars that have not been categorized");
+				category.setType("Avatar");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Graphics that have not been categorized");
+				category.setType("Graphic");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Issue trackers that have not been categorized");
+				category.setType("IssueTracker");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+				
+				category = new Category();
+				category.setName("Misc");
+				category.setDescription("Analytics that have not been categorized");
+				category.setType("Analytic");
+				category.setDomain(domain);
+				AdminDatabase.instance().createCategory(category, getUser(), "");
+			}
+			
+			this.wizardState = WizardState.Confirm;
+			return true;
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+	}
+	
+	public boolean confirmPayment(String tx, String amt, String st, String cc, String domain_id, String payment_id, String date, String token) {
+		AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + payment_id + " confirm payment " + "tx: "+ tx + " amt: " + amt + " st: " + st + " cc: " 
+				+ cc + " domain_id: " + domain_id + " payment_id: " + payment_id + " token: " + token);
+		try {
+			Domain domain = null;
+			boolean reset = false;
+			boolean sendEmail = true;
+			if (getUser() == null) {
+				reset = true;
+			}
+			if ((getWizardDomain() == null) || (getPayment() == null) || (getUser() == null)) {
+				domain = AdminDatabase.instance().findDomain(domain_id);
+				setInstance(domain);
+				setWizardDomain(domain);
+				Payment initialPayment = AdminDatabase.instance().findPayment(Long.parseLong(payment_id));
+				setPayment(initialPayment);
+				setUser(AdminDatabase.instance().findUser(this.payment.getUserId()));
+				if (token == null || !getPayment().getToken().equals(token)) {
+					// Pay Pal does not pass the invoice when not in test mode for some reason.
+					//throw new BotException("Payment token is missing or incorrect, please contact sales if you made a payment");
+				}
+				if (initialPayment.isSubscription()) {
+					AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + payment_id + " processing subscription payment");
+					java.sql.Date initialPaymentDate = new java.sql.Date(initialPayment.getPaymentDate().getTime());
+					String initialMonth = initialPaymentDate.toString().substring(5, 7);
+					String initialDay = initialPaymentDate.toString().substring(8);
+					String initialYear = initialPaymentDate.toString().substring(0, 4);
+					
+					String paymentMonth = date.substring(9, 12);
+					String paymentDay = date.substring(13, 15);
+					String paymentYear = date.substring(17, 21);
+					
+					if (!(initialMonth.equalsIgnoreCase(paymentMonth) && initialDay.equalsIgnoreCase(paymentDay)
+							&& initialYear.equalsIgnoreCase(paymentYear))) {
+						boolean uniqueTransaction = true;
+						for (Payment transaction : domain.getPayments()) {
+							if (transaction.getPaypalTx() != null && transaction.getPaypalTx().equalsIgnoreCase(tx)) {
+								uniqueTransaction = false;
+								break;
+							}
+						}
+						if (uniqueTransaction) {
+							sendEmail = false;
+							AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + payment_id + " processing recurring subscription payment: tx " + tx);
+							beginPayment(initialPayment.getAccountType()+"", String.valueOf(initialPayment.getPaymentDuration()), initialPayment.isSubscription());
+						} else {
+							AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + payment_id + " transaction "+ tx +" already processed");
+							return true;
+						}
+					}
+				}
+				getPayment().setPaypalTx(tx);
+				getPayment().setPaypalAmt(amt);
+				getPayment().setPaypalSt(st);
+				getPayment().setPaypalCc(cc);
+			} else {
 				if (!getUser().isSuperUser() && !getUser().isAdminUser() && (getWizardDomain().getId() != null && getPayment().getAccountType() != AccountType.Trial)) {
 					if (tx == null) {
 						throw new BotException("Must return from Paypal with verified payment, missing transaction id, please contact sales if you made a payment");
 					}
-					if (!getPayment().getToken().equals(token)) {
-						throw new BotException("Payment token is missing or incorrect, please contact sales if you made a payment");
+					if (token == null || !getPayment().getToken().equals(token)) {
+						// Pay Pal does not pass the invoice when not in test mode for some reason.
+						//throw new BotException("Payment token is missing or incorrect, please contact sales if you made a payment");
 					}
 					getPayment().setPaypalTx(tx);
 					getPayment().setPaypalAmt(amt);
@@ -539,32 +615,44 @@ public class DomainBean extends WebMediumBean<Domain> {
 				if (getPayment() == null) {
 					throw new BotException("Missing payment, please contact sales if you made a payment");
 				}
-				Domain  domain = null;
 				domain = (Domain)getInstance().clone();
-				if (getPayment().getAccountType() != AccountType.Trial) {
-					if (domain.isExpired() || getWizardDomain().getAccountType() != getPayment().getAccountType()) {
-						domain.setAccountType(getPayment().getAccountType());
-						domain.setPaymentDate(getPayment().getPaymentDate());
-						domain.setPaymentDuration(getPayment().getPaymentDuration());
-					} else {
-						domain.setPaymentDuration(domain.getPaymentDuration() + getPayment().getPaymentDuration());
-					}
-				} else {
+			}
+			if (getPayment().getStatus().equals(PaymentStatus.Complete)) {
+				AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + payment_id + " payment already processed");
+				return true;
+			}
+			if (getPayment().getAccountType() != AccountType.Trial) {
+				if (reset || domain.isExpired() || getWizardDomain().getAccountType() != getPayment().getAccountType()) {
 					domain.setAccountType(getPayment().getAccountType());
 					domain.setPaymentDate(getPayment().getPaymentDate());
 					domain.setPaymentDuration(getPayment().getPaymentDuration());
+				} else {
+					domain.setPaymentDuration(domain.getPaymentDuration() + getPayment().getPaymentDuration());
 				}
-				domain.setActive(true);
-				domain = AdminDatabase.instance().updateDomain(domain, domain.getTagsString(), domain.getCategoriesString());
-				
-				getPayment().setStatus(PaymentStatus.Complete);
-				domain = AdminDatabase.instance().updatePayment(domain, getPayment());
-				setInstance(domain);
-				
-				this.payment = null;
-				this.wizardDomain = null;
-				this.wizardState = WizardState.Complete;
+			} else {
+				domain.setAccountType(getPayment().getAccountType());
+				domain.setPaymentDate(getPayment().getPaymentDate());
+				domain.setPaymentDuration(getPayment().getPaymentDuration());
+			}
+			if (getPayment().isSubscription()) {
+				domain.setPaymentDate(new Date());
+				domain.setPaymentDuration(1);
+			}
+			domain.setSubscription(getPayment().isSubscription());
+			domain.setActive(true);
+			domain = AdminDatabase.instance().updateDomain(domain, domain.getTagsString(), domain.getCategoriesString());
 
+			AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + payment_id + " updated domain with " + domain.getAccountType());
+			
+			getPayment().setStatus(PaymentStatus.Complete);
+			domain = AdminDatabase.instance().updatePayment(domain, getPayment());
+			setInstance(domain);
+			
+			this.payment = null;
+			this.wizardDomain = null;
+			this.wizardState = WizardState.Complete;
+			
+			if (sendEmail) {
 				try {
 					StringWriter writer = new StringWriter();
 					writer.write("Hello " + domain.getCreator().getUserId()
@@ -576,18 +664,17 @@ public class DomainBean extends WebMediumBean<Domain> {
 					writer.write("\n<p><br/><hr>"
 							+ "\n<p>This is an automated email from " + Site.NAME + " - <a href=\"" + Site.SECUREURLLINK + "\">" + Site.SECUREURLLINK + "</a>."
 							+ "\n<p>You can update your email preferences from your <a href=\"" + Site.SECUREURLLINK + "/login?sign-in=true\">profile page</a> (click edit).");
-	
+		
 					EmailService.instance().sendEmail(domain.getCreator().getEmail(), "Thank you for subscribing to " + Site.NAME, null, writer.toString());
 				} catch (Exception exception) {
 					AdminDatabase.instance().log(exception);
 				}
-				return true;
 			}
+			return true;
 		} catch (Exception failed) {
 			error(failed);
 			return false;
 		}
-		return false;
 	}
 	
 	public boolean allowSubdomain() {
@@ -695,7 +782,7 @@ public class DomainBean extends WebMediumBean<Domain> {
 		return true;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public boolean deleteInstance(boolean confirm) {
 		try {
 			checkInstance();
@@ -903,10 +990,15 @@ public class DomainBean extends WebMediumBean<Domain> {
 					out.write(" : ");
 					out.write(String.valueOf(payment.getAccountType()));
 					out.write(" - ");
+					out.write(payment.isSubscription() ? "subscription - " : "");
 					out.write(String.valueOf(payment.getPaymentDuration()));
 					out.write(" - ");
 					out.write(loginBean.translate("months"));
 					out.write(" - ");
+					if (payment.isSubscription()) {
+						out.write("subscription");
+						out.write(" - ");
+					}
 					out.write(payment.getUserId());
 				}
 				out.write("<form action='domain' method='post' class='message'>\n");

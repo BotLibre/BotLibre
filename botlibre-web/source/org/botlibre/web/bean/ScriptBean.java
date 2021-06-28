@@ -180,6 +180,7 @@ public class ScriptBean extends WebMediumBean<Script> {
 			zip.closeEntry();
 			
 			OutputStream out = response.getOutputStream();
+			zip.finish();
 			zip.flush();
 			byte[] bytes = stream.toByteArray();
 			out.write(bytes, 0, bytes.length);
@@ -328,7 +329,9 @@ public class ScriptBean extends WebMediumBean<Script> {
 	
 	@Override
 	public void writeSearchFields(StringWriter writer) {
-		writer.write("<div class='search-div'><span class='search-span'>Language</span> ");
+		writer.write("<div class='search-div'><span class='search-span'>");
+		writer.write(this.loginBean.translate("Language"));
+		writer.write("</span> ");
 		writer.write("<select id='searchselect' name='language-filter' onchange='this.form.submit()'>\n");
 		writer.write("<option value='' " + getLanguageCheckedString("") + "></option>\n");
 		writer.write("<option value='AIML' " + getLanguageCheckedString("AIML") + ">AIML</option>\n");
@@ -484,13 +487,13 @@ public class ScriptBean extends WebMediumBean<Script> {
 	public List<Script> getAllInstances(Domain domain) {
 		try {
 			List<Script> results = AdminDatabase.instance().getAllScripts(this.page, this.pageSize, this.languageFilter, this.categoryFilter, this.nameFilter,
-					this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+					this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllScriptsCount(this.languageFilter, this.categoryFilter, this.nameFilter,
-							this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+							this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 				}
 			}
 			return results;
@@ -503,7 +506,7 @@ public class ScriptBean extends WebMediumBean<Script> {
 	public List<Script> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllScripts(
-					0, 100, "", "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain(), false);
+					0, 100, "", "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain(), false);
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<Script>();

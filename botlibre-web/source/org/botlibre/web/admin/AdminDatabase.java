@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2021 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
  ******************************************************************************/
 package org.botlibre.web.admin;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,10 +32,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,6 +49,9 @@ import java.util.logging.StreamHandler;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -122,6 +124,7 @@ import org.botlibre.web.rest.UserMessageConfig;
 import org.botlibre.web.script.Script;
 import org.botlibre.web.script.ScriptSource;
 import org.botlibre.web.service.AdminService;
+import org.botlibre.web.service.AgentStats;
 import org.botlibre.web.service.AppIDStats;
 import org.botlibre.web.service.BotStats;
 import org.botlibre.web.service.BotTranslation;
@@ -148,12 +151,6 @@ import org.botlibre.web.service.WeChatService;
 @SuppressWarnings("unchecked")
 public class AdminDatabase {
 	public static boolean DATABASEFAILURE = false;
-//	public static boolean RECREATE_DATABASE = true;
-//	public static String DATABASE_USER = "postgres";
-//	public static String DATABASE_PASSWORD = "password";
-//	public static String IMPORT_URL = "jdbc:postgresql:";
-//	public static String DATABASE_URL = "jdbc:postgresql:botlibre";
-//	public static String DATABASE_DRIVER = "org.postgresql.Driver";
 	
 	public static Map<String, String> bannedIPs = new HashMap<String, String>();
 	
@@ -222,18 +219,6 @@ public class AdminDatabase {
 		//encryptPassword("password");
 		//System.out.println(new AdminDatabase().obfuscate("password"));
 	}
-	
-//	public static void createAdminDatabase() {
-//		try {
-//			Class.forName(DATABASE_DRIVER);
-//			Connection connection = DriverManager.getConnection(IMPORT_URL, DATABASE_USER, DATABASE_PASSWORD);
-//			connection.createStatement().execute("create database botlibre");
-//			connection.close();
-//		} catch (Exception failed) {
-//			failed.printStackTrace();
-//			throw new RuntimeException(failed);
-//		}
-//	}
 	
 	public static void outOfMemory() {
 		outOfMemory = true;
@@ -384,6 +369,7 @@ public class AdminDatabase {
 						em =  this.factory.createEntityManager();
 					} catch (Exception exception) {
 						try {
+							log(Level.SEVERE, exception.toString());
 							// If the database does not exist, create it the first time the server starts.
 							new Migrate().initDatabase();
 							this.factory = Persistence.createEntityManagerFactory(Site.PERSISTENCE_UNIT, properties);
@@ -570,17 +556,123 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllInstancesCount(String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict, 
-			InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+			InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "count all instances");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(BotInstance.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(BotInstance.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			Query query = em.createQuery(criteria);
 			if (criteria == null) {
 				return 0;
 			}
 			return ((Number)query.getSingleResult()).intValue();
 		} finally {
+			em.close();
+		}
+	}
+
+	/**
+	 * Transfer all content from one user to another.
+	 */
+	public void transferUser(String fromUser, String toUser) {
+		log(Level.INFO, "transfer user");
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			User sourceUser = em.find(User.class, fromUser);
+			if (sourceUser == null) {
+				throw new BotException("User does not exist - " + fromUser);
+			}
+			User targetUser = em.find(User.class, toUser);
+			if (targetUser == null) {
+				throw new BotException("User does not exist - " + toUser);
+			}
+			Query query = em.createQuery("Select b from BotInstance b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			List<WebMedium> instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from Avatar b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from Script b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from Graphic b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from Forum b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from ChatChannel b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from Domain b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from IssueTracker b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			query = em.createQuery("Select b from Analytic b where b.creator = :user");
+			query.setParameter("user", sourceUser);
+			instances = query.getResultList();
+			for (WebMedium instance : instances) {
+				log(Level.INFO, "transfer", instance);
+				instance.setCreator(targetUser);
+				instance.getAdmins().add(targetUser);
+				instance.getAdmins().remove(sourceUser);
+			}
+			em.getTransaction().commit();
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
 			em.close();
 		}
 	}
@@ -696,6 +788,9 @@ public class AdminDatabase {
 						em.persist(stat);
 					}
 					for (IPStats stat : new HashMap<String, IPStats>(IPStats.stats).values()) {
+						em.persist(stat);
+					}
+					for (AgentStats stat : new HashMap<String, AgentStats>(AgentStats.stats).values()) {
 						em.persist(stat);
 					}
 					for (PageStats stat : new HashMap<String, PageStats>(PageStats.stats).values()) {
@@ -925,8 +1020,10 @@ public class AdminDatabase {
 				BotStats.reset();
 				LiveChatStats.reset();
 				IPStats.reset();
+				AgentStats.reset();
 				PageStats.reset();
 				ReferrerStats.reset();
+				ErrorStats.reset();
 				if (em.getTransaction().isActive()) {
 					em.getTransaction().rollback();
 				}
@@ -937,11 +1034,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<BotInstance> getAllInstances(int page, int pageSize, String categoryFilter, String nameFilter, String viewUser,
-				InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		log(Level.FINE, "all instances");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(BotInstance.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, includeDefaultDomain);
+			CriteriaQuery criteria = buildSearchQuery(BotInstance.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 			if (criteria == null) {
 				return new ArrayList<BotInstance>();
 			}
@@ -962,12 +1059,12 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public CriteriaQuery buildSearchQuery(Class type, EntityManager em, boolean count, String categoryFilter, String nameFilter, String viewUser,
-				InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery criteria = cb.createQuery();
 		Root root = criteria.from(type);
 		buildSearchCriteria(cb, criteria, root, count, sort);
-		Predicate where = buildSearchWhere(cb, criteria, root, categoryFilter, nameFilter, viewUser, filter, restrict, content, tagFilter, user, domain, includeDefaultDomain);
+		Predicate where = buildSearchWhere(cb, criteria, root, categoryFilter, nameFilter, viewUser, filter, restrict, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 		if (where == null) {
 			return null;
 		}
@@ -1024,7 +1121,7 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public Predicate buildSearchWhere(CriteriaBuilder cb, CriteriaQuery criteria, Root root, String categoryFilter, String nameFilter, String viewUser,
-				InstanceFilter filter, InstanceRestrict restrict, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				InstanceFilter filter, InstanceRestrict restrict, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		Predicate where = cb.conjunction();
 		// Tags
 		if (!tagFilter.trim().isEmpty()) {
@@ -1057,10 +1154,21 @@ public class AdminDatabase {
 			where = cb.and(where, (cb.equal(root.get("isPrivate"), false)));
 			where = cb.and(where, (cb.equal(root.get("isHidden"), false)));
 			where = cb.and(where, (cb.equal(root.get("isAdult"), true)));
+			where = cb.and(where, (cb.equal(root.get("creator").get("active"), true)));
 		} else if (filter == InstanceFilter.Featured) {
 			where = cb.and(where, (cb.equal(root.get("isFeatured"), true)));
 			where = cb.and(where, (cb.equal(root.get("isPrivate"), false)));
 			where = cb.and(where, (cb.equal(root.get("isHidden"), false)));
+			where = cb.and(where, (cb.equal(root.get("creator").get("active"), true)));
+			
+			// Hide public content that has not be reviewed.
+			if (Site.REVIEW_CONTENT && (domain == null || (!domain.isPrivate() && !domain.isHidden()))) {
+				if (user == null || !user.isAdminUser()) {
+					if (content == ContentRating.Everyone || content == ContentRating.Teen) {
+						where = cb.and(where, (cb.equal(root.get("isReviewed"), true)));
+					}
+				}
+			}
 		} else if (filter == InstanceFilter.Personal) {
 			if (viewUser == null) {
 				if (user == null) {
@@ -1071,6 +1179,7 @@ public class AdminDatabase {
 			if ((user == null) || (!user.getUserId().equals(viewUser) && !user.isSuperUser())) {
 				where = cb.and(where, (cb.equal(root.get("isPrivate"), false)));
 				where = cb.and(where, (cb.equal(root.get("isHidden"), false)));
+				where = cb.and(where, (cb.equal(root.get("creator").get("active"), true)));
 			} else {
 				content = null;
 			}
@@ -1080,9 +1189,19 @@ public class AdminDatabase {
 			where = cb.and(where, (cb.equal(root.get("isPrivate"), false)));
 			if (user == null) {
 				where = cb.and(where, (cb.equal(root.get("isHidden"), false)));
+				where = cb.and(where, (cb.equal(root.get("creator").get("active"), true)));
 			} else {
 				if (!user.isSuperUser()) {
+					where = cb.and(where, (cb.equal(root.get("creator").get("active"), true)));
 					where = cb.and(where, cb.or(cb.equal(root.get("isHidden"), false), cb.equal(root.get("creator"), user)));
+				}
+			}
+			// Hide public content that has not be reviewed.
+			if (Site.REVIEW_CONTENT && (domain == null || (!domain.isPrivate() && !domain.isHidden()))) {
+				if (user == null || !user.isAdminUser()) {
+					if (content == ContentRating.Everyone || content == ContentRating.Teen) {
+						where = cb.and(where, (cb.equal(root.get("isReviewed"), true)));
+					}
 				}
 			}
 		}
@@ -1174,6 +1293,9 @@ public class AdminDatabase {
 				where = cb.and(where, cb.equal(root.get("enableEmail"), true));
 			} else if (restrict == InstanceRestrict.Hidden) {
 				where = cb.and(where, cb.equal(root.get("isHidden"), true));
+			} else if (restrict == InstanceRestrict.Review) {
+				where = cb.and(where, cb.equal(root.get("isReviewed"), false));
+				where = cb.and(where, cb.equal(root.get("isHidden"), false));
 			} else if (restrict == InstanceRestrict.Flagged) {
 				where = cb.and(where, cb.equal(root.get("isFlagged"), true));
 			} else if (restrict == InstanceRestrict.Icon) {
@@ -1193,8 +1315,28 @@ public class AdminDatabase {
 		} else if ((user == null) || !user.isSuperUser()) {
 			where = cb.and(where, (cb.equal(root.get("isTemplate"), false)));
 		}
+		// Date
+		if ((startFilter != null) && !startFilter.trim().isEmpty()) {
+			where = cb.and(where, (cb.greaterThanOrEqualTo(root.get("creationDate"), startFilter)));
+		}
+		if ((endFilter != null) && !endFilter.trim().isEmpty()) {
+			where = cb.and(where, (cb.lessThanOrEqualTo(root.get("creationDate"), endFilter)));
+		}
+		// Name
 		if ((nameFilter != null) && !nameFilter.trim().isEmpty()) {
-			where = cb.and(where, (cb.like(cb.lower(root.get("name")), "%" + nameFilter.trim().toLowerCase() + "%")));
+			Predicate nameWhere = (cb.like(cb.lower(root.get("name")), "%" + nameFilter.trim().toLowerCase() + "%"));
+			nameWhere = cb.or(nameWhere, (cb.like(cb.lower(root.get("description")), "%" + nameFilter.trim().toLowerCase() + "%")));
+			/*// Tags
+			if (tagFilter.trim().isEmpty()) {
+				Path path = root.join("tags");
+				nameWhere = cb.or(nameWhere, (cb.lower(path.get("name")).in(Utils.csv(nameFilter.toLowerCase()))));
+			}
+			// Categories
+			if (categoryFilter.trim().isEmpty()) {
+				Path path = root.join("categories");
+				nameWhere = cb.or(nameWhere, (cb.lower(path.get("name")).in(Utils.csv(nameFilter.toLowerCase()))));
+			}*/
+			where = cb.and(where, nameWhere);
 		}
 		if (domain != null && ((user == null) || ((filter != InstanceFilter.Personal) || !user.getUserId().equals(viewUser)))) {
 			if (includeDefaultDomain) {
@@ -1208,11 +1350,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllForumsCount(String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict, 
-			InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+			InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "count all forums");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Forum.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(Forum.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			Query query = em.createQuery(criteria);
 			if (criteria == null) {
 				return 0;
@@ -1225,11 +1367,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllIssueTrackersCount(String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict, 
-			InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+			InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "count all issuetracker");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(IssueTracker.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(IssueTracker.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			Query query = em.createQuery(criteria);
 			if (criteria == null) {
 				return 0;
@@ -1242,11 +1384,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllDomainsCount(String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict, 
-			InstanceSort sort, ContentRating content, String tagFilter, User user) {
+			InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user) {
 		log(Level.FINE, "count all domains");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Domain.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, null, false);
+			CriteriaQuery criteria = buildSearchQuery(Domain.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, null, false);
 			Query query = em.createQuery(criteria);
 			query.setHint("eclipselink.read-only", "true");
 			if (criteria == null) {
@@ -1260,11 +1402,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllAvatarsCount(String categoryFilter, String nameFilter,
-				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		log(Level.FINE, "count all avatars");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Avatar.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, includeDefaultDomain);
+			CriteriaQuery criteria = buildSearchQuery(Avatar.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 			Query query = em.createQuery(criteria);
 			if (criteria == null) {
 				return 0;
@@ -1277,11 +1419,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllGraphicsCount(String categoryFilter, String nameFilter,
-				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		log(Level.FINE, "count all graphics");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Graphic.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, includeDefaultDomain);
+			CriteriaQuery criteria = buildSearchQuery(Graphic.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 			Query query = em.createQuery(criteria);
 			if (criteria == null) {
 				return 0;
@@ -1294,7 +1436,7 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllScriptsCount(String languageFilter, String categoryFilter, String nameFilter,
-				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDeafaultDomain) {
+				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDeafaultDomain) {
 		log(Level.FINE, "count all scripts");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
@@ -1302,7 +1444,7 @@ public class AdminDatabase {
 			CriteriaQuery criteria = cb.createQuery();
 			Root root = criteria.from(Script.class);
 			buildSearchCriteria(cb, criteria, root, true, sort);
-			Predicate where = buildSearchWhere(cb, criteria, root, categoryFilter, nameFilter, viewUser, filter, restrict, content, tagFilter, user, domain, includeDeafaultDomain);
+			Predicate where = buildSearchWhere(cb, criteria, root, categoryFilter, nameFilter, viewUser, filter, restrict, content, tagFilter, startFilter, endFilter, user, domain, includeDeafaultDomain);
 			if (where == null) {
 				return 0;
 			}
@@ -1319,11 +1461,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Forum> getAllForums(int page, int pageSize, String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict,
-				InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+				InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "all forums");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Forum.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(Forum.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			if (criteria == null) {
 				return new ArrayList<Forum>();
 			}
@@ -1343,11 +1485,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<IssueTracker> getAllIssueTrackers(int page, int pageSize, String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict,
-				InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+				InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "all issuetracker");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(IssueTracker.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(IssueTracker.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			if (criteria == null) {
 				return new ArrayList<IssueTracker>();
 			}
@@ -1367,11 +1509,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Domain> getAllDomains(int page, int pageSize, String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict,
-				InstanceSort sort, ContentRating content, String tagFilter, User user) {
+				InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user) {
 		log(Level.FINE, "all domain");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Domain.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, null, false);
+			CriteriaQuery criteria = buildSearchQuery(Domain.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, null, false);
 			if (criteria == null) {
 				return new ArrayList<Domain>();
 			}
@@ -1392,11 +1534,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Avatar> getAllAvatars(int page, int pageSize, String categoryFilter, String nameFilter,
-				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		log(Level.FINE, "all avatars");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Avatar.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, includeDefaultDomain);
+			CriteriaQuery criteria = buildSearchQuery(Avatar.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 			if (criteria == null) {
 				return new ArrayList<Avatar>();
 			}
@@ -1416,11 +1558,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Graphic> getAllGraphics(int page, int pageSize, String categoryFilter, String nameFilter,
-				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		log(Level.FINE, "all graphics");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(Graphic.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, includeDefaultDomain);
+			CriteriaQuery criteria = buildSearchQuery(Graphic.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 			if (criteria == null) {
 				return new ArrayList<Graphic>();
 			}
@@ -1440,7 +1582,7 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Script> getAllScripts(int page, int pageSize, String languageFilter, String categoryFilter, String nameFilter,
-				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain, boolean includeDefaultDomain) {
+				String viewUser, InstanceFilter filter, InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain, boolean includeDefaultDomain) {
 		log(Level.FINE, "all scripts");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
@@ -1448,7 +1590,7 @@ public class AdminDatabase {
 			CriteriaQuery criteria = cb.createQuery();
 			Root root = criteria.from(Script.class);
 			buildSearchCriteria(cb, criteria, root, false, sort);
-			Predicate where = buildSearchWhere(cb, criteria, root, categoryFilter, nameFilter, viewUser, filter, restrict, content, tagFilter, user, domain, includeDefaultDomain);
+			Predicate where = buildSearchWhere(cb, criteria, root, categoryFilter, nameFilter, viewUser, filter, restrict, content, tagFilter, startFilter, endFilter, user, domain, includeDefaultDomain);
 			if (where == null) {
 				return new ArrayList<Script>();
 			}
@@ -1472,11 +1614,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public int getAllChannelsCount(String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter, InstanceRestrict restrict, 
-				InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+				InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "count all channels");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(ChatChannel.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(ChatChannel.class, em, true, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			if (criteria == null) {
 				return 0;
 			}
@@ -1489,11 +1631,11 @@ public class AdminDatabase {
 	
 	@SuppressWarnings("rawtypes")
 	public List<ChatChannel> getAllChannels(int page, int pageSize, String categoryFilter, String nameFilter, String viewUser, InstanceFilter filter,
-			InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, User user, Domain domain) {
+			InstanceRestrict restrict, InstanceSort sort, ContentRating content, String tagFilter, String startFilter, String endFilter, User user, Domain domain) {
 		log(Level.FINE, "all channels");
 		EntityManager em =  getFactory().createEntityManager();
 		try {
-			CriteriaQuery criteria = buildSearchQuery(ChatChannel.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, user, domain, false);
+			CriteriaQuery criteria = buildSearchQuery(ChatChannel.class, em, false, categoryFilter, nameFilter, viewUser, filter, restrict, sort, content, tagFilter, startFilter, endFilter, user, domain, false);
 			if (criteria == null) {
 				return new ArrayList<ChatChannel>();
 			}
@@ -2053,7 +2195,7 @@ public class AdminDatabase {
 		log(Level.FINE, "all templates");
 
 		return AdminDatabase.instance().getAllInstances(
-					0, 100, "", "", user.getUserId(), InstanceFilter.Template, InstanceRestrict.None, InstanceSort.Name, content, "", user, domain, true);
+					0, 100, "", "", user.getUserId(), InstanceFilter.Template, InstanceRestrict.None, InstanceSort.Name, content, "", null, null, user, domain, true);
 	}
 
 	public List<BotInstance> getAllInstances(Domain domain) {
@@ -2097,7 +2239,7 @@ public class AdminDatabase {
 			UserFilter userFilter, UserRestrict restrictFilter, 
 			UserSort sortFilter, User user, boolean isSuperUser) {
 		log(Level.FINE, "all users", restrictFilter);
-		EntityManager em =  getFactory().createEntityManager();
+		EntityManager em = getFactory().createEntityManager();
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery criteria = cb.createQuery();
@@ -2121,7 +2263,7 @@ public class AdminDatabase {
 	public int getAllUserCount(String nameFilter, String emailFilter, String tagFilter, UserFilter userFilter, 
 			UserRestrict  restrictFilter, UserSort sortFilter, User user,  boolean isSuperUser) {
 		log(Level.FINE, "count all users");
-		EntityManager em =  getFactory().createEntityManager();
+		EntityManager em = getFactory().createEntityManager();
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery criteria = cb.createQuery();
@@ -2143,9 +2285,11 @@ public class AdminDatabase {
 		Predicate where = cb.conjunction();
 		if (user == null) {
 			where = cb.and(where, cb.equal(root.get("access"), User.UserAccess.Everyone));
+			where = cb.and(where, cb.equal(root.get("active"), true));
 		}
 		if (user != null && !user.isSuperUser()) {
 			where = cb.and(where, cb.equal(root.get("access"), User.UserAccess.Everyone));
+			where = cb.and(where, cb.equal(root.get("active"), true));
 		}
 		if (nameFilter != null && !nameFilter.isEmpty()) {
 			where = cb.and(where, 
@@ -2218,6 +2362,10 @@ public class AdminDatabase {
 				criteria.orderBy(cb.desc(root.get("lastConnected")), cb.asc(root.get("name")));
 			} else if (sort == org.botlibre.web.bean.UserBean.UserSort.Affiliates) {
 				criteria.orderBy(cb.desc(root.get("affiliates")), cb.asc(root.get("name")));
+			} else if (sort == org.botlibre.web.bean.UserBean.UserSort.Friends) {
+				criteria.orderBy(cb.desc(root.get("friends")), cb.asc(root.get("name")));
+			} else if (sort == org.botlibre.web.bean.UserBean.UserSort.Followers) {
+				criteria.orderBy(cb.desc(root.get("followers")), cb.asc(root.get("name")));
 			} else {
 				criteria.orderBy(cb.asc(root.get("name")));
 			}
@@ -2225,7 +2373,6 @@ public class AdminDatabase {
 			criteria.select(cb.count(root));
 		}
 	}
-
 	
 	@SuppressWarnings("rawtypes")
 	public List<UserMessage> getAllUserMessages(int page, int pageSize, String filter, String userFilter,
@@ -3361,10 +3508,23 @@ public class AdminDatabase {
 		}
 	}
 	
-	public List<IPStats> getAllAgentStats(String agent) {
+	public List<IPStats> getAllIPAgentStats(String agent) {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			Query query = em.createQuery("Select s from IPStats s where s.agent = :agent order by s.date desc");
+			query.setParameter("agent", agent);
+			query.setHint("eclipselink.read-only", "true");
+			query.setMaxResults(100);
+			return query.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+	
+	public List<AgentStats> getAllAgentStats(String agent) {
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			Query query = em.createQuery("Select s from AgentStats s where s.agent = :agent order by s.date desc");
 			query.setParameter("agent", agent);
 			query.setHint("eclipselink.read-only", "true");
 			query.setMaxResults(100);
@@ -4175,6 +4335,8 @@ public class AdminDatabase {
 		if (botPlatform == null) {
 			log(Level.INFO, "Missing database entry for platform settings, using default settings");
 			return;
+		} else {
+			botPlatform.init();
 		}
 		
 		if (DATABASEFAILURE) {
@@ -4197,6 +4359,7 @@ public class AdminDatabase {
 			Site.LOCK = botPlatform.LOCK;
 			Site.READONLY = botPlatform.READONLY;
 			Site.ADULT = botPlatform.ADULT;
+			Site.REVIEW_CONTENT = botPlatform.REVIEW_CONTENT;
 			Site.CONTENT_RATING = ContentRating.valueOf(botPlatform.CONTENT_RATING);
 			Site.NAME = botPlatform.NAME;
 			Site.DOMAIN = botPlatform.DOMAIN;
@@ -4225,6 +4388,8 @@ public class AdminDatabase {
 			Site.ANONYMOUS_CHAT = botPlatform.ANONYMOUS_CHAT;
 			Site.REQUIRE_TERMS = botPlatform.REQUIRE_TERMS;
 			Site.AGE_RESTRICT = botPlatform.AGE_RESTRICT;
+			Site.DISABLE_SUPERGROUP = botPlatform.DISABLE_SUPERGROUP;
+			Site.BLOCK_AGENT = botPlatform.BLOCK_AGENT;
 			Site.BACKLINK = botPlatform.BACKLINK;
 			Site.WEEKLYEMAIL = botPlatform.WEEKLYEMAIL;
 			Site.WEEKLYEMAILBOTS = botPlatform.WEEKLYEMAILBOTS;
@@ -4269,6 +4434,7 @@ public class AdminDatabase {
 			Site.MICROSOFT_SPEECH_KEY = decryptIfEncrypted(botPlatform.MICROSOFT_SPEECH_KEY);
 			Site.RESPONSIVEVOICE_KEY = decryptIfEncrypted(botPlatform.RESPONSIVEVOICE_KEY);
 			Site.YANDEX_KEY = decryptIfEncrypted(botPlatform.YANDEX_KEY);
+			Site.MICROSOFT_TRANSLATION_KEY = decryptIfEncrypted(botPlatform.MICROSOFT_TRANSLATION_KEY);
 			
 		} catch (Exception exception) {
 			log(Level.INFO, "Invalid database entry for platform settings, using default settings");
@@ -4286,14 +4452,17 @@ public class AdminDatabase {
 		restorePlatformOtherSettings();
 	}
 	
-	private String decryptIfEncrypted(String inp) {
-		if (!inp.startsWith("__")) {
-			return inp;
+	private String decryptIfEncrypted(String value) {
+		if (value == null) {
+			return "";
+		}
+		if (!value.startsWith("__")) {
+			return value;
 		}
 		try {
-			return Utils.decrypt(Site.KEY2, inp.substring(2, inp.length()));
+			return Utils.decrypt(Site.KEY2, value.substring(2, value.length()));
 		} catch (Exception exception) {
-			return inp;
+			return value;
 		}
 	}
 	
@@ -4363,6 +4532,7 @@ public class AdminDatabase {
 		botPlatform.LOCK = Site.LOCK;
 		botPlatform.READONLY = Site.READONLY;
 		botPlatform.ADULT = Site.ADULT;
+		botPlatform.REVIEW_CONTENT = Site.REVIEW_CONTENT;
 		botPlatform.CONTENT_RATING = Site.CONTENT_RATING.toString();
 		botPlatform.NAME = Site.NAME;
 		botPlatform.DOMAIN = Site.DOMAIN;
@@ -4390,6 +4560,8 @@ public class AdminDatabase {
 		botPlatform.ANONYMOUS_CHAT = Site.ANONYMOUS_CHAT;
 		botPlatform.REQUIRE_TERMS = Site.REQUIRE_TERMS;
 		botPlatform.AGE_RESTRICT = Site.AGE_RESTRICT;
+		botPlatform.DISABLE_SUPERGROUP = Site.DISABLE_SUPERGROUP;
+		botPlatform.BLOCK_AGENT = Site.BLOCK_AGENT;
 		botPlatform.BACKLINK = Site.BACKLINK;
 		botPlatform.WEEKLYEMAIL = Site.WEEKLYEMAIL;
 		botPlatform.WEEKLYEMAILBOTS = Site.WEEKLYEMAILBOTS;
@@ -4434,6 +4606,7 @@ public class AdminDatabase {
 		botPlatform.MICROSOFT_SPEECH_KEY = "__" + Utils.encrypt(Site.KEY2, Site.MICROSOFT_SPEECH_KEY);
 		botPlatform.RESPONSIVEVOICE_KEY = "__" + Utils.encrypt(Site.KEY2, Site.RESPONSIVEVOICE_KEY);
 		botPlatform.YANDEX_KEY = "__" + Utils.encrypt(Site.KEY2, Site.YANDEX_KEY);
+		botPlatform.MICROSOFT_TRANSLATION_KEY = "__" + Utils.encrypt(Site.KEY2, Site.MICROSOFT_TRANSLATION_KEY);
 		
 		EntityManager em = getFactory().createEntityManager();
 		try {
@@ -4678,6 +4851,28 @@ public class AdminDatabase {
 		}
 	}
 	
+	public User updateUserSubscribe(String userid, boolean isSubscribed) {
+		log(Level.INFO, "update user subscribed",  userid);
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			User user = em.find(User.class, userid);
+			if (user == null) {
+				throw new BotException("User does not exist - " + userid);
+			}
+			user.setSubscribed(isSubscribed);
+			em.getTransaction().commit();
+			user.setPassword(null);
+			user.setEncryptedPassword(null);
+			return user;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
 	public Category updateCategory(Category category, String parents) {
 		log(Level.INFO, "update category", category);
 		if (!category.getDomain().isAdult() && (Utils.checkProfanity(category.getDescription()))) {
@@ -4780,16 +4975,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from BotInstance p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from BotInstance p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<BotInstance> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Bot already exists - " + newInstance.getAlias());
@@ -4800,7 +4995,7 @@ public class AdminDatabase {
 			newInstance.setDatabaseId(newInstance.getId());
 			User managedUser = em.find(User.class, user.getUserId());
 			newInstance.getAdmins().add(managedUser);
-			int count = getAllInstancesCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null);
+			int count = getAllInstancesCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null);
 			if (count >= user.getContentLimit()) {
 				throw new BotException("You must upgrade to create more than " + user.getContentLimit() + " bots");
 			}
@@ -4831,16 +5026,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from Forum p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from Forum p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<Forum> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Forum already exists - " + newInstance.getAlias());
@@ -4849,7 +5044,7 @@ public class AdminDatabase {
 			newInstance.setCreationDate(new Date());
 			em.persist(newInstance);
 			User managedUser = em.find(User.class, user.getUserId());
-			int count = getAllForumsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null);
+			int count = getAllForumsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null);
 			if (count >= user.getContentLimit()) {
 				throw new BotException("You must upgrade to create more than " + user.getContentLimit() + " forums");
 			}
@@ -4881,16 +5076,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from IssueTracker p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from IssueTracker p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<Forum> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("IssueTracker already exists - " + newInstance.getAlias());
@@ -4899,7 +5094,7 @@ public class AdminDatabase {
 			newInstance.setCreationDate(new Date());
 			em.persist(newInstance);
 			User managedUser = em.find(User.class, user.getUserId());
-			int count = getAllIssueTrackersCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null);
+			int count = getAllIssueTrackersCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null);
 			if (count >= user.getContentLimit()) {
 				throw new BotException("You must upgrade to create more than " + user.getContentLimit() + " issue trackers");
 			}
@@ -4936,16 +5131,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from Avatar p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from Avatar p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<Avatar> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Avatar already exists - " + newInstance.getAlias());
@@ -4954,7 +5149,7 @@ public class AdminDatabase {
 			newInstance.setCreationDate(new Date());
 			em.persist(newInstance);
 			User managedUser = em.find(User.class, user.getUserId());
-			int count = getAllAvatarsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null, false);
+			int count = getAllAvatarsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null, false);
 			if (count >= user.getContentLimit()) {
 				throw new BotException("You must upgrade to create more than " + user.getContentLimit() + " avatars");
 			}
@@ -4988,16 +5183,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from Graphic p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from Graphic p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<Graphic> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Graphic already exists - " + newInstance.getAlias());
@@ -5006,7 +5201,7 @@ public class AdminDatabase {
 			newInstance.setCreationDate(new Date());
 			em.persist(newInstance);
 			User managedUser = em.find(User.class, user.getUserId());
-			int count = getAllGraphicsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null, false);
+			int count = getAllGraphicsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null, false);
 			if (count >= (user.getContentLimit() * 10)) {
 				throw new BotException("You must upgrade to create more than " + (user.getContentLimit() * 10) + " graphics");
 			}
@@ -5035,16 +5230,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from Script p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from Script p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<Script> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Script already exists - " + newInstance.getAlias());
@@ -5056,7 +5251,7 @@ public class AdminDatabase {
 			newInstance.getSource().setVersion("0.1");
 			em.persist(newInstance);
 			User managedUser = em.find(User.class, user.getUserId());
-			int count = getAllScriptsCount("", "", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null, false);
+			int count = getAllScriptsCount("", "", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null, false);
 			if (count >= (user.getContentLimit() * 10)) {
 				throw new BotException("You must upgrade to create more than " + (user.getContentLimit() * 10) + " scripts");
 			}
@@ -5089,16 +5284,16 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			Query query = em.createQuery("Select p from ChatChannel p where p.alias = :alias and p.domain = :domain");
+			Query query = em.createQuery("Select p from ChatChannel p where p.alias = :alias");
 			query.setHint("eclipselink.read-only", "true");
 			query.setParameter("alias", newInstance.getAlias());
-			query.setParameter("domain", newInstance.getDomain());
+			//query.setParameter("domain", newInstance.getDomain());
 			List<ChatChannel> results = query.getResultList();
 			if (!results.isEmpty()) {
 				// Append user to alias.
 				newInstance.setAlias(newInstance.getAlias() + "-" + user.getUserId());
 				query.setParameter("alias", newInstance.getAlias());
-				query.setParameter("domain", newInstance.getDomain());
+				//query.setParameter("domain", newInstance.getDomain());
 				results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Channel already exists - " + newInstance.getAlias());
@@ -5107,7 +5302,7 @@ public class AdminDatabase {
 			newInstance.setCreationDate(new Date());
 			em.persist(newInstance);
 			User managedUser = em.find(User.class, user.getUserId());
-			int count = getAllChannelsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user, null);
+			int count = getAllChannelsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user, null);
 			if (count >= user.getContentLimit()) {
 				throw new BotException("You must upgrade to create more than " + user.getContentLimit() + " channels");
 			}
@@ -5166,7 +5361,7 @@ public class AdminDatabase {
 			} else if (newInstance.getAccountType() == AccountType.EnterprisePlus) {
 				user.setType(UserType.Diamond);
 			}
-			int count = getAllDomainsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", user);
+			int count = getAllDomainsCount("", "", user.getUserId(), InstanceFilter.Personal, InstanceRestrict.None, InstanceSort.Name, ContentRating.Adult, "", "", "", user);
 			if (count >= user.getContentLimit()) {
 				throw new BotException("You must upgrade to create more than " + user.getContentLimit() + " workspaces");
 			}
@@ -5614,6 +5809,25 @@ public class AdminDatabase {
 		}
 	}
 	
+	public void removePayment(User user, UserPayment oldInstance) {
+		log(Level.INFO, "remove payment", oldInstance.getToken());
+		oldInstance.checkConstraints();
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			User managed = em.find(User.class, user.getUserId());
+			UserPayment payment = em.find(UserPayment.class, oldInstance.getId());
+			managed.getPayments().remove(payment);
+			em.getTransaction().commit();
+			managed.setEncryptedPassword(null);
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
 	public User updatePayment(UserPayment instance) {
 		log(Level.INFO, "update payment", instance.getToken());
 		instance.checkConstraints();
@@ -5811,6 +6025,10 @@ public class AdminDatabase {
 			if (userId.equals(userTargetId)) {
 				throw new BotException("You cannot add yourself as a friend - " + userId);
 			}
+			User user = (User)em.find(User.class, userId);
+			if (user == null) {
+				throw new BotException("User does not exist - " + userId);
+			}
 			User friend = (User)em.find(User.class, userTargetId);
 			if (friend == null) {
 				throw new BotException("User does not exist - " + userTargetId);
@@ -5821,6 +6039,8 @@ public class AdminDatabase {
 					throw new BotException("Friendship already exists - " + currFriendship.getFriend());
 				}
 			}
+			user.setFriends(friendsList.size() + 1);
+			friend.setFollowers(friend.getFollowers() + 1);
 			friendship = new Friendship();
 			friendship.setUserId(userId);
 			friendship.setFriend(userTargetId);
@@ -5836,21 +6056,23 @@ public class AdminDatabase {
 	}
 	
 	public boolean removeUserFriendship(String userId, String friendId) {
-		log(Level.WARNING, "deleting user friendship",  friendId);
+		log(Level.INFO, "deleting user friendship",  friendId);
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
-			User userInstance = em.find(User.class, userId);
-			if (userInstance == null) {
+			User user = em.find(User.class, userId);
+			if (user == null) {
 				throw new BotException("User does not exist - " + userId);
 			}
-			User friendInstance = em.find(User.class, friendId);
-			if (friendInstance == null) {
+			User friend = em.find(User.class, friendId);
+			if (friend == null) {
 				throw new BotException("User does not exist - " + friendId);
 			}
+			user.setFriends(user.getFriends() - 1);
+			friend.setFollowers(friend.getFollowers() - 1);
 			Query query = em.createQuery("Delete from Friendship friendship where friendship.userId = :user and friendship.friend = :friend");
-			query.setParameter("user", userInstance.getUserId());
-			query.setParameter("friend", friendInstance.getUserId());
+			query.setParameter("user", user.getUserId());
+			query.setParameter("friend", friend.getUserId());
 			query.executeUpdate();
 			em.getTransaction().commit();
 			return true;
@@ -5862,8 +6084,25 @@ public class AdminDatabase {
 		}
 	}
 	
+	public boolean hasUserFriendship(String userId, String friendId) {
+		log(Level.INFO, "has user friendship",  userId, friendId);
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			Query query = em.createQuery("Select f from Friendship f where f.userId = :userId and f.friend = :friendId");
+			query.setHint("eclipselink.read-only", "true");
+			query.setParameter("userId", userId);
+			query.setParameter("friendId", friendId);
+			return !query.getResultList().isEmpty();
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
 	public UserMessage getUserMessage(Long id) {
-		log(Level.WARNING, "get user message",  id);
+		log(Level.INFO, "get user message",  id);
 		EntityManager em =  getFactory().createEntityManager();
 		UserMessage userMessage = null;
 		try {
@@ -5929,10 +6168,10 @@ public class AdminDatabase {
 				throw new BotException("Bot does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {	
-				Query query = em.createQuery("Select p from BotInstance p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from BotInstance p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Bot already exists - " + updatedInstance.getAlias());
@@ -6077,6 +6316,8 @@ public class AdminDatabase {
 		instance.setDetails(updatedInstance.getDetails());
 		instance.setDisclaimer(updatedInstance.getDisclaimer());
 		instance.setLicense(updatedInstance.getLicense());
+		instance.setReviewed(updatedInstance.isReviewed());
+		instance.setReviewRejectionComments(updatedInstance.getReviewRejectionComments());
 		instance.setShowAds(updatedInstance.getShowAds());
 		instance.setAdCodeVerified(updatedInstance.isAdCodeVerified());
 		instance.setAdCode(updatedInstance.getAdCode());
@@ -6134,6 +6375,7 @@ public class AdminDatabase {
 			instance.setPaymentDate(updatedInstance.getPaymentDate());
 			instance.setPaymentDuration(updatedInstance.getPaymentDuration());
 			instance.setAccountType(updatedInstance.getAccountType());
+			instance.setSubscription(updatedInstance.isSubscription());
 			if (updatedInstance.getDomainForwarder() != null) {
 				instance.setDomainForwarder(em.merge(updatedInstance.getDomainForwarder()));
 			} else {
@@ -6162,6 +6404,23 @@ public class AdminDatabase {
 		}
 	}
 	
+	public UserPayment findPaymentTxn(String paypalTx) {
+		log(Level.FINE, "find payment from transaction id ", paypalTx);
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			Query query = em.createQuery("Select p from UserPayment p where p.paypalTx = :paypalTx");
+			query.setHint("eclipselink.read-only", "true");
+			query.setParameter("paypalTx", paypalTx);
+			List<UserPayment> results = query.getResultList();
+			if (results.isEmpty()) {
+				return null;
+			}
+			return results.get(0);
+		} finally {
+			em.close();
+		}
+	}
+	
 	public Forum updateForum(Forum updatedInstance, String categories, String tags) {
 		log(Level.INFO, "update", updatedInstance);
 		checkConstraints(updatedInstance, tags);
@@ -6173,10 +6432,10 @@ public class AdminDatabase {
 				throw new BotException(updatedInstance.getDisplayName() + " does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {	
-				Query query = em.createQuery("Select p from Forum p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from Forum p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Forum already exists - " + updatedInstance.getAlias());
@@ -6221,10 +6480,10 @@ public class AdminDatabase {
 				throw new BotException(updatedInstance.getDisplayName() + " does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {	
-				Query query = em.createQuery("Select p from IssueTracker p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from IssueTracker p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("IssueTracker already exists - " + updatedInstance.getAlias());
@@ -6297,10 +6556,10 @@ public class AdminDatabase {
 				throw new BotException(updatedInstance.getTypeName() + " does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {	
-				Query query = em.createQuery("Select p from Avatar p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from Avatar p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Avatar already exists - " + updatedInstance.getAlias());
@@ -6343,10 +6602,10 @@ public class AdminDatabase {
 				throw new BotException(updatedInstance.getTypeName() + " does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {	
-				Query query = em.createQuery("Select p from Graphic p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from Graphic p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Graphic already exists - " + updatedInstance.getAlias());
@@ -6384,10 +6643,10 @@ public class AdminDatabase {
 				throw new BotException(updatedInstance.getDisplayName() + " does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {
-				Query query = em.createQuery("Select p from Script p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from Script p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Script already exists - " + updatedInstance.getAlias());
@@ -6466,10 +6725,10 @@ public class AdminDatabase {
 				throw new BotException(updatedInstance.getTypeName() + " does not exist - " + updatedInstance.getId());
 			}
 			if (!instance.getAlias().equals(updatedInstance.getAlias())) {	
-				Query query = em.createQuery("Select p from ChatChannel p where p.alias = :alias and p.domain = :domain");
+				Query query = em.createQuery("Select p from ChatChannel p where p.alias = :alias");
 				query.setHint("eclipselink.read-only", "true");
 				query.setParameter("alias", updatedInstance.getAlias());
-				query.setParameter("domain", updatedInstance.getDomain());
+				//query.setParameter("domain", updatedInstance.getDomain());
 				List<BotInstance> results = query.getResultList();
 				if (!results.isEmpty()) {
 					throw new BotException("Channel already exists - " + updatedInstance.getAlias());
@@ -6489,6 +6748,7 @@ public class AdminDatabase {
 			instance.setType(updatedInstance.getType());
 			instance.setVideoAccessMode(updatedInstance.getVideoAccessMode());
 			instance.setAudioAccessMode(updatedInstance.getAudioAccessMode());
+			instance.setInviteAccessMode(updatedInstance.getInviteAccessMode());
 			if (updatedInstance.getDomainForwarder() != null) {
 				instance.setDomainForwarder(em.merge(updatedInstance.getDomainForwarder()));
 			} else {
@@ -7082,10 +7342,20 @@ public class AdminDatabase {
 				throw new BotException("User does not exist - " + userId);
 			}
 
-			Query query = em.createQuery("Delete from UserMessage m where m.owner = :user");
+			Query query = em.createQuery("Update UserMessage m set m.parent = null where m.creator = :user");
 			query.setParameter("user", instance.detach());
 			query.executeUpdate();
+			query = em.createQuery("Update UserMessage m set m.parent = null where m.owner = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			query = em.createQuery("Update UserMessage m set m.parent = null where m.target = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+
 			query = em.createQuery("Delete from UserMessage m where m.creator = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			query = em.createQuery("Delete from UserMessage m where m.owner = :user");
 			query.setParameter("user", instance.detach());
 			query.executeUpdate();
 			query = em.createQuery("Delete from UserMessage m where m.target = :user");
@@ -7105,13 +7375,28 @@ public class AdminDatabase {
 			query = em.createQuery("Delete from ChannelAttachment m where m.creator = :user");
 			query.setParameter("user", instance.detach());
 			query.executeUpdate();
+			query = em.createNativeQuery("Delete from FORUMPOST_SUBSCRIBERS where subscribers_userid = ?");
+			query.setParameter(1, instance.getUserId());
+			query.executeUpdate();
+			query = em.createNativeQuery("Delete from FORUM_SUBSCRIBERS where subscribers_userid = ?");
+			query.setParameter(1, instance.getUserId());
+			query.executeUpdate();
 			query = em.createQuery("Delete from ForumAttachment m where m.creator = :user");
 			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+			query = em.createNativeQuery("Delete from ISSUE_SUBSCRIBERS where subscribers_userid = ?");
+			query.setParameter(1, instance.getUserId());
+			query.executeUpdate();
+			query = em.createNativeQuery("Delete from ISSUETRACKER_SUBSCRIBERS where subscribers_userid = ?");
+			query.setParameter(1, instance.getUserId());
 			query.executeUpdate();
 			query = em.createQuery("Delete from IssueTrackerAttachment m where m.creator = :user");
 			query.setParameter("user", instance.detach());
 			query.executeUpdate();
-			
+			query = em.createQuery("Update Issue m set m.creator = null where m.creator = :user");
+			query.setParameter("user", instance.detach());
+			query.executeUpdate();
+
 			query = em.createQuery("Delete from Vote m where m.user = :user");
 			query.setParameter("user", instance.detach());
 			query.executeUpdate();
@@ -7119,6 +7404,7 @@ public class AdminDatabase {
 			query = em.createQuery("Delete from Friendship fr where fr.userId = :userId or fr.friend = :userId");
 			query.setParameter("userId", userId);
 			query.executeUpdate();
+			
 			em.remove(instance);
 			em.getTransaction().commit();
 			instance.setEncryptedPassword(null);
@@ -7135,7 +7421,7 @@ public class AdminDatabase {
 	}
 	
 	public UserMessage deleteUserMessage(UserMessage message) {
-		log(Level.WARNING, "deleting message",  message.getId());
+		log(Level.INFO, "deleting message",  message.getId());
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -7156,7 +7442,7 @@ public class AdminDatabase {
 	}
 	
 	public boolean deleteUserToUserMessages(UserMessageConfig config) {
-		log(Level.WARNING, "deleting user to user messages",  config.user);
+		log(Level.INFO, "deleting user to user messages",  config.user);
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -7184,7 +7470,7 @@ public class AdminDatabase {
 	}
 	
 	public ScriptSource deleteScriptSource(Long id) {
-		log(Level.WARNING, "deleting script source",  id);
+		log(Level.INFO, "deleting script source",  id);
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -7620,6 +7906,7 @@ public class AdminDatabase {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
+			updateAvatarType(avatar);
 			em.merge(avatar);
 			em.getTransaction().commit();
 			return avatar;
@@ -7631,8 +7918,34 @@ public class AdminDatabase {
 		}
 	}
 	
+	public void updateAvatarType(AvatarImage avatar) {
+		try {
+			ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(avatar.getImage()));
+			Iterator<ImageReader> imageReaders = ImageIO.getImageReaders(stream);
+			while (imageReaders.hasNext()) {
+				ImageReader reader = (ImageReader) imageReaders.next();
+				avatar.setType(reader.getFormatName());
+				break;
+			}
+			if (avatar.getThumb() != null) {
+				stream = ImageIO.createImageInputStream(new ByteArrayInputStream(avatar.getThumb()));
+				imageReaders = ImageIO.getImageReaders(stream);
+				while (imageReaders.hasNext()) {
+					ImageReader reader = (ImageReader) imageReaders.next();
+					avatar.setThumbType(reader.getFormatName());
+					break;
+				}
+			}
+			if (!avatar.hasThumbType()) {
+				avatar.setThumbType("jpg");
+			}
+		} catch (Exception exception) {
+			// Ignore.
+		}
+	}
+	
 	public User updateUser(String userId, byte[] image) {
-		log(Level.INFO, "update image",  userId);
+		log(Level.INFO, "update user image",  userId);
 		EntityManager em =  getFactory().createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -7643,8 +7956,32 @@ public class AdminDatabase {
 			if (image != null) {
 				AvatarImage avatar = new AvatarImage();
 				avatar.setImage(image);
+				updateAvatarType(avatar);
 				user.setAvatar(avatar);
 			}
+			em.getTransaction().commit();
+			user.setEncryptedPassword(null);
+			return user;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
+	public User updateUserName(String userId, String name, String bio) {
+		log(Level.INFO, "update user name",  userId);
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			User user = em.find(User.class, userId);
+			if (user == null) {
+				throw new BotException("User does not exist - " + userId);
+			}
+			user.setName(name);
+			user.setBio(bio);
+			user.checkConstraints();
 			em.getTransaction().commit();
 			user.setEncryptedPassword(null);
 			return user;
@@ -7793,6 +8130,7 @@ public class AdminDatabase {
 			if (image != null) {
 				AvatarImage avatar = new AvatarImage();
 				avatar.setImage(image);
+				updateAvatarType(avatar);
 				instance.setAvatar(avatar);
 			}
 			em.getTransaction().commit();
@@ -7857,7 +8195,9 @@ public class AdminDatabase {
 			if (image != null) {
 				AvatarImage avatar = new AvatarImage();
 				avatar.setImage(image);
+				updateAvatarType(avatar);
 				instance.setAvatar(avatar);
+				instance.setReviewed(false);
 			}
 			em.getTransaction().commit();
 			return instance;
@@ -8282,6 +8622,66 @@ public class AdminDatabase {
 			}
 			managed.preDelete(em);
 			em.remove(managed);
+			em.getTransaction().commit();
+			return;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
+	public void updateReviewed(WebMedium instance) {
+		log(Level.INFO, "review", instance);
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			WebMedium managed = em.find(instance.getClass(), instance.getId());
+			if (managed == null) {
+				throw new BotException(instance.getDisplayName() + " does not exist - " + instance.getId());
+			}
+			managed.setReviewed(true);
+			em.getTransaction().commit();
+			return;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
+	public void updateHidden(WebMedium instance) {
+		log(Level.INFO, "hide", instance);
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			WebMedium managed = em.find(instance.getClass(), instance.getId());
+			if (managed == null) {
+				throw new BotException(instance.getDisplayName() + " does not exist - " + instance.getId());
+			}
+			managed.setHidden(true);
+			em.getTransaction().commit();
+			return;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
+	public void updatePrivate(WebMedium instance) {
+		log(Level.INFO, "private", instance);
+		EntityManager em =  getFactory().createEntityManager();
+		try {
+			em.getTransaction().begin();
+			WebMedium managed = em.find(instance.getClass(), instance.getId());
+			if (managed == null) {
+				throw new BotException(instance.getDisplayName() + " does not exist - " + instance.getId());
+			}
+			managed.setPrivate(true);
 			em.getTransaction().commit();
 			return;
 		} finally {
@@ -8995,7 +9395,6 @@ public class AdminDatabase {
 					user = new User("admin");
 					user.setSuperUser(true);
 					user.setType(UserType.Admin);
-					
 					user.setPassword("password");
 					
 					// Use random default password for admin:
@@ -9080,7 +9479,7 @@ public class AdminDatabase {
 				//if (stat.badAPI > (Stats.MAX_BAD_API * 2)) {
 				//	Utils.sleep(10000);
 				//}
-				throw new BotException("IP has been banned for the day, max invalid app ID attempts");				
+				throw new BotException("IP has been banned for the day, max invalid app ID attempts");
 			}
 		}
 		long applicationId = -1;
@@ -9300,6 +9699,19 @@ public class AdminDatabase {
 		}
 	}
 	
+	public Domain findDomain(String id) {
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			Domain instance = (Domain)em.find(Domain.class, Long.parseLong(id));
+			return instance;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
 	public User checkCredentialsUser(String credentialsUserID) {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
@@ -9339,6 +9751,9 @@ public class AdminDatabase {
 			//	throw new BotException("Invalid credentials token");
 			//}
 			em.getTransaction().begin();
+			if (!user.isActive()) {
+				user.setActive(true);
+			}
 			user.setConnects(user.getConnects() + 1);
 			user.setLastConnected(new Date());
 			em.getTransaction().commit();
@@ -9352,6 +9767,61 @@ public class AdminDatabase {
 		}
 	}
 	
+	public User findUser(String id) {
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			User user = em.find(User.class, id);
+			if (user == null) {
+				user = em.find(User.class, id.toLowerCase());
+				if (user == null) {
+					List<User> users = null;
+					if (id.contains("@")) {
+						Query query = em.createQuery("Select u from User u where lower(u.email) = :email");
+						query.setParameter("email", id.toLowerCase());
+						users = query.getResultList();
+					}
+					if ((users == null) || users.isEmpty()) {
+						throw new BotException("Invalid user - " + id);
+					} else {
+						user = users.get(0);
+					}
+				}
+			}
+			return user;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+	
+	public List<User> findUserByEmail(String email) {
+		EntityManager em = getFactory().createEntityManager();
+		try {
+			List<User> users = null;
+			if (email.contains("@")) {
+				Query query = em.createQuery("Select u from User u where lower(u.email) = :email");
+				query.setParameter("email", email.toLowerCase());
+				users = query.getResultList();
+			} else {
+				throw new BotException("Require user's email - " + email);
+			}
+			if ((users == null) || users.isEmpty()) {
+				throw new BotException("Invalid user - " + email);
+			} 
+			for (User user : users) {
+				user.setEncryptedPassword(null);
+			}
+			return users;
+		} finally {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+		}
+	}
+
 	public User validateUser(String id, String password, long token, boolean reset, boolean wasSuper) {
 		EntityManager em =  getFactory().createEntityManager();
 		try {
@@ -9391,6 +9861,9 @@ public class AdminDatabase {
 					throw new BotException("Missing password or token");
 				}
 				em.getTransaction().begin();
+				if (!user.isActive()) {
+					user.setActive(true);
+				}
 				user.setConnects(user.getConnects() + 1);
 				user.setLastConnected(new Date());
 				if (reset && user.getTokenReset() == null
@@ -9664,89 +10137,91 @@ public class AdminDatabase {
 		}
 
 		for (Domain domain : domains) {
-			long time = domain.getPaymentExpiryDate().getTime() - new Date().getTime();
-			if (time > 0 && (time < (Utils.DAY * 15)) && (time > (Utils.DAY * 14)) && domain.getCreator() != null) {
-				log(Level.INFO, "about to expire domain", domain, domain.getCreator().getUserId());
-				if (domain.getCreator().hasEmail()) {
-					log(Level.INFO, "sending about to expire domain email", domain, domain.getCreator().getUserId(), domain.getCreator().getEmail());
+			if (domain.getPaymentExpiryDate() != null) {
+				long time = domain.getPaymentExpiryDate().getTime() - new Date().getTime();
+				if (time > 0 && (time < (Utils.DAY * 15)) && (time > (Utils.DAY * 14)) && domain.getCreator() != null) {
+					log(Level.INFO, "about to expire domain", domain, domain.getCreator().getUserId());
+					if (domain.getCreator().hasEmail()) {
+						log(Level.INFO, "sending about to expire domain email", domain, domain.getCreator().getUserId(), domain.getCreator().getEmail());
+						try {
+							StringWriter writer = new StringWriter();
+							writer.write("Hello " + domain.getCreator().getUserId()
+									+ ",<p>\n\nYour workspace " + domain.getName() + " on " + Site.NAME
+									+ " expires in 15 days.");
+							writer.write("\n<p>");
+							writer.write("Please go to your workspace page to make a payment - <a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName() + "</a>");
+							writer.write("\n<br/>You can also email " + Site.EMAILSALES + " to setup automatic payments.");
+							
+							writer.write("\n<p><br/><hr>"
+									+ "\n<p>This is an automated email from " + Site.NAME + " - <a href=\"" + Site.SECUREURLLINK + "\">" + Site.SECUREURLLINK + "</a>."
+									+ "\n<p>You can update your email preferences from your <a href=\"" + Site.SECUREURLLINK + "/login?sign-in=true\">profile page</a> (click edit).");
+			
+							EmailService.instance().sendEmail(domain.getCreator().getEmail(), "Your workspace expires soon on " + Site.NAME, null, writer.toString());
+						} catch (Exception exception) {
+							log(exception);
+						}
+					}
+					Utils.sleep(100);
+					
+					StringWriter writer = new StringWriter();
+					writer.write("Workspace " + domain.getName() + " on " + Site.NAME
+							+ " expires in 15 days.");
+					writer.write("\n<p>");
+					writer.write("<a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName()
+							+ "</a> - " + domain.getCreator() + " - " + String.valueOf(domain.getCreator().getEmail()));
+					
+					EmailService.instance().sendEmail(Site.EMAILSALES, "Workspace expires soon on " + Site.NAME, null, writer.toString());
+					Utils.sleep(100);
+				} else if (time > 0 && time < Utils.DAY && domain.getCreator() != null) {
+					log(Level.INFO, "expired domain", domain, domain.getCreator().getUserId());
+					if (domain.getCreator().hasEmail()) {
+						log(Level.INFO, "sending expired domain email", domain, domain.getCreator().getUserId(), domain.getCreator().getEmail());
+						try {
+							StringWriter writer = new StringWriter();
+							writer.write("Hello " + domain.getCreator().getUserId()
+									+ ",<p>\n\nYour workspace " + domain.getName() + " on " + Site.NAME
+									+ " expires today.");
+							writer.write("\n<p>");
+							writer.write("Please go to your workspace page to make a payment - <a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName() + "</a>");
+							
+							writer.write("\n<p><br/><hr>"
+									+ "\n<p>This is an automated email from " + Site.NAME + " - <a href=\"" + Site.SECUREURLLINK + "\">" + Site.SECUREURLLINK + "</a>."
+									+ "\n<p>You can update your email preferences from your <a href=\"" + Site.SECUREURLLINK + "/login?sign-in=true\">profile page</a> (click edit).");
+			
+							EmailService.instance().sendEmail(domain.getCreator().getEmail(), "Your workspace has expired on " + Site.NAME, null, writer.toString());
+						} catch (Exception exception) {
+							log(exception);
+						}
+					}
+					Utils.sleep(100);
+					
+					StringWriter writer = new StringWriter();
+					writer.write("Domain " + domain.getName() + " on " + Site.NAME
+							+ " expires today.");
+					writer.write("\n<p>");
+					writer.write("<a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName()
+							+ "</a> - " + domain.getCreator() + " - " + String.valueOf(domain.getCreator().getEmail()));
+					
+					EmailService.instance().sendEmail(Site.EMAILSALES, "Workspace has expired on " + Site.NAME, null, writer.toString());
+					Utils.sleep(100);
+				} else if (time < 0) {
+					em =  getFactory().createEntityManager();
 					try {
-						StringWriter writer = new StringWriter();
-						writer.write("Hello " + domain.getCreator().getUserId()
-								+ ",<p>\n\nYour workspace " + domain.getName() + " on " + Site.NAME
-								+ " expires in 15 days.");
-						writer.write("\n<p>");
-						writer.write("Please go to your workspace page to make a payment - <a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName() + "</a>");
-						writer.write("\n<br/>You can also email " + Site.EMAILSALES + " to setup automatic payments.");
-						
-						writer.write("\n<p><br/><hr>"
-								+ "\n<p>This is an automated email from " + Site.NAME + " - <a href=\"" + Site.SECUREURLLINK + "\">" + Site.SECUREURLLINK + "</a>."
-								+ "\n<p>You can update your email preferences from your <a href=\"" + Site.SECUREURLLINK + "/login?sign-in=true\">profile page</a> (click edit).");
-		
-						EmailService.instance().sendEmail(domain.getCreator().getEmail(), "Your workspace expires soon on " + Site.NAME, null, writer.toString());
-					} catch (Exception exception) {
-						log(exception);
+						em.getTransaction().begin();
+						Domain instance = (Domain)em.find(Domain.class, domain.getId());
+						if (instance != null) {
+							instance.setActive(false);
+						}
+						em.getTransaction().commit();
+					} finally {
+						if (em.getTransaction().isActive()) {
+							em.getTransaction().rollback();
+						}
+						em.close();
 					}
-				}
-				Utils.sleep(100);
-				
-				StringWriter writer = new StringWriter();
-				writer.write("Workspace " + domain.getName() + " on " + Site.NAME
-						+ " expires today.");
-				writer.write("\n<p>");
-				writer.write("<a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName()
-						+ "</a> - " + domain.getCreator() + " - " + String.valueOf(domain.getCreator().getEmail()));
-				
-				EmailService.instance().sendEmail(Site.EMAILSALES, "Workspace has expired on " + Site.NAME, null, writer.toString());
-				Utils.sleep(100);
-			} else if (time > 0 && time < Utils.DAY && domain.getCreator() != null) {
-				log(Level.INFO, "expired domain", domain, domain.getCreator().getUserId());
-				if (domain.getCreator().hasEmail()) {
-					log(Level.INFO, "sending expired domain email", domain, domain.getCreator().getUserId(), domain.getCreator().getEmail());
-					try {
-						StringWriter writer = new StringWriter();
-						writer.write("Hello " + domain.getCreator().getUserId()
-								+ ",<p>\n\nYour workspace " + domain.getName() + " on " + Site.NAME
-								+ " expires today.");
-						writer.write("\n<p>");
-						writer.write("Please go to your workspace page to make a payment - <a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName() + "</a>");
-						
-						writer.write("\n<p><br/><hr>"
-								+ "\n<p>This is an automated email from " + Site.NAME + " - <a href=\"" + Site.SECUREURLLINK + "\">" + Site.SECUREURLLINK + "</a>."
-								+ "\n<p>You can update your email preferences from your <a href=\"" + Site.SECUREURLLINK + "/login?sign-in=true\">profile page</a> (click edit).");
-		
-						EmailService.instance().sendEmail(domain.getCreator().getEmail(), "Your workspace has expired on " + Site.NAME, null, writer.toString());
-					} catch (Exception exception) {
-						log(exception);
-					}
-				}
-				Utils.sleep(100);
-				
-				StringWriter writer = new StringWriter();
-				writer.write("Domain " + domain.getName() + " on " + Site.NAME
-						+ " expires today.");
-				writer.write("\n<p>");
-				writer.write("<a href=\"" + Site.SECUREURLLINK + "/domain?id=" + domain.getId() + "\">" + domain.getName()
-						+ "</a> - " + domain.getCreator() + " - " + String.valueOf(domain.getCreator().getEmail()));
-				
-				EmailService.instance().sendEmail(Site.EMAILSALES, "Workspace has expired on " + Site.NAME, null, writer.toString());
-				Utils.sleep(100);
-			} else if (time < 0 ) {
-				em =  getFactory().createEntityManager();
-				try {
-					em.getTransaction().begin();
-					Domain instance = (Domain)em.find(Domain.class, domain.getId());
-					if (instance != null) {
-						instance.setActive(false);
-					}
-					em.getTransaction().commit();
-				} finally {
-					if (em.getTransaction().isActive()) {
-						em.getTransaction().rollback();
-					}
-					em.close();
 				}
 			}
 		}
 	}
-
+	
 }

@@ -55,7 +55,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/category1.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/category1.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("The categories tab allows you to remove categories from your workspace") %><br/>

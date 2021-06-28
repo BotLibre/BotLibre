@@ -31,7 +31,7 @@
 					<p>
 						<ul>
 							<li><a href="enterprise-bot-platform.jsp"><%= loginBean.translate("Enterprise Bot Platform") %></a></li>
-							<li><a target="_blank" href="https://play.google.com/store/apps/details?id=org.botlibre.web.android"><%= loginBean.translate("Bot Libre Android") %></a></li>
+							<li><a target="_blank" href="https://play.google.com/store/apps/details?id=com.paphus.botlibre.client.android"><%= loginBean.translate("Bot Libre Android") %></a></li>
 							<li><a target="_blank" href="https://play.google.com/store/apps/details?id=com.paphus.botlibre.offline"><%= loginBean.translate("Bot Libre Android Offline") %></a></li>
 							<li><a target="_blank" href="https://itunes.apple.com/ca/app/bot-libre/id998358768"><%= loginBean.translate("Bot Libre iOS") %></a></li>
 							<li><a href="browse?browse-type=Desktop"><%= loginBean.translate("Bot Libre Desktop") %></a></li>
@@ -52,6 +52,11 @@
 				</div>
 				<br/>
 			<% } %>
+			<form action="login" method="post" class="message">
+				<input id="ok" type="submit" name="sales" value="<%= loginBean.translate("Contact Sales") %>">
+				<input id="ok" type="submit" name="demo" value="<%= loginBean.translate("Request Demo") %>">
+			</form>
+			<br/>
 			<div class="feature">
 				<h4><img src="images/create.png" class="title"> <%= loginBean.translate("Create") %></h4>
 				<%= loginBean.translate(Site.NAME + " makes it easy to your own bot") %>
@@ -72,7 +77,7 @@
 					<li><%= loginBean.translate("Chat with real emotions") %>
 					<li><%= loginBean.translate("Chat with rich HTML and JavaScript") %>
 					<li><%= loginBean.translate("Chat with buttons, links, and commands") %>
-					<li><%= loginBean.translate("Chat on Facebook, Twitter, Telegram, Skype, Kik, WeChat, Slack, email, SMS, IRC") %>
+					<li><%= loginBean.translate("Chat on Facebook, Twitter, Telegram, WhatsApp, Skype, Kik, WeChat, Slack, email, SMS, IVR") %>
 					<li><%= loginBean.translate("Chat in live chat channel or chatroom") %>
 					<li><%= loginBean.translate("Chat from mobile app") %>
 				</ul>
@@ -167,12 +172,13 @@
 				</ul>
 			</div>
 			<div class="feature">
-				<h4><img src="images/api.png" class="title"> <%= loginBean.translate("SMS") %></h4>
-				<%= loginBean.translate("Create a bot for SMS text messaging") %>
+				<h4><img src="images/twilio.svg" class="title"> <%= loginBean.translate("SMS & IVR") %></h4>
+				<%= loginBean.translate("Create a bot for SMS and IVR") %>
 				<ul>
-					<li><%= loginBean.translate("Connect your bot to Twilio SMS") %>
-					<li><%= loginBean.translate("Reply to SMS messages") %>
-					<li><%= loginBean.translate("Send SMS messages from chat or social media") %>
+					<li><%= loginBean.translate("Connect your bot to Twilio SMS & IVR") %>
+					<li><%= loginBean.translate("Reply to SMS messages, send SMS messages from chat or social media") %>
+					<li><%= loginBean.translate("Answer voice phone calls, initiate voice calls from chat or social media") %>
+					<li><%= loginBean.translate("Automate call centers or answering machines") %>
 				</ul>
 			</div>
 			<div class="feature">

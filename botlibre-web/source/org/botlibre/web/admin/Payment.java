@@ -40,6 +40,7 @@ public class Payment {
 	protected String paypalCc;
 	protected String token;
 	protected AccountType accountType;
+	protected boolean isSubscription;
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date paymentDate;
 	protected int paymentDuration;
@@ -47,7 +48,7 @@ public class Payment {
 	protected Long domainId;
 	protected PaymentStatus status;
 
-	public enum PaymentStatus {WaitingForPayment, Complete}
+	public enum PaymentStatus {WaitingForPayment, Complete, Rejected}
 	
 	public Payment() { }
 
@@ -114,7 +115,15 @@ public class Payment {
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
 	}
-
+	
+	public boolean isSubscription() {
+		return isSubscription;
+	}
+	
+	public void setSubscription(boolean isSubscribed) {
+		this.isSubscription = isSubscribed;
+	}
+	
 	public Date getPaymentDate() {
 		return paymentDate;
 	}

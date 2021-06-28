@@ -60,7 +60,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/twitter1.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/twitter1.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow your bot to manage a Twitter account and interact with other Twitter users.") %><br/>

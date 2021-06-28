@@ -78,6 +78,7 @@ import org.botlibre.web.admin.UserPayment;
 import org.botlibre.web.admin.UserPayment.UserPaymentStatus;
 import org.botlibre.web.admin.UserPayment.UserPaymentType;
 import org.botlibre.web.rest.UpgradeConfig;
+import org.botlibre.web.rest.UserConfig;
 import org.botlibre.web.rest.UserFriendsConfig;
 import org.botlibre.web.rest.WebMediumConfig;
 import org.botlibre.web.service.AppIDStats;
@@ -168,7 +169,7 @@ public class LoginBean extends ServletBean {
 	}
 	
 	public void generatePostToken() {
-		this.postToken = String.valueOf(Utils.random().nextLong());
+		this.postToken = String.valueOf(Math.abs(Utils.random().nextLong()));
 	}
 	
 	public String postTokenInput() {
@@ -604,23 +605,28 @@ public class LoginBean extends ServletBean {
 		}
 	}
 	
-	public List<UserFriendsConfig> getUserFriendships(UserFriendsConfig config) {
+	public List<UserConfig> getUserFriendships(UserFriendsConfig config) {
 		AdminDatabase.instance().log(Level.INFO, "API get-user-friendships", "get user friendships");
 		try {
 			User friend = AdminDatabase.instance().getUser(config.userFriend);
 			if ((friend != null && friend.isPrivate()) && (!loginBean.isAdmin() && !friend.getUserId().equals(loginBean.getUser().getUserId()))) {
 				throw new BotException("Private user - " + config.userFriend);
 			}
-			List<UserFriendsConfig> friendsList = new ArrayList<UserFriendsConfig>();
+			List<UserConfig> friendsList = new ArrayList<UserConfig>();
 			List<Friendship> friendships = AdminDatabase.instance().getUserFriendships(config.userFriend);
 			for (Friendship friendship : friendships) {
-				UserFriendsConfig userFriendConfig = new UserFriendsConfig();
-				userFriendConfig.friendship = String.valueOf(friendship.getId());
-				userFriendConfig.userFriend = friendship.getFriend();
-				friendsList.add(userFriendConfig);
+				loginBean.viewUser(friendship.getFriend());
+				if (loginBean.getError() != null) {
+					throw loginBean.getError();
+				}
+				User user = loginBean.getViewUser();
+				UserConfig userConfig = new UserConfig(user, false, false);
+				userConfig.avatar = loginBean.getAvatarImage(user);
+				userConfig.avatarThumb = loginBean.getAvatarThumb(user);
+				friendsList.add(userConfig);
 			}
 			return friendsList;
-		} catch (Exception failed) {
+		} catch (Throwable failed) {
 			error(failed);
 			return null;
 		}
@@ -635,22 +641,27 @@ public class LoginBean extends ServletBean {
 		}
 	}
 	
-	public List<UserFriendsConfig> getUserFollowers(UserFriendsConfig config) {
+	public List<UserConfig> getUserFollowers(UserFriendsConfig config) {
 		try {
 			User friend = AdminDatabase.instance().getUser(config.userFriend);
-			if ((friend != null && friend.isPrivate()) && (!loginBean.isAdmin() && !friend.getUserId().equals(loginBean.getUser().getUserId()))) {
+			if ((friend != null && friend.isPrivate()) && (!this.loginBean.isAdmin() && !friend.getUserId().equals(this.loginBean.getUser().getUserId()))) {
 				throw new BotException("Private user - " + config.userFriend);
 			}
-			List<Friendship> friendshipList = AdminDatabase.instance().getUserFollowers(config.user);
-			List<UserFriendsConfig> followersList = new ArrayList<UserFriendsConfig>();
+			List<Friendship> friendshipList = AdminDatabase.instance().getUserFollowers(config.userFriend);
+			List<UserConfig> followersList = new ArrayList<UserConfig>();
 			for (Friendship followers : friendshipList) {
-				UserFriendsConfig userFriendConfig = new UserFriendsConfig();
-				userFriendConfig.friendship = String.valueOf(followers.getId());
-				userFriendConfig.userFriend = followers.getUserId();
-				followersList.add(userFriendConfig);
+				this.loginBean.viewUser(followers.getUserId());
+				if (this.loginBean.getError() != null) {
+					throw this.loginBean.getError();
+				}
+				User user = this.loginBean.getViewUser();
+				UserConfig userConfig = new UserConfig(user, false, false);
+				userConfig.avatar = this.loginBean.getAvatarImage(user);
+				userConfig.avatarThumb = this.loginBean.getAvatarThumb(user);
+				followersList.add(userConfig);
 			}
 			return followersList;
-		} catch (Exception failed) {
+		} catch (Throwable failed) {
 			error(failed);
 			return null;
 		}
@@ -696,7 +707,7 @@ public class LoginBean extends ServletBean {
 							if (getBotBean().validateInstance(id)) {
 								BotInstance instance = getBotBean().getInstance();
 								User user = new User();
-								user.setUserId(String.valueOf(instance.getName()));
+								user.setUserId("@" + String.valueOf(instance.getAlias()));
 								user.setName(instance.getName());
 								if (instance.getAvatar() == null && instance.getInstanceAvatar() != null) {
 									user.setAvatar(instance.getInstanceAvatar().getAvatar());
@@ -709,6 +720,10 @@ public class LoginBean extends ServletBean {
 								user.setConnects(instance.getConnects());
 								user.setType(instance.getCreator().getType());
 								user.setIsBot(true);
+								user.setVoice(instance.getVoice());
+								user.setVoiceMod(instance.getVoiceMod());
+								user.setNativeVoice(instance.getNativeVoice());
+								user.setNativeVoiceName(instance.getNativeVoiceName());
 								user.setInstanceAvatar(instance.getInstanceAvatar());
 								users.add(user);
 							} else {
@@ -875,7 +890,7 @@ public class LoginBean extends ServletBean {
 
 	public String getAvatarImage(AvatarImage avatar) {
 		if (avatar != null) {
-			String fileName = "avatars/" + "a" + avatar.getId() + ".jpg";
+			String fileName = "avatars/" + "a" + avatar.getId() + "." + avatar.getType();
 			String path = LoginBean.outputFilePath + "/" + fileName;
 			byte[] image = avatar.getImage();
 			if (image != null) {
@@ -899,14 +914,15 @@ public class LoginBean extends ServletBean {
 
 	public String getAvatarThumb(AvatarImage avatar, int size) {
 		if (avatar != null) {
-			String fileName = "avatars/" + "at" + avatar.getId() + "-" + avatar.getToken() + ".jpg";
-			String path = LoginBean.outputFilePath + "/" + fileName;
 			byte[] image = avatar.getThumb();
-			if (image == null && avatar.getImage() != null) {
+			// Check for missing thumb types to generate thumb or migrate old data.
+			if (avatar.getImage() != null && (image == null || !avatar.hasThumbType())) {
 				image = Utils.createThumb(avatar.getImage(), size);
 				avatar.setThumb(image);
 				AdminDatabase.instance().updateAvatar(avatar);
 			}
+			String fileName = "avatars/" + "at" + avatar.getId() + "-" + avatar.getToken() + "." + avatar.getThumbType();
+			String path = LoginBean.outputFilePath + "/" + fileName;
 			if (image != null) {
 				File file = new File(path);
 				if (!file.exists()) {
@@ -1198,15 +1214,19 @@ public class LoginBean extends ServletBean {
 		return true;
 	}
 
-	public boolean flagUser(String reason) {
+	public boolean flagUser(String reason, String flaggedUser) {
 		try {
 			checkLogin();
-			setViewUser(AdminDatabase.instance().flagUser(this.viewUser.getUserId(), this.user.getUserId(), reason));
+			setViewUser(AdminDatabase.instance().flagUser(flaggedUser, this.user.getUserId(), reason));
 		} catch (Exception failed) {
 			error(failed);
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean flagUser(String reason) {
+		return flagUser(reason, getViewUser().getUserId());
 	}
 
 	public boolean unflagUser() {
@@ -1484,9 +1504,10 @@ public class LoginBean extends ServletBean {
 	/**
 	 * Create a new user.
 	 */
-	public boolean createUser(String userId, String password, String password2, String dateOfBirth, String hint, String name, String ip, String source, String affiliate,
+	public boolean createUser(String userId, String password, String password2, String dateOfBirth, String hint, String name, String gender, String properties, String ip, String source, String affiliate,
 			String userAccess, String email, String website, String bio, boolean displayName, boolean over18,
 			String credentialsType, String credentialsUserID, String credentialsToken,
+			Boolean emailMessages, Boolean emailNotices, Boolean emailSummary,
 			boolean terms) {
 		try {
 			if (Site.READONLY) {
@@ -1506,6 +1527,12 @@ public class LoginBean extends ServletBean {
 			}
 			if (name != null) {
 				name = name.trim();
+			}
+			if (gender != null) {
+				gender = gender.trim();
+			}
+			if (properties != null) {
+				properties = properties.trim();
 			}
 			if (email != null) {
 				email = email.trim().toLowerCase();
@@ -1531,12 +1558,23 @@ public class LoginBean extends ServletBean {
 				birthDate = Utils.parseDate(dateOfBirth);
 				user.setDateOfBirth(birthDate);
 			}
+			if (emailNotices != null) {
+				user.setEmailNotices(emailNotices);
+			}
+			if (emailMessages != null) {
+				user.setEmailMessages(emailMessages);
+			}
+			if (emailSummary != null) {
+				user.setEmailSummary(emailSummary);
+			}
 			user.setHint(hint);
 			user.setName(name);
+			user.setGender(gender);
+			user.setProperties(properties);
 			if (userAccess != null && !userAccess.isEmpty()) {
 				user.setAccess(UserAccess.valueOf(userAccess));
 			}
-			user.setShoulsDisplayName(displayName);
+			user.setShouldDisplayName(displayName);
 			user.setSource(source);
 			if (affiliate == null || affiliate.isEmpty()) {
 				if (this.affiliate != null && !this.affiliate.isEmpty()) {
@@ -1737,6 +1775,19 @@ public class LoginBean extends ServletBean {
 			error(exception);
 		}
 	}
+	
+	public User getUserAvatarMessage(String userId) {
+		try {
+			User user = AdminDatabase.instance().getUser(userId);
+			if (user == null) {
+				user = checkBotUser(userId);
+			}
+			return user;
+		} catch(Exception failed) {
+			error(failed);
+			return null;
+		}
+	}
 
 	public void contact(String email, String name, String business, String details, boolean demo) {
 		try {
@@ -1765,21 +1816,25 @@ public class LoginBean extends ServletBean {
 		}
 	}
 	
-	public Friendship createUserFriendship(String userTargetId) {
+	public Friendship createUserFriendship(String friendUserId) {
 		try {
 			checkLogin();
-			User friend = AdminDatabase.instance().getUser(userTargetId);
-			if ((friend != null && friend.isPrivate()) && (!loginBean.isAdmin() && !friend.getUserId().equals(loginBean.getUser().getUserId()))) {
-				throw new BotException("Cannot friend private profiles - " + userTargetId);
+			User botUser = null;
+			if (friendUserId.startsWith("@")) {
+				botUser = checkBotUser(friendUserId);
+				if (botUser != null) {
+					friendUserId = botUser.getUserId();
+				}
+			} else {
+				User friend = AdminDatabase.instance().getUser(friendUserId);
+				if ((friend != null && friend.isPrivate()) && (!this.loginBean.isAdmin() && !friend.getUserId().equals(this.loginBean.getUser().getUserId()))) {
+					throw new BotException("Cannot friend private users - " + friendUserId);
+				}
 			}
-			User botUser = checkBotUser(userTargetId);
-			if (botUser != null) {
-				userTargetId = "@" + botBean.getInstance().getAlias();
-			}
-			Friendship friendship = AdminDatabase.instance().createUserFriendship(loginBean.getUser().getUserId(), userTargetId);
+			Friendship friendship = AdminDatabase.instance().createUserFriendship(loginBean.getUser().getUserId(), friendUserId);
 			if (botUser != null) {
 				// Process bot's greeting.
-				createUserGreeting(userTargetId, "Friend");
+				createUserGreeting(friendUserId, "Friend");
 			}
 			return friendship;
 		} catch (Exception failed) {
@@ -1791,12 +1846,27 @@ public class LoginBean extends ServletBean {
 	public boolean deleteUserFriendship(String friendId) {
 		try {
 			checkLogin();
-			AdminDatabase.instance().removeUserFriendship(loginBean.getUserId(), friendId);
+			AdminDatabase.instance().removeUserFriendship(this.loginBean.getUserId(), friendId);
 		} catch (Exception failed) {
 			error(failed);
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Return if the friend user id follows the current user.
+	 */
+	public boolean isFollower(String friendId) {
+		try {
+			if (!isLoggedIn()) {
+				return false;
+			}
+			return AdminDatabase.instance().hasUserFriendship(friendId, this.loginBean.getUserId());
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
 	}
 	
 	/**
@@ -1817,7 +1887,7 @@ public class LoginBean extends ServletBean {
 			String reply = "";
 			User botUser = checkBotUser(target);
 			if (botUser == null) {
-				throw new BotException("Invalid user - " + target);
+				throw new BotException("Invalid bot user - " + target);
 			}
 			ChatBean chatBean = this.loginBean.getBean(ChatBean.class);
 			boolean speak = chatBean.getSpeak();
@@ -1871,15 +1941,18 @@ public class LoginBean extends ServletBean {
 			BotBean botBean = this.loginBean.getBotBean();
 			String botId = userId.substring(1, userId.length());
 			if (!botBean.validateInstance(botId)) {
-				throw new BotException("Bot - " + botId + " does not exist");
+				if (this.loginBean.getError() instanceof BotException) {
+					throw (BotException)this.loginBean.getError();
+				}
+				throw new BotException("Invalid bot alias - " + userId);
 			}
 			userId = "@" + botBean.getInstance().getAlias();
 			User botUser = AdminDatabase.instance().getUser(userId);
+			BotInstance bot = botBean.getInstance();
 			if (botUser == null) {
 				botUser = new User();
 				botUser.setUserId(userId);
 				botUser.setIsBot(true);
-				BotInstance bot = botBean.getInstance();
 				botUser.setName(bot.getName());
 				if (bot.isPrivate()) {
 					botUser.setAccess(User.UserAccess.Private);
@@ -1890,14 +1963,19 @@ public class LoginBean extends ServletBean {
 				}
 				botUser.setBio(bot.getDescription());
 				botUser.setCreationDate(bot.getCreationDate());
-				// Should set tags.
+				// Should set tags?
 				//botUser.setTags(bot.getTags());
 				AdminDatabase.instance().createUser(botUser);
-				if (bot.getAvatar() != null) {
-					botUser = AdminDatabase.instance().updateUser(botUser.getUserId(), bot.getAvatar().getImage());
-				} else if (bot.getInstanceAvatar() != null && bot.getInstanceAvatar().getAvatar() != null) {
-					botUser = AdminDatabase.instance().updateUser(botUser.getUserId(), bot.getInstanceAvatar().getAvatar().getImage());
-				}
+			}
+			if (!bot.getName().equals(botUser.getName()) || !bot.getDescription().equals(botUser.getBio())) {
+				AdminDatabase.instance().updateUserName(botUser.getUserId(), bot.getName(), bot.getDescription());
+			}
+			// Update avatars to match.
+			if (bot.getAvatar() != null && (botUser.getAvatar() == null || bot.getAvatar().getImage().length != botUser.getAvatar().getImage().length)) {
+				botUser = AdminDatabase.instance().updateUser(botUser.getUserId(), bot.getAvatar().getImage());
+			} else if ((bot.getInstanceAvatar() != null && bot.getInstanceAvatar().getAvatar() != null)
+					&& (botUser.getAvatar() == null || bot.getInstanceAvatar().getAvatar().getImage().length != botUser.getAvatar().getImage().length)) {
+				botUser = AdminDatabase.instance().updateUser(botUser.getUserId(), bot.getInstanceAvatar().getAvatar().getImage());
 			}
 			return botUser;
 		}
@@ -1908,12 +1986,19 @@ public class LoginBean extends ServletBean {
 		UserMessage newUserMessage = null;
 		try {
 			checkLogin();
-			User targetUser = AdminDatabase.instance().getUser(target);
-			if ((targetUser != null && targetUser.isPrivate()) && (!loginBean.isAdmin() && !targetUser.getUserId().equals(loginBean.getUser().getUserId()))) {
-				throw new BotException("Cannot message private users - " + target);
+			User user = null;
+			if (target.startsWith("@")) {
+				user = this.loginBean.checkBotUser(target);
+				if (user != null) {
+					target = user.getUserId();
+				}
+			} else {
+				User targetUser = AdminDatabase.instance().getUser(target);
+				if ((targetUser != null && targetUser.isPrivate()) && (!loginBean.isAdmin() && !targetUser.getUserId().equals(loginBean.getUser().getUserId()))) {
+					throw new BotException("Cannot send messages to private users - " + target);
+				}
 			}
-			
-			if (Site.VERIFY_EMAIL && !this.user.isVerified() && this.user.isBasic()) {
+			if (Site.VERIFY_EMAIL && !this.user.isVerified() && this.user.isBasic() && !target.contentEquals("admin")) {
 				throw new BotException("To prevent spam, you must verify your email address before sending a message.");
 			}
 			if (target != null) {
@@ -1930,10 +2015,9 @@ public class LoginBean extends ServletBean {
 				stat.userMessages++;
 			}
 			
-			User user = checkBotUser(target);
 			String reply = "";
 			if (user != null) {
-				target = "@" + botBean.getInstance().getAlias();
+				target = user.getUserId();
 				ChatBean chatBean = this.loginBean.getBean(ChatBean.class);
 				boolean speak = chatBean.getSpeak();
 				chatBean.setSpeak(false);
@@ -2330,9 +2414,9 @@ public class LoginBean extends ServletBean {
 	/**
 	 * Update a user.
 	 */
-	public boolean updateUser(String oldPassword, String newPassword, String newPassword2, String hint, String name, String userAccess, String tags,
+	public boolean updateUser(String oldPassword, String newPassword, String newPassword2, String hint, String name, String gender, String properties, String userAccess, String tags,
 			String email, String source, Boolean emailNotices, Boolean emailMessages, Boolean emailSummary, String website, String bio, Boolean displayName, Boolean over18,
-			String adCode, Boolean verifiedPayment, String type) {
+			String adCode, Boolean verifiedPayment, String type, Boolean isSubscribed) {
 		try {
 			checkLogin();
 			if (getEditUser() == null) {
@@ -2359,6 +2443,14 @@ public class LoginBean extends ServletBean {
 				name = name.trim();
 				user.setName(name);
 			}
+			if (gender != null) {
+				gender = gender.trim();
+				user.setGender(gender);
+			}
+			if (properties != null) {
+				properties = properties.trim();
+				user.setProperties(properties);
+			}
 			if (userAccess != null) {
 				userAccess = userAccess.trim();
 				user.setAccess(UserAccess.valueOf(userAccess));
@@ -2381,7 +2473,7 @@ public class LoginBean extends ServletBean {
 				user.setWebsite(website);
 			}
 			if (displayName != null) {
-				user.setShoulsDisplayName(displayName);
+				user.setShouldDisplayName(displayName);
 			}
 			if (emailNotices != null) {
 				user.setEmailNotices(emailNotices);
@@ -2410,6 +2502,12 @@ public class LoginBean extends ServletBean {
 					user.setUpgradeDate(new Date());
 				}
 				user.setType(UserType.valueOf(type));
+				if (isSubscribed != null) {
+					if (user.isSubscribed() != isSubscribed) {
+						user.setUpgradeDate(new Date());
+					}
+					user.setSubscribed(isSubscribed);
+				}
 			}
 			if (newPassword != null && !newPassword.isEmpty() && !newPassword.equals(newPassword2)) {
 				throw new BotException("New passwords do not match");
@@ -2458,6 +2556,20 @@ public class LoginBean extends ServletBean {
 			} else {
 				setViewUser(AdminDatabase.instance().updateUser(getUser().getUserId(), image));
 			}
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Update a user's payment plan
+	 */
+	public boolean updateUserSubscribe(boolean isSubscribed) {
+		try {
+			checkLogin();
+			setUser(AdminDatabase.instance().updateUserSubscribe(getUserId(), isSubscribed));
 		} catch (Exception failed) {
 			error(failed);
 			return false;
@@ -2625,50 +2737,137 @@ public class LoginBean extends ServletBean {
 		return writer.toString();
 	}
 	
-	public void beginPayment(UserType userType, UserPaymentType type, String orderId, String token, String st, String sku) {
+	public void beginPayment(UserType userType, UserPaymentType type, String orderId, String token, String st, String sku, String paymentDuration, boolean isSubscription) {
 		try {
-			checkLogin();
+			if (!orderId.equalsIgnoreCase("recurring")) {
+				checkLogin();
+			} else if (type == UserPaymentType.AppleItunes) {
+				orderId = st;
+			}
 			this.payment = new UserPayment();
 			this.payment.setStatus(UserPaymentStatus.WaitingForPayment);
 			this.payment.setType(type);
 			this.payment.setUserType(userType);
 			this.payment.setPaymentDate(new Date(Calendar.getInstance().getTimeInMillis()));
+			int duration = 12; // TODO change to 1 month
+			if (paymentDuration != null && !paymentDuration.isEmpty()) {
+				duration = Integer.valueOf(paymentDuration);
+			}
+			this.payment.setPaymentDuration(duration);
 			this.payment.setToken(String.valueOf(Math.abs(Utils.random().nextLong())));
 			this.payment.setUserId(getUserId());
 			this.payment.setPaypalTx(orderId);
-			this.payment.setToken(token);
+			if (token != null && !token.isEmpty()) {
+				this.payment.setToken(token);
+			} else {
+				this.payment.setToken(String.valueOf(Math.abs(Utils.random().nextLong())));
+			}
 			this.payment.setPaypalSt(st);
 			this.payment.setPaypalCc(sku);
-			if (userType == UserType.Diamond) {
-				this.payment.setCost("99.99");
-			} else if (userType == UserType.Platinum) {
-				this.payment.setCost("49.99");
-			} else if (userType == UserType.Gold) {
-				this.payment.setCost("4.99");
-			} else if (userType == UserType.Bronze) {
-				this.payment.setCost("0.99");
-			} else {
-				throw new BotException("Invalid upgrade type: " + userType);
-			}
+			this.payment.setSubscription(isSubscription);
+			this.payment.updateCost();
 			this.user = AdminDatabase.instance().addPayment(this.user, this.payment);
+
+			AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + this.payment.getId() + " : " + this.user.getUserId() + " begin payment");
 		} catch (Exception exception) {
 			error(exception);
 		}
 	}
 	
-	public void confirmPayment(String tx, String amt, String st, String cc, String id) {
+	public void confirmPayment(String tx, String amt, String st, String cc, String id, String date, boolean ipn, String token, String ipnType) {
+		AdminDatabase.instance().log(Level.INFO, "PAYMENT: confirm payment " + "tx: "+ tx + " amt: " + amt + " st: " + st + " cc: " + cc
+				+ " id: " + id + " date: " + date + " token: " + token + " isIPN: " + ipn + " ipnType: " + ipnType);
 		try {
-			this.payment = AdminDatabase.instance().findUserPayment(Long.valueOf(id));
+			UserPayment initialPayment = AdminDatabase.instance().findUserPayment(Long.valueOf(id));
+			this.payment = initialPayment;
+			this.user = AdminDatabase.instance().findUser(initialPayment.getUserId());
+			if (ipn && ipnType != null && ipnType.equals("subscr_payment")) {
+				String initialDate = initialPayment.getPaymentDate().toString();
+				if ((!(initialDate.substring(4, 10) + ", " + initialDate.substring(24, 28)).equalsIgnoreCase(date.substring(9, 21))) 
+						&& initialPayment.getStatus().equals(UserPaymentStatus.Complete)) {
+					boolean uniqueTransaction = true;
+					User usr = AdminDatabase.instance().findUser(this.payment.getUserId());
+					if (usr == null) {
+						return;
+					}
+					for (UserPayment payment : usr.getPayments()) {
+						if (payment.getPaypalTx() != null && payment.getPaypalTx().equalsIgnoreCase(tx)) {
+							uniqueTransaction = false;
+							break;
+						}
+					}
+					if (uniqueTransaction) {
+						AdminDatabase.instance().log(Level.INFO, "PAYMENT: processing recurring subscription payment: tx " + tx);
+						beginPayment(initialPayment.getUserType(), initialPayment.getType(), "recurring", initialPayment.getToken(), "", "", String.valueOf(initialPayment.getPaymentDuration()), initialPayment.isSubscription());
+					} else {
+						AdminDatabase.instance().log(Level.INFO, "PAYMENT: transaction " + tx +" already processed");
+						return;
+					}
+				}
+			}
+			if (this.payment.getStatus().equals(UserPaymentStatus.Complete)) {
+				AdminDatabase.instance().log(Level.INFO, "PAYMENT: payment already processed");
+				return;
+			}
+			if (token == null || !this.payment.getToken().equals(token)) {
+				// Do not check token, seems to be issue in Pay Pal passing token.
+				// this.payment.setStatus(UserPaymentStatus.Rejected);
+				AdminDatabase.instance().log(Level.WARNING, "PAYMENT: token mismatch - user: " + this.user.getUserId() + " type: " + this.payment.getUserType() + " date: " + this.payment.getPaymentDate()
+				+ " - token: " + token + " : " + this.payment.getToken());
+			}// else {
 			this.payment.setStatus(UserPaymentStatus.Complete);
+			//}
 			this.payment.setType(UserPaymentType.PayPal);
 			this.payment.setPaypalTx(tx);
 			this.payment.setPaypalAmt(amt);
 			this.payment.setPaypalSt(st);
 			this.payment.setPaypalCc(cc);
 			this.user = AdminDatabase.instance().updatePayment(this.payment);
-			this.user.setType(this.payment.getUserType());
-			this.user.setUpgradeDate(new Date());
-			this.user = AdminDatabase.instance().updateUser(this.user, null, true, null);
+			if (this.payment.getStatus() == UserPaymentStatus.Rejected) {
+				AdminDatabase.instance().log(Level.WARNING, "PAYMENT: unable to update user: " + this.user.getUserId() + " type: " + this.payment.getUserType() + " date: " + this.payment.getPaymentDate()
+							+ " - token missmatch " + token + " : " + this.payment.getToken());
+				throw new BotException("Payment token is missing or incorrect, please contact sales if you made a payment");
+			}
+			if (!this.payment.getUserType().equals(UserType.Avatar)) {
+				if (ipn && ipnType != null && ipnType.equals("subscr_payment")) {
+					this.user.setUpgradeDate(new Date());
+					this.user.setUpgradeDuration(1);
+					this.user.setSubscribed(true);
+				} else if (this.user.getType() == this.payment.getUserType() && !this.user.isExpired()) {
+					this.user.setUpgradeDuration(this.user.getUpgradeDuration() + this.payment.getPaymentDuration());
+				} else {
+					this.user.setUpgradeDate(new Date());
+					this.user.setUpgradeDuration(this.payment.getPaymentDuration());
+				}
+				this.user.setType(this.payment.getUserType());
+				this.user.setSubscribed(this.payment.isSubscription());
+				this.user = AdminDatabase.instance().updateUser(this.user, null, false, null);
+				AdminDatabase.instance().log(Level.INFO, "PAYMENT: updated user " + this.user.getUserId() + " with " + this.payment.getUserType());
+			}
+			this.payment = null;
+		} catch (Exception exception) {
+			error(exception);
+		}
+	}
+	
+	public void completeAdminPayment() {
+		try {
+			this.payment.setStatus(UserPaymentStatus.Complete);
+			this.payment.setType(UserPaymentType.PayPal);
+			
+			this.user = AdminDatabase.instance().updatePayment(this.payment);
+			if (!this.payment.getUserType().equals(UserType.Avatar)) {
+				if (this.user.getType() == this.payment.getUserType() && !this.user.isExpired()) {
+					this.user.setUpgradeDuration(this.user.getUpgradeDuration() + this.payment.getPaymentDuration());
+				} else {
+					this.user.setUpgradeDate(new Date());
+					this.user.setUpgradeDuration(this.payment.getPaymentDuration());
+				}
+				this.user.setType(this.payment.getUserType());
+				this.user.setSubscribed(this.payment.isSubscription());
+				this.user = AdminDatabase.instance().updateUser(this.user, null, false, null);
+				AdminDatabase.instance().log(Level.INFO, "PAYMENT: updated user " + this.user.getUserId() + " with " + this.payment.getUserType());
+			}
 			this.payment = null;
 		} catch (Exception exception) {
 			error(exception);
@@ -2685,9 +2884,29 @@ public class LoginBean extends ServletBean {
 			this.payment.setPaypalSt(st);
 			this.payment.setPaypalCc(sku);
 			this.user = AdminDatabase.instance().updatePayment(this.payment);
-			this.user.setType(this.payment.getUserType());
-			this.user.setUpgradeDate(new Date());
-			this.user = AdminDatabase.instance().updateUser(this.user, null, true, null);
+			if (this.payment.getUserType().equals(UserType.Avatar)) {
+				// Upgrade for 1 month of Platinum.
+				if (this.user.getType() == UserType.Basic || this.user.isExpired()) {
+					this.user.setUpgradeDate(new Date());
+					this.user.setUpgradeDuration(1);
+					this.user.setType(UserType.Platinum);
+					this.user = AdminDatabase.instance().updateUser(this.user, null, false, null);
+				}
+			} else {
+				if (this.payment.isSubscription()) {
+					this.user.setUpgradeDate(new Date());
+					this.user.setUpgradeDuration(1);
+				} else if (this.user.getType() == this.payment.getUserType() && !this.user.isExpired()) {
+					this.user.setUpgradeDuration(this.user.getUpgradeDuration() + this.payment.getPaymentDuration());
+				} else {
+					this.user.setUpgradeDate(new Date());
+					this.user.setUpgradeDuration(this.payment.getPaymentDuration());
+				}
+				this.user.setType(this.payment.getUserType());
+				this.user.setSubscribed(this.payment.isSubscription());
+				this.user = AdminDatabase.instance().updateUser(this.user, null, false, null);
+			}
+			AdminDatabase.instance().log(Level.INFO, "PAYMENT: " + this.payment.getId() + " : " + this.user.getUserId() + " confirm payment");
 			this.payment = null;
 		} catch (Exception exception) {
 			error(exception);
@@ -2695,23 +2914,33 @@ public class LoginBean extends ServletBean {
 	}
 	
 	public void upgradeUser(UpgradeConfig upgrade) {
-		if (!isLoggedIn()) {
+		if (upgrade.orderId != null && !upgrade.orderId.equals("recurring") && !isLoggedIn()) {
 			throw new BotException("You must sign in first");
 		}
 		//if (getUser().getSource().equals("ios") && !upgrade.type.equals("AppleItunes")) {
 		//	throw new BotException("iOS users can only upgrade from the iOS app");
 		//}
-		beginPayment(UserType.valueOf(upgrade.userType), UserPaymentType.valueOf(upgrade.type), upgrade.orderId, upgrade.token, upgrade.orderToken, upgrade.sku);
+		UserPayment payment = AdminDatabase.instance().findPaymentTxn(upgrade.orderId);
+		if (payment != null) {
+			AdminDatabase.instance().log(Level.INFO, "PAYMENT: transaction already processed ", upgrade.orderId);
+		} else {
+			AdminDatabase.instance().log(Level.INFO, "PAYMENT: getting ready to process transaction ", upgrade.orderId);
+		}
+		beginPayment(UserType.valueOf(upgrade.userType), UserPaymentType.valueOf(upgrade.type), upgrade.orderId, upgrade.token, upgrade.orderToken, upgrade.sku, upgrade.months, upgrade.subscription);
+		if (upgrade.orderId != null && upgrade.type != null && upgrade.orderId.equals("recurring") && upgrade.type.equals("AppleItunes")) {
+			upgrade.orderId = upgrade.orderToken;
+			upgrade.orderToken = "";
+		}
 		if (upgrade.secret == null || !String.valueOf((Long.valueOf(upgrade.secret) - getUserId().length())).equals(Site.UPGRADE_SECRET)) {
-			AdminDatabase.instance().log(Level.WARNING, "Upgrade failed: authorization", upgrade.orderId, upgrade.secret, getUserId(), Long.valueOf(upgrade.secret) - getUserId().length());
+			AdminDatabase.instance().log(Level.WARNING, "PAYMENT: Upgrade failed: authorization", upgrade.orderId, upgrade.secret, getUserId(), Long.valueOf(upgrade.secret) - getUserId().length());
 			throw new BotException("Upgrade failed authorization");
 		}
 		if (upgrade.type != null && upgrade.type.equals("GooglePlay") && (upgrade.orderId == null || !upgrade.orderId.startsWith("GPA"))) {
-			AdminDatabase.instance().log(Level.WARNING, "Upgrade failed: suspicious transaction", upgrade.orderId);
+			AdminDatabase.instance().log(Level.WARNING, "PAYMENT: Upgrade failed: suspicious transaction", upgrade.orderId);
 			throw new BotException("This transaction seems suspicious, if your Google Play account is charged, please contact billing@botlibre.com");
 		}
 		if (upgrade.type != null && upgrade.type.equals("AppleItunes") && (upgrade.orderId == null || (upgrade.orderId.contains("-") || upgrade.orderId.contains(".")))) {
-			AdminDatabase.instance().log(Level.WARNING, "Upgrade failed: suspicious transaction", upgrade.orderId);
+			AdminDatabase.instance().log(Level.WARNING, "PAYMENT: Upgrade failed: suspicious transaction", upgrade.orderId);
 			throw new BotException("This transaction seems suspicious, if your Apple account is charged, please contact billing@botlibre.com");
 		}
 		confirmUpgradePayment(upgrade.type, upgrade.orderId, upgrade.token, upgrade.orderToken, upgrade.sku, String.valueOf(this.payment.getId()));
@@ -2764,7 +2993,7 @@ public class LoginBean extends ServletBean {
 			this.user = AdminDatabase.instance().updatePayment(this.payment);
 			this.user.setType(this.payment.getUserType());
 			this.user.setUpgradeDate(new Date());
-			this.user = AdminDatabase.instance().updateUser(this.user, null, true, null);
+			this.user = AdminDatabase.instance().updateUser(this.user, null, false, null);
 			this.payment = null;
 		} catch (Exception exception) {
 			error(exception);
@@ -2991,6 +3220,16 @@ public class LoginBean extends ServletBean {
 		if (server.startsWith("www.") || server.startsWith(Site.SANDBOX + ".")
 					|| server.startsWith("twitter.")) {
 			server = server.substring(server.indexOf('.') + 1, server.length());
+		}
+		if (Site.LOCK && Site.BLOCK_AGENT != null && !Site.BLOCK_AGENT.isEmpty()) {
+			// Check for bad agents and block.
+			String agent = request.getHeader("user-agent");
+			if (agent != null && agent.contains(Site.BLOCK_AGENT)) {
+				try {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND);
+					return false;
+				} catch (Exception exception) { }
+			}
 		}
 		if (Site.LOCK && !server.equals(Site.SERVER_NAME) && !server.equals(Site.SERVER_NAME2) && !server.equals(Site.URL)) {
 			String subdomain = server;
@@ -3255,6 +3494,14 @@ public class LoginBean extends ServletBean {
 		AdminDatabase.instance().cleanupJunk();
 	}
 
+	public void transferUser(String fromUser, String toUser) {
+		try {
+			AdminDatabase.instance().transferUser(fromUser, toUser);
+		} catch (Exception failed) {
+			error(failed);
+		}
+	}
+
 	public void verifyAllUnverifiedEmail() {
 		List<User> users = AdminDatabase.instance().getUnverifiedUsers();
 		for (User user: users) {
@@ -3268,14 +3515,14 @@ public class LoginBean extends ServletBean {
 	public String isUserAccessModeSelected(String type) {
 		UserAccess mode = UserAccess.Friends;
 		if (getEditUser() != null && getEditUser().getAccess() != null) {
-				mode = getEditUser().getAccess();
-			}
-			if (mode.name().equals(type)) {
-				return "selected=\"selected\"";
-			} else {
-				return "";
-			}
+			mode = getEditUser().getAccess();
 		}
+		if (mode.name().equals(type)) {
+			return "selected=\"selected\"";
+		} else {
+			return "";
+		}
+	}
 	
 	public boolean isTranslationRequired() {
 		if (this.language == null || this.language.isEmpty() || this.language.equals("en")) {

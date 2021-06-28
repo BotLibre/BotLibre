@@ -39,7 +39,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/telegram1.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/telegram1.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow bot to manage a Telegram channel, group, or chat on Telegram.") %><br/>

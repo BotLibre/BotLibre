@@ -56,7 +56,7 @@
 			<div class="browse">
 				<h1>
 					<span class="dropt-banner">
-						<img src="images/voice1.png" class="admin-banner-pic" style="vertical-align:middle">
+						<img src="images/voice1.png" class="admin-banner-pic">
 						<div>
 							<p class="help">
 								<%= loginBean.translate("Configure your user's language and voice.") %><br/>

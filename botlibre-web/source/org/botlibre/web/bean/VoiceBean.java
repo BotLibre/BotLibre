@@ -47,6 +47,14 @@ public class VoiceBean extends ServletBean {
 		this.speakText = null;
 	}
 
+	public String getNativeVoiceProvider() {
+		if (getBotBean().getInstance() == null) {
+			return "";
+		}
+		getBotBean().checkOldConfig();
+		return getBotBean().getInstance().getNativeVoiceProvider();
+	}
+
 	public String getVoice() {
 		if (getBotBean().getInstance() == null) {
 			return "";
@@ -160,7 +168,7 @@ public class VoiceBean extends ServletBean {
 	public void save(String voice, String mod, boolean nativeVoice, String language, String pitch, String speechRate) {
 		BotInstance instance = getBotBean().getInstance();
 		getBotBean().setInstance(AdminDatabase.instance().updateInstanceVoice(
-				instance.getId(), voice == null ? instance.getVoice() : voice, mod, nativeVoice, instance.getNativeVoiceProvider(), instance.getNativeVoiceName(), language, pitch, speechRate, null, null, null));
+				instance.getId(), voice == null ? instance.getVoice() : voice, mod, nativeVoice, null, null, language, pitch, speechRate, null, null, null));
 	}
 
 	public String getSpeakFileName() {

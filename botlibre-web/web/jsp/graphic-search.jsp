@@ -29,11 +29,13 @@
 	<% loginBean.setPageType(Page.Search); %>
 	<jsp:include page="banner.jsp"/>
 	<div id="mainbody">
-		<div id="contents-full">	
+		<div id="contents-full">
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
 				<% if (allowAccess) { %>
-					<h3><%= loginBean.translate("Search Graphics") %></h3>
+					<h3 onclick="document.getElementById('search').click()" class="clickable"><img src="images/search.svg" class="admin-banner-pic" style="width:28px;padding:4px;"/>
+						<%= loginBean.translate("Search Graphics") %>
+					</h3>
 					<%= bean.searchFormHTML() %>
 					<%= bean.searchHTML() %>
 				<% } %>

@@ -43,7 +43,7 @@
 				<jsp:include page="error.jsp"/>
 				<% if (!loginBean.isSuperUser()) { %>
 				  <%= loginBean.translate("Must be sys admin") %>
-				<% } else if (!Site.COMMERCIAL) { %>
+				<% } else if (!Site.COMMERCIAL || (Site.DEDICATED && !Site.CLOUD)) { %>
 					<h3><%= loginBean.translate("User Upgrades") %></h3>
 					<%= bean.searchFormUserPaymentHTML() %>
 					<%= bean.searchUserPaymentHTML() %>

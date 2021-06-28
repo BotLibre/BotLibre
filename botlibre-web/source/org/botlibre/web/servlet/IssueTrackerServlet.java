@@ -47,7 +47,7 @@ public class IssueTrackerServlet extends BeanServlet {
 		SessionProxyBean proxy = (SessionProxyBean)request.getSession().getAttribute("proxy");
 		IssueTrackerBean bean = loginBean.getBean(IssueTrackerBean.class);
 		loginBean.setActiveBean(bean);
-		if  (!loginBean.checkDomain(request, response)) {
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 		
@@ -354,16 +354,7 @@ public class IssueTrackerServlet extends BeanServlet {
 				return;
 			}*/
 
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("issuetracker-search.jsp").forward(request, response);
-				return;
-			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("issuetracker-search.jsp").forward(request, response);
+			if (checkSearchCommon(bean, "issuetracker-search.jsp", request, response)) {
 				return;
 			}
 

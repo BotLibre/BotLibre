@@ -17,7 +17,6 @@
  ******************************************************************************/
 package org.botlibre.web.admin;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

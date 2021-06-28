@@ -30,7 +30,7 @@
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
 				<% if (bean.getCategory() == null) { %>
-					<h1><img src="images/chat.png" class="admin-banner-pic" style="vertical-align:middle"><%= loginBean.translate(" Live Chat") %></h1>
+					<h1><img src="images/chat.png" class="admin-banner-pic"><%= loginBean.translate(" Live Chat") %></h1>
 					<% if (domainBean.hasValidInstance()) { %>
 						<p><%= loginBean.translate("Live chat lets you create a live chat channel or chatroom for a website or mobile app.") %></p>
 					<% } else { %>

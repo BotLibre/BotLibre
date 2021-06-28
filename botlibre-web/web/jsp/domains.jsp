@@ -40,7 +40,7 @@
 		<div id="contents-full">
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
-				<h1><img src="images/domain.png" class="admin-banner-pic" style="vertical-align:middle"><%= loginBean.translate(" Workspaces") %></h1>
+				<h1><img src="images/domain.png" class="admin-banner-pic"><%= loginBean.translate(" Workspaces") %></h1>
 				<p><%= loginBean.translate("Browse public workspaces, or create your own private or shared workspace") %></p>
 				<%= bean.browseCategoriesHTML() %>
 				<% if (bean.getCategory() == null) { %>

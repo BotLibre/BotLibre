@@ -59,7 +59,7 @@
 <% } %>
 	<h1>
 		<span class="dropt-banner">
-			<img src="images/user1.png" class="admin-banner-pic" style="vertical-align:middle">
+			<img src="images/user1.png" class="admin-banner-pic">
 			<div>
 				<p class="help">
 					<%= loginBean.translate("Configure the users and administrators of your forum.") %><br/>

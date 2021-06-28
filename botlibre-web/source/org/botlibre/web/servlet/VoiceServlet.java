@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.botlibre.web.bean.LoginBean;
 import org.botlibre.web.Site;
+import org.botlibre.web.admin.BotInstance;
 import org.botlibre.web.bean.BotBean;
 import org.botlibre.web.bean.VoiceBean;
 import org.botlibre.web.service.PageStats;
@@ -49,7 +50,7 @@ public class VoiceServlet extends BeanServlet {
 		String voice = request.getParameter("voice");
 		String voiceMod = request.getParameter("voice-mod");
 		String provider = (String)request.getParameter("provider");
-		Boolean nativeVoice = !("botlibre".equals(provider));
+		Boolean nativeVoice = "html5".equals(provider) || "responsive".equals(provider);
 		Boolean responsiveVoice = "responsive".equals(provider);
 		String nativeVoiceName = request.getParameter("native-voice-name");
 		String language = request.getParameter("language");
@@ -79,10 +80,9 @@ public class VoiceServlet extends BeanServlet {
 			}
 			if (save != null) {
 				String voiceName = nativeVoiceName;
-				if(bingSpeech) { 
+				if (bingSpeech) { 
 					voiceName = bingSpeechVoice; 
-				}
-				else if(qqSpeech) { 
+				} else if (qqSpeech) { 
 					voiceName = qqSpeechVoice;
 				}
 				botBean.checkAdmin();
@@ -92,15 +92,14 @@ public class VoiceServlet extends BeanServlet {
 					throw new Exception("ResponsiveVoice is only offered through our commercial website botlibre.biz");
 				}
 				
-				if (bingSpeech) { 
+				if (bingSpeech && !Site.COMMERCIAL) { 
 					if (nativeSpeechApiKey == null || nativeSpeechApiKey.isEmpty()) {
 						throw new Exception("Microsoft Speech API key is required.");
 					}
 					if (bingSpeechApiEndpoint == null || bingSpeechApiEndpoint.isEmpty()) {
 						throw new Exception("Microsoft Speech API endpoint is required.");
 					}
-				}
-				else if (qqSpeech) { 
+				} else if (qqSpeech) { 
 					if (nativeSpeechApiKey == null || nativeSpeechApiKey.isEmpty()) {
 						throw new Exception("QQ Speech App Key is required.");
 					}

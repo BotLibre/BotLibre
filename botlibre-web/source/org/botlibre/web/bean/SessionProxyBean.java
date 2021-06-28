@@ -132,17 +132,17 @@ public class SessionProxyBean {
 	}
 	
 	public String proxyString() {
-		if (this.beanId == null) {
+		//if (this.beanId == null) {
 			return "";
-		}
-		return "&proxy=" + getBeanId();
+		//}
+		//return "&proxy=" + getBeanId();
 	}
 	
 	public String proxyInput() {
-		if (this.beanId == null) {
+		//if (this.beanId == null) {
 			return "";
-		}
-		return "<input name=\"proxy\" type=\"hidden\" value=\"" + getBeanId() + "\"/>";
+		//}
+		//return "<input name=\"proxy\" type=\"hidden\" value=\"" + getBeanId() + "\"/>";
 	}
 
 	public void clear() {

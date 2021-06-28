@@ -27,6 +27,7 @@ import org.botlibre.util.Utils;
 
 import org.botlibre.web.admin.ClientType;
 import org.botlibre.web.bean.BrowseBean.InstanceFilter;
+import org.botlibre.web.service.PageStats;
 import org.botlibre.web.bean.ForumBean;
 import org.botlibre.web.bean.ForumPostBean;
 import org.botlibre.web.bean.LoginBean;
@@ -39,8 +40,15 @@ public class ForumPostServlet extends BeanServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 
+		// TODO: Temp fix to prevent crawler dos attack.
+		if (request.getParameter("proxy") != null) {
+			PageStats.page(request);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
 		LoginBean loginBean = getEmbeddedLoginBean(request, response);
-		if  (!loginBean.checkDomain(request, response)) {
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 		ForumPostBean bean = loginBean.getBean(ForumPostBean.class);

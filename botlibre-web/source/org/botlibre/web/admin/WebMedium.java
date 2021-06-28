@@ -74,6 +74,8 @@ public abstract class WebMedium extends Flaggable {
 	protected boolean isHidden;
 	protected boolean isExternal;
 	protected boolean isPaphus;
+	protected boolean isReviewed;
+	protected String reviewRejectionComments;
 	protected boolean showAds = true;
 	protected boolean adCodeVerified = false;
 	protected boolean contentVerified = false;
@@ -171,15 +173,17 @@ public abstract class WebMedium extends Flaggable {
 		if (this.contentRating != null) {
 			config.contentRating = this.contentRating.name();
 		}
-		config.description = this.description;
-		config.details = this.details;
-		config.disclaimer = this.disclaimer;
-		config.categories = getCategoriesString();
-		config.tags = getTagsString();
+		config.description = Utils.stripTags(this.description);
+		config.details = Utils.stripTags(this.details);
+		config.disclaimer = Utils.stripTags(this.disclaimer);
+		config.categories = Utils.stripTags(getCategoriesString());
+		config.tags = Utils.stripTags(getTagsString());
 		config.isFlagged = this.isFlagged;
+		config.isReviewed = this.isReviewed;
 		config.isExternal = this.isExternal;
 		config.isPaphus = this.isPaphus;
 		config.flaggedReason = this.flaggedReason;
+		config.reviewRejectionComments = this.reviewRejectionComments;
 		if (this.creator != null) {
 			config.creator = this.creator.getUserId();
 		}
@@ -188,7 +192,7 @@ public abstract class WebMedium extends Flaggable {
 		}
 		config.website = this.website;
 		config.subdomain = getSubdomain();
-		config.license = this.license;
+		config.license = Utils.stripTags(this.license);
 		config.showAds = this.showAds;
 		config.connects = String.valueOf(this.connects);
 		config.dailyConnects = String.valueOf(this.dailyConnects);
@@ -203,12 +207,37 @@ public abstract class WebMedium extends Flaggable {
 		config.id = String.valueOf(this.id);
 		config.name = this.name;
 		config.alias = this.alias;
-		config.isExternal = isExternal();
-		config.isFlagged = isFlagged();
-		config.description = Utils.stripTags(getDescription());
-		config.license = Utils.stripTags(getLicense());
+		config.isAdult = this.isAdult;
+		config.isPrivate = this.isPrivate;
+		config.isHidden = this.isHidden;
+		if (this.accessMode != null) {
+			config.accessMode = this.accessMode.name();
+		}
+		if (this.forkAccessMode != null) {
+			config.forkAccessMode = this.forkAccessMode.name();
+		}
+		if (this.contentRating != null) {
+			config.contentRating = this.contentRating.name();
+		}
+		config.description = Utils.stripTags(this.description);
+		config.details = Utils.stripTags(this.details);
+		config.disclaimer = Utils.stripTags(this.disclaimer);
 		config.categories = Utils.stripTags(getCategoriesString());
 		config.tags = Utils.stripTags(getTagsString());
+		
+		config.isFlagged = this.isFlagged;
+		config.isReviewed = this.isReviewed;
+		config.isExternal = this.isExternal;
+		config.isPaphus = this.isPaphus;
+		if (this.creator != null) {
+			config.creator = this.creator.getUserId();
+		}
+		if (this.creationDate != null) {
+			config.creationDate = this.creationDate.toString();
+		}
+		config.website = this.website;
+		config.subdomain = getSubdomain();
+		config.license = Utils.stripTags(this.license);
 		
 		config.connects = String.valueOf(this.connects);
 		config.dailyConnects = String.valueOf(this.dailyConnects);
@@ -217,6 +246,25 @@ public abstract class WebMedium extends Flaggable {
 		config.thumbsUp = String.valueOf(this.thumbsUp);
 		config.thumbsDown = String.valueOf(this.thumbsDown);
 		config.stars = String.valueOf(this.stars);
+	}
+
+	public boolean isReviewed() {
+		return isReviewed;
+	}
+
+	public void setReviewed(boolean isReviewed) {
+		this.isReviewed = isReviewed;
+	}
+
+	public String getReviewRejectionComments() {
+		if (reviewRejectionComments == null) {
+			return "";
+		}
+		return reviewRejectionComments;
+	}
+
+	public void setReviewRejectionComments(String reviewRejectionComments) {
+		this.reviewRejectionComments = reviewRejectionComments;
 	}
 
 	public Long getParentId() {
@@ -514,6 +562,12 @@ public abstract class WebMedium extends Flaggable {
 		this.disclaimer = Utils.sanitize(this.disclaimer);
 		this.details = Utils.sanitize(this.details);
 		this.description = Utils.sanitize(this.description);
+
+		if (Site.REVIEW_CONTENT && getDomain() != null && !getDomain().isPrivate() && !getDomain().isHidden() && !isHidden() && !isPrivate()) {
+			if (getId() != null && (getDescription() == null || getDescription().isEmpty())) {
+				throw new BotException("You must set a description");
+			}
+		}
 	}
 
 	public boolean isAdmin(User user) {
@@ -951,6 +1005,9 @@ public abstract class WebMedium extends Flaggable {
 			if (!newCategories.contains(category)) {
 				newCategories.add(category);
 			}
+		}
+		if (Site.REVIEW_CONTENT && getDomain() != null && !getDomain().isPrivate() && !getDomain().isHidden() && !isHidden() && !isPrivate() && newCategories.isEmpty() && !(this instanceof Domain)) {
+			throw new BotException("You must choose at least one category");
 		}
 		List<Category> ancestors = new ArrayList<Category>();
 		for (Category category : newCategories) {

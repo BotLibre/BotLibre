@@ -43,6 +43,8 @@ import org.botlibre.knowledge.BinaryData;
 import org.botlibre.knowledge.Bootstrap;
 import org.botlibre.knowledge.Primitive;
 import org.botlibre.thought.language.Language;
+import org.botlibre.thought.language.Language.CorrectionMode;
+import org.botlibre.thought.language.Language.LearningMode;
 import org.botlibre.util.Utils;
 
 import org.botlibre.web.Site;
@@ -53,7 +55,9 @@ import org.botlibre.web.admin.AvatarImage;
 import org.botlibre.web.admin.AvatarMedia;
 import org.botlibre.web.admin.BotAttachment;
 import org.botlibre.web.admin.BotInstance;
+import org.botlibre.web.admin.Category;
 import org.botlibre.web.admin.ClientType;
+import org.botlibre.web.admin.ContentRating;
 import org.botlibre.web.admin.Domain;
 import org.botlibre.web.admin.Media;
 import org.botlibre.web.admin.User;
@@ -224,6 +228,64 @@ public class BotBean extends WebMediumBean<BotInstance> {
 	}
 	
 	/**
+	 * Create a new bot instance as the user's personal bot.
+	 */
+	public boolean createUserInstance(String ip) {
+		try {
+			checkLogin();
+			InstanceConfig instanceConfig = new InstanceConfig();
+			instanceConfig.name = getUserId() + " Bot";
+			instanceConfig.alias = getUserId() + "Bot";
+			instanceConfig.categories = "Personal";
+			instanceConfig.description = getUser().getBio();
+			instanceConfig.tags = getUser().getTagsString();
+			Category category = new Category();
+			category.setName("Personal");
+			category.setDomain(getDomain());
+			checkCategory(category);
+			createInstance(instanceConfig, false, true, ip);
+			if (getUser().getAvatar() != null) {
+				setInstance(AdminDatabase.instance().update(this.instance, getUser().getAvatar().getImage()));
+			} else if (getUser().getInstanceAvatar() != null && getUser().getInstanceAvatar().getAvatar() != null) {
+				setInstance(AdminDatabase.instance().updateInstanceAvatar(getInstance().getId(), getUser().getInstanceAvatar().getId()));
+			}
+
+			// Enabled learning from the user.
+			Language language = getBot().mind().getThought(Language.class);
+			language.setLearningMode(LearningMode.Administrators);
+			language.saveProperties();
+			
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Check if the user has a personal bot, otherwise create it.
+	 */
+	public boolean checkUserInstance(User user, String ip) {
+		try {
+			if (validateInstance(user.getUserId() + "Bot")) {
+				if (!getInstance().getCreator().equals(user)) {
+					throw new BotException("Invalid personal bot, contact support");
+				}
+			} else {
+				if (!this.loginBean.isLoggedIn() || !user.equals(getUser())) {
+					throw new BotException("This user does not have a personal bot");
+				}
+				this.loginBean.setError(null);
+				createUserInstance(ip);
+			}
+			return true;
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+	}
+	
+	/**
 	 * Create a new bot instance.
 	 */
 	public boolean createInstance(InstanceConfig config, boolean isTemplate, boolean isSchema, String ip) {
@@ -280,6 +342,7 @@ public class BotBean extends WebMediumBean<BotInstance> {
 				if (templateInstance.getAvatar() != null) {
 					AvatarImage avatar = new AvatarImage();
 					avatar.setImage(templateInstance.getAvatar().getImage());
+					avatar.setType(templateInstance.getAvatar().getType());
 					newInstance.setAvatar(avatar);
 				}
 				newInstance.setInstanceAvatar(templateInstance.getInstanceAvatar());
@@ -637,13 +700,15 @@ public class BotBean extends WebMediumBean<BotInstance> {
 	public List<BotInstance> getAllInstances(Domain domain) {
 		try {
 			List<BotInstance> results = AdminDatabase.instance().getAllInstances(
-					this.page, this.pageSize, this.categoryFilter, this.nameFilter, this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, false);
+					this.page, this.pageSize, this.categoryFilter, this.nameFilter, this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort,
+					this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, false);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllInstancesCount(
-							this.categoryFilter, this.nameFilter, this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain);
+							this.categoryFilter, this.nameFilter, this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort,
+							this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 				}
 			}
 			return results;
@@ -659,7 +724,7 @@ public class BotBean extends WebMediumBean<BotInstance> {
 	public List<BotInstance> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllInstances(
-						0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain(), false);
+						0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain(), false);
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<BotInstance>();
@@ -1195,7 +1260,7 @@ public class BotBean extends WebMediumBean<BotInstance> {
 					if (media.isImage()) {
 						this.avatarFileName = media.getFileName();
 						this.avatarFileType = media.getType();
-						return;					
+						return;
 					}
 				}
 			}

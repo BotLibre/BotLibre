@@ -51,6 +51,9 @@ public class LiveChatServlet extends BeanServlet {
 		response.setCharacterEncoding("utf-8");
 
 		SessionProxyBean proxy = (SessionProxyBean)request.getSession().getAttribute("proxy");
+		if (proxy == null) {
+			proxy = new SessionProxyBean();
+		}
 		LoginBean loginBean = getEmbeddedLoginBean(request, response);
 		if (loginBean == null) {
 			request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -309,6 +312,7 @@ public class LiveChatServlet extends BeanServlet {
 			config.type = (String)request.getParameter("type");
 			config.videoAccessMode = (String)request.getParameter("videoAccessMode");
 			config.audioAccessMode = (String)request.getParameter("audioAccessMode");
+			config.inviteAccessMode = (String)request.getParameter("inviteAccessMode");
 			String isFeatured = (String)request.getParameter("isFeatured");
 			String adVerified = (String)request.getParameter("adVerified");
 			String delete = (String)request.getParameter("delete");
@@ -450,13 +454,14 @@ public class LiveChatServlet extends BeanServlet {
 			boolean showBoxmax = "on".equals((String)request.getParameter("showBoxmax"));
 			boolean showSendImage = "on".equals((String)request.getParameter("showSendImage"));
 			boolean showEmailChatLog = "on".equals((String)request.getParameter("showEmailChatLog"));
+			boolean avatar = "on".equals((String)request.getParameter("avatar"));
 			
 			if (embed != null) {
 				loginBean.verifyPostToken(postToken);
 				ChannelEmbedTabBean embedBean = loginBean.getBean(ChannelEmbedTabBean.class);
 				embedBean.generateCode(subdomain, embedType, caption, landing, userName, password, token, css, customCss, buttonCss, banner, footer, color,
 						background, width, height, offset, boxlocation, chooseLanguage, chatlog, online, bubble, showAds, loginBanner, prompt, send, facebookLogin, showTitle,
-						showLink, promptContactInfo, showAdvancedInfo, showMenubar, showBoxmax, showSendImage, showEmailChatLog);
+						showLink, promptContactInfo, showAdvancedInfo, showMenubar, showBoxmax, showSendImage, showEmailChatLog, avatar);
 				request.getRequestDispatcher("channel-embedtab.jsp").forward(request, response);
 				return;
 			}
@@ -471,17 +476,8 @@ public class LiveChatServlet extends BeanServlet {
 				request.getRequestDispatcher("channel-embedtab.jsp").forward(request, response);
 				return;
 			}
-						
-			if (page != null) {
-				bean.setPage(Integer.valueOf(page));
-				request.getRequestDispatcher("channel-search.jsp").forward(request, response);
-				return;
-			}
-			if (userFilter != null) {
-				bean.resetSearch();
-				bean.setUserFilter(Utils.sanitize(userFilter));
-				bean.setInstanceFilter(InstanceFilter.Personal);
-				request.getRequestDispatcher("channel-search.jsp").forward(request, response);
+
+			if (checkSearchCommon(bean, "channel-search.jsp", request, response)) {
 				return;
 			}
 

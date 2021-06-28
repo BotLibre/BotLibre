@@ -21,6 +21,7 @@
 	<a href="channel-users.jsp" title="<%= loginBean.translate("Configure users, operators, and administrators of the channel") %>"> <img src="images/user1.png" class="admin-banner-pic"></a> 
 	<a href="channel-settings.jsp" title="<%= loginBean.translate("Configure settings including welcome messages, email, and an automated chat bot to service the channel.") %>"> <img src="images/learning.png" class="admin-banner-pic"></a> 
 	<a href="channel-logs.jsp" title="<%= loginBean.translate("View the channel chat logs.") %>"> <img src="images/chatlog1.png" class="admin-banner-pic"></a>
+	<a href="channel-stats.jsp" title="<%= loginBean.translate("View the channel analytics.") %>"> <img src="images/stats.svg" class="admin-banner-pic"></a>
 	</div>
 	<% if (!embed) { %>
 		</div>

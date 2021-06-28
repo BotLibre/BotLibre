@@ -132,11 +132,11 @@ public class BotServlet extends BeanServlet {
 					return;
 				}
 				LiveChatBean livechatBean = bean.getBean(LiveChatBean.class);
-				if (botBean.getInstance() != null && !livechatBean.validateInstance(botBean.getInstanceName() + " Live Chat", botBean.getInstance().getDomain())) {
-					bean.setError(null);
-					livechatBean.createInstance(botBean.getInstanceName() + " Live Chat", ChannelType.OneOnOne, bean.getBotBean());
+				if (!livechatBean.checkBotChannel(ChannelType.OneOnOne, bean.getBotBean())) {
+					request.getRequestDispatcher("instance.jsp").forward(request, response);
+				} else {
+					request.getRequestDispatcher("livechat.jsp").forward(request, response);
 				}
-				request.getRequestDispatcher("livechat.jsp").forward(request, response);
 				return;
 			}
 			String chatroom = (String)request.getParameter("chatroom");
@@ -146,11 +146,11 @@ public class BotServlet extends BeanServlet {
 					return;
 				}
 				LiveChatBean livechatBean = bean.getBean(LiveChatBean.class);
-				if (botBean.getInstance() != null && !livechatBean.validateInstance(botBean.getInstanceName() + " Chat Room", botBean.getInstance().getDomain())) {
-					bean.setError(null);
-					livechatBean.createInstance(botBean.getInstanceName() + " Chat Room", ChannelType.ChatRoom, bean.getBotBean());
+				if (!livechatBean.checkBotChannel(ChannelType.ChatRoom, bean.getBotBean())) {
+					request.getRequestDispatcher("instance.jsp").forward(request, response);
+				} else {
+					request.getRequestDispatcher("livechat.jsp").forward(request, response);
 				}
-				request.getRequestDispatcher("livechat.jsp").forward(request, response);
 				return;
 			}
 			String admin = (String)request.getParameter("admin");
@@ -218,7 +218,7 @@ public class BotServlet extends BeanServlet {
 			if (createInstance != null) {
 				bean.verifyPostToken(postToken);
 				config.name = newInstance;
-				if (!botBean.createInstance(config, "on".equals(isTemplate), true, request.getRemoteAddr())) {
+				if (!botBean.createInstance(config, "on".equals(isTemplate), true, BeanServlet.extractIP(request))) {
 					response.sendRedirect("create-instance.jsp");
 				} else {
 					bean.setPageType(Page.Browse);
@@ -230,7 +230,7 @@ public class BotServlet extends BeanServlet {
 			if (createLink != null) {
 				bean.verifyPostToken(postToken);
 				config.name = newInstance;
-				if (!botBean.createLink(config, request.getRemoteAddr(), apiURL, apiPost, apiResponse, apiServerSide, apiJSON)) {
+				if (!botBean.createLink(config, BeanServlet.extractIP(request), apiURL, apiPost, apiResponse, apiServerSide, apiJSON)) {
 					response.sendRedirect("create-instance-link.jsp");
 				} else {
 					bean.setPageType(Page.Browse);
@@ -271,6 +271,10 @@ public class BotServlet extends BeanServlet {
 						request.getRequestDispatcher("browse.jsp").forward(request, response);
 					}
 				}
+				return;
+			}
+
+			if (checkSearchCommon(botBean, "instance-search.jsp", request, response)) {
 				return;
 			}
 			String disconnect = (String)request.getParameter("disconnect");

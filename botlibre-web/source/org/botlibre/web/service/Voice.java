@@ -17,20 +17,34 @@
  ******************************************************************************/
 package org.botlibre.web.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.botlibre.web.admin.BotInstance;
+
 public abstract class Voice {
 	public static int MAX_SIZE = 800;
 	public static int MAX_FILE_NAME_SIZE = 200;
 	
-	static Voice instance;
+	static Map<String, Voice> voices;
 
-	public static Voice instance() {
-		if (instance == null) {
-			instance = new MaryVoice();
+	public static Voice instance(String speechProvider) {
+		if (voices == null) {
+			voices = new HashMap<>();
+			voices.put(BotInstance.MARY, new MaryVoice());
+			voices.put(BotInstance.BINGSPEECH, new MicrosoftVoice());
 		}
-		return instance;
+		if (speechProvider == null || speechProvider.isEmpty()) {
+			return voices.get(BotInstance.MARY);
+		}
+		Voice voice = voices.get(speechProvider);
+		if (voice == null) {
+			return voices.get(BotInstance.MARY);
+		}
+		return voice;
 	}	
 
-	public abstract boolean speak(String voice, String mod, String text, String file);
+	public abstract boolean speak(String voice, String mod, String text, String file, String apiKey, String apiToken, String apiEndpoint);
 	
 	public void setVoice(String text) {}
 	

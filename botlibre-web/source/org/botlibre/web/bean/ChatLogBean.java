@@ -85,6 +85,8 @@ public class ChatLogBean extends ServletBean {
 	public static final String DIRECTMESSAGE = "directmessage";
 	public static final String EMAIL = "email";
 	public static final String SMS = "sms";
+	public static final String IVR = "ivr";
+	public static final String WHATSAPP = "whatsapp";
 	public static final String TELEGRAM = "telegram";
 	public static final String SKYPE = "skype";
 	public static final String WECHAT = "wechat";
@@ -2398,6 +2400,10 @@ public class ChatLogBean extends ServletBean {
 				inputType = Primitive.DIRECTMESSAGE;
 			} else if (this.type.equals(SMS)) {
 				inputType = Primitive.SMS;
+			} else if (this.type.equals(IVR)) {
+				inputType = Primitive.IVR;
+			} else if (this.type.equals(WHATSAPP)) {
+				inputType = Primitive.WHATSAPP;
 			} else if (this.type.equals(FACEBOOKMESSENGER)) {
 				inputType = Primitive.FACEBOOKMESSENGER;
 			} else if (this.type.equals(SLACK)) {
@@ -4586,7 +4592,7 @@ public class ChatLogBean extends ServletBean {
 				String responseId = question.getId() + "-" + answer.getTarget().getId();
 				writer.write("<tr id='question-response-row-" + responseId + "'>");
 			
-				if (isDefault || isGreeting) {	
+				if (isDefault || isGreeting) {
 					writer.write("<td></td><td></td><td></td>");
 					writer.write("<td id='response-td-id-" + responseId + "'>");
 				} else {
@@ -4686,7 +4692,7 @@ public class ChatLogBean extends ServletBean {
 			if(meta != null) {
 				data = this.getLabel(nextResponse.getTarget());
 				if(data != null && !data.isEmpty()) {
-					writer.write("<tr class='meta-table'><td style='width:100%;'><span id='span-label-" + responseId + "' class='chat-label'>" + data + "</span></td></tr>");
+					writer.write("<tr class='meta-table edit-label-tr'><td style='width:100%;'><span id='span-label-" + responseId + "' class='chat-label'>" + data + "</span></td></tr>");
 				}
 			}
 			meta = nextResponse.getMeta().getRelationship(Primitive.KEYWORD);

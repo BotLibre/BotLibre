@@ -40,7 +40,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/timers.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/timers.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Setup your bot to run scripts at various time intervals to automate web tasks.") %><br/>

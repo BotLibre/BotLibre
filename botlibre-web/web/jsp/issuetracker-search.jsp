@@ -33,7 +33,9 @@
 			<div class="browse">
 				<jsp:include page="error.jsp"/>
 				<% if (allowAccess) { %>
-					<h3><%= loginBean.translate("Search Issue Trackers") %></h3>
+					<h3 onclick="document.getElementById('search').click()" class="clickable"><img src="images/search.svg" class="admin-banner-pic" style="width:28px;padding:4px;"/>
+						<%= loginBean.translate("Search Issue Trackers") %>
+					</h3>
 					<%= bean.searchFormHTML() %>
 					<%= bean.searchHTML() %>
 				<% } %>

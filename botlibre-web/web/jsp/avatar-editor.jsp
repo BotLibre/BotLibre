@@ -102,7 +102,7 @@
 	<% } else { %>
 		<h1>
 			<span class="dropt-banner">
-				<img src="images/analytic-media.svg" class="admin-banner-pic" style="vertical-align:middle">
+				<img src="images/analytic-media.svg" class="admin-banner-pic">
 				<div>
 					<p class="help">
 						<%= loginBean.translate("Configure, import, and upload media for the avatar.") %>

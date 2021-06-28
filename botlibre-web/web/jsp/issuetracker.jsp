@@ -57,6 +57,7 @@
 		
 		<% bean.writeExternalHTML(out); %>
 		<% bean.writeFlaggedHTML(out); %>
+		<% bean.writeReviewHTML(out); %>
 		
 		<% if (bean.getInstance() != null) { %>
 			<form action="issuetracker" method="post" class="message" <%= (bean.getInstance().isExternal()) ? "target=\"_blank\"" : "" %>>

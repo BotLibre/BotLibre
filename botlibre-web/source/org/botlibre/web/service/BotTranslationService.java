@@ -17,6 +17,10 @@
  ******************************************************************************/
 package org.botlibre.web.service;
 
+import java.util.logging.Level;
+
+import org.botlibre.BotException;
+import org.botlibre.web.Site;
 import org.botlibre.web.admin.AdminDatabase;
 
 
@@ -40,8 +44,12 @@ public class BotTranslationService extends TranslationService {
 			BotTranslation translation = AdminDatabase.instance().findBotTranslation(id);
 			if (translation == null) {
 				try {
-					// Use Yandex.
-					translated = yandexTranslate(textOrId, sourceLanguage, targetLanguage);
+					if (Stats.stats.botTranslations > Site.MAX_TRANSLATION_API) {
+						throw new BotException("Max translations");
+					}
+					// translate with appropriate api 
+					translated = translateAPI(textOrId, sourceLanguage, targetLanguage);
+					Stats.stats.botTranslations++;
 					if (translated != null) {
 						translation = new BotTranslation();
 						translation.sourceLanguage = sourceLanguage;
@@ -54,14 +62,17 @@ public class BotTranslationService extends TranslationService {
 						return translated;
 					}
 				} catch (Exception exception) {
+					Stats.stats.botTranslationErrors++;
 					AdminDatabase.instance().log(exception);
 				}
 				cacheTranslation(id, "");
 				return textOrId;
 			}
+			Stats.stats.cachedBotTranslations++;
 			cacheTranslation(id, translation.translation);
 			return translation.translation;
 		}
+		Stats.stats.cachedBotTranslations++;
 		if (translated.isEmpty()) {
 			return textOrId;
 		}

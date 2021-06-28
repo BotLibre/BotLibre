@@ -21,6 +21,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.botlibre.web.Site;
+
 @Entity
 @Table(name="botplatform")
 public class BotPlatform {
@@ -41,6 +43,7 @@ public class BotPlatform {
 	protected boolean LOCK;
 	protected boolean READONLY;
 	protected boolean ADULT;
+	protected boolean REVIEW_CONTENT;
 	protected String CONTENT_RATING;
 	protected String NAME;
 	protected String DOMAIN;
@@ -68,6 +71,8 @@ public class BotPlatform {
 	protected boolean ANONYMOUS_CHAT;
 	protected boolean REQUIRE_TERMS;
 	protected boolean AGE_RESTRICT;
+	protected Boolean DISABLE_SUPERGROUP;
+	protected String BLOCK_AGENT;
 	protected boolean BACKLINK;
 	protected boolean WEEKLYEMAIL;
 	protected boolean WEEKLYEMAILBOTS;
@@ -112,4 +117,15 @@ public class BotPlatform {
 	protected String MICROSOFT_SPEECH_KEY;
 	protected String RESPONSIVEVOICE_KEY;
 	protected String YANDEX_KEY;
+	protected String MICROSOFT_TRANSLATION_KEY;
+	
+	public void init() {
+		// Set defaults for upgrade.
+		if (DISABLE_SUPERGROUP == null) {
+			DISABLE_SUPERGROUP = Site.DISABLE_SUPERGROUP;
+		}
+		if (BLOCK_AGENT == null) {
+			BLOCK_AGENT = Site.BLOCK_AGENT;
+		}
+	}
 }

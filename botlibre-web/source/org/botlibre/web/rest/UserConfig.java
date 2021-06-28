@@ -41,6 +41,10 @@ public class UserConfig extends Config {
 	@XmlAttribute
 	public boolean showName;
 	@XmlAttribute
+	public String gender;
+	@XmlAttribute
+	public String properties;
+	@XmlAttribute
 	public String source;
 	@XmlAttribute
 	public String affiliate;
@@ -49,11 +53,17 @@ public class UserConfig extends Config {
 	@XmlAttribute
 	public String email;
 	@XmlAttribute
+	public Boolean emailMessages;
+	@XmlAttribute
+	public Boolean emailNotices;
+	@XmlAttribute
+	public Boolean emailSummary;
+	@XmlAttribute
+	public boolean isSubscribed;
+	@XmlAttribute
 	public String website;
 	@XmlAttribute
 	public boolean over18;
-	@XmlAttribute
-	public boolean displayName;
 	@XmlAttribute
 	public String connects;
 	@XmlAttribute
@@ -73,13 +83,27 @@ public class UserConfig extends Config {
 	@XmlAttribute
 	public String graphics;
 	@XmlAttribute
+	public String issues;
+	@XmlAttribute
+	public String issueTrackers;
+	@XmlAttribute
 	public String domains;
+	@XmlAttribute
+	public String friends;
+	@XmlAttribute
+	public String followers;
+	@XmlAttribute
+	public String affiliates;
 	@XmlAttribute
 	public String messages;
 	@XmlAttribute
 	public String joined;
 	@XmlAttribute
 	public String lastConnect;
+	@XmlAttribute
+	public String upgradeDate;
+	@XmlAttribute
+	public String expiryDate;
 	@XmlAttribute
 	public String type;
 	@XmlAttribute
@@ -96,8 +120,6 @@ public class UserConfig extends Config {
 	public boolean newMessage;
 	@XmlAttribute
 	public String tags;
-	@XmlAttribute
-	public String page;
 	
 	public String bio;
 	public String avatar;
@@ -133,12 +155,18 @@ public class UserConfig extends Config {
 	public long instanceAvatarId;
 	@XmlAttribute
 	public String channelType;
+	@XmlAttribute
+	public String flaggedUser;
+	@XmlAttribute
+	public String users;
+	@XmlAttribute
+	public String viewUser;
 	
 	public UserConfig() {
 		
 	}
 	
-	public UserConfig(User user, boolean allFields) {
+	public UserConfig(User user, boolean allFields, boolean friend) {
 		this.user = user.getUserId();
 		if (allFields) {
 			this.token = String.valueOf(user.getToken());
@@ -155,16 +183,38 @@ public class UserConfig extends Config {
 			this.nativeVoiceApiKey = user.getNativeVoiceApiKey();
 			this.nativeVoiceAppId = user.getNativeVoiceAppId();
 			this.voiceApiEndpoint = user.getVoiceApiEndpoint();
+			
+			if (user.getUpgradeDate() != null) {
+				this.upgradeDate = user.getUpgradeDate().toString();
+			}
+			if (user.getExpiryDate() != null) {
+				this.expiryDate = user.getExpiryDate().toString();
+			}
+			this.affiliates = String.valueOf(user.getAffiliates());
+			this.gender = user.getGender();
+			this.properties = user.getProperties();
+			this.isSubscribed = user.isSubscribed();
+			this.emailMessages = user.getEmailMessages();
+			this.emailNotices = user.getEmailNotices();
+			this.emailSummary = user.getEmailSummary();
+			this.voice = user.getVoice();
+			this.voiceMod = user.getVoiceMod();
+			this.nativeVoice = user.isNativeVoice();
+			this.nativeVoiceName = user.getNativeVoiceName();
+			this.nativeVoiceProvider = user.getNativeVoiceProvider();
+			this.speechRate = user.getSpeechRate();
+			this.pitch = user.getPitch();
+			if (user.getInstanceAvatar() != null) {
+				this.instanceAvatarId = user.getInstanceAvatar().getId();
+			}
 		}
-		if (allFields || user.isPublic()) {
+		if (allFields || user.isPublic() || friend) {
 			if (allFields || user.getShouldDisplayName()) {
 				this.name = user.getName();
 			}
-			this.showName = user.getShouldDisplayName();
 			this.website = user.getWebsite();
 			this.bio = user.getBio();
 			this.over18 = user.isOver18();
-			this.displayName = user.getShouldDisplayName();
 			this.connects = String.valueOf(user.getConnects());
 			this.posts = String.valueOf(user.getPosts());
 			this.bots = String.valueOf(user.getInstances());
@@ -173,10 +223,13 @@ public class UserConfig extends Config {
 			this.messages = String.valueOf(user.getMessages());
 			this.avatars = String.valueOf(user.getAvatars());
 			this.scripts = String.valueOf(user.getScripts());
-			this.scripts = String.valueOf(user.getAnalytics());
 			this.graphics = String.valueOf(user.getGraphics());
+			this.issues = String.valueOf(user.getIssues());
+			this.issueTrackers = String.valueOf(user.getIssueTrackers());
+			this.analytics = String.valueOf(user.getAnalytics());
 			this.domains = String.valueOf(user.getDomains());
 			this.flaggedReason = user.getFlaggedReason();
+			this.flaggedUser = user.getFlaggedUser();
 			if (user.getCreationDate() != null) {
 				this.joined = user.getCreationDate().toString();
 			}
@@ -184,21 +237,15 @@ public class UserConfig extends Config {
 				this.lastConnect = user.getLastConnected().toString();
 			}
 			this.type = user.getType().name();
+			
+			this.friends = String.valueOf(user.getFriends());
+			this.followers = String.valueOf(user.getFollowers());
 		}
 		this.isFlagged = user.isFlagged();
-		
 		this.tags = user.getTagsString();
 		this.isBot = user.isBot();
-		this.voice = user.getVoice();
-		this.voiceMod = user.getVoiceMod();
-		this.nativeVoice = user.isNativeVoice();
-		this.nativeVoiceName = user.getNativeVoiceName();
-		this.nativeVoiceProvider = user.getNativeVoiceProvider();
 		this.language = user.getLanguage();
-		this.speechRate = user.getSpeechRate();
-		this.pitch = user.getPitch();
-		if (user.getInstanceAvatar() != null) {
-			this.instanceAvatarId = user.getInstanceAvatar().getId();
-		}
+		this.showName = user.getShouldDisplayName();
+		this.userAccess = user.getAccess().name();
 	}
 }

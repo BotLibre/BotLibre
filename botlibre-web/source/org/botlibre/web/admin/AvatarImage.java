@@ -37,7 +37,8 @@ public class AvatarImage {
 	@Lob
 	protected byte[] thumb;
 	protected String name = "";
-	protected String type = "jpg";
+	protected String type;
+	protected String thumbType;
 	protected String license = "";
 	protected String owner = "";
 	protected boolean shared;
@@ -81,11 +82,29 @@ public class AvatarImage {
 	}
 
 	public String getType() {
+		if (type == null) {
+			return "jpg";
+		}
 		return type;
 	}
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public boolean hasThumbType() {
+		return thumbType != null;
+	}
+
+	public String getThumbType() {
+		if (thumbType == null) {
+			return "jpg";
+		}
+		return thumbType;
+	}
+
+	public void setThumbType(String thumbType) {
+		this.thumbType = thumbType;
 	}
 
 	public String getOwner() {

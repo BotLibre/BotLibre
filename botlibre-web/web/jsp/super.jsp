@@ -43,9 +43,9 @@
 	<link rel="stylesheet" href="scripts/tablesorter/tablesorter.css" type="text/css">
 	<style type="text/css">
 		.setting-labels {
-		    color: #585858;
-		    font-size: 16px;
-		    line-height: 24px;
+			color: #585858;
+			font-size: 16px;
+			line-height: 24px;
 		}
 	</style>
 	<script type="text/javascript" src="scripts/tablesorter/tablesorter.js"></script>
@@ -361,6 +361,7 @@
 										</div>
 									</span>
 									<%= loginBean.translate("Allow Anonymous Chat") %>
+									
 									<br/>
 									<input type="checkbox" name="REQUIRE_TERMS" <%= Site.REQUIRE_TERMS ? "checked" : "" %>/>
 									<span class="dropt-banner">
@@ -370,6 +371,7 @@
 										</div>
 									</span>
 									<%= loginBean.translate("Require Accept Terms (to chat)") %>
+									
 									<br/>
 									<input type="checkbox" name="AGE_RESTRICT" <%= Site.AGE_RESTRICT ? "checked" : "" %>/>
 									<span class="dropt-banner">
@@ -379,6 +381,17 @@
 										</div>
 									</span>
 									<%= loginBean.translate("Age Restrict (> 13)") %>
+									
+									<br/>
+									<input type="checkbox" name="REVIEW_CONTENT" <%= Site.REVIEW_CONTENT ? "checked" : "" %>/>
+									<span class="dropt-banner">
+										<img id="help-mini" src="images/help.svg"/>
+										<div>
+											<%= loginBean.translate("Require admin approval before public content is visible in browse directory") %><br/>
+										</div>
+									</span>
+									<%= loginBean.translate("Require public content review") %>
+									
 									<br/>
 									<input type="checkbox" name="BACKLINK" <%= Site.BACKLINK ? "checked" : "" %>/>
 									<span class="dropt-banner">
@@ -388,6 +401,26 @@
 										</div>
 									</span>
 									<%= loginBean.translate("Require Embedding Backlink") %>
+									
+									<br/>
+									<input type="checkbox" name="DISABLE_SUPERGROUP" <%= Site.DISABLE_SUPERGROUP ? "checked" : "" %>/>
+									<span class="dropt-banner">
+										<img id="help-mini" src="images/help.svg"/>
+										<div>
+											<%= loginBean.translate("Do not allow messages from Telegram super groups") %><br/>
+										</div>
+									</span>
+									<%= loginBean.translate("Disable Telegram super groups") %>
+									
+									<br/>
+									<span class="dropt-banner">
+										<img id="help-mini" src="images/help.svg"/>
+										<div>
+											<%= loginBean.translate("Block the web agent string (dos attack/web crawler/bot)") %><br/>
+										</div>
+									</span>
+									<%= loginBean.translate("Block web agent string") %><br/>
+									<input type="text" name="BLOCK_AGENT" value="<%= Site.BLOCK_AGENT %>"/>
 									<br/>
 								</div>
 								<h3><%= loginBean.translate("Services Settings") %></h3>
@@ -621,8 +654,20 @@
 									<%= loginBean.translate("Microsoft Speech API Key") %><br/>
 									<input type="password" name="MICROSOFT_SPEECH_KEY" value="<%= Site.MICROSOFT_SPEECH_KEY %>"/>
 									<br/>
+									<%= loginBean.translate("Microsoft Speech API Endpoint") %><br/>
+									<input type="password" name="MICROSOFT_SPEECH_ENDPOINT" value="<%= Site.MICROSOFT_SPEECH_ENDPOINT %>"/>
+									<br/>
+									<%= loginBean.translate("Responsive Voice Key") %><br/>
+									<input type="password" name="RESPONSIVEVOICE_KEY" value="<%= Site.RESPONSIVEVOICE_KEY %>"/>
+									<br/>
 									<%= loginBean.translate("Yandex API Key") %><br/>
 									<input type="password" name="YANDEX_KEY" value="<%= Site.YANDEX_KEY %>"/>
+									<br/>
+									<%= loginBean.translate("Microsoft Translation API Key") %><br/>
+									<input type="password" name="MICROSOFT_TRANSLATION_KEY" value="<%= Site.MICROSOFT_TRANSLATION_KEY %>"/>
+									<br/>
+									<%= loginBean.translate("Microsoft Translation API Endpoint") %><br/>
+									<input type="password" name="MICROSOFT_TRANSLATION_ENDPOINT" value="<%= Site.MICROSOFT_TRANSLATION_ENDPOINT %>"/>
 									<br/>
 								</div>
 				
@@ -634,6 +679,15 @@
 								<a href="create-user.jsp"><%= loginBean.translate("Create user") %></a><br/><br/>
 								<a href="browse-user.jsp"><%= loginBean.translate("Browse users") %></a><br/>
 							</p>
+							<form action="super" method="post" class="message">
+								<%= loginBean.postTokenInput() %>
+								<h3><%= loginBean.translate("Transfer User") %></h3>
+								<table>
+									<tr><td><span><%= loginBean.translate("From user") %>:</span></td><td><input type="text" name="transferUserFrom"/></td></tr>
+									<tr><td><span><%= loginBean.translate("To user") %>:</span></td><td><input type="text" name="transferUserTo"/></td></tr>
+								</table>
+								<input type="submit" name="transferUser" value="<%= loginBean.translate("Transfer") %>"/><br/>
+							</form>
 						</div>
 						<div id="tabs-4" class="ui-tabs-hide">
 							<form action="super" method="post" class="message">

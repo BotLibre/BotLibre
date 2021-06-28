@@ -41,7 +41,7 @@ public class IssueServlet extends BeanServlet {
 		response.setCharacterEncoding("utf-8");
 
 		LoginBean loginBean = getEmbeddedLoginBean(request, response);
-		if  (!loginBean.checkDomain(request, response)) {
+		if (!loginBean.checkDomain(request, response)) {
 			return;
 		}
 		IssueBean bean = loginBean.getBean(IssueBean.class);

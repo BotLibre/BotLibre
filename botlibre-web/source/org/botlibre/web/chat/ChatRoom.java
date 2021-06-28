@@ -168,7 +168,13 @@ public class ChatRoom {
 	public void message(ChatEndpoint connection, String message) {
 		try {
 			if (message.startsWith("Media:")) {
-				if (isInPrivate(connection)) {
+				boolean isPrivate = isInPrivate(connection);
+				if(message.contains("update-users")) {
+					broadcastOnlineList(isPrivate);
+					broadcastOnlineXML(isPrivate);
+					return;
+				}
+				if (isPrivate) {
 					ChatEndpoint client = getPrivate(connection);
 					if (client != null) {
 						client.sendTextIgnoreError(message);
@@ -253,6 +259,59 @@ public class ChatRoom {
 				}
 				return;
 			}
+			if (command.equalsIgnoreCase("invite")) {
+				if (this.channel.isOneOnOne()) {
+					connection.sendTextIgnoreError("Error: You can only invite bots to chatrooms.");
+					return;
+				}
+				String botAlias = message.substring(index + 2, message.length());
+				LoginBean botLoginBean = new LoginBean();
+				botLoginBean.setUser(connection.getUser());
+				botLoginBean.setLoggedIn(true);
+				botLoginBean.getBean(LiveChatBean.class).setInstance(getChannel());
+				boolean exists = botLoginBean.getBotBean().validateInstance(botAlias);
+				if (exists) {
+					if (connection.getUser() == null || !botLoginBean.getBean(LiveChatBean.class).allowInvite()) {
+						connection.sendTextIgnoreError("Error: You don't have access to invite bots to this channel.");
+						return;
+					}
+					if (this.botConnections.size() >= Site.MAX_CHAT_INVITE) {
+						connection.sendTextIgnoreError("Error: Maximum bots in channel.");
+						return;
+					}
+					for (ChatBotEndpoint bot: this.botConnections) {
+						if (bot.getBot().equals(botLoginBean.getBotBean().getInstance())) {
+							connection.sendTextIgnoreError("Error: Bot " + botAlias + " already in channel.");
+							return;
+						}
+						if (!connection.getUser().isAdminUser() && !connection.getUser().isPartnerUser() && connection.getUser().equals(bot.getUser())) {
+							// Users can only invite one bot.
+							connection.sendTextIgnoreError("Error: You can only invite 1 bot.");
+							return;
+						}
+					}
+					ChatMessage chat = new ChatMessage();
+					chat.setChannel(this.channel);
+					chat.setDomain(this.channel.getDomain());
+					chat.setCreator(connection.getUser());
+					chat.setNick(connection.getNick());
+					chat.setMessage("invite: " + botAlias);
+					AdminDatabase.instance().createChatMessage(chat);
+					
+					ChatBotEndpoint bot = new ChatBotEndpoint(botLoginBean.getBotBean().getInstance(), this);
+					bot.setLoginBean(botLoginBean);
+					bot.setUser(botLoginBean.getUser());
+					addConnection(bot);
+					connection.sendTextIgnoreError("Info: Bot " + botAlias + " has been added to this channel.");
+					broadcastOnlineList(false);
+					broadcastOnlineXML(false);
+					return;
+				} else {
+					connection.sendTextIgnoreError("Error: Invalid invite, bot " + botAlias + " does not exists.");
+					return;
+				}
+			}
+
 			ChatMessage chat = new ChatMessage();
 			chat.setChannel(this.channel);
 			chat.setDomain(this.channel.getDomain());
@@ -409,24 +468,21 @@ public class ChatRoom {
 				}
 			} else if (isChatRoom()) {
 				broadcastMessage(filteredMessage, false);
-				if (this.channel.hasBot()) {
-					for (ChatBotEndpoint bot : this.botConnections) {
-						Chat sense = bot.getChat(this);
-						if (sense == null) {
-							throw new BotException("Connection to bot failed");
-						}
-						if (this.channel.getBotMode() == BotMode.AnswerOnly) {
-							String nick = bot.getNick();
-							if ((message.length() < nick.length()) || message.substring(0, nick.length()).equals(nick)) {
-								continue;
-							}
-						}
-						bot.startStats(sense);
-						ChatEvent chatMessage = new ChatEvent();
-						chatMessage.setNick(connection.getNick());
-						chatMessage.setMessage(message);
-						sense.input(chatMessage);
+				for (ChatBotEndpoint bot : this.botConnections) {
+					Chat sense = bot.getChat(this);
+					if (sense == null) {
+						throw new BotException("Connection to bot failed");
 					}
+					if (this.channel.getBotMode() == BotMode.AnswerOnly) {
+						if (!message.startsWith(bot.getNick()) && !(bot.getNick2() != null && message.startsWith(bot.getNick2()))) {
+							continue;
+						}
+					}
+					bot.startStats(sense);
+					ChatEvent chatMessage = new ChatEvent();
+					chatMessage.setNick(connection.getNick());
+					chatMessage.setMessage(message);
+					sense.input(chatMessage);
 				}
 			} else {
 				broadcastMessage(filteredMessage, true);
@@ -460,6 +516,10 @@ public class ChatRoom {
 		}
 		writer.write("<div class='online-user' id='user-");
 		writer.write(LiveChatBean.encode(client.getNick()));
+		writer.write("' name='");
+		writer.write(client.getNick2() == null ? client.getNick() : client.getNick2());
+		writer.write("' alias='");
+		writer.write(client.getNick());
 		writer.write("'>");
 		if (client.getUser() != null) {
 			//writer.write("<a class='user' target='_blank' href='login?view-user=");
@@ -479,8 +539,17 @@ public class ChatRoom {
 			writer.write("<a class='user' target='_blank' href='login?view-user=");
 			writer.write(this.loginBean.encodeURI(client.getUser().getUserId()));
 			writer.write("'>");
-			writer.write(client.getUser().getUserHTML());
-			writer.write("</a>");
+			if (client.getUser().getShouldDisplayName() && !client.getUser().getName().isEmpty()) {
+				writer.write("<span class='online-userid-label'>");
+				writer.write(client.getUser().getName());
+				writer.write("</span><br/><span class='online-username-label'>");
+				writer.write(client.getUser().getUserHTML());
+				writer.write("</span></a>");
+			} else {
+				writer.write("<br/><span class='online-userid-label'>");
+				writer.write(client.getUser().getUserHTML());
+				writer.write("</span><br/></a>");
+			}
 			writer.write("</div>");
 		} else {
 			writer.write("<img src='");
@@ -492,15 +561,19 @@ public class ChatRoom {
 			writer.write("/");
 			writer.write(this.loginBean.getAvatarThumb(client.getUser()));
 			writer.write("' width='50'/>");
-			writer.write("<div class='online-user-label'>");
+			writer.write("<div class='online-user-label'><br><span class='online-userid-label'>");
 			writer.write(client.getNick());
-			writer.write("</div>");
+			writer.write("</span></div>");
 		}
 		writer.write("</div>");
 	}
 
 	public void writeBotHTML(StringWriter writer, ChatBotEndpoint bot) {
-		writer.write("<div class='online-user'>");
+		writer.write("<div class='online-user' name='");
+		writer.write(bot.getNick2() == null ? bot.getNick() : bot.getNick2());
+		writer.write("' alias='");
+		writer.write(bot.getNick());
+		writer.write("' >");
 		//writer.write("<a class='user' target='_blank' href='browse?id=");
 		//writer.write(String.valueOf(bot.getBot().getId()));
 		//writer.write("'>");
@@ -517,9 +590,11 @@ public class ChatRoom {
 		writer.write("<div class='online-user-label'>");
 		writer.write("<a class='user' target='_blank' href='browse?id=");
 		writer.write(String.valueOf(bot.getBot().getId()));
-		writer.write("'>");
-		writer.write(bot.getBot().getNameHTML());
-		writer.write("</a>");
+		writer.write("'><span class='online-botname-label'>");
+		writer.write(bot.getBot().getName());
+		writer.write("</span><br/><span class='online-botalias-label'>@");
+		writer.write(bot.getBot().getAlias());
+		writer.write("</span></a>");
 		writer.write("</div>");
 		writer.write("</div>");
 	}
@@ -612,11 +687,11 @@ public class ChatRoom {
 		LiveChatStats stats = LiveChatStats.getStats(this.channel.getId(), this.channel.getName());
 		stats.connects++;
 		boolean isAdmin = isAdmin(connection);
-		if (isAdmin) {
+		/*if (isAdmin) {
 			for (String oldMessage : this.history) {
 				connection.sendTextIgnoreError(Utils.sanitize(oldMessage));
 			}
-		}
+		}*/
 		connection.sendTextIgnoreError("Channel: " + Site.ID + this.token);
 		String message = null;
 		if (isOneOnOne() && !isAdmin) {
@@ -691,9 +766,20 @@ public class ChatRoom {
 		if (!this.connections.contains(connection)) {
 			return;
 		}
+		// Remove bots of that user from the connection before exiting.
+		List<ChatBotEndpoint> bots = new ArrayList<ChatBotEndpoint>();
+		for (ChatBotEndpoint bot : this.botConnections) {
+			if (connection.getUser() != null && connection.getUser().equals(bot.getUser())) {
+				bots.add(bot);
+			}
+		}
+		for (ChatBotEndpoint bot : bots) {
+			removeConnection(bot);
+		}
+
 		removeConnection(connection);
 		if (isInPrivate(connection)) {
-			removePrivate(connection, true);			
+			removePrivate(connection, true);
 		}
 		updateConnected(connection);
 		message = String.format("Info: %s %s", connection.getNick(), "has disconnected.");
@@ -712,6 +798,9 @@ public class ChatRoom {
 		this.spyConnections.remove(connection);
 		this.botConnections.remove(connection);
 		this.nicks.remove(connection.getNick());
+		if (connection.getNick2() != null && this.nicks.get(connection.getNick2()) == connection) {
+			this.nicks.remove(connection.getNick2());
+		}
 		ChatEndpoint value = this.privateConnections.remove(connection);
 		if (value != null) {
 			this.privateConnections.remove(value);
@@ -727,6 +816,10 @@ public class ChatRoom {
 			this.botConnections.add((ChatBotEndpoint)connection);
 		}
 		this.nicks.put(connection.getNick(), connection);
+		// Only add 2nd nick if not in use.
+		if (connection.getNick2() != null && !this.nicks.containsKey(connection.getNick2())) {
+			this.nicks.put(connection.getNick2(), connection);
+		}
 	}
 
 	public boolean addPrivate(ChatEndpoint connection, ChatEndpoint client) {
@@ -960,7 +1053,7 @@ public class ChatRoom {
 		ChatEndpoint connection = this.nicks.get(nick);
 		if (connection == null) {
 			for (ChatEndpoint client : this.connections) {
-				if (client.getNick().equalsIgnoreCase(nick)) {
+				if (client.getNick().equalsIgnoreCase(nick) || (client.getNick2() != null && client.getNick2().equalsIgnoreCase(nick))) {
 					connection = client;
 					break;
 				}
@@ -973,7 +1066,7 @@ public class ChatRoom {
 		ChatEndpoint connection = this.nicks.get(nick);
 		if (connection == null) {
 			for (ChatEndpoint client : this.connections) {
-				if (client.getNick().equalsIgnoreCase(nick)) {
+				if (client.getNick().equalsIgnoreCase(nick) || (client.getNick2() != null && client.getNick2().equalsIgnoreCase(nick))) {
 					connection = client;
 					break;
 				}
@@ -1011,7 +1104,7 @@ public class ChatRoom {
 			return true;
 		}
 		try {
-			String whisper = connection.getNick() + ": whipser: " + message;
+			String whisper = connection.getNick() + ": whisper: " + message;
 			client.sendText(Utils.sanitize(whisper));
 		} catch (Exception exception) {
 			log(Level.WARNING, exception.toString());
@@ -1019,7 +1112,7 @@ public class ChatRoom {
 			client.close();
 			return false;
 		}
-		String whisper = connection.getNick() + ": whipser: " + client.getNick() + ": " + message;
+		String whisper = connection.getNick() + ": whisper: " + client.getNick() + ": " + message;
 		connection.sendTextIgnoreError(Utils.sanitize(whisper));
 		return true;
 	}

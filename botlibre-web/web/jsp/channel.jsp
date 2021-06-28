@@ -60,6 +60,7 @@
 		
 	<% bean.writeExternalHTML(out); %>
 	<% bean.writeFlaggedHTML(out); %>
+	<% bean.writeReviewHTML(out); %>
 		
 	<% if (bean.getInstance() != null) { %>
 		<form action="livechat" method="get" <%= (bean.getInstance().isExternal()) ? "target=\"_blank\"" : "" %> class="message">

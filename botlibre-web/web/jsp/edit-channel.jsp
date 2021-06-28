@@ -77,13 +77,24 @@
 						<option value="Disabled" <%= bean.isAudioAccessModeSelected("Disabled") %>><%= loginBean.translate("Disabled") %></option>
 					</select></td>
 				</tr>
+				<tr>
+					<td><%= loginBean.translate("Bot Invite Access") %></td>
+					<td><select name="inviteAccessMode" title="<%= loginBean.translate("Define who can invite bots to this channel") %>">
+						<!-- option value="Everyone" <%= bean.isInviteAccessModeSelected("Everyone") %>><%= loginBean.translate("Everyone") %></option -->
+						<option value="Users" <%= bean.isInviteAccessModeSelected("Users") %>><%= loginBean.translate("Users") %></option>
+						<option value="Members" <%= bean.isInviteAccessModeSelected("Members") %>><%= loginBean.translate("Members") %></option>
+						<option value="Administrators" <%= bean.isInviteAccessModeSelected("Administrators") %>><%= loginBean.translate("Administrators") %></option>
+						<option value="Disabled" <%= bean.isInviteAccessModeSelected("Disabled") %>><%= loginBean.translate("Disabled") %></option>
+					</select></td>
+				</tr>
 				</table>
 			<% } %>
 
 			<% bean.writEditAdCodeHTML(null, false, out); %>
-					  	
+
 			<input id="ok" name="save-instance" type="submit" value="<%= loginBean.translate("Save") %>"/><input id="cancel" name="cancel-instance" type="submit" value="<%= loginBean.translate("Cancel") %>"/><br/>
 		</form>
+		<% bean.writePublishDialogHTML(proxy, out); %>
 	<% } %>
 	</div>
 <% if (!embed) { %>

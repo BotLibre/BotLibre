@@ -25,6 +25,7 @@ import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 
 import org.botlibre.BotException;
+import org.botlibre.web.servlet.BeanServlet;
 
 @Entity
 public class Stats {
@@ -95,6 +96,9 @@ public class Stats {
 	public int botTwilioVoiceAPI;
 	public int botTwilioVoiceProcessed;
 	public int botTwilioVoiceCalls;
+	public int botWhatsAppSent;
+	public int botWhatsAppProcessed;
+	public int botWhatsAppAPI;
 	public int botEmails;
 	public int botEmailsProcessed;
 	public int botChats;
@@ -192,7 +196,14 @@ public class Stats {
 	public int analyticTrainingBusy;
 	public int analyticTestMediaBusy;
 	public int analyticBinaryUpload;
-
+	
+	public int translations;
+	public int cachedTranslations;
+	public int translationErrors;
+	public int botTranslations;
+	public int speechAPI;
+	public int cachedBotTranslations;
+	public int botTranslationErrors;
 	
 	public static void reset() {
 		stats = new Stats();
@@ -216,7 +227,7 @@ public class Stats {
 		if (request == null) {
 			return;
 		}
-		String ip = request.getRemoteAddr();
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return;
 		}
@@ -230,7 +241,7 @@ public class Stats {
 		if (request == null) {
 			return;
 		}
-		String ip = request.getRemoteAddr();
+		String ip = BeanServlet.extractIP(request);
 		if (ip == null || ip.isEmpty()) {
 			return;
 		}

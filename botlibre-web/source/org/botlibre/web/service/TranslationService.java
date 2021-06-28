@@ -17,12 +17,14 @@
  ******************************************************************************/
 package org.botlibre.web.service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+import org.botlibre.BotException;
 import org.botlibre.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -55,8 +57,12 @@ public class TranslationService {
 			Translation translation = AdminDatabase.instance().findTranslation(id);
 			if (translation == null) {
 				try {
-					// Use Yandex.
-					translated = yandexTranslate(textOrId, sourceLanguage, targetLanguage);
+					if (Stats.stats.translations > Site.MAX_TRANSLATION_API) {
+						throw new BotException("Max translations");
+					}
+					// translate with appropriate api 
+					translated = translateAPI(textOrId, sourceLanguage, targetLanguage);
+					Stats.stats.translations++;
 					if (translated != null) {
 						translation = new Translation();
 						translation.sourceLanguage = sourceLanguage;
@@ -68,18 +74,30 @@ public class TranslationService {
 						return translated;
 					}
 				} catch (Exception exception) {
+					Stats.stats.translationErrors++;
 					AdminDatabase.instance().log(exception);
 				}
 				cacheTranslation(id, "");
 				return textOrId;
 			}
+			Stats.stats.cachedTranslations++;
 			cacheTranslation(id, translation.translation);
 			return translation.translation;
 		}
+		Stats.stats.cachedTranslations++;
 		if (translated.isEmpty()) {
 			return textOrId;
 		}
 		return translated;
+	}
+	
+	public String translateAPI(String textOrId, String sourceLanguage, String targetLanguage) throws Exception {
+		if ((Site.MICROSOFT_TRANSLATION_KEY != null) && (!Site.MICROSOFT_TRANSLATION_KEY.isEmpty())) {
+			return microsoftTranslate(textOrId, sourceLanguage, targetLanguage);
+		} else if ((Site.YANDEX_KEY != null) && (!Site.YANDEX_KEY.isEmpty())) {
+			return yandexTranslate(textOrId, sourceLanguage, targetLanguage);
+		}
+		return null;
 	}
 	
 	public void cacheTranslation(TranslationId id, String translation) {
@@ -89,7 +107,7 @@ public class TranslationService {
 		this.translations.put(id, translation);
 	}
 	
-	public String yandexTranslate(String textOrId, String sourceLanguage, String targetLanguage) {
+	public String yandexTranslate(String textOrId, String sourceLanguage, String targetLanguage) throws Exception {
 		if (sourceLanguage == null || targetLanguage == null) {
 			return null;
 		}
@@ -114,23 +132,70 @@ public class TranslationService {
 		url = url + Site.YANDEX_KEY;
 		url = url + "&format=html&text=" + Utils.encodeURL(textOrId);
 		url = url + "&lang=" + sourceLanguage + "-" + targetLanguage;
-		try {
-			String xml = Utils.httpGET(url);
-			Element root = Utils.parseXML(xml);
-			NodeList list = root.getElementsByTagName("text");
-			if (list.getLength() == 0) {
-				return null;
-			}
-			String text = list.item(0).getTextContent().trim();
-			if (text.isEmpty()) {
-				return null;
-			}
-			AdminDatabase.instance().log(Level.INFO, "translation", text);
-			return text;
-		} catch (Exception exception) {
-			AdminDatabase.instance().log(exception);
+		String xml = Utils.httpGET(url);
+		Element root = Utils.parseXML(xml);
+		NodeList list = root.getElementsByTagName("text");
+		if (list.getLength() == 0) {
 			return null;
 		}
+		String text = list.item(0).getTextContent().trim();
+		if (text.isEmpty()) {
+			return null;
+		}
+		AdminDatabase.instance().log(Level.INFO, "translation", text);
+		return text;
+	}
+	
+	public String microsoftTranslate(String textOrId, String sourceLanguage, String targetLanguage) throws Exception {
+		if (sourceLanguage == null || targetLanguage == null) {
+			return null;
+		}
+		if (sourceLanguage.length() < 2 || targetLanguage.length() < 2) {
+			return null;
+		}
+		if (sourceLanguage.length() > 2) {
+			sourceLanguage = sourceLanguage.substring(0, 2);
+		}
+		if (targetLanguage.length() > 2) {
+			targetLanguage = targetLanguage.substring(0, 2);
+		}
+		if (targetLanguage.equals(sourceLanguage)) {
+			return null;
+		}
+		if (textOrId == null || textOrId.isEmpty()) {
+			return null;
+		}
+		AdminDatabase.instance().log(Level.INFO, "translating", sourceLanguage, targetLanguage, textOrId);
+		
+		// Use Microsoft Azure 
+		String url = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0";
+		url = url + "&to=" + targetLanguage;
+		url = url + "&textType=html";
+		
+		String type = "application/json; charset=UTF-8";
+		String data = "[{\"Text\":\""+ Utils.escapeQuotesJS(textOrId) +"\"}]";
+		
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Ocp-Apim-Subscription-Key", Site.MICROSOFT_TRANSLATION_KEY);
+		headers.put("Ocp-Apim-Subscription-Region", "eastus");
+		
+		String jsonRetn = Utils.httpPOST(url, type, data, headers);
+			
+		if ((jsonRetn.indexOf("},\"translations\":[{\"text\":\"") == -1) || (jsonRetn.indexOf("\",\"to\":\""+ targetLanguage +"\"}]}]") == -1)) {
+			return null;
+		}
+		
+		int startInx = 27 + jsonRetn.indexOf("},\"translations\":[{\"text\":\"");
+		int endInx = jsonRetn.indexOf("\",\"to\":\""+ targetLanguage +"\"}]}]");
+		String text = jsonRetn.subSequence(startInx, endInx).toString();
+		
+		if (text.isEmpty()) {
+			return null;
+		}
+		text = text.replaceAll("(\\\\r\\\\n|\\\\n)", "<br/>");
+		text = text.replaceAll("\\\\\"", "\"");
+		AdminDatabase.instance().log(Level.INFO, "translation", text);
+		return text;
 	}
 	
 	public void clear(Translation translation) {

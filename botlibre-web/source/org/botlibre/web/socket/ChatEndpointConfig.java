@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *      http://www.eclipse.org/legal/epl-v10.html
+ *	  http://www.eclipse.org/legal/epl-v10.html
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,15 +24,15 @@ import javax.websocket.server.ServerEndpointConfig;
 
 public class ChatEndpointConfig extends ServerEndpointConfig.Configurator
 {
-    @Override
-    public void modifyHandshake(ServerEndpointConfig config, 
-                                HandshakeRequest request, 
-                                HandshakeResponse response)
-    {
-        HttpSession httpSession = (HttpSession)request.getHttpSession();
-        if (httpSession == null) {
-        	return;
-        }
-        config.getUserProperties().put(HttpSession.class.getName(), httpSession);
-    }
+	@Override
+	public void modifyHandshake(ServerEndpointConfig config, 
+								HandshakeRequest request, 
+								HandshakeResponse response)
+	{
+		HttpSession httpSession = (HttpSession)request.getHttpSession();
+		if (httpSession == null) {
+			return;
+		}
+		config.getUserProperties().put(HttpSession.class.getName(), httpSession);
+	}
 }

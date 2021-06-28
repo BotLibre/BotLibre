@@ -31,6 +31,7 @@ import org.botlibre.web.service.PageStats;
 @javax.servlet.annotation.WebServlet("/web")
 @SuppressWarnings("serial")
 public class WebServlet extends BeanServlet {
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}

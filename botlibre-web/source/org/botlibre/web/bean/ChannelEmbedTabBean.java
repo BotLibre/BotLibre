@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  Copyright 2013-2019 Paphus Solutions Inc.
+ *  Copyright 2013-2021 Paphus Solutions Inc.
  *
  *  Licensed under the Eclipse Public License, Version 1.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 	protected boolean bubble = false;
 	protected boolean online = true;
 	protected boolean chatLog = true;
+	protected boolean avatar = false;
 	
 	public ChannelEmbedTabBean() {
 		this.type = "box";
@@ -53,14 +54,6 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 		this.bubble = bubble;
 	}
 
-	public boolean getChatLog() {
-		return chatLog;
-	}
-
-	public void setChatLog(boolean chatLog) {
-		this.chatLog = chatLog;
-	}
-
 	@Override
 	public LiveChatBean getBean() {
 		return getLoginBean().getBean(LiveChatBean.class);
@@ -80,13 +73,21 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 		}
 		return "";
 	}
+	
+	public boolean getAvatar() {
+		return avatar;
+	}
+	
+	public void setAvatar(boolean avatar) {
+		this.avatar = avatar;
+	}
 
 	public void generateCode(String subdomain, String type, String caption, String landing, String userName, String password, String token,
 				String css, String customcss, String buttoncss, String banner, String footer, String color, String background,
 				String width, String height, String offset, String location, String language, boolean chatLog, boolean online, boolean bubble,
 				boolean showAds, boolean loginBanner, String prompt, String send, boolean facebookLogin, boolean showTitle, boolean showLink,
 				boolean promptContactInfo, boolean showAdvancedInfo, boolean showMenubar, boolean showBoxmax, boolean showSendImage,
-				boolean showEmailChatLog) {
+				boolean showEmailChatLog, boolean avatar) {
 		try {
 			if (send == null) {
 				send = "";
@@ -123,7 +124,8 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 			this.height = Utils.sanitize(height.trim());
 			this.offset = Utils.sanitize(offset.trim());
 			this.location = Utils.sanitize(location.trim());
-			this.chatLog = chatLog;
+			this.showChatLog = chatLog;
+			this.avatar = avatar;
 			this.online = online;
 			this.bubble = bubble;
 			this.promptContactInfo = promptContactInfo;
@@ -206,20 +208,23 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 		if (this.showAds) {
 			writer.write("&showAds=true");
 		}
-		if (this.chatLog) {
+		if (this.showChatLog) {
 			writer.write("&chatLog=true");
 		} else {
 			writer.write("&chatLog=false");
 		}
-		if(this.showMenubar) {
+		if (this.showMenubar) {
 			writer.write("&menubar=true");
 		} else {
 			writer.write("&menubar=false");
 		}
-		if(this.sendImage) {
+		if (this.sendImage) {
 			writer.write("&sendImage=true");
 		} else {
 			writer.write("&sendImage=false");
+		}
+		if (this.avatar) {
+			writer.write("&avatar=true");
 		}
 		writer.write("&background=");
 		writer.write(encodeURI(this.background));
@@ -285,6 +290,14 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 
 	public void generateCode() {
 		int height = 500;
+		if (!this.avatar && !this.showChatLog) {
+			height = 260;
+		} else if (this.loginBanner) {
+			height = 600;
+		}
+		if (!this.height.isEmpty()) {
+			height = Integer.parseInt(this.height);
+		}
 		int width = 700;
 		if (!this.width.isEmpty()) {
 			width = Integer.parseInt(this.width);
@@ -295,49 +308,7 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 		}
 		StringWriter writer = new StringWriter();
 		
-		if (this.css.equals("chatlog")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/chatlog.css' type='text/css'>\n");
-		} else if (this.css.equals("social_chat")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/social_chat.css' type='text/css'>\n");
-		} else if (this.css.equals("chatroom")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/chatroom.css' type='text/css'>\n");
-		} else if (this.css.equals("blue_chat")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_chat.css' type='text/css'>\n");
-		} else if (this.css.equals("pink_chat")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/pink_chat.css' type='text/css'>\n");
-		} else if (this.css.equals("custom_chat")) {
-			if (this.customCss != "" && this.customCss.startsWith("http") || this.customCss.startsWith("https")) {
-				writer.write("<link rel='stylesheet' href='" + this.customCss + "' type='text/css'>\n");
-			}
-		} else {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/chatlog.css' type='text/css'>\n");
-		}
 		
-		if (this.buttoncss.equals("blue_round_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_round_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("red_round_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/red_round_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("green_round_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/green_round_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("blue_bot_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_bot_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("red_bot_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/red_bot_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("green_bot_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/green_bot_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("purple_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/purple_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("red_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/red_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("green_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/green_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("square_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/square_chat_button.css' type='text/css'>\n");
-		} else if (this.buttoncss.equals("round_chat_button")) {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/round_chat_button.css' type='text/css'>\n");
-		} else {
-			writer.write("<link rel='stylesheet' href='" + Site.SECUREURLLINK + "/css/blue_round_button.css' type='text/css'>\n");
-		}
 		if (type.equals("link")) {
 			writer.write("<script>\n");
 			writer.write("function popupwindow(url, title, w, h) {\n");
@@ -374,14 +345,10 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 			if (isLoggedIn() && getUser().getApplicationId() == null) {
 				getLoginBean().setUser(AdminDatabase.instance().resetAppId(getUser().getUserId()));
 			}
-			writer.write("<style>\n");
-			writer.write("// You can customize the css styles here\n");
-			writer.write("#" + Site.PREFIX + "box {} #" + Site.PREFIX + "boxbar {} #" + Site.PREFIX + "boxbarmax {} #" + Site.PREFIX + "boxmin {} #" + Site.PREFIX + "boxmax {} #" + Site.PREFIX + "boxclose {} ." + Site.PREFIX + "bubble-text {} ." + Site.PREFIX + "box-input {}\n");
-			writer.write("</style>\n");
 			writer.write("<script type='text/javascript' src='" + Site.SECUREURLLINK + "/scripts/sdk.js'></script>\n");
 			writer.write("<script type='text/javascript'>\n");
 			if (isLoggedIn() && getUser().getApplicationId() != null) {
-				writer.write("SDK.applicationId = \"" + getUser().getApplicationId() + "\";\n");			
+				writer.write("SDK.applicationId = \"" + getUser().getApplicationId() + "\";\n");
 			}
 			if (!this.language.trim().isEmpty()) {
 				writer.write("SDK.lang = \"" + this.language + "\";\n");
@@ -441,7 +408,32 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 			} else {
 				writer.write("livechat.css = \"" + Site.SECUREURLLINK + "/css/chatlog.css" + "\";\n");
 			}
-			writer.write("livechat.version = 6.0;\n");
+			if (this.buttoncss.equals("blue_round_button")) {
+				writer.write("livechat.buttoncss ='" + Site.SECUREURLLINK + "/css/blue_round_button.css'; \n");
+			} else if (this.buttoncss.equals("red_round_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/red_round_button.css'; \n");
+			} else if (this.buttoncss.equals("green_round_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/green_round_button.css'; \n");
+			} else if (this.buttoncss.equals("blue_bot_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/blue_bot_button.css'; \n");
+			} else if (this.buttoncss.equals("red_bot_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/red_bot_button.css'; \n");
+			} else if (this.buttoncss.equals("green_bot_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/green_bot_button.css'; \n");
+			} else if (this.buttoncss.equals("purple_chat_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/purple_chat_button.css'; \n");
+			} else if (this.buttoncss.equals("red_chat_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/red_chat_button.css'; \n");
+			} else if (this.buttoncss.equals("green_chat_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/green_chat_button.css'; \n");
+			} else if (this.buttoncss.equals("square_chat_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/square_chat_button.css'; \n");
+			} else if (this.buttoncss.equals("round_chat_button")) {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/round_chat_button.css'; \n");
+			} else {
+				writer.write("livechat.buttoncss = '" + Site.SECUREURLLINK + "/css/blue_round_button.css'; \n");
+			}
+			writer.write("livechat.version = 8.5;\n");
 			if (this.bubble) {
 				writer.write("livechat.bubble = true;\n");
 			} else {
@@ -450,7 +442,7 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 			if (Site.BACKLINK) {
 				writer.write("livechat.backlink = " + this.showLink + ";\n");
 			}
-			if (this.chatLog) {
+			if (this.showChatLog) {
 				writer.write("livechat.chatLog = true;\n");
 			} else {
 				writer.write("livechat.chatLog = false;\n");
@@ -490,6 +482,15 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 			}
 			if (getBean().getInstance().isChatRoom()) {
 				writer.write("livechat.chatroom = true;\n");
+			}		
+			if (this.avatar) {
+				writer.write("livechat.avatar = true;\n");
+			}
+			if (this.showChatLog) {
+				writer.write("livechat.chatLog = true;\n");
+			} 
+			else {
+				writer.write("livechat.chatLog = false;\n");
 			}
 			writer.write("livechat.popupURL = \"");
 			writeURL(writer);
@@ -500,7 +501,14 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 			writer.write("<iframe src=\"");
 			writeURL(writer);
 			//writer.write("\" width=\"700\" height=\"" + height + "\" frameborder=\"0\" scrolling=\"auto\"></iframe>");
-			writer.write("\" width=\"" + width + "\" height=\"" + height + "\" frameborder=\"0\" scrolling=\"auto\"></iframe>");
+			//writer.write("\" width=\"" + width + "\" height=\"" + height + "\" frameborder=\"0\" scrolling=\"auto\"></iframe>");
+			if (!this.avatar && this.showChatLog) {
+				writer.write("\" width=\"" + width + "\" height=\"" + height + "\" frameborder=\"0\" overflow-x=\"hidden\" scrolling=\"hidden\"></iframe>");
+			} else if (!this.avatar && !this.showChatLog) {
+				writer.write("\" width=\"" + width + "\" height=\"" + height + "\" frameborder=\"0\" scrolling=\"hidden\"></iframe>");
+			} else {
+				writer.write("\" width=\"" + width + "\" height=\"" + height + "\" frameborder=\"0\" scrolling=\"auto\"></iframe>");
+			}
 		}
 		setCode(writer.toString());
 	}
@@ -510,7 +518,7 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 		super.disconnect();
 		this.type = "box";
 		this.landing = "chat";
-		this.bubble = false;
+		this.bubble = true;
 		this.online = true;
 		this.promptContactInfo = true;
 		this.advancedInfo = false;
@@ -518,7 +526,8 @@ public class ChannelEmbedTabBean extends EmbedWebMediumBean {
 		this.boxMax = true;
 		this.sendImage = true;
 		this.emailChatLog = true;
-		this.chatLog = true;
+		this.showChatLog = true;
 		this.language = "";
+		this.avatar = false;
 	}
 }

@@ -42,6 +42,7 @@ import org.botlibre.web.service.AppIDStats;
 import org.botlibre.web.service.BeanManager;
 import org.botlibre.web.service.IPStats;
 import org.botlibre.web.service.Stats;
+import org.botlibre.web.servlet.BeanServlet;
 
 /**
  * Defines the Program AB SRAIX REST API.
@@ -75,7 +76,7 @@ public class SRAIXRestServer {
 			@QueryParam("plainText") boolean plainText,
 			@Context HttpServletRequest requestContext) {
 		
-		AdminDatabase.instance().log(Level.INFO, "SRAIX chat", message, application, requestContext.getRemoteAddr());
+		AdminDatabase.instance().log(Level.INFO, "SRAIX chat", message, application, BeanServlet.extractIP(requestContext));
 		if (application == null || application.isEmpty()) {
 			try {
 				Stats.checkMaxAPI();

@@ -91,13 +91,13 @@ public class IssueTrackerBean extends WebMediumBean<IssueTracker> {
 	public List<IssueTracker> getAllInstances(Domain domain) {
 		try {
 			List<IssueTracker> results = AdminDatabase.instance().getAllIssueTrackers(this.page, this.pageSize, this.categoryFilter, this.nameFilter,
-					this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain);
+					this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllIssueTrackersCount(this.categoryFilter, this.nameFilter,
-							this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain);
+							this.userFilter, this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 				}
 			}
 			return results;
@@ -110,7 +110,7 @@ public class IssueTrackerBean extends WebMediumBean<IssueTracker> {
 	public List<IssueTracker> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllIssueTrackers(
-					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain());
+					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain());
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<IssueTracker>();

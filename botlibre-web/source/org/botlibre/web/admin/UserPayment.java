@@ -25,6 +25,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.botlibre.BotException;
 import org.botlibre.util.Utils;
 import org.botlibre.web.admin.User.UserType;
 
@@ -37,8 +38,10 @@ public class UserPayment {
 	protected String cost;
 	protected String token;
 	protected UserType userType;
+	protected boolean isSubscription;
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date paymentDate;
+	protected int paymentDuration;
 	protected String userId;
 	protected UserPaymentStatus status;
 	protected UserPaymentType type;
@@ -50,10 +53,17 @@ public class UserPayment {
 	
 	protected String bitCoinJSON;
 	
-	public enum UserPaymentStatus {WaitingForPayment, Complete}
-	public enum UserPaymentType {PayPal, BitCoin, GooglePlay, AppleItunes}
+	public enum UserPaymentStatus {WaitingForPayment, Complete, Rejected}
+	public enum UserPaymentType {PayPal, BitCoin, GooglePlay, AppleItunes, Braintree, Amazon}
 	
-	public UserPayment() { }
+	public UserPayment() { 
+		cost = "";
+		token = "";
+		userId = "";
+		status = UserPaymentStatus.WaitingForPayment;
+		type = UserPaymentType.PayPal;
+		userType = UserType.Bronze;
+	}
 
 	public long getId() {
 		return id;
@@ -61,6 +71,14 @@ public class UserPayment {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public int getPaymentDuration() {
+		return paymentDuration;
+	}
+
+	public void setPaymentDuration(int paymentDuration) {
+		this.paymentDuration = paymentDuration;
 	}
 
 	public String getCost() {
@@ -134,6 +152,14 @@ public class UserPayment {
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
+	
+	public boolean isSubscription() {
+		return isSubscription;
+	}
+	
+	public void setSubscription(boolean isSubscribed) {
+		this.isSubscription = isSubscribed;
+	}
 
 	public Date getPaymentDate() {
 		return paymentDate;
@@ -172,6 +198,22 @@ public class UserPayment {
 		this.paypalAmt = Utils.sanitize(this.paypalAmt);
 		this.paypalCc = Utils.sanitize(this.paypalCc);
 		this.bitCoinJSON = Utils.sanitize(this.bitCoinJSON);
+	}
+	
+	public void updateCost() {
+		if (this.userType == UserType.Diamond) {
+			setCost(String.format("%.2f", 99.99 * this.paymentDuration));
+		} else if (this.userType == UserType.Platinum) {
+			setCost(String.format("%.2f", 49.99 * this.paymentDuration));
+		} else if (this.userType == UserType.Gold) {
+			setCost(String.format("%.2f", 4.99 * this.paymentDuration));
+		} else if (this.userType == UserType.Bronze) {
+			setCost(String.format("%.2f", 0.99 * this.paymentDuration));
+		} else if (this.userType == UserType.Avatar) {
+			setCost(String.format("%.2f", 49.99 * this.paymentDuration));
+		} else {
+			throw new BotException("Invalid upgrade type: " + userType);
+		}
 	}
 	
 }

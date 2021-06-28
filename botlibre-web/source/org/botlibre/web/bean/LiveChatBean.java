@@ -376,6 +376,18 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 			return "";
 		}
 	}
+
+	public String isInviteAccessModeSelected(String type) {
+		AccessMode mode = AccessMode.Users;
+		if (getEditInstance() != null) {
+			mode = getEditInstance().getInviteAccessMode();
+		}
+		if (mode != null && mode.name().equals(type)) {
+			return "selected=\"selected\"";
+		} else {
+			return "";
+		}
+	}
 	
 	public String getDurationCheckedString(String duration) {
 		if (duration.equals(this.duration)) {
@@ -496,13 +508,13 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 	public List<ChatChannel> getAllInstances(Domain domain) {
 		try {
 			List<ChatChannel> results = AdminDatabase.instance().getAllChannels(this.page, this.pageSize, this.categoryFilter, this.nameFilter, this.userFilter, 
-					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating,this.tagFilter, getUser(), domain);
+					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating,this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllChannelsCount(this.categoryFilter, this.nameFilter, this.userFilter, 
-							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain);
+							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain);
 				}
 			}
 			return results;
@@ -515,7 +527,7 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 	public List<ChatChannel> getAllFeaturedInstances() {
 		try {
 			return AdminDatabase.instance().getAllChannels(
-					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", null, getDomain());
+					0, 100, "", "", "", InstanceFilter.Featured, InstanceRestrict.None, InstanceSort.MonthlyConnects, this.loginBean.contentRating, "", "", "", null, getDomain());
 		} catch (Exception failed) {
 			error(failed);
 			return new ArrayList<ChatChannel>();
@@ -576,6 +588,32 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 		}
 		return false;
 	}
+	
+	public boolean allowInvite() {
+		if (this.instance == null || this.instance.getInviteAccessMode() == AccessMode.Disabled) {
+			return false;
+		}
+		if (getUser() != null && getUser().isFlagged()) {
+			return false;
+		}
+		if (this.instance.getInviteAccessMode() == AccessMode.Everyone) {
+			// Require users.
+			//return true;
+		}
+		if (!isLoggedIn()) {
+			return false;
+		}
+		if (this.instance.getInviteAccessMode() == AccessMode.Users) {
+			return true;
+		}
+		if (this.instance.isAdmin(getUser())) {
+			return true;
+		}
+		if (this.instance.getInviteAccessMode() == AccessMode.Members && this.instance.isAdmin(getUser())) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public String getAvatarImage(AvatarImage avatar) {
@@ -629,6 +667,9 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 			if (config.audioAccessMode != null) {
 				newInstance.setAudioAccessMode(AccessMode.valueOf(config.audioAccessMode));
 			}
+			if (config.inviteAccessMode != null) {
+				newInstance.setInviteAccessMode(AccessMode.valueOf(config.inviteAccessMode));
+			}
 			newInstance.setDomain(getDomain());
 			checkVerfied(config);
 			//AdminDatabase.instance().validateNewChannel(newInstance.getAlias(), config.description, config.tags, config.isAdult, getDomain());
@@ -681,10 +722,23 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 		return true;
 	}
 
-	public boolean createInstance(String name, ChannelType type, BotBean botBean) {
+	/**
+	 * Create a live chat channel for the bot.
+	 */
+	public boolean createBotChannel(ChannelType type, BotBean botBean) {
 		try {
 			BotInstance bot = botBean.getInstance();
+			String name = null;
+			String alias = null;
+			if (type == ChannelType.OneOnOne) {
+				name = botBean.getInstance().getName() + " Live Chat";
+				alias = botBean.getInstance().getAlias() + "LiveChat";
+			} else {
+				name = botBean.getInstance().getName() + " Chat Room";
+				alias = botBean.getInstance().getAlias() + "ChatRoom";
+			}
 			ChatChannel newInstance = new ChatChannel(name);
+			newInstance.setAlias(alias);
 			newInstance.setType(type);
 			newInstance.setDomain(bot.getDomain());
 			newInstance.setDescription(bot.getDescription());
@@ -707,11 +761,6 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 			}
 			Stats.stats.chatCreates++;
 			setInstance(AdminDatabase.instance().createChannel(newInstance, bot.getCreator(), bot.getCategoriesString(), bot.getTagsString(), this.loginBean));
-			if (bot.getAvatar() != null) {
-				setInstance(AdminDatabase.instance().update(this.instance, bot.getAvatar().getImage()));
-			} else if (bot.getInstanceAvatar() != null && bot.getInstanceAvatar().getAvatar() != null) {
-				setInstance(AdminDatabase.instance().update(this.instance, bot.getInstanceAvatar().getAvatar().getImage()));
-			}
 			setInstance((ChatChannel)AdminDatabase.instance().updateChannelSettings(newInstance, bot.getId()));
 		} catch (Exception failed) {
 			error(failed);
@@ -719,25 +768,129 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 		}
 		return true;
 	}
-	
-	public boolean createUserChannelInstance(String name, ChannelType type, User user, Domain domain, Long botId) {
-		try {
-			ChatChannel newInstance = new ChatChannel(name);
-			newInstance.setType(type);
-			newInstance.setDomain(domain);
-			newInstance.setDescription(user.getBioText());
-			newInstance.setPrivate(user.isPrivate());
-			newInstance.setCreator(user);
-			newInstance.setAdCode(user.getAdCode());
-			setInstance(newInstance);
-			Stats.stats.chatCreates++;
-			setInstance(AdminDatabase.instance().createChannel(newInstance, user, InstanceFilter.Personal.toString().trim(), user.getTagsString(), this.loginBean));
-			if (user.getAvatar() != null) {
-				setInstance(AdminDatabase.instance().update(this.instance, user.getAvatar().getImage()));
-			} else if (user.getInstanceAvatar() != null && user.getInstanceAvatar().getAvatar() != null) {
-				setInstance(AdminDatabase.instance().update(this.instance, user.getInstanceAvatar().getAvatar().getImage()));
+
+	/**
+	 * Check if the bot has a live chat channel, otherwise create it.
+	 */
+	public boolean checkBotChannel(ChannelType type, BotBean botBean) {
+		String alias = null;
+		String oldAlias = null;
+		if (type == ChannelType.OneOnOne) {
+			alias = botBean.getInstance().getAlias() + "LiveChat";
+			oldAlias = botBean.getInstance().getName() + " Live Chat";
+		} else {
+			alias = botBean.getInstance().getAlias() + "ChatRoom";
+			oldAlias = botBean.getInstance().getName() + " Chat Room";
+		}
+		boolean found = validateInstance(alias, botBean.getInstance().getDomain());
+		if (!found) {
+			// Also check old alias.
+			found = validateInstance(oldAlias, botBean.getInstance().getDomain());
+		}
+		if (found) {
+			if (!botBean.getInstance().getCreator().equals(getInstance().getCreator())) {
+				setInstance(null);
+				found = false;
+				// If the creator does not match and was using the old alias, then create under the new alias.
+				if (getInstance().getAlias().equals(alias)) {
+					this.loginBean.setError(new BotException("Invalid live chat channel, contact support"));
+					return false;
+				}
 			}
-			setInstance((ChatChannel)AdminDatabase.instance().updateChannelSettings(newInstance, botId));
+		}
+		this.loginBean.setError(null);
+		if (!found) {
+			createBotChannel(type, botBean);
+			if (botBean.getInstance().isReviewed()) {
+				AdminDatabase.instance().updateReviewed(this.instance);
+			}
+		}
+		try {
+			BotInstance bot = botBean.getInstance();
+			if (bot.getAvatar() != null
+						&& (this.instance.getAvatar() == null || (bot.getAvatar().getImage().length != this.instance.getAvatar().getImage().length))) {
+				setInstance(AdminDatabase.instance().update(this.instance, bot.getAvatar().getImage()));
+				if (botBean.getInstance().isReviewed()) {
+					AdminDatabase.instance().updateReviewed(this.instance);
+				}
+			} else if (bot.getAvatar() == null && bot.getInstanceAvatar() != null && bot.getInstanceAvatar().getAvatar() != null
+						&& (this.instance.getAvatar() == null || (bot.getInstanceAvatar().getAvatar().getImage().length != this.instance.getAvatar().getImage().length))) {
+				setInstance(AdminDatabase.instance().update(this.instance, bot.getInstanceAvatar().getAvatar().getImage()));
+				if (botBean.getInstance().isReviewed()) {
+					AdminDatabase.instance().updateReviewed(this.instance);
+				}
+			}
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Create the personal live chat channel for the user.
+	 */
+	public boolean createUserChannel(ChannelType type, BotBean botBean) {
+		try {
+			String name = null;
+			String alias = null;
+			if (type == ChannelType.OneOnOne) {
+				name = getUser().getUserId() + " Live Chat";
+				alias = getUser().getUserId() + "LiveChat";
+			} else {
+				name = getUser().getUserId() + " Chat Room";
+				alias = getUser().getUserId() + "ChatRoom";
+			}
+			ChatChannel newInstance = new ChatChannel(name);
+			newInstance.setAlias(alias);
+			newInstance.setType(type);
+			newInstance.setDescription(getUser().getBioText());
+			newInstance.setPrivate(getUser().isPrivate());
+			newInstance.setHidden(!getUser().isPublic());
+			newInstance.setCreator(getUser());
+			newInstance.setDomain(getDomain());
+			setInstance(newInstance);
+			Category category = new Category();
+			category.setName("Personal");
+			category.setDomain(getDomain());
+			checkCategory(category);
+			Stats.stats.chatCreates++;
+			setInstance(AdminDatabase.instance().createChannel(newInstance, getUser(), "Personal", getUser().getTagsString(), this.loginBean));
+			setInstance((ChatChannel)AdminDatabase.instance().updateChannelSettings(newInstance, botBean.getInstanceId()));
+		} catch (Exception failed) {
+			error(failed);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Check if the bot has a live chat channel, otherwise create it.
+	 */
+	public boolean checkUserChannel(User user, ChannelType type, BotBean botBean) {
+		try {
+			String alias = null;
+			if (type == ChannelType.OneOnOne) {
+				alias = user.getUserId() + "LiveChat";
+			} else {
+				alias = user.getUserId() + "ChatRoom";
+			}
+			boolean found = validateInstance(alias, botBean.getInstance().getDomain());
+			if (!found) {
+				if (!this.loginBean.isLoggedIn() || !user.equals(getUser())) {
+					throw new BotException("This user does not have a personal channel");
+				}
+				this.loginBean.setError(null);
+				createUserChannel(type, botBean);
+			} else {
+				if (!botBean.getInstance().getCreator().equals(getInstance().getCreator())) {
+					throw new BotException("Invalid live chat channel, contact support");
+				}
+			}
+			if (user.getAvatar() != null
+					&& (this.instance.getAvatar() == null || (user.getAvatar().getImage().length != this.instance.getAvatar().getImage().length))) {
+				setInstance(AdminDatabase.instance().update(this.instance, getUser().getAvatar().getImage()));
+			}
 		} catch (Exception failed) {
 			error(failed);
 			return false;
@@ -783,6 +936,9 @@ public class LiveChatBean extends WebMediumBean<ChatChannel> {
 			}
 			if (config.audioAccessMode != null) {
 				newInstance.setAudioAccessMode(AccessMode.valueOf(config.audioAccessMode));
+			}
+			if (config.inviteAccessMode != null) {
+				newInstance.setInviteAccessMode(AccessMode.valueOf(config.inviteAccessMode));
 			}
 			if (newInstance.getAdCode() == null || (config.adCode != null && !newInstance.getAdCode().equals(config.adCode))) {
 				newInstance.setAdCodeVerified(false);

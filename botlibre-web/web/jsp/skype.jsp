@@ -40,7 +40,7 @@
 		<div class="browse">
 			<h1>
 				<span class="dropt-banner">
-					<img src="images/skype1.png" class="admin-banner-pic" style="vertical-align:middle">
+					<img src="images/skype1.png" class="admin-banner-pic">
 					<div>
 						<p class="help">
 							<%= loginBean.translate("Allow your bot to send, receive, and reply to Skype messages.") %><br/>

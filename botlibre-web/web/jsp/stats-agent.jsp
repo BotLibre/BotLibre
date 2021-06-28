@@ -1,10 +1,9 @@
+<%@page import="org.botlibre.web.service.AgentStats"%>
 <%@page import="org.botlibre.util.Utils"%>
-<%@page import="org.botlibre.web.service.IPStats"%>
 <%@page import="org.botlibre.web.service.ReferrerStats"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Collections"%>
-<%@page import="org.botlibre.web.service.IPStats"%>
 <%@page import="org.botlibre.web.admin.AdminDatabase"%>
 <%@page import="org.botlibre.web.Site"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
@@ -39,30 +38,18 @@
 						<thead>
 						<tr>
 							<th>Date</th>
-							<th>IP</th>
 							<th>Sessions</th>
 							<th>Pages</th>
 							<th>API Calls</th>
-							<th>Bad API Calls</th>
-							<th>Bot Creates</th>
-							<th>Bot Connects</th>
-							<th>Bot Chats</th>
-							<th>User Messages</th>
 						</tr>
 						</thead>
 						<tbody>
-						<% for (IPStats stat : AdminDatabase.instance().getAllAgentStats(loginBean.getSelectedStats())) { %>
+						<% for (AgentStats stat : AdminDatabase.instance().getAllAgentStats(loginBean.getSelectedStats())) { %>
 							<tr>
 								<td><%= stat.date %></td>
-								<td><%= Utils.sanitize(stat.ip) %></td>
 								<td><%= stat.sessions %></td>
 								<td><%= stat.pages %></td>
 								<td><%= stat.api %></td>
-								<td><%= stat.badAPI %></td>
-								<td><%= stat.botCreates %></td>
-								<td><%= stat.botConnects %></td>
-								<td><%= stat.botChats %></td>
-								<td><%= stat.userMessages %></td>
 							</tr>
 						<% } %>
 						</tbody>

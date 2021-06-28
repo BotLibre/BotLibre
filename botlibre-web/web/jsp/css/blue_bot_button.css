@@ -4,6 +4,7 @@
  */
  
 #botplatformboxbar, #botplatformchatboxbar {
+	display: inline;
 	width: 64px;
 	height: 64px;
 	padding: 0px;
@@ -28,7 +29,7 @@
 	display: none;
 }
 
-#botplatformboxbar3, #botplatformchatboxbar3{
+#botplatformboxbar3, #botplatformchatboxbar3 {
 	display: inline;
 }
 

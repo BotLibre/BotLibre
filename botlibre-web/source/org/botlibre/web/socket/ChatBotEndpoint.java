@@ -53,7 +53,8 @@ public class ChatBotEndpoint extends ChatEndpoint implements ChatListener {
 
 	public ChatBotEndpoint(BotInstance bot, ChatRoom room) {
 		this.bot = bot;
-		this.nick = bot.getName();
+		this.nick = "@" + bot.getAlias();
+		this.nick2 = bot.getName();
 		this.roomId = room.getId();
 	}
 	
@@ -98,7 +99,8 @@ public class ChatBotEndpoint extends ChatEndpoint implements ChatListener {
 		if (room == null) {
 			return;
 		}
-		String bot = this.loginBean.getBotBean().getInstanceName();
+		//String bot = this.loginBean.getBotBean().getInstanceName();
+		String bot = "@" + this.loginBean.getBotBean().getInstance().getAlias();
 		ChatEndpoint connection = room.getConnectionNoLock(message.getNick());
 		if (connection == null) {
 			return;
@@ -172,17 +174,17 @@ public class ChatBotEndpoint extends ChatEndpoint implements ChatListener {
 		bean.setLoggedIn(true);
 		bean.getBotBean().setInstance(this.bot);
 		bean.getBotBean().connect(ClientType.WEB);
-			if (bean.getError() != null) {
-				return null;
-			}
-			Bot instance = bean.getBotBean().getBot();
-			Chat sense = instance.awareness().getSense(Chat.class);
-			if (sense == null) {
+		if (bean.getError() != null) {
+			return null;
+		}
+		Bot instance = bean.getBotBean().getBot();
+		Chat sense = instance.awareness().getSense(Chat.class);
+		if (sense == null) {
 			throw new BotException("Connection to bot failed");
 		}
 		sense.setChatListener(this);
-		sense.setNick(bean.getBotBean().getInstanceName());
-		sense.setNickAlt(bean.getBotBean().getInstanceName() + "1");
+		sense.setNick("@" + bean.getBotBean().getInstance().getAlias());
+		sense.setNickAlt(bean.getBotBean().getInstanceName());
 		sense.addUser(connection.getNick());
 		sense.addUser(sense.getNick());
 		
@@ -191,7 +193,7 @@ public class ChatBotEndpoint extends ChatEndpoint implements ChatListener {
 
 	public Chat getChat(ChatRoom room) {
 		this.loginBean.getBotBean().connect(ClientType.WEB);
-		if (loginBean.getError() != null) {
+		if (this.loginBean.getError() != null) {
 			return null;
 		}
 		Bot instance = this.loginBean.getBotBean().getBot();
@@ -204,8 +206,8 @@ public class ChatBotEndpoint extends ChatEndpoint implements ChatListener {
 				sense.setLanguageState(LanguageState.Discussion);
 			}
 			sense.setChatListener(this);
-			sense.setNick(this.loginBean.getBotBean().getInstanceName());
-			sense.setNickAlt(this.loginBean.getBotBean().getInstanceName() + "1");
+			sense.setNick("@" + this.loginBean.getBotBean().getInstance().getAlias());
+			sense.setNickAlt(this.loginBean.getBotBean().getInstanceName());
 			resetUsers(room);
 		}
 		return sense;
@@ -277,9 +279,9 @@ public class ChatBotEndpoint extends ChatEndpoint implements ChatListener {
 	@Override
 	public void close() {
 		if (this.loginBean.getBotBean().isConnected()) {
-				Bot instance = this.loginBean.getBotBean().getBot();
-				Chat sense = instance.awareness().getSense(Chat.class);
-				sense.disconnect();
+			Bot instance = this.loginBean.getBotBean().getBot();
+			Chat sense = instance.awareness().getSense(Chat.class);
+			sense.disconnect();
 			this.loginBean.getBotBean().disconnect();
 		}
 	}

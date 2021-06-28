@@ -51,6 +51,7 @@
 		
 		<% bean.writeExternalHTML(out); %>
 		<% bean.writeFlaggedHTML(out); %>
+		<% bean.writeReviewHTML(out); %>
 		
 		<% if (bean.getInstance() != null && !bean.getInstance().isExternal()) { %>
 			<form action="avatar" method="get" class="message">

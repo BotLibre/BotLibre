@@ -75,7 +75,7 @@
 		<input name="website" type="text" value="<%= loginBean.getEditUser().getWebsite() %>" /><br/>
 		<%= loginBean.translate("Bio") %><br/>
 		<textarea name="bio" type="textarea" ><%= loginBean.getEditUser().getBio() %></textarea><br/>						
-		<% if (!Site.COMMERCIAL) { %>
+		<% if (Site.ADCODE) { %>
 			<%= loginBean.translate("Ad Code") %><br/>
 			<input name="adVerified" type="checkbox" <%= loginBean.getEditUser().isAdCodeVerified() ? "checked" : "" %> <%= loginBean.isSuper() ? "" : "disabled" %> title="If you ad contains JavaScript it must be verified before it is used"><%= loginBean.translate("Ad Verified") %></input><br/>
 			<textarea name="adCode"
@@ -94,8 +94,14 @@
 				<option value="Partner" <%= loginBean.isUserTypeSelected("Partner") %>><%= loginBean.translate("Partner") %></option>
 				<option value="Admin" <%= loginBean.isUserTypeSelected("Admin") %>><%= loginBean.translate("Admin") %></option>
 			</select><br/>
+			
+			<%= loginBean.translate("Payment Plan") %>
+			<select id="plan" name="plan">
+				<option value="onetime" <%= loginBean.getEditUser().isSubscribed() ? "" : "selected" %>><%= loginBean.translate("One Time Payment") %></option>
+				<option value="subscription" <%= loginBean.getEditUser().isSubscribed() ? "selected" : "" %>><%= loginBean.translate("Monthly Subscription") %></option>
+			</select><br/>
 		<% } %>
-		<input id="ok" name="save-user" type="submit" value="<%= loginBean.translate("Sav") %>e"/><input id="cancel" name="cancel-user" type="submit" value="<%= loginBean.translate("Cancel") %>"/>
+		<input id="ok" name="save-user" type="submit" value="<%= loginBean.translate("Save") %>"/><input id="cancel" name="cancel-user" type="submit" value="<%= loginBean.translate("Cancel") %>"/>
 	</form>
 	<% } %>
 	</div>

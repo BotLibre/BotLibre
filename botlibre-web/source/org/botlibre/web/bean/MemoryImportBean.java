@@ -38,17 +38,21 @@ public class MemoryImportBean extends ScriptBean {
 		this.languageFilter = "JSON";
 	}
 
+	public boolean isImport() {
+		return true;
+	}
+
 	@Override
 	public List<Script> getAllInstances(Domain domain) {
 		try {
 			List<Script> results = AdminDatabase.instance().getAllScripts(this.page, this.pageSize, this.languageFilter, this.categoryFilter, this.nameFilter, this.userFilter, 
-					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, true);
+					this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, true);
 			if ((this.resultsSize == 0) || (this.page == 0)) {
 				if (results.size() < this.pageSize) {
 					this.resultsSize = results.size();
 				} else {
 					this.resultsSize = AdminDatabase.instance().getAllScriptsCount(this.languageFilter, this.categoryFilter, this.nameFilter, this.userFilter, 
-							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, getUser(), domain, true);
+							this.instanceFilter, this.instanceRestrict, this.instanceSort, this.loginBean.contentRating, this.tagFilter, this.startFilter, this.endFilter, getUser(), domain, true);
 				}
 			}
 			return results;
@@ -65,7 +69,9 @@ public class MemoryImportBean extends ScriptBean {
 	
 	@Override
 	public void writeSearchFields(StringWriter writer) {
-		writer.write("<div class='search-div'><span class='search-span'>Language</span> ");
+		writer.write("<div class='search-div'><span class='search-span'>");
+		writer.write(this.loginBean.translate("Language"));
+		writer.write("</span> ");
 		writer.write("<select id='searchselect' name='language-filter' onchange='this.form.submit()'>\n");
 		writer.write("<option value='JSON' " + getLanguageCheckedString("JSON") + ">JSON</option>\n");
 		writer.write("<option value='CSV' " + getLanguageCheckedString("CSV") + ">CSV</option>\n");
