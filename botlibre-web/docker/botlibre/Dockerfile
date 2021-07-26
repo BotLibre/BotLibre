@@ -39,9 +39,8 @@ RUN wget https://www.botlibre.biz/download/lib.zip  && \
 	unzip lib.zip -d lib/ && \
 	rm lib.zip
 
-
-FROM centos:centos7
-RUN yum -y update && yum -y clean all
+FROM centos:8
+RUN dnf update -y && dnf -y clean all
 
 COPY --from=java-builder /root/jdk1.8.0_131 /opt/jdk1.8.0_131
 RUN alternatives --install /usr/bin/java java /opt/jdk1.8.0_131/bin/java 2 && \

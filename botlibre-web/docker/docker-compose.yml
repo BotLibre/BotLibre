@@ -24,7 +24,7 @@ services:
         target: /usr/local/tomcat8/conf
   
   app-db:
-    image: postgres:9.4.26-alpine
+    image: postgres:9.6-alpine
     restart: on-failure
     environment:
       - POSTGRES_PASSWORD=password
