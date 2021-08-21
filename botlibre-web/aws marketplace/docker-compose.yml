@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   app-web:
-    image: 117940112483.dkr.ecr.us-east-1.amazonaws.com/e1cd28d6-071f-43ae-a889-24859b60e895/cg-643190366/botlibre:CentOS7PostgreSQL9.4Java8ApacheTomcat8.5-latest
+    image: 709825985650.dkr.ecr.us-east-1.amazonaws.com/paphus-solutions/botlibre:manual-update
     restart: on-failure
     environment:
       - JAVA_OPTS=-server -Xmx8g -Dblhostname=localhost
@@ -24,7 +24,7 @@ services:
         target: /usr/local/tomcat8/conf
   
   app-db:
-    image: 117940112483.dkr.ecr.us-east-1.amazonaws.com/e1cd28d6-071f-43ae-a889-24859b60e895/cg-643190366/postgres:CentOS7PostgreSQL9.4Java8ApacheTomcat8.5-latest
+    image: 709825985650.dkr.ecr.us-east-1.amazonaws.com/paphus-solutions/botlibre:manual-update
     restart: on-failure
     environment:
       - POSTGRES_PASSWORD=password
