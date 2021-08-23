@@ -63,11 +63,15 @@ public class Discord extends BasicSense {
      */
     @Override
     public void awake() {
-        this.token = this.bot.memory().getProperty("Discord.token");
-        if (this.token == null) {
-            this.token = "";
-        }
-        this.startClient();
+
+//        this.token = this.bot.memory().getProperty("Discord.token");
+//        if (this.token == null) {
+//            this.token = "";
+//        }
+//        this.startClient();
+    	
+		super.awake();
+		setIsEnabled(true);
     }
 
     public void startClient() {
