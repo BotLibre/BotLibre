@@ -28,6 +28,8 @@ import org.botlibre.util.Utils;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.listener.message.MessageCreateListener;
+import org.javacord.api.util.event.ListenerManager;
 import org.javacord.api.entity.message.Message;
 
 import io.github.furstenheim.CopyDown;
@@ -47,6 +49,8 @@ public class Discord extends BasicSense {
     protected int messagesProcessed;
 
     protected DiscordApi api;
+        
+    protected ListenerManager<MessageCreateListener> listenerManager ;
 
     public Discord(boolean enabled) {
         this.isEnabled = enabled;
@@ -56,7 +60,7 @@ public class Discord extends BasicSense {
     public Discord() { this(false); }
 
     public String getUserName() {
-        return api.getYourself().getName();
+        return this.api.getYourself().getName();
     }
     /**
      * Start sensing.
@@ -64,16 +68,20 @@ public class Discord extends BasicSense {
     @Override
     public void awake() {
 
-//        this.token = this.bot.memory().getProperty("Discord.token");
-//        if (this.token == null) {
-//            this.token = "";
-//        }
-//        this.startClient();
-    	
-		super.awake();
-		setIsEnabled(true);
+		this.token = this.bot.memory().getProperty("Discord.token");
+		
+		if (this.token == null || this.token.equals("")) {
+		    this.token = "";
+		} else {
+			this.configApi();
+			this.startMessageListener();
+		}
     }
 
+    /**
+     * @deprecated should be removed in the future
+     * use {@link #configApi()} and {@link #startMessageListener()} instead
+     */
     public void startClient() {
         this.api = new DiscordApiBuilder().setToken(this.token).login().join();
         this.api.addMessageCreateListener(event -> {
@@ -82,10 +90,26 @@ public class Discord extends BasicSense {
     }
 
     public String getToken() { return token; }
+    
+    public void configApi() {
+    	this.api = new DiscordApiBuilder().setToken(this.token).login().join();
+    }
+    
+    public void startMessageListener() {
+    	this.listenerManager = this.api.addMessageCreateListener(event -> {
+            this.processMessage(event.getMessage());
+        });
+    }
+
+    public void stopMessageListener() {
+    	if (this.listenerManager != null) {
+    		this.listenerManager.remove();
+    		this.api.disconnect();
+    	}
+    }
 
     public void setToken( String token ) {
         this.token = token;
-        this.startClient();
     }
 
     public String getJoinLink() { return api.createBotInvite(); }
