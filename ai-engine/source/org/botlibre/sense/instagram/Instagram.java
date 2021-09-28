@@ -25,7 +25,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
+import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
@@ -56,7 +58,6 @@ public class Instagram extends BasicSense{
 	
 	protected String userName = "";
 	protected String id = "";
-	protected String name = "";
 	
     protected String token = "";
     protected Date tokenExpiry;
@@ -74,6 +75,10 @@ public class Instagram extends BasicSense{
     protected int comments;
     protected int likes;
     protected int errors;
+    
+    protected String page = "";
+	protected String pageId = "";
+	protected String profileName = "";
 
     protected List<String> answeredComments = new ArrayList<>();
     
@@ -120,24 +125,40 @@ public class Instagram extends BasicSense{
     	initProperties();
         this.token = token;
     }
+    
+    public String getOauthKey() {
+    	return oauthKey;
+    }
+    
+    public static void setOauthKey(String oauthKey) {
+    	Instagram.oauthKey = oauthKey;
+    }
+    
+    public static String getOauthSecret() {
+    	return oauthSecret;
+    }
+    
+    public static void setOauthSecret(String oauthSecret) {
+    	Instagram.oauthSecret = oauthSecret;
+    }
 
     public String getAppOauthKey() {
-    	initProperties();
+    	//initProperties();
         return appOauthKey;
     }
 
     public void setAppOauthKey(String appOauthKey) {
-    	initProperties();
+    	//initProperties();
         this.appOauthKey = appOauthKey;
     }
 
     public String getAppOauthSecret() {
-    	initProperties();
+    	//initProperties();
         return appOauthSecret;
     }
 
     public void setAppOauthSecret(String appOauthSecret) {
-    	initProperties();
+    	//initProperties();
         this.appOauthSecret = appOauthSecret;
     }
 
@@ -265,18 +286,34 @@ public class Instagram extends BasicSense{
     /**
      * Connect to facebook
      */
-    public void connect() {
-        ConfigurationBuilder config = new ConfigurationBuilder();
-        config.setOAuthAppId(getAppOauthKey());
-        config.setOAuthAppSecret(getAppOauthSecret());
-        config.setOAuthAccessToken(getToken());
-
-        facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
-        setConnection(facebook);
+    public void connect() throws FacebookException {
+    	initProperties();
+    	ConfigurationBuilder config = new ConfigurationBuilder();
+		String key = getOauthKey();
+		String secret = getOauthSecret();
+		
+		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+			key = this.appOauthKey;
+		}
+		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
+			secret = this.appOauthSecret;
+		}
+		
+		config.setOAuthAppId(key);
+		config.setOAuthAppSecret(secret);
+		config.setOAuthAccessToken(getToken());
+		facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
+		setConnection(facebook);
+    	
     }
     
-    public void connectAccount() {
+    public void connectAccount() throws FacebookException {
     	connect();
+    	facebook4j.Facebook facebook = getConnection();
+		User user = facebook.getMe();
+		if (this.userName == null || !this.userName.equals(user.getId())) {
+			this.userName = user.getId();
+		}
     	try {
 	    	RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
 	    	JSONObject result = res.asJSONObject();
@@ -284,14 +321,15 @@ public class Instagram extends BasicSense{
 	    	this.id = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
 	    	this.userName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
     	} catch (Exception e) {
-    		//
+    		System.out.println(e);
     	}
     }
     
+    
     public String authorizeAccount(String callbackURL) throws FacebookException {
 		this.connection = new FacebookFactory().getInstance();
-		String key = getAppOauthKey();
-		String secret = getAppOauthSecret();
+		String key = getOauthKey();
+		String secret = getOauthSecret();
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
 			key = this.appOauthKey;
 		}
@@ -299,6 +337,12 @@ public class Instagram extends BasicSense{
 			secret = this.appOauthSecret;
 		}
 		this.connection.setOAuthAppId(key, secret);
+		this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
+				+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
+				+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,pages_manage_ads,"
+				+ "pages_manage_posts,pages_manage_engagement,public_profile");
+		
+		/*
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
 			this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
 					+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
@@ -309,19 +353,39 @@ public class Instagram extends BasicSense{
 					+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
 					+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,pages_manage_ads,"
 					+ "pages_manage_posts,pages_manage_engagement,public_profile");
-		}
+		}*/
 		return this.connection.getOAuthAuthorizationURL(callbackURL);
 	}
     
     /**
 	 * Authorise a new account to be accessible by Bot.
 	 */
+    
+
 	public void authorizeComplete(String pin) throws FacebookException {
+		
+		AccessToken token = this.connection.getOAuthAccessToken(pin);
+		setToken(token.getToken());
+
+		User user = this.connection.getMe();
+		System.out.println("User name is" + user.getName());
+		this.userName = user.getId();
+		if (token.getExpires() != null) {
+			this.tokenExpiry = new Date(System.currentTimeMillis() + (token.getExpires() * 1000));
+		}
+		this.profileName = user.getName();
+		
+		/*
+		AccessToken token = this.connection.getOAuthAccessToken(pin);
+		setToken(token.getToken());
+		
+		
 		if (this.connection == null) {
 			connect();
 		}
-		AccessToken token = this.connection.getOAuthAccessToken(pin);
-		setToken(token.getToken());
+		
+		
+		
 		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("client_id", this.oauthKey);
@@ -329,6 +393,7 @@ public class Instagram extends BasicSense{
 		params.put("grant_type", "fb_exchange_token");
 		params.put("fb_exchange_token", token.getToken());
 
+		
 		RawAPIResponse apiResponse = this.connection.callGetAPI("/oauth/access_token", params);
 
 		String response = apiResponse.asString();
@@ -339,9 +404,12 @@ public class Instagram extends BasicSense{
 
 		this.tokenExpiry = new Date(System.currentTimeMillis() + (newAccessToken.getExpires() * 1000));
 		System.out.println(this.tokenExpiry);
+		*/
+		
 	}
+    
 	
-	public void testComment(String message) {
+	public void testComment(String message) throws FacebookException {
 		if (this.connection == null) {
 			connectAccount();
 		}
@@ -354,11 +422,11 @@ public class Instagram extends BasicSense{
             	postComment(media.getJSONObject(0).getString("id"), message);
             }
         } catch (Exception e) {
-            return;
+            System.out.println(e);
         }
     }
 	
-	public void testReply() {
+	public void testReply() throws FacebookException {
 		if (this.connection == null) {
 			connectAccount();
 		}
@@ -381,7 +449,7 @@ public class Instagram extends BasicSense{
         }
     }
 	
-	public void testDeleteComment() {
+	public void testDeleteComment() throws FacebookException {
 		if (this.connection == null) {
 			connectAccount();
 		}
@@ -853,6 +921,7 @@ public class Instagram extends BasicSense{
 				this.token = property;
 			}
 			
+			
 			this.appOauthKey = this.bot.memory().getProperty("Instagram.appOauthKey");
 			if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
 				this.appOauthKey = Utils.decrypt(Utils.KEY, this.appOauthKey);
@@ -867,6 +936,7 @@ public class Instagram extends BasicSense{
 			if (this.appOauthSecret == null) {
 				this.appOauthSecret = "None";
 			}
+			
 			
 			property = this.bot.memory().getProperty("Instagram.likeAllComments");
 			if (property != null) {
