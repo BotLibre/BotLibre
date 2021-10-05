@@ -47,72 +47,80 @@ public class Discord extends BasicSense {
     protected boolean initProperties;
 
     protected int messagesProcessed;
-
-    protected DiscordApi api;
-        
-    protected ListenerManager<MessageCreateListener> listenerManager ;
+//
+//    protected DiscordApi api;
+//        
+//    protected ListenerManager<MessageCreateListener> listenerManager ;
 
     public Discord(boolean enabled) {
         this.isEnabled = enabled;
         this.languageState = LanguageState.Discussion;
     }
 
-    public Discord() { this(false); }
-
-    public String getUserName() {
-        return this.api.getYourself().getName();
+    public Discord() {
+        this(false);
     }
+
+//    public String getUserName() {
+//        return this.api.getYourself().getName();
+//    }
     /**
      * Start sensing.
      */
     @Override
     public void awake() {
 
-		this.token = this.bot.memory().getProperty("Discord.token");
-		
-		if (this.token == null || this.token.equals("")) {
-		    this.token = "";
-		} else {
-			this.configApi();
-			this.startMessageListener();
-		}
+        this.token = this.bot.memory().getProperty("Discord.token");
+
+        setIsEnabled(true);
+
+//		if (this.token == null || this.token.equals("")) {
+//		    this.token = "";
+//		} else {
+//			this.configApi();
+//			this.startMessageListener();
+//		}
     }
 
-    /**
-     * @deprecated should be removed in the future
-     * use {@link #configApi()} and {@link #startMessageListener()} instead
-     */
-    public void startClient() {
-        this.api = new DiscordApiBuilder().setToken(this.token).login().join();
-        this.api.addMessageCreateListener(event -> {
-            this.processMessage(event.getMessage());
-        });
+//    /**
+//     * @deprecated should be removed in the future
+//     * use {@link #configApi()} and {@link #startMessageListener()} instead
+//     */
+//    public void startClient() {
+//        this.api = new DiscordApiBuilder().setToken(this.token).login().join();
+//        this.listenerManager = this.api.addMessageCreateListener(event -> {
+//            this.processMessage(event.getMessage());
+//        });
+//    }
+
+    public String getToken() {
+        return token;
     }
 
-    public String getToken() { return token; }
-    
-    public void configApi() {
-    	this.api = new DiscordApiBuilder().setToken(this.token).login().join();
-    }
-    
-    public void startMessageListener() {
-    	this.listenerManager = this.api.addMessageCreateListener(event -> {
-            this.processMessage(event.getMessage());
-        });
-    }
+//    public void configApi() {
+//    	this.api = new DiscordApiBuilder().setToken(this.token).login().join();
+//    }
+//    
+//    public void startMessageListener() {
+//    	this.listenerManager = this.api.addMessageCreateListener(event -> {
+//            this.processMessage(event.getMessage());
+//        });
+//    }
+//
+//    public void stopMessageListener() {
+//    	if (this.listenerManager != null) {
+//    		this.listenerManager.remove();
+//    		this.api.disconnect();
+//    	}
+//    }
 
-    public void stopMessageListener() {
-    	if (this.listenerManager != null) {
-    		this.listenerManager.remove();
-    		this.api.disconnect();
-    	}
-    }
-
-    public void setToken( String token ) {
+    public void setToken(String token) {
         this.token = token;
     }
 
-    public String getJoinLink() { return api.createBotInvite(); }
+    public String getJoinLink() {
+        return api.createBotInvite();
+    }
 
     public void initProperties() {
         if (this.initProperties) {
@@ -150,9 +158,13 @@ public class Discord extends BasicSense {
         log("Done checking profile.", Level.INFO);
     }
 
-    public int getMessagesProcessed() { return messagesProcessed; }
+    public int getMessagesProcessed() {
+        return messagesProcessed;
+    }
 
-    public void setMessagesProcessed( int messagesProcessed ) { this.messagesProcessed = messagesProcessed; }
+    public void setMessagesProcessed(int messagesProcessed) {
+        this.messagesProcessed = messagesProcessed;
+    }
 
     public String processMessage(Message discord) {
         try {
@@ -216,7 +228,7 @@ public class Discord extends BasicSense {
             conversation = network.createVertex();
             today.setRelationship(conversationId, conversation);
             this.conversations++;
-        }  else {
+        } else {
             checkEngaged(conversation);
         }
         conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
@@ -272,4 +284,3 @@ public class Discord extends BasicSense {
         return response;
     }
 }
-
