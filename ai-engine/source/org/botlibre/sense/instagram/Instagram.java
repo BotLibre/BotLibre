@@ -35,6 +35,7 @@ import org.botlibre.knowledge.Primitive;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.sense.ResponseListener;
 import org.botlibre.sense.facebook.Facebook;
+import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language;
 import org.botlibre.util.Utils;
 
@@ -48,6 +49,7 @@ import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
 import facebook4j.internal.org.json.JSONArray;
 import facebook4j.internal.org.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 public class Instagram extends BasicSense{
 	public static int MAX_WAIT = 1000 * 5; // 30 seconds
@@ -55,6 +57,7 @@ public class Instagram extends BasicSense{
 	public static int MAX_LOOKUP = 100;
 	public static String oauthKey = "key";
 	public static String oauthSecret = "secret";
+	public static String pageAccessToken = "";
 	
 	protected String userName = "";
 	protected String id = "";
@@ -109,6 +112,15 @@ public class Instagram extends BasicSense{
     public String getID() {
     	initProperties();
         return id;
+    }
+    
+    public String getPageAccessToken() {
+    	return pageAccessToken;
+    }
+    
+    public void setPageAccessToken(String PAT) {
+    	initProperties();
+    	this.pageAccessToken = PAT;
     }
 
     public void setID(String id) {
@@ -308,7 +320,7 @@ public class Instagram extends BasicSense{
     }
     
     public void connectAccount() throws FacebookException {
-    	connect();
+    	//connect();
     	facebook4j.Facebook facebook = getConnection();
 		User user = facebook.getMe();
 		if (this.userName == null || !this.userName.equals(user.getId())) {
@@ -323,6 +335,7 @@ public class Instagram extends BasicSense{
     	} catch (Exception e) {
     		System.out.println(e);
     	}
+    	saveProperties();
     }
     
     
@@ -864,29 +877,134 @@ public class Instagram extends BasicSense{
     
     @Override
     public void output(Vertex output) {
-        if (!isEnabled()) {
-            notifyResponseListener();
-            return;
-        }
-        Vertex sense = output.mostConscious(Primitive.SENSE);
-        if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
-            notifyResponseListener();
-            return;
-        }
-        String text = printInput(output);
-        text = Utils.stripTags(text);
+    	
+    	Vertex sense = output.mostConscious(Primitive.SENSE);
+		// If not output to twitter, ignore.
+		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
+			notifyResponseListener();
+			return;
+		}
+		String text = printInput(output);
+		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
+		Vertex id = conversation.getRelationship(Primitive.ID);
+		String conversationId = id.printString();
+		
+		Vertex target = output.mostConscious(Primitive.TARGET);
+		String replyTo = conversationId;
+		if (target != null && target.hasRelationship(Primitive.WORD)) {
+			replyTo = target.mostConscious(Primitive.WORD).printString();
+		}
+		
+		Vertex command = output.mostConscious(Primitive.COMMAND);
 
-        if (this.responseListener == null) {
-            return;
+		if (this.responseListener != null) {
+			this.responseListener.reply = text;
+			notifyResponseListener();
+		}
+        
+        try {
+        	sendIGMessage(text, conversationId);
+        } catch (Exception e) {
+        	log(e);
         }
-        this.responseListener.reply = text;
-
-        Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
-        if (conversation != null) {
-            this.responseListener.conversation = conversation.getDataValue();
-        }
-        notifyResponseListener();
+        
     }
+    
+    public void sendIGMessage(String text, String replyUser) throws FacebookException {
+    	log("Sending messenger message:", Level.INFO, text, replyUser);
+    	String url = "https://graph.facebook.com/v12.0/me/messages?access_token="
+    		+getPageAccessToken();
+    	
+    	try {
+    	String json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(text) + "\"}}";
+    	Utils.httpPOST(url, "application/json", json);
+		Utils.sleep(500);
+		
+    	} catch (Exception exception) {
+    		log(exception);
+    	}
+    	
+    }
+    
+    public String inputInstagramMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
+		System.out.println("InputInstagramMessage Called.");
+    	Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.INSTAGRAM);
+		if (!user.hasRelationship(Primitive.NAME)) {
+			String url = "https://graph.facebook.com/v12.0/me?fields=id,first_name,last_name&access_token="+ getToken();
+			String senderName = null;
+			try {
+				if (getConnection() == null) { connect(); }
+				String json = Utils.httpGET(url);
+				net.sf.json.JSONObject userJSON = (net.sf.json.JSONObject)JSONSerializer.toJSON(json);
+				if (userJSON != null) {
+					Object firstName = userJSON.get("first_name");
+					Object lastName = userJSON.get("last_name");
+					if (firstName instanceof String) {
+						senderName = (String)firstName;
+					}
+					if (lastName instanceof String) {
+						if (senderName == null) {
+							senderName = "";
+						}
+						senderName = senderName + " " + (String)lastName;
+					}
+				}
+			} catch (Exception exception) {
+				log(url, Level.INFO);
+				url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getToken();
+				log(url, Level.INFO);
+				log(exception);
+			}
+			if (senderName == null || senderName.isEmpty()) {
+				senderName = senderId;
+			}
+			user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.INSTAGRAM, senderName);
+		}
+		
+		Vertex input = createInput(text.trim(), network);
+		Vertex self = network.createVertex(Primitive.SELF);
+		input.addRelationship(Primitive.SPEAKER, user);		
+		input.addRelationship(Primitive.TARGET, self);
+		
+		/*
+		if (getTrackMessageObjects() && message != null) {
+			input.addRelationship(Primitive.MESSAGE, getBot().awareness().getSense(Http.class).convertElement(message, network));
+		}*/
+
+		Vertex conversationId = network.createVertex(senderId);
+		Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(self);
+		Vertex conversation = today.getRelationship(conversationId);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(conversationId, conversation);
+		}
+		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
+		conversation.addRelationship(Primitive.TYPE, Primitive.INSTAGRAM);
+		conversation.addRelationship(Primitive.ID, conversationId);
+		conversation.addRelationship(Primitive.SPEAKER, user);
+		conversation.addRelationship(Primitive.SPEAKER, self);
+		Language.addToConversation(input, conversation);
+		
+		network.save();
+		getBot().memory().addActiveMemory(input);
+		this.responseListener = new ResponseListener();
+		String reply = null;
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
+				try {
+					this.responseListener.wait(MAX_WAIT);
+				} catch (Exception exception) {
+					log(exception);
+					return "";
+				}
+			}
+			reply = this.responseListener.reply;
+			this.responseListener = null;
+		}
+		return reply;
+	}
+    
+    
     
     /**
 	 * Load settings.
