@@ -25,7 +25,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
+import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
@@ -33,7 +35,9 @@ import org.botlibre.knowledge.Primitive;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.sense.ResponseListener;
 import org.botlibre.sense.facebook.Facebook;
+import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language;
+import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.Utils;
 
 import facebook4j.Account;
@@ -46,25 +50,29 @@ import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
 import facebook4j.internal.org.json.JSONArray;
 import facebook4j.internal.org.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 public class Instagram extends BasicSense{
 	public static int MAX_WAIT = 1000 * 5; // 30 seconds
 	
 	public static int MAX_LOOKUP = 100;
-	public static String oauthKey = "key";
-	public static String oauthSecret = "secret";
 	
+	//protected static String oauthKey = "key";
+	//protected static String oauthSecret = "secret";
 	protected String userName = "";
 	protected String id = "";
-	protected String name = "";
 	
     protected String token = "";
     protected Date tokenExpiry;
-    public String appOauthKey = "";
-    public String appOauthSecret = "";
-    protected String apiBaseURL = "https://api.facebook.com/";
-    protected String graphBaseURL = "https://graph.facebook.com/";
+    protected String appOauthKey = "";
+    protected String appOauthSecret = "";
+    protected String pageAccessToken = "";
+    
     protected String result = "";
+    
+    protected final String graphVersion = "v12.0";
+    protected final String apiBaseURL = "https://api.facebook.com/";
+    protected final String graphBaseURL = "https://graph.facebook.com/";
     
     protected int maxPost = 5;
     protected int maxComment = 30;
@@ -74,9 +82,14 @@ public class Instagram extends BasicSense{
     protected int comments;
     protected int likes;
     protected int errors;
+    
+    protected String page = "";
+	protected String pageId = "";
+	protected String profileName = "";
 
     protected List<String> answeredComments = new ArrayList<>();
     
+    protected boolean messageEnabled = false;
     protected boolean likeAllComments = false;
     protected boolean replyToComments = false;
     protected boolean autoPost = false;
@@ -86,9 +99,29 @@ public class Instagram extends BasicSense{
 
     private facebook4j.Facebook connection;
     
-    protected boolean initProperties;
+    protected boolean isInitialized;
 
     public Instagram () {
+    	this(false);
+    }
+    
+    public Instagram(boolean enabled) {
+    	this.isEnabled = enabled;
+    	this.languageState = LanguageState.Discussion;
+    }
+    
+    // If changing properties does not work, clear the cache
+    public void disable() {
+    	isEnabled = false;
+    	messageEnabled = false;
+    	likeAllComments = false;
+    	replyToComments = false;
+    	autoPost = false;
+    	saveProperties();
+    }
+    
+    public String getProfileName() {
+    	return this.profileName;
     }
 
     public String getUserName() {
@@ -105,6 +138,20 @@ public class Instagram extends BasicSense{
     	initProperties();
         return id;
     }
+    
+    public Date getTokenExpiry() {
+    	return this.tokenExpiry;
+    }
+    
+    public String getPageAccessToken() {
+    	initProperties();
+    	return pageAccessToken;
+    }
+    
+    public void setPageAccessToken(String pageAccessToken) {
+    	//initProperties();
+    	this.pageAccessToken = pageAccessToken;
+    }
 
     public void setID(String id) {
     	initProperties();
@@ -120,14 +167,15 @@ public class Instagram extends BasicSense{
     	initProperties();
         this.token = token;
     }
-
+    
+    
     public String getAppOauthKey() {
     	initProperties();
         return appOauthKey;
     }
 
     public void setAppOauthKey(String appOauthKey) {
-    	initProperties();
+    	//initProperties();
         this.appOauthKey = appOauthKey;
     }
 
@@ -137,7 +185,7 @@ public class Instagram extends BasicSense{
     }
 
     public void setAppOauthSecret(String appOauthSecret) {
-    	initProperties();
+    	//initProperties();
         this.appOauthSecret = appOauthSecret;
     }
 
@@ -216,9 +264,18 @@ public class Instagram extends BasicSense{
 		return autoPost;
 	}
 	
+	public boolean getMessageEnabled() {
+		initProperties();
+		return messageEnabled;
+	}
+	
 	public void setAutoPost (boolean autoPost) {
     	initProperties();
 		this.autoPost = autoPost;
+	}
+	
+	public void setMessageEnabled(boolean messageEnabled) {
+		this.messageEnabled = messageEnabled;
 	}
 	
 	public List<String> getImageURLs() {
@@ -265,18 +322,34 @@ public class Instagram extends BasicSense{
     /**
      * Connect to facebook
      */
-    public void connect() {
-        ConfigurationBuilder config = new ConfigurationBuilder();
-        config.setOAuthAppId(getAppOauthKey());
-        config.setOAuthAppSecret(getAppOauthSecret());
-        config.setOAuthAccessToken(getToken());
-
-        facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
-        setConnection(facebook);
+    public void connect() throws FacebookException {
+    	initProperties();
+    	ConfigurationBuilder config = new ConfigurationBuilder();
+		String key = "";
+		String secret = "";
+		
+		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+			key = this.appOauthKey;
+		}
+		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
+			secret = this.appOauthSecret;
+		}
+		
+		config.setOAuthAppId(key);
+		config.setOAuthAppSecret(secret);
+		config.setOAuthAccessToken(getToken());
+		facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
+		setConnection(facebook);
+    	
     }
     
-    public void connectAccount() {
-    	connect();
+    public void connectAccount() throws FacebookException {
+    	//connect();
+    	facebook4j.Facebook facebook = getConnection();
+		User user = facebook.getMe();
+		if (this.userName == null || !this.userName.equals(user.getId())) {
+			this.userName = user.getId();
+		}
     	try {
 	    	RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
 	    	JSONObject result = res.asJSONObject();
@@ -284,14 +357,16 @@ public class Instagram extends BasicSense{
 	    	this.id = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
 	    	this.userName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
     	} catch (Exception e) {
-    		//
+    		log(e);
     	}
+    	saveAuth();
     }
+    
     
     public String authorizeAccount(String callbackURL) throws FacebookException {
 		this.connection = new FacebookFactory().getInstance();
-		String key = getAppOauthKey();
-		String secret = getAppOauthSecret();
+		String key = "";
+		String secret = "";
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
 			key = this.appOauthKey;
 		}
@@ -299,49 +374,41 @@ public class Instagram extends BasicSense{
 			secret = this.appOauthSecret;
 		}
 		this.connection.setOAuthAppId(key, secret);
-		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-			this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
-					+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
-					+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,pages_manage_ads,"
-					+ "pages_manage_posts,pages_manage_engagement,public_profile");
-		} else {
-			this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
-					+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
-					+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,pages_manage_ads,"
-					+ "pages_manage_posts,pages_manage_engagement,public_profile");
-		}
+		this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
+				+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
+				+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,pages_manage_ads,"
+				+ "pages_manage_posts,pages_manage_engagement,public_profile");
+		
 		return this.connection.getOAuthAuthorizationURL(callbackURL);
 	}
     
     /**
 	 * Authorise a new account to be accessible by Bot.
 	 */
+    
+
 	public void authorizeComplete(String pin) throws FacebookException {
-		if (this.connection == null) {
-			connect();
-		}
+		
 		AccessToken token = this.connection.getOAuthAccessToken(pin);
 		setToken(token.getToken());
+
+		User user = this.connection.getMe();
+		System.out.println("User name is " + user.getName());
+		System.out.println("PAT is " + getPageAccessToken());
+		this.userName = user.getId();
+		if (token.getExpires() != null) {
+			this.tokenExpiry = new Date(System.currentTimeMillis() + (token.getExpires() * 1000));
+		}
 		
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("client_id", this.oauthKey);
-		params.put("client_secret", this.oauthSecret);
-		params.put("grant_type", "fb_exchange_token");
-		params.put("fb_exchange_token", token.getToken());
-
-		RawAPIResponse apiResponse = this.connection.callGetAPI("/oauth/access_token", params);
-
-		String response = apiResponse.asString();
-		AccessToken newAccessToken = new AccessToken(response);
-
-		this.connection.setOAuthAccessToken(newAccessToken);
-		setToken(newAccessToken.getToken());
-
-		this.tokenExpiry = new Date(System.currentTimeMillis() + (newAccessToken.getExpires() * 1000));
-		System.out.println(this.tokenExpiry);
+		this.profileName = user.getName();
+		this.isEnabled = true;
+		
+		saveAuth();
+		
 	}
+    
 	
-	public void testComment(String message) {
+	public void testComment(String message) throws FacebookException {
 		if (this.connection == null) {
 			connectAccount();
 		}
@@ -354,11 +421,11 @@ public class Instagram extends BasicSense{
             	postComment(media.getJSONObject(0).getString("id"), message);
             }
         } catch (Exception e) {
-            return;
+            System.out.println(e);
         }
     }
 	
-	public void testReply() {
+	public void testReply() throws FacebookException {
 		if (this.connection == null) {
 			connectAccount();
 		}
@@ -381,7 +448,7 @@ public class Instagram extends BasicSense{
         }
     }
 	
-	public void testDeleteComment() {
+	public void testDeleteComment() throws FacebookException {
 		if (this.connection == null) {
 			connectAccount();
 		}
@@ -796,41 +863,140 @@ public class Instagram extends BasicSense{
     
     @Override
     public void output(Vertex output) {
-        if (!isEnabled()) {
-            notifyResponseListener();
-            return;
-        }
-        Vertex sense = output.mostConscious(Primitive.SENSE);
-        if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
-            notifyResponseListener();
-            return;
-        }
-        String text = printInput(output);
-        text = Utils.stripTags(text);
+    	
+    	Vertex sense = output.mostConscious(Primitive.SENSE);
+		// If not output to twitter, ignore.
+		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
+			notifyResponseListener();
+			return;
+		}
+		String text = printInput(output);
+		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
+		Vertex id = conversation.getRelationship(Primitive.ID);
+		String conversationId = id.printString();
+		
+		Vertex target = output.mostConscious(Primitive.TARGET);
+		String replyTo = conversationId;
+		if (target != null && target.hasRelationship(Primitive.WORD)) {
+			replyTo = target.mostConscious(Primitive.WORD).printString();
+		}
+		
+		Vertex command = output.mostConscious(Primitive.COMMAND);
 
-        if (this.responseListener == null) {
-            return;
+		if (this.responseListener != null) {
+			this.responseListener.reply = text;
+			notifyResponseListener();
+		}
+        
+        try {
+        	sendIGMessage(text, conversationId);
+        } catch (Exception e) {
+        	log(e);
         }
-        this.responseListener.reply = text;
-
-        Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
-        if (conversation != null) {
-            this.responseListener.conversation = conversation.getDataValue();
-        }
-        notifyResponseListener();
+        
     }
+    
+    public void sendIGMessage(String text, String replyUser) throws FacebookException {
+    	log("Sending messenger message:", Level.INFO, text, replyUser);
+    	String url = "https://graph.facebook.com/v12.0/me/messages?access_token="
+    		+getPageAccessToken();
+
+    	try {
+	    	String json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(text) + "\"}}";
+	    	Utils.httpPOST(url, "application/json", json);
+			Utils.sleep(500);
+    	} catch (Exception exception) {
+    		log(exception);
+    	}
+    }
+    
+    public String inputInstagramMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
+		System.out.println("InputInstagramMessage Called.");
+    	Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.INSTAGRAM);
+		if (!user.hasRelationship(Primitive.NAME)) {
+			String url = "https://graph.facebook.com/v12.0/me?fields=id,first_name,last_name&access_token="+ getToken();
+			String senderName = null;
+			try {
+				if (getConnection() == null) { connect(); }
+				String json = Utils.httpGET(url);
+				net.sf.json.JSONObject userJSON = (net.sf.json.JSONObject)JSONSerializer.toJSON(json);
+				if (userJSON != null) {
+					Object firstName = userJSON.get("first_name");
+					Object lastName = userJSON.get("last_name");
+					if (firstName instanceof String) {
+						senderName = (String)firstName;
+					}
+					if (lastName instanceof String) {
+						if (senderName == null) {
+							senderName = "";
+						}
+						senderName = senderName + " " + (String)lastName;
+					}
+				}
+			} catch (Exception exception) {
+				log(url, Level.INFO);
+				url = "https://graph.facebook.com/v2.6/" + senderId + "?fields=first_name,last_name&access_token=" + getToken();
+				log(url, Level.INFO);
+				log(exception);
+			}
+			if (senderName == null || senderName.isEmpty()) {
+				senderName = senderId;
+			}
+			user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.INSTAGRAM, senderName);
+		}
+		
+		Vertex input = createInput(text.trim(), network);
+		Vertex self = network.createVertex(Primitive.SELF);
+		input.addRelationship(Primitive.SPEAKER, user);		
+		input.addRelationship(Primitive.TARGET, self);
+		
+		/*
+		if (getTrackMessageObjects() && message != null) {
+			input.addRelationship(Primitive.MESSAGE, getBot().awareness().getSense(Http.class).convertElement(message, network));
+		}*/
+
+		Vertex conversationId = network.createVertex(senderId);
+		Vertex today = network.getBot().awareness().getTool(org.botlibre.tool.Date.class).date(self);
+		Vertex conversation = today.getRelationship(conversationId);
+		if (conversation == null) {
+			conversation = network.createVertex();
+			today.setRelationship(conversationId, conversation);
+		}
+		conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
+		conversation.addRelationship(Primitive.TYPE, Primitive.INSTAGRAM);
+		conversation.addRelationship(Primitive.ID, conversationId);
+		conversation.addRelationship(Primitive.SPEAKER, user);
+		conversation.addRelationship(Primitive.SPEAKER, self);
+		Language.addToConversation(input, conversation);
+		
+		network.save();
+		getBot().memory().addActiveMemory(input);
+		this.responseListener = new ResponseListener();
+		String reply = null;
+		synchronized (this.responseListener) {
+			if (this.responseListener.reply == null) {
+				try {
+					this.responseListener.wait(MAX_WAIT);
+				} catch (Exception exception) {
+					log(exception);
+					return "";
+				}
+			}
+			reply = this.responseListener.reply;
+			this.responseListener = null;
+		}
+		return reply;
+	}
     
     /**
 	 * Load settings.
 	 */
 	public void initProperties() {
-		if (this.initProperties) {
-			return;
-		}
+		if (this.isInitialized) { return; }
+		
 		synchronized (this) {
-			if (this.initProperties) {
-				return;
-			}
+			if (this.isInitialized) { return; }
+			
 			getBot().memory().loadProperties("Instagram");
 			Network memory = getBot().memory().newMemory();
 			Vertex instagram = memory.createVertex(getPrimitive());
@@ -853,42 +1019,51 @@ public class Instagram extends BasicSense{
 				this.token = property;
 			}
 			
-			this.appOauthKey = this.bot.memory().getProperty("Instagram.appOauthKey");
-			if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-				this.appOauthKey = Utils.decrypt(Utils.KEY, this.appOauthKey);
+			property = this.bot.memory().getProperty("Instagram.appOauthKey");
+			if (property != null && !property.isEmpty()) {
+				this.appOauthKey = Utils.decrypt(Utils.KEY, property);
 			}
-			if (this.appOauthKey == null) {
-				this.appOauthKey = "None";
+
+			property = this.bot.memory().getProperty("Instagram.appOauthSecret");
+			if (property != null && !property.isEmpty()) {
+				this.appOauthSecret = Utils.decrypt(Utils.KEY, property);
 			}
-			this.appOauthSecret = this.bot.memory().getProperty("Instagram.appOauthSecret");
-			if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
-				this.appOauthSecret = Utils.decrypt(Utils.KEY, this.appOauthSecret);
-			}
-			if (this.appOauthSecret == null) {
-				this.appOauthSecret = "None";
+	
+			property = this.bot.memory().getProperty("Instagram.pageAccessToken");
+			if (property != null && !property.isEmpty()) {
+				this.pageAccessToken = Utils.decrypt(Utils.KEY, property);
 			}
 			
 			property = this.bot.memory().getProperty("Instagram.likeAllComments");
 			if (property != null) {
 				this.likeAllComments = Boolean.valueOf(property);
 			}
+			
 			property = this.bot.memory().getProperty("Instagram.replyToComments");
 			if (property != null) {
 				this.replyToComments = Boolean.valueOf(property);
 			}
+			
 			property = this.bot.memory().getProperty("Instagram.autoPost");
 			if (property != null) {
 				this.autoPost = Boolean.valueOf(property);
+			}
+			
+			property = this.bot.memory().getProperty("Instagram.messageEnabled");
+			if (property != null) {
+				this.messageEnabled = Boolean.valueOf(property);
 			}
 			
 			property = this.bot.memory().getProperty("Instagram.maxPost");
 			if (property != null) {
 				this.maxPost = Integer.valueOf(property);
 			}
+			
 			property = this.bot.memory().getProperty("Instagram.maxLike");
 			if (property != null) {
 				this.maxLike = Integer.valueOf(property);
 			}
+			
 			property = this.bot.memory().getProperty("Instagram.maxComment");
 			if (property != null) {
 				this.maxComment = Integer.valueOf(property);
@@ -927,35 +1102,57 @@ public class Instagram extends BasicSense{
 				}
 			}
 			
-			this.initProperties = true;
+			this.isInitialized = true;
 		}
 	}
 	
-	public void saveProperties() {
+	// Save Authentication properties in the database
+	public void saveAuth() {
 		Network memory = getBot().memory().newMemory();
 		memory.saveProperty("Instagram.userName", this.userName, true);
 		memory.saveProperty("Instagram.token", this.token, true);
 		memory.saveProperty("Instagram.id", this.id, true);
 		memory.saveProperty("Instagram.result", this.result, true);
 		
+		// Save the Oauthkey
 		if (this.appOauthKey == null || this.appOauthKey.isEmpty()) {
 			memory.saveProperty("Instagram.appOauthKey", "", true);
 		} else {
 			memory.saveProperty("Instagram.appOauthKey", Utils.encrypt(Utils.KEY, this.appOauthKey), true);
 		}
+		
+		// Save the OauthSecret
 		if (this.appOauthKey == null || this.appOauthKey.isEmpty()) {
 			memory.saveProperty("Instagram.appOauthSecret", "", true);
 		} else {
 			memory.saveProperty("Instagram.appOauthSecret", Utils.encrypt(Utils.KEY, this.appOauthSecret), true);
 		}
 		
+		// Save the Page Access Token
+		System.out.println("Save PAT: " + this.pageAccessToken);
+		if (this.pageAccessToken == null || getPageAccessToken().isEmpty()) {
+			memory.saveProperty("Instagram.pageAccessToken", "", true);
+		} else {
+			memory.saveProperty("Instagram.pageAccessToken", Utils.encrypt(Utils.KEY, this.pageAccessToken), true);
+		}
+		
+	}
+	
+	// Save User Instagram preference properties to the database
+	public void saveProperties() {
+		Network memory = getBot().memory().newMemory();
+		
+		System.out.println("Save messageEnabled: " + messageEnabled);
+		
 		memory.saveProperty("Instagram.likeAllComments", String.valueOf(this.likeAllComments), true);
 		memory.saveProperty("Instagram.replyToComments", String.valueOf(this.replyToComments), true);
 		memory.saveProperty("Instagram.autoPost", String.valueOf(this.autoPost), true);
+		memory.saveProperty("Instagram.messageEnabled", String.valueOf(this.messageEnabled), true);
 		
 		memory.saveProperty("Instagram.maxPost", String.valueOf(this.maxPost), true);
 		memory.saveProperty("Instagram.maxLike", String.valueOf(this.maxLike), true);
 		memory.saveProperty("Instagram.maxComment", String.valueOf(this.maxComment), true);
+		
 		
 		Vertex instagram = memory.createVertex(getPrimitive());
 		

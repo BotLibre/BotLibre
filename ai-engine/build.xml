@@ -55,6 +55,7 @@
 	        description="generate the distribution" >
 	    <!-- Put everything in ${build} into botlibre-ai.jar file -->
 	    <jar jarfile="${lib}/botlibre-ai.jar" basedir="${build}"/>
+		
 	</target>
 	
 	<target name="clean"
