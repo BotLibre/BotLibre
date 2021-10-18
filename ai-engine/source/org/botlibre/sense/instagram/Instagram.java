@@ -38,7 +38,10 @@ import org.botlibre.sense.facebook.Facebook;
 import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
+import org.botlibre.util.TextStream;
 import org.botlibre.util.Utils;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import facebook4j.Account;
 import facebook4j.FacebookException;
@@ -49,7 +52,9 @@ import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
 import facebook4j.internal.org.json.JSONArray;
+import facebook4j.internal.org.json.JSONException;
 import facebook4j.internal.org.json.JSONObject;
+
 import net.sf.json.JSONSerializer;
 
 public class Instagram extends BasicSense{
@@ -887,28 +892,230 @@ public class Instagram extends BasicSense{
 			this.responseListener.reply = text;
 			notifyResponseListener();
 		}
+		
+		// If the response is empty, do not send it.
+		if (command == null && text.isEmpty()) {
+			return;
+		}
+		
+		sendIGMessage(text, replyTo);
         
+		/*
         try {
         	sendIGMessage(text, conversationId);
         } catch (Exception e) {
         	log(e);
-        }
+        }*/
         
     }
     
-    public void sendIGMessage(String text, String replyUser) throws FacebookException {
-    	log("Sending messenger message:", Level.INFO, text, replyUser);
+    public String createJSONQuickReply(String command, String id, String text) {
+		try {
+			JSONObject root = (JSONObject)JSONSerializer.toJSON(command);
+			if (!root.has("type") || !root.getString("type").equals("instagram")) {
+				return "";
+			}
+			Object json = root.get("quick_replies");
+			if (json == null) {
+				return "";
+			}
+			return json.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return "";
+		}
+	} 
+    
+    public void sendIGMessage(String text, String replyUser){
+    	log("Sending Instagram message:", Level.INFO, text, replyUser);
+
     	String url = "https://graph.facebook.com/v12.0/me/messages?access_token="
     		+getPageAccessToken();
 
     	try {
-	    	String json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(text) + "\"}}";
-	    	Utils.httpPOST(url, "application/json", json);
-			Utils.sleep(500);
-    	} catch (Exception exception) {
-    		log(exception);
-    	}
+			if (getMessageEnabled()) {
+				try {
+					// Check for HTML content and strip button elements.
+					String strippedText = format(text);
+					String postText = null;
+					
+					// Max size limit
+					if (strippedText.length() >= 320) {
+						TextStream stream = new TextStream(strippedText);
+						while (!stream.atEnd()) {
+							String message = stream.nextParagraph(320);
+							String json = null;
+							if (stream.atEnd()) {
+								postText = message;
+							} else {
+								json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(text) + "\"}}";
+								log("POST", Level.INFO, url, replyUser , json);
+								Utils.httpPOST(url, "application/json", json);
+								Utils.sleep(500);
+							}
+						}
+					} else {
+						postText = strippedText;
+					}
+					
+					Element root = null;
+					boolean linkFound = false;
+					
+					if ((text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+						try {
+							root = getBot().awareness().getSense(Http.class).parseHTML(text);
+
+							
+							/* Can be used later for generic templates
+							 * 
+							NodeList imageNodes = root.getElementsByTagName("img");
+							String image = null;
+							if (imageNodes.getLength() > 0) {
+								String src = ((Element)imageNodes.item(0)).getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									image = src;
+									String title = ((Element)imageNodes.item(0)).getAttribute("title");
+									if (title != null && !title.isEmpty()) {
+										imageTitle = title;
+									}
+								}
+							}*/
+							
+							// Check for <button> link tags.
+							NodeList nodes = root.getElementsByTagName("button");
+							if (nodes.getLength() > 0) {
+								// Check for <button> tags.
+								boolean quickReply = nodes.getLength() > 1 && nodes.getLength() <= 11;
+								if (quickReply) {
+									String buttonJSON = "";
+									String postText2 = postText;
+									for (int index = 0; index  < (Math.min(11, nodes.getLength())); index++) {
+										Element node = (Element)nodes.item(index);
+										String button = node.getTextContent().trim();
+										if (button != null && !button.isEmpty()) {
+											if (postText2 == null) {
+												postText2 = button;
+											}
+											if (!buttonJSON.isEmpty()) {
+												buttonJSON = buttonJSON + ", ";
+											}
+											button = Utils.escapeQuotesJS(button);
+											buttonJSON = buttonJSON + "{ \"content_type\": \"text\", \"payload\": \"" + button + "\", title: \"" + button + "\"}";
+											linkFound = true;
+										}
+									}
+									if (linkFound) {
+										String json = "{\"recipient\":{\"id\":\""
+													+ replyUser + "\"}, \"messaging_type\": \"RESPONSE\", \"message\":{ \"text\": \"" + Utils.escapeQuotesJS(postText2) + "\", \"quick_replies\": [ " + buttonJSON + " ]}}";
+										log("POST", Level.INFO, url, replyUser, json);
+										Utils.httpPOST(url, "application/json", json);
+										Utils.sleep(500);
+										postText = null;
+									}
+								} 
+							}
+							/* Test Temlate Later
+							int count = 0;
+							String buttonJSON = "";
+							
+							for (String button : extraButtons) {
+								button = Utils.escapeQuotesJS(button);
+								if (!buttonJSON.isEmpty()) {
+									buttonJSON = buttonJSON + ", ";
+								}
+								buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + button + "\", title: \"" + button + "\"}";
+								count++;
+								if (count == 3 || count == extraButtons.size()) {
+									String json = "{recipient:{id:\""
+											+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
+											+ "..." + "\", buttons: [ " + buttonJSON + " ]}}}}";
+									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
+									buttonJSON = "";
+									count = 0;
+								}
+							} */
+						} catch (Exception exception) {
+							log(exception);
+						}
+					}
+					
+					if (postText != null) {
+						String json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
+						log("POST", Level.INFO, url, replyUser, json);
+						Utils.httpPOST(url, "application/json", json);
+						Utils.sleep(500);
+					}
+					/* Use Later for Generic Templates
+					if (!linkFound && (text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+						try {
+							NodeList nodes = root.getElementsByTagName("img");
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"image\", payload: { url: \"" + src + "\"}}}}";
+									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
+								}
+							}
+							nodes = root.getElementsByTagName("audio");
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"audio\", payload: { url: \"" + src + "\"}}}}";
+									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
+								}
+							}
+							nodes = root.getElementsByTagName("video");
+							for (int index = 0; index  < nodes.getLength(); index++) {
+								Element node = (Element)nodes.item(index);
+								String src = node.getAttribute("src");
+								if (src != null && !src.isEmpty()) {
+									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"video\", payload: { url: \"" + src + "\"}}}}";
+									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+									Utils.httpPOST(url, "application/json", json);
+									Utils.sleep(500);
+								}
+							}
+						} catch (Exception exception) {
+							log(exception);
+						}
+					}
+					*/
+				} catch (Exception exception) {
+					this.errors++;
+					log(exception);
+				}
+			} else {
+				log("Instagram Messaging must be enabled.", Level.WARNING);
+			}
+		} catch (Exception exception) {
+			log(exception);
+		}
     }
+    
+    /**
+	 * Prepare and format the text for Facebook.
+	 */
+	public String format(String text) {
+		text = text.replace("\n", "");
+		text = text.replace("\r", "");
+		text = text.replace("\\", ""); // Facebook does not like this character for some reason.
+		text = Utils.stripTags(text);
+		// Strip tags changes <br> to \n
+		text = text.replace("\n", " \\n");
+		text = text.trim();
+		while (text.endsWith("\\n")) {
+			text = text.substring(0, text.length() - "\\n".length());
+		}
+		return text;
+	}
     
     public String inputInstagramMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
 		System.out.println("InputInstagramMessage Called.");
