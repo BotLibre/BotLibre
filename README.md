@@ -1,7 +1,7 @@
 # Bot Libre
 An open source platform for artificial intelligence, nlp, chat bots, virtual agents, social media automation, and live chat automation.
 
-* http://www.botlibre.org
+* https://www.botlibre.org
 * https://www.botlibre.com
 * https://www.botlibre.biz
 
