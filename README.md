@@ -4,7 +4,6 @@ An open source platform for artificial intelligence, nlp, chat bots, virtual age
 * http://www.botlibre.org
 * https://www.botlibre.com
 * https://www.botlibre.biz
-* https://sourceforge.net/projects/botlibre
 
 ## Components
 
