@@ -482,7 +482,10 @@ public class Primitive implements Serializable {
 	//Instagram
 	public static final Primitive IMAGEURLS = new Primitive("imageURLS");
 	public static final Primitive CAPTIONS = new Primitive("captions");
-	public static final Primitive ANSWEREDCOMMENTS = new Primitive("answeredComments");
+	//public static final Primitive ANSWEREDCOMMENTS = new Primitive("answeredComments");
+	public static final Primitive COMMENTKEYWORDS = new Primitive("commentKeywords");
+	public static final Primitive LASTIGCOMMENT = new Primitive("lastIGComment");
+	
 	
 	public static final Primitive INSTAGRAM = new Primitive("instagram");
 	
@@ -499,6 +502,7 @@ public class Primitive implements Serializable {
 	public static final Primitive LASTLEARN = new Primitive("lastlearn");
 	public static final Primitive LASTTIMELINE = new Primitive("lasttimeline");
 	public static final Primitive LASTNEWSFEED = new Primitive("lastnewsfeed");
+	public static final Primitive LASTCOMMENT = new Primitive("lastcomment");
 	public static final Primitive LASTDIRECTMESSAGE = new Primitive("lastdirectmessage");
 	public static final Primitive ID = new Primitive("id");
 	public static final Primitive MESSAGE = new Primitive("message");
