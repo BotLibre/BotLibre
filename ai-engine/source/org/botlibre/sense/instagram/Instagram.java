@@ -21,6 +21,7 @@ import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
 import org.botlibre.knowledge.Primitive;
+import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.sense.ResponseListener;
 import org.botlibre.sense.facebook.Facebook;
@@ -53,6 +55,7 @@ import facebook4j.Account;
 import facebook4j.Comment;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.PostUpdate;
 import facebook4j.RawAPIResponse;
 import facebook4j.ResponseList;
 import facebook4j.User;
@@ -72,6 +75,12 @@ public class Instagram extends BasicSense{
 	
 	protected String userName = "";
 	protected String id = "";
+	protected String page = "";
+	protected String pageId = "";
+	protected String profileName = "";
+	protected String IGUserId = "";
+	protected String IGUserName = "";
+	protected String IGName = "";
 	
     protected String token = "";
     protected Date tokenExpiry;
@@ -96,19 +105,13 @@ public class Instagram extends BasicSense{
     protected int postsProcessed = 0;
     protected int totalCommentsProcessed = 0;
     
-    protected String page = "";
-	protected String pageId = "";
-	protected String profileName = "";
-
     protected List<String> commentKeywords = new ArrayList<>();
+    protected List<String> autoPosts = new ArrayList<>();
     
     protected boolean messageEnabled = false;
     protected boolean commentReplyEnabled = false;
     protected boolean replyAllComments = false;
-    protected boolean autoPost = false;
-
-    protected List<String> imageURLs = new ArrayList<String>();
-    protected List<String> captions = new ArrayList<String>();
+    protected boolean autoPostEnabled = false;
     
     private facebook4j.Facebook connection;
     
@@ -129,6 +132,7 @@ public class Instagram extends BasicSense{
     }
     
     public String getProfileName() {
+    	initProperties();
     	return this.profileName;
     }
 
@@ -141,6 +145,26 @@ public class Instagram extends BasicSense{
     	initProperties();
         this.userName = userName;
     }
+    
+    public String getIGUserName() {
+    	initProperties();
+    	return IGUserName;
+    }
+    
+    public void setIGUserName(String IGUserName) {
+    	initProperties();
+    	this.IGUserName = IGUserName;
+    }
+    
+    public String getIGName() {
+    	initProperties();
+    	return IGName;
+    }
+    
+    public void setIGName(String IGName) {
+    	initProperties();
+    	this.IGName = IGName;
+    }
 
     public String getID() {
     	initProperties();
@@ -148,6 +172,7 @@ public class Instagram extends BasicSense{
     }
     
     public Date getTokenExpiry() {
+    	initProperties();
     	return this.tokenExpiry;
     }
     
@@ -175,7 +200,6 @@ public class Instagram extends BasicSense{
     	initProperties();
         this.token = token;
     }
-    
     
     public String getAppOauthKey() {
     	initProperties();
@@ -253,12 +277,23 @@ public class Instagram extends BasicSense{
 	}
 	
 	public void setReplyAllComments(boolean replyAllComments) {
+		initProperties();
 		this.replyAllComments = replyAllComments;
 	}
 	
-	public boolean getAutoPost () {
+	public boolean getAutoPostEnabled () {
     	initProperties();
-		return autoPost;
+		return autoPostEnabled;
+	}
+	
+	public int getAutoPostHours() {
+		initProperties();
+		return autoPostHours;
+	}
+	
+	public void setAutoPostHours(int autoPostHours) {
+		initProperties();
+		this.autoPostHours = autoPostHours;
 	}
 	
 	public boolean getMessageEnabled() {
@@ -266,33 +301,14 @@ public class Instagram extends BasicSense{
 		return messageEnabled;
 	}
 	
-	public void setAutoPost (boolean autoPost) {
+	public void setAutoPostEnabled (boolean autoPostEnabled) {
     	initProperties();
-		this.autoPost = autoPost;
+		this.autoPostEnabled = autoPostEnabled;
 	}
 	
 	public void setMessageEnabled(boolean messageEnabled) {
+		initProperties();
 		this.messageEnabled = messageEnabled;
-	}
-	
-	public List<String> getImageURLs() {
-    	initProperties();
-		return imageURLs;
-	}
-
-	public void setImageURLs(List<String> imageURLs) {
-    	initProperties();
-		this.imageURLs = imageURLs;
-	}
-	
-	public List<String> getCaptions() {
-    	initProperties();
-		return captions;
-	}
-
-	public void setCaptions(List<String> captions) {
-    	initProperties();
-		this.captions = captions;
 	}
 	
 	public String getResult() {
@@ -321,6 +337,17 @@ public class Instagram extends BasicSense{
 		initProperties();
 		this.commentKeywords = statusKeywords;
 	}
+	
+	public List<String> getAutoPosts() {
+		initProperties();
+		return autoPosts;
+		//return network.createVertex(getPrimitive()).orderedRelations(Primitive.IGAUTOPOSTS);
+	}
+	
+	public void setAutoPosts(List<String> autoPosts) {
+		initProperties();
+		this.autoPosts = autoPosts;
+	}
 
     /**
      * Connect to facebook
@@ -348,8 +375,8 @@ public class Instagram extends BasicSense{
     
     public void connectAccount() throws FacebookException {
     	//connect();
-    	facebook4j.Facebook facebook = getConnection();
-		User user = facebook.getMe();
+    	facebook4j.Facebook instagram = getConnection();
+		User user = instagram.getMe();
 		if (this.userName == null || !this.userName.equals(user.getId())) {
 			this.userName = user.getId();
 		}
@@ -357,12 +384,16 @@ public class Instagram extends BasicSense{
 	    	RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
 	    	JSONObject result = res.asJSONObject();
 	    	setResult(result.toString());
-	    	this.id = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
-	    	this.userName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
+	    	String id = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
+	    	String userName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
+	    	setID(id);
+	    	setUserName(userName);
+	    	System.out.println(res);
+	    	System.out.println("Connect id"+id);
     	} catch (Exception e) {
     		log(e);
     	}
-    	saveAuth();
+    	saveProperties();
     }
     
     
@@ -388,24 +419,40 @@ public class Instagram extends BasicSense{
     /**
 	 * Authorize a new account to be accessible by the bot.
 	 */
-	public void authorizeComplete(String pin) throws FacebookException {
-		
-		AccessToken token = this.connection.getOAuthAccessToken(pin);
-		setToken(token.getToken());
-
-		User user = this.connection.getMe();
-		System.out.println("User name is " + user.getName());
-		System.out.println("PAT is " + getPageAccessToken());
-		this.userName = user.getId();
-		if (token.getExpires() != null) {
-			this.tokenExpiry = new Date(System.currentTimeMillis() + (token.getExpires() * 1000));
+	public void authorizeComplete(String pin) {
+		try {
+			AccessToken accessToken = this.connection.getOAuthAccessToken(pin);
+			setToken(accessToken.getToken());
+			
+			RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
+	    	JSONObject result = res.asJSONObject();
+	    	setResult(result.toString());
+	    	
+	    	String tempId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
+	    	String tempUserName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
+	    	setID(tempId);
+	    	setUserName(tempUserName);
+	    	
+	    	System.out.println(res);
+	    	System.out.println("Connect id"+id);
+	    	
+	    	User user = this.connection.getMe();
+	    	System.out.println("User name is " + user.getName());
+			this.userName = user.getId();
+			if (accessToken.getExpires() != null) {
+				this.tokenExpiry = new Date(System.currentTimeMillis() + (accessToken.getExpires() * 1000));
+			}
+			
+			this.profileName = user.getName();
+			this.isEnabled = true;
+			
+			saveProperties();
+			
+			
+		} catch (Exception e){
+			log(e);
 		}
-		
-		this.profileName = user.getName();
-		this.isEnabled = true;
-		
-		saveAuth();
-		
+
 	}
 	
 	/**
@@ -415,8 +462,8 @@ public class Instagram extends BasicSense{
 		log("Checking Instagram profile.", Level.INFO);
 		try {
 			if (getcommentReplyEnabled()) { answerNewComments(); }
+			if (getAutoPostEnabled()) { checkAutoPost(); }
 			//checkRSS();
-			//checkAutoPost();
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -464,29 +511,6 @@ public class Instagram extends BasicSense{
         }
     }
 	
-	public void testDeleteComment() throws FacebookException {
-		if (this.connection == null) {
-			connectAccount();
-		}
-        try {
-            RawAPIResponse res = getConnection().callGetAPI("/" + this.id + "/media?fields=id,comments,timestamp");
-            JSONObject result = res.asJSONObject();
-            setResult(result.toString());
-            JSONArray media = result.getJSONArray("data");
-            if (media.length() > 0) {
-            	JSONObject comments = media.getJSONObject(0);
-            	setResult(comments.toString());
-            	if (comments.has("comments")) {
-            		JSONObject comment = comments.getJSONObject("comments").getJSONArray("data").getJSONObject(0);
-            		setResult(comment.toString());
-            		deleteComment(comment.getString("id"));
-            	}
-            }
-        } catch (Exception e) {
-            return;
-        }
-    }
-	
 	public void postComment (String mediaID, String message) {
 		try {
 			HashMap<String,String> params = new HashMap<>();
@@ -499,7 +523,7 @@ public class Instagram extends BasicSense{
 		}
 	}
 	
-	public void postReply (String commentID, String text) {
+	public void postReply (String text, String commentID) {
         try {
 //            POST /{ig-comment-id}/replies?message={message}
             HashMap<String, String> params = new HashMap<String, String>();
@@ -512,21 +536,12 @@ public class Instagram extends BasicSense{
         }
     }
 	
-	public boolean deleteComment (String commentID) {
+	public List<String> getUserMedia(String userID) throws FacebookException{
+		if (this.connection == null) {
+    		connectAccount();
+    	}
         try {
-            RawAPIResponse res = getConnection().callDeleteAPI(commentID);
-            JSONObject apiResult = res.asJSONObject();
-            setResult(apiResult.toString());
-            boolean success = apiResult.getBoolean("success");
-            return success;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-	
-	public List<String> getUserMedia(String userID) {
-
-        try {
+        	System.out.println("The userid is: " + userID);
             String nextURL = null;
             List<String> mediaIDs = new ArrayList<>();
             HashMap<String, String> params = new HashMap<>();
@@ -541,7 +556,7 @@ public class Instagram extends BasicSense{
                     res = getConnection().callGetAPI("/" + userID + "/media");
                 }
                 apiResult = res.asJSONObject();
-                System.out.println("API RESULT:" + apiResult);
+                //System.out.println("API RESULT:" + apiResult);
                 JSONArray media = apiResult.getJSONArray("data");
                 for (int index = 0; index < Math.min(media.length(), getMaxPost()); index++) {
                     JSONObject post = media.getJSONObject(index);
@@ -630,7 +645,7 @@ public class Instagram extends BasicSense{
 
     public String createVideoContainer (String userID, String videoURL, String caption) {
         try {
-//            https://graph.facebook.com/v5.0/{ig-user-id}/media?video_url={video-url}&media_type={media-type}&caption={caption}&access_token={access-token}
+//          https://graph.facebook.com/v5.0/{ig-user-id}/media?video_url={video-url}&media_type={media-type}&caption={caption}&access_token={access-token}
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("video_url", videoURL);
             params.put("media_type", "VIDEO");
@@ -663,7 +678,7 @@ public class Instagram extends BasicSense{
 
     public String publishContainer (String userID, String containerID) {
         try {
-//            https://graph.facebook.com/v5.0/{ig-user-id}/media_publish?creation_id={creation-id}&access_token={access-token}
+//          https://graph.facebook.com/v5.0/{ig-user-id}/media_publish?creation_id={creation-id}&access_token={access-token}
 
             HashMap<String, String> params = new HashMap<>();
             params = new HashMap<String, String>();
@@ -678,46 +693,138 @@ public class Instagram extends BasicSense{
             return null;
         }
     }
-	
-    public List<JSONObject> getCommentDates (String mediaID) {
-        try {
-//            GET {ig-media-id}/comments?fields=like_count,replies,username,text
-            HashMap<String, String> params = new HashMap<>();
-            params.put("fields", "text,timestamp,replies{text,timestamp,user},media,user");
-            RawAPIResponse res = getConnection().callGetAPI("/" + mediaID + "/comments", params);
-            JSONObject apiResult = res.asJSONObject();
-            List<JSONObject> commentInfo = new ArrayList<>();
-            JSONArray comments = apiResult.getJSONArray("data");
-            for (int index = 0; index < comments.length(); index++) {
-                JSONObject comment = comments.getJSONObject(index);
-                commentInfo.add(comment);
-            }
-            return commentInfo;
-        } catch (Exception e) {
-            return null;
-        }
+    
+
+	// Returns 0, 1, or 2 strings depending on the input
+	public List<String> parseAutoPost(String content) {
+		int urlStart = -1, urlEnd = -1, strlen = content.length();
+		int captionStart = -1;
+		
+		for (int i = 0; i < strlen; i++) {
+			if(content.charAt(i) == ' ') {
+				if (urlStart != -1 && urlEnd == -1) {
+					urlEnd = i;
+				}
+			} else {
+				if (urlStart == -1) {
+					urlStart = i;
+				} else if (urlStart != -1 && urlEnd != -1 && captionStart == -1) {
+					captionStart = i;
+					break;
+				}
+			}
+		}
+		
+		ArrayList<String> output = new ArrayList<>();
+		if (urlStart != -1) {
+			if (urlEnd != -1 && captionStart != -1) {
+				output.add(content.substring(urlStart, urlEnd));
+				output.add(content.substring(captionStart, strlen));
+			} else if (urlEnd != -1) {
+				output.add(content.substring(urlStart, urlEnd));
+
+			} else {
+				output.add(content.substring(urlStart, strlen));
+			}
+		} 
+		
+		return output;
+		
+	}
+    
+    public void checkAutoPost() {
+    	if (!getAutoPostEnabled()) {
+			return;
+		}
+    	log("Autoposting", Level.FINE);
+		try {
+			Network memory = getBot().memory().newMemory();
+			Vertex instagram = memory.createVertex(getPrimitive());
+			Vertex vertex = instagram.getRelationship(Primitive.IGLASTPOST);
+			long last = 0;
+			if (vertex != null) {
+				last = ((Timestamp)vertex.getData()).getTime();
+			}
+			long millis = getAutoPostHours() * 60 * 60 * 1000;
+			if ((System.currentTimeMillis() - last) < millis) {
+				log("Autoposting hours not reached", Level.FINE, getAutoPostHours());
+				return;
+			}
+			List<String> autoposts = getAutoPosts();
+			/*
+			if (autoposts != null && !autoposts.isEmpty()) {
+				int index = Utils.random().nextInt(autoposts.size());
+				Vertex post = autoposts.get(index);
+				String text = null;
+				// Check for labels and formulas
+				if (post.instanceOf(Primitive.LABEL)) {
+					post = post.mostConscious(Primitive.RESPONSE);
+				}
+				if (post.instanceOf(Primitive.FORMULA)) {
+					Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+					SelfCompiler.addGlobalVariables(memory.createInstance(Primitive.INPUT), null, memory, variables);
+					Vertex result = getBot().mind().getThought(Language.class).evaluateFormula(post, variables, memory);
+					if (result != null) {
+						text = getBot().mind().getThought(Language.class).getWord(result, memory).getDataValue();
+					} else {
+						log("Invalid autopost template formula", Level.WARNING, post);
+						text = null;
+					}
+				} else {
+					text = post.printString();
+				}
+				if (text != null) {
+					log("Autoposting", Level.INFO, post);
+					post(text, null);
+					Utils.sleep(100);
+					instagram.setRelationship(Primitive.IGLASTPOST, memory.createTimestamp());
+					memory.save();
+				}
+			}*/
+		} catch (Exception exception) {
+			log(exception);
+		}
     }
     
-    public void clearAnswers () {
-    	Network memory = getBot().memory().newMemory();
-        Vertex instagram = memory.createVertex(getPrimitive());
-		memory.save();
-    }
+    /**
+	 * Post.
+	 */
+	public void post(String text, String reply) {
+		this.posts++;
+		log("Posting:", Level.INFO, text, reply);
+		try {
+			if (getConnection() == null) {
+				connect();
+			}
+			if (reply != null) {
+				getConnection().commentPost(reply, format(text));
+			} else {
+				PostUpdate update = new PostUpdate(format(text));
+				getConnection().postFeed(update);
+			}
+		} catch (Exception exception) {
+			this.errors++;
+			log(exception.getMessage(), Level.WARNING, text);
+		}
+	}
     
     // Process A comment
     public long[] processComment(JSONObject comment, JSONObject parent, Network memory, int count, long max, long last) throws JSONException, ParseException {
     	SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+    	System.out.println("The comment is" + comment);
     	
     	String text = comment.getString("text");
 		String commentId = comment.getString("id");
-		String authorId = comment.getJSONObject("from").getString("id");
+		String authorId = comment.getString("username");
 		Date date = parser.parse(comment.getString("timestamp"));
 		long timestamp = date.getTime();
 		
+		input(comment, parent, memory);
 		
 		log("Processing post comment", Level.FINE, commentId, text);
 		
-		if (count >= this.maxComment) {
+		
+		if (true || count >= this.maxComment) {
 			log("Max Comments reached", Level.FINE, count);
 			return null;
 		}
@@ -726,11 +833,12 @@ public class Instagram extends BasicSense{
 			max = timestamp;
 		}
 		if (!authorId.equals(this.userName)) {
-			if ((System.currentTimeMillis() - timestamp) > DAY) {
+			
+			if (true || (System.currentTimeMillis() - timestamp) > DAY) {
 				log("Day old post comment", Level.FINE, commentId, timestamp);
 				return null;
 			}
-			if (timestamp > last) {
+			if (true || timestamp > last) {
 				if (getReplyAllComments() || containsKeywords(text)) {
 					count++;
 					log("Processing post comment", Level.FINE, text, authorId, userName);
@@ -764,8 +872,8 @@ public class Instagram extends BasicSense{
     	return match;
     }
     
-    public LinkedList<JSONObject> getCommentReplies(JSONObject comment){
-    	LinkedList<JSONObject> data = new LinkedList();
+    public ArrayList<JSONObject> getCommentReplies(JSONObject comment){
+    	ArrayList<JSONObject> data = new ArrayList<JSONObject>();
     	
     	try {
     		Queue<JSONObject> q = new LinkedList<>();
@@ -794,10 +902,15 @@ public class Instagram extends BasicSense{
     // Reply to new comments
     public void answerNewComments() {
     	log("Checking for new comments", Level.FINE);
+    	
         try {
+        	if (this.connection == null) {
+        		connectAccount();
+        	}
+        	
         	Network memory = getBot().memory().newMemory();
 			Vertex instagram = memory.createVertex(getPrimitive());
-			Vertex vertex = instagram.getRelationship(Primitive.LASTIGCOMMENT);
+			Vertex vertex = instagram.getRelationship(Primitive.IGLASTCOMMENT);
 			
 			long last = 0;
 			if (vertex != null) {
@@ -809,10 +922,7 @@ public class Instagram extends BasicSense{
             int commentsProcessed = 0;
             boolean complete = false;
             HashMap<String,String> params = new HashMap<>();
-            HashMap<String, String> fields = new HashMap<>();
-            fields.put("fields", "from,id,text,replies");
-            //params.put("fields", "id,timestamp,comments{id,username,text,timestamp,replies{id,username,text,timestamp}}");
-            RawAPIResponse res;
+            params.put("fields", "id,timestamp,comments{id,username,text,timestamp,replies{id,username,text,timestamp}}");
 
             List<String> posts = getUserMedia(getID());
             for(int i = 0; i < posts.size() && commentsProcessed < getMaxComment(); i++) {
@@ -820,25 +930,28 @@ public class Instagram extends BasicSense{
                     params.put("after", next);
                 }
             	do {	
-            		JSONObject apiResult = getConnection().callGetAPI("/" + posts.get(i) + "/comments", fields).asJSONObject();
+            		JSONObject apiResult = getConnection().callGetAPI("/" + posts.get(i), params).asJSONObject();
             		System.out.println(apiResult);
-            		JSONArray comments = apiResult.getJSONArray("data");
+            		JSONArray comments = apiResult.getJSONObject("comments").getJSONArray("data");
             		
             		if (comments != null && comments.length() != 0) {
-            			for (int j = 0; i < comments.length(); i++) {
+            			for (int j = 0; j < comments.length(); j++) {
             				JSONObject comment = comments.getJSONObject(j);
+            				System.out.println("Comment at " + j + comment);
             				long[] values = processComment(comment, null, memory, commentsProcessed, max, last);
-							if (values == null) {
+							
+            				/*
+            				if (values == null) {
 								break;
 							}
 							commentsProcessed = (int)values[0];
 							max = values[1];
 							if (commentsProcessed == -1) {
 								break;
-							}
+							}*/
 							
-							LinkedList<JSONObject> replies = getCommentReplies(comment);
-							if ((replies != null) && replies.size() != 0) {
+							ArrayList<JSONObject> replies = getCommentReplies(comment);
+							if ((replies != null) && !replies.isEmpty()) {
 								for (int index2 = replies.size() - 1; index2 >= 0; index2--) {
 									JSONObject reply = replies.get(index2);
 									values = processComment(reply, comment, memory, commentsProcessed, max, last);
@@ -849,8 +962,6 @@ public class Instagram extends BasicSense{
 									max = values[1];
 								}
 							}
-							
-            				
             			}
             		} else {
 						log("No comments", Level.FINE, posts.get(i));
@@ -871,7 +982,7 @@ public class Instagram extends BasicSense{
             }
             
             if (max != 0) {
-            	instagram.setRelationship(Primitive.LASTIGCOMMENT, memory.createVertex(max));
+            	instagram.setRelationship(Primitive.IGLASTCOMMENT, memory.createVertex(max));
             	memory.save();
             }
     		
@@ -938,13 +1049,16 @@ public class Instagram extends BasicSense{
 	 * Process the post comment.
 	 */
 	public void input(JSONObject comment, JSONObject parent, Network network) {
+		System.out.println("Input called");
+		/*
 		if (!isEnabled()) {
 			return;
-		}
+		}*/
 		try {
+			System.out.println("Before here");
 			String text = comment.getString("text").trim();
 			String commentId = comment.getString("id");
-			String authorId = comment.getJSONObject("from").getString("id");
+			String authorId = comment.getString("username");
 			
 			SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
 			Date date = parser.parse(comment.getString("timestamp"));
@@ -952,10 +1066,11 @@ public class Instagram extends BasicSense{
 			
 			
 			log("Processing post comment", Bot.FINE, text, commentId);
+			/*
 			if ((System.currentTimeMillis() - timestamp) > DAY) {
 				log("Day old post commentt", Bot.FINE, commentId, timestamp);
 				return;
-			}
+			}*/
 			
 			log("Input post comment", Level.FINE, text, name);
 			this.postsProcessed++;
@@ -963,7 +1078,9 @@ public class Instagram extends BasicSense{
 			if (parent != null) {
 				id = parent.getString("id");
 			}
-			inputSentence(text, commentId, authorId, this.userName, id, timestamp, network);
+			
+			System.out.println("here");
+			inputSentence(text, commentId, authorId, this.userName, commentId, timestamp, network);
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -973,19 +1090,24 @@ public class Instagram extends BasicSense{
 	 * Process the text sentence.
 	 */
 	public void inputSentence(String text, String userId, String userName, String targetUserName, String messageId, long time, Network network) {
+		System.out.println("InputSentence called "+ messageId);
+		
 		Vertex input = createInput(text.trim(), network);
 		Vertex sentence = input.getRelationship(Primitive.INPUT);
-		Vertex id = network.createVertex(messageId);
-		if (sentence.hasRelationship(Primitive.POST, id)) {
+		
+		Vertex idVertex = network.createVertex(messageId);
+		
+		/*
+		if (sentence.hasRelationship(Primitive.IGCOMMENT, id)) {
 			log("Post already processed", Bot.FINE, id, time);
 			return;
-		}
-		sentence.addRelationship(Primitive.POST, id);
-		input.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
+		}*/
+		sentence.addRelationship(Primitive.IGCOMMENT, idVertex);
+		input.addRelationship(Primitive.INSTANTIATION, Primitive.IGCOMMENT);
 		input.addRelationship(Primitive.CREATEDAT, network.createVertex(time));
-		input.addRelationship(Primitive.ID, id);
+		input.addRelationship(Primitive.ID, idVertex);
 		Vertex conversation = network.createInstance(Primitive.CONVERSATION);
-		conversation.addRelationship(Primitive.TYPE, Primitive.POST);
+		conversation.addRelationship(Primitive.TYPE, Primitive.IGCOMMENT);
 		Language.addToConversation(input, conversation);
 		Vertex user = network.createUniqueSpeaker(new Primitive(userId), Primitive.INSTAGRAM, userName);
 		conversation.addRelationship(Primitive.SPEAKER, user);
@@ -1005,8 +1127,8 @@ public class Instagram extends BasicSense{
 		getBot().memory().addActiveMemory(input);
 	}
     
-    public void inputSentence(String text, String userId, String userName, String targetUserName, String id, Network network) {
-        Vertex input = createInput(text.trim(), network);
+    public void inputSentence(String text, String userId, String userName, String targetUserName, String id, Network network) {    
+    	Vertex input = createInput(text.trim(), network);
         Vertex user = network.createUniqueSpeaker(new Primitive(userId), Primitive.INSTAGRAM, userName);
         Vertex self = network.createVertex(Primitive.SELF);
         input.addRelationship(Primitive.SPEAKER, user);
@@ -1045,6 +1167,7 @@ public class Instagram extends BasicSense{
     
     @Override
     public void output(Vertex output) {
+    	System.out.println("Output called");
     	
     	Vertex sense = output.mostConscious(Primitive.SENSE);
 		// If not output to twitter, ignore.
@@ -1075,8 +1198,15 @@ public class Instagram extends BasicSense{
 			return;
 		}
 		
-		sendIGMessage(text, replyTo);
-        
+		System.out.println("Output called," + replyTo + "  " + text);
+		if (conversation.hasRelationship(Primitive.TYPE, Primitive.IGCOMMENT)) {
+			postReply(text, replyTo);
+		} else if (conversation.hasRelationship(Primitive.TYPE, Primitive.INSTAGRAM)) {
+			sendIGMessage(text, replyTo);
+		} else {
+			System.out.println("Invalid Reply Type");
+		}
+
     }
     
     public String createJSONQuickReply(String command, String id, String text) {
@@ -1101,6 +1231,9 @@ public class Instagram extends BasicSense{
 
     	String url = "https://graph.facebook.com/v12.0/me/messages?access_token="
     		+getPageAccessToken();
+    	
+    	System.out.println(url);
+    	System.out.println(getPageAccessToken());
 
     	try {
 			if (getMessageEnabled()) {
@@ -1288,7 +1421,7 @@ public class Instagram extends BasicSense{
 	}
     
     public String inputInstagramMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
-		System.out.println("InputInstagramMessage Called.");
+		log("Input Instagram Message Called", Level.FINE);
     	Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.INSTAGRAM);
 		if (!user.hasRelationship(Primitive.NAME)) {
 			String url = "https://graph.facebook.com/v12.0/me?fields=id,first_name,last_name&access_token="+ getToken();
@@ -1416,9 +1549,14 @@ public class Instagram extends BasicSense{
 				this.commentReplyEnabled = Boolean.valueOf(property);
 			}
 			
-			property = this.bot.memory().getProperty("Instagram.autoPost");
+			property = this.bot.memory().getProperty("Instagram.autoPostEnabled");
 			if (property != null) {
-				this.autoPost = Boolean.valueOf(property);
+				this.autoPostEnabled = Boolean.valueOf(property);
+			}
+			
+			property = this.bot.memory().getProperty("Instagram.IGUserName");
+			if (property != null && !property.isEmpty()) {
+				this.IGUserName = Utils.decrypt(Utils.KEY, property);
 			}
 			
 			property = this.bot.memory().getProperty("Instagram.messageEnabled");
@@ -1437,7 +1575,7 @@ public class Instagram extends BasicSense{
 			}
 			
 			this.commentKeywords = new ArrayList<String>();
-			List<Relationship> keywords = instagram.orderedRelationships(Primitive.COMMENTKEYWORDS);
+			List<Relationship> keywords = instagram.orderedRelationships(Primitive.IGCOMMENTKEYWORDS);
 			if (keywords != null) {
 				for (Relationship relationship : keywords) {
 					String text = ((String)relationship.getTarget().getData()).trim();
@@ -1446,45 +1584,37 @@ public class Instagram extends BasicSense{
 					}
 				}
 			}
+			
+			this.autoPosts = new ArrayList<String>();
+			List<Vertex> autoposts = instagram.orderedRelations(Primitive.IGAUTOPOSTS);
+			if (autoposts != null && !autoposts.isEmpty()) {
+				Iterator<Vertex> iterator = autoposts.iterator();
+				while (iterator.hasNext()) {
+					Vertex post = iterator.next();
+					this.autoPosts.add(post.printString());
+				}
+			}
 		
 			property = this.bot.memory().getProperty("Instagram.maxComment");
 			if (property != null) {
 				this.maxComment = Integer.valueOf(property);
 			}
 			
-			this.imageURLs = new ArrayList<String>();
-			List<Relationship> images = instagram.orderedRelationships(Primitive.IMAGEURLS);
-			if (images != null) {
-				for (Relationship relationship : images) {
-					String text = ((String)relationship.getTarget().getData()).trim();
-					if (!text.isEmpty()) {
-						this.imageURLs.add(text);
-					}
-				}
-			}
-			
-			this.captions = new ArrayList<String>();
-			List<Relationship> captions = instagram.orderedRelationships(Primitive.CAPTIONS);
-			if (captions != null) {
-				for (Relationship relationship : captions) {
-					String text = ((String)relationship.getTarget().getData()).trim();
-					if (!text.isEmpty()) {
-						this.captions.add(text);
-					}
-				}
-			}
-			
 			this.isInitialized = true;
 		}
 	}
 	
-	// Save Authentication properties in the database
-	public void saveAuth() {
+	// Save User Instagram preference properties to the database
+	@Override
+	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
+		
 		memory.saveProperty("Instagram.userName", this.userName, true);
 		memory.saveProperty("Instagram.token", this.token, true);
 		memory.saveProperty("Instagram.id", this.id, true);
 		memory.saveProperty("Instagram.result", this.result, true);
+		memory.saveProperty("Instagram.IGUserName", this.IGUserName, true);
+		memory.saveProperty("Instagram.IGName", this.IGName, true);
 		
 		// Save the Oauthkey
 		if (this.appOauthKey == null || this.appOauthKey.isEmpty()) {
@@ -1494,50 +1624,61 @@ public class Instagram extends BasicSense{
 		}
 		
 		// Save the OauthSecret
-		if (this.appOauthKey == null || this.appOauthKey.isEmpty()) {
+		if (this.appOauthSecret == null || this.appOauthSecret.isEmpty()) {
 			memory.saveProperty("Instagram.appOauthSecret", "", true);
 		} else {
 			memory.saveProperty("Instagram.appOauthSecret", Utils.encrypt(Utils.KEY, this.appOauthSecret), true);
 		}
 		
 		// Save the Page Access Token
-		if (this.pageAccessToken == null || getPageAccessToken().isEmpty()) {
+		if (this.pageAccessToken == null || this.pageAccessToken.isEmpty()) {
 			memory.saveProperty("Instagram.pageAccessToken", "", true);
 		} else {
 			memory.saveProperty("Instagram.pageAccessToken", Utils.encrypt(Utils.KEY, this.pageAccessToken), true);
 		}
-		
-	}
-	
-	// Save User Instagram preference properties to the database
-	
-	@Override
-	public void saveProperties() {
-		Network memory = getBot().memory().newMemory();
 
 		memory.saveProperty("Instagram.commentReplyEnabled", String.valueOf(this.commentReplyEnabled), true);
-		memory.saveProperty("Instagram.autoPost", String.valueOf(this.autoPost), true);
+		memory.saveProperty("Instagram.autoPostEnabled", String.valueOf(this.autoPostEnabled), true);
 		memory.saveProperty("Instagram.messageEnabled", String.valueOf(this.messageEnabled), true);
 		
 		memory.saveProperty("Instagram.maxPost", String.valueOf(this.maxPost), true);
 		memory.saveProperty("Instagram.maxComment", String.valueOf(this.maxComment), true);
 		memory.saveProperty("Instagram.replyAllComments", String.valueOf(this.replyAllComments), true);
 		
-		
 		Vertex instagram = memory.createVertex(getPrimitive());
+		instagram.unpinChildren();
 		
-		instagram.internalRemoveRelationships(Primitive.IMAGEURLS);
-		for (String text : this.imageURLs) {
+		instagram.internalRemoveRelationships(Primitive.IGCOMMENTKEYWORDS);
+		for (String text : this.commentKeywords) {
 			Vertex keywords =  memory.createVertex(text);
-			instagram.addRelationship(Primitive.IMAGEURLS, keywords);
+			instagram.addRelationship(Primitive.IGCOMMENTKEYWORDS, keywords);
 		}
 		
-		instagram.internalRemoveRelationships(Primitive.CAPTIONS);
-		for (String text : this.captions) {
-			Vertex keywords =  memory.createVertex(text);
-			instagram.addRelationship(Primitive.CAPTIONS, keywords);
-		}
 		
+		/*
+		if (this.autoPosts != null) {
+			Collection<Relationship> old = instagram.getRelationships(Primitive.IGAUTOPOSTS);
+			if (old != null) {
+				for (Relationship post : old) {
+					if (post.getTarget().instanceOf(Primitive.FORMULA)) {
+						SelfCompiler.getCompiler().unpin(post.getTarget());
+					}
+				}
+			}
+			instagram.internalRemoveRelationships(Primitive.IGAUTOPOSTS);
+			for (String text : autoPosts) {
+				Vertex post =  memory.createSentence(text);
+				if (post.instanceOf(Primitive.FORMULA)) {
+					SelfCompiler.getCompiler().pin(post);
+				}
+				post.addRelationship(Primitive.INSTANTIATION, Primitive.POST);
+				facebook.addRelationship(Primitive.AUTOPOSTS, post);
+			}
+		}*/
+		
+		
+		
+		memory.createVertex(getPrimitive());
 		memory.save();
 	}
 	

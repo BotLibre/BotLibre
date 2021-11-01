@@ -480,12 +480,13 @@ public class Primitive implements Serializable {
 	public static final Primitive TWITTER = new Primitive("twitter");
 	
 	//Instagram
-	public static final Primitive IMAGEURLS = new Primitive("imageURLS");
-	public static final Primitive CAPTIONS = new Primitive("captions");
-	//public static final Primitive ANSWEREDCOMMENTS = new Primitive("answeredComments");
-	public static final Primitive COMMENTKEYWORDS = new Primitive("commentKeywords");
-	public static final Primitive LASTIGCOMMENT = new Primitive("lastIGComment");
-	
+	public static final Primitive IGCOMMENT = new Primitive("IGComment");
+	public static final Primitive IGCOMMENTKEYWORDS = new Primitive("commentKeywords");
+	public static final Primitive IGLASTCOMMENT = new Primitive("lastIGComment");
+	public static final Primitive IGAUTOPOSTENABLED = new Primitive("IGAutoPostEnabled");
+	public static final Primitive IGAUTOPOSTHOURS = new Primitive("IGAutoPostHours");
+	public static final Primitive IGAUTOPOSTS = new Primitive("IGAutoPosts");
+	public static final Primitive IGLASTPOST = new Primitive("IGLastPost");
 	
 	public static final Primitive INSTAGRAM = new Primitive("instagram");
 	
