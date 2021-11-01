@@ -26,10 +26,6 @@ import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
 import org.botlibre.util.Utils;
 
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
-import org.javacord.api.listener.message.MessageCreateListener;
-import org.javacord.api.util.event.ListenerManager;
 import org.javacord.api.entity.message.Message;
 
 import io.github.furstenheim.CopyDown;
@@ -100,19 +96,6 @@ public class Discord extends BasicSense {
 		if (this.token != null && !this.token.isEmpty()) {
 			setIsEnabled(true);
 		}
-	}
-	
-	/**
-	 * Auto post to channel
-	 */
-	public void checkProfile() {
-		log("Checking profile.", Level.INFO);
-		try {
-			initProperties();
-		} catch (Exception exception) {
-			log(exception);
-		}
-		log("Done checking profile.", Level.INFO);
 	}
 	
 	public String processMessage(Message discord) {
