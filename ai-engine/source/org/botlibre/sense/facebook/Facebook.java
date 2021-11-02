@@ -1155,7 +1155,7 @@ public class Facebook extends BasicSense {
 	 * Check profile for messages.
 	 */
 	public void checkProfile() {
-		log("Checking profile.", Level.INFO);
+		log("Checking Facebook profile.", Level.INFO);
 		this.processedPosts = new HashSet<String>();
 		this.wallPosts = new HashSet<String>();
 		try {
@@ -1167,7 +1167,7 @@ public class Facebook extends BasicSense {
 		} catch (Exception exception) {
 			log(exception);
 		}
-		log("Done checking profile.", Level.INFO);
+		log("Done checking Facebook profile.", Level.INFO);
 	}
 
 	/**
