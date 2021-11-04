@@ -73,14 +73,11 @@ public class Instagram extends BasicSense{
 	
 	public static int MAX_LOOKUP = 100;
 	
-	protected String userName = "";
 	protected String id = "";
+	protected String userName = "";
+	protected String profileName = "";
 	protected String page = "";
 	protected String pageId = "";
-	protected String profileName = "";
-	protected String IGUserId = "";
-	protected String IGUserName = "";
-	protected String IGName = "";
 	
     protected String token = "";
     protected Date tokenExpiry;
@@ -126,14 +123,49 @@ public class Instagram extends BasicSense{
     	this.languageState = LanguageState.Discussion;
     }
     
-    // If changing properties does not work, clear the cache
-    public void disable() {
-    	isEnabled = false;
-    }
+	/**
+	 * Start sensing.
+	 */
+	@Override
+	public void awake() {
+		super.awake();
+		this.userName = this.bot.memory().getProperty("Instagram.userName");
+		if (this.userName == null) {
+			this.userName = "";
+		}
+		this.token = this.bot.memory().getProperty("Instagram.token");
+		if (this.token == null) {
+			this.token = "";
+		}
+		if (!this.token.isEmpty()) {
+			setIsEnabled(true);
+		}
+		
+		this.appOauthKey = this.bot.memory().getProperty("Instagram.appOauthKey");
+		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+			this.appOauthKey = Utils.decrypt(Utils.KEY, this.appOauthKey);
+		}
+		if (this.appOauthKey == null) {
+			this.appOauthKey = "";
+		}
+		
+		this.appOauthSecret = this.bot.memory().getProperty("Instagram.appOauthSecret");
+		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
+			this.appOauthSecret = Utils.decrypt(Utils.KEY, this.appOauthSecret);
+		}
+		if (this.appOauthSecret == null) {
+			this.appOauthSecret = "";
+		}
+	}
     
     public String getProfileName() {
     	initProperties();
     	return this.profileName;
+    }
+    
+    public void setProfileName(String profileName) {
+    	initProperties();
+    	this.profileName = profileName;
     }
 
     public String getUserName() {
@@ -145,30 +177,15 @@ public class Instagram extends BasicSense{
     	initProperties();
         this.userName = userName;
     }
-    
-    public String getIGUserName() {
-    	initProperties();
-    	return IGUserName;
-    }
-    
-    public void setIGUserName(String IGUserName) {
-    	initProperties();
-    	this.IGUserName = IGUserName;
-    }
-    
-    public String getIGName() {
-    	initProperties();
-    	return IGName;
-    }
-    
-    public void setIGName(String IGName) {
-    	initProperties();
-    	this.IGName = IGName;
-    }
 
-    public String getID() {
+    public String getId() {
     	initProperties();
         return id;
+    }
+    
+    public void setId(String id) {
+    	initProperties();
+        this.id = id;
     }
     
     public Date getTokenExpiry() {
@@ -186,11 +203,6 @@ public class Instagram extends BasicSense{
     	this.pageAccessToken = pageAccessToken;
     }
 
-    public void setID(String id) {
-    	initProperties();
-        this.id = id;
-    }
-    
     public String getToken() {
     	initProperties();
         return token;
@@ -219,16 +231,6 @@ public class Instagram extends BasicSense{
     public void setAppOauthSecret(String appOauthSecret) {
     	initProperties();
         this.appOauthSecret = appOauthSecret;
-    }
-
-    public String getApiBaseURL () {
-    	initProperties();
-    	return apiBaseURL;
-    }
-    
-    public String getGraphBaseURL () {
-    	initProperties();
-    	return graphBaseURL;
     }
     
     public int getMaxPost() {
@@ -312,10 +314,12 @@ public class Instagram extends BasicSense{
 	}
 	
 	public String getResult() {
+		initProperties();
 		return result;
 	}
 	
 	public void setResult(String result) {
+		initProperties();
 		this.result = result;
 	}
 	
@@ -324,7 +328,6 @@ public class Instagram extends BasicSense{
 	}
 
     public void setConnection (facebook4j.Facebook connection) {
-    	initProperties();
         this.connection = connection;
     }
     
@@ -341,63 +344,14 @@ public class Instagram extends BasicSense{
 	public List<String> getAutoPosts() {
 		initProperties();
 		return autoPosts;
-		//return network.createVertex(getPrimitive()).orderedRelations(Primitive.IGAUTOPOSTS);
 	}
 	
 	public void setAutoPosts(List<String> autoPosts) {
 		initProperties();
 		this.autoPosts = autoPosts;
 	}
-
-    /**
-     * Connect to facebook
-     */
-    public void connect() throws FacebookException {
-    	initProperties();
-    	ConfigurationBuilder config = new ConfigurationBuilder();
-		String key = "";
-		String secret = "";
-		
-		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-			key = this.appOauthKey;
-		}
-		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
-			secret = this.appOauthSecret;
-		}
-		
-		config.setOAuthAppId(key);
-		config.setOAuthAppSecret(secret);
-		config.setOAuthAccessToken(getToken());
-		facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
-		setConnection(facebook);
-    	
-    }
     
-    public void connectAccount() throws FacebookException {
-    	//connect();
-    	facebook4j.Facebook instagram = getConnection();
-		User user = instagram.getMe();
-		if (this.userName == null || !this.userName.equals(user.getId())) {
-			this.userName = user.getId();
-		}
-    	try {
-	    	RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
-	    	JSONObject result = res.asJSONObject();
-	    	setResult(result.toString());
-	    	String id = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
-	    	String userName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
-	    	setID(id);
-	    	setUserName(userName);
-	    	System.out.println(res);
-	    	System.out.println("Connect id"+id);
-    	} catch (Exception e) {
-    		log(e);
-    	}
-    	saveProperties();
-    }
-    
-    
-    public String authorizeAccount(String callbackURL) throws FacebookException {
+    public String authorizeAccount(String callbackURL) {
 		this.connection = new FacebookFactory().getInstance();
 		String key = "";
 		String secret = "";
@@ -423,37 +377,68 @@ public class Instagram extends BasicSense{
 		try {
 			AccessToken accessToken = this.connection.getOAuthAccessToken(pin);
 			setToken(accessToken.getToken());
-			
 			RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
-	    	JSONObject result = res.asJSONObject();
+    		JSONObject result = res.asJSONObject();
 	    	setResult(result.toString());
+	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
+	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
+	    	String IGName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("name");
 	    	
-	    	String tempId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
-	    	String tempUserName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
-	    	setID(tempId);
-	    	setUserName(tempUserName);
-	    	
-	    	System.out.println(res);
-	    	System.out.println("Connect id"+id);
-	    	
-	    	User user = this.connection.getMe();
-	    	System.out.println("User name is " + user.getName());
-			this.userName = user.getId();
-			if (accessToken.getExpires() != null) {
-				this.tokenExpiry = new Date(System.currentTimeMillis() + (accessToken.getExpires() * 1000));
-			}
-			
-			this.profileName = user.getName();
-			this.isEnabled = true;
+	    	setId(IGId);
+	    	setUserName(IGUsername);
+	    	setProfileName(IGName);
 			
 			saveProperties();
-			
-			
 		} catch (Exception e){
 			log(e);
 		}
-
 	}
+	
+	public void connect() throws FacebookException {
+		initProperties();
+		ConfigurationBuilder config = new ConfigurationBuilder();
+		String key = getAppOauthKey();
+		String secret = getAppOauthSecret();
+		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+			key = this.appOauthKey;
+		}
+		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
+			secret = this.appOauthSecret;
+		}
+		config.setOAuthAppId(key);
+		config.setOAuthAppSecret(secret);
+		config.setOAuthAccessToken(getToken());
+		facebook4j.Facebook instagram = new FacebookFactory(config.build()).getInstance();
+		setConnection(instagram);
+	}
+	
+	/**
+	 * Set the username, name and id of the instagram account in 
+	 * @throws FacebookException
+	 */
+	public void connectAccount() throws FacebookException {
+    	connect();
+    	facebook4j.Facebook instagram = getConnection();
+    	RawAPIResponse res = instagram.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
+    	try {
+    		// Set Facebook Properties
+    		
+    		JSONObject result = res.asJSONObject();
+	    	setResult(result.toString());
+	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
+	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
+	    	String IGName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("name");
+	    	
+	    	setId(IGId);
+	    	setUserName(IGUsername);
+	    	setProfileName(IGName);
+			
+			saveProperties();
+
+    	} catch (Exception e) {
+    		log(e);
+    	}
+    }
 	
 	/**
 	 * Check profile for comments
@@ -469,47 +454,6 @@ public class Instagram extends BasicSense{
 		}
 		log("Done checking Instagram profile.", Level.INFO);
 	}
-	
-	
-	public void testComment(String message) throws FacebookException {
-		if (this.connection == null) {
-			connectAccount();
-		}
-        try {
-            RawAPIResponse res = getConnection().callGetAPI("/" + this.id + "/media");
-            JSONObject result = res.asJSONObject();
-            setResult(result.toString());
-            JSONArray media = result.getJSONArray("data");
-            if (media.length() > 0) {
-            	postComment(media.getJSONObject(0).getString("id"), message);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-	
-	public void testReply() throws FacebookException {
-		if (this.connection == null) {
-			connectAccount();
-		}
-        try {
-            RawAPIResponse res = getConnection().callGetAPI("/" + this.id + "/media?fields=id,comments,timestamp");
-            JSONObject result = res.asJSONObject();
-            setResult(result.toString());
-            JSONArray media = result.getJSONArray("data");
-            if (media.length() > 0) {
-            	JSONObject comments = media.getJSONObject(0);
-            	setResult(comments.toString());
-            	if (comments.has("comments")) {
-            		JSONObject comment = comments.getJSONObject("comments").getJSONArray("data").getJSONObject(0);
-            		setResult(comment.toString());
-            		postReply(comment.getString("id"), "Replying to: " + comment.getString("text"));
-            	}
-            }
-        } catch (Exception e) {
-            return;
-        }
-    }
 	
 	public void postComment (String mediaID, String message) {
 		try {
@@ -536,12 +480,11 @@ public class Instagram extends BasicSense{
         }
     }
 	
-	public List<String> getUserMedia(String userID) throws FacebookException{
+	public List<String> getUserMedia(String userID) throws FacebookException {
 		if (this.connection == null) {
     		connectAccount();
     	}
         try {
-        	System.out.println("The userid is: " + userID);
             String nextURL = null;
             List<String> mediaIDs = new ArrayList<>();
             HashMap<String, String> params = new HashMap<>();
@@ -556,7 +499,6 @@ public class Instagram extends BasicSense{
                     res = getConnection().callGetAPI("/" + userID + "/media");
                 }
                 apiResult = res.asJSONObject();
-                //System.out.println("API RESULT:" + apiResult);
                 JSONArray media = apiResult.getJSONArray("data");
                 for (int index = 0; index < Math.min(media.length(), getMaxPost()); index++) {
                     JSONObject post = media.getJSONObject(index);
@@ -588,7 +530,7 @@ public class Instagram extends BasicSense{
                 try {
                     Thread.sleep(3000);
                 } catch (Exception e) {
-//                    log("Could not sleep: " + e.getMessage());
+                    log("Could not sleep: " + e.getMessage(), Level.FINE);
                 }
             }
         }
@@ -794,7 +736,7 @@ public class Instagram extends BasicSense{
 		log("Posting:", Level.INFO, text, reply);
 		try {
 			if (getConnection() == null) {
-				connect();
+				connectAccount();
 			}
 			if (reply != null) {
 				getConnection().commentPost(reply, format(text));
@@ -807,24 +749,37 @@ public class Instagram extends BasicSense{
 			log(exception.getMessage(), Level.WARNING, text);
 		}
 	}
+	
+	// Self API
+	public void post(Vertex source, Vertex sentence) {
+		if (sentence.instanceOf(Primitive.FORMULA)) {
+			Map<Vertex, Vertex> variables = new HashMap<Vertex, Vertex>();
+			SelfCompiler.addGlobalVariables(sentence.getNetwork().createInstance(Primitive.INPUT), null, sentence.getNetwork(), variables);
+			sentence = getBot().mind().getThought(Language.class).evaluateFormula(sentence, variables, sentence.getNetwork());
+			if (sentence == null) {
+				log("Invalid template formula", Level.WARNING, sentence);
+				return;
+			}
+		}
+		String post = getBot().mind().getThought(Language.class).getWord(sentence, sentence.getNetwork()).getDataValue();
+		getBot().stat("facebook.post");
+		post(post, null);
+	}
     
     // Process A comment
     public long[] processComment(JSONObject comment, JSONObject parent, Network memory, int count, long max, long last) throws JSONException, ParseException {
     	SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-    	System.out.println("The comment is" + comment);
     	
     	String text = comment.getString("text");
 		String commentId = comment.getString("id");
 		String authorId = comment.getString("username");
 		Date date = parser.parse(comment.getString("timestamp"));
-		long timestamp = date.getTime();
-		
-		input(comment, parent, memory);
+		long timestamp = date.getTime();		
 		
 		log("Processing post comment", Level.FINE, commentId, text);
 		
 		
-		if (true || count >= this.maxComment) {
+		if (count >= getMaxComment()) {
 			log("Max Comments reached", Level.FINE, count);
 			return null;
 		}
@@ -832,13 +787,14 @@ public class Instagram extends BasicSense{
 		if (timestamp > max) {
 			max = timestamp;
 		}
-		if (!authorId.equals(this.userName)) {
+		if (!authorId.equals(getUserName())) {
 			
-			if (true || (System.currentTimeMillis() - timestamp) > DAY) {
+			if ((System.currentTimeMillis() - timestamp) > DAY) {
+				System.out.println("Day old post comment");
 				log("Day old post comment", Level.FINE, commentId, timestamp);
 				return null;
 			}
-			if (true || timestamp > last) {
+			if (timestamp > last) {
 				if (getReplyAllComments() || containsKeywords(text)) {
 					count++;
 					log("Processing post comment", Level.FINE, text, authorId, userName);
@@ -856,6 +812,7 @@ public class Instagram extends BasicSense{
 		long[] values = new long[2];
 		values[0] = count;
 		values[1] = max;
+		System.out.println("Values " + values[0] + " " + values[1]);
 		return values;
 	}
     
@@ -872,7 +829,8 @@ public class Instagram extends BasicSense{
     	return match;
     }
     
-    public ArrayList<JSONObject> getCommentReplies(JSONObject comment){
+    /*
+    public ArrayList<JSONObject> getCommentReplies(JSONObject comment) {
     	ArrayList<JSONObject> data = new ArrayList<JSONObject>();
     	
     	try {
@@ -880,7 +838,7 @@ public class Instagram extends BasicSense{
         	q.add(comment);
         	while (!q.isEmpty()) {
         		JSONObject top = q.poll();
-        		String commentId = comment.getString("id");
+        		String commentId = top.getString("id");
         		
         		JSONObject res;
         		res = getConnection().callGetAPI("/" + commentId + "/replies?fields=from,id,text,replies").asJSONObject();
@@ -897,7 +855,7 @@ public class Instagram extends BasicSense{
     		log(e);
     		return null;
     	}
-    }
+    }*/
 
     // Reply to new comments
     public void answerNewComments() {
@@ -924,36 +882,39 @@ public class Instagram extends BasicSense{
             HashMap<String,String> params = new HashMap<>();
             params.put("fields", "id,timestamp,comments{id,username,text,timestamp,replies{id,username,text,timestamp}}");
 
-            List<String> posts = getUserMedia(getID());
+            List<String> posts = getUserMedia(getId());
             for(int i = 0; i < posts.size() && commentsProcessed < getMaxComment(); i++) {
             	if (next != null) {
                     params.put("after", next);
                 }
             	do {	
             		JSONObject apiResult = getConnection().callGetAPI("/" + posts.get(i), params).asJSONObject();
-            		System.out.println(apiResult);
+            		if (!apiResult.has("comments")) { continue; }
+            		
             		JSONArray comments = apiResult.getJSONObject("comments").getJSONArray("data");
             		
             		if (comments != null && comments.length() != 0) {
             			for (int j = 0; j < comments.length(); j++) {
             				JSONObject comment = comments.getJSONObject(j);
-            				System.out.println("Comment at " + j + comment);
+      
             				long[] values = processComment(comment, null, memory, commentsProcessed, max, last);
-							
-            				/*
+            				
             				if (values == null) {
 								break;
 							}
+
 							commentsProcessed = (int)values[0];
 							max = values[1];
 							if (commentsProcessed == -1) {
 								break;
-							}*/
+							}
 							
-							ArrayList<JSONObject> replies = getCommentReplies(comment);
-							if ((replies != null) && !replies.isEmpty()) {
-								for (int index2 = replies.size() - 1; index2 >= 0; index2--) {
-									JSONObject reply = replies.get(index2);
+							if (!comment.has("replies")) { continue; }
+							
+							JSONArray replies = comment.getJSONObject("replies").getJSONArray("data");
+							if ((replies != null) && replies.length() != 0) {
+								for (int index2 = replies.length() - 1; index2 >= 0; index2--) {
+									JSONObject reply = (JSONObject) replies.get(index2);
 									values = processComment(reply, comment, memory, commentsProcessed, max, last);
 									if (values == null) {
 										break;
@@ -966,7 +927,6 @@ public class Instagram extends BasicSense{
             		} else {
 						log("No comments", Level.FINE, posts.get(i));
 					}
-
             		
             		if (!complete && apiResult.has("paging") && apiResult.getJSONObject("paging").has("next")) {
                         next = apiResult.getJSONObject("paging").getJSONObject("cursors").getString("after");
@@ -974,8 +934,6 @@ public class Instagram extends BasicSense{
                         next = null;
                     }
             	} while(next != null && commentsProcessed < getMaxComment());
-            	
-     	
             }
             if (commentsProcessed >= getMaxComment()) { 
             	log("Max Comments Reached", Level.FINE);
@@ -1019,7 +977,8 @@ public class Instagram extends BasicSense{
     			}
     		}
     	} catch (Exception e) {
-//    		setResult(e.getMessage());
+    		log(e);
+    		setResult(e.getMessage());
     	}
     }
     
@@ -1049,13 +1008,12 @@ public class Instagram extends BasicSense{
 	 * Process the post comment.
 	 */
 	public void input(JSONObject comment, JSONObject parent, Network network) {
-		System.out.println("Input called");
-		/*
-		if (!isEnabled()) {
+		
+		if (!isEnabled() || !getcommentReplyEnabled()) {
+			log("Class and Comment Replies must be Enabled", Level.FINE);
 			return;
-		}*/
+		}
 		try {
-			System.out.println("Before here");
 			String text = comment.getString("text").trim();
 			String commentId = comment.getString("id");
 			String authorId = comment.getString("username");
@@ -1066,20 +1024,15 @@ public class Instagram extends BasicSense{
 			
 			
 			log("Processing post comment", Bot.FINE, text, commentId);
-			/*
+			
 			if ((System.currentTimeMillis() - timestamp) > DAY) {
 				log("Day old post commentt", Bot.FINE, commentId, timestamp);
 				return;
-			}*/
+			}
 			
 			log("Input post comment", Level.FINE, text, name);
 			this.postsProcessed++;
-			String id = commentId;
-			if (parent != null) {
-				id = parent.getString("id");
-			}
 			
-			System.out.println("here");
 			inputSentence(text, commentId, authorId, this.userName, commentId, timestamp, network);
 		} catch (Exception exception) {
 			log(exception);
@@ -1090,18 +1043,15 @@ public class Instagram extends BasicSense{
 	 * Process the text sentence.
 	 */
 	public void inputSentence(String text, String userId, String userName, String targetUserName, String messageId, long time, Network network) {
-		System.out.println("InputSentence called "+ messageId);
-		
 		Vertex input = createInput(text.trim(), network);
 		Vertex sentence = input.getRelationship(Primitive.INPUT);
-		
 		Vertex idVertex = network.createVertex(messageId);
 		
-		/*
-		if (sentence.hasRelationship(Primitive.IGCOMMENT, id)) {
-			log("Post already processed", Bot.FINE, id, time);
+		
+		if (sentence.hasRelationship(Primitive.IGCOMMENT, idVertex)) {
+			log("Comment already processed", Bot.FINE, id, time);
 			return;
-		}*/
+		}
 		sentence.addRelationship(Primitive.IGCOMMENT, idVertex);
 		input.addRelationship(Primitive.INSTANTIATION, Primitive.IGCOMMENT);
 		input.addRelationship(Primitive.CREATEDAT, network.createVertex(time));
@@ -1145,8 +1095,8 @@ public class Instagram extends BasicSense{
             checkEngaged(conversation);
         }
         conversation.addRelationship(Primitive.INSTANTIATION, Primitive.CONVERSATION);
-        conversation.addRelationship(Primitive.TYPE, Primitive.INSTAGRAM);
-        conversation.addRelationship(Primitive.ID, network.createVertex(id));
+        conversation.addRelationship(Primitive.TYPE, Primitive.IGCOMMENT);
+        conversation.addRelationship(Primitive.ID, conversationId);
         conversation.addRelationship(Primitive.SPEAKER, user);
         conversation.addRelationship(Primitive.SPEAKER, self);
         Language.addToConversation(input, conversation);
@@ -1168,43 +1118,60 @@ public class Instagram extends BasicSense{
     @Override
     public void output(Vertex output) {
     	System.out.println("Output called");
+    	if (!isEnabled()) {
+    		System.out.println("Disabled f");
+    		return;
+    	}
+    	
     	
     	Vertex sense = output.mostConscious(Primitive.SENSE);
-		// If not output to twitter, ignore.
+		// If not output to instagram, ignore.
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
 			notifyResponseListener();
 			return;
 		}
 		String text = printInput(output);
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
-		Vertex id = conversation.getRelationship(Primitive.ID);
-		String conversationId = id.printString();
-		
-		Vertex target = output.mostConscious(Primitive.TARGET);
-		String replyTo = conversationId;
-		if (target != null && target.hasRelationship(Primitive.WORD)) {
-			replyTo = target.mostConscious(Primitive.WORD).printString();
-		}
-		
-		Vertex command = output.mostConscious(Primitive.COMMAND);
-
-		if (this.responseListener != null) {
-			this.responseListener.reply = text;
-			notifyResponseListener();
-		}
-		
-		// If the response is empty, do not send it.
-		if (command == null && text.isEmpty()) {
-			return;
-		}
-		
-		System.out.println("Output called," + replyTo + "  " + text);
-		if (conversation.hasRelationship(Primitive.TYPE, Primitive.IGCOMMENT)) {
-			postReply(text, replyTo);
+    	
+		// Reply to Instagram Comments
+    	if (conversation.hasRelationship(Primitive.TYPE, Primitive.IGCOMMENT)) {
+    		output.addRelationship(Primitive.INSTANTIATION, Primitive.IGCOMMENT);
+    		Vertex question = output.getRelationship(Primitive.QUESTION);
+    		String reply = null;
+    		if (question != null) {
+    			Vertex idVertex = question.getRelationship(Primitive.ID);
+    			if (idVertex != null) {
+    				reply = (String)idVertex.getData();
+    			}
+    		}
+			postReply(text, reply);
+			
 		} else if (conversation.hasRelationship(Primitive.TYPE, Primitive.INSTAGRAM)) {
+			Vertex idVertex = conversation.getRelationship(Primitive.ID);
+			String conversationId = idVertex.printString();
+			
+			Vertex target = output.mostConscious(Primitive.TARGET);
+			String replyTo = conversationId;
+			if (target != null && target.hasRelationship(Primitive.WORD)) {
+				replyTo = target.mostConscious(Primitive.WORD).printString();
+			}
+			
+			Vertex command = output.mostConscious(Primitive.COMMAND);
+
+			if (this.responseListener != null) {
+				this.responseListener.reply = text;
+				notifyResponseListener();
+			}
+			
+			// If the response is empty, do not send it
+			if (command == null && text.isEmpty()) {
+				return;
+			}
+			
 			sendIGMessage(text, replyTo);
 		} else {
-			System.out.println("Invalid Reply Type");
+			System.out.println("Invalid message");
+			log("Invalid Message Type", Level.FINE);
 		}
 
     }
@@ -1226,179 +1193,172 @@ public class Instagram extends BasicSense{
 		}
 	} 
     
-    public void sendIGMessage(String text, String replyUser){
-    	log("Sending Instagram message:", Level.INFO, text, replyUser);
-
-    	String url = "https://graph.facebook.com/v12.0/me/messages?access_token="
-    		+getPageAccessToken();
-    	
-    	System.out.println(url);
-    	System.out.println(getPageAccessToken());
-
+    public void sendIGMessage(String text, String replyUser) {
+    	if (!isEnabled() || !getMessageEnabled()) { 
+    		log("Instagram Messaging disabled", Level.FINE);
+    		return; 
+    	}
+    	System.out.println("SendIGMEssage called");
     	try {
-			if (getMessageEnabled()) {
-				try {
-					// Check for HTML content and strip button elements.
-					String strippedText = format(text);
-					String postText = null;
-					
-					// Max size limit
-					if (strippedText.length() >= 320) {
-						TextStream stream = new TextStream(strippedText);
-						while (!stream.atEnd()) {
-							String message = stream.nextParagraph(320);
-							String json = null;
-							if (stream.atEnd()) {
-								postText = message;
-							} else {
-								json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(text) + "\"}}";
-								log("POST", Level.INFO, url, replyUser , json);
-								Utils.httpPOST(url, "application/json", json);
-								Utils.sleep(500);
-							}
-						}
-					} else {
-						postText = strippedText;
-					}
-					
-					Element root = null;
-					boolean linkFound = false;
-					
-					if ((text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
-						try {
-							root = getBot().awareness().getSense(Http.class).parseHTML(text);
+			// Check for HTML content and strip button elements.
+    		log("Processing Message:", Level.INFO, text, replyUser);
 
-							
-							/* Can be used later for generic templates
-							 * 
-							NodeList imageNodes = root.getElementsByTagName("img");
-							String image = null;
-							if (imageNodes.getLength() > 0) {
-								String src = ((Element)imageNodes.item(0)).getAttribute("src");
-								if (src != null && !src.isEmpty()) {
-									image = src;
-									String title = ((Element)imageNodes.item(0)).getAttribute("title");
-									if (title != null && !title.isEmpty()) {
-										imageTitle = title;
-									}
-								}
-							}*/
-							
-							// Check for <button> link tags.
-							NodeList nodes = root.getElementsByTagName("button");
-							if (nodes.getLength() > 0) {
-								// Check for <button> tags.
-								boolean quickReply = nodes.getLength() > 1 && nodes.getLength() <= 11;
-								if (quickReply) {
-									String buttonJSON = "";
-									String postText2 = postText;
-									for (int index = 0; index  < (Math.min(11, nodes.getLength())); index++) {
-										Element node = (Element)nodes.item(index);
-										String button = node.getTextContent().trim();
-										if (button != null && !button.isEmpty()) {
-											if (postText2 == null) {
-												postText2 = button;
-											}
-											if (!buttonJSON.isEmpty()) {
-												buttonJSON = buttonJSON + ", ";
-											}
-											button = Utils.escapeQuotesJS(button);
-											buttonJSON = buttonJSON + "{ \"content_type\": \"text\", \"payload\": \"" + button + "\", title: \"" + button + "\"}";
-											linkFound = true;
-										}
-									}
-									if (linkFound) {
-										String json = "{\"recipient\":{\"id\":\""
-													+ replyUser + "\"}, \"messaging_type\": \"RESPONSE\", \"message\":{ \"text\": \"" + Utils.escapeQuotesJS(postText2) + "\", \"quick_replies\": [ " + buttonJSON + " ]}}";
-										log("POST", Level.INFO, url, replyUser, json);
-										Utils.httpPOST(url, "application/json", json);
-										Utils.sleep(500);
-										postText = null;
-									}
-								} 
-							}
-							/* Test Temlate Later
-							int count = 0;
-							String buttonJSON = "";
-							
-							for (String button : extraButtons) {
-								button = Utils.escapeQuotesJS(button);
-								if (!buttonJSON.isEmpty()) {
-									buttonJSON = buttonJSON + ", ";
-								}
-								buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + button + "\", title: \"" + button + "\"}";
-								count++;
-								if (count == 3 || count == extraButtons.size()) {
-									String json = "{recipient:{id:\""
-											+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
-											+ "..." + "\", buttons: [ " + buttonJSON + " ]}}}}";
-									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
-									Utils.httpPOST(url, "application/json", json);
-									Utils.sleep(500);
-									buttonJSON = "";
-									count = 0;
-								}
-							} */
-						} catch (Exception exception) {
-							log(exception);
-						}
-					}
-					
-					if (postText != null) {
-						String json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
-						log("POST", Level.INFO, url, replyUser, json);
+        	String url = "https://graph.facebook.com/v12.0/me/messages?access_token="
+        		+getPageAccessToken();
+    		String strippedText = format(text);
+			String postText = null;
+			
+			// Max size limit
+			if (strippedText.length() >= 320) {
+				TextStream stream = new TextStream(strippedText);
+				while (!stream.atEnd()) {
+					String message = stream.nextParagraph(320);
+					String json = null;
+					if (stream.atEnd()) {
+						postText = message;
+					} else {
+						json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(text) + "\"}}";
+						log("POST", Level.INFO, url, replyUser , json);
 						Utils.httpPOST(url, "application/json", json);
 						Utils.sleep(500);
 					}
-					/* Use Later for Generic Templates
-					if (!linkFound && (text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
-						try {
-							NodeList nodes = root.getElementsByTagName("img");
-							for (int index = 0; index  < nodes.getLength(); index++) {
-								Element node = (Element)nodes.item(index);
-								String src = node.getAttribute("src");
-								if (src != null && !src.isEmpty()) {
-									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"image\", payload: { url: \"" + src + "\"}}}}";
-									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
-									Utils.httpPOST(url, "application/json", json);
-									Utils.sleep(500);
-								}
-							}
-							nodes = root.getElementsByTagName("audio");
-							for (int index = 0; index  < nodes.getLength(); index++) {
-								Element node = (Element)nodes.item(index);
-								String src = node.getAttribute("src");
-								if (src != null && !src.isEmpty()) {
-									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"audio\", payload: { url: \"" + src + "\"}}}}";
-									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
-									Utils.httpPOST(url, "application/json", json);
-									Utils.sleep(500);
-								}
-							}
-							nodes = root.getElementsByTagName("video");
-							for (int index = 0; index  < nodes.getLength(); index++) {
-								Element node = (Element)nodes.item(index);
-								String src = node.getAttribute("src");
-								if (src != null && !src.isEmpty()) {
-									String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"video\", payload: { url: \"" + src + "\"}}}}";
-									log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
-									Utils.httpPOST(url, "application/json", json);
-									Utils.sleep(500);
-								}
-							}
-						} catch (Exception exception) {
-							log(exception);
-						}
-					}
-					*/
-				} catch (Exception exception) {
-					this.errors++;
-					log(exception);
 				}
 			} else {
-				log("Instagram Messaging must be enabled.", Level.WARNING);
+				postText = strippedText;
 			}
+			
+			Element root = null;
+			boolean linkFound = false;
+			
+			if ((text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+				try {
+					root = getBot().awareness().getSense(Http.class).parseHTML(text);
+
+					
+					/* Can be used later for generic templates
+					 * 
+					NodeList imageNodes = root.getElementsByTagName("img");
+					String image = null;
+					if (imageNodes.getLength() > 0) {
+						String src = ((Element)imageNodes.item(0)).getAttribute("src");
+						if (src != null && !src.isEmpty()) {
+							image = src;
+							String title = ((Element)imageNodes.item(0)).getAttribute("title");
+							if (title != null && !title.isEmpty()) {
+								imageTitle = title;
+							}
+						}
+					}*/
+					
+					// Check for <button> link tags.
+					NodeList nodes = root.getElementsByTagName("button");
+					if (nodes.getLength() > 0) {
+						// Check for <button> tags.
+						boolean quickReply = nodes.getLength() > 1 && nodes.getLength() <= 11;
+						if (quickReply) {
+							String buttonJSON = "";
+							String postText2 = postText;
+							for (int index = 0; index  < (Math.min(11, nodes.getLength())); index++) {
+								Element node = (Element)nodes.item(index);
+								String button = node.getTextContent().trim();
+								if (button != null && !button.isEmpty()) {
+									if (postText2 == null) {
+										postText2 = button;
+									}
+									if (!buttonJSON.isEmpty()) {
+										buttonJSON = buttonJSON + ", ";
+									}
+									button = Utils.escapeQuotesJS(button);
+									buttonJSON = buttonJSON + "{ \"content_type\": \"text\", \"payload\": \"" + button + "\", title: \"" + button + "\"}";
+									linkFound = true;
+								}
+							}
+							if (linkFound) {
+								String json = "{\"recipient\":{\"id\":\""
+											+ replyUser + "\"}, \"messaging_type\": \"RESPONSE\", \"message\":{ \"text\": \"" + Utils.escapeQuotesJS(postText2) + "\", \"quick_replies\": [ " + buttonJSON + " ]}}";
+								log("POST", Level.INFO, url, replyUser, json);
+								Utils.httpPOST(url, "application/json", json);
+								Utils.sleep(500);
+								postText = null;
+							}
+						} 
+					}
+					/* Test Temlate Later
+					int count = 0;
+					String buttonJSON = "";
+					
+					for (String button : extraButtons) {
+						button = Utils.escapeQuotesJS(button);
+						if (!buttonJSON.isEmpty()) {
+							buttonJSON = buttonJSON + ", ";
+						}
+						buttonJSON = buttonJSON + "{ type: \"postback\", payload: \"" + button + "\", title: \"" + button + "\"}";
+						count++;
+						if (count == 3 || count == extraButtons.size()) {
+							String json = "{recipient:{id:\""
+									+ id + "\"}, message:{ attachment: { type: \"template\", payload: { template_type: \"button\", text: \""
+									+ "..." + "\", buttons: [ " + buttonJSON + " ]}}}}";
+							log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+							Utils.httpPOST(url, "application/json", json);
+							Utils.sleep(500);
+							buttonJSON = "";
+							count = 0;
+						}
+					} */
+				} catch (Exception exception) {
+					log(exception);
+				}
+			}
+			
+			if (postText != null) {
+				String json = "{recipient:{id:\"" + replyUser + "\"}, message:{ text:\"" + Utils.escapeQuotesJS(postText) + "\"}}";
+				log("POST", Level.INFO, url, replyUser, json);
+				Utils.httpPOST(url, "application/json", json);
+				Utils.sleep(500);
+			}
+			/* Use Later for Generic Templates
+			if (!linkFound && (text.indexOf('<') != -1) && (text.indexOf('>') != -1)) {
+				try {
+					NodeList nodes = root.getElementsByTagName("img");
+					for (int index = 0; index  < nodes.getLength(); index++) {
+						Element node = (Element)nodes.item(index);
+						String src = node.getAttribute("src");
+						if (src != null && !src.isEmpty()) {
+							String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"image\", payload: { url: \"" + src + "\"}}}}";
+							log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+							Utils.httpPOST(url, "application/json", json);
+							Utils.sleep(500);
+						}
+					}
+					nodes = root.getElementsByTagName("audio");
+					for (int index = 0; index  < nodes.getLength(); index++) {
+						Element node = (Element)nodes.item(index);
+						String src = node.getAttribute("src");
+						if (src != null && !src.isEmpty()) {
+							String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"audio\", payload: { url: \"" + src + "\"}}}}";
+							log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+							Utils.httpPOST(url, "application/json", json);
+							Utils.sleep(500);
+						}
+					}
+					nodes = root.getElementsByTagName("video");
+					for (int index = 0; index  < nodes.getLength(); index++) {
+						Element node = (Element)nodes.item(index);
+						String src = node.getAttribute("src");
+						if (src != null && !src.isEmpty()) {
+							String json = "{recipient:{id:\"" + id + "\"}, message:{ attachment:{ type: \"video\", payload: { url: \"" + src + "\"}}}}";
+							log("POST", Level.INFO, url, getFacebookMessengerAccessToken(), json);
+							Utils.httpPOST(url, "application/json", json);
+							Utils.sleep(500);
+						}
+					}
+				} catch (Exception exception) {
+					log(exception);
+				}
+			}
+			*/
 		} catch (Exception exception) {
+			this.errors++;
 			log(exception);
 		}
     }
@@ -1421,13 +1381,13 @@ public class Instagram extends BasicSense{
 	}
     
     public String inputInstagramMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
-		log("Input Instagram Message Called", Level.FINE);
+    	log("Input Instagram Message Called", Level.FINE);
     	Vertex user = network.createUniqueSpeaker(new Primitive(senderId), Primitive.INSTAGRAM);
 		if (!user.hasRelationship(Primitive.NAME)) {
 			String url = "https://graph.facebook.com/v12.0/me?fields=id,first_name,last_name&access_token="+ getToken();
 			String senderName = null;
 			try {
-				if (getConnection() == null) { connect(); }
+				if (getConnection() == null) { connectAccount(); }
 				String json = Utils.httpGET(url);
 				net.sf.json.JSONObject userJSON = (net.sf.json.JSONObject)JSONSerializer.toJSON(json);
 				if (userJSON != null) {
@@ -1481,6 +1441,8 @@ public class Instagram extends BasicSense{
 		
 		network.save();
 		getBot().memory().addActiveMemory(input);
+		
+		System.out.println("At bottom");
 		this.responseListener = new ResponseListener();
 		String reply = null;
 		synchronized (this.responseListener) {
@@ -1519,6 +1481,11 @@ public class Instagram extends BasicSense{
 			if (property != null) {
 				this.id = property;
 			}
+			property = this.bot.memory().getProperty("Instagram.profileName");
+			if (property != null) {
+				this.profileName = property;
+			}
+			
 			property = this.bot.memory().getProperty("Instagram.result");
 			if (property != null) {
 				this.result = property;
@@ -1552,11 +1519,6 @@ public class Instagram extends BasicSense{
 			property = this.bot.memory().getProperty("Instagram.autoPostEnabled");
 			if (property != null) {
 				this.autoPostEnabled = Boolean.valueOf(property);
-			}
-			
-			property = this.bot.memory().getProperty("Instagram.IGUserName");
-			if (property != null && !property.isEmpty()) {
-				this.IGUserName = Utils.decrypt(Utils.KEY, property);
 			}
 			
 			property = this.bot.memory().getProperty("Instagram.messageEnabled");
@@ -1613,8 +1575,7 @@ public class Instagram extends BasicSense{
 		memory.saveProperty("Instagram.token", this.token, true);
 		memory.saveProperty("Instagram.id", this.id, true);
 		memory.saveProperty("Instagram.result", this.result, true);
-		memory.saveProperty("Instagram.IGUserName", this.IGUserName, true);
-		memory.saveProperty("Instagram.IGName", this.IGName, true);
+		memory.saveProperty("Instagram.profileName", this.profileName, true);
 		
 		// Save the Oauthkey
 		if (this.appOauthKey == null || this.appOauthKey.isEmpty()) {
@@ -1675,8 +1636,6 @@ public class Instagram extends BasicSense{
 				facebook.addRelationship(Primitive.AUTOPOSTS, post);
 			}
 		}*/
-		
-		
 		
 		memory.createVertex(getPrimitive());
 		memory.save();
