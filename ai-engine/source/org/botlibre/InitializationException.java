@@ -27,6 +27,7 @@ public class InitializationException extends BotException {
 	
 	public InitializationException() {
 		super();
+		
 	}
 	
 	public InitializationException(String message) {
@@ -35,6 +36,7 @@ public class InitializationException extends BotException {
 	
 	public InitializationException(Exception exception) {
 		super(exception);
+		exception.printStackTrace();
 	}
 }
 
