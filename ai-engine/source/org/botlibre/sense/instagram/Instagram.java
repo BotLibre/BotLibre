@@ -563,7 +563,7 @@ public class Instagram extends BasicSense{
             String containerID = (String)apiResult.get("id");
             return containerID;
         } catch (Exception e) {
-        	System.out.println(e);
+        	log(e);
             return null;
         }
     }
@@ -818,7 +818,6 @@ public class Instagram extends BasicSense{
 		if (!authorId.equals(getUserName())) {
 			
 			if ((System.currentTimeMillis() - timestamp) > DAY) {
-				System.out.println("Day old post comment");
 				log("Day old post comment", Level.FINE, commentId, timestamp);
 				return null;
 			}
@@ -832,10 +831,10 @@ public class Instagram extends BasicSense{
 					log("Skipping post comment, missing keywords.", Level.FINE, text);
 				}
 			} else {
-				log("Old post comment", Level.INFO, commentId, timestamp);							
+				log("Old post comment", Level.INFO, commentId, timestamp);
 			}
 		} else {
-			log("Ignoring own comment", Level.INFO, commentId);							
+			log("Ignoring own comment", Level.INFO, commentId);
 		}
 		long[] values = new long[2];
 		values[0] = count;
@@ -1145,13 +1144,6 @@ public class Instagram extends BasicSense{
     
     @Override
     public void output(Vertex output) {
-    	System.out.println("Output called");
-    	if (!isEnabled()) {
-    		System.out.println("Disabled f");
-    		return;
-    	}
-    	
-    	
     	Vertex sense = output.mostConscious(Primitive.SENSE);
 		// If not output to instagram, ignore.
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
@@ -1198,7 +1190,6 @@ public class Instagram extends BasicSense{
 			
 			sendIGMessage(text, replyTo);
 		} else {
-			System.out.println("Invalid message");
 			log("Invalid Message Type", Level.FINE);
 		}
 
@@ -1226,7 +1217,6 @@ public class Instagram extends BasicSense{
     		log("Instagram Messaging disabled", Level.FINE);
     		return; 
     	}
-    	System.out.println("SendIGMEssage called");
     	try {
 			// Check for HTML content and strip button elements.
     		log("Processing Message:", Level.INFO, text, replyUser);
