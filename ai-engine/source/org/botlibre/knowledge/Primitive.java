@@ -487,8 +487,10 @@ public class Primitive implements Serializable {
 	public static final Primitive IGAUTOPOSTHOURS = new Primitive("IGAutoPostHours");
 	public static final Primitive IGAUTOPOSTS = new Primitive("IGAutoPosts");
 	public static final Primitive IGLASTPOST = new Primitive("IGLastPost");
-	
+	public static final Primitive IGLASTRSS = new Primitive("IGLastRss");
 	public static final Primitive INSTAGRAM = new Primitive("instagram");
+	public static final Primitive IGRSSKEYWORDS = new Primitive("IGRssKeywords");
+	public static final Primitive IGRSSLINKS = new Primitive("IGRssLinks");
 	
 	// Twitter
 	public static final Primitive TWITTERADDRESS = new Primitive("twitteraddress");

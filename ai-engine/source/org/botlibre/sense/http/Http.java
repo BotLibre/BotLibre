@@ -1716,6 +1716,12 @@ public class Http extends BasicSense {
 					} else {
 						continue;
 					}
+					children = entry.getElementsByTagName("description");
+					if ((children != null) && (children.getLength() > 0)) {
+						map.put("description", children.item(0).getTextContent());
+					} else {
+						continue;
+					}
 					children = entry.getElementsByTagName("content");
 					if ((children != null) && (children.getLength() > 0)) {
 						map.put("content", children.item(0).getTextContent());
@@ -1729,6 +1735,19 @@ public class Http extends BasicSense {
 						if ((rel != null) && rel.equals("alternate")) {
 							map.put("link", link.getAttribute("href"));							
 						}						
+					}
+					Element e = (Element) children.item(0);
+					children = entry.getElementsByTagName("media:content");
+					if ((children != null) && (children.getLength() > 0)) {
+						map.put("url", e.getAttribute("url"));
+						
+					} else {
+						continue;
+					}
+					children = entry.getElementsByTagName("media:description");
+					e = (Element) children.item(0);
+					if (children != null && children.getLength() > 0) {
+						map.put("mediaDescription", e.getTextContent());
 					}
 					feed.add(map);
 				}
@@ -1775,12 +1794,32 @@ public class Http extends BasicSense {
 							} else {
 								continue;
 							}
+							children = entry.getElementsByTagName("description");
+							if ((children != null) && (children.getLength() > 0)) {
+								map.put("description", children.item(0).getTextContent());
+							} else {
+								continue;
+							}
 							children = entry.getElementsByTagName("link");
 							if ((children != null) && (children.getLength() > 0)) {
 								map.put("link", children.item(0).getTextContent());
 							} else {
 								continue;
 							}
+							Element e = (Element) children.item(0);
+							children = entry.getElementsByTagName("media:content");
+							if ((children != null) && (children.getLength() > 0)) {
+								map.put("url", e.getAttribute("url"));
+								
+							} else {
+								continue;
+							}
+							children = entry.getElementsByTagName("media:description");
+							e = (Element) children.item(0);
+							if (children != null && children.getLength() > 0) {
+								map.put("mediaDescription", e.getTextContent());
+							}
+							
 							feed.add(map);
 						}
 					}
