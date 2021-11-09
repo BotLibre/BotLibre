@@ -95,6 +95,7 @@ public class Instagram extends BasicSense{
     protected int maxPost = 20;
     protected int maxComment = 50;
     protected int maxError = 5;
+    protected int maxFeed = 20;
     protected int posts;
     protected int likes;
     protected int errors;
@@ -105,11 +106,14 @@ public class Instagram extends BasicSense{
     
     protected List<String> commentKeywords = new ArrayList<>();
     protected List<String> autoPosts = new ArrayList<>();
+    protected List<String> rssKeywords = new ArrayList<>();
+    protected List<String> rssLinks = new ArrayList<>();
     
     protected boolean messageEnabled = false;
     protected boolean commentReplyEnabled = false;
     protected boolean replyAllComments = false;
     protected boolean autoPostEnabled = false;
+    protected boolean rssEnabled = false;
     
     private facebook4j.Facebook connection;
     
@@ -264,12 +268,12 @@ public class Instagram extends BasicSense{
 		this.maxComment = maxComment;
 	}
 	
-	public boolean getcommentReplyEnabled () {
+	public boolean getCommentReplyEnabled () {
     	initProperties();
 		return commentReplyEnabled;
 	}
 	
-	public void setcommentReplyEnabled (boolean commentReplyEnabled) {
+	public void setCommentReplyEnabled (boolean commentReplyEnabled) {
     	initProperties();
 		this.commentReplyEnabled = commentReplyEnabled;
 	}
@@ -337,9 +341,9 @@ public class Instagram extends BasicSense{
 		return commentKeywords;
 	}
 
-	public void setCommentKeywords(List<String> statusKeywords) {
+	public void setCommentKeywords(List<String> commentKeywords) {
 		initProperties();
-		this.commentKeywords = new ArrayList<>(statusKeywords);
+		this.commentKeywords = new ArrayList<>(commentKeywords);
 	}
 	
 	public List<String> getAutoPosts() {
@@ -351,7 +355,37 @@ public class Instagram extends BasicSense{
 		initProperties();
 		this.autoPosts = new ArrayList<>(autoPosts);
 	}
-    
+	
+	public boolean getRssEnabled() {
+		initProperties();
+		return rssEnabled;
+	}
+	
+	public void setRssEnabled(boolean rssEnabled) {
+		initProperties();
+		this.rssEnabled = rssEnabled;
+	}
+	
+	public List<String> getRssKeywords() {
+		initProperties();
+		return rssKeywords;
+	}
+
+	public void setRssKeywords(List<String> rssKeywords) {
+		initProperties();
+		this.commentKeywords = new ArrayList<>(rssKeywords);
+	}
+	
+	public List<String> getRssLinks() {
+		initProperties();
+		return rssLinks;
+	}
+
+	public void setRssLinks(List<String> rssLinks) {
+		initProperties();
+		this.rssLinks = new ArrayList<>(rssLinks);
+	}
+	
     public String authorizeAccount(String callbackURL) {
 		this.connection = new FacebookFactory().getInstance();
 		String key = "";
@@ -446,9 +480,9 @@ public class Instagram extends BasicSense{
 	public void checkProfile() {
 		log("Checking Instagram profile.", Level.INFO);
 		try {
-			if (getcommentReplyEnabled()) { answerNewComments(); }
-			if (getAutoPostEnabled()) { checkAutoPost(); }
-			//checkRSS();
+			answerNewComments();
+			checkAutoPost();
+			checkRSS();
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -686,6 +720,7 @@ public class Instagram extends BasicSense{
     
     public void checkAutoPost() {
     	if (!getAutoPostEnabled()) {
+    		log("AutoPosting is disabled", Level.FINE);
 			return;
 		}
     	log("Autoposting", Level.FINE);
@@ -887,8 +922,12 @@ public class Instagram extends BasicSense{
 
     // Reply to new comments
     public void answerNewComments() {
-    	log("Checking for new comments", Level.FINE);
+    	if (!getCommentReplyEnabled()) {
+    		log("Comments are disabled", Level.FINE);
+    		return;
+    	}
     	
+    	log("Checking for new comments", Level.FINE);
         try {
         	if (this.connection == null) {
         		connectAccount();
@@ -1037,7 +1076,7 @@ public class Instagram extends BasicSense{
 	 */
 	public void input(JSONObject comment, JSONObject parent, Network network) {
 		
-		if (!isEnabled() || !getcommentReplyEnabled()) {
+		if (!isEnabled() || !getCommentReplyEnabled()) {
 			log("Class and Comment Replies must be Enabled", Level.FINE);
 			return;
 		}
@@ -1219,7 +1258,119 @@ public class Instagram extends BasicSense{
 			e.printStackTrace();
 			return "";
 		}
-	} 
+	}
+    
+    /**
+	 * Check RSS feed.
+	 */
+	public void checkRSS() {
+		if (!getRssEnabled() || getRssLinks().isEmpty()) {
+			log("RSS Feed Instagram disabled or empty", Level.FINE);
+			return;
+		}
+		log("Processing Instagram RSS", Level.FINE, getRssLinks());
+		try {
+			Network memory = getBot().memory().newMemory();
+			Vertex instagram = memory.createVertex(getPrimitive());
+			Vertex vertex = instagram.getRelationship(Primitive.IGLASTRSS);
+			long last = 0;
+			if (vertex != null) {
+				last = ((Number)vertex.getData()).longValue();
+			}
+			for (String rss : getRssLinks()) {
+				TextStream stream = new TextStream(rss);
+				String prefix = stream.upToAll("http").trim();
+				if (prefix.isEmpty()) {
+					prefix = "";
+				}
+				prefix = prefix + " ";
+				String url = stream.nextWord();
+				String postfix = " " + stream.upToEnd().trim();
+				List<Map<String, Object>> feed = getBot().awareness().getSense(Http.class).parseRSSFeed(Utils.safeURL(url), last);
+				if (feed != null) {
+					long max = 0;
+					int count = 0;
+					this.errors = 0;
+					for (int index = feed.size() - 1; index >= 0; index--) {
+						Map<String, Object> entry = feed.get(index);
+						long time = (Long)entry.get("published");
+						if ((System.currentTimeMillis() - time) > DAY) {
+							continue;
+						}
+						if (time > last) {
+							if (count > this.maxFeed) {
+								break;
+							}
+							if (this.errors > this.maxError) {
+								break;
+							}
+							String text = (String)entry.get("title");
+							String mediaDescription = (String) entry.get("mediaDescription");
+							String description = (String) entry.get("description");
+							String imageURL = (String)entry.get("url");
+							if (!getRssKeywords().isEmpty()) {
+								boolean match = false;
+								List<String> words = new TextStream(text.toLowerCase()).allWords();
+								for (String keywords : getRssKeywords()) {
+									List<String> keyWords = new TextStream(keywords.toLowerCase()).allWords();
+									if (!keyWords.isEmpty()) {
+										if (words.containsAll(keyWords)) {
+											match = true;
+											break;
+										}
+									}
+								}
+								if (!match) {
+									log("Skipping RSS, missing keywords", Level.FINE, text);
+									continue;
+								}
+							}
+							log("Posting RSS", Level.FINE, entry.get("title"));
+							text = prefix + text + postfix;
+							if (text.length() > 120) {
+								text = text.substring(0, 120);
+							}
+							
+							if (imageURL != null && (imageURL.endsWith("jpg") || 
+									imageURL.endsWith("jpeg"))) {
+								String caption = "";
+								if (mediaDescription != null) {
+									caption += mediaDescription + "\n";
+								}
+								if (text != null) {
+									caption += text + "\n";
+								}
+								if (description != null) {
+									caption += description;
+								}
+								
+								// Current IG Caption limit is 2200 chars
+								if (caption.length() > 2200) {
+									caption = caption.substring(0, 2200);
+								}
+								postImageMedia(getId(), imageURL, caption);
+								log("Posted RSS " + caption, Level.FINE);
+							
+								Utils.sleep(500);
+								count++;
+								if (time > max) {
+									max = time;
+								}
+							} else {
+								log("Invalid URL" + imageURL, Level.INFO);
+							}
+						}
+					}
+					if (max != 0) {
+						instagram.setRelationship(Primitive.LASTRSS, memory.createVertex(max));
+						memory.save();
+					}
+				}
+			}
+		} catch (Exception exception) {
+			log(exception);
+		}
+	}
     
     public void sendIGMessage(String text, String replyUser) {
     	if (!isEnabled() || !getMessageEnabled()) { 
@@ -1407,6 +1558,20 @@ public class Instagram extends BasicSense{
 		}
 		return text;
 	}
+	
+	public ArrayList<String> parseRelationships(List<Relationship> relationships) {
+		ArrayList<String> temp = new ArrayList<>();
+		if (relationships != null) {
+			for (Relationship relationship : relationships) {
+				String text = ((String)relationship.getTarget().getData()).trim();
+				if (!text.isEmpty()) {
+					temp.add(text);
+				}
+			}
+			return temp;
+		} 
+		return null;
+	}
     
     public String inputInstagramMessage(String text, String targetUserName, String senderId, net.sf.json.JSONObject message, Network network) {
     	log("Input Instagram Message Called", Level.FINE);
@@ -1548,6 +1713,11 @@ public class Instagram extends BasicSense{
 				this.autoPostEnabled = Boolean.valueOf(property);
 			}
 			
+			property = this.bot.memory().getProperty("Instagram.rssEnabled");
+			if (property != null) {
+				this.rssEnabled = Boolean.valueOf(property);
+			}
+			
 			property = this.bot.memory().getProperty("Instagram.messageEnabled");
 			if (property != null) {
 				this.messageEnabled = Boolean.valueOf(property);
@@ -1563,16 +1733,24 @@ public class Instagram extends BasicSense{
 				this.replyAllComments = Boolean.valueOf(property);
 			}
 			
-			ArrayList<String> temp = new ArrayList<>();
+			ArrayList<String> temp;
+			
 			List<Relationship> keywords = instagram.orderedRelationships(Primitive.IGCOMMENTKEYWORDS);
-			if (keywords != null) {
-				for (Relationship relationship : keywords) {
-					String text = ((String)relationship.getTarget().getData()).trim();
-					if (!text.isEmpty()) {
-						temp.add(text);
-					}
-				}
+			temp = parseRelationships(keywords);
+			if (temp != null) {
 				this.commentKeywords = temp;
+			}
+			
+			List<Relationship> rsslinks = instagram.orderedRelationships(Primitive.IGRSSLINKS);
+			temp = parseRelationships(rsslinks);
+			if (temp != null) {
+				this.rssLinks = temp;
+			}
+			
+			List<Relationship> rsskeywords = instagram.orderedRelationships(Primitive.IGRSSKEYWORDS);
+			temp = parseRelationships(rsskeywords);
+			if (temp != null) {
+				this.rssKeywords = temp;
 			}
 			
 			temp = new ArrayList<>();
@@ -1635,6 +1813,8 @@ public class Instagram extends BasicSense{
 		memory.saveProperty("Instagram.maxComment", String.valueOf(this.maxComment), true);
 		memory.saveProperty("Instagram.replyAllComments", String.valueOf(this.replyAllComments), true);
 		
+		memory.saveProperty("Instagram.rssEnabled", String.valueOf(this.rssEnabled), true);
+		
 		Vertex instagram = memory.createVertex(getPrimitive());
 		instagram.unpinChildren();
 		
@@ -1644,6 +1824,17 @@ public class Instagram extends BasicSense{
 			instagram.addRelationship(Primitive.IGCOMMENTKEYWORDS, keywords);
 		}
 		
+		instagram.internalRemoveRelationships(Primitive.IGRSSKEYWORDS);
+		for (String text : this.rssKeywords) {
+			Vertex keywords =  memory.createVertex(text);
+			instagram.addRelationship(Primitive.IGRSSKEYWORDS, keywords);
+		}
+		
+		instagram.internalRemoveRelationships(Primitive.IGRSSLINKS);
+		for (String text : this.rssLinks) {
+			Vertex keywords =  memory.createVertex(text);
+			instagram.addRelationship(Primitive.IGRSSLINKS, keywords);
+		}
 		
 		if (!this.autoPosts.isEmpty()) {
 			Collection<Relationship> old = instagram.getRelationships(Primitive.IGAUTOPOSTS);
