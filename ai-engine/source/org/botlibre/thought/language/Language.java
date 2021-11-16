@@ -908,7 +908,7 @@ public class Language extends BasicThought {
 	 */
 	public static void addSentenceConditionMeta(Vertex question, Vertex answer, Primitive responseType, String condition, boolean pin, Network network) {
 		if (condition == null || condition.trim().isEmpty()) {
-			clearSentenceMeta(question, answer, Primitive.CONDITION, network);
+			clearSentenceMeta(question, answer, Primitive.CONDITION, responseType, network);
 		} else {
 			Vertex expression = network.createTemplate("Template(\"{if (true == (" + condition + ")) { \"true\" } else { \"false\" }}\")");
 			if (pin) {
