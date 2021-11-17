@@ -396,6 +396,8 @@ public class Instagram extends BasicSense{
 		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
 			secret = this.appOauthSecret;
 		}
+		
+		log("Key: " + key + " Secret: " + secret, Level.FINE);
 		this.connection.setOAuthAppId(key, secret);
 		this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
 				+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
@@ -414,6 +416,8 @@ public class Instagram extends BasicSense{
 			setToken(accessToken.getToken());
 			RawAPIResponse res = this.connection.callGetAPI("/me/accounts?fields=instagram_business_account{id,name,username}");
     		JSONObject result = res.asJSONObject();
+    		log("AuthorizeComplete fetch result " + result.toString(), Level.FINE);
+    		
 	    	setResult(result.toString());
 	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
 	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
@@ -434,6 +438,8 @@ public class Instagram extends BasicSense{
 		ConfigurationBuilder config = new ConfigurationBuilder();
 		String key = getAppOauthKey();
 		String secret = getAppOauthSecret();
+		log("Connect Key: " + key + " Secret: " + secret, Level.FINE);
+		
 		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
 			key = this.appOauthKey;
 		}
