@@ -399,9 +399,9 @@ public class Instagram extends BasicSense{
 		
 		log("Key: " + key + " Secret: " + secret, Level.FINE);
 		this.connection.setOAuthAppId(key, secret);
-		this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,ads_management,"
+		this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,"
 				+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
-				+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,pages_manage_ads,"
+				+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,"
 				+ "pages_manage_posts,pages_manage_engagement,public_profile");
 		
 		return this.connection.getOAuthAuthorizationURL(callbackURL);
@@ -468,7 +468,7 @@ public class Instagram extends BasicSense{
 	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
 	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
 	    	String IGName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("name");
-	    	
+	    	log("Inside connect " + result.toString(), Level.FINE);
 	    	setId(IGId);
 	    	setUserName(IGUsername);
 	    	setProfileName(IGName);
