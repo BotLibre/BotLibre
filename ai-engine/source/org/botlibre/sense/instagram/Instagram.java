@@ -399,10 +399,10 @@ public class Instagram extends BasicSense{
 		
 		log("Key: " + key + " Secret: " + secret, Level.FINE);
 		this.connection.setOAuthAppId(key, secret);
-		this.connection.setOAuthPermissions("pages_manage_cta,pages_manage_instant_articles,pages_show_list,"
-				+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,instagram_manage_insights,"
-				+ "instagram_content_publish,pages_read_engagement,pages_manage_metadata,pages_read_user_content,"
-				+ "pages_manage_posts,pages_manage_engagement,public_profile");
+		this.connection.setOAuthPermissions("pages_manage_cta,pages_show_list,"
+				+ "business_management,pages_messaging,instagram_basic,instagram_manage_comments,"
+				+ "instagram_content_publish,pages_manage_metadata,pages_read_user_content,"
+				+ "pages_manage_posts,public_profile");
 		
 		return this.connection.getOAuthAuthorizationURL(callbackURL);
 	}
@@ -1832,7 +1832,7 @@ public class Instagram extends BasicSense{
 			instagram.addRelationship(Primitive.IGRSSLINKS, keywords);
 		}
 		
-		if (!this.autoPosts.isEmpty()) {
+		if (this.autoPosts != null) {
 			Collection<Relationship> old = instagram.getRelationships(Primitive.IGAUTOPOSTS);
 			if (old != null) {
 				for (Relationship post : old) {
