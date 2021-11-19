@@ -419,9 +419,9 @@ public class Instagram extends BasicSense{
     		log("AuthorizeComplete fetch result " + result.toString(), Level.FINE);
     		
 	    	setResult(result.toString());
-	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
-	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
-	    	String IGName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("name");
+	    	String IGId = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("id");
+	    	String IGUsername = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("username");
+	    	String IGName = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("name");
 	    	
 	    	setId(IGId);
 	    	setUserName(IGUsername);
