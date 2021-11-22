@@ -17,25 +17,18 @@
  ******************************************************************************/
 package org.botlibre.sense.instagram;
 
-import java.io.StringWriter;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
 import java.util.logging.Level;
 
 import org.botlibre.Bot;
-import org.botlibre.BotException;
 import org.botlibre.api.knowledge.Network;
 import org.botlibre.api.knowledge.Relationship;
 import org.botlibre.api.knowledge.Vertex;
@@ -43,7 +36,6 @@ import org.botlibre.knowledge.Primitive;
 import org.botlibre.self.SelfCompiler;
 import org.botlibre.sense.BasicSense;
 import org.botlibre.sense.ResponseListener;
-import org.botlibre.sense.facebook.Facebook;
 import org.botlibre.sense.http.Http;
 import org.botlibre.thought.language.Language;
 import org.botlibre.thought.language.Language.LanguageState;
@@ -52,14 +44,10 @@ import org.botlibre.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import facebook4j.Account;
-import facebook4j.Comment;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
 import facebook4j.PostUpdate;
 import facebook4j.RawAPIResponse;
-import facebook4j.ResponseList;
-import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
 import facebook4j.internal.org.json.JSONArray;
@@ -85,9 +73,7 @@ public class Instagram extends BasicSense{
     protected String appOauthKey = "";
     protected String appOauthSecret = "";
     protected String pageAccessToken = "";
-    
-    protected String result = "";
-    
+        
     protected final String graphVersion = "v12.0";
     protected final String apiBaseURL = "https://api.facebook.com/";
     protected final String graphBaseURL = "https://graph.facebook.com/";
@@ -318,16 +304,6 @@ public class Instagram extends BasicSense{
 		this.messageEnabled = messageEnabled;
 	}
 	
-	public String getResult() {
-		initProperties();
-		return result;
-	}
-	
-	public void setResult(String result) {
-		initProperties();
-		this.result = result;
-	}
-	
 	public facebook4j.Facebook getConnection() {
 		return this.connection;
 	}
@@ -418,7 +394,6 @@ public class Instagram extends BasicSense{
     		JSONObject result = res.asJSONObject();
     		log("AuthorizeComplete fetch result " + result.toString(), Level.FINE);
     		
-	    	setResult(result.toString());
 	    	String IGId = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("id");
 	    	String IGUsername = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("username");
 	    	String IGName = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("name");
@@ -464,7 +439,6 @@ public class Instagram extends BasicSense{
     	try {
     		// Set Instagram Properties
     		JSONObject result = res.asJSONObject();
-	    	setResult(result.toString());
 	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
 	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
 	    	String IGName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("name");
@@ -508,14 +482,13 @@ public class Instagram extends BasicSense{
 		}
 	}*/
 	
-	public void postReply (String text, String commentID) {
+	public void postReply(String text, String commentID) {
         try {
 //            POST /{ig-comment-id}/replies?message={message}
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("message", text);
             params.put("comment_enabled", "true");
             RawAPIResponse res = getConnection().callPostAPI("/" + commentID + "/replies", params);
-            setResult(res.asJSONObject().toString());
         } catch (Exception e) {
         	log(e);
         }
@@ -553,7 +526,6 @@ public class Instagram extends BasicSense{
                 }
             } while (nextURL != null);
 
-            setResult(mediaIDs.toString());
             return mediaIDs;
         } catch (Exception e) {
             log(e);
@@ -1018,7 +990,6 @@ public class Instagram extends BasicSense{
     		
         } catch (Exception e) {
         	log(e);
-            setResult(e.getMessage());
         }
     }
     
@@ -1029,7 +1000,6 @@ public class Instagram extends BasicSense{
     		params.put("fields", "id,caption,comments{id,user,username,text,timestamp}");
     		RawAPIResponse res = connection.callGetAPI(this.id + "/media", params);
     		JSONArray result = res.asJSONObject().getJSONArray("data");
-    		setResult(res.asJSONObject().toString());
     		if (result.length() > 0) {
     			JSONObject media = result.getJSONObject(0);
     			if (media.has("comments")) {
@@ -1038,19 +1008,11 @@ public class Instagram extends BasicSense{
     				String from = comment.getString("username");
     				String text = comment.getString("text");
     				String target = this.userName;
-    				setResult("From: " + from +
-    						"\nTarget: " + target +
-    						"\nText: " + text +
-    						"\nConversation ID: " + conversationID);
     				String message = processMessage(from, from, target, text, conversationID);
-    				if (message != null) {
-    					setResult("Message: " + message);
-    				}
     			}
     		}
     	} catch (Exception e) {
     		log(e);
-    		setResult(e.getMessage());
     	}
     }
     
@@ -1674,11 +1636,6 @@ public class Instagram extends BasicSense{
 				this.profileName = property;
 			}
 			
-			property = this.bot.memory().getProperty("Instagram.result");
-			if (property != null) {
-				this.result = property;
-			}
-			
 			property = this.bot.memory().getProperty("Instagram.token");
 			if (property != null) {
 				this.token = property;
@@ -1777,7 +1734,6 @@ public class Instagram extends BasicSense{
 		memory.saveProperty("Instagram.userName", this.userName, true);
 		memory.saveProperty("Instagram.profileName", this.profileName, true);
 		memory.saveProperty("Instagram.id", this.id, true);
-		memory.saveProperty("Instagram.result", this.result, true);
 		memory.saveProperty("Instagram.token", this.token, true);
 		
 		// Save the Oauthkey
