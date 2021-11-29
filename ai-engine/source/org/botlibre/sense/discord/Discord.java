@@ -134,11 +134,11 @@ public class Discord extends BasicSense {
 				}
 				if (!discord.getMentionedUsers().isEmpty()) {
 					recipientId = discord.getMentionedUsers().get(0).getIdAsString();
-					recipientName = discord.getMentionedUsers().get(0).getDiscriminatedName();
+					recipientName = discord.getMentionedUsers().get(0).getName();
 				}
 			} else {
 				recipientId = discord.getApi().getYourself().getIdAsString();
-				recipientName = discord.getApi().getYourself().getDiscriminatedName();
+				recipientName = discord.getApi().getYourself().getName();
 			}
 			String text = Jsoup.parse(Processor.process(discord.getContent())).text();
 			String conversationId = discord.getChannel().getIdAsString();
