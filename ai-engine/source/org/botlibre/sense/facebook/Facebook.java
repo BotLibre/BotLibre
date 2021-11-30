@@ -53,11 +53,13 @@ import facebook4j.Friend;
 import facebook4j.PagableList;
 import facebook4j.Post;
 import facebook4j.PostUpdate;
+import facebook4j.RawAPIResponse;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
 import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
+import facebook4j.internal.org.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -68,6 +70,8 @@ public class Facebook extends BasicSense {
 	public static int MAX_LOOKUP = 100;
 	public static String oauthKey = "key";
 	public static String oauthSecret = "secret";
+	public static String appName = "";
+	public String webhook = "";
 	
 	protected String userName = "";
 	protected String token = "";
@@ -75,7 +79,14 @@ public class Facebook extends BasicSense {
 	public String appOauthKey = "";
 	public String appOauthSecret = "";
 	
+	protected String pageId = "";
+	protected List<Map<String, String>> pages = new ArrayList<>();
+	protected String profileName = "";
+	
 	protected boolean initProperties;
+	protected boolean customApp = false;
+	protected boolean authorized = false;
+	protected boolean pageConnected = false;
 	
 	protected boolean autoFriend = false;
 	protected String welcomeMessage = "";
@@ -104,9 +115,7 @@ public class Facebook extends BasicSense {
 	protected boolean autoPost = false;
 	protected int autoPostHours = 24;
 	protected String page = "";
-	protected String pageId = "";
-	protected List<String> pages = new ArrayList<String>();
-	protected String profileName = "";
+	
 	protected List<String> likeKeywords = new ArrayList<String>();
 	protected List<String> postRSS = new ArrayList<String>();
 	protected List<String> rssKeywords = new ArrayList<String>();
@@ -124,6 +133,152 @@ public class Facebook extends BasicSense {
 
 	protected facebook4j.Facebook connection;	
 	
+	// Install the app in the facebook page
+	public void installApp() throws FacebookException {
+		
+		log("Installing BotLibre app on Facebook Page " + this.page, Level.INFO);
+		Map<String, String> params = new HashMap<>();
+		params.put("access_token", getFacebookMessengerAccessToken());
+		params.put("subscribed_fields", "messages");
+		
+		String path = "/" + getPageId() + "/subscribed_apps";
+		RawAPIResponse res = getConnection().callPostAPI(path, params);
+		log("App installation success", Level.INFO, res.asString());
+	}
+	
+	// Check if app is installed in the facebook page
+	public boolean checkAppInstalled() throws FacebookException {
+		log("Checking for Botlibre app installations", Level.INFO);
+		
+		String path = "/" + getPageId() + "/subscribed_apps";
+		Map<String, String> params = new HashMap<>();
+		params.put("access_token", getFacebookMessengerAccessToken());
+		facebook4j.Facebook con = buildConnection(getOauthKey(), getOauthSecret(), getFacebookMessengerAccessToken());
+		
+		//System.out.println("Token is " + getToken());
+		RawAPIResponse res = con.callGetAPI(path, params);
+		
+		try {
+			facebook4j.internal.org.json.JSONArray data = res.asJSONObject().getJSONArray("data");
+			for (int i = 0; i < data.length(); i++) {
+				facebook4j.internal.org.json.JSONObject app = data.getJSONObject(i);
+				if (app.getString("name").equals(getAppName())) return true;
+			}
+			return false;
+		} catch (JSONException je) {
+			log(je);
+			return false;
+		}
+	}
+	
+	// Uninstall an app from the page
+	public void uninstallApp() throws FacebookException {
+		log("Uninstalling BotLibre app on Facebook Page " + this.page, Level.INFO);
+		Map<String, String> params = new HashMap<>();
+		params.put("access_token", getFacebookMessengerAccessToken());
+		
+		String path = "/" + getPageId() + "/subscribed_apps";
+		
+		facebook4j.Facebook con = buildConnection(getOauthKey(), getOauthSecret(), getFacebookMessengerAccessToken());
+		RawAPIResponse res = con.callDeleteAPI(path, params);
+		saveProperties(null);
+		log("App uninstall success", Level.INFO, res.asString());
+	}
+	
+	// Disconnect a page from the bot
+	public void disconnectPage() throws FacebookException {
+		disconnectWebhook();
+		uninstallApp();
+		this.pageConnected = false;
+		this.authorized = false;
+		this.userName = null;
+		this.page = null;
+		this.profileName = null;
+		this.token = null;
+		this.facebookMessengerAccessToken = null;
+		saveProperties();
+	}
+	
+	// Connect a webhook to a page
+	public void connectWebhook() throws FacebookException {
+		log("Connecting webhook", Level.FINE);
+		String appAccessToken = getOauthKey()+"|" +getOauthSecret();
+		
+		Map<String, String> params = new HashMap<>();
+		params.put("access_token", appAccessToken);
+		params.put("object", "page");
+		params.put("callback_url", getWebhook());
+		params.put("fields", "messages");
+		params.put("active", "true");
+		params.put("include_values", "true");
+		params.put("verify_token", "token");
+		
+		facebook4j.Facebook con = buildConnection(getOauthKey(), getOauthSecret(), appAccessToken);
+		
+		RawAPIResponse res = con.callPostAPI("/" +getOauthKey() + "/subscriptions", params);
+		this.pageConnected = true;
+		log("Webhook Connection successful " + res.toString(), Level.FINE);
+	}
+	
+	public void disconnectWebhook() throws FacebookException {
+		
+		log("Disconnecting Webhook", Level.INFO);
+		
+		String appAccessToken = getOauthKey()+ "|" +getOauthSecret();
+		String path = "/" + getOauthKey() + "/subscriptions";
+		
+		Map<String, String> params = new HashMap<>();
+		
+		params.put("access_token", appAccessToken);
+		params.put("object", "page");
+		
+		facebook4j.Facebook con = buildConnection(getOauthKey(), getOauthSecret(), appAccessToken);
+		RawAPIResponse res = con.callDeleteAPI(path, params);
+		
+		log("Successfully disconnected Webhook " + res.toString(), Level.INFO);
+	}
+	
+	facebook4j.Facebook buildConnection(String appId, String appSecret, String accessToken) {
+		
+		ConfigurationBuilder config = new ConfigurationBuilder();
+	
+		config.setOAuthAppId(appId);
+		config.setOAuthAppSecret(appSecret);
+		config.setOAuthAccessToken(accessToken);
+		
+		return new FacebookFactory(config.build()).getInstance();
+	}
+	
+	public boolean getCustomApp() {
+		initProperties();
+		return customApp;
+	}
+	
+	public void setCustomApp(boolean customApp) {
+		initProperties();
+		this.customApp = customApp;
+	}
+	
+	public boolean getAuthorized() {
+		initProperties();
+		return authorized;
+	}
+	
+	public void setAuthorized(boolean authorized) {
+		initProperties();
+		this.authorized = authorized;
+	}
+	
+	public boolean getPageConnected() {
+		initProperties();
+		return pageConnected;
+	}
+	
+	public void setPageConnected(boolean pageConnected) {
+		initProperties();
+		this.pageConnected = pageConnected;
+	}
+	
 	public Facebook(boolean enabled) {
 		this.isEnabled = enabled;
 		this.languageState = LanguageState.Discussion;
@@ -132,6 +287,21 @@ public class Facebook extends BasicSense {
 	public Facebook() {
 		this(false);
 	}
+	
+	public String getWebhook() {
+		initProperties();
+		return this.webhook;
+	}
+	
+	public String getAppName() {
+		return this.appName;
+	}
+	
+	public void setWebhook(String webhook) {
+		initProperties();
+		this.webhook = webhook;
+	}
+	
 	
 	public boolean getTrackMessageObjects() {
 		initProperties();
@@ -159,11 +329,11 @@ public class Facebook extends BasicSense {
 		this.appOauthSecret = appOauthSecret;
 	}
 
-	public List<String> getPages() {
+	public List<Map<String, String>> getPages() {
 		return pages;
 	}
 
-	public void setPages(List<String> pages) {
+	public void setPages(List<Map<String, String>> pages) {
 		this.pages = pages;
 	}
 
@@ -420,6 +590,47 @@ public class Facebook extends BasicSense {
 		initProperties();
 		this.autoFriendKeywords = autoFriendKeywords;
 	}
+	
+	
+	public String authorizeAccount2(String callbackURL) throws FacebookException {
+		this.connection = new FacebookFactory().getInstance();
+		String key = getOauthKey();
+		String secret = getOauthSecret();
+		String permissions = "pages_show_list,pages_manage_engagement,"
+				+ "pages_manage_posts,pages_read_engagement,pages_read_user_content," 
+				+ "pages_messaging, pages_manage_metadata";
+		this.connection.setOAuthAppId(key, secret);
+		this.connection.setOAuthPermissions(permissions);
+		return this.connection.getOAuthAuthorizationURL(callbackURL);
+	}
+	
+	public void authorizeComplete2(String pin) throws FacebookException {
+		AccessToken token = this.connection.getOAuthAccessToken(pin);
+		setToken(token.getToken());
+		User user = this.connection.getMe();
+		this.userName = user.getId();
+		if (token.getExpires() != null) {
+			this.tokenExpiry = new Date(System.currentTimeMillis() + (token.getExpires() * 1000));
+		}
+		this.profileName = user.getName();
+
+		try {
+			ResponseList<Account> accounts = this.connection.getAccounts();
+			this.pages = new ArrayList<>();
+			if (accounts != null) {
+				for (Account account : accounts) {
+					Map<String, String> accountData = new HashMap<>();
+					accountData.put("name", account.getName());
+					accountData.put("accessToken", account.getAccessToken());
+					accountData.put("id", account.getId());
+					this.pages.add(accountData);
+				}
+			}
+		} catch (Exception exception) {
+			log(exception);
+		}
+		
+	}
 
 	/**
 	 * Authorise a new account to be accessible by Bot.
@@ -429,19 +640,16 @@ public class Facebook extends BasicSense {
 		this.connection = new FacebookFactory().getInstance();
 		String key = getOauthKey();
 		String secret = getOauthSecret();
-		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+		
+		if (this.customApp) {
 			key = this.appOauthKey;
-		}
-		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
 			secret = this.appOauthSecret;
 		}
+		
+		final String permissions = "pages_show_list,pages_manage_engagement,pages_manage_posts,pages_read_engagement,pages_read_user_content,pages_messaging, pages_manage_metadata";
+		
 		this.connection.setOAuthAppId(key, secret);
-		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
-			this.connection.setOAuthPermissions("pages_show_list,pages_manage_engagement,pages_manage_posts,pages_read_engagement,pages_read_user_content,pages_messaging");
-		} else {
-			this.connection.setOAuthPermissions("pages_show_list,pages_manage_engagement,pages_manage_posts,pages_read_engagement,pages_read_user_content,pages_messaging");
-		}
-		//this.connection.setOAuthPermissions("read_stream, manage_pages, publish_pages, publish_actions, read_mailbox, read_page_mailboxes");
+		this.connection.setOAuthPermissions(permissions);
 		return this.connection.getOAuthAuthorizationURL(callbackURL);
 	}
 	
@@ -451,7 +659,6 @@ public class Facebook extends BasicSense {
 	public void authorizeComplete(String pin) throws FacebookException {
 		AccessToken token = this.connection.getOAuthAccessToken(pin);
 		setToken(token.getToken());
-
 		User user = this.connection.getMe();
 		this.userName = user.getId();
 		if (token.getExpires() != null) {
@@ -460,15 +667,19 @@ public class Facebook extends BasicSense {
 		this.profileName = user.getName();
 
 		try {
-			this.page = "";
 			ResponseList<Account> accounts = this.connection.getAccounts();
-			this.pages = new ArrayList<String>();
+			this.pages = new ArrayList<>();
 			if (accounts != null) {
 				for (Account account : accounts) {
-					this.page = account.getName();
-					this.pages.add(account.getName());
+					Map<String, String> accountData = new HashMap<>();
+					accountData.put("name", account.getName());
+					accountData.put("accessToken", account.getAccessToken());
+					accountData.put("id", account.getId());
+					System.out.println("Account "+ account.getName() + " " + account.getAccessToken());
+					this.pages.add(accountData);
 				}
 			}
+			setAuthorized(true);
 		} catch (Exception exception) {
 			log(exception);
 		}
@@ -642,6 +853,23 @@ public class Facebook extends BasicSense {
 			if (property != null) {
 				this.autoPostHours = Integer.valueOf(property);
 			}
+			property = this.bot.memory().getProperty("Facebook.customApp");
+			if (property != null) {
+				this.customApp = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.authorized");
+			if (property != null) {
+				this.authorized = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.pageConnected");
+			if (property != null) {
+				this.pageConnected = Boolean.valueOf(property);
+			}
+			property = this.bot.memory().getProperty("Facebook.webhook");
+			if (property != null) {
+				this.webhook = property;
+			}
+			
 			this.statusKeywords = new ArrayList<String>();
 			List<Relationship> keywords = facebook.orderedRelationships(Primitive.STATUSKEYWORDS);
 			if (keywords != null) {
@@ -881,6 +1109,12 @@ public class Facebook extends BasicSense {
 		memory.saveProperty("Facebook.greetingText", String.valueOf(this.greetingText), false);
 		memory.saveProperty("Facebook.autoPost", String.valueOf(this.autoPost), false);
 		memory.saveProperty("Facebook.autoPostHours", String.valueOf(this.autoPostHours), false);
+		memory.saveProperty("Facebok.customApp", String.valueOf(this.customApp), false);
+		memory.saveProperty("Facebok.authorized", String.valueOf(this.authorized), false);
+		memory.saveProperty("Facebok.pageConnected", String.valueOf(this.pageConnected), false);
+		memory.saveProperty("Facebook.webhook", this.webhook, false);
+		
+		
 
 		Vertex facebook = memory.createVertex(getPrimitive());
 		facebook.unpinChildren();
@@ -1070,17 +1304,46 @@ public class Facebook extends BasicSense {
 		ConfigurationBuilder config = new ConfigurationBuilder();
 		String key = getOauthKey();
 		String secret = getOauthSecret();
-		if (this.appOauthKey != null && !this.appOauthKey.isEmpty()) {
+		
+		if (this.customApp) {
 			key = this.appOauthKey;
-		}
-		if (this.appOauthSecret != null && !this.appOauthSecret.isEmpty()) {
 			secret = this.appOauthSecret;
 		}
+		
 		config.setOAuthAppId(key);
 		config.setOAuthAppSecret(secret);
 		config.setOAuthAccessToken(getToken());
 		facebook4j.Facebook facebook = new FacebookFactory(config.build()).getInstance();
 		setConnection(facebook);
+	}
+	
+	public void connectPage(String pageName) throws FacebookException {
+		connect();
+		facebook4j.Facebook facebook = getConnection();
+		User user = facebook.getMe();
+		if (this.userName == null || !this.userName.equals(user.getId())) {
+			this.userName = user.getId();
+			this.profileName = user.getName();
+		}
+		
+		for (Map<String, String> account : getPages()) {
+			if (account.get("name").equals(pageName)) {
+				this.pageId = account.get("id");
+				this.facebookMessengerAccessToken = account.get("accessToken");
+				this.page = account.get("name");
+				break;
+			}
+			
+		}
+		if (getAuthorized()) {
+			if (!checkAppInstalled()) {
+				installApp();
+			}
+			connectWebhook();
+			saveProperties(null);
+		} else {
+			log("Account must be authorized for connect", Level.WARNING);
+		}
 	}
 	
 	public void connectAccount() throws FacebookException {
@@ -1121,7 +1384,8 @@ public class Facebook extends BasicSense {
 							setConnection(facebook);
 							this.pageId = facebook.getPage().getId();
 							log("Connected to Facebook page", Level.INFO, facebook.getPage().getId(), facebook.getPage().getName());
-						}
+							this.pageConnected = true;						}
+						
 					}
 				}
 				if (!found) {
@@ -1861,7 +2125,7 @@ public class Facebook extends BasicSense {
 		try {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("message", format(text));
-			getConnection().callPostAPI("/" + id + "/messages", params);
+//			getConnection().callPostAPI("/" + id + "/messages", params);
 		} catch (Exception exception) {
 			this.errors++;
 			log(exception);
