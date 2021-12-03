@@ -304,7 +304,10 @@ public class Instagram extends BasicSense{
 		this.messageEnabled = messageEnabled;
 	}
 	
-	public facebook4j.Facebook getConnection() {
+	public facebook4j.Facebook getConnection() throws FacebookException {
+		if (connection == null) {
+			connect();
+		}
 		return this.connection;
 	}
 
@@ -439,9 +442,9 @@ public class Instagram extends BasicSense{
     	try {
     		// Set Instagram Properties
     		JSONObject result = res.asJSONObject();
-	    	String IGId = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("id");
-	    	String IGUsername = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("username");
-	    	String IGName = result.getJSONArray("data").getJSONObject(0).getJSONObject("instagram_business_account").getString("name");
+	    	String IGId = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("id");
+	    	String IGUsername = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("username");
+	    	String IGName = result.getJSONArray("data").getJSONObject(1).getJSONObject("instagram_business_account").getString("name");
 	    	log("Inside connect " + result.toString(), Level.FINE);
 	    	setId(IGId);
 	    	setUserName(IGUsername);
@@ -460,6 +463,9 @@ public class Instagram extends BasicSense{
 	public void checkProfile() {
 		log("Checking Instagram profile.", Level.INFO);
 		try {
+			if(getConnection() == null) {
+				connect();
+			}
 			answerNewComments();
 			checkAutoPost();
 			checkRSS();
@@ -1177,11 +1183,12 @@ public class Instagram extends BasicSense{
 			Vertex idVertex = conversation.getRelationship(Primitive.ID);
 			String conversationId = idVertex.printString();
 			
-			Vertex target = output.mostConscious(Primitive.TARGET);
 			String replyTo = conversationId;
+			/*
+			Vertex target = output.mostConscious(Primitive.TARGET);
 			if (target != null && target.hasRelationship(Primitive.WORD)) {
 				replyTo = target.mostConscious(Primitive.WORD).printString();
-			}
+			}*/
 			
 			Vertex command = output.mostConscious(Primitive.COMMAND);
 
