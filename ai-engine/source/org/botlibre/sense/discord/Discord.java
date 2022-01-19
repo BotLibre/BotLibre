@@ -39,6 +39,7 @@ public class Discord extends BasicSense {
 	public static int MAX_WAIT = 60 * 1000;
 	
 	protected String token = "";
+	protected String savedToken = "";
 	
 	protected boolean initProperties;
 	protected LanguageState groupMode = LanguageState.Discussion;
@@ -60,11 +61,15 @@ public class Discord extends BasicSense {
 	public void awake() {
 		
 		this.token = this.bot.memory().getProperty("Discord.token");
+		this.savedToken = this.bot.memory().getProperty("Discord.savedToken");
 		
 		setIsEnabled(true);
 		
-		if (this.token == null || this.token.equals("")) {
+		if (this.token == null) {
 			this.token = "";
+		}
+		if (this.savedToken == null) {
+			this.savedToken = "";
 		}
 	}
 	
@@ -74,6 +79,14 @@ public class Discord extends BasicSense {
 	
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getSavedToken() {
+		return savedToken;
+	}
+	
+	public void setSavedToken(String savedToken) {
+		this.savedToken = savedToken;
 	}
 
 	public LanguageState getGroupMode() {
@@ -96,6 +109,12 @@ public class Discord extends BasicSense {
 		if (property != null) {
 			this.token = property;
 		}
+
+		property = this.bot.memory().getProperty("Discord.savedToken");
+		if (property != null) {
+			this.savedToken = property;
+		}
+
 		property = this.bot.memory().getProperty("Discord.groupMode");
 		if (property != null) {
 			this.groupMode = LanguageState.valueOf(property);
@@ -106,6 +125,7 @@ public class Discord extends BasicSense {
 	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
 		memory.saveProperty("Discord.token", this.token, true);
+		memory.saveProperty("Discord.savedToken", this.savedToken, true);
 		memory.saveProperty("Discord.groupMode", String.valueOf(this.groupMode), false);
 		
 		memory.save();
@@ -140,7 +160,11 @@ public class Discord extends BasicSense {
 				recipientId = discord.getApi().getYourself().getIdAsString();
 				recipientName = discord.getApi().getYourself().getName();
 			}
+			
+			// trim, remove @id
 			String text = Jsoup.parse(Processor.process(discord.getContent())).text();
+			text = text.replaceAll("@\\![0-9]+\\s","");
+
 			String conversationId = discord.getChannel().getIdAsString();
 			String message = processMessage(text, fromId, fromName, recipientId, recipientName, discord.getApi().getYourself().getIdAsString(), conversationId, group);
 			if (message != null && !message.isEmpty()) {
