@@ -697,7 +697,7 @@ public class Language extends BasicThought {
 	 */
 	public static void addSentenceTopicMeta(Vertex question, Vertex answer, Primitive responseType, String topic, boolean require, Boolean exclusiveTopic, Network network) {
 		if (topic == null || topic.trim().isEmpty()) {
-			clearSentenceMeta(question, answer, Primitive.TOPIC, network);
+			clearSentenceMeta(question, answer, Primitive.TOPIC, responseType, network);
 		} else {
 			Vertex topicFragment = network.createFragment(topic);
 			if (answer.isPinned()) {
@@ -829,7 +829,7 @@ public class Language extends BasicThought {
 	 */
 	public static void addSentenceCommandMeta(Vertex question, Vertex answer, Primitive responseType, String command, boolean pin, Network network) {
 		if (command == null || command.trim().isEmpty()) {
-			clearSentenceMeta(question, answer, Primitive.COMMAND, network);
+			clearSentenceMeta(question, answer, Primitive.COMMAND, responseType,network);
 		} else {
 			Vertex expression = network.createTemplate("Template(\"{Http.toJSON(" + command + ")}\")");
 			if (pin) {
@@ -869,7 +869,7 @@ public class Language extends BasicThought {
 	 */
 	public static void addSentenceThinkMeta(Vertex question, Vertex answer, Primitive responseType, String think, boolean pin, Network network) {
 		if (think == null || think.trim().isEmpty()) {
-			clearSentenceMeta(question, answer, Primitive.THINK, network);
+			clearSentenceMeta(question, answer, Primitive.THINK, responseType, network);
 		} else {
 			Vertex expression = network.createTemplate("Template(\"{think {" + think + "}}\")");
 			if (pin) {
