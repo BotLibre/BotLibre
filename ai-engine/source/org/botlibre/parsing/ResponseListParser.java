@@ -959,75 +959,78 @@ public class ResponseListParser {
 				}
 			}
 			// Allow either ',' or '","' separators.
-			boolean quotes = line.contains("\"");
 			bot.log(this, "Processing csv line", Level.INFO, line);
 			// "questions","answer","topic"
 			// "What is this? What's this?","This is Open Bot.","Bot"
 			TextStream lineStream = new TextStream(line);
-			if (quotes) {
-				lineStream.skipTo('"');
-				lineStream.skip();
+			
+
+			List<String> csvItemList = lineStream.csv();
+			
+			List<String> resultList = new ArrayList<>();
+			boolean inQuote = false;
+			String quoteString = "";
+			for (String str : csvItemList) {
+				// simple quote
+				if (!inQuote && str.startsWith("\"") && str.endsWith("\"")) {
+					resultList.add(str.substring(1, str.length() - 1));
+					continue;
+				}
+				
+				// quote with comma
+				if (str.startsWith("\"")) {
+					inQuote = true;
+					quoteString = str;
+					continue;
+				}
+				if (inQuote) {
+					quoteString = quoteString + ", " + str;
+				
+					if (str.endsWith("\"")) {
+						inQuote = false;
+						resultList.add(quoteString.substring(1, quoteString.length() - 1));
+						quoteString = "";
+						
+					}
+				} else { //without csv
+					resultList.add(str);
+				}
 			}
-			if (lineStream.atEnd()) {
-				bot.log(this, "Expecting \" character", Level.WARNING, line);
-				continue;
-			}
+			
+			//Question
 			String questionText = null;
-			if (quotes) {
-				questionText = lineStream.upToAll("\",\"").trim();
-				lineStream.skip("\",\"".length());
-			} else {
-				questionText = lineStream.upTo(',').trim();
-				lineStream.skip();
-			}
-			if (lineStream.atEnd()) {
-				bot.log(this, "Expecting \",\" characters", Level.WARNING, line);
-				continue;
+			if (0 < resultList.size()) {
+				questionText = resultList.get(0);
 			}
 			bot.log(this, "Processing csv question", Level.INFO, questionText);
+			
+			//Answer
 			String answerText = null;
-			if (quotes) {
-				answerText = lineStream.upToAll("\"").trim();
-			} else {
-				answerText = lineStream.upTo(',').trim();
+			if (1 < resultList.size()) {
+				answerText = resultList.get(1);
 			}
-			lineStream.skip();
 			bot.log(this, "Processing csv answer", Level.INFO, answerText);
 			answer = network.createSentence(answerText);
 			if (pin) {
 				SelfCompiler.getCompiler().pin(answer);
 			}
+			
 			// Topic
 			String topic = "";
-			if (quotes) {
-				if (lineStream.peek() != ',') {
-					lineStream.skipTo('"', true);
-					topic = lineStream.upTo('"').trim();
-				}
-			} else {
-				topic = lineStream.upTo(',').trim();
+			if (2 < resultList.size()) {
+				topic = resultList.get(2);
 			}
-			lineStream.skip();
+			
 			// Keywords
 			String keywords = "";
-			if (quotes) {
-				if (lineStream.peek() != ',') {
-					lineStream.skipTo('"', true);
-					keywords = lineStream.upTo('"').trim();
-				}
-			} else {
-				keywords = lineStream.upTo(',').trim();
+			if (3 < resultList.size()) {
+				keywords = resultList.get(3);
 			}
-			lineStream.skip();
+			
 			// Required
 			String required = "";
-			if (quotes) {
-				if (lineStream.peek() != ',') {
-					lineStream.skipTo('"', true);
-					required = lineStream.upTo('"').trim();
-				}
-			} else {
-				required = lineStream.upTo(',').trim();
+			if (4 < resultList.size()) {
+				required = resultList.get(4);
 			}
 
 			TextStream questionStream = new TextStream(questionText);
