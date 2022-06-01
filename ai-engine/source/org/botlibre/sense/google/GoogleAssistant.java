@@ -24,6 +24,8 @@ public class GoogleAssistant extends BasicSense {
 	
 	protected List<String> stopPhrases = new ArrayList<String>();
 	
+	protected boolean autoExit = false;
+
 	protected boolean initProperties;
 	
 	protected int messagesProcessed;
@@ -61,6 +63,11 @@ public class GoogleAssistant extends BasicSense {
 			Network memory = getBot().memory().newMemory();
 			Vertex googleAssistant = memory.createVertex(getPrimitive());
 			
+			String property = this.bot.memory().getProperty("GoogleAssistant.autoExit");
+			if (property != null) {
+				this.autoExit = Boolean.valueOf(property);
+			}
+			
 			this.stopPhrases = new ArrayList<String>();
 			List<Relationship> rss = googleAssistant.orderedRelationships(Primitive.RSS);
 			if (rss != null) {
@@ -78,6 +85,8 @@ public class GoogleAssistant extends BasicSense {
 
 	public void saveProperties() {
 		Network memory = getBot().memory().newMemory();
+		
+		memory.saveProperty("GoogleAssistant.autoExit", String.valueOf(this.autoExit), false);
 		
 		Vertex googleAssistant = memory.createVertex(getPrimitive());
 		googleAssistant.unpinChildren();
@@ -235,6 +244,16 @@ public class GoogleAssistant extends BasicSense {
 		payload.put("google", google);
 		body.put("payload", payload);
 		return body;
+	}
+	
+	public boolean getAutoExit() {
+		initProperties();
+		return autoExit;
+	}
+
+	public void setAutoExit(boolean autoExit) {
+		initProperties();
+		this.autoExit = autoExit;
 	}
 	
 	public List<String> getStopPhrases() {
