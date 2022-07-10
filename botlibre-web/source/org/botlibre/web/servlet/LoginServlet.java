@@ -184,13 +184,33 @@ public class LoginServlet extends BeanServlet {
 			String details = (String)request.getParameter("details");
 			String demoRequest = (String)request.getParameter("demoRequest");
 			String spamCheck = (String)request.getParameter("spamCheck");
+			String newsletterCheck = (String)request.getParameter("newsletterCheck");
+
 			if (contact != null) {
 				if (!"ok".equals(spamCheck)) {
 					throw new BotException("Your request has been rejected as spam");
 				}
+
 				bean.verifyPostToken(postToken);
 				bean.contact(email, name, business, details, "on".equals(demoRequest));
+
+				if ("on".equals(newsletterCheck)) {
+					Cookie cookie = new Cookie("newsletter-popup-shown", "true");
+					cookie.setMaxAge(60*60*24*365*5);
+					response.addCookie(cookie);
+					response.sendRedirect("/");
+					return;
+				}
 				response.sendRedirect("contact.jsp");
+				return;
+			}
+
+			String subscribeLater = (String)request.getParameter("subscribeLater");
+			if (subscribeLater != null) {
+				Cookie cookie = new Cookie("newsletter-popup-shown", "true");
+				cookie.setMaxAge(60*60*3);
+				response.addCookie(cookie);
+				response.sendRedirect("/");
 				return;
 			}
 			

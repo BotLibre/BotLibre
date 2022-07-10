@@ -1,15 +1,31 @@
+<%@page import="org.botlibre.web.admin.Domain"%>
+<%@page import="org.botlibre.web.admin.Payment"%>
 <%@page import="org.botlibre.web.admin.AdminDatabase"%>
 <%@page import="org.botlibre.web.bean.DomainBean"%>
 <%@page import="org.botlibre.web.Site"%>
 <%@page import="org.botlibre.web.bean.BotBean"%>
 <%@page import="org.eclipse.persistence.internal.helper.Helper" %>
 <%@page import = "org.botlibre.web.bean.LoginBean.Page" %>
+<%@page import="javax.servlet.http.Cookie"%>
 
 <%@page contentType="text/html; charset=UTF-8" %>
 
 <jsp:useBean id="proxy" class="org.botlibre.web.bean.SessionProxyBean" scope="session"/>
 <jsp:useBean id="loginBean" class="org.botlibre.web.bean.LoginBean" scope="session"/>
-<% 
+
+<%  
+boolean shouldRedirect = true;
+
+for (Cookie cookie : request.getCookies()) {  
+	if (cookie.getName().equals("newsletter-popup-shown")) {
+		shouldRedirect = false;
+		break;
+	}
+}
+if (shouldRedirect) {
+	response.sendRedirect("newsletter-register.jsp");
+}
+
 try {
 	boolean databaseFailure = false;
 	DomainBean domainBean = null;
@@ -43,6 +59,9 @@ try {
 	<link href="css/simpletextrotator.css" rel="stylesheet" media="screen">
 	<link href="css/overwrite.css" rel="stylesheet" media="screen">
 	<link href="css/animate.css" rel="stylesheet" media="screen">
+	
+
+
 </head>
 
 <% if (databaseFailure) { %>
