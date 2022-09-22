@@ -1165,18 +1165,18 @@ public class Instagram extends BasicSense{
 		}
 		String text = printInput(output);
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
-    	
+		
 		// Reply to Instagram Comments
-    	if (conversation.hasRelationship(Primitive.TYPE, Primitive.IGCOMMENT)) {
-    		output.addRelationship(Primitive.INSTANTIATION, Primitive.IGCOMMENT);
-    		Vertex question = output.getRelationship(Primitive.QUESTION);
-    		String reply = null;
-    		if (question != null) {
-    			Vertex idVertex = question.getRelationship(Primitive.ID);
-    			if (idVertex != null) {
-    				reply = (String)idVertex.getData();
-    			}
-    		}
+		if (conversation.hasRelationship(Primitive.TYPE, Primitive.IGCOMMENT)) {
+			output.addRelationship(Primitive.INSTANTIATION, Primitive.IGCOMMENT);
+			Vertex question = output.getRelationship(Primitive.QUESTION);
+			String reply = null;
+			if (question != null) {
+				Vertex idVertex = question.getRelationship(Primitive.ID);
+				if (idVertex != null) {
+					reply = (String)idVertex.getData();
+				}
+			}
 			postReply(text, reply);
 			
 		} else if (conversation.hasRelationship(Primitive.TYPE, Primitive.INSTAGRAM)) {
@@ -1184,11 +1184,6 @@ public class Instagram extends BasicSense{
 			String conversationId = idVertex.printString();
 			
 			String replyTo = conversationId;
-			/*
-			Vertex target = output.mostConscious(Primitive.TARGET);
-			if (target != null && target.hasRelationship(Primitive.WORD)) {
-				replyTo = target.mostConscious(Primitive.WORD).printString();
-			}*/
 			
 			Vertex command = output.mostConscious(Primitive.COMMAND);
 
