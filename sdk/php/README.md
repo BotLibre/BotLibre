@@ -5,6 +5,7 @@ The following changes have been made to the php.ini file:
 
 * Uncomment: extension=curl
 * Uncomment: extension=openssl
+* Unccoment: extension_dir = "c:\php\ext"
 
 **cacert.pem** is a file containing trusted root certificates that are used for verifying SSL/TLS connections. When a client makes an HTTPS request to a server, it needs to verify that the server's SSL/TLS certificate is valid and has been issued by a trusted certificate authority (CA).
 ```
