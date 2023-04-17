@@ -87,7 +87,7 @@
 
 		public function __construct()
 		{
-			Main::$connection = new SDKConnection(new BotlibreCredentails($this->applicationId));
+			Main::$connection = new SDKConnection(new BotlibreCredentails(Main::$applicationId));
 			if (Main::$domainId != null) {
 				Main::$domain = new DomainConfig();
 				Main::$domain->id = $this->domainId;
