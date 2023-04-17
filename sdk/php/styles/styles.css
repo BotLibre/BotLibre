@@ -1,0 +1,77 @@
+.menu {
+  display: inline-block;
+  position: relative;
+}
+
+.menu:hover .dropdown {
+  display: block;
+}
+
+label {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.dropdown a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 5px;
+}
+
+form {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Apply Flexbox layout to the container element */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15vh;
+  /* Set the height of the container to 100% of the viewport height */
+}
+
+fieldset {
+  height: 380px;
+  overflow: auto;
+  border: 2px solid #ccc;
+  padding: 10px;
+}
+
+legend {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-weight: bold;
+}
+
+input {
+  width: 80px;
+  height: 30px;
+  font-size: 15px;
+}
+
+select {
+  width: 250px;
+  font-size: 15px;
+  height: 20px;
+}
+
+#box {
+  width: 97%;
+  border: 5px solid rgb(163, 117, 43);
+  margin: 10px;
+}
