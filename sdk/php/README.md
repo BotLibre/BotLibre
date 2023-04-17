@@ -1,5 +1,5 @@
 ## Changes to php.ini
-There are some changes that have been made in the 'php-ini' file. This file is used to configure the PHP enviornment, and the changes made to it are described below.
+There have been some changes made in the 'php.ini' file. This file is used to configure the PHP environment and the changes made to it are described below.
 
 The following changes have been made to the php.ini file:
 
