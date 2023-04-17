@@ -42,15 +42,10 @@
 		public static ?bool $DEBUG = true;
 		public static ?bool $ADULT = false;
 
-		/**
-		 * Enter your application ID here.
-		 * You can get an application ID from any of the services websites (BOT libre, FORUMS libre, LIVE CHAT libre, Paphus Live Chat)
+		/* Enter your application ID here.
+		 * You can get an application ID from any of the services websites (Bot Libre, Bot Libre for Business)
 		 */
 		public static string $applicationId = "";
-		public string $twitterAppId = "";
-		public string $paphusAppId = "";
-		public string $forumsAppId = "";
-		public string $livechatAppId = "";
 
 
 		/**
