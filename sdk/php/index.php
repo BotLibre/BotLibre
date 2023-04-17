@@ -46,11 +46,19 @@
 		 * Enter your application ID here.
 		 * You can get an application ID from any of the services websites (BOT libre, FORUMS libre, LIVE CHAT libre, Paphus Live Chat)
 		 */
-		public string $applicationId = "986530966192349057";
-		public string $twitterAppId = "6022406562833792899";
-		public string $paphusAppId = "1444710791353231612";
-		public string $forumsAppId = "1401036148793048377";
-		public string $livechatAppId = "1401036148793048377";
+		public static string $applicationId = "";
+		public string $twitterAppId = "";
+		public string $paphusAppId = "";
+		public string $forumsAppId = "";
+		public string $livechatAppId = "";
+
+
+		/**
+		 * Please enter your account details. Both your username and password are required. \
+		 * If you don't have an account yet, you can create one to use.
+		 */
+		public static string $username = "";
+		public static string $password = "";
 
 		/**
 		 * Configure your connection credentials here.
@@ -96,9 +104,9 @@
 		{
 			//TODO: Setup user
 			$userConfig = new UserConfig();
-			$userConfig->application = "7369571872937606859";
-			$userConfig->user = "Account_test";
-			$userConfig->password = "password123";
+			$userConfig->application = Main::$applicationId;
+			$userConfig->user = Main::$username;
+			$userConfig->password = Main::$password;
 			$userConfig = Main::$connection->connect($userConfig);
 			return $userConfig;
 		}
@@ -108,7 +116,7 @@
 			//TODO: Setup message
 			$config = new ChatConfig();
 			$config->message = "Who are you?";
-			$config->application = "7369571872937606859";
+			$config->application =  Main::$applicationId;
 			$config->instance = "165";
 			$response = Main::$connection->chat($config);
 			return $response;
@@ -118,7 +126,7 @@
 		{
 			//TODO: Setup user using 
 			$userConfig = new UserConfig();
-			$userConfig->application = "7369571872937606859";
+			$userConfig->application = Main::$applicationId;
 			$userConfig->user = "user";
 			//$userConfig->password = "password123";
 			$userConfig = Main::$connection->fetchUser($userConfig);
@@ -129,9 +137,9 @@
 		{
 			//TODO: Setup user using 
 			$forumPostConfig = new ForumPostConfig();
-			$forumPostConfig->application = "7369571872937606859";
-			$forumPostConfig->user = "Account_test";
-			$forumPostConfig->password = "password123";
+			$forumPostConfig->application = Main::$applicationId;
+			$forumPostConfig->user = Main::$username;
+			$forumPostConfig->password = Main::$password;
 			$forumPostConfig->id = "5012";
 			$forumPostConfig = Main::$connection->fetchForumPost($forumPostConfig);
 			return $forumPostConfig;
@@ -141,9 +149,9 @@
 		{
 			//TODO: Setup user using 
 			$userConfig = new UserConfig();
-			$userConfig->application = "7369571872937606859";
-			$userConfig->user = "Account_test";
-			$userConfig->password = "password123";
+			$userConfig->application = Main::$applicationId;
+			$userConfig->user = Main::$username;
+			$userConfig->password = Main::$password;
 			//Missing additional information
 			$userConfig = Main::$connection->createUser($userConfig);
 			return $userConfig;
