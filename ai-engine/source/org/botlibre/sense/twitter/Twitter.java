@@ -296,7 +296,7 @@ public class Twitter extends BasicSense {
 	public RequestToken authorizeAccount() throws TwitterException {
 		twitter4j.Twitter twitter = new TwitterFactory().getInstance();
 		twitter.setOAuthConsumer(getOauthKey(), getOauthSecret());
-		RequestToken requestToken = twitter.getOAuthRequestToken();
+		RequestToken requestToken = twitter.getOAuthRequestToken("oob");
 		setConnection(twitter);
 		return requestToken;
 	}
@@ -913,9 +913,6 @@ public class Twitter extends BasicSense {
 									}
 								}
 							}
-							if (getLearn()) {
-								learnTweet(status, true, true, memory);
-							}
 							if (match) {
 								count++;
 								input(status);
@@ -949,6 +946,9 @@ public class Twitter extends BasicSense {
 										log("Skipping already retweeted", Level.FINE, status.getText());
 									}
 								}
+							}
+							if (getLearn()) {
+								learnTweet(status, true, true);
 							}
 						} else {
 							log("Old status", Level.INFO, statusId, statusTime);							
@@ -995,7 +995,7 @@ public class Twitter extends BasicSense {
 					if (!processed.contains(tweet.getId())) {
 						log("Processing search result", Level.INFO, tweet.getUser().getScreenName(), tweetSearch, tweet.getText());
 						processed.add(tweet.getId());
-						learnTweet(tweet, processTweets, processReplies, memory);
+						learnTweet(tweet, processTweets, processReplies);
 						count++;
 					}
 				}
@@ -1037,7 +1037,7 @@ public class Twitter extends BasicSense {
 							if (!processed.contains(tweet.getId())) {
 								log("Processing user timeline result", Level.INFO, tweet.getUser().getScreenName(), tweet.getText());
 								processed.add(tweet.getId());
-								learnTweet(tweet, processTweets, processReplies, memory);
+								learnTweet(tweet, processTweets, processReplies);
 								count++;
 							}
 						}
@@ -1088,7 +1088,7 @@ public class Twitter extends BasicSense {
 					continue;
 				}
 				if (statusId > last) {
-					learnTweet(tweet, true, true, memory);
+					learnTweet(tweet, true, true);
 				} else {
 					log("Old status", Level.INFO, statusId, statusTime);							
 				}
@@ -1102,7 +1102,7 @@ public class Twitter extends BasicSense {
 		}
 	}
 	
-	public void learnTweet(Status tweet, boolean processTweets, boolean processReplies, Network memory) throws Exception {
+	public void learnTweet(Status tweet, boolean processTweets, boolean processReplies) throws Exception {
 		String text = tweet.getText();
 		// Exclude retweets
 		if (tweet.isRetweet()) {
@@ -1119,6 +1119,7 @@ public class Twitter extends BasicSense {
 			return;
 		}
 		log("Learning status", Level.INFO, text);
+		Network memory = getBot().memory().newMemory();
 		// Exclude replies/mentions
 		if (tweet.getText().indexOf('@') != -1) {
 			log("Tweet is reply", Level.FINER, tweet.getText());
@@ -1145,6 +1146,7 @@ public class Twitter extends BasicSense {
 						Vertex question = memory.createSentence(replyText.trim());
 						Vertex sentence = memory.createSentence(text.trim());
 						Language.addResponse(question, sentence, memory);
+						memory.save();
 					}
 				} catch (Exception ignore) {
 					log(ignore.toString(), Level.WARNING);
@@ -1156,14 +1158,19 @@ public class Twitter extends BasicSense {
 		if (!processTweets) {
 			return;
 		}
-		Vertex sentence = memory.createSentence(text);
-		String keywords = "";
-		for (String word : new TextStream(text).allWords()) {
-			if (word.startsWith("#")) {
-				keywords = keywords + " " + word + " " + word.substring(1, word.length());
+		try {
+			Vertex sentence = memory.createSentence(text);
+			String keywords = "";
+			for (String word : new TextStream(text).allWords()) {
+				if (word.startsWith("#")) {
+					keywords = keywords + " " + word + " " + word.substring(1, word.length());
+				}
 			}
+			Language.addResponse(sentence, sentence, null, keywords, null, memory);
+			memory.save();
+		} catch (Exception ignore) {
+			log(ignore.toString(), Level.WARNING);
 		}
-		Language.addResponse(sentence, sentence, null, keywords, null, memory);
 	}
 
 	/**
@@ -1315,9 +1322,6 @@ public class Twitter extends BasicSense {
 									break;
 								}
 							}
-							if (getLearn()) {
-								learnTweet(tweet, true, true, memory);
-							}
 							if (match) {
 								processed.add(tweet.getId());
 								log("Processing search", Level.INFO, tweet.getUser().getScreenName(), tweetSearch, tweet.getText());
@@ -1347,6 +1351,10 @@ public class Twitter extends BasicSense {
 								} else {
 									log("Already retweeted", Level.FINER, tweet.getText());
 								}
+							}
+							// Learn tweet after processing to avoid returning tweet as response.
+							if (getLearn()) {
+								learnTweet(tweet, true, true);
 							}
 						}
 					}

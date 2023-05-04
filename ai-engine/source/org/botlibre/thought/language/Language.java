@@ -762,7 +762,7 @@ public class Language extends BasicThought {
 					&& !question.hasRelationship(Primitive.INSTANTIATION, Primitive.PATTERN)) {
 			question = network.createSentence(Utils.reduce(question.getDataValue()));
 		}
-		addResponse(question, answer, null, null, null, 0.5f, network);
+		addResponse(question, answer, null, null, null, network.getBot().mind().getThought(Language.class).getLearningRate(), network);
 	}
 	
 	/**
@@ -774,7 +774,7 @@ public class Language extends BasicThought {
 					&& !question.hasRelationship(Primitive.INSTANTIATION, Primitive.PATTERN)) {
 			question = network.createSentence(Utils.reduce(question.getDataValue()));
 		}
-		addResponse(question, answer, topic, keywords, required, 0.5f, network);
+		addResponse(question, answer, topic, keywords, required, network.getBot().mind().getThought(Language.class).getLearningRate(), network);
 	}
 	
 	/**
@@ -4757,7 +4757,7 @@ public class Language extends BasicThought {
 								count = 0;
 							}
 							matches.put(otherSentence, count + value);
-							log("Increasing question match value", Level.FINER, otherSentence, word, count + value, value);
+							log("Increasing question match value (question, word, value, word value)", Level.FINER, otherSentence, word, count + value, value);
 						}
 					} else {
 						log("Sentence has no responses", Level.FINEST, otherSentence);
@@ -4788,6 +4788,7 @@ public class Language extends BasicThought {
 							count = 0;
 						}
 						matches.put(otherSentence, count + value);
+						log("Increasing pattern match value (pattern, word, value, word value)", Level.FINER, otherSentence, word, count + value, value);
 					}
 				}
 			}
