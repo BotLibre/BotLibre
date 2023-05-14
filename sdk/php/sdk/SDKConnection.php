@@ -161,6 +161,27 @@ class SDKConnection
 
 
 	/**
+	 * Process the avatar message and return the avatars response.
+	 * This allows the speech and video animation for an avatar to be generated for the message.
+	 */
+	public function avatarMessage(AvatarMessage $config): ?ChatResponse
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/avatar-message", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$response = new ChatResponse();
+			$response->parseXML($xml);
+			return $response;
+		} catch (Exception $exception) {
+			echo "Error: " + $exception; //Misssing implementation of SDKException.parseFailure(exception);
+		}
+	}
+
+
+	/**
 	 * Fetch the user details.
 	 * Function names can't be the same.
 	 */
@@ -213,9 +234,10 @@ class SDKConnection
 	/**
 	 * Create a new user.
 	 */
-	public function createUser(UserConfig $config): ?UserConfig {
+	public function createUser(UserConfig $config): ?UserConfig
+	{
 		$config->addCredentials($this);
-		$xml = $this->POST($this->url . "/create-user" , $config->toXML());
+		$xml = $this->POST($this->url . "/create-user", $config->toXML());
 		if ($xml == null) {
 			return null;
 		}
@@ -224,7 +246,7 @@ class SDKConnection
 			$user->parseXML($xml);
 			$this->user = $user;
 			return $user;
-		}  catch (Exception $exception) {
+		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
 	}
@@ -233,9 +255,10 @@ class SDKConnection
 	 * Create a new forum post.
 	 * You must set the forum id for the post.
 	 */
-	public function createForumPost(ForumPostConfig $config): ?ForumPostConfig {
+	public function createForumPost(ForumPostConfig $config): ?ForumPostConfig
+	{
 		$config->addCredentials($this);
-		$xml = $this->POST($this->url . "/create-forum-post" , $config->toXML());
+		$xml = $this->POST($this->url . "/create-forum-post", $config->toXML());
 		if ($xml == null) {
 			return null;
 		}
@@ -243,7 +266,7 @@ class SDKConnection
 			$post = new ForumPostConfig();
 			$post->parseXML($xml);
 			return $post;
-		}  catch (Exception $exception) {
+		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
 	}
@@ -293,7 +316,8 @@ class SDKConnection
 	 * Create a reply to a forum post.
 	 * You must set the parent id for the post replying to.
 	 */
-	public function createReply(ForumPostConfig $config) : ?ForumPostConfig {
+	public function createReply(ForumPostConfig $config): ?ForumPostConfig
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/create-reply", $config->toXML());
 		if ($xml == null) {
@@ -313,7 +337,8 @@ class SDKConnection
 	 * This can be used to send a user a direct message.
 	 * SPAM will cause your account to be deleted.
 	 */
-	public function createUserMessage(UserMessageConfig $config) : void {
+	public function createUserMessage(UserMessageConfig $config): void
+	{
 		$config->addCredentials($this);
 		$this->POST($this->url . "/create-user-message", $config->toXML());
 	}
@@ -321,7 +346,8 @@ class SDKConnection
 	/**
 	 * Update the forum post.
 	 */
-	public function updateForumPost(ForumPostConfig $config) : ?ForumPostConfig{
+	public function updateForumPost(ForumPostConfig $config): ?ForumPostConfig
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/update-forum-post", $config->toXML());
 		if ($xml == null) {
@@ -340,7 +366,8 @@ class SDKConnection
 	 * Create or update the response.
 	 * This can also be used to flag, unflag, validate, or invalidate a response.
 	 */
-	public function saveResponse(?ResponseConfig $config) : ?ResponseConfig{
+	public function saveResponse(?ResponseConfig $config): ?ResponseConfig
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/save-response", $config->toXML());
 		if ($xml == null) {
@@ -353,6 +380,274 @@ class SDKConnection
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
+	}
+
+
+	/**
+	 * Return the administrators of the content.
+	 */
+	public function getAdmins(WebMediumConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-" . $config->getType() . "-admins", $config->toXML());
+		$users = array();
+		if ($xml == null) {
+			return $users;
+		}
+		$xmlData = simplexml_load_string($xml);
+		if ($xmlData === false) {
+			echo "Failed loading XML: ";
+			foreach (libxml_get_errors() as $error) {
+				echo "<br>", $error->message;
+			}
+		}
+		// else {
+		//     print_r($xmlData);
+		// }
+		// for (int index = 0; index < root.getChildNodes().getLength(); index++) {
+		// 	UserConfig user = new UserConfig();
+		// 	user.parseXML((Element)root.getChildNodes().item(index));
+		// 	users.add(user.user);
+		// }
+		// return users;
+
+		return $xmlData;
+	}
+
+
+
+	/**
+	 * Permanently delete the forum post with the id.
+	 */
+	public function deleteForumPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/delete-forum-post", $config->toXML());
+	}
+
+	/**
+	 * Permanently delete the response, greetings, or default response with the response id (and question id).
+	 */
+	public function deleteResponse(ResponseConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/delete-response", $config->toXML());
+	}
+
+	/**
+	 * Permanently delete the avatar media.
+	 */
+	public function deleteAvatarMedia(AvatarMedia $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/delete-avatar-media", $config->toXML());
+	}
+
+	/**
+	 * Permanently delete the avatar background.
+	 */
+	public function deleteAvatarBackground(AvatarConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/delete-avatar-background", $config->toXML());
+	}
+
+	/**
+	 * Save the avatar media tags.
+	 */
+	public function saveAvatarMedia(AvatarMedia $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/save-avatar-media", $config->toXML());
+	}
+
+	/**
+	 * Subscribe for email updates for the post.
+	 */
+	public function subscribeForumPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/subscribe-post", $config->toXML());
+	}
+
+	/**
+	 * Subscribe for email updates for the forum.
+	 */
+	public function subscribeForum(ForumConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/subscribe-forum", $config->toXML());
+	}
+
+
+	/**
+	 * Unsubscribe from email updates for the post.
+	 */
+	public function unsubscribeForumPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/unsubscribe-post", $config->toXML());
+	}
+
+	/**
+	 * Unsubscribe for email updates for the forum.
+	 */
+	public function unsubscribeForum(ForumConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/unsubscribe-forum", $config->toXML());
+	}
+
+	/**
+	 * Thumbs up the content.
+	 */
+	public function thumbsUp(WebMediumConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/thumbs-up-" . $config->getType(), $config->toXML());
+	}
+
+	/**
+	 * Thumbs down the content.
+	 */
+	public function thumbsDown(WebMediumConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/thumbs-down-" . $config->getType(), $config->toXML());
+	}
+
+	/**
+	 * Rate the content.
+	 */
+	public function star(WebMediumConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/star-" . $config->getType(), $config->toXML());
+	}
+
+	/**
+	 * Thumbs up the content.
+	 */
+	public function thumbsUpPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/thumbs-up-post", $config->toXML());
+	}
+
+	/**
+	 * Thumbs down the content.
+	 */
+	public function thumbsDownPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/thumbs-down-post", $config->toXML());
+	}
+
+	/**
+	 * Rate the content.
+	 */
+	public function starPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/start-post", $config->toXML());
+	}
+
+	/**
+	 * Flag the forum post as offensive, a reason is required.
+	 */
+	public function flagForumPost(ForumPostConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/flag-forum-post", $config->toXML());
+	}
+
+	/**
+	 * Flag the user as offensive, a reason is required.
+	 */
+	public function flagUser(UserConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/flag-user", $config->toXML());
+	}
+
+	/**
+	 * Return the bot's learning configuration.
+	 */
+	public function getLearning(InstanceConfig $config) : ?LearningConfig {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-learning", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$learning = new LearningConfig();
+			$learning->parseXML($xml);
+			return $learning;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Process the speech message and return the server generate text-to-speech audio file.
+	 * This allows for server-side speech generation.
+	 */
+	public function tts(Speech $config): ?string
+	{
+		$config->addCredentials($this);
+		return $this->POST($this->url . "/speak", $config->toXML());
+	}
+
+
+
+	/**
+	 * Return the list of content types.
+	 */
+	public function getTypes() {
+		return $this->types;
+	}
+	
+	/**
+	 * Return the channel types.
+	 */
+	public function getChannelTypes() {
+		return $this->channelTypes;
+	}
+	
+	/**
+	 * Return the access mode types.
+	 */
+	public function getAccessModes() {
+		return $this->accessModes;
+	}
+	
+	/**
+	 * Return the media access mode types.
+	 */
+	public function getMediaAccessModes() {
+		return $this->mediaAccessModes;
+	}
+	
+	/**
+	 * Return the learning mode types.
+	 */
+	public function getLearningModes() {
+		return $this->learningModes;
+	}
+	
+	/**
+	 * Return the correction mode types.
+	 */
+	public function getCorrectionModes() {
+		return $this->correctionModes;
+	}
+	
+	/**
+	 * Return the bot mode types.
+	 */
+	public function getBotModes() {
+		return $this->botModes;
 	}
 
 	/**
@@ -452,6 +747,49 @@ class SDKConnection
 	// 	}
 	// }
 
+
+
+	public function GET(string $url) : string {
+		if ($this->debug) {
+			$debugComment = "GET_URL: " . $url;
+			$debugInfo = $url;
+			include "./views/debug.php";
+		}
+		$ch = curl_init();
+		$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
+		if ($this->debug) {
+			$debugComment = "GET: Sending xml request.";
+			$debugInfo = $xmlData;
+			include "./views/debug.php";
+		}
+
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HTTPGET, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		//curl_setopt($ch, CURLOPT_HEADER, 1);
+
+		// $headers = [
+		// 	'Content-Type: application/xml',
+		// 	'Accept: application/xml'
+		// ];
+
+		// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		$response = curl_exec($ch);
+		if ($e = curl_error($ch)) {
+			echo $e;
+		} else {
+			if ($this->debug) {
+				if (isset($response) || $response !== null) {
+					$result = simplexml_load_string($response) or die("Error: Cannot create object");
+					$debugComment = "Result after the request.";
+					$debugInfo = $result;
+					include "./views/debug.php";
+				}
+			}
+		}
+		curl_close($ch);
+		return $response;
+	}
 	public function POST(string $url, string $xml): string
 	{
 		if ($this->debug) {

@@ -68,7 +68,7 @@
 
 
 		/**
-		 * Please enter your account details. Both your username and password are required. \
+		 * Please enter your account details. Both your username and password are required.
 		 * If you don't have an account yet, you can create one to use.
 		 */
 		public static string $username = "";
