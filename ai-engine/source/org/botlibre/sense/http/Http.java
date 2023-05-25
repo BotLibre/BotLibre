@@ -1393,7 +1393,7 @@ public class Http extends BasicSense {
 					// Use JSON format.
 					writer.write(printDate((Timestamp)object.getData()));
 				} else {
-					writer.write(object.printString());
+					writer.write(object.printString().replace("\"", "\\\""));
 				}
 				writer.write("\"");
 			}
