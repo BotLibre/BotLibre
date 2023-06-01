@@ -9,7 +9,7 @@
 
 label {
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 
@@ -42,20 +42,20 @@ form {
   align-items: center;
   justify-content: center;
   height: 15vh;
-  /* Set the height of the container to 100% of the viewport height */
 }
 
 fieldset {
-  height: 380px;
+  height: 60vh;
   overflow: auto;
   border: 2px solid #ccc;
   padding: 10px;
+  border-radius: 10px;
 }
 
 legend {
   border: 1px solid #ccc;
   padding: 5px 10px;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 input {
@@ -74,4 +74,5 @@ select {
   width: 97%;
   border: 5px solid rgb(163, 117, 43);
   margin: 10px;
+  border-radius: 10px;
 }

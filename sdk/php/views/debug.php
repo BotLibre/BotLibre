@@ -23,5 +23,8 @@
         if(isset($debugInfo)) {
             echo print_r($debugInfo); 
         }
+        if(isset($viewable_image)) {
+            echo $viewable_image;
+        }
     ?>
 </div>

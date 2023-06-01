@@ -16,7 +16,77 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-    class AvatarMedia extends Config {
-        
+class AvatarMedia extends Config
+{
+    public ?string $mediaId;
+    public ?string $name;
+    public ?string $type;
+    public ?string $media;
+    public ?string $emotions;
+    public ?string $actions;
+    public ?string $poses;
+    public $hd;
+    public $talking;
+
+    public function parseXML($xml): void
+    {
+        parent::parseXML($xml);
+        $xmlData = simplexml_load_string($xml);
+        if ($xmlData === false) {
+            echo "Failed loading XML: ";
+            foreach (libxml_get_errors() as $error) {
+                echo "<br>", $error->message;
+            }
+        }
+        // else {
+        //     print_r($xmlData);
+        // }
+
+        $this->mediaId = $xmlData->attributes()->mediaId;
+        $this->name = $xmlData->attributes()->name;
+        $this->type = $xmlData->attributes()->type;
+        $this->media = $xmlData->attributes()->media;
+        $this->emotions = $xmlData->attributes()->emotions;
+        $this->actions = $xmlData->attributes()->actions;
+        $this->poses = $xmlData->attributes()->poses;
+        $this->hd = $xmlData->attributes()->hd;
+        $this->talking = $xmlData->attributes()->talking;
     }
+
+    public function toXML(): ?string
+    {
+        $writer .= "<avatar-media";
+        $this->writeCredentails($writer);
+        if (isset($this->mediaId)) {
+            $writer .= " mediaId=\"" . $this->mediaId . "\"";
+        }
+        if (isset($this->mediaId)) {
+            $writer .= " mediaId=\"" . $this->mediaId . "\"";
+        }
+        if (isset($this->type)) {
+            $writer .= " type=\"" . $this->type . "\"";
+        }
+        if (isset($this->emotions)) {
+            $writer .= " emotions=\"" . $this->emotions . "\"";
+        }
+        if (isset($this->actions)) {
+            $writer .= " actions=\"" . $this->actions . "\"";
+        }
+        if (isset($this->poses)) {
+            $writer .= " poses=\"" . $this->poses . "\"";
+        }
+        $writer .= " hd=\"" . $this->hd . "\"";
+        $writer .= " hd=\"" . $this->talking . "\"";
+        $writer .= "/>";
+        return $writer;
+    }
+
+    public function isVideo () : bool {
+        return isset($this->type) && strpos($this->type, 'video') !== false;
+    }
+
+    public function isAudio () : bool {
+        return isset($this->type) && strpos($this->type, 'audio') !== false;
+    }
+}
 ?>

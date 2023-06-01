@@ -32,7 +32,7 @@ class DomainConfig extends WebMediumConfig {
 
     public function toXML() : String {
         $writer = "<domain";
-        if($this->creationMode !=null && !$this->creationMode === "") {
+        if(isset($this->creationMode)) {
             $writer.= " creationMode=\"" . $this->creationMode . "\"";
         }
         $this->writeXML($writer);
@@ -49,7 +49,7 @@ class DomainConfig extends WebMediumConfig {
             }
         } else {
             //Print
-            print_r($xmlData);
+            //print_r($xmlData);
         }
         $this->creationMode = $xmlData->attributes()->creationMode;
     }

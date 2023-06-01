@@ -27,6 +27,8 @@ require_once('./config/DomainConfig.php');
 require_once('./config/ForumPostConfig.php');
 require_once('./config/UserMessageConfig.php');
 require_once('./config/ResponseConfig.php');
+require_once('./config/ForumPostConfig.php');
+require_once('./config/MediaConfig.php');
 
 class SDKConnection
 {
@@ -101,7 +103,7 @@ class SDKConnection
 			$result->parseXML($xml);
 		} catch (Exception $exception) {
 
-			echo "Error: " + $exception->getMessage();
+			echo "Error: " . $exception->getMessage();
 		}
 		return $result;
 	}
@@ -155,9 +157,47 @@ class SDKConnection
 			$response->parseXML($xml);
 			return $response;
 		} catch (Exception $exception) {
-			echo "Error: " + $exception;
+			echo "Error: " . $exception->getMessage();
 		}
 	}
+
+	/**
+	 * Fetch the content details from the server.
+	 * The id or name and domain of the object must be set.
+	 */
+	public function fetch($config) {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/check-" . $config->getType(), $config->toXML());
+		if($xml==null) {
+			return null;
+		}
+		try {
+			$config->parseXML($xml);
+			return $config;
+		}catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Create the new content.
+	 * The content will be returned with its new id.
+	 */
+	public function create($config) {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/create-" . $config->getType(), $config->toXML());
+		if($xml == null) {
+			return null;
+		}
+		try {
+			$config->parseXML($xml);
+			return $config;
+		}catch(Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
 
 
 	/**
@@ -176,7 +216,7 @@ class SDKConnection
 			$response->parseXML($xml);
 			return $response;
 		} catch (Exception $exception) {
-			echo "Error: " + $exception; //Misssing implementation of SDKException.parseFailure(exception);
+			echo "Error: " . $exception->getMessage(); //Misssing implementation of SDKException.parseFailure(exception);
 		}
 	}
 
@@ -186,7 +226,7 @@ class SDKConnection
 	 * Function names can't be the same.
 	 */
 	public function fetchUser(UserConfig $config): ?UserConfig
-	{ //Need Testing
+	{ 
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/view-user", $config->toXML());
 		if ($xml == null) {
@@ -204,13 +244,9 @@ class SDKConnection
 	/**
 	 * Fetch the URL for the image from the server.
 	 */
-	// public function fetchImage(String $image) : URL {
-	// 	try {
-	// 		return new URL("http://" . $this->credentials->host + $this->credentials->app . "/" + $image);
-	// 	} catch (Exception $exception) {
-	// 		echo "Error: " . $exception->getMessage();
-	// 	}
-	// }
+	public function fetchImage(String $image) : String {
+		return "http://" . $this->credentials->host . $this->credentials->app . "/" . $image;
+	}
 
 	/**
 	 * Fetch the forum post details for the forum post id.
@@ -250,6 +286,25 @@ class SDKConnection
 			echo "Error: " . $exception->getMessage();
 		}
 	}
+	/**
+	 * Update the user details.
+	 * The password must be passed to allow the update.
+	 */
+	public function updateUser(UserConfig $config) : ?UserConfig {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/update-user", $config->toXML());
+		if($xml == null) {
+			return null;
+		}
+		try {
+			$user = new UserConfig();
+			$user->parseXML($xml);
+			$this->user = $user;
+			return $user;
+		}catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
 
 	/**
 	 * Create a new forum post.
@@ -274,43 +329,39 @@ class SDKConnection
 	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
-	// public MediaConfig createChannelFileAttachment(String file, MediaConfig config) {
-	// 	config.addCredentials(this);
-	// 	String xml = POSTFILE(this.url + "/create-channel-attachment", file, config.name, config.toXML());
-	// 	Element root = parse(xml);
-	// 	if (root == null) {
-	// 		return null;
-	// 	}
-	// 	try {
-	// 		MediaConfig media = new MediaConfig();
-	// 		media.parseXML(root);
-	// 		return media;
-	// 	} catch (Exception exception) {
-	// 		this.exception = SDKException.parseFailure(exception);
-	// 		throw this.exception;
-	// 	}
-	// }
+	public function createChannelFileAttachment(String $file, MediaConfig $config) {
+		$config->addCredentials($this);
+		$xml = $this->POSTFILE($this->url . "/create-channel-attachment", $file, $config->name, $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$media = new MediaConfig();
+			$media->parseXML($xml);
+			return $media;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
 
 
 	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
-	// public MediaConfig createChannelImageAttachment(String file, MediaConfig config) {
-	// 	config.addCredentials(this);
-	// 	String xml = POSTIMAGE(this.url + "/create-channel-attachment", file, config.name, config.toXML());
-	// 	Element root = parse(xml);
-	// 	if (root == null) {
-	// 		return null;
-	// 	}
-	// 	try {
-	// 		MediaConfig media = new MediaConfig();
-	// 		media.parseXML(root);
-	// 		return media;
-	// 	} catch (Exception exception) {
-	// 		this.exception = SDKException.parseFailure(exception);
-	// 		throw this.exception;
-	// 	}
-	// }
+	public function createChannelImageAttachment(String $file, MediaConfig $config) {
+		$config->addCredentials($this);
+		$xml = $this->POSTIMAGE($this->url . "/create-channel-attachment", $file, $config->name, $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$media = new MediaConfig();
+			$media->parseXML($xml);
+			return $media;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
 
 	/**
 	 * Create a reply to a forum post.
@@ -383,35 +434,16 @@ class SDKConnection
 	}
 
 
-	/**
-	 * Return the administrators of the content.
-	 */
-	public function getAdmins(WebMediumConfig $config)
-	{
-		$config->addCredentials($this);
-		$xml = $this->POST($this->url . "/get-" . $config->getType() . "-admins", $config->toXML());
-		$users = array();
-		if ($xml == null) {
-			return $users;
-		}
-		$xmlData = simplexml_load_string($xml);
-		if ($xmlData === false) {
-			echo "Failed loading XML: ";
-			foreach (libxml_get_errors() as $error) {
-				echo "<br>", $error->message;
-			}
-		}
-		// else {
-		//     print_r($xmlData);
-		// }
-		// for (int index = 0; index < root.getChildNodes().getLength(); index++) {
-		// 	UserConfig user = new UserConfig();
-		// 	user.parseXML((Element)root.getChildNodes().item(index));
-		// 	users.add(user.user);
-		// }
-		// return users;
 
-		return $xmlData;
+	/**
+	 * Permanently delete the content with the id.
+	 */
+	public function delete(WebMediumConfig $config) : void {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/delete-" . $config->getType(), $config->toXML());
+		if(!isset($this->domain) && $this->domain->id === $config->id && $config->getType() === "domain"){
+			$this->domain=null;
+		}
 	}
 
 
@@ -460,6 +492,16 @@ class SDKConnection
 		$config->addCredentials($this);
 		$this->POST($this->url . "/save-avatar-media", $config->toXML());
 	}
+
+
+	/**
+	 * Flag the content as offensive, a reason is required.
+	 */
+	public function flag(WebMediumConfig $config) : void {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/flag-" . $config->getType(), $config->toXML());
+	}
+
 
 	/**
 	 * Subscribe for email updates for the post.
@@ -571,9 +613,177 @@ class SDKConnection
 	}
 
 	/**
+	 * Return the forum's bot configuration.
+	 */
+	public function getForumBotMode(ForumConfig $config): ?BotModeConfig
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-forum-bot-mode", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$botMode = new BotModeConfig();
+			$botMode->parseXML($xml);
+			return $botMode;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Return the bot's voice configuration.
+	 */
+	public function getVoice(InstanceConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-voice", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$voice = new VoiceConfig();
+			$voice->parseXML($xml);
+			return $voice;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Return the bot's default responses.
+	 */
+
+	public function getDefaultResponses(InstanceConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-default-responses", $config->toXML());
+		$defaultResponses = array();
+		if ($xml == null) {
+			return $defaultResponses;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				array_push($defaultResponses, $element);
+			}
+			return $defaultResponses;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Return the bot's greetings.
+	 */
+	public function getGreetings(ResponseSearchConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-greetings", $config->toXML());
+		$greetings = array();
+		if ($xml == null) {
+			return $greetings;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				array_push($greetings, $element);
+			}
+			return $greetings;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+	/**
+	 * Search the bot's responses.
+	 */
+	public function getResponses(ResponseSearchConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-responses", $config->toXML());
+		$responses = array();
+		if ($xml == null) {
+			return $responses;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				$response = new ResponseConfig();
+				$response->parseXML($element);
+				array_push($responses, $response);
+			}
+			return $responses;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+	/**
+	 * Search the bot's conversations.
+	 */
+	public function getConversations(ResponseSearchConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-converstaions", $config->toXML());
+		$conversations = array();
+		if ($xml == null) {
+			return $conversations;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				$response = new ConversationConfig();
+				$response->parseXML($element);
+				array_push($conversations, $response);
+			}
+			return $conversations;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
 	 * Return the bot's learning configuration.
 	 */
-	public function getLearning(InstanceConfig $config) : ?LearningConfig {
+	public function getLearning(InstanceConfig $config): ?LearningConfig
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-learning", $config->toXML());
 		if ($xml == null) {
@@ -604,49 +814,56 @@ class SDKConnection
 	/**
 	 * Return the list of content types.
 	 */
-	public function getTypes() {
+	public function getTypes()
+	{
 		return $this->types;
 	}
-	
+
 	/**
 	 * Return the channel types.
 	 */
-	public function getChannelTypes() {
+	public function getChannelTypes()
+	{
 		return $this->channelTypes;
 	}
-	
+
 	/**
 	 * Return the access mode types.
 	 */
-	public function getAccessModes() {
+	public function getAccessModes()
+	{
 		return $this->accessModes;
 	}
-	
+
 	/**
 	 * Return the media access mode types.
 	 */
-	public function getMediaAccessModes() {
+	public function getMediaAccessModes()
+	{
 		return $this->mediaAccessModes;
 	}
-	
+
 	/**
 	 * Return the learning mode types.
 	 */
-	public function getLearningModes() {
+	public function getLearningModes()
+	{
 		return $this->learningModes;
 	}
-	
+
 	/**
 	 * Return the correction mode types.
 	 */
-	public function getCorrectionModes() {
+	public function getCorrectionModes()
+	{
 		return $this->correctionModes;
 	}
-	
+
 	/**
 	 * Return the bot mode types.
 	 */
-	public function getBotModes() {
+	public function getBotModes()
+	{
 		return $this->botModes;
 	}
 
@@ -726,30 +943,375 @@ class SDKConnection
 	{
 		$this->debug = $debug;
 	}
-	// public Element parse(String xml) {
-	// 	if (this.debug) {
-	// 		System.out.println(xml);
-	// 	}
-	// 	Document dom = null;
-	// 	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	// 	try {
-	// 		DocumentBuilder builder = factory.newDocumentBuilder();
-	// 		InputSource source = new InputSource();
-	// 		source.setCharacterStream(new StringReader(xml));
-	// 		dom = builder.parse(source);
-	// 		return dom.getDocumentElement();
-	// 	} catch (Exception exception) {
-	// 		if (this.debug) {
-	// 			exception.printStackTrace();
-	// 		}
-	// 		this.exception = new SDKException(exception.getMessage(), exception);
-	// 		throw this.exception;
-	// 	}
-	// }
+
+	/**
+	 * Return the administrators of the content.
+	 */
+	public function getAdmins(WebMediumConfig $config) {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-" . $config->getType() . "-admins", $config->toXML());
+		$users = array();
+		if ($users == null) {
+			return $users;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					$user = new UserConfig();
+					$user->parseXML($element);
+					array_push($users, $user->user);
+				}
+			}
+			return $users;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Return the list of user details for the comma separated values list of user ids.
+	 */
+	public function getUsers(String $usersCSV) {
+		$config = new UserConfig();
+		$config->user = $usersCSV;
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-users", $config->toXML());
+		$users = array();
+		if ($xml == null) {
+			return $users;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					$userConfig = new UserConfig();
+					$userConfig->parseXML($element);
+					array_push($users, $userConfig);
+				}
+			}
+			return $users;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Return the list of forum posts for the forum browse criteria.
+	 */
+	public function getPosts(BrowseConfig $config) {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-forum-posts", $config->toXML());
+		$instances =array();
+		if ($xml == null) {
+			return $instances;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					$post = new ForumPostConfig();
+					$post->parseXML($element);
+					array_push($post, $post);
+				}
+			}
+			return $instances;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Return the list of categories for the type, and domain.
+	 */
+	 public function getCategories(ContentConfig $config) {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-categories", $config->toXML());
+		$categories = array();
+		if ($xml == null) {
+			return $categories;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					$category = new ContentConfig();
+					$category->parseXML($element);
+					array_push($categories, $category);
+				}
+			}
+			return $categories;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/*
+	*Return the list of tags for the type, and domain.
+	*/
+	public function getTags(ContentConfig $config) {
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-tags", $config->toXML());
+		$tags = array();
+		array_push($tags, "");
+		if($xml == null) {
+			return $tags;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					//tags.add(((Element)root.getChildNodes().item(index)).getAttribute("name"));
+					array_push($tags, $element);
+				}
+			}
+			return $tags;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Return the list of bot templates.
+	 */
+
+	//return the list of templates with the pictures.
+	public function getTemplates()
+	{
+		$xml = $this->GET($this->url . "/get-all-templates");
+		$instances = array();
+		if ($xml == null) {
+			return $instances;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					$instance = new InstanceConfig();
+					$instance->parseXML($element);
+					array_push($instances, $instance);
+				}
+			}
+			return $instances;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Return the users for the content.
+	 */
+	public function getUsersOfType(WebMediumConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-" . $config->getType() . "-users", $config->toXML());
+		$users = array();
+		if ($xml == null) {
+			return $users;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			} else {
+				foreach ($xmlData as $element) {
+					$user = new UserConfig();
+					$user->parseXML($element);
+					array_push($users, $user->user);
+				}
+			}
+			return $users;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Return the channel's bot configuration.
+	 */
+	public function getChannelBotMode(ChannelConfig $config): ?BotModeConfig
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-channel-bot-mode", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$botMode = new BotModeConfig();
+			$botMode->parseXML($xml);
+			return $botMode;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Save the channel's bot configuration.
+	 */
+	public function saveChannelBotMode(BotModeConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url + "/save-channel-bot-mode", $config->toXML());
+	}
+
+
+	/**
+	 * Save the forum's bot configuration.
+	 */
+	public function saveForumBotMode(BotModeConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url + "/save-forum-bot-mode", $config->toXML());
+	}
+
+	/**
+	 * Save the bot's learning configuration.
+	 */
+	public function saveLearning(LearningConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url + "/save-learning", $config->toXML());
+	}
+
+
+	/**
+	 * Save the bot's voice configuration.
+	 */
+	public function saveVoice(VoiceConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url + "/save-voice", $config->toXML());
+	}
+
+	/**
+	 * Save the bot's avatar configuration.
+	 */
+	public function saveBotAvatar(InstanceConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url + "/save-bot-avatar", $config->toXML());
+	}
+
+	/**
+	 * Train the bot with a new question/response pair.
+	 */
+	public function train(TrainingConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/train-instance", $config->toXML());
+	}
+
+
+	/**
+	 * Perform the user administration task (add or remove users, or administrators).
+	 */
+	public function userAdmin(UserAdminConfig $config): void
+	{
+		$config->addCredentials($this);
+		$this->POST($this->url . "/user-admin", $config->toXML());
+	}
+
+
+	/**
+	 * Save the image as the avatar's background.
+	 */
+	public function saveAvatarBackground(string $file, AvatarMedia $config): void
+	{
+		$config->addCredentials($this);
+		$this->POSTIMAGE($this->url . "/save-avatar-background", $file, $config->name, $config->toXML());
+	}
+
+	/**
+	 * Add the avatar media file to the avatar.
+	 */
+	public function createAvatarMedia(string $file, AvatarMedia $config): void
+	{
+		$config->addCredentials($this);
+		if ((pathinfo($file, PATHINFO_EXTENSION) === "jpg") || (pathinfo($file, PATHINFO_EXTENSION) === "jpeg")) {
+			if ($config->hd) {
+				$this->POSTHDIMAGE($this->url . "/create-avatar-media", $file, $config->name, $config->toXML());
+			} else {
+				$this->POSTIMAGE($this->url . "/create-avatar-media", $file, $config->name, $config->toXML());
+			}
+		} else {
+			$this->POSTFILE($this->url . "/create-avatar-media", $file, $config->name, $config->toXML());
+		}
+	}
+
+	/**
+	 * Add the graphic media file to the graphic.
+	 */
+	public function createGraphicMedia(string $file, GraphicConfig $config): void
+	{
+		$config->addCredentials($this);
+		if ((pathinfo($file, PATHINFO_EXTENSION) === "jpg") || (pathinfo($file, PATHINFO_EXTENSION) === "jpeg")) {
+			$this->POSTIMAGE($this->url . "/update-graphic-media", $file, $config->fileName, $config->toXML());
+		} else {
+			$this->POSTFILE($this->url . "/update-graphic-media", $file, $config->fileName, $config->toXML());
+		}
+	}
+
+
+	/**
+	 * Update the user's icon.
+	 * The file will be uploaded to the server.
+	 */
+	public function updateIconUser(string $file, UserConfig $config): ?UserConfig
+	{
+		$config->addCredentials($this);
+		$xml = $this->POSTIMAGE($this->url . "/update-user-icon", $file, "image.jpg", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$config = new UserConfig();
+			$config->parseXML($xml);
+			return $config;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
 
 
 
-	public function GET(string $url) : string {
+	public function GET(string $url): string
+	{
 		if ($this->debug) {
 			$debugComment = "GET_URL: " . $url;
 			$debugInfo = $url;
@@ -834,6 +1396,201 @@ class SDKConnection
 		}
 		curl_close($ch);
 		return $response;
+	}
+
+
+	public function POSTIMAGE(string $url, string $file, string $name, string $xml): ?string
+	{
+		if ($this->debug) {
+			$debugComment = "POST_FILE: " . $name . "<br>" . $url . "<br>" . $file;
+			$debugInfo = htmlentities($xml);
+			include "./views/debug.php";
+		}
+		try {
+			$ch = curl_init();
+			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
+			if ($this->debug) {
+				$debugComment = "POST: Sending xml request.";
+				$debugInfo = $xmlData;
+				include "./views/debug.php";
+			}
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			$originalImage = imagecreatefromjpeg($file);
+			$resizedImage = imagecreatetruecolor(300, 300);
+
+			//Resizing the image
+			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, imagesx($originalImage), imagesy($originalImage));
+
+			//Compress the resized image to a JPEG byte array
+			//there is a code
+			ob_start();
+			imagejpeg($resizedImage, null, 90);
+			$byte_arr = ob_get_clean();
+			//curl file object
+			$fileBody = new CURLFile(null, 'image/jpeg', $name);
+			//Data
+			$postData = array(
+				$name => $fileBody,
+				'xml' => $xml
+			);
+
+			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$headers = [
+				'Content-Type: application/xml',
+				'Accept: application/xml'
+			];
+
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			//Execute request
+			$response = curl_exec($curl);
+
+			//Check for errors
+			if (curl_errno($curl)) {
+				echo "Error: " . curl_error($curl);
+			} else {
+				if ($this->debug) {
+					if (isset($response) || $response !== null) {
+						$result = simplexml_load_string($response) or die("Error: Cannot create object");
+						$debugComment = "Result after the request.";
+						$debugInfo = $result;
+						include "./views/debug.php";
+					}
+				}
+			}
+			curl_close($curl);
+			echo $response;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	public function POSTHDIMAGE(string $url, string $file, string $name, string $xml): ?string
+	{
+		if ($this->debug) {
+			$debugComment = "POST_FILE: " . $name . "<br>" . $url . "<br>" . $file;
+			$debugInfo = htmlentities($xml);
+			include "./views/debug.php";
+		}
+		try {
+			$ch = curl_init();
+			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
+			if ($this->debug) {
+				$debugComment = "POST: Sending xml request.";
+				$debugInfo = $xmlData;
+				include "./views/debug.php";
+			}
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			$originalImage = imagecreatefromjpeg($file);
+			$resizedImage = imagecreatetruecolor(600, 600);
+
+			//Resizing the image
+			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, imagesx($originalImage), imagesy($originalImage));
+
+			//Compress the resized image to a JPEG byte array
+			//there is a code
+			ob_start();
+			imagejpeg($resizedImage, null, 90);
+			$byte_arr = ob_get_clean();
+			//curl file object
+			$fileBody = new CURLFile(null, 'image/jpeg', $name);
+			//Data
+			$postData = array(
+				$name => $fileBody,
+				'xml' => $xml
+			);
+
+			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$headers = [
+				'Content-Type: application/xml',
+				'Accept: application/xml'
+			];
+
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			//Execute request
+			$response = curl_exec($curl);
+
+			//Check for errors
+			if (curl_errno($curl)) {
+				echo "Error: " . curl_error($curl);
+			} else {
+				if ($this->debug) {
+					if (isset($response) || $response !== null) {
+						$result = simplexml_load_string($response) or die("Error: Cannot create object");
+						$debugComment = "Result after the request.";
+						$debugInfo = $result;
+						include "./views/debug.php";
+					}
+				}
+			}
+			curl_close($curl);
+			echo $response;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	public function POSTFILE(string $url, string $path, string $name, string $xml): ?string
+	{
+		if ($this->debug) {
+			$debugComment = "POST_FILE: " . $name . "<br>" . $url . "<br>" . $path;
+			$debugInfo = htmlentities($xml);
+			include "./views/debug.php";
+		}
+		try {
+			$ch = curl_init();
+			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
+			if ($this->debug) {
+				$debugComment = "POST: Sending xml request.";
+				$debugInfo = $xmlData;
+				include "./views/debug.php";
+			}
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			//curl file object
+			$file = new CURLFile($path, mime_content_type($path), basename($path));
+			//Data
+			$postData = array(
+				$name => $file,
+				'xml' => $xml
+			);
+
+			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$headers = [
+				'Content-Type: application/xml',
+				'Accept: application/xml'
+			];
+
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			//Execute request
+			$response = curl_exec($curl);
+
+			//Check for errors
+			if (curl_errno($curl)) {
+				echo "Error: " . curl_error($curl);
+			} else {
+				if ($this->debug) {
+					if (isset($response) || $response !== null) {
+						$result = simplexml_load_string($response) or die("Error: Cannot create object");
+						$debugComment = "Result after the request.";
+						$debugInfo = $result;
+						include "./views/debug.php";
+					}
+				}
+			}
+			curl_close($curl);
+			echo $response;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
 	}
 }
 ?>
