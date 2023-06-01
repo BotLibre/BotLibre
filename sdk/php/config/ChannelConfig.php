@@ -16,8 +16,63 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-class ChannelConfig {
+class ChannelConfig extends WebMediumConfig {
+    public ?String $type;
+	public ?String $videoAccessMode;
+	public ?String $audioAccessMode;
+	public ?String $messages;
+	public ?String $usersOnline;
+	public ?String $adminsOnline;
 
-    
+    public function getType() : ?String {
+        return "channel";
+    }
+
+    public function stats() {
+        return $this->usersOnline . " users online, " . $this->adminsOnline . " admins";
+    }
+
+    public function credentials() : WebMediumConfig {
+        $config = new ChannelConfig();
+        $config->id = $this->id;
+        return $config;
+    }
+
+    public function toXML() : String {
+        $writer .= "<channel";
+        if(isset($this->type) && !empty($this->type)) {
+            $writer .= " type=\"" . $this->type . "\"";
+        }
+        if(isset($this->videoAccessMode)) {
+            $writer .= " videoAccessMode=\"" . $this->videoAccessMode . "\"";
+        }
+        if(isset($this->audioAccessMode)) {
+            $writer .= " audioAccessMode=\"" . $this->audioAccessMode . "\"";
+        }
+        $this->writeXML($writer);
+        $writer .="</channel>";
+        return $writer;
+    }
+
+    public function parseXML($xml) {
+        parent::parseXML($xml);
+        $xmlData = simplexml_load_string($xml);
+        if ($xmlData === false) {
+            echo "Failed loading XML: ";
+            foreach (libxml_get_errors() as $error) {
+                echo "<br>", $error->message;
+            }
+        } 
+        // else {
+        //     print_r($xmlData);
+        // }
+        //$this->user = $tempXML->user;
+        $this->type = $xmlData->attributes()->type;
+        $this->videoAccessMode = $xmlData->attributes()->videoAccessMode;
+        $this->audioAccessMode = $xmlData->attributes()->audioAccessMode;
+        $this->messages = $xmlData->attributes()->messages;
+        $this->usersOnline = $xmlData->attributes()->usersOnline;
+        $this->adminsOnline = $xmlData->attributes()->adminsOnline;
+    }
 }
 ?>

@@ -59,13 +59,17 @@ abstract class WebMediumConfig extends Config
 
 
     // abstract public function toXML() : String;
-    // abstract public function getType(): String;
+    abstract public function getType(): ?String;
     // abstract public function credentials(): WebMediumConfig;
 
     public function stats(): string
     {
         return "";
     }
+
+    public function toString() : ?String {
+		return $this->name;
+	}
 
     public function getToken(): int
     {
@@ -75,7 +79,7 @@ abstract class WebMediumConfig extends Config
         }
         return $token;
     }
-    public function writeXML($writer): void
+    public function writeXML(&$writer): void
     {
         $writer = $this->writeCredentails($writer);
         if ($this->id != null) {
@@ -170,9 +174,10 @@ abstract class WebMediumConfig extends Config
             foreach (libxml_get_errors() as $error) {
                 echo "<br>", $error->message;
             }
-        } else {
-            print_r($xmlData);
-        }
+        } 
+        // else {
+        //     print_r($xmlData);
+        // }
         //$this->user = $tempXML->user;
         $this->id = $xmlData->attributes()->id;
         $this->name = $xmlData->attributes()->name;
