@@ -28,12 +28,10 @@ class BrowseConfig extends Config {
 	public ?String $page;
 	public ?String $contentRating;
 
-    public function toXML() : ?String {
+    public function toXML() : string {
+        $writer = "";
         $writer .= "<browse";
         $this->writeCredentails($writer);
-        if(isset($this->typeFilter)) {
-            $writer .= " type=\"" . $this->type . "\"";
-        }
         if(isset($this->userFilter)) {
             $writer .= " userFilter=\"" . $this->userFilter . "\"";
         }

@@ -42,6 +42,7 @@ require_once('./util/Utils.php');
         public ?String $replyCount;
         public ?String $parent;
         public ?String $avatar;
+
         public $replies = array();
 
 
@@ -112,8 +113,12 @@ require_once('./util/Utils.php');
             }catch (Exception $exception){
                 echo "Error: " . $exception->getMessage();
             }
+
+            //Check xmlData is not null.
+            if(!is_object($xmlData)) {
+                return;
+            }
             //Attributes
-            $this->id = $xmlData->attributes()->id;
             $this->parent = $xmlData->attributes()->parent;
             $this->forum = $xmlData->attributes()->forum;
             $this->views = $xmlData->attributes()->views;

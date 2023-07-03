@@ -20,7 +20,6 @@ class AvatarMedia extends Config
 {
     public ?string $mediaId;
     public ?string $name;
-    public ?string $type;
     public ?string $media;
     public ?string $emotions;
     public ?string $actions;
@@ -53,8 +52,9 @@ class AvatarMedia extends Config
         $this->talking = $xmlData->attributes()->talking;
     }
 
-    public function toXML(): ?string
+    public function toXML(): string
     {
+        $writer = "";
         $writer .= "<avatar-media";
         $this->writeCredentails($writer);
         if (isset($this->mediaId)) {
@@ -62,9 +62,6 @@ class AvatarMedia extends Config
         }
         if (isset($this->mediaId)) {
             $writer .= " mediaId=\"" . $this->mediaId . "\"";
-        }
-        if (isset($this->type)) {
-            $writer .= " type=\"" . $this->type . "\"";
         }
         if (isset($this->emotions)) {
             $writer .= " emotions=\"" . $this->emotions . "\"";
@@ -76,7 +73,7 @@ class AvatarMedia extends Config
             $writer .= " poses=\"" . $this->poses . "\"";
         }
         $writer .= " hd=\"" . $this->hd . "\"";
-        $writer .= " hd=\"" . $this->talking . "\"";
+        $writer .= " talking=\"" . $this->talking . "\"";
         $writer .= "/>";
         return $writer;
     }

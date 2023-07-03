@@ -47,7 +47,7 @@ class VoiceConfig extends Config
         $this->speechRate = $xmlData->attributes()->speechRate;
     }
 
-    public function toXML(): ?string
+    public function toXML(): string
     {
         $writer .= "<voice";
         $this->writeCredentails($writer);

@@ -28,7 +28,7 @@ class ChannelConfig extends WebMediumConfig {
         return "channel";
     }
 
-    public function stats() {
+    public function stats() : string{
         return $this->usersOnline . " users online, " . $this->adminsOnline . " admins";
     }
 
@@ -54,7 +54,7 @@ class ChannelConfig extends WebMediumConfig {
         return $writer;
     }
 
-    public function parseXML($xml) {
+    public function parseXML($xml) : void {
         parent::parseXML($xml);
         $xmlData = simplexml_load_string($xml);
         if ($xmlData === false) {

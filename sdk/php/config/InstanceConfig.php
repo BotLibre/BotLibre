@@ -72,6 +72,7 @@ class InstanceConfig extends WebMediumConfig {
             foreach (libxml_get_errors() as $error) {
                 echo "<br>", $error->message;
             }
+            return;
         } 
         $this->allowForking = $xmlData->attributes()->allowForking;
         $this->hasAPI = $xmlData->attributes()->hasAPI;

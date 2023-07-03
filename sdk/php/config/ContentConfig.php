@@ -27,10 +27,13 @@ class ContentConfig extends Config {
         try {
             $xmlData = simplexml_load_string($xml);
             if($xmlData === false) {
-                echo "Failed loading XML: ";
+                echo "Failed loading XML: <br>";
+                var_dump($xml);
+                echo "<br>";
                 foreach (libxml_get_errors() as $error) {
                     echo "<br>", $error->message;
                 }
+                return;
             }
         }catch (Exception $exception){
             echo "Error: " . $exception->getMessage();
@@ -45,11 +48,10 @@ class ContentConfig extends Config {
     }
 
     public function toXML() : String {
+        $writer = "";
         $writer .= "<content";
         $this->writeCredentails($writer);
-        if(isset($this->type)) {
-            $writer .= " type=\"" . $this->type . "\"";
-        }
+        
         $writer .= "/>";
         return $writer;
     }

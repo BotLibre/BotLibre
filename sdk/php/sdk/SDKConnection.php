@@ -29,6 +29,17 @@ require_once('./config/UserMessageConfig.php');
 require_once('./config/ResponseConfig.php');
 require_once('./config/ForumPostConfig.php');
 require_once('./config/MediaConfig.php');
+require_once('./config/AvatarMedia.php');
+require_once('./config/BrowseConfig.php');
+require_once('./config/ContentConfig.php');
+require_once('./config/AvatarMessage.php');
+require_once('./config/Speech.php');
+require_once('./config/InstanceConfig.php');
+require_once('./config/AvatarConfig.php');
+require_once('./config/ChannelConfig.php');
+require_once('./config/BotModeConfig.php');
+require_once('./config/LearningConfig.php');
+require_once('./config/VoiceConfig.php');
 
 class SDKConnection
 {
@@ -165,16 +176,17 @@ class SDKConnection
 	 * Fetch the content details from the server.
 	 * The id or name and domain of the object must be set.
 	 */
-	public function fetch($config) {
+	public function fetch($config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/check-" . $config->getType(), $config->toXML());
-		if($xml==null) {
+		if ($xml == null) {
 			return null;
 		}
 		try {
 			$config->parseXML($xml);
 			return $config;
-		}catch (Exception $exception) {
+		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
 	}
@@ -183,16 +195,17 @@ class SDKConnection
 	 * Create the new content.
 	 * The content will be returned with its new id.
 	 */
-	public function create($config) {
+	public function create($config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/create-" . $config->getType(), $config->toXML());
-		if($xml == null) {
+		if ($xml == null) {
 			return null;
 		}
 		try {
 			$config->parseXML($xml);
 			return $config;
-		}catch(Exception $exception) {
+		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
 	}
@@ -226,7 +239,7 @@ class SDKConnection
 	 * Function names can't be the same.
 	 */
 	public function fetchUser(UserConfig $config): ?UserConfig
-	{ 
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/view-user", $config->toXML());
 		if ($xml == null) {
@@ -244,7 +257,8 @@ class SDKConnection
 	/**
 	 * Fetch the URL for the image from the server.
 	 */
-	public function fetchImage(String $image) : String {
+	public function fetchImage(string $image): string
+	{
 		return "http://" . $this->credentials->host . $this->credentials->app . "/" . $image;
 	}
 
@@ -290,10 +304,11 @@ class SDKConnection
 	 * Update the user details.
 	 * The password must be passed to allow the update.
 	 */
-	public function updateUser(UserConfig $config) : ?UserConfig {
+	public function updateUser(UserConfig $config): ?UserConfig
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/update-user", $config->toXML());
-		if($xml == null) {
+		if ($xml == null) {
 			return null;
 		}
 		try {
@@ -301,7 +316,7 @@ class SDKConnection
 			$user->parseXML($xml);
 			$this->user = $user;
 			return $user;
-		}catch (Exception $exception) {
+		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
 	}
@@ -329,7 +344,8 @@ class SDKConnection
 	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
-	public function createChannelFileAttachment(String $file, MediaConfig $config) {
+	public function createChannelFileAttachment(string $file, MediaConfig $config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POSTFILE($this->url . "/create-channel-attachment", $file, $config->name, $config->toXML());
 		if ($xml == null) {
@@ -348,7 +364,8 @@ class SDKConnection
 	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
-	public function createChannelImageAttachment(String $file, MediaConfig $config) {
+	public function createChannelImageAttachment(string $file, MediaConfig $config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POSTIMAGE($this->url . "/create-channel-attachment", $file, $config->name, $config->toXML());
 		if ($xml == null) {
@@ -438,11 +455,12 @@ class SDKConnection
 	/**
 	 * Permanently delete the content with the id.
 	 */
-	public function delete(WebMediumConfig $config) : void {
+	public function delete(WebMediumConfig $config): void
+	{
 		$config->addCredentials($this);
 		$this->POST($this->url . "/delete-" . $config->getType(), $config->toXML());
-		if(!isset($this->domain) && $this->domain->id === $config->id && $config->getType() === "domain"){
-			$this->domain=null;
+		if (!isset($this->domain) && $this->domain->id === $config->id && $config->getType() === "domain") {
+			$this->domain = null;
 		}
 	}
 
@@ -497,7 +515,8 @@ class SDKConnection
 	/**
 	 * Flag the content as offensive, a reason is required.
 	 */
-	public function flag(WebMediumConfig $config) : void {
+	public function flag(WebMediumConfig $config): void
+	{
 		$config->addCredentials($this);
 		$this->POST($this->url . "/flag-" . $config->getType(), $config->toXML());
 	}
@@ -947,7 +966,8 @@ class SDKConnection
 	/**
 	 * Return the administrators of the content.
 	 */
-	public function getAdmins(WebMediumConfig $config) {
+	public function getAdmins(WebMediumConfig $config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-" . $config->getType() . "-admins", $config->toXML());
 		$users = array();
@@ -978,7 +998,8 @@ class SDKConnection
 	/**
 	 * Return the list of user details for the comma separated values list of user ids.
 	 */
-	public function getUsers(String $usersCSV) {
+	public function getUsers(string $usersCSV)
+	{
 		$config = new UserConfig();
 		$config->user = $usersCSV;
 		$config->addCredentials($this);
@@ -1010,10 +1031,11 @@ class SDKConnection
 	/**
 	 * Return the list of forum posts for the forum browse criteria.
 	 */
-	public function getPosts(BrowseConfig $config) {
+	public function getPosts(BrowseConfig $config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-forum-posts", $config->toXML());
-		$instances =array();
+		$instances = array();
 		if ($xml == null) {
 			return $instances;
 		}
@@ -1028,7 +1050,7 @@ class SDKConnection
 				foreach ($xmlData as $element) {
 					$post = new ForumPostConfig();
 					$post->parseXML($element);
-					array_push($post, $post);
+					array_push($instances, $post);
 				}
 			}
 			return $instances;
@@ -1041,7 +1063,8 @@ class SDKConnection
 	/**
 	 * Return the list of categories for the type, and domain.
 	 */
-	 public function getCategories(ContentConfig $config) {
+	public function getCategories(ContentConfig $config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-categories", $config->toXML());
 		$categories = array();
@@ -1069,14 +1092,15 @@ class SDKConnection
 	}
 
 	/*
-	*Return the list of tags for the type, and domain.
-	*/
-	public function getTags(ContentConfig $config) {
+	 *Return the list of tags for the type, and domain.
+	 */
+	public function getTags(ContentConfig $config)
+	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-tags", $config->toXML());
 		$tags = array();
 		array_push($tags, "");
-		if($xml == null) {
+		if ($xml == null) {
 			return $tags;
 		}
 		try {
@@ -1317,17 +1341,10 @@ class SDKConnection
 			$debugInfo = $url;
 			include "./views/debug.php";
 		}
-		$ch = curl_init();
-		$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
-		if ($this->debug) {
-			$debugComment = "GET: Sending xml request.";
-			$debugInfo = $xmlData;
-			include "./views/debug.php";
-		}
-
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_HTTPGET, true);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPGET, true);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($ch, CURLOPT_HEADER, 1);
 
 		// $headers = [
@@ -1335,9 +1352,9 @@ class SDKConnection
 		// 	'Accept: application/xml'
 		// ];
 
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		$response = curl_exec($ch);
-		if ($e = curl_error($ch)) {
+		// curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		$response = curl_exec($curl);
+		if ($e = curl_error($curl)) {
 			echo $e;
 		} else {
 			if ($this->debug) {
@@ -1349,7 +1366,7 @@ class SDKConnection
 				}
 			}
 		}
-		curl_close($ch);
+		curl_close($curl);
 		return $response;
 	}
 	public function POST(string $url, string $xml): string
@@ -1359,7 +1376,7 @@ class SDKConnection
 			$debugInfo = htmlentities($xml);
 			include "./views/debug.php";
 		}
-		$ch = curl_init();
+		$curl = curl_init();
 		$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
 		if ($this->debug) {
 			$debugComment = "POST: Sending xml request.";
@@ -1367,34 +1384,29 @@ class SDKConnection
 			include "./views/debug.php";
 		}
 
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml); //It needs the actual xml text not the object
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $xml); //It needs the actual xml text not the object
 		// The result of simplexml_load_string($xml) passing a string xml will return a data object xml.
 		// curl_setopt just need a string text of the xml.
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		//curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		//curl_setopt($curl, CURLOPT_HEADER, 1);
 
 		$headers = [
 			'Content-Type: application/xml',
 			'Accept: application/xml'
 		];
 
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		$response = curl_exec($ch);
-		if ($e = curl_error($ch)) {
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		$response = curl_exec($curl);
+		if ($e = curl_error($curl)) {
 			echo $e;
 		} else {
 			if ($this->debug) {
-				if (isset($response) || $response !== null) {
-					$result = simplexml_load_string($response) or die("Error: Cannot create object");
-					$debugComment = "Result after the request.";
-					$debugInfo = $result;
-					include "./views/debug.php";
-				}
+				$this->checkResponse($response);
 			}
 		}
-		curl_close($ch);
+		curl_close($curl);
 		return $response;
 	}
 
@@ -1407,31 +1419,28 @@ class SDKConnection
 			include "./views/debug.php";
 		}
 		try {
-			$ch = curl_init();
+			$curl = curl_init();
 			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
 			if ($this->debug) {
 				$debugComment = "POST: Sending xml request.";
 				$debugInfo = $xmlData;
 				include "./views/debug.php";
 			}
-			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $url);
 			$originalImage = imagecreatefromjpeg($file);
 			$resizedImage = imagecreatetruecolor(300, 300);
 
 			//Resizing the image
-			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, imagesx($originalImage), imagesy($originalImage));
+			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, 300, 300, imagesx($originalImage), imagesy($originalImage));
 
-			//Compress the resized image to a JPEG byte array
-			//there is a code
-			ob_start();
-			imagejpeg($resizedImage, null, 90);
-			$byte_arr = ob_get_clean();
+			// Create a temporary file to store the resized image
+			$tmpFilename = tempnam(sys_get_temp_dir(), 'upload');
+			imagejpeg($resizedImage, $tmpFilename, 90);
 			//curl file object
-			$fileBody = new CURLFile(null, 'image/jpeg', $name);
-			//Data
+			$fileBody = new CURLFile($tmpFilename, 'image/jpeg', $name);
+
 			$postData = array(
-				$name => $fileBody,
+				'file' => $fileBody,
 				'xml' => $xml
 			);
 
@@ -1439,32 +1448,61 @@ class SDKConnection
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$headers = [
-				'Content-Type: application/xml',
-				'Accept: application/xml'
+				'Content-Type: multipart/form-data',
+				'Accept: text/plain'
 			];
 
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+
+			ob_start(); //Start output buffering
+			print_r($fileBody);
+			echo ob_get_clean() . "<br>"; //End output buffering. 
+			//Get the output buffer contents and clear the buffer
+
 			//Execute request
 			$response = curl_exec($curl);
-
+			
 			//Check for errors
 			if (curl_errno($curl)) {
 				echo "Error: " . curl_error($curl);
 			} else {
 				if ($this->debug) {
-					if (isset($response) || $response !== null) {
-						$result = simplexml_load_string($response) or die("Error: Cannot create object");
-						$debugComment = "Result after the request.";
-						$debugInfo = $result;
-						include "./views/debug.php";
-					}
+					$this->checkResponse($response);
 				}
 			}
+			//Clean up
 			curl_close($curl);
-			echo $response;
+			imagedestroy($originalImage);
+			imagedestroy($resizedImage);
+			unlink($tmpFilename);
+			return $response;
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
 		}
+	}
+
+	public function checkResponse($response): void
+	{
+		libxml_use_internal_errors(true); //Enable internal error handling
+		if (isset($response) || $response !== null) {
+			$debugComment = "<br>Result after the request.";
+			$result = simplexml_load_string($response);
+			if ($result === false) {
+				$debugInfo = "";
+				$debugInfo .= $response;
+				// XML parsing failed, handle the error
+				$errors = libxml_get_errors();
+				foreach ($errors as $error) {
+					$debugInfo .= "<br>XML Error: " . $error->message;
+				}
+				libxml_clear_errors(); //Clear the error buffer
+			} else {
+				$debugInfo = $result;
+			}
+			include "./views/debug.php";
+		}
+		libxml_use_internal_errors(false); //Disable 
 	}
 
 
@@ -1476,14 +1514,13 @@ class SDKConnection
 			include "./views/debug.php";
 		}
 		try {
-			$ch = curl_init();
+			$curl = curl_init();
 			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
 			if ($this->debug) {
 				$debugComment = "POST: Sending xml request.";
 				$debugInfo = $xmlData;
 				include "./views/debug.php";
 			}
-			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $url);
 			$originalImage = imagecreatefromjpeg($file);
 			$resizedImage = imagecreatetruecolor(600, 600);
@@ -1500,7 +1537,7 @@ class SDKConnection
 			$fileBody = new CURLFile(null, 'image/jpeg', $name);
 			//Data
 			$postData = array(
-				$name => $fileBody,
+				'file' => $fileBody,
 				'xml' => $xml
 			);
 
@@ -1512,7 +1549,7 @@ class SDKConnection
 				'Accept: application/xml'
 			];
 
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 			//Execute request
 			$response = curl_exec($curl);
 
@@ -1551,13 +1588,12 @@ class SDKConnection
 				$debugInfo = $xmlData;
 				include "./views/debug.php";
 			}
-			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $url);
 			//curl file object
 			$file = new CURLFile($path, mime_content_type($path), basename($path));
 			//Data
 			$postData = array(
-				$name => $file,
+				'file' => $file,
 				'xml' => $xml
 			);
 
@@ -1565,11 +1601,11 @@ class SDKConnection
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$headers = [
-				'Content-Type: application/xml',
-				'Accept: application/xml'
+				'Content-Type: multipart/form-data',
+				'Accept: application/xml' //text/plain
 			];
 
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 			//Execute request
 			$response = curl_exec($curl);
 

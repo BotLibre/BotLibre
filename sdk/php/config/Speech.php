@@ -19,8 +19,9 @@
 class Speech extends Config {
     public ?string $text;
     public ?string $voice;
+    public ?String $mod;
 
-    public function toXML() : ?String {
+    public function toXML() : String {
         $writer .= "<speech";
         $this->writeCredentails($writer);
         if(isset($this->text)) {
@@ -28,6 +29,9 @@ class Speech extends Config {
         }
         if(isset($this->voice)) {
             $writer .= " voice=\"" .  $this->voice . "\"";
+        }
+        if(isset($this->mod)) {
+            $writer .= " mod=\"" .  strtolower($this->mod) . "\"";
         }
         $writer .= "/>";
         return $writer;
