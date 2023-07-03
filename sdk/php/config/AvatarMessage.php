@@ -27,7 +27,7 @@
         public ?string $format;
         public bool $hd;
 
-        public function toXML() :?String {
+        public function toXML() : String {
             $writer .= "<avatar-message";
             $this->writeCredentails($writer);
             if(isset($this->avatar)) {

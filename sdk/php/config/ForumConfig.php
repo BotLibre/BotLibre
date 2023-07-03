@@ -21,8 +21,6 @@
         public ?String $postAccessMode;
         public ?String $posts;
 
-
-
         public function getType() : ?String {
             return "forum";
         }
@@ -30,5 +28,13 @@
         public function stats() : ?String {
             return $this->posts . " posts";
         }
+
+        public function credentials(): ?WebMediumConfig {
+            $config = new ForumConfig();
+            $config->id = $this->id;
+            return $config;
+        }
     }
+
+    
 ?>

@@ -174,11 +174,11 @@ abstract class WebMediumConfig extends Config
             foreach (libxml_get_errors() as $error) {
                 echo "<br>", $error->message;
             }
+            return;
         } 
         // else {
         //     print_r($xmlData);
         // }
-        //$this->user = $tempXML->user;
         $this->id = $xmlData->attributes()->id;
         $this->name = $xmlData->attributes()->name;
         $this->creationDate = $xmlData->attributes()->creationDate;

@@ -6,6 +6,8 @@ The following changes have been made to the php.ini file:
 * Uncomment: extension=curl
 * Uncomment: extension=openssl
 * Uncomment: extension_dir = "c:\php\ext"
+* Uncomment: extension=gd
+
 
 **cacert.pem** is a file containing trusted root certificates that are used for verifying SSL/TLS connections. When a client makes an HTTPS request to a server, it needs to verify that the server's SSL/TLS certificate is valid and has been issued by a trusted certificate authority (CA).
 ```
@@ -25,4 +27,10 @@ curl.cainfo = "C:\php\cacert.pem"
 ; option.
 openssl.cafile="C:\php\cacert.pem"
 ```
+
 The **cacert.pem** file is often used in PHP projects to provide a set of trusted root certificates that can be used by the curl library (which is commonly used for making HTTPS requests). 
+
+```
+[gd]
+(Graphics Draw) extension is a PHP extension that provides a set of functions for image manipulation and image generation. It allows you to work with different types of image formats, such as JPEG, PNG, GIF and many others. Commonly used GD functions such as imagecreatefromjpeg(), imagecreatefrompng(), imagecreatefromgif(), and imagejpeg()
+```

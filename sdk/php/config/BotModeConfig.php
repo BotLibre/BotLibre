@@ -36,7 +36,7 @@ class BotModeConfig extends Config {
         $this->bot = $xmlData->attributes()->bot;
     }
 
-    public function toXML(): ?String {
+    public function toXML() : string {
         $writer .= "<bot-mode";
         $this->writeCredentails($writer);
         if(isset($this->mode)){
