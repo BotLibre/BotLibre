@@ -24,7 +24,7 @@ class GraphicConfig extends WebMediumConfig {
 
 
 
-    public function toXML() : ?String {
+    public function toXML() : String {
         $writer .= "<graphic";
         if(isset($this->media)) {
             $writer .= " media=\"" . $this->media . "\"";

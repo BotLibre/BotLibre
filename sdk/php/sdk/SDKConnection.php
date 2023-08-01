@@ -40,6 +40,12 @@ require_once('./config/ChannelConfig.php');
 require_once('./config/BotModeConfig.php');
 require_once('./config/LearningConfig.php');
 require_once('./config/VoiceConfig.php');
+require_once('./config/ScriptConfig.php');
+require_once('./config/ScriptSourceConfig.php');
+require_once('./config/ResponseSearchConfig.php');
+require_once('./config/TrainingConfig.php');
+require_once('./config/GraphicConfig.php');
+
 
 class SDKConnection
 {
@@ -100,6 +106,8 @@ class SDKConnection
 		return $this->user;
 	}
 
+
+
 	/**
 	 * Execute the custom API.
 	 */
@@ -136,10 +144,10 @@ class SDKConnection
 	 * A domain is an isolated content space.
 	 * Any browse or query request will be specific to the domain's content.
 	 */
-	// public function connect(DomainConfig $config) : DomainConfig {
-	// 	$this->domain = fetch(config);
-	// 	return $this->domain;
-	// }
+	public function connectDomain(DomainConfig $config) : DomainConfig {
+		$this->domain = $this->fetch($config);
+		return $this->domain;
+	}
 
 	/**
 	 * Disconnect from the connection.
@@ -653,7 +661,7 @@ class SDKConnection
 	/**
 	 * Return the bot's voice configuration.
 	 */
-	public function getVoice(InstanceConfig $config)
+	public function getVoice(InstanceConfig $config) : ?VoiceConfig
 	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-voice", $config->toXML());
@@ -706,7 +714,7 @@ class SDKConnection
 	/**
 	 * Return the bot's greetings.
 	 */
-	public function getGreetings(ResponseSearchConfig $config)
+	public function getGreetings(InstanceConfig $config)
 	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-greetings", $config->toXML());
@@ -817,6 +825,231 @@ class SDKConnection
 		}
 	}
 
+
+	/**
+	 * Return the list of content for the browse criteria.
+	 * The type defines the content type (one of Bot, Forum, Channel, Domain).
+	 */
+	public function browse(BrowseConfig $config)
+	{
+		$config->addCredentials($this);
+		$type = "";
+		if($config->type == "Bot") {
+			$type = "/get-instances";
+		} else {
+			$type = "/get-" . strtolower($config->type) . "s";
+		}
+		echo "BROWSE - TYPE: " . $type;
+		$xml = $this->POST($this->url . $type, $config->toXML());
+		$instances = array();
+		if ($xml == null) {
+			return $instances;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				$instance = null;
+				if($config->type === "Bot") {
+					$instance = new InstanceConfig();
+				} else if($config->type === "Forum") {
+					$instance = new ForumConfig();
+				} else if($config->type === "Channel") {
+					$instance = new ChannelConfig();
+				} else if($config->type === "Domain") {
+					$instance = new DomainConfig();
+				} else if($config->type === "Avatar") {
+					$instance = new AvatarConfig();
+				} else if($config->type === "Script") {
+					$instance = new ScriptConfig();
+				} else if($config->type === "Graphic") {
+					$instance = new GraphicConfig();
+				}
+				$instance->parseXML($element);
+				array_push($instances, $instance);
+			}
+			return $instances;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+
+	/**
+	 * Return the list of media for the avatar.
+	 */
+	public function getAvatarMedia(AvatarConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-avatar-media", $config->toXML());
+		$instances = array();
+		if ($xml == null) {
+			return $instances;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				$instance = new AvatarMedia();
+				$instance->parseXML($element);
+				array_push($instances, $instance);
+			}
+			return $instances;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Return the script source.
+	 */
+	public function getScriptSource(ScriptConfig $config): ?ScriptSourceConfig
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-script-source", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$script = new ScriptSourceConfig();
+			$script->parseXML($xml);
+			return $script;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * Create or update script - Save the script source
+	 */
+	public function saveScriptSource(ScriptSourceConfig $config) : void {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/save-script-source", $config->toXML());
+	}
+
+
+
+	/**
+	 * Return the source code for a single bot script
+	 */
+	public function getBotScriptSource(ScriptSourceConfig $config): ?ScriptSourceConfig
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-bot-script-source", $config->toXML());
+		if ($xml == null) {
+			return null;
+		}
+		try {
+			$botScript = new ScriptSourceConfig();
+			$botScript->parseXML($xml);
+			return $botScript;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+	/**
+	 * Return a list of the bots scripts.
+	 */
+	public function getBotScripts(InstanceConfig $config)
+	{
+		$config->addCredentials($this);
+		$xml = $this->POST($this->url . "/get-bot-scripts", $config->toXML());
+		$botScripts = array();
+		if ($xml == null) {
+			return $botScripts;
+		}
+		try {
+			$xmlData = simplexml_load_string($xml);
+			if ($xmlData === false) {
+				echo "Failed loading XML: ";
+				foreach (libxml_get_errors() as $error) {
+					echo "<br>", $error->message;
+				}
+			}
+			// else {
+			//     print_r($xmlData);
+			// }
+			foreach ($xmlData as $element) {
+				$script = new ScriptConfig();
+				$script->parseXML($element);
+				array_push($botScripts, $script);
+			}
+			return $botScripts;
+		} catch (Exception $exception) {
+			echo "Error: " . $exception->getMessage();
+		}
+	}
+
+
+	/**
+	 * import a script to the bot
+	 */
+	public function importBotScript(ScriptConfig $config) {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/import-bot-script" , $config->toXML());
+	}
+
+
+
+	/**
+	 * import a chatlog/response list to the bot
+	 */
+	public function importBotLog(ScriptConfig $config) {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/import-bot-log" , $config->toXML());
+	}
+
+	/**
+	 * Save the bot script source
+	 */
+	public function saveBotScriptSource (ScriptSourceConfig $config) {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/save-bot-script-source" , $config->toXML());
+	}
+
+	/**
+	 * Delete selected bot script
+	 */
+	public function deleteBotScript(ScriptSourceConfig $config) {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/delete-bot-script", $config->toXML());
+	}
+
+	/**
+	 * Move up one bot script
+	 */
+	public function upBotScript(ScriptSourceConfig $config) {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/up-bot-script", $config->toXML());
+	}
+	
+	/**
+	 * Move down one bot script
+	 */
+	public function downBotScript(ScriptSourceConfig $config) {
+		$config->addCredentials($this);
+		$this->POST($this->url . "/down-bot-script",  $config->toXML());
+	}
 
 	/**
 	 * Process the speech message and return the server generate text-to-speech audio file.

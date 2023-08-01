@@ -75,4 +75,13 @@ select {
   border: 5px solid rgb(163, 117, 43);
   margin: 10px;
   border-radius: 10px;
+  padding: 10px;
+}
+
+strong {
+  padding: 10px; font-size: 18px;
+}
+
+u {
+  font-size: 18px;
 }
