@@ -16,16 +16,28 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-class AvatarConfig extends WebMediumConfig {
-        public $mediaConfig = array();
-        private ?string $avatarFormat;
-        private $avatarHD;
-        public ?string $background;
-        public ?string $icon;
+class AvatarConfig extends WebMediumConfig
+{
+    public $mediaConfig = array();
+    private ?string $avatarFormat;
+    private $avatarHD;
+    public ?string $background;
+    public ?string $icon;
 
-        public function getType() : ?String {
-            return "avatar";
-        }
-
+    public function getType(): ?string
+    {
+        return "avatar";
     }
+
+    public function toXML(): string
+    {
+        $writer .= "<avatar";
+        $this->writeXML($writer);
+        $writer .="</avatar>";
+        return $writer;
+    }
+    public function parseXML($xml) : void {
+        parent::parseXML($xml);
+    }
+}
 ?>

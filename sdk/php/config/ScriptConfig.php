@@ -1,24 +1,28 @@
-<?php 
-class ScriptConfig extends WebMediumConfig {
-    public ?String $language = "";
-    public ?String $version = "";
-    
-    public function getType() : String {
+<?php
+class ScriptConfig extends WebMediumConfig
+{
+    public ?string $language = "";
+    public ?string $version = "";
+
+    public function getType(): string
+    {
         return "script";
     }
-    public function credentials() : WebMediumConfig {
-		$config = new ScriptConfig();
-		$config->id = $this->id;
-		return $config;
-	}
+    public function credentials(): WebMediumConfig
+    {
+        $config = new ScriptConfig();
+        $config->id = $this->id;
+        return $config;
+    }
 
-    public function toXML() : string {
+    public function toXML(): string
+    {
         $writer = "";
         $writer .= "<script";
-        if(isset($this->language)) {
+        if (isset($this->language)) {
             $writer .= " language=\"" . $this->language . "\"";
         }
-        if(isset($this->version)) {
+        if (isset($this->version)) {
             $writer .= " version=\"" . $this->version . "\"";
         }
         $this->writeXML($writer);
@@ -28,17 +32,10 @@ class ScriptConfig extends WebMediumConfig {
 
     public function parseXML($xml): void
     {
-        $xmlData = simplexml_load_string($xml);
+        $xmlData = Utils::loadXML($xml);
         if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
             return;
-        } 
-        // else {
-        //     print_r($xmlData);
-        // }
+        }
         $this->language = $xmlData->attributes()->language;
         $this->version = $xmlData->attributes()->version;
     }

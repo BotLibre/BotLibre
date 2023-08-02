@@ -174,24 +174,11 @@
 				Main::$connection->setDomain(Main::$domain);
 			}
 			if (Main::$DEBUG) {
-				$this->includeMessage("[Main] initializing SDKConnection.", null, Main::$connection);
+				Utils::includeMessage("[Main] initializing SDKConnection.", null, Main::$connection);
 				Main::$showAds = false;
 				Main::$connection->setDebug(true);
 			}
 
-		}
-
-
-		public function includeMessage($message, $img = null, $info = null)
-		{
-			$debugComment = $message;
-			if ($img != null) {
-				$viewable_image = $img;
-			}
-			if ($info != null) {
-				$debugInfo = $info;
-			}
-			include "views/debug.php";
 		}
 
 		public function testConnectUserAccount(): ?UserConfig
@@ -202,7 +189,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testConnectUserAccount() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testConnectUserAccount() in index.php</strong>");
 				return null;
 			}
 			return Main::$connection->connect($userConfig);
@@ -223,7 +210,7 @@
 			// An ID of the bot example: ID: 165
 			$config->instance = "165";
 			if ($config->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSendChatMessaage() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSendChatMessaage() in index.php</strong>");
 				return null;
 			}
 			return Main::$connection->chat($config);
@@ -244,7 +231,7 @@
 			$userConfig->user = "user";
 			$userConfig->password = Main::$password;
 			if ($userConfig->application === "" || $userConfig->password === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
 				return null;
 			}
 			return Main::$connection->fetchUser($userConfig);
@@ -268,7 +255,7 @@
 			$forumPostConfig->password = Main::$password;
 			$forumPostConfig->id = "5012";
 			if ($forumPostConfig->application === "" || $forumPostConfig->user === "" || $forumPostConfig->password === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
 				return null;
 			}
 			return Main::$connection->fetchForumPost($forumPostConfig);
@@ -300,7 +287,7 @@
 			if (isset($userConfig->user, $userConfig->password, $userConfig->hint, $userConfig->email, $userConfig->name)) {
 				$userConfig = Main::$connection->createUser($userConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateUser() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateUser() in index.php</strong>");
 				return null;
 			}
 
@@ -325,7 +312,7 @@
 			if (isset($userConfig->user, $userConfig->password, $userConfig->hint, $userConfig->email, $userConfig->name)) {
 				$userConfig = Main::$connection->updateUser($userConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testUpdateUser() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUser() in index.php</strong>");
 				return null;
 			}
 
@@ -466,7 +453,7 @@
 			if (isset($postConfig->details, $postConfig->forum, $postConfig->parent)) {
 				$postConfig = Main::$connection->createReply($postConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateReply() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateReply() in index.php</strong>");
 				return null;
 			}
 			return $postConfig;
@@ -495,7 +482,7 @@
 			if (isset($config->target, $config->subject, $config->message)) {
 				Main::$connection->createUserMessage($config);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateUserMessage() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateUserMessage() in index.php</strong>");
 				include "views/debug.php";
 			}
 		}
@@ -510,7 +497,7 @@
 			if (isset($response->response, $response->question, $response->instance, $response->type)) {
 				Main::$connection->saveResponse($response);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveResponse() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveResponse() in index.php</strong>");
 			}
 
 		}
@@ -528,7 +515,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -553,7 +540,7 @@
 			if (isset($avatarConfig->application, $avatarConfig->name, $avatarConfig->instance, $avatarConfig->type)) {
 				Main::$connection->saveAvatarBackground($imagePath, $avatarConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
 			}
 		}
 
@@ -565,7 +552,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -586,7 +573,7 @@
 				Main::$connection->deleteResponse($config);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
 			}
 			return false;
 		}
@@ -599,7 +586,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -617,7 +604,7 @@
 				Main::$connection->deleteAvatarMedia($avatarMedia);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
 			}
 			return false;
 		}
@@ -631,7 +618,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -657,7 +644,7 @@
 				Main::$connection->saveAvatarMedia($avatarMedia);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
 			}
 			return false;
 		}
@@ -669,7 +656,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteAvatarBackground() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarBackground() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -701,7 +688,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -718,7 +705,7 @@
 				Main::$connection->flag($avatarConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
 			}
 			return false;
 		}
@@ -748,7 +735,7 @@
 				Main::$connection->flagUser($viewUser);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testFlagUser() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testFlagUser() in index.php</strong>");
 			}
 			return false;
 		}
@@ -762,7 +749,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -776,7 +763,7 @@
 				Main::$connection->subscribeForumPost($forumPostConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
 			}
 			return false;
 		}
@@ -789,7 +776,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -803,7 +790,7 @@
 				Main::$connection->unsubscribeForumPost($forumPostConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
 			}
 			return false;
 		}
@@ -821,7 +808,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -835,7 +822,7 @@
 			if (isset($browseForumPosts->type, $browseForumPosts->typeFilter, $browseForumPosts->sort)) {
 				return Main::$connection->getPosts($browseForumPosts);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
 			}
 			return null;
 		}
@@ -848,7 +835,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -862,7 +849,7 @@
 				Main::$connection->subscribeForum($forumPost);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
 			}
 			return false;
 		}
@@ -875,7 +862,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -889,7 +876,7 @@
 				Main::$connection->unsubscribeForum($forumPost);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
 			}
 			return false;
 		}
@@ -902,7 +889,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -918,7 +905,7 @@
 				Main::$connection->thumbsUp($forumPost);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
 			}
 			return false;
 		}
@@ -931,7 +918,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -947,7 +934,7 @@
 				Main::$connection->thumbsDown($forumPost);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
 			}
 			return false;
 		}
@@ -960,7 +947,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -976,7 +963,7 @@
 				Main::$connection->star($forumPost);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1000,7 +987,7 @@
 				}
 				return Main::$connection->avatarMessage($avatarMessage);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testAvatarMessage() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testAvatarMessage() in index.php</strong>");
 			}
 
 		}
@@ -1014,7 +1001,7 @@
 			if (isset($ttsConfig->voice, $ttsConfig->text, $ttsConfig->mod)) {
 				return Main::$connection->tts($ttsConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testTTS() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testTTS() in index.php</strong>");
 			}
 		}
 
@@ -1026,7 +1013,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1043,7 +1030,7 @@
 			if (isset($forumConfig->id, $forumConfig->user, $forumConfig->token)) {
 				return Main::$connection->getAdmins($forumConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
 			}
 
 		}
@@ -1058,7 +1045,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1075,7 +1062,7 @@
 			if (isset($forumConfig->id, $forumConfig->user, $forumConfig->token)) {
 				return Main::$connection->getUsersOfType($forumConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
 			}
 
 		}
@@ -1092,7 +1079,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1104,7 +1091,7 @@
 			if (isset($contentConfig->type)) {
 				return Main::$connection->getCategories($contentConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1120,7 +1107,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1132,7 +1119,7 @@
 			if (isset($contentConfig->type)) {
 				return Main::$connection->getTags($contentConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1150,7 +1137,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1163,7 +1150,7 @@
 			if (isset($channelConfig->user, $channelConfig->token, $channelConfig->id)) {
 				return Main::$connection->getChannelBotMode($channelConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1176,7 +1163,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1191,7 +1178,7 @@
 			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->token, $botModeConfig->bot, $botModeConfig->mode)) {
 				return Main::$connection->saveChannelBotMode($botModeConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1205,7 +1192,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1220,7 +1207,7 @@
 			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->token, $botModeConfig->bot, $botModeConfig->mode)) {
 				return Main::$connection->saveForumBotMode($botModeConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1375,7 +1362,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1392,7 +1379,7 @@
 				Main::$connection->userAdmin($userAdminConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1405,7 +1392,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1423,7 +1410,7 @@
 				Main::$connection->create($avatarConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1436,7 +1423,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1460,7 +1447,7 @@
 				Main::$connection->createAvatarMedia($file, $mediaConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1498,7 +1485,7 @@
 				//Main::$connection->createGraphicMedia($file, $graphicConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testCreateGraphicMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testCreateGraphicMedia() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1511,7 +1498,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1527,7 +1514,7 @@
 			if (isset($file)) {
 				return Main::$connection->updateIconUser($file, $userConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1540,7 +1527,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetFroumBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetFroumBotMode() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1553,7 +1540,7 @@
 			if (isset($forumConfig->id)) {
 				return Main::$connection->getForumBotMode($forumConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetFroumBotMode() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetFroumBotMode() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1566,7 +1553,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetVoice() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetVoice() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1579,12 +1566,15 @@
 			if (isset($instanceConfig->id, $instanceConfig->instance)) {
 				return Main::$connection->getVoice($instanceConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetVoice() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetVoice() in index.php</strong>");
 			}
 			return null;
 
 		}
-
+		/**
+		 * Tested -> Worked
+		 * Requirement: Bot ID or instance
+		 */
 		public function testGetDefaultResponses()
 		{
 			//TODO: Set user
@@ -1593,7 +1583,39 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetDefaultResponses() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetDefaultResponses() in index.php</strong>");
+				return null;
+			}
+			$userConfig = Main::$connection->connect($userConfig);
+			$instanceConfig = new InstanceConfig();
+			$instanceConfig->user = $userConfig->user;
+			$instanceConfig->token = $userConfig->token;
+			// $instanceConfig->id = "45527014";
+			// $instanceConfig->instance = "45527014";
+	
+			if (isset($instanceConfig->id, $instanceConfig->instance)) {
+				return Main::$connection->getDefaultResponses($instanceConfig);
+			} else {
+				Utils::includeMessage("<strong>Please fill the required data @ testGetDefaultResponses() in index.php</strong>");
+			}
+			return null;
+
+		}
+
+
+		/**
+		 * Tested -> Worked
+		 * Requirement: Bot ID or instance
+		 */
+		public function testGetGreetings()
+		{
+			//TODO: Set user
+			$userConfig = new UserConfig();
+			$userConfig->application = Main::$applicationId; //application id, username and password are required.
+			$userConfig->user = Main::$username;
+			$userConfig->password = Main::$password;
+			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
+				Utils::includeMessage("<strong>Please fill the required data @ testGetGreetings() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1604,39 +1626,17 @@
 			// $instanceConfig->instance = "";
 	
 			if (isset($instanceConfig->id, $instanceConfig->instance)) {
-				return Main::$connection->getDefaultResponses($instanceConfig);
-			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetDefaultResponses() in index.php</strong>");
-			}
-			return null;
-
-		}
-
-		public function testGetGreetings()
-		{
-			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetGreetings() in index.php</strong>");
-				return null;
-			}
-			$userConfig = Main::$connection->connect($userConfig);
-			$instanceConfig = new InstanceConfig();
-			$instanceConfig->user = $userConfig->user;
-			// $instanceConfig->token = $userConfig->token;
-			// $instanceConfig->id = "";
-			// $instanceConfig->instance = "";
-	
-			if (isset($instanceConfig->id, $instanceConfig->instance)) {
 				return Main::$connection->getGreetings($instanceConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetGreetings() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetGreetings() in index.php</strong>");
 			}
 			return null;
 		}
+
+		/**
+		 * Tested -> Worked
+		 * Requirement: Bot ID or instance
+		 */
 
 		public function testGetResponses()
 		{
@@ -1646,29 +1646,32 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetResponses() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetResponses() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
 			$responseSearchConfig = new ResponseSearchConfig();
 			$responseSearchConfig->user = $userConfig->user;
 			$responseSearchConfig->token = $userConfig->token;
-			$responseSearchConfig->instance = "";
+			// $responseSearchConfig->instance = ""; //Bot id
 			$responseSearchConfig->responseType = "responses"; //To get responses
-			// $responseSearchConfig->duration = "all";
-			// $responseSearchConfig->inputType = "all";
-			// $responseSearchConfig->restrict = "exact";
-			// $responseSearchConfig->filter = ""; //response (From ResponseConfig)
+			$responseSearchConfig->duration = "all";
+			$responseSearchConfig->inputType = "all";
+			$responseSearchConfig->restrict = "exact";
+			$responseSearchConfig->filter = ""; //response (From ResponseConfig)
 	
 
 			if (isset($responseSearchConfig->instance, $responseSearchConfig->responseType, $responseSearchConfig->filter)) {
 				return Main::$connection->getResponses($responseSearchConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetResponses() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetResponses() in index.php</strong>");
 			}
 			return null;
 		}
-
+		/**
+		 * Tested -> Does not return conversations
+		 * Requirement: Bot ID or instance
+		 */
 		public function testGetConversations()
 		{
 			//TODO: Set user
@@ -1677,29 +1680,35 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetConversations() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetConversations() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
 			$responseSearchConfig = new ResponseSearchConfig();
-			// $responseSearchConfig->user = $userConfig->user;
-			// $responseSearchConfig->token = $userConfig->token;
-			// $responseSearchConfig->instance = "";
-			// $responseSearchConfig->responseType = "conversations"; //To get conversations
-			$responseSearchConfig->duration = "";
-			$responseSearchConfig->inputType = "";
-			$responseSearchConfig->restrict = "";
+			$responseSearchConfig->user = $userConfig->user;
+			$responseSearchConfig->token = $userConfig->token;
+			// $responseSearchConfig->instance = ""; //Bot instance
+			$responseSearchConfig->responseType = "conversation"; //To get conversations
+			$responseSearchConfig->duration = "day";
+			$responseSearchConfig->inputType = "all";
+			$responseSearchConfig->restrict = "none";
 			$responseSearchConfig->filter = "";
 	
 
 			if (isset($responseSearchConfig->instance, $responseSearchConfig->responseType, $responseSearchConfig->filter)) {
 				return Main::$connection->getConversations($responseSearchConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetConversations() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetConversations() in index.php</strong>");
 			}
 			return null;
 		}
 
+
+
+		/**
+		 * Tested -> Passed only when Learning Mode is enabled
+		 * Requirement: Bot ID and instance
+		 */
 		public function testGetLearning()
 		{
 			//TODO: Set user
@@ -1708,24 +1717,30 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetLearning() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetLearning() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
 			$instanceConfig = new InstanceConfig();
 			$instanceConfig->user = $userConfig->user;
 			$instanceConfig->token = $userConfig->token;
-			// $instanceConfig->instance = "";
+			// $instanceConfig->instance = ""; //Need a bot ID
+			// $instanceConfig->id = "";
 	
 
 			if (isset($instanceConfig->instance)) {
 				return Main::$connection->getLearning($instanceConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetLearning() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetLearning() in index.php</strong>");
 			}
 			return null;
 		}
 
+
+		/**
+		 * Tested -> Passed
+		 * Requirement: Type: Bot, Script, Avatar, Forum, Domain or Graphic.
+		 */
 		public function testBrowse()
 		{
 			//TODO: Set user
@@ -1734,22 +1749,22 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
 			$browseConfig = new BrowseConfig();
 			$browseConfig->user = $userConfig->user;
 			$browseConfig->token = $userConfig->token;
-			// $browseConfig->type = "Avatar";
-			// $browseConfig->typeFilter = "Featured";
-			// $browseConfig->contentRating = "";
+			// $browseConfig->type = "Bot"; //Can be either Avatar, Forum, Graphic, Bot, Script ...etc
+			$browseConfig->typeFilter = "Featured";
+			$browseConfig->contentRating = "Everyone";
 	
 
-			if (isset($browseConfig->instance, $browseConfig->type, $browseConfig->typeFilter, $browseConfig->contentRating)) {
+			if (isset($browseConfig->type, $browseConfig->typeFilter, $browseConfig->contentRating)) {
 				return Main::$connection->browse($browseConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1762,7 +1777,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1776,7 +1791,7 @@
 			if (isset($browseConfig->instance)) {
 				return Main::$connection->getAvatarMedia($avatarConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1789,7 +1804,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1800,7 +1815,7 @@
 			if (isset($scriptConfig->instance, $scriptConfig->id)) {
 				return Main::$connection->getScriptSource($scriptConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1815,7 +1830,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1828,7 +1843,7 @@
 				Main::$connection->saveScriptSource($scriptSourceConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1843,7 +1858,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1854,7 +1869,7 @@
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
 				return Main::$connection->getBotScriptSource($scriptSourceConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1867,7 +1882,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
 				return null;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1878,7 +1893,7 @@
 			if (isset($instanceConfig->instance, $instanceConfig->id)) {
 				return Main::$connection->getBotScripts($instanceConfig);
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
 			}
 			return null;
 		}
@@ -1891,7 +1906,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
 				return false;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1903,7 +1918,7 @@
 				Main::$connection->importBotScript($scriptConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1916,7 +1931,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
 				return false;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1930,7 +1945,7 @@
 				Main::$connection->importBotLog($scriptConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1943,7 +1958,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
 				return false;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1957,7 +1972,7 @@
 				Main::$connection->saveBotScriptSource($scriptSourceConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1970,7 +1985,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
 				return false;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -1983,7 +1998,7 @@
 				Main::$connection->deleteBotScript($scriptSourceConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
 			}
 			return false;
 		}
@@ -1996,7 +2011,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
 				return false;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -2009,7 +2024,7 @@
 				Main::$connection->upBotScript($scriptSourceConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
 			}
 			return false;
 		}
@@ -2022,7 +2037,7 @@
 			$userConfig->user = Main::$username;
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$this->includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
 				return false;
 			}
 			$userConfig = Main::$connection->connect($userConfig);
@@ -2035,7 +2050,7 @@
 				Main::$connection->downBotScript($scriptSourceConfig);
 				return true;
 			} else {
-				$this->includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
+				Utils::includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
 			}
 			return false;
 		}
@@ -2053,269 +2068,269 @@
 		if (isset($_GET["api"])) {
 			switch ($_GET["api"]) {
 				case "connect";
-					$main->includeMessage("<strong>Connecting a user account. @account_test</strong>");
+					Utils::includeMessage("<strong>Connecting a user account. @account_test</strong>");
 					$userConfig = $main->testConnectUserAccount();
 					break;
 				case "chat":
-					$main->includeMessage("<strong>Connecting a user account. @account_test and sending a 'hello world' message.</strong>");
+					Utils::includeMessage("<strong>Connecting a user account. @account_test and sending a 'hello world' message.</strong>");
 					$userConfig = $main->testConnectUserAccount();
-					$main->includeMessage("<strong>Sending a chat message.</strong>");
+					Utils::includeMessage("<strong>Sending a chat message.</strong>");
 					$response = $main->testSendChatMessage();
 					break;
 				case "view-user":
-					$main->includeMessage("<strong>Fetch user details. @test</strong>");
+					Utils::includeMessage("<strong>Fetch user details. @test</strong>");
 					$userConfig = $main->testFetchUserDetails();
 					break;
 				case "check-forum-post":
-					$main->includeMessage("<strong>Fetch Forum post detials.</strong>");
+					Utils::includeMessage("<strong>Fetch Forum post detials.</strong>");
 					$forumPost = $main->testFetchForumPost();
 					break;
 				case "create-user":
-					$main->includeMessage("<strong>Create a new user.</strong>");
+					Utils::includeMessage("<strong>Create a new user.</strong>");
 					$userConfig = $main->testCreateUser();
 					break;
 				case "update-user":
-					$main->includeMessage("<strong>update an existing user.</strong>");
+					Utils::includeMessage("<strong>update an existing user.</strong>");
 					$userConfig = $main->testUpdateUser();
 					break;
 				case "fetch-image":
-					$main->includeMessage("<strong>View an image.</strong>", $main->testFetchImage());
+					Utils::includeMessage("<strong>View an image.</strong>", $main->testFetchImage());
 					break;
 				case "create-forum-post":
-					$main->includeMessage("<strong>Create a forum post.</strong>");
+					Utils::includeMessage("<strong>Create a forum post.</strong>");
 					$newPost = $main->testCreateForumPost();
 					break;
 				case "update-forum-post":
-					$main->includeMessage("<strong>Update a forum post.</strong>");
+					Utils::includeMessage("<strong>Update a forum post.</strong>");
 					$newPost = $main->testUpdateForumPost();
 					break;
 				case "delete-forum-post":
-					$main->includeMessage("<strong>Delete forum post.</strong>");
+					Utils::includeMessage("<strong>Delete forum post.</strong>");
 					$pass = $main->testDeleteForumPost();
 					break;
 				case "create-channel-file-attachment":
-					$main->includeMessage("<strong>Create a channel file attachment.</strong>");
+					Utils::includeMessage("<strong>Create a channel file attachment.</strong>");
 					$channelAttachment = $main->testCreateChannelFileAttachment();
 					break;
 				case "create-channel-image-attachment":
-					$main->includeMessage("<strong>Create a channel image attachment.</strong>");
+					Utils::includeMessage("<strong>Create a channel image attachment.</strong>");
 					$channelAttachment = $main->testCreateChannelImageAttachment();
 					break;
 				case "create-post-reply":
-					$main->includeMessage("<strong>Create a post reply.</strong>");
+					Utils::includeMessage("<strong>Create a post reply.</strong>");
 					$channelAttachment = $main->testCreateReply();
 					break;
 				case "save-avatar-background":
-					$main->includeMessage("<strong>Save - Upload avatar's background.</strong>");
+					Utils::includeMessage("<strong>Save - Upload avatar's background.</strong>");
 					$saveAvatar = $main->testSaveAvatarBackground();
 					break;
 				case "delete-response":
-					$main->includeMessage("<strong>Permanently delete the response, greetings, or default response.</strong>");
+					Utils::includeMessage("<strong>Permanently delete the response, greetings, or default response.</strong>");
 					$pass = $main->testDeleteResponse();
 					break;
 				case "delete-avatar-media":
-					$main->includeMessage("<strong>Delete the avatar media.</strong>");
+					Utils::includeMessage("<strong>Delete the avatar media.</strong>");
 					$pass = $main->testDeleteAvatarMedia();
 					break;
 				case "delete-avatar-background":
-					$main->includeMessage("<strong>Delete the avatar background.</strong>");
+					Utils::includeMessage("<strong>Delete the avatar background.</strong>");
 					$pass = $main->testDeleteAvatarBackground();
 					break;
 				case "save-avatar-media":
-					$main->includeMessage("<strong>Save the avatar media.</strong>");
+					Utils::includeMessage("<strong>Save the avatar media.</strong>");
 					$pass = $main->testSaveAvatarMedia();
 					break;
 				case "flag":
-					$main->includeMessage("<strong>Flag an instance.</strong>");
+					Utils::includeMessage("<strong>Flag an instance.</strong>");
 					$pass = $main->testFlagInstance();
 					break;
 				case "subscribe-forum-post":
-					$main->includeMessage("<strong>Subscribe a forum post.</strong>");
+					Utils::includeMessage("<strong>Subscribe a forum post.</strong>");
 					$pass = $main->testSubscribeForumPost();
 					include "views/debug.php";
 					break;
 				case "unsubscribe-forum-post":
-					$main->includeMessage("<strong>Unsubscribe a forum post.</strong>");
+					Utils::includeMessage("<strong>Unsubscribe a forum post.</strong>");
 					$pass = $main->testUnsubscribeForumPost();
 					break;
 				case "subscribe-forum":
-					$main->includeMessage("<strong>Subscribe to a forum.</strong>");
+					Utils::includeMessage("<strong>Subscribe to a forum.</strong>");
 					$pass = $main->testSubscribeForum();
 					break;
 				case "get-forum-posts":
-					$main->includeMessage("<strong>Return the list of forum posts for the forum browse criteria.</strong>");
+					Utils::includeMessage("<strong>Return the list of forum posts for the forum browse criteria.</strong>");
 					$list = $main->testGetForumPosts();
 					break;
 				case "unsubscribe-forum":
-					$main->includeMessage("<strong>Unsubscribe to a forum.</strong>");
+					Utils::includeMessage("<strong>Unsubscribe to a forum.</strong>");
 					$pass = $main->testUnsubscribeForum();
 					break;
 				case "thumbs-up-forum":
-					$main->includeMessage("<strong>Thumbs up to a forum.</strong>");
+					Utils::includeMessage("<strong>Thumbs up to a forum.</strong>");
 					$pass = $main->testThumbsUpForum();
 					break;
 				case "thumbs-down-forum":
-					$main->includeMessage("<strong>Thumbs down to a forum.</strong>");
+					Utils::includeMessage("<strong>Thumbs down to a forum.</strong>");
 					$pass = $main->testThumbsDownForum();
 					break;
 				case "star-forum":
-					$main->includeMessage("<strong>Evaluate a forum by placing a number of stars.</strong>");
+					Utils::includeMessage("<strong>Evaluate a forum by placing a number of stars.</strong>");
 					$pass = $main->testStarForum();
 					break;
 				case "flag-user":
-					$main->includeMessage("<strong>Flag user account.</strong>");
+					Utils::includeMessage("<strong>Flag user account.</strong>");
 					$pass = $main->testFlagUser();
 					break;
 				case "avatar-message":
-					$main->includeMessage("<strong>Process the avatar message and return the avatars response.</strong>");
+					Utils::includeMessage("<strong>Process the avatar message and return the avatars response.</strong>");
 					$avatarMessage = $main->testAvatarMessage();
 					break;
 				case "tts":
-					$main->includeMessage("<strong>Process the speech message and return the server generate text-to-speech audio file.</strong>");
+					Utils::includeMessage("<strong>Process the speech message and return the server generate text-to-speech audio file.</strong>");
 					$tts = $main->testTTS();
 					break;
 				case "get-admins-forum":
-					$main->includeMessage("<strong>Return the administrators of the content.</strong>");
+					Utils::includeMessage("<strong>Return the administrators of the content.</strong>");
 					$list = $main->testGetAdminsForum();
 					break;
 				case "get-users-forum":
-					$main->includeMessage("<strong>Return the users of the content.</strong>");
+					Utils::includeMessage("<strong>Return the users of the content.</strong>");
 					$list = $main->testGetUsersForum();
 					break;
 				case "get-categories":
-					$main->includeMessage("<strong>Return the administrators of the content.</strong>");
+					Utils::includeMessage("<strong>Return the administrators of the content.</strong>");
 					$list = $main->testGetCategories();
 					break;
 				case "get-tags":
-					$main->includeMessage("<strong>Return the list of tags for the type, and domain.</strong>");
+					Utils::includeMessage("<strong>Return the list of tags for the type, and domain.</strong>");
 					$list = $main->testGetTags();
 					break;
 				case "get-templates":
-					$main->includeMessage("<strong>Return the list of bot templates.</strong>");
+					Utils::includeMessage("<strong>Return the list of bot templates.</strong>");
 					$list = $main->testGetTemplates();
 					break;
 				case "get-channel-bot-mode":
-					$main->includeMessage("<strong>Return the channel's bot configuration.</strong>");
+					Utils::includeMessage("<strong>Return the channel's bot configuration.</strong>");
 					$botModeConfig = $main->testGetChannelBotMode();
 					break;
 				case "save-channel-bot-mode":
-					$main->includeMessage("<strong>Save the channel's bot configuration.</strong>");
+					Utils::includeMessage("<strong>Save the channel's bot configuration.</strong>");
 					$botModeConfig = $main->testSaveChannelBotMode();
 					break;
 				case "save-forum-bot-mode":
-					$main->includeMessage("<strong>Save the channel's bot configuration.</strong>");
+					Utils::includeMessage("<strong>Save the channel's bot configuration.</strong>");
 					$botModeConfig = $main->testSaveForumBotMode();
 					break;
 				case "save-learning":
-					$main->includeMessage("<strong>Save the bot's learning configuration.</strong>");
+					Utils::includeMessage("<strong>Save the bot's learning configuration.</strong>");
 					$pass = $main->testSaveLearning();
 					break;
 				case "save-voice":
-					$main->includeMessage("<strong>Save the bot's voice configuration.</strong>");
+					Utils::includeMessage("<strong>Save the bot's voice configuration.</strong>");
 					$pass = $main->testSaveVoice();
 					break;
 				case "save-bot-avatar":
-					$main->includeMessage("<strong>Save the bot's avatar configuration.</strong>");
+					Utils::includeMessage("<strong>Save the bot's avatar configuration.</strong>");
 					$pass = $main->testSaveBotAvatar();
 					break;
 				case "train-instance":
-					$main->includeMessage("<strong>Train the bot with a new question/response pair.</strong>");
+					Utils::includeMessage("<strong>Train the bot with a new question/response pair.</strong>");
 					$pass = $main->testTrainInstance();
 					break;
 				case "user-admin":
-					$main->includeMessage("<strong>Perform the user administration task (add or remove users, or administrators).</strong>");
+					Utils::includeMessage("<strong>Perform the user administration task (add or remove users, or administrators).</strong>");
 					$pass = $main->testUserAdmin();
 					break;
 				case "create-avatar":
-					$main->includeMessage("<strong>Create the new content. Avatar.</strong>");
+					Utils::includeMessage("<strong>Create the new content. Avatar.</strong>");
 					$pass = $main->testCreateAvatar();
 					break;
 				case "create-avatar-media":
-					$main->includeMessage("<strong>Add the avatar media file to the avatar.</strong>");
+					Utils::includeMessage("<strong>Add the avatar media file to the avatar.</strong>");
 					$pass = $main->testCreateAvatarMedia();
 					break;
 				case "create-graphic-media":
-					$main->includeMessage("<strong>Add the graphic media file to the graphic.</strong>");
+					Utils::includeMessage("<strong>Add the graphic media file to the graphic.</strong>");
 					$pass = $main->testCreateGraphicMedia();
 					break;
 				case "update-user-icon":
-					$main->includeMessage("<strong>Update the user's icon. The file will be uploaded to the server.</strong>");
+					Utils::includeMessage("<strong>Update the user's icon. The file will be uploaded to the server.</strong>");
 					$userConfig = $main->testUpdateUserIcon();
 					break;
 				case "get-forum-bot-mode":
-					$main->includeMessage("<strong>Return the forum's bot configuration.</strong>");
+					Utils::includeMessage("<strong>Return the forum's bot configuration.</strong>");
 					$botModeConfig = $main->testGetFroumBotMode();
 					break;
 				case "get-voice":
-					$main->includeMessage("<strong>Return the bot's voice configuration.</strong>");
+					Utils::includeMessage("<strong>Return the bot's voice configuration.</strong>");
 					$voiceConfig = $main->testGetVoice();
 					break;
 				case "get-default-responses":
-					$main->includeMessage("<strong>Return the bot's default responses.</strong>");
+					Utils::includeMessage("<strong>Return the bot's default responses.</strong>");
 					$list = $main->testGetDefaultResponses();
 					break;
 				case "get-greetings":
-					$main->includeMessage("<strong>Return the bot's greetings.</strong>");
+					Utils::includeMessage("<strong>Return the bot's greetings.</strong>");
 					$list = $main->testGetGreetings();
 					break;
 				case "get-responses":
-					$main->includeMessage("<strong>Search the bot's responses.</strong>");
+					Utils::includeMessage("<strong>Search the bot's responses.</strong>");
 					$list = $main->testGetResponses();
 					break;
 				case "get-conversations":
-					$main->includeMessage("<strong>Search the bot's conversations.</strong>");
+					Utils::includeMessage("<strong>Search the bot's conversations.</strong>");
 					$list = $main->testGetConversations();
 					break;
 				case "get-learning":
-					$main->includeMessage("<strong>Return the bot's learning configuration.</strong>");
+					Utils::includeMessage("<strong>Return the bot's learning configuration.</strong>");
 					$learningConfig = $main->testGetLearning();
 					break;
 				case "browse":
-					$main->includeMessage("<strong>Return the list of content for the browse criteria. The type defines the content type (one of Bot, Forum, Channel, Domain)..</strong>");
+					Utils::includeMessage("<strong>Return the list of content for the browse criteria. The type defines the content type (one of Bot, Forum, Channel, Domain)..</strong>");
 					$list = $main->testBrowse();
 					break;
 				case "get-avatar-media":
-					$main->includeMessage("<strong>Return the list of media for the avatar.</strong>");
+					Utils::includeMessage("<strong>Return the list of media for the avatar.</strong>");
 					$list = $main->testGetAvatarMedia();
 					break;
 				case "get-script-source":
-					$main->includeMessage("<strong>Return the script source.</strong>");
+					Utils::includeMessage("<strong>Return the script source.</strong>");
 					$scriptSourceConfig = $main->testGetScriptSource();
 					break;
 				case "save-script-source":
-					$main->includeMessage("<strong>Create or update script - Save the script source.</strong>");
+					Utils::includeMessage("<strong>Create or update script - Save the script source.</strong>");
 					$pass = $main->testSaveScriptSource();
 					break;
 				case "get-bot-script-source":
-					$main->includeMessage("<strong>Return the source code for a single bot script.</strong>");
+					Utils::includeMessage("<strong>Return the source code for a single bot script.</strong>");
 					$pass = $main->testGetBotScriptSource();
 					break;
 				case "get-bot-scripts":
-					$main->includeMessage("<strong>Return a list of the bots scripts.</strong>");
+					Utils::includeMessage("<strong>Return a list of the bots scripts.</strong>");
 					$list = $main->testGetBotScripts();
 					break;
 				case "import-bot-script":
-					$main->includeMessage("<strong>import a script to the bot.</strong>");
+					Utils::includeMessage("<strong>import a script to the bot.</strong>");
 					$pass = $main->testImportBotScript();
 					break;
 				case "import-bot-log":
-					$main->includeMessage("<strong>import a chatlog/response list to the bot.</strong>");
+					Utils::includeMessage("<strong>import a chatlog/response list to the bot.</strong>");
 					$pass = $main->testImportBotLog();
 					break;
 				case "save-bot-script-source":
-					$main->includeMessage("<strong>Save the bot script source.</strong>");
+					Utils::includeMessage("<strong>Save the bot script source.</strong>");
 					$pass = $main->testSaveBotScript();
 					break;
 				case "delete-bot-script":
-					$main->includeMessage("<strong>Delete selected bot script.</strong>");
+					Utils::includeMessage("<strong>Delete selected bot script.</strong>");
 					$pass = $main->testDeleteBotScript();
 					break;
 				case "up-bot-script":
-					$main->includeMessage("<strong>Move up one bot script.</strong>");
+					Utils::includeMessage("<strong>Move up one bot script.</strong>");
 					$pass = $main->testUpBotScript();
 					break;
 				case "down-bot-script":
-					$main->includeMessage("<strong>Move down one bot script.</strong>");
+					Utils::includeMessage("<strong>Move down one bot script.</strong>");
 					$pass = $main->testDownBotScript();
 					break;
 
@@ -2374,10 +2389,10 @@
 			echo "<strong>Voice: </strong>" . $voiceConfig->voice . "<br>";
 			echo "<strong>NativeVoice: </strong>" . $voiceConfig->nativeVoice . "<br>";
 			echo "<strong>Language: </strong>" . $voiceConfig->language . "<br>";
-		} else if (isset($learningConfig)) {
+		} else if (isset($learningConfig,  $learningConfig->learningMode)) {
 			echo "<strong>Learning Mode: </strong>" . $learningConfig->learningMode . "<br>";
 			echo "<strong>Learning Rate: </strong>" . $learningConfig->learningRate . "<br>";
-			echo "<strong>Correction Mode: </strong>" . $learningConfig->correctionMode . "<br>";
+			// echo "<strong>Correction Mode: </strong>" . $learningConfig->correctionMode . "<br>";
 		} else if (isset($scriptSourceConfig)) {
 			echo "<strong>Version: </strong>" . $scriptSourceConfig->version . "<br>";
 			echo "<strong>Version Name: </strong>" . $scriptSourceConfig->versionName . "<br>";

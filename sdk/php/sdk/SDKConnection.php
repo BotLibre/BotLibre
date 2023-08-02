@@ -24,6 +24,7 @@ require_once('./config/Config.php');
 require_once('./config/ChatConfig.php');
 require_once('./config/ChatResponse.php');
 require_once('./config/DomainConfig.php');
+require_once('./config/ForumConfig.php');
 require_once('./config/ForumPostConfig.php');
 require_once('./config/UserMessageConfig.php');
 require_once('./config/ResponseConfig.php');
@@ -144,7 +145,8 @@ class SDKConnection
 	 * A domain is an isolated content space.
 	 * Any browse or query request will be specific to the domain's content.
 	 */
-	public function connectDomain(DomainConfig $config) : DomainConfig {
+	public function connectDomain(DomainConfig $config): DomainConfig
+	{
 		$this->domain = $this->fetch($config);
 		return $this->domain;
 	}
@@ -661,7 +663,7 @@ class SDKConnection
 	/**
 	 * Return the bot's voice configuration.
 	 */
-	public function getVoice(InstanceConfig $config) : ?VoiceConfig
+	public function getVoice(InstanceConfig $config): ?VoiceConfig
 	{
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-voice", $config->toXML());
@@ -691,16 +693,10 @@ class SDKConnection
 			return $defaultResponses;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
-			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+			$xmlData = Utils::loadXML($xml);
+			if($xmlData === false) {
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
 			foreach ($xmlData as $element) {
 				array_push($defaultResponses, $element);
 			}
@@ -723,16 +719,11 @@ class SDKConnection
 			return $greetings;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
-			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+			$xmlData = Utils::loadXML($xml);
+			if($xmlData===false) {
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
+
 			foreach ($xmlData as $element) {
 				array_push($greetings, $element);
 			}
@@ -741,6 +732,9 @@ class SDKConnection
 			echo "Error: " . $exception->getMessage();
 		}
 	}
+
+
+
 	/**
 	 * Search the bot's responses.
 	 */
@@ -753,17 +747,11 @@ class SDKConnection
 			return $responses;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
-			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+			$xmlData = Utils::loadXML($xml);
+			if($xmlData===false) {
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
-			foreach ($xmlData as $element) {
+			foreach ($xmlData->response as $element) {
 				$response = new ResponseConfig();
 				$response->parseXML($element);
 				array_push($responses, $response);
@@ -779,22 +767,17 @@ class SDKConnection
 	public function getConversations(ResponseSearchConfig $config)
 	{
 		$config->addCredentials($this);
-		$xml = $this->POST($this->url . "/get-converstaions", $config->toXML());
+		$xml = $this->POST($this->url . "/get-conversations", $config->toXML());
 		$conversations = array();
 		if ($xml == null) {
 			return $conversations;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
-			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+			echo print_r($xml);
+			$xmlData = Utils::loadXML($xml);
+			if($xmlData===false) {
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
 			foreach ($xmlData as $element) {
 				$response = new ConversationConfig();
 				$response->parseXML($element);
@@ -834,7 +817,7 @@ class SDKConnection
 	{
 		$config->addCredentials($this);
 		$type = "";
-		if($config->type == "Bot") {
+		if ($config->type == "Bot") {
 			$type = "/get-instances";
 		} else {
 			$type = "/get-" . strtolower($config->type) . "s";
@@ -846,31 +829,25 @@ class SDKConnection
 			return $instances;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
-			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+			$xmlData = Utils::loadXML($xml);
+			if($xmlData===false) {
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
 			foreach ($xmlData as $element) {
 				$instance = null;
-				if($config->type === "Bot") {
+				if ($config->type === "Bot") {
 					$instance = new InstanceConfig();
-				} else if($config->type === "Forum") {
+				} else if ($config->type === "Forum") {
 					$instance = new ForumConfig();
-				} else if($config->type === "Channel") {
+				} else if ($config->type === "Channel") {
 					$instance = new ChannelConfig();
-				} else if($config->type === "Domain") {
+				} else if ($config->type === "Domain") {
 					$instance = new DomainConfig();
-				} else if($config->type === "Avatar") {
+				} else if ($config->type === "Avatar") {
 					$instance = new AvatarConfig();
-				} else if($config->type === "Script") {
+				} else if ($config->type === "Script") {
 					$instance = new ScriptConfig();
-				} else if($config->type === "Graphic") {
+				} else if ($config->type === "Graphic") {
 					$instance = new GraphicConfig();
 				}
 				$instance->parseXML($element);
@@ -941,7 +918,8 @@ class SDKConnection
 	/**
 	 * Create or update script - Save the script source
 	 */
-	public function saveScriptSource(ScriptSourceConfig $config) : void {
+	public function saveScriptSource(ScriptSourceConfig $config): void
+	{
 		$config->addCredentials($this);
 		$this->POST($this->url . "/save-script-source", $config->toXML());
 	}
@@ -1004,9 +982,10 @@ class SDKConnection
 	/**
 	 * import a script to the bot
 	 */
-	public function importBotScript(ScriptConfig $config) {
+	public function importBotScript(ScriptConfig $config)
+	{
 		$config->addCredentials($this);
-		$this->POST($this->url . "/import-bot-script" , $config->toXML());
+		$this->POST($this->url . "/import-bot-script", $config->toXML());
 	}
 
 
@@ -1014,23 +993,26 @@ class SDKConnection
 	/**
 	 * import a chatlog/response list to the bot
 	 */
-	public function importBotLog(ScriptConfig $config) {
+	public function importBotLog(ScriptConfig $config)
+	{
 		$config->addCredentials($this);
-		$this->POST($this->url . "/import-bot-log" , $config->toXML());
+		$this->POST($this->url . "/import-bot-log", $config->toXML());
 	}
 
 	/**
 	 * Save the bot script source
 	 */
-	public function saveBotScriptSource (ScriptSourceConfig $config) {
+	public function saveBotScriptSource(ScriptSourceConfig $config)
+	{
 		$config->addCredentials($this);
-		$this->POST($this->url . "/save-bot-script-source" , $config->toXML());
+		$this->POST($this->url . "/save-bot-script-source", $config->toXML());
 	}
 
 	/**
 	 * Delete selected bot script
 	 */
-	public function deleteBotScript(ScriptSourceConfig $config) {
+	public function deleteBotScript(ScriptSourceConfig $config)
+	{
 		$config->addCredentials($this);
 		$this->POST($this->url . "/delete-bot-script", $config->toXML());
 	}
@@ -1038,17 +1020,19 @@ class SDKConnection
 	/**
 	 * Move up one bot script
 	 */
-	public function upBotScript(ScriptSourceConfig $config) {
+	public function upBotScript(ScriptSourceConfig $config)
+	{
 		$config->addCredentials($this);
 		$this->POST($this->url . "/up-bot-script", $config->toXML());
 	}
-	
+
 	/**
 	 * Move down one bot script
 	 */
-	public function downBotScript(ScriptSourceConfig $config) {
+	public function downBotScript(ScriptSourceConfig $config)
+	{
 		$config->addCredentials($this);
-		$this->POST($this->url . "/down-bot-script",  $config->toXML());
+		$this->POST($this->url . "/down-bot-script", $config->toXML());
 	}
 
 	/**
@@ -1695,7 +1679,7 @@ class SDKConnection
 
 			//Execute request
 			$response = curl_exec($curl);
-			
+
 			//Check for errors
 			if (curl_errno($curl)) {
 				echo "Error: " . curl_error($curl);

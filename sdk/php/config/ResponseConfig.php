@@ -17,29 +17,25 @@
  *
  ******************************************************************************/
 class ResponseConfig extends Config {
-    public String $questionId;
-	public String $responseId;
-	public String $question;
-	public String $response;
-	public String $previous;
-	public String $onRepeat;
-	public String $label;
-	public String $topic;
-	public String $keywords;
-	public String $required;
-	public String $emotions;
-	public String $actions;
-	public String $poses;
+    public ?String $questionId;
+	public ?String $responseId;
+	public ?String $question;
+	public ?String $response;
+	public ?String $previous;
+	public ?String $onRepeat;
+	public ?String $label;
+	public ?String $topic;
+	public ?String $keywords;
+	public ?String $required;
+	public ?String $emotions;
+	public ?String $actions;
+	public ?String $poses;
 	public $noRepeat;
 	public $requirePrevious;
 	public $requireTopic;
 	public $flagged;
 	public String $correctness;
 	public String $command;
-
-    // public function __construct () {
-
-    // }
 
     public function toXML() : String {
 		$writer .= "";
@@ -59,7 +55,51 @@ class ResponseConfig extends Config {
     }
 
     public function parseXML($xml) : void {
-        
+		$xmlData = Utils::loadXML($xml);
+		if($xmlData===false) {
+			return;
+		}
+        $this->questionId = $xmlData->attributes()->questionId;
+        $this->responseId = $xmlData->attributes()->responseId;
+        $this->label = $xmlData->attributes()->label;
+		$this->topic = $xmlData->attributes()->topic;
+		$this->keywords = $xmlData->attributes()->keywords;
+		$this->required = $xmlData->attributes()->required;
+
+
+		$this->emotions = $xmlData->attributes()->emotions;
+        $this->actions = $xmlData->attributes()->actions;
+        $this->poses = $xmlData->attributes()->poses;
+		$this->type = $xmlData->attributes()->type;
+		$this->correctness = $xmlData->attributes()->correctness;
+		if(isset($xmlData->attributes()->noRepeat)) {
+			$this->noRepeat =(bool) $xmlData->attributes()->noRepeat;
+		}
+		if(isset($xmlData->attributes()->requireTopic)) {
+			$this->requireTopic = (bool) $xmlData->attributes()->requireTopic;
+		}
+
+		if(isset($xmlData->attributes()->flagged)) {
+			$this->flagged = (bool) $xmlData->attributes()->flagged;
+		}
+
+		if(isset($xmlData->attributes()->requirePrevious)) {
+			$this->requirePrevious =(bool)  $xmlData->attributes()->requirePrevious;
+		}
+		if(isset($xmlData->question)) {
+			$this->question = $xmlData->question;
+		}
+		if(isset($xmlData->response)) {
+			$this->response = $xmlData->response;
+		}
+		if(isset($xmlData->question)) {
+			$this->question = $xmlData->question;
+		}
+		if(isset($xmlData->command)) {
+			$this->command = $xmlData->command;
+			$this->command = str_replace('&#34;', '"', $this->command);
+		}
+
     }
 }
 ?>
