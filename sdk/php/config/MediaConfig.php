@@ -26,17 +26,9 @@
 
     public function parseXML($xml) : void {
         parent::parseXML($xml);
-
-        try {
-            $xmlData = simplexml_load_string($xml);
-            if($xmlData === false) {
-                echo "Failed loading XML: ";
-                foreach (libxml_get_errors() as $error) {
-                    echo "<br>", $error->message;
-                }
-            }
-        }catch (Exception $exception){
-            echo "Error: " . $exception->getMessage();
+        $xmlData = Utils::loadXML($xml);
+        if ($xmlData === false) {
+            return;
         }
 
         $this->id = $xmlData->attributes()->id;

@@ -22,16 +22,10 @@ class BotModeConfig extends Config {
 
     public function parseXML($xml):void {
         parent::parseXML($xml);
-        $xmlData = simplexml_load_string($xml);
+        $xmlData = Utils::loadXML($xml);
         if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
+            return;
         }
-        // else {
-        //     print_r($xmlData);
-        // }
         $this->mode = $xmlData->attributes()->mode;
         $this->bot = $xmlData->attributes()->bot;
     }

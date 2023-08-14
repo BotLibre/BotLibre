@@ -29,7 +29,7 @@ class Utils
 	/*
 	 *	Used for debugging
 	 */
-	public static function includeMessage($message, $img = null, $info = null)
+	public static function includeMessage($message, $img = null, $info = null, $sucess=true)
 	{
 		$debugComment = $message;
 		if ($img != null) {
@@ -37,6 +37,9 @@ class Utils
 		}
 		if ($info != null) {
 			$debugInfo = $info;
+		}
+		if(!$sucess) {
+			$borderColor = "border-color: red;";
 		}
 		include "views/debug.php";
 	}
@@ -46,6 +49,7 @@ class Utils
 	 */
 	public static function loadXML($xml)
 	{
+		$XMLLogsOff = libxml_use_internal_errors(true);
 		$xmlData = $xml;
 		if(is_string($xml)) {
 			$xmlData = simplexml_load_string($xml);
@@ -56,9 +60,15 @@ class Utils
 				$errorMessage .= $error->message;
 			}
 			$errorMessage .= "<strong>Response: </strong>" . $xml;
-			Utils::includeMessage("Failed loading XML", null, $errorMessage);
+			Utils::includeMessage("Couldn't read xml", null, $errorMessage, false);
 		} else {
 			Utils::includeMessage("Passed", null, $xmlData);
+		}
+		$errors = libxml_get_errors();
+		libxml_clear_errors();
+		libxml_use_internal_errors($XMLLogsOff);
+		if($errors) {
+			Utils::includeMessage("Couldn't read xml ->", null, $errors, false);
 		}
 		return $xmlData;
 	}

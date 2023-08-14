@@ -93,20 +93,9 @@ class UserConfig extends Config
 
     public function parseXML($xml): void
     {
-        try {
-            $xmlData = simplexml_load_string($xml);
-            if ($xmlData === false) {
-                echo "Failed loading XML: ";
-                foreach (libxml_get_errors() as $error) {
-                    echo "<br>", $error->message;
-                }
-            } 
-            // else {
-            //     //Print
-            //     print_r($xmlData);
-            // }
-        }catch (Exception $exception){
-            echo "Error: " . $exception->getMessage();
+        $xmlData = Utils::loadXML($xml);
+        if ($xmlData === false) {
+            return;
         }
         $this->user = $xmlData->attributes()->user;
         $this->name = $xmlData->attributes()->name;

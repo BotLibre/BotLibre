@@ -31,6 +31,7 @@ class AvatarConfig extends WebMediumConfig
 
     public function toXML(): string
     {
+        $writer = "";
         $writer .= "<avatar";
         $this->writeXML($writer);
         $writer .="</avatar>";

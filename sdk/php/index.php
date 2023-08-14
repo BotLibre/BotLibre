@@ -39,71 +39,72 @@
 				}
 				?>
 				<option value="">/</option>
-				<option value="connect">/check-user</option>
-				<option value="chat">/post-chat</option>
-				<option value="view-user">/view-user</option>
-				<option value="check-forum-post">/check-forum-post</option>
-				<option value="create-user">/create-user</option>
-				<option value="update-user">/update-user</option>
-				<option value="fetch-image">/fetch-image</option>
-				<option value="create-forum-post">/create-forum-post</option>
-				<option value="update-forum-post">/update-forum-post</option>
-				<option value="delete-forum-post">/delete-forum-post</option>
-				<option value="get-forum-posts">/get-forum-posts</option>
-				<option value="create-channel-file-attachment">/create-channel-file-attachment</option>
-				<option value="create-channel-image-attachment">/create-channel-image-attachment</option>
-				<option value="create-post-reply">/create-post-reply</option>
-				<option value="save-avatar-background">/save-avatar-background</option>
-				<option value="delete-avatar-background">/delete-avatar-background</option>
-				<option value="save-avatar-media">/save-avatar-media</option>
-				<option value="delete-avatar-media">/delete-avatar-media</option>
-				<option value="delete-response">/delete-response</option>
-				<option value="flag">/flag</option>
-				<option value="subscribe-forum-post">/subscribe-forum-post</option>
-				<option value="unsubscribe-forum-post">/unsubscribe-forum-post</option>
-				<option value="subscribe-forum">/subscribe-forum</option>
-				<option value="unsubscribe-forum">/unsubscribe-forum</option>
-				<option value="thumbs-up-forum">/thumbs-up-forum</option>
-				<option value="thumbs-down-forum">/thumbs-down-forum</option>
-				<option value="star-forum">/star-forum</option>
-				<option value="avatar-message">/avatar-message</option>
-				<option value="tts">/tts</option>
-				<option value="get-admins-forum">/get-admins-forum</option>
-				<option value="get-users-forum">/get-users-forum</option>
-				<option value="get-categories">/get-categories</option>
-				<option value="get-tags">/get-tags</option>
-				<option value="get-templates">/get-templates</option>
-				<option value="get-channel-bot-mode">/get-channel-bot-mode</option>
-				<option value="save-channel-bot-mode">/save-channel-bot-mode</option>
-				<option value="save-forum-bot-mode">/save-forum-bot-mode</option>
-				<option value="save-learning">/save-learning</option>
-				<option value="save-voice">/save-voice</option>
-				<option value="save-bot-avatar">/save-bot-avatar</option>
-				<option value="train-instance">/train-instance</option>
-				<option value="user-admin">/user-admin</option>
-				<option value="create-avatar-media">/create-avatar-media</option>
-				<option value="create-avatar">/create-avatar</option>
-				<option value="create-graphic-media">/create-graphic-media</option>
-				<option value="update-user-icon">/update-user-icon</option>
-				<option value="get-forum-bot-mode">/get-forum-bot-mode</option>
-				<option value="get-voice">/get-voice</option>
-				<option value="get-default-responses">/get-default-responses</option>
-				<option value="get-greetings">/get-greetings</option>
-				<option value="get-responses">/get-responses</option>
-				<option value="get-conversations">/get-conversations</option>
-				<option value="get-learning">/get-learning</option>
-				<option value="browse">/browse</option>
-				<option value="get-avatar-media">/get-avatar-media</option>
-				<option value="get-script-source">/get-script-source</option>
-				<option value="save-script-source">/save-script-source</option>
-				<option value="get-bot-script-source">/get-bot-script-source</option>
-				<option value="get-bot-scripts">/get-bot-scripts</option>
-				<option value="import-bot-script">/import-bot-script</option>
-				<option value="import-bot-log">/import-bot-log</option>
-				<option value="save-bot-script-source">/save-bot-script-source</option>
-				<option value="delete-bot-script">/delete-bot-script</option>
-				<option value="up-bot-script">/up-bot-script</option>
-				<option value="down-bot-script">/down-bot-script</option>
+				<option value="connect">check-user</option>
+				<option value="chat">post-chat</option>
+				<option value="view-user">view-user</option>
+				<option value="check-forum-post">check-forum-post</option>
+				<option value="create-user">create-user</option>
+				<option value="update-user">update-user</option>
+				<option value="fetch-image">fetch-image</option>
+				<option value="create-forum-post">create-forum-post</option>
+				<option value="update-forum-post">update-forum-post</option>
+				<option value="delete-forum-post">delete-forum-post</option>
+				<option value="get-forum-posts">get-forum-posts</option>
+				<option value="create-channel-file-attachment">create-channel-file-attachment</option>
+				<option value="create-channel-image-attachment">create-channel-image-attachment</option>
+				<option value="create-post-reply">create-post-reply</option>
+				<option value="save-avatar-background">save-avatar-background</option>
+				<option value="delete-avatar-background">delete-avatar-background</option>
+				<option value="save-avatar-media">save-avatar-media</option>
+				<option value="delete-avatar-media">delete-avatar-media</option>
+				<option value="delete-response">delete-response</option>
+				<option value="save-response">save-response</option>
+				<option value="flag">flag</option>
+				<option value="subscribe-forum-post">subscribe-forum-post</option>
+				<option value="unsubscribe-forum-post">unsubscribe-forum-post</option>
+				<option value="subscribe-forum">subscribe-forum</option>
+				<option value="unsubscribe-forum">unsubscribe-forum</option>
+				<option value="thumbs-up-forum">thumbs-up-forum</option>
+				<option value="thumbs-down-forum">thumbs-down-forum</option>
+				<option value="star-forum">star-forum</option>
+				<option value="avatar-message">avatar-message</option>
+				<option value="tts">tts</option>
+				<option value="get-admins-forum">get-admins-forum</option>
+				<option value="get-users-forum">get-users-forum</option>
+				<option value="get-categories">get-categories</option>
+				<option value="get-tags">get-tags</option>
+				<option value="get-templates">get-templates</option>
+				<option value="get-channel-bot-mode">get-channel-bot-mode</option>
+				<option value="save-channel-bot-mode">save-channel-bot-mode</option>
+				<option value="save-forum-bot-mode">save-forum-bot-mode</option>
+				<option value="save-learning">save-learning</option>
+				<option value="save-voice">save-voice</option>
+				<option value="save-bot-avatar">save-bot-avatar</option>
+				<option value="train-instance">train-instance</option>
+				<option value="user-admin">user-admin</option>
+				<option value="create-avatar-media">create-avatar-media</option>
+				<option value="create-avatar">create-avatar</option>
+				<option value="create-graphic-media">create-graphic-media</option>
+				<option value="update-user-icon">update-user-icon</option>
+				<option value="get-forum-bot-mode">get-forum-bot-mode</option>
+				<option value="get-voice">get-voice</option>
+				<option value="get-default-responses">get-default-responses</option>
+				<option value="get-greetings">get-greetings</option>
+				<option value="get-responses">get-responses</option>
+				<option value="get-conversations">get-conversations</option>
+				<option value="get-learning">get-learning</option>
+				<option value="browse">browse</option>
+				<option value="get-avatar-media">get-avatar-media</option>
+				<option value="get-script-source">get-script-source</option>
+				<option value="save-script-source">save-script-source</option>
+				<option value="get-bot-script-source">get-bot-script-source</option>
+				<option value="get-bot-scripts">get-bot-scripts</option>
+				<option value="import-bot-script">import-bot-script</option>
+				<option value="import-bot-log">import-bot-log</option>
+				<option value="save-bot-script-source">save-bot-script-source</option>
+				<option value="delete-bot-script">delete-bot-script</option>
+				<option value="up-bot-script">up-bot-script</option>
+				<option value="down-bot-script">down-bot-script</option>
 			</select>
 			<br><br>
 			<input type="submit" value="TEST">
@@ -181,7 +182,10 @@
 
 		}
 
-		public function testConnectUserAccount(): ?UserConfig
+		/**
+		 * Tested: passed
+		 */
+		public function testConnectUserAccount(): bool
 		{
 			//TODO: Set user
 			$userConfig = new UserConfig();
@@ -190,34 +194,38 @@
 			$userConfig->password = Main::$password;
 			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
 				Utils::includeMessage("<strong>Please fill the required data @ testConnectUserAccount() in index.php</strong>");
-				return null;
+				return false;
 			}
-			return Main::$connection->connect($userConfig);
+			Main::$connection->connect($userConfig);
+			return true;
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: Bot ID, and a Message.
 		 */
 
 		public function testSendChatMessage(): ?ChatResponse
 		{
+			if (!$this->testConnectUserAccount()) {
+				return null;
+			}
 			//TODO: Set message
 			$config = new ChatConfig();
 			// Add a message here: $config->message = "How are you?"
-			$config->message = "Who are you?";
-			$config->application = Main::$applicationId;
+			$config->message = "How are you?";
+
 			// An ID of the bot example: ID: 165
 			$config->instance = "165";
-			if ($config->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSendChatMessaage() in index.php</strong>");
-				return null;
+			if (isset($config->instance)) {
+				return Main::$connection->chat($config);
 			}
-			return Main::$connection->chat($config);
+			Utils::includeMessage("<strong>Please fill the required data @ testSendChatMessaage() in index.php</strong>");
+			return null;
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirements: 
 		 * 1. Application ID
 		 * 2. Username
@@ -238,7 +246,7 @@
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirements
 		 * 1. Application ID
 		 * 2. User
@@ -248,21 +256,21 @@
 
 		public function testFetchForumPost(): ?ForumPostConfig
 		{
-			//TODO: Set user using 
-			$forumPostConfig = new ForumPostConfig();
-			$forumPostConfig->application = Main::$applicationId;
-			$forumPostConfig->user = Main::$username;
-			$forumPostConfig->password = Main::$password;
-			$forumPostConfig->id = "5012";
-			if ($forumPostConfig->application === "" || $forumPostConfig->user === "" || $forumPostConfig->password === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
+			//TODO: Set user
+			if (!$this->testConnectUserAccount()) {
 				return null;
 			}
-			return Main::$connection->fetchForumPost($forumPostConfig);
+			$forumPostConfig = new ForumPostConfig();
+			// $forumPostConfig->id = "";
+			if (isset($forumPostConfig->id)) {
+				return Main::$connection->fetchForumPost($forumPostConfig);
+			}
+			Utils::includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
+			return null;
 		}
 
 		/**
-		 * Tested-> Worked
+		 * Tested-> passed
 		 * Requirments:
 		 * 1. User
 		 * 2. Password
@@ -272,9 +280,9 @@
 
 		public function testCreateUser(): ?UserConfig
 		{
-			//TODO: Set user 
+			//TODO: Set user
 			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId;
+			// $userConfig->application = Main::$applicationId;
 			//Required data for testing.
 			// $userConfig->user = "";
 			// $userConfig->password = "";
@@ -294,22 +302,27 @@
 			return $userConfig;
 		}
 
-
+		/**
+		 * Tested: passed
+		 * Requirements: Must be logged in to update current user data, i.e name, email and password.
+		 */
 		public function testUpdateUser(): ?UserConfig
 		{
 			//TODO: Set user 
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId;
+	
+			if (!$this->testConnectUserAccount()) {
+				return null;
+			}
+			$userConfig = Main::$connection->getUser(); //Updating current user account.
 			//Required data for testing.
-			// $userConfig->user = "";
 			// $userConfig->password = "";
-			// $userConfig->hint = "";
+			// $userConfig->hint = "testAccount";
 			// $userConfig->name = "";
 			// $userConfig->email = "";
 			// $userConfig->website = "";
-			// $userConfig->bio = "";
+			// $userConfig->bio = "Test update user";
 			// $userConfig->showName = true;
-			if (isset($userConfig->user, $userConfig->password, $userConfig->hint, $userConfig->email, $userConfig->name)) {
+			if (isset($userConfig->hint, $userConfig->bio)) {
 				$userConfig = Main::$connection->updateUser($userConfig);
 			} else {
 				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUser() in index.php</strong>");
@@ -319,6 +332,7 @@
 			return $userConfig;
 		}
 
+		//Tested
 		public function testFetchImage()
 		{
 			//example: ...fetchImage("avatars/a667989.JPEG")
@@ -327,7 +341,7 @@
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirements: 
 		 * 1. User must be logged in
 		 * 2. Forum ID
@@ -337,7 +351,9 @@
 		public function testCreateForumPost()
 		{
 			//TODO: Set user
-			$this->testConnectUserAccount();
+			if (!$this->testConnectUserAccount()) {
+				return;
+			}
 			//TODO: Set ForumPostConfig
 			$postConfig = new ForumPostConfig();
 			// $postConfig->forum = ""; //Forum ID
@@ -347,15 +363,14 @@
 			if (isset($postConfig->details, $postConfig->forum, $postConfig->topic)) {
 				$postConfig = Main::$connection->createForumPost($postConfig);
 			} else {
-				$debugComment = "<strong>Please fill the required data @ testCreatePostConfig() in index.php</strong>";
-				include "views/debug.php";
+				Utils::includeMessage("<strong>Please fill the required data @ testCreatePostConfig() in index.php</strong>");
 				return null;
 			}
 			return $postConfig;
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirements: 
 		 * 1. User must be logged in
 		 * 2. Forum ID
@@ -365,7 +380,9 @@
 		public function testUpdateForumPost()
 		{
 			//TODO: Set user
-			$this->testConnectUserAccount();
+			if (!$this->testConnectUserAccount()) {
+				return;
+			}
 			//TODO: Set ForumPostConfig
 			$postConfig = new ForumPostConfig();
 			// $postConfig->forum = ""; //Forum ID
@@ -373,30 +390,33 @@
 			// $postConfig->details = "";
 			// $postConfig->tags = "";
 			if (isset($postConfig->details, $postConfig->forum, $postConfig->topic)) {
-				$configForumPost = Main::$connection->updateForumPost($postConfig);
+				return Main::$connection->updateForumPost($postConfig);
 			} else {
-				$debugComment = "<strong>Please fill the required data @ testUpdateForumPost() in index.php</strong>";
-				include "views/debug.php";
+				Utils::includeMessage("<strong>Please fill the required data @ testUpdateForumPost() in index.php</strong>");
 				return null;
 			}
-			return $postConfig;
 		}
 
-
-		public function testDeleteForumPost(): bool
+		/**
+		 * Tested: passed
+		 * Requirements: The ID of the post and the ID of the forum containing the post.
+		 */
+		public function testDeleteForumPost()
 		{
 			//TODO: Set user
-			$this->testConnectUserAccount();
-			$postConfig = new ForumPostConfig();
-			// $postConfig->forum = ""; //Forum ID
-			if (isset($postConfig->forum)) {
-				Main::$connection->deleteForumPost($postConfig);
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testDeleteForumPost() in index.php</strong>";
-				include "views/debug.php";
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			return true;
+
+			$postConfig = new ForumPostConfig();
+			// $postConfig->forum = ""; //required forum id.
+			// $postConfig->id = ""; // required post id to be deleted.
+			if (isset($postConfig->forum, $postConfig->id)) {
+				Main::$connection->deleteForumPost($postConfig);
+				return true;
+			}
+			Utils::includeMessage("<strong>Please fill the required data @ testDeleteForumPost() in index.php</strong>");
+			return false;
 		}
 
 		//Tested -> Failed, returned file name is null.
@@ -408,12 +428,10 @@
 			// $mediaConfig->instance = ""; //Channel ID is required
 			$file = ""; //Get file path
 			if (isset($mediaConfig->name, $mediaConfig->type, $file, $mediaConfig->instance)) {
-				$mediaConfig = Main::$connection->createChannelFileAttachment($file, $mediaConfig);
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testCreateChannelFileAttachment() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+				return Main::$connection->createChannelFileAttachment($file, $mediaConfig);
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateChannelFileAttachment() in index.php</strong>");
+			return null;
 		}
 
 		public function testCreateChannelImageAttachment()
@@ -424,17 +442,15 @@
 			// $mediaConfig->instance = ""; //Channel ID is required
 			$file = ""; //Get file path
 			if (isset($mediaConfig->name, $mediaConfig->type, $file, $mediaConfig->instance)) {
-				$mediaConfig = Main::$connection->createChannelImageAttachment($file, $mediaConfig);
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testCreateChannelImageAttachment() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+				return Main::$connection->createChannelImageAttachment($file, $mediaConfig);
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateChannelImageAttachment() in index.php</strong>");
+			return null;
 		}
 
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirements: 
 		 * 1. User must be logged in
 		 * 2. Forum ID
@@ -443,7 +459,9 @@
 		public function testCreateReply()
 		{
 			//TODO: Set user
-			$this->testConnectUserAccount();
+			if (!$this->testConnectUserAccount()) {
+				return;
+			}
 			//TODO: Set ForumPostConfig
 			$postConfig = new ForumPostConfig();
 			// $postConfig->forum = ""; //Forum ID
@@ -451,12 +469,10 @@
 			// $postConfig->details = "";
 			// $postConfig->tags = "";
 			if (isset($postConfig->details, $postConfig->forum, $postConfig->parent)) {
-				$postConfig = Main::$connection->createReply($postConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateReply() in index.php</strong>");
-				return null;
+				return Main::$connection->createReply($postConfig);
 			}
-			return $postConfig;
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateReply() in index.php</strong>");
+			return null;
 		}
 
 		public function testCreateUserMessage()
@@ -481,25 +497,50 @@
 	
 			if (isset($config->target, $config->subject, $config->message)) {
 				Main::$connection->createUserMessage($config);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateUserMessage() in index.php</strong>");
-				include "views/debug.php";
+				return true;
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateUserMessage() in index.php</strong>");
+			return false;
 		}
 
+
+		/**
+		 * Tested -> passed for creating a new question and a response.
+		 */
 		public function testSaveResponse()
 		{
-			$response = new ResponseConfig();
-			// $response->response = "";
-			// $response->question = "";
-			// $response->instance = "";
-			// $response->type = "";
-			if (isset($response->response, $response->question, $response->instance, $response->type)) {
-				Main::$connection->saveResponse($response);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveResponse() in index.php</strong>");
+			//TODO: Set user
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-
+			$response = new ResponseConfig();
+			$response->instance = ""; //Bot ID
+			// $response->responseId ="";
+			// $response->questionId ="";
+			// $response->type = "";
+			// $response->correctness = "";
+			// $response->flagged = "";
+			$response->question = "Test Question";
+			$response->response = "Test Response";
+			// $response->topic = "";
+			// $response->label = "";
+			// $response->keywords = "";
+			// $response->required = "";
+			// $response->emotions = "like";
+			// $response->actions = "";
+			// $response->poses = "";
+			// $response->previous = "";
+			// $response->onRepeat = "";
+			// $response->command = "";
+			// $response->noRepeat = "";
+			// $response->requirePrevious = "";
+	
+			if (isset($response->instance)) {
+				Main::$connection->saveResponse($response);
+				return true;
+			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveResponse() in index.php</strong>");
+			return false;
 		}
 
 		/**
@@ -510,27 +551,17 @@
 		public function testSaveAvatarBackground()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
 			$avatarConfig = new AvatarMedia();
 			//image path directory
 			$imagePath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'imgtest.jpg';
 
-			// echo "token: " . $userConfig->token . "<br>";
 			// echo "image path: " . $imagePath;
 	
-			$avatarConfig->user = $userConfig->user;
-			$avatarConfig->token = $userConfig->token;
-
 
 			// $avatarConfig->name = "imgtest.jpg";
 			// $avatarConfig->type = "image/jpeg";
@@ -539,73 +570,63 @@
 	
 			if (isset($avatarConfig->application, $avatarConfig->name, $avatarConfig->instance, $avatarConfig->type)) {
 				Main::$connection->saveAvatarBackground($imagePath, $avatarConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
-			}
-		}
-
-		public function testDeleteResponse()
-		{
-			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
-				return null;
-			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
-	
-			$config = new ResponseConfig();
-
-			$config->user = $userConfig->user;
-			$config->token = $userConfig->token;
-
-
-			// $config->instance = ""; //response id
-			// $config->type = ""; //i.e conversation, greeting, response, flagged.
-			// $config->responseId = ""; // response ID.
-			// $config->questionId = ""; // question ID.
-	
-			if (isset($config->instance, $config->type, $config->responseId, $condfig->questionId)) {
-				Main::$connection->deleteResponse($config);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
 			return false;
 		}
 
+
+		//Tested -> passed
+		//Requirement: Bot instance id, type: response, response id and question id.
+	
+		public function testDeleteResponse()
+		{
+			//TODO: Set user
+			if (!$this->testConnectUserAccount()) {
+				return;
+			}
+			
+	
+			$config = new ResponseConfig();
+
+
+			// $config->instance = ""; //response id
+			// $config->type = "response"; //i.e conversation, greeting, response, flagged.
+			// $config->responseId = ""; // response ID.
+			// $config->questionId = ""; // question ID.
+	
+			// $config->question = "";
+			// $config->response = "";
+	
+			if (isset($config->instance, $config->responseId)) {
+				Main::$connection->deleteResponse($config);
+				return true;
+			}
+			Utils::includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
+			return false;
+		}
+
+
+		/**
+		 * Tested: Passed
+		 */
 		public function testDeleteAvatarMedia()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
-	
-
+			
 			$avatarMedia = new AvatarMedia();
-
-			$avatarMedia->user = $userConfig->user;
-			$avatarMedia->token = $userConfig->token;
 
 			// $avatarMedia->mediaId = ""; //media ID.
 			// $avatarMedia->instance = "";//Instance ID.
 			if (isset($avatarMedia->instance, $avatarMedia->mediaId)) {
 				Main::$connection->deleteAvatarMedia($avatarMedia);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
 			return false;
 		}
 
@@ -613,22 +634,13 @@
 		public function testSaveAvatarMedia()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
 
 			$avatarMedia = new AvatarMedia();
-
-			$avatarMedia->user = $userConfig->user;
-			$avatarMedia->token = $userConfig->token;
 
 			// $avatarMedia->mediaId = ""; //media ID.
 			// $avatarMedia->type=""; //media type.
@@ -643,70 +655,54 @@
 			if (isset($avatarMedia->instance, $avatarMedia->type, $avatarMedia->name, $avatarMedia->emotions, $avatarMedia->talking, $avatarMedia->poses, $avatarMedia->actions, $avatarMedia->mediaId)) {
 				Main::$connection->saveAvatarMedia($avatarMedia);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
 			return false;
 		}
+
+
+
+		/**
+		 * Tested: passed
+		 */
 		public function testDeleteAvatarBackground()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarBackground() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
-	
+		
 
 			$avatarConfig = new AvatarConfig();
-
-			$avatarConfig->user = $userConfig->user;
-			$avatarConfig->token = $userConfig->token;
-
-			//$avatarConfig->id = ""; //Avatar id.
+			// $avatarConfig->id = ""; //Avatar id.
 	
 			if (isset($avatarConfig->id)) {
 				Main::$connection->deleteAvatarBackground($avatarConfig);
 				return true;
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testDeleteAvatarBackground() in index.php</strong>";
-				include "views/debug.php";
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarBackground() in index.php</strong>");
 			return false;
+
 		}
 
 		public function testFlagInstance()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
 			//This can be applied on either (GraphicConfig, ChannelConfig, DomainConfig ..etc);
 			$avatarConfig = new AvatarConfig();
-			$avatarConfig->user = $userConfig->user;
-			$avatarConfig->token = $userConfig->token;
 			$avatarConfig->flaggedReason = "Reason for flagging. " . $avatarConfig->getType();
 			//$avatarConfig->id = ""; //Avatar id.
 	
 			if (isset($avatarConfig->id, $avatarConfig->flaggedReason)) {
 				Main::$connection->flag($avatarConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
 			return false;
 		}
 
@@ -714,18 +710,7 @@
 		public function testFlagUser()
 		{
 			//TODO: Set user
-			// $userConfig = new UserConfig();
-			// $userConfig->application = Main::$applicationId; //application id, username and password are required.
-			// $userConfig->user = Main::$username;
-			// $userConfig->password = Main::$password;
-			// if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-			// 	$debugComment = "<strong>Please fill the required data @ testFlagUser() in index.php</strong>";
-			// 	include "views/debug.php";
-			// 	return null;
-			// }
-			// $userConfig = Main::$connection->connect($userConfig);
-	
-
+			
 			$viewUser = new UserConfig();
 			// $viewUser->user = "";
 			// $viewUser->instance = "";
@@ -734,9 +719,8 @@
 			if (isset($viewUser->user, $viewUser->flaggedReason, $viewUser->instance)) {
 				Main::$connection->flagUser($viewUser);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testFlagUser() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testFlagUser() in index.php</strong>");
 			return false;
 		}
 
@@ -744,227 +728,170 @@
 		public function testSubscribeForumPost()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
 			$forumPostConfig = new ForumPostConfig();
-			$forumPostConfig->user = $userConfig->user;
-			$forumPostConfig->token = $userConfig->token;
 			//$forumPostConfig->id = ""; //ForumPostConfig id.
 			if (isset($forumPostConfig->id)) {
 				Main::$connection->subscribeForumPost($forumPostConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
 			return false;
 		}
 
 		public function testUnsubscribeForumPost()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
 			$forumPostConfig = new ForumPostConfig();
-			$forumPostConfig->user = $userConfig->user;
-			$forumPostConfig->token = $userConfig->token;
 			//$forumPostConfig->id = ""; //ForumPostConfig id.
 			if (isset($forumPostConfig->id)) {
 				Main::$connection->unsubscribeForumPost($forumPostConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
 			return false;
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: User login.
 		 */
 
 		public function testGetForumPosts()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 			$browseForumPosts = new BrowseConfig();
-			$browseForumPosts->user = $userConfig->user;
-			$browseForumPosts->token = $userConfig->token;
 			$browseForumPosts->type = "Post";
 			$browseForumPosts->typeFilter = "Public";
 			$browseForumPosts->sort = "date";
 			if (isset($browseForumPosts->type, $browseForumPosts->typeFilter, $browseForumPosts->sort)) {
 				return Main::$connection->getPosts($browseForumPosts);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
 			return null;
 		}
-
+		/**
+		 * Tested -> passed
+		 * Requirement: forum id.
+		 */
 		public function testSubscribeForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
-			$forumPost = new ForumConfig();
-			$forumPost->user = $userConfig->user;
-			$forumPost->token = $userConfig->token;
-			//$forumPost->id = ""; //ForumPost id.
-			if (isset($forumPost->id)) {
-				Main::$connection->subscribeForum($forumPost);
+			$forum = new ForumConfig();
+
+			// $forum->id = ""; //ForumPost id.
+			if (isset($forum->id)) {
+				Main::$connection->subscribeForum($forum);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
+
 			return false;
 		}
 
+		/**
+		 * Tested -> passed
+		 * Requirement: forum id.
+		 */
 		public function testUnsubscribeForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
-			$forumPost = new ForumConfig();
-			$forumPost->user = $userConfig->user;
-			$forumPost->token = $userConfig->token;
-			//$forumPost->id = ""; //ForumPost id.
-			if (isset($forumPost->id)) {
-				Main::$connection->unsubscribeForum($forumPost);
+			$forum = new ForumConfig();
+			// $forum->id = ""; //ForumPost id.
+			if (isset($forum->id)) {
+				Main::$connection->unsubscribeForum($forum);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
+
 			return false;
 		}
+
+
 
 		public function testThumbsUpForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
-	
+			
 			//FourmConfig, GraphicConfig, ForumPostConfig ..etc. Has getType() which return the type of the config object.
 			//Thus the function thumbsUp(takes an object of WebMediumConfig) which inherited from all the config objects.
 			$forumPost = new ForumConfig();
-			$forumPost->user = $userConfig->user;
-			$forumPost->token = $userConfig->token;
-			//$forumPost->id = ""; //ForumPost id.
+
+			// $forumPost->id = ""; //ForumPost id.
 			if (isset($forumPost->id)) {
 				Main::$connection->thumbsUp($forumPost);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
+
 			return false;
 		}
 
 		public function testThumbsDownForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
-	
+			
 			//FourmConfig, GraphicConfig, ForumPostConfig ..etc. Has getType() which return the type of the config object.
 			//Thus the function thumbsDown(takes an object of WebMediumConfig) which inherited from all the config objects.
 			$forumPost = new ForumConfig();
-			$forumPost->user = $userConfig->user;
-			$forumPost->token = $userConfig->token;
 			//$forumPost->id = ""; //ForumPost id.
 			if (isset($forumPost->id)) {
 				Main::$connection->thumbsDown($forumPost);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
+
 			return false;
 		}
 
 		public function testStarForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
-			//Now we can use the token from the user after User Login.
+			
 	
 			//FourmConfig, GraphicConfig, ForumPostConfig ..etc. Has getType() which return the type of the config object.
 			//Thus the function testStarForum(takes an object of WebMediumConfig) which inherited from all the config objects.
 			$forumPost = new ForumConfig();
-			$forumPost->user = $userConfig->user;
-			$forumPost->token = $userConfig->token;
+
 			//$forumPost->id = ""; //ForumPost id.
 			if (isset($forumPost->id)) {
 				Main::$connection->star($forumPost);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
+
 			return false;
 		}
 
@@ -986,10 +913,9 @@
 					$avatarMessage->voice = "";
 				}
 				return Main::$connection->avatarMessage($avatarMessage);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testAvatarMessage() in index.php</strong>");
 			}
-
+			Utils::includeMessage("<strong>Please fill the required data @ testAvatarMessage() in index.php</strong>");
+			return null;
 		}
 
 		public function testTTS()
@@ -1000,38 +926,31 @@
 			// $ttsConfig->mod = "";
 			if (isset($ttsConfig->voice, $ttsConfig->text, $ttsConfig->mod)) {
 				return Main::$connection->tts($ttsConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testTTS() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testTTS() in index.php</strong>");
+			return null;
+
 		}
 
 		public function testGetAdminsForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			//Connecting to a forum and establish validation
 	
 			$forumConfig = new ForumConfig();
-			$forumConfig->application = $this->applicationId;
-			$forumConfig->user = $userConfig->user;
-			$forumConfig->token = $userConfig->token;
+
 			// $forumConfig->id = ""; //Forum ID
 	
 
-			if (isset($forumConfig->id, $forumConfig->user, $forumConfig->token)) {
+			if (isset($forumConfig->id, $forumConfig->user)) {
 				return Main::$connection->getAdmins($forumConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
+			return null;
 
 		}
 
@@ -1040,87 +959,63 @@
 		public function testGetUsersForum()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			//Connecting to a forum and establish validation
 	
 			$forumConfig = new ForumConfig();
-			$forumConfig->application = $this->applicationId;
-			$forumConfig->user = $userConfig->user;
-			$forumConfig->token = $userConfig->token;
+
 			// $forumConfig->id = ""; //Forum ID
 	
 
-			if (isset($forumConfig->id, $forumConfig->user, $forumConfig->token)) {
+			if (isset($forumConfig->id)) {
 				return Main::$connection->getUsersOfType($forumConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
 			}
-
+			Utils::includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
+			return null;
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: User login.
 		 */
 		public function testGetCategories()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$contentConfig = new ContentConfig();
-			$contentConfig->user = $userConfig->user;
-			$contentConfig->token = $userConfig->token;
+
 			$contentConfig->type = "Bot"; //Forum, Channel, Aavatar, Script, Domain.
 			if (isset($contentConfig->type)) {
 				return Main::$connection->getCategories($contentConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
 			return null;
 		}
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: User login.
 		 */
 		public function testGetTags()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$contentConfig = new ContentConfig();
-			$contentConfig->user = $userConfig->user;
-			$contentConfig->token = $userConfig->token;
+
 			$contentConfig->type = "Bot"; //Forum, Channel, Aavatar, Script, Domain.
 			if (isset($contentConfig->type)) {
 				return Main::$connection->getTags($contentConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
+
 			return null;
 		}
 
@@ -1132,54 +1027,39 @@
 		public function testGetChannelBotMode()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$channelConfig = new ChannelConfig();
-			$channelConfig->user = $userConfig->user;
-			$channelConfig->token = $userConfig->token;
+
 			// $channelConfig->id = "";
 	
-			if (isset($channelConfig->user, $channelConfig->token, $channelConfig->id)) {
+			if (isset($channelConfig->user, $channelConfig->id)) {
 				return Main::$connection->getChannelBotMode($channelConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
+
 			return null;
 		}
 
 		public function testSaveChannelBotMode()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$botModeConfig = new BotModeConfig();
-			$botModeConfig->user = $userConfig->user;
-			$botModeConfig->token = $userConfig->token;
+
 			// $botModeConfig->instance = "";
 			// $botModeConfig->bot = "";
 			// $botModeConfig->mode = "";
 	
-			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->token, $botModeConfig->bot, $botModeConfig->mode)) {
+			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->bot, $botModeConfig->mode)) {
 				return Main::$connection->saveChannelBotMode($botModeConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
 			return null;
 		}
 
@@ -1187,48 +1067,32 @@
 		public function testSaveForumBotMode()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$botModeConfig = new BotModeConfig();
-			$botModeConfig->user = $userConfig->user;
-			$botModeConfig->token = $userConfig->token;
+
 			// $botModeConfig->instance = "";
 			// $botModeConfig->bot = "";
 			// $botModeConfig->mode = "";
 	
-			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->token, $botModeConfig->bot, $botModeConfig->mode)) {
+			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->bot, $botModeConfig->mode)) {
 				return Main::$connection->saveForumBotMode($botModeConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
 			return null;
 		}
 
 		public function testSaveLearning()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$debugComment = "<strong>Please fill the required data @ testSaveLearning() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$learningConfig = new LearningConfig();
-			$learningConfig->user = $userConfig->user;
-			$learningConfig->token = $userConfig->token;
+
 			// $learningConfig->instance = "";
 			// $learningConfig->correctionMode = "";
 			// $learningConfig->learningMode = "";
@@ -1247,13 +1111,11 @@
 			// $learningConfig->learnGrammar = true;
 			// $learningConfig->synthesizeResponse = true;
 	
-			if (isset($learningConfig->instance, $learningConfig->user, $learningConfig->token, $learningConfig->learningMode, $learningConfig->learningRate)) {
+			if (isset($learningConfig->instance, $learningConfig->user, $learningConfig->learningMode, $learningConfig->learningRate)) {
 				Main::$connection->saveLearning($learningConfig);
 				return true;
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testSaveLearning() in index.php</strong>";
-				include "views/debug.php";
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveLearning() in index.php</strong>");
 			return false;
 
 		}
@@ -1261,20 +1123,12 @@
 		public function testSaveVoice()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$debugComment = "<strong>Please fill the required data @ testSaveVoice() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$voiceConfig = new VoiceConfig();
-			$voiceConfig->user = $userConfig->user;
-			$voiceConfig->token = $userConfig->token;
+
 			// $voiceConfig->instance = "";
 			// $voiceConfig->voice = "";
 			// $voiceConfig->mod = "";
@@ -1282,121 +1136,87 @@
 			// $voiceConfig->pitch = "";
 			// $voiceConfig->speechRate = "";
 			// $voiceConfig->nativeVoice = "";
-			if (isset($voiceConfig->instance, $voiceConfig->user, $voiceConfig->token, $voiceConfig->voice, $voiceConfig->mod)) {
+			if (isset($voiceConfig->instance, $voiceConfig->user, $voiceConfig->voice, $voiceConfig->mod)) {
 				Main::$connection->saveVoice($voiceConfig);
 				return true;
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testSaveVoice() in index.php</strong>";
-				include "views/debug.php";
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveVoice() in index.php</strong>");
 			return false;
 		}
 
 		public function testSaveBotAvatar()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$debugComment = "<strong>Please fill the required data @ testSaveBotAvatar() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$instanceConfig = new InstanceConfig();
-			$instanceConfig->user = $userConfig->user;
-			$instanceConfig->token = $userConfig->token;
+
 			// $instanceConfig->instance = "";
 			// $instanceConfig->instanceAvatar = "";
-			if (isset($instanceConfig->instance, $instanceConfig->user, $instanceConfig->token, $instanceConfig->instanceAvatar)) {
+			if (isset($instanceConfig->instance, $instanceConfig->user, $instanceConfig->instanceAvatar)) {
 				Main::$connection->saveBotAvatar($instanceConfig);
 				return true;
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testSaveBotAvatar() in index.php</strong>";
-				include "views/debug.php";
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveBotAvatar() in index.php</strong>");
 			return false;
-
 		}
 
 		public function testTrainInstance()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$debugComment = "<strong>Please fill the required data @ testTrainInstance() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$trainingConfig = new TrainingConfig();
-			$trainingConfig->user = $userConfig->user;
-			$trainingConfig->token = $userConfig->token;
+
 			// $trainingConfig->instance = "";
 			// $trainingConfig->operation = "";
 			// $trainingConfig->question = "";
 			// $trainingConfig->response = "";
 	
-			if (isset($trainingConfig->instance, $trainingConfig->token, $trainingConfig->operation, $trainingConfig->question, $trainingConfig->response)) {
+			if (isset($trainingConfig->instance, $trainingConfig->operation, $trainingConfig->question, $trainingConfig->response)) {
 				Main::$connection->train($trainingConfig);
 				return true;
-			} else {
-				$debugComment = "<strong>Please fill the required data @ testTrainInstance() in index.php</strong>";
-				include "views/debug.php";
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testTrainInstance() in index.php</strong>");
 			return false;
 		}
 
 		public function testUserAdmin()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$userAdminConfig = new UserAdminConfig();
-			$userAdminConfig->user = $userConfig->user;
-			$userAdminConfig->token = $userConfig->token;
+
 			$userAdminConfig->instance = "";
 			// $userAdminConfig->type = "";
 			// $userAdminConfig->operation = ""; //example: 'Addadmin'
 			// $userAdminConfig->operationUser = "";
 	
-			if (isset($userAdminConfig->instance, $userAdminConfig->token, $userAdminConfig->type, $userAdminConfig->operation, $trainingConfig->operationUser)) {
+			if (isset($userAdminConfig->instance, $userAdminConfig->type, $userAdminConfig->operation, $trainingConfig->operationUser)) {
 				Main::$connection->userAdmin($userAdminConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
+
 			return false;
 		}
 
 
-		public function testCreateAvatar() {
+		public function testCreateAvatar()
+		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$avatarConfig = new AvatarConfig();
+
 			$avatarConfig->name = "";
 			$avatarConfig->description = "";
 			// $avatarConfig->details = "";
@@ -1409,27 +1229,20 @@
 			if (isset($avatarConfig->name, $avatarConfig->description, $avatarConfig->details, $avatarConfig->accessMode, $avatarConfig->isPrivate)) {
 				Main::$connection->create($avatarConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
+
 			return false;
 		}
 
 		public function testCreateAvatarMedia()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$mediaConfig = new AvatarMedia();
-			$mediaConfig->user = $userConfig->user;
-			$mediaConfig->token = $userConfig->token;
+
 
 
 			//Load file
@@ -1446,9 +1259,9 @@
 			if (isset($mediaConfig->instance, $mediaConfig->name, $mediaConfig->type, $file)) {
 				Main::$connection->createAvatarMedia($file, $mediaConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
+
 			return false;
 		}
 
@@ -1456,19 +1269,11 @@
 		public function testCreateGraphicMedia()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				$debugComment = "<strong>Please fill the required data @ testCreateGraphicMedia() in index.php</strong>";
-				include "views/debug.php";
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$graphicConfig = new GraphicConfig();
-			$graphicConfig->user = $userConfig->user;
-			$graphicConfig->token = $userConfig->token;
+
 
 
 			//Load file
@@ -1484,24 +1289,18 @@
 			if (isset($graphicConfig->id, $graphicConfig->fileName, $graphicConfig->fileType, $file)) {
 				//Main::$connection->createGraphicMedia($file, $graphicConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreateGraphicMedia() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testCreateGraphicMedia() in index.php</strong>");
+
 			return false;
 		}
 
 		public function testUpdateUserIcon()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			//Load file
 			$target_dir = "uploads/";
 			$file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -1512,7 +1311,7 @@
 			echo "-----<br>";
 
 			if (isset($file)) {
-				return Main::$connection->updateIconUser($file, $userConfig);
+				// return Main::$connection->updateIconUser($file, $userConfig);
 			} else {
 				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
 			}
@@ -1522,19 +1321,12 @@
 		public function testGetFroumBotMode(): ?BotModeConfig
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetFroumBotMode() in index.php</strong>");
+			if (!$this->testConnectUserAccount()) {
 				return null;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 
 			$forumConfig = new ForumConfig();
-			$forumConfig->user = $userConfig->user;
-			// $forumConfig->token = $userConfig->token;
+
 			// $forumConfig->id = "";
 	
 			if (isset($forumConfig->id)) {
@@ -1548,18 +1340,10 @@
 		public function testGetVoice()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetVoice() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$instanceConfig = new InstanceConfig();
-			$instanceConfig->user = $userConfig->user;
-			// $instanceConfig->token = $userConfig->token;
 			// $instanceConfig->id = "";
 			// $instanceConfig->instance = "";
 	
@@ -1572,26 +1356,18 @@
 
 		}
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: Bot ID or instance
 		 */
 		public function testGetDefaultResponses()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetDefaultResponses() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$instanceConfig = new InstanceConfig();
-			$instanceConfig->user = $userConfig->user;
-			$instanceConfig->token = $userConfig->token;
-			// $instanceConfig->id = "45527014";
-			// $instanceConfig->instance = "45527014";
+			// $instanceConfig->id = "";
+			// $instanceConfig->instance = "";
 	
 			if (isset($instanceConfig->id, $instanceConfig->instance)) {
 				return Main::$connection->getDefaultResponses($instanceConfig);
@@ -1604,27 +1380,19 @@
 
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: Bot ID or instance
 		 */
 		public function testGetGreetings()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetGreetings() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$instanceConfig = new InstanceConfig();
-			$instanceConfig->user = $userConfig->user;
-			$instanceConfig->token = $userConfig->token;
 			// $instanceConfig->id = "";
 			// $instanceConfig->instance = "";
-	
+
 			if (isset($instanceConfig->id, $instanceConfig->instance)) {
 				return Main::$connection->getGreetings($instanceConfig);
 			} else {
@@ -1634,25 +1402,18 @@
 		}
 
 		/**
-		 * Tested -> Worked
+		 * Tested -> passed
 		 * Requirement: Bot ID or instance
 		 */
 
 		public function testGetResponses()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetResponses() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$responseSearchConfig = new ResponseSearchConfig();
-			$responseSearchConfig->user = $userConfig->user;
-			$responseSearchConfig->token = $userConfig->token;
+
 			// $responseSearchConfig->instance = ""; //Bot id
 			$responseSearchConfig->responseType = "responses"; //To get responses
 			$responseSearchConfig->duration = "all";
@@ -1675,25 +1436,17 @@
 		public function testGetConversations()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetConversations() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$responseSearchConfig = new ResponseSearchConfig();
-			$responseSearchConfig->user = $userConfig->user;
-			$responseSearchConfig->token = $userConfig->token;
 			// $responseSearchConfig->instance = ""; //Bot instance
-			$responseSearchConfig->responseType = "conversation"; //To get conversations
+			$responseSearchConfig->responseType = "conversation"; //To get conversations. or response (to get responses)
 			$responseSearchConfig->duration = "day";
 			$responseSearchConfig->inputType = "all";
 			$responseSearchConfig->restrict = "none";
 			$responseSearchConfig->filter = "";
-	
+
 
 			if (isset($responseSearchConfig->instance, $responseSearchConfig->responseType, $responseSearchConfig->filter)) {
 				return Main::$connection->getConversations($responseSearchConfig);
@@ -1712,18 +1465,11 @@
 		public function testGetLearning()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetLearning() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$instanceConfig = new InstanceConfig();
-			$instanceConfig->user = $userConfig->user;
-			$instanceConfig->token = $userConfig->token;
+
 			// $instanceConfig->instance = ""; //Need a bot ID
 			// $instanceConfig->id = "";
 	
@@ -1744,79 +1490,60 @@
 		public function testBrowse()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$browseConfig = new BrowseConfig();
-			$browseConfig->user = $userConfig->user;
-			$browseConfig->token = $userConfig->token;
-			// $browseConfig->type = "Bot"; //Can be either Avatar, Forum, Graphic, Bot, Script ...etc
+
+			$browseConfig->type = "Bot"; //Can be either Avatar, Forum, Graphic, Bot, Script ...etc
 			$browseConfig->typeFilter = "Featured";
 			$browseConfig->contentRating = "Everyone";
-	
+
 
 			if (isset($browseConfig->type, $browseConfig->typeFilter, $browseConfig->contentRating)) {
 				return Main::$connection->browse($browseConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
+
 			return null;
 		}
 
 		public function testGetAvatarMedia()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$avatarConfig = new AvatarConfig();
-			$avatarConfig->user = $userConfig->user;
-			$avatarConfig->token = $userConfig->token;
+
 			// $avatarConfig->id = "";
 			// $avatarConfig->instance = "";
 	
 
 			if (isset($browseConfig->instance)) {
 				return Main::$connection->getAvatarMedia($avatarConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
+
 			return null;
 		}
 
 		public function testGetScriptSource()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptConfig = new ScriptConfig();
+
 			// $scriptConfig->instance = "";
 			// $scriptConfig->id = "";
 	
 			if (isset($scriptConfig->instance, $scriptConfig->id)) {
 				return Main::$connection->getScriptSource($scriptConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
+
 			return null;
 		}
 
@@ -1825,16 +1552,11 @@
 		public function testSaveScriptSource()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptSourceConfig = new ScriptSourceConfig();
+
 			// $scriptSourceConfig->instance = "";
 			// $scriptSourceConfig->id = "";
 			// $scriptSourceConfig->source = "";
@@ -1842,9 +1564,9 @@
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id, $scriptSourceConfig->source)) {
 				Main::$connection->saveScriptSource($scriptSourceConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
+
 			return false;
 		}
 
@@ -1853,205 +1575,151 @@
 		public function testGetBotScriptSource()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptSourceConfig = new ScriptSourceConfig();
+
 			// $scriptSourceConfig->instance = "";
 			// $scriptSourceConfig->id = "";
 	
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
 				return Main::$connection->getBotScriptSource($scriptSourceConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
 			return null;
 		}
 
 		public function testGetBotScripts()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
-				return null;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$instanceConfig = new InstanceConfig();
+
 			// $instanceConfig->instance = "";
 			// $instanceConfig->id = "";
 	
 			if (isset($instanceConfig->instance, $instanceConfig->id)) {
 				return Main::$connection->getBotScripts($instanceConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
 			return null;
 		}
 
 		public function testImportBotScript()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptConfig = new ScriptConfig();
-			$scriptConfig->user = $userConfig->user;
-			// $scriptConfig->token = $userConfig->token;
+
 			// $scriptConfig->id = "";
 			if (isset($scriptConfig->id)) {
 				Main::$connection->importBotScript($scriptConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
 			return false;
 		}
 
 		public function testImportBotLog()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptConfig = new ScriptConfig();
-			$scriptConfig->user = $userConfig->user;
-			$scriptConfig->token = $userConfig->token;
+
 			// $scriptConfig->instance = "";
 			// $scriptConfig->id = "";
 	
 			if (isset($scriptConfig->instance, $scriptConfig->id)) {
 				Main::$connection->importBotLog($scriptConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
 			return false;
 		}
 
 		public function testSaveBotScript()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptSourceConfig = new ScriptSourceConfig();
-			$scriptSourceConfig->user = $userConfig->user;
-			$scriptSourceConfig->token = $userConfig->token;
+
 			// $scriptSourceConfig->instance = ""; //id
 			// $scriptSourceConfig->id = ""; //if not null, source id.
 			// $scriptSourceConfig->source = "";
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id, $scriptSourceConfig->source)) {
 				Main::$connection->saveBotScriptSource($scriptSourceConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
 			return false;
 		}
 
+		/**
+		 * Tested: passed
+		 */
 		public function testDeleteBotScript()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptSourceConfig = new ScriptSourceConfig();
-			$scriptSourceConfig->user = $userConfig->user;
-			$scriptSourceConfig->token = $userConfig->token;
-			// $scriptSourceConfig->instance = ""; //id
-			// $scriptSourceConfig->id = ""; //if not null, source id.
+			// $scriptSourceConfig->instance = ""; //bot id
+			// $scriptSourceConfig->id = ""; // script id 
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
 				Main::$connection->deleteBotScript($scriptSourceConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
 			return false;
 		}
 
+
+		/**
+		 * Tested: passed
+		 */
 		public function testUpBotScript()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptSourceConfig = new ScriptSourceConfig();
-			$scriptSourceConfig->user = $userConfig->user;
-			$scriptSourceConfig->token = $userConfig->token;
-			// $scriptSourceConfig->instance = ""; //id
-			// $scriptSourceConfig->id = ""; 
+			// $scriptSourceConfig->instance = ""; //bot id
+			// $scriptSourceConfig->id = ""; // script id 
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
 				Main::$connection->upBotScript($scriptSourceConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
 			return false;
 		}
-
+		/**
+		 * Tested: passed
+		 */
 		public function testDownBotScript()
 		{
 			//TODO: Set user
-			$userConfig = new UserConfig();
-			$userConfig->application = Main::$applicationId; //application id, username and password are required.
-			$userConfig->user = Main::$username;
-			$userConfig->password = Main::$password;
-			if ($userConfig->user === "" || $userConfig->password === "" || $userConfig->application === "") {
-				Utils::includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
-				return false;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			$userConfig = Main::$connection->connect($userConfig);
 			$scriptSourceConfig = new ScriptSourceConfig();
-			$scriptSourceConfig->user = $userConfig->user;
-			$scriptSourceConfig->token = $userConfig->token;
-			// $scriptSourceConfig->instance = ""; //id
-			// $scriptSourceConfig->id = ""; 
+			// $scriptSourceConfig->instance = ""; //bot id
+			// $scriptSourceConfig->id = ""; // script id 
 			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
 				Main::$connection->downBotScript($scriptSourceConfig);
 				return true;
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
 			}
+			Utils::includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
 			return false;
 		}
 	}
@@ -2072,8 +1740,6 @@
 					$userConfig = $main->testConnectUserAccount();
 					break;
 				case "chat":
-					Utils::includeMessage("<strong>Connecting a user account. @account_test and sending a 'hello world' message.</strong>");
-					$userConfig = $main->testConnectUserAccount();
 					Utils::includeMessage("<strong>Sending a chat message.</strong>");
 					$response = $main->testSendChatMessage();
 					break;
@@ -2122,7 +1788,7 @@
 					break;
 				case "save-avatar-background":
 					Utils::includeMessage("<strong>Save - Upload avatar's background.</strong>");
-					$saveAvatar = $main->testSaveAvatarBackground();
+					$pass = $main->testSaveAvatarBackground();
 					break;
 				case "delete-response":
 					Utils::includeMessage("<strong>Permanently delete the response, greetings, or default response.</strong>");
@@ -2147,7 +1813,6 @@
 				case "subscribe-forum-post":
 					Utils::includeMessage("<strong>Subscribe a forum post.</strong>");
 					$pass = $main->testSubscribeForumPost();
-					include "views/debug.php";
 					break;
 				case "unsubscribe-forum-post":
 					Utils::includeMessage("<strong>Unsubscribe a forum post.</strong>");
@@ -2333,8 +1998,10 @@
 					Utils::includeMessage("<strong>Move down one bot script.</strong>");
 					$pass = $main->testDownBotScript();
 					break;
-
-
+				case "save-response":
+					Utils::includeMessage("<strong>Create, update, flag, unflag or invalidate a response.</strong>");
+					$pass = $main->testSaveResponse();
+					break;
 			}
 		}
 		?>
@@ -2348,11 +2015,11 @@
 		<strong>Details</strong>
 		<br>
 		<?php
-		if (isset($userConfig)) {
-			echo "<strong>User: </strong>" . $userConfig->user . "<br>";
-			echo "<strong>Joined: </strong>" . $userConfig->joined . "<br>";
-			echo "<strong>Connects: </strong>" . $userConfig->connects . "<br>";
-			echo "<strong>Name: </strong>" . $userConfig->name . "<br>";
+		if (Main::$connection->getUser() != null) {
+			echo "<strong>User: </strong>" . Main::$connection->getUser()->user . "<br>";
+			echo "<strong>Joined: </strong>" . Main::$connection->getUser()->joined . "<br>";
+			echo "<strong>Connects: </strong>" . Main::$connection->getUser()->connects . "<br>";
+			echo "<strong>Name: </strong>" . Main::$connection->getUser()->name . "<br>";
 			if (isset($response)) {
 				echo "<strong>Message: </strong>" . $response->message . "<br>";
 			}
@@ -2372,7 +2039,7 @@
 				echo "<strong>Tags: </strong>" . $newPost->tags . "<br>";
 			}
 		} else if (isset($pass)) {
-			echo "<strong>Passed: </strong>" . $pass . "<br>";
+			echo "<strong>Request: </strong>" . ($pass ? 'Posted' : 'Missing data') . "<br>";
 		} else if (isset($avatarMessage)) {
 			echo "<strong>Instance: </strong>" . $avatarMessage->instance . "<br>";
 			echo "<strong>Avatar: </strong>" . $avatarMessage->avatar . "<br>";
@@ -2389,7 +2056,7 @@
 			echo "<strong>Voice: </strong>" . $voiceConfig->voice . "<br>";
 			echo "<strong>NativeVoice: </strong>" . $voiceConfig->nativeVoice . "<br>";
 			echo "<strong>Language: </strong>" . $voiceConfig->language . "<br>";
-		} else if (isset($learningConfig,  $learningConfig->learningMode)) {
+		} else if (isset($learningConfig, $learningConfig->learningMode)) {
 			echo "<strong>Learning Mode: </strong>" . $learningConfig->learningMode . "<br>";
 			echo "<strong>Learning Rate: </strong>" . $learningConfig->learningRate . "<br>";
 			// echo "<strong>Correction Mode: </strong>" . $learningConfig->correctionMode . "<br>";

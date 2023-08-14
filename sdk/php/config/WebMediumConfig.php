@@ -50,7 +50,7 @@ abstract class WebMediumConfig extends Config
     public string $graphic;
     public int $thumbsUp = 0;
     public int $thumbsDown = 0;
-    public string $stars = "0";
+    public string $stars = "";
     public string $connects;
     public string $dailyConnects;
     public string $weeklyConnects;
@@ -103,7 +103,7 @@ abstract class WebMediumConfig extends Config
         if (isset($this->forkAccessMode)) {
             $writer .= " forkAccessMode=\"" . $this->forkAccessMode . "\"";
         }
-        if (isset($this->stars)) {
+        if (isset($this->stars) && $this->stars!=="") {
             $writer .= " stars=\"" . $this->stars . "\"";
         }
         if (isset($this->isAdult)) {

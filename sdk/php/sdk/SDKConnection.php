@@ -694,7 +694,7 @@ class SDKConnection
 		}
 		try {
 			$xmlData = Utils::loadXML($xml);
-			if($xmlData === false) {
+			if ($xmlData === false) {
 				return;
 			}
 			foreach ($xmlData as $element) {
@@ -720,7 +720,7 @@ class SDKConnection
 		}
 		try {
 			$xmlData = Utils::loadXML($xml);
-			if($xmlData===false) {
+			if ($xmlData === false) {
 				return;
 			}
 
@@ -748,7 +748,7 @@ class SDKConnection
 		}
 		try {
 			$xmlData = Utils::loadXML($xml);
-			if($xmlData===false) {
+			if ($xmlData === false) {
 				return;
 			}
 			foreach ($xmlData->response as $element) {
@@ -775,7 +775,7 @@ class SDKConnection
 		try {
 			echo print_r($xml);
 			$xmlData = Utils::loadXML($xml);
-			if($xmlData===false) {
+			if ($xmlData === false) {
 				return;
 			}
 			foreach ($xmlData as $element) {
@@ -830,7 +830,7 @@ class SDKConnection
 		}
 		try {
 			$xmlData = Utils::loadXML($xml);
-			if($xmlData===false) {
+			if ($xmlData === false) {
 				return;
 			}
 			foreach ($xmlData as $element) {
@@ -873,16 +873,10 @@ class SDKConnection
 			return $instances;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
 			foreach ($xmlData as $element) {
 				$instance = new AvatarMedia();
 				$instance->parseXML($element);
@@ -957,16 +951,10 @@ class SDKConnection
 			return $botScripts;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
+				return;
 			}
-			// else {
-			//     print_r($xmlData);
-			// }
 			foreach ($xmlData as $element) {
 				$script = new ScriptConfig();
 				$script->parseXML($element);
@@ -1106,9 +1094,12 @@ class SDKConnection
 	/**
 	 * Return the current connected user.
 	 */
-	public function getUser(): UserConfig
+	public function getUser(): ?UserConfig
 	{
-		return $this->user;
+		if (isset($this->user)) {
+			return $this->user;
+		}
+		return null;
 	}
 
 	/**
@@ -1192,19 +1183,16 @@ class SDKConnection
 			return $users;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					$user = new UserConfig();
-					$user->parseXML($element);
-					array_push($users, $user->user);
-				}
+				return;
 			}
+			foreach ($xmlData as $element) {
+				$user = new UserConfig();
+				$user->parseXML($element);
+				array_push($users, $user->user);
+			}
+
 			return $users;
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
@@ -1226,19 +1214,16 @@ class SDKConnection
 			return $users;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					$userConfig = new UserConfig();
-					$userConfig->parseXML($element);
-					array_push($users, $userConfig);
-				}
+				return;
 			}
+			foreach ($xmlData as $element) {
+				$userConfig = new UserConfig();
+				$userConfig->parseXML($element);
+				array_push($users, $userConfig);
+			}
+
 			return $users;
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
@@ -1257,19 +1242,16 @@ class SDKConnection
 			return $instances;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					$post = new ForumPostConfig();
-					$post->parseXML($element);
-					array_push($instances, $post);
-				}
+				return;
 			}
+			foreach ($xmlData as $element) {
+				$post = new ForumPostConfig();
+				$post->parseXML($element);
+				array_push($instances, $post);
+			}
+
 			return $instances;
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
@@ -1289,18 +1271,14 @@ class SDKConnection
 			return $categories;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					$category = new ContentConfig();
-					$category->parseXML($element);
-					array_push($categories, $category);
-				}
+				return;
+			}
+			foreach ($xmlData as $element) {
+				$category = new ContentConfig();
+				$category->parseXML($element);
+				array_push($categories, $category);
 			}
 			return $categories;
 		} catch (Exception $exception) {
@@ -1321,18 +1299,15 @@ class SDKConnection
 			return $tags;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					//tags.add(((Element)root.getChildNodes().item(index)).getAttribute("name"));
-					array_push($tags, $element);
-				}
+				return;
 			}
+			foreach ($xmlData as $element) {
+				//tags.add(((Element)root.getChildNodes().item(index)).getAttribute("name"));
+				array_push($tags, $element);
+			}
+
 			return $tags;
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
@@ -1352,19 +1327,16 @@ class SDKConnection
 			return $instances;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					$instance = new InstanceConfig();
-					$instance->parseXML($element);
-					array_push($instances, $instance);
-				}
+				return;
 			}
+			foreach ($xmlData as $element) {
+				$instance = new InstanceConfig();
+				$instance->parseXML($element);
+				array_push($instances, $instance);
+			}
+
 			return $instances;
 		} catch (Exception $exception) {
 			echo "Error: " . $exception->getMessage();
@@ -1384,18 +1356,14 @@ class SDKConnection
 			return $users;
 		}
 		try {
-			$xmlData = simplexml_load_string($xml);
+			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
-				echo "Failed loading XML: ";
-				foreach (libxml_get_errors() as $error) {
-					echo "<br>", $error->message;
-				}
-			} else {
-				foreach ($xmlData as $element) {
-					$user = new UserConfig();
-					$user->parseXML($element);
-					array_push($users, $user->user);
-				}
+				return;
+			}
+			foreach ($xmlData as $element) {
+				$user = new UserConfig();
+				$user->parseXML($element);
+				array_push($users, $user->user);
 			}
 			return $users;
 		} catch (Exception $exception) {
@@ -1575,12 +1543,7 @@ class SDKConnection
 			echo $e;
 		} else {
 			if ($this->debug) {
-				if (isset($response) || $response !== null) {
-					$result = simplexml_load_string($response) or die("Error: Cannot create object");
-					$debugComment = "Result after the request.";
-					$debugInfo = $result;
-					include "./views/debug.php";
-				}
+				$this->checkResponse($response);
 			}
 		}
 		curl_close($curl);
@@ -1589,29 +1552,24 @@ class SDKConnection
 	public function POST(string $url, string $xml): string
 	{
 		if ($this->debug) {
-			$debugComment = "POST_URL: " . $url;
-			$debugInfo = htmlentities($xml);
-			include "./views/debug.php";
+			Utils::includeMessage("POST_URL: " . $url, null, htmlentities($xml));
 		}
 		$curl = curl_init();
-		$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
 		if ($this->debug) {
-			$debugComment = "POST: Sending xml request.";
-			$debugInfo = $xmlData;
-			include "./views/debug.php";
+			Utils::includeMessage("POST: Sending xml request.", null, simplexml_load_string($xml));
 		}
 
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $xml); //It needs the actual xml text not the object
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $xml); //It needs the actual xml text (as a string) not the XML object
 		// The result of simplexml_load_string($xml) passing a string xml will return a data object xml.
 		// curl_setopt just need a string text of the xml.
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($curl, CURLOPT_HEADER, 1);
-
 		$headers = [
-			'Content-Type: application/xml',
-			'Accept: application/xml'
+			'Content-Type: application/xml'
+			// ,
+			// 'Accept: application/xml' //remove this line to avoid HTTP STATUS 406.
 		];
 
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -1702,23 +1660,24 @@ class SDKConnection
 	public function checkResponse($response): void
 	{
 		libxml_use_internal_errors(true); //Enable internal error handling
+		if ($response === "") {
+			Utils::includeMessage("200 OK");
+			return;
+		}
 		if (isset($response) || $response !== null) {
-			$debugComment = "<br>Result after the request.";
 			$result = simplexml_load_string($response);
 			if ($result === false) {
-				$debugInfo = "";
-				$debugInfo .= $response;
 				// XML parsing failed, handle the error
 				$errors = libxml_get_errors();
 				foreach ($errors as $error) {
-					$debugInfo .= "<br>XML Error: " . $error->message;
+					$response .= "<br>XML Error: " . $error->message;
 				}
 				libxml_clear_errors(); //Clear the error buffer
 			} else {
-				$debugInfo = $result;
+				$response .= "<br>200 OK";
 			}
-			include "./views/debug.php";
 		}
+		Utils::includeMessage("Result after the request.", null, $response);
 		libxml_use_internal_errors(false); //Disable 
 	}
 
@@ -1775,12 +1734,7 @@ class SDKConnection
 				echo "Error: " . curl_error($curl);
 			} else {
 				if ($this->debug) {
-					if (isset($response) || $response !== null) {
-						$result = simplexml_load_string($response) or die("Error: Cannot create object");
-						$debugComment = "Result after the request.";
-						$debugInfo = $result;
-						include "./views/debug.php";
-					}
+					$this->checkResponse($response);
 				}
 			}
 			curl_close($curl);
@@ -1831,12 +1785,7 @@ class SDKConnection
 				echo "Error: " . curl_error($curl);
 			} else {
 				if ($this->debug) {
-					if (isset($response) || $response !== null) {
-						$result = simplexml_load_string($response) or die("Error: Cannot create object");
-						$debugComment = "Result after the request.";
-						$debugInfo = $result;
-						include "./views/debug.php";
-					}
+					$this->checkResponse($response);
 				}
 			}
 			curl_close($curl);

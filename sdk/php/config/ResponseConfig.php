@@ -38,7 +38,7 @@ class ResponseConfig extends Config {
 	public String $command;
 
     public function toXML() : String {
-		$writer .= "";
+		$writer = "";
 		$this->writeXML($writer);
 		return $writer;
 	}
@@ -52,6 +52,61 @@ class ResponseConfig extends Config {
         if(isset($this->responseId)) {
             $writer .= " responseId=\"" . $this->responseId . "\"";
         }
+		if(isset($this->label)) {
+            $writer .= " label=\"" . $this->label . "\"";
+        }
+		if(isset($this->topic)) {
+            $writer .= " topic=\"" . $this->topic . "\"";
+        }
+		if(isset($this->keywords)) {
+            $writer .= " keywords=\"" . $this->keywords . "\"";
+        }
+		if(isset($this->required)) {
+            $writer .= " required=\"" . $this->required . "\"";
+        }
+		if(isset($this->emotions)) {
+            $writer .= " emotions=\"" . $this->emotions . "\"";
+        }
+		if(isset($this->actions)) {
+            $writer .= " actions=\"" . $this->actions . "\"";
+        }
+		if(isset($this->poses)) {
+            $writer .= " poses=\"" . $this->poses . "\"";
+        }
+		if(isset($this->correctness)) {
+            $writer .= " correctness=\"" . $this->correctness . "\"";
+        }
+		$writer .= " noRepeat=\"" . $this->noRepeat . "\"";
+		$writer .= " requirePrevious=\"" . $this->requirePrevious . "\"";
+		$writer .= " requireTopic=\"" . $this->requireTopic . "\"";
+		$writer .= " flagged=\"" . $this->flagged . "\"";
+		$writer .= ">";
+		if(isset($this->question)) {
+			$writer .= "<question>";
+			$writer .= Utils::escapeHTML($this->question);
+			$writer .= "</question>";
+		}
+		if(isset($this->response)) {
+			$writer .= "<response>";
+			$writer .= Utils::escapeHTML($this->response);
+			$writer .= "</response>";
+		}
+		if(isset($this->previous)) {
+			$writer .= "<previous>";
+			$writer .= Utils::escapeHTML($this->previous);
+			$writer .= "</previous>";
+		}
+		if(isset($this->onRepeat)) {
+			$writer .= "<onRepeat>";
+			$writer .= Utils::escapeHTML($this->onRepeat);
+			$writer .= "</onRepeat>";
+		}
+		if(isset($this->command)) {
+			$writer .= "<command>";
+			$writer .= Utils::escapeHTML($this->command);
+			$writer .= "</command>";
+		}
+		$writer .= "</response>";
     }
 
     public function parseXML($xml) : void {
@@ -65,8 +120,6 @@ class ResponseConfig extends Config {
 		$this->topic = $xmlData->attributes()->topic;
 		$this->keywords = $xmlData->attributes()->keywords;
 		$this->required = $xmlData->attributes()->required;
-
-
 		$this->emotions = $xmlData->attributes()->emotions;
         $this->actions = $xmlData->attributes()->actions;
         $this->poses = $xmlData->attributes()->poses;

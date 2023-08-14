@@ -24,34 +24,25 @@ class ContentConfig extends Config {
 
     public function parseXML($xml) : void {
         parent::parseXML($xml);
-        try {
-            $xmlData = simplexml_load_string($xml);
-            if($xmlData === false) {
-                echo "Failed loading XML: <br>";
-                var_dump($xml);
-                echo "<br>";
-                foreach (libxml_get_errors() as $error) {
-                    echo "<br>", $error->message;
-                }
-                return;
-            }
-        }catch (Exception $exception){
-            echo "Error: " . $exception->getMessage();
+        $xmlData = Utils::loadXML($xml);
+        if ($xmlData === false) {
+            return;
         }
         $this->type = $xmlData->attributes()->type;
         $this->name = $xmlData->attributes()->name;
         $this->icon = $xmlData->attributes()->icon;
-        $node = $xmlData->xpath("description");
-        if(isset($node)) {
-            $this->description = $node;
+        if(isset($xmlData->description)) {
+            $this->description = $xmlData->description;
         }
     }
 
     public function toXML() : String {
         $writer = "";
         $writer .= "<content";
-        $this->writeCredentails($writer);
-        
+        $this->writeCredentails($writer); // WriteCredentials It also sets the type.
+        // if (isset($this->type)) {
+        //     $writer .= " type=\"" . $this->type . "\"";
+        // }
         $writer .= "/>";
         return $writer;
     }

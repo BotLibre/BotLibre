@@ -52,16 +52,10 @@ class ScriptSourceConfig extends Config {
     }
 
     public function parseXML($xml) : void{
-        $xmlData = simplexml_load_string($xml);
+        $xmlData = Utils::loadXML($xml);
         if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
+            return;
         }
-        // else {
-        //     print_r($xmlData);
-        // }
         $this->id = $xmlData->attributes()->id;
         $this->creationDate = $xmlData->attributes()->creationDate;
         $this->updateDate = $xmlData->attributes()->updateDate;

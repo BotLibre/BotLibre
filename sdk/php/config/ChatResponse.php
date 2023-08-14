@@ -70,17 +70,10 @@ class ChatResponse extends Config {
 		return $this->avatarTalkType != null && strpos($this->avatarTalkType, "video") !== false;
 	}
 	public function parseXML($xml) : void {
-		$xmlData = simplexml_load_string($xml);
-		if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
-        } 
-		// else {
-        //     print_r($xmlData);
-        // }
-		#All attributes
+		$xmlData = Utils::loadXML($xml);
+        if ($xmlData === false) {
+            return;
+        }
 		$this->conversation = $xmlData->attributes()->conversation;
 		$this->emote = $xmlData->attributes()->emote;
 		$this->action = $xmlData->attributes()->action;

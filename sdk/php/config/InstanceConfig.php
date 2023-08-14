@@ -17,11 +17,11 @@
  *
  ******************************************************************************/
 class InstanceConfig extends WebMediumConfig {
-    public string $size;
-    public string $instanceAvatar;
+    public ?string $size;
+    public ?string $instanceAvatar;
     public $allowForking;
     public $hasAPI;
-    public string $template;
+    public ?string $template;
     public int $rank;
     public int $wins;
     public int $losses;
