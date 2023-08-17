@@ -98,24 +98,8 @@ require_once('./util/Utils.php');
         }
 
         public function parseXML($xml) : void {
-            try {
-                $xmlData = simplexml_load_string($xml);
-                if ($xmlData === false) {
-                    echo "Failed loading XML: ";
-                    foreach (libxml_get_errors() as $error) {
-                        echo "<br>", $error->message;
-                    }
-                } 
-                // else {
-                //     //Print
-                //     print_r($xmlData);
-                // }
-            }catch (Exception $exception){
-                echo "Error: " . $exception->getMessage();
-            }
-
-            //Check xmlData is not null.
-            if(!is_object($xmlData)) {
+            $xmlData = Utils::loadXML($xml);
+            if ($xmlData === false) {
                 return;
             }
             //Attributes

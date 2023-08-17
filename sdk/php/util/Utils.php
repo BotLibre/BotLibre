@@ -16,12 +16,61 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-class Utils {
-    /**
+class Utils
+{
+	/**
 	 * Replace reserved HTML character with their HTML escape codes.
 	 */
-	public static function escapeHTML($html) : String{
-		return str_replace(array("&","<",">","\"","`","'"),array("&amp;","&lt;","&gt;","&quot;","&#96;","&#39;"),$html);
+	public static function escapeHTML($html): string
+	{
+		return str_replace(array("&", "<", ">", "\"", "`", "'"), array("&amp;", "&lt;", "&gt;", "&quot;", "&#96;", "&#39;"), $html);
+	}
+
+	/*
+	 *	Used for debugging
+	 */
+	public static function includeMessage($message, $img = null, $info = null, $sucess=true)
+	{
+		$debugComment = $message;
+		if ($img != null) {
+			$viewable_image = $img;
+		}
+		if ($info != null) {
+			$debugInfo = $info;
+		}
+		if(!$sucess) {
+			$borderColor = "border-color: red;";
+		}
+		include "views/debug.php";
+	}
+
+	/*
+	 *	Load xml
+	 */
+	public static function loadXML($xml)
+	{
+		$XMLLogsOff = libxml_use_internal_errors(true);
+		$xmlData = $xml;
+		if(is_string($xml)) {
+			$xmlData = simplexml_load_string($xml);
+		}
+		if ($xmlData === false) {
+			$errorMessage = "";
+			foreach (libxml_get_errors() as $error) {
+				$errorMessage .= $error->message;
+			}
+			$errorMessage .= "<strong>Response: </strong>" . $xml;
+			Utils::includeMessage("Couldn't read xml", null, $errorMessage, false);
+		} else {
+			Utils::includeMessage("Passed", null, $xmlData);
+		}
+		$errors = libxml_get_errors();
+		libxml_clear_errors();
+		libxml_use_internal_errors($XMLLogsOff);
+		if($errors) {
+			Utils::includeMessage("Couldn't read xml ->", null, $errors, false);
+		}
+		return $xmlData;
 	}
 }
 

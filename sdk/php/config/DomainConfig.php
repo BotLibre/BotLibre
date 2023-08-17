@@ -18,7 +18,7 @@
  ******************************************************************************/
 require_once('WebMediumConfig.php');
 class DomainConfig extends WebMediumConfig {
-    public String $creationMode;
+    public ?String $creationMode;
 
     public function getType() : String {
         return "domain";
@@ -41,15 +41,9 @@ class DomainConfig extends WebMediumConfig {
     }
     public function parseXML($xml) : void {
         parent::parseXML($xml);
-        $xmlData = simplexml_load_string($xml);
-        if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
-        } else {
-            //Print
-            //print_r($xmlData);
+        $xmlData = Utils::loadXML($xml);
+        if($xmlData === false) {
+            return;
         }
         $this->creationMode = $xmlData->attributes()->creationMode;
     }

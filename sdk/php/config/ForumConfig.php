@@ -16,25 +16,56 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-    class ForumConfig extends WebMediumConfig {
-        public ?String $replyAccessMode;
-        public ?String $postAccessMode;
-        public ?String $posts;
+class ForumConfig extends WebMediumConfig
+{
+    public ?string $replyAccessMode;
+    public ?string $postAccessMode;
+    public ?string $posts;
 
-        public function getType() : ?String {
-            return "forum";
-        }
-
-        public function stats() : ?String {
-            return $this->posts . " posts";
-        }
-
-        public function credentials(): ?WebMediumConfig {
-            $config = new ForumConfig();
-            $config->id = $this->id;
-            return $config;
-        }
+    public function getType(): string
+    {
+        return "forum";
     }
 
-    
+    public function stats(): string
+    {
+        return $this->posts . " posts";
+    }
+
+    public function credentials(): ?WebMediumConfig
+    {
+        $config = new ForumConfig();
+        $config->id = $this->id;
+        return $config;
+    }
+
+    public function toXML() : string
+    {
+        $writer = "";
+        $writer .= "<forum";
+        if (isset($this->replyAccessMode)) {
+            $writer .= " replyAccessMode=\"" . $this->replyAccessMode . "\"";
+        }
+        if (isset($this->postAccessMode)) {
+            $writer .= " postAccessMode=\"" . $this->postAccessMode . "\"";
+        }
+        $this->writeXML($writer);
+        $writer .= "</forum>";
+        return $writer;
+    }
+
+    public function parseXML($xml) :void
+    {
+        parent::parseXML($xml);
+        $xmlData = Utils::loadXML($xml);
+        if ($xmlData === false) {
+            return;
+        }
+        $this->replyAccessMode = $xmlData->attributes()->replyAccessMode;
+        $this->postAccessMode = $xmlData->attributes()->postAccessMode;
+        $this->posts = $xmlData->attributes()->posts;
+    }
+}
+
+
 ?>

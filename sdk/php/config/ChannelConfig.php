@@ -56,17 +56,10 @@ class ChannelConfig extends WebMediumConfig {
 
     public function parseXML($xml) : void {
         parent::parseXML($xml);
-        $xmlData = simplexml_load_string($xml);
-        if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
-        } 
-        // else {
-        //     print_r($xmlData);
-        // }
-        //$this->user = $tempXML->user;
+        $xmlData = Utils::loadXML($xml);
+        if($xmlData===false) {
+            return;
+        }
         $this->type = $xmlData->attributes()->type;
         $this->videoAccessMode = $xmlData->attributes()->videoAccessMode;
         $this->audioAccessMode = $xmlData->attributes()->audioAccessMode;

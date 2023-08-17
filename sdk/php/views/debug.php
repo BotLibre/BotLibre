@@ -17,7 +17,7 @@
  *
  ******************************************************************************/
  -->
-<div id="box" style="padding: 10px; border: 5px solid rgb(163, 43, 43); width: 93%;">
+<div id="box" style="padding: 10px; border: 5px solid #5bc973; width: 93%; <?php echo $borderColor ?>;">
     <strong>Comment: </strong> <?php echo $debugComment; ?> <br>
     <?php 
         if(isset($debugInfo)) {

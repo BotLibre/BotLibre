@@ -46,19 +46,10 @@ class Config
 
     public function parseXML($xml) : void
     {
-        $xmlData = simplexml_load_string($xml);
-        if ($xmlData === false) {
-            echo "Failed loading XML: <br>";
-            var_dump($xml);
-            echo "<br>";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
+        $xmlData = Utils::loadXML($xml);
+        if($xmlData===false) {
             return;
-        } else {
-            print_r($xmlData);
         }
-        //$this->user = $tempXML->user;
         
         $this->application = $xmlData->attributes()->application;
         $this->domain = $xmlData->attributes()->domain;

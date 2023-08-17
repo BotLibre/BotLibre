@@ -26,28 +26,15 @@ class InputConfig extends Config
 
     public function parseXML($xml): void
     {
-        $xmlData = simplexml_load_string($xml);
+        $xmlData = Utils::loadXML($xml);
         if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
+            return;
         }
-        // else {
-        //     print_r($xmlData);
-        // }
         $this->id = $xmlData->attributes()->id;
         $this->creationDate = $xmlData->attributes()->creationDate;
         $this->speaker = $xmlData->attributes()->speaker;
         $this->target = $xmlData->attributes()->target;
 
-
-        /**
-         *Node node = element.getElementsByTagName("value").item(0);
-         *if (node != null) {
-         *	this.value = node.getTextContent();
-         *}
-         */
         if (isset($xmlData->value)) {
             $this->value = $xmlData->value;
         }

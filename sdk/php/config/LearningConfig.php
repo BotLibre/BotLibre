@@ -16,38 +16,33 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-class LearningConfig extends Config {
+class LearningConfig extends Config
+{
     public ?string $learningMode;
-	public ?string $learningRate;
-	public ?string $correctionMode;
-	public  $enableComprehension;
-	public  $enableEmoting;
-	public  $enableEmotions;
-	public  $enableConsciousness;
-	public  $enableWiktionary;
-	public  $enableResponseMatch;
-	public  $learnGrammar;
-	public  $synthesizeResponse;
-	public  $fixFormulaCase;
-	public  $checkExactMatchFirst;
-	public int $scriptTimeout;
-	public int $responseMatchTimeout;
-	public ?string $conversationMatchPercentage;
-	public ?string $discussionMatchPercentage;
+    public ?string $learningRate;
+    public ?string $correctionMode;
+    public $enableComprehension;
+    public $enableEmoting;
+    public $enableEmotions;
+    public $enableConsciousness;
+    public $enableWiktionary;
+    public $enableResponseMatch;
+    public $learnGrammar;
+    public $synthesizeResponse;
+    public $fixFormulaCase;
+    public $checkExactMatchFirst;
+    public int $scriptTimeout;
+    public int $responseMatchTimeout;
+    public ?string $conversationMatchPercentage;
+    public ?string $discussionMatchPercentage;
 
 
-    public function parseXML($xml): void {
+    public function parseXML($xml): void
+    {
         parent::parseXML($xml);
-        try {
-            $xmlData = simplexml_load_string($xml);
-            if($xmlData === false) {
-                echo "Failed loading XML: ";
-                foreach (libxml_get_errors() as $error) {
-                    echo "<br>", $error->message;
-                }
-            }
-        }catch (Exception $exception){
-            echo "Error: " . $exception->getMessage();
+        $xmlData = Utils::loadXML($xml);
+        if($xmlData===false) {
+            return;
         }
         $this->learningMode = $xmlData->attributes()->learningMode;
         $this->learningRate = $xmlData->attributes()->correctionMode;
@@ -62,51 +57,52 @@ class LearningConfig extends Config {
         $this->fixFormulaCase = $xmlData->attributes()->fixFormulaCase;
         $this->checkExactMatchFirst = $xmlData->attributes()->checkExactMatchFirst;
         $value = $xmlData->attributes()->scriptTimeout;
-        if(isset($value) && strlen($value) > 0) {
-            $this->scriptTimeout = (int)$value;
+        if (isset($value) && strlen($value) > 0) {
+            $this->scriptTimeout = (int) $value;
         }
         $value = $xmlData->attributes()->responseMatchTimeout;
-        if(isset($value) && strlen($value) > 0) {
-            $this->responseMatchTimeout = (int)$value;
+        if (isset($value) && strlen($value) > 0) {
+            $this->responseMatchTimeout = (int) $value;
         }
         $this->conversationMatchPercentage = $xmlData->attributes()->conversationMatchPercentage;
         $this->discussionMatchPercentage = $xmlData->attributes()->discussionMatchPercentage;
     }
 
-    public function toXML() : String {
+    public function toXML(): string
+    {
         $writer .= "<learning";
         $this->writeCredentails($writer);
-        if(isset($this->learningMode)) {
+        if (isset($this->learningMode)) {
             $writer .= " learningMode=\"" . $this->learningMode . "\"";
         }
-        if(isset($this->learningMode)) {
+        if (isset($this->learningMode)) {
             $writer .= " correctionMode=\"" . $this->correctionMode . "\"";
         }
         $writer .= " enableComprehension=\"" . $this->enableComprehension . "\"";
         $writer .= " enableEmoting=\"" . $this->enableEmoting . "\"";
         $writer .= " enableEmotions=\"" + $this->enableEmotions . "\"";
-		$writer .= " enableConsciousness=\"" + $this->enableConsciousness . "\"";
-		$writer .= " enableWiktionary=\"" + $this->enableWiktionary . "\"";
-		$writer .= " enableResponseMatch=\"" + $this->enableResponseMatch . "\"";
-		$writer .= " learnGrammar=\"" + $this->learnGrammar . "\"";
-		$writer .= " synthesizeResponse=\"" + $this->synthesizeResponse . "\"";
-		$writer .= " fixFormulaCase=\"" + $this->fixFormulaCase . "\"";
-		$writer .= " checkExactMatchFirst=\"" + $this->checkExactMatchFirst . "\"";
-        if($this->scriptTimeout != 0) {
+        $writer .= " enableConsciousness=\"" + $this->enableConsciousness . "\"";
+        $writer .= " enableWiktionary=\"" + $this->enableWiktionary . "\"";
+        $writer .= " enableResponseMatch=\"" + $this->enableResponseMatch . "\"";
+        $writer .= " learnGrammar=\"" + $this->learnGrammar . "\"";
+        $writer .= " synthesizeResponse=\"" + $this->synthesizeResponse . "\"";
+        $writer .= " fixFormulaCase=\"" + $this->fixFormulaCase . "\"";
+        $writer .= " checkExactMatchFirst=\"" + $this->checkExactMatchFirst . "\"";
+        if ($this->scriptTimeout != 0) {
             $writer .= " scriptTimeout=\"" + $this->scriptTimeout . "\"";
         }
-        if(isset($this->responseMatchTimeout)) {
+        if (isset($this->responseMatchTimeout)) {
             $writer .= " responseMatchTimeout=\"" + $this->responseMatchTimeout . "\"";
         }
-        if(isset($this->conversationMatchPercentage)) {
+        if (isset($this->conversationMatchPercentage)) {
             $writer .= " conversationMatchPercentage=\"" + $this->conversationMatchPercentage . "\"";
         }
-        if(isset($this->learningRate)) {
+        if (isset($this->learningRate)) {
             $writer .= " learningRate=\"" + $this->learningRate . "\"";
         }
         $writer .= "/>";
         return $writer;
-    }   
+    }
 
 }
 ?>

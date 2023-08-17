@@ -30,16 +30,10 @@ class AvatarMedia extends Config
     public function parseXML($xml): void
     {
         parent::parseXML($xml);
-        $xmlData = simplexml_load_string($xml);
+        $xmlData = Utils::loadXML($xml);
         if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
+            return;
         }
-        // else {
-        //     print_r($xmlData);
-        // }
 
         $this->mediaId = $xmlData->attributes()->mediaId;
         $this->name = $xmlData->attributes()->name;
@@ -60,8 +54,11 @@ class AvatarMedia extends Config
         if (isset($this->mediaId)) {
             $writer .= " mediaId=\"" . $this->mediaId . "\"";
         }
-        if (isset($this->mediaId)) {
-            $writer .= " mediaId=\"" . $this->mediaId . "\"";
+        if (isset($this->name)) {
+            $writer .= " name=\"" . $this->name . "\"";
+        }
+        if (isset($this->type)) {
+            $writer .= " type=\"" . $this->type . "\"";
         }
         if (isset($this->emotions)) {
             $writer .= " emotions=\"" . $this->emotions . "\"";

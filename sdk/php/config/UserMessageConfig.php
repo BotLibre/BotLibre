@@ -29,16 +29,10 @@ class UserMessageConfig extends Config {
     public function parseXML($xml) : void {
         parent::parseXML($xml);
 
-        $xmlData = simplexml_load_string($xml);
+        $xmlData = Utils::loadXML($xml);
         if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
-        } 
-        // else {
-        //     print_r($xmlData);
-        // }
+            return;
+        }
         $this->id = $xmlData->attributes()->id;
         $this->creationDate = $xmlData->attributes()->creationDate;
         $this->owner = $xmlData->attributes()->owner;

@@ -50,7 +50,7 @@ abstract class WebMediumConfig extends Config
     public string $graphic;
     public int $thumbsUp = 0;
     public int $thumbsDown = 0;
-    public string $stars = "0";
+    public string $stars = "";
     public string $connects;
     public string $dailyConnects;
     public string $weeklyConnects;
@@ -82,84 +82,84 @@ abstract class WebMediumConfig extends Config
     public function writeXML(&$writer): void
     {
         $writer = $this->writeCredentails($writer);
-        if ($this->id != null) {
+        if (isset($this->id)) {
             $writer .= " id=\"" . $this->id . "\"";
         }
-        if ($this->name != null) {
+        if (isset($this->name)) {
             $writer .= " name=\"" . $this->name . "\"";
         }
-        if ($this->isPrivate != null) {
+        if (isset($this->isPrivate)) {
             $writer .= " isPrivate=\"true\"";
         }
-        if ($this->isHidden != null) {
+        if (isset($this->isHidden)) {
             $writer .= " isHidden=\"true\"";
         }
-        if ($this->accessMode != null && !$this->accessMode === "") {
+        if (isset($this->accessMode)) {
             $writer .= " accessMode=\"" . $this->accessMode . "\"";
         }
-        if ($this->contentRating != null && !$this->contentRating === "") {
+        if (isset($this->contentRating)) {
             $writer .= " contentRating=\"" . $this->contentRating . "\"";
         }
-        if ($this->forkAccessMode != null && !$this->forkAccessMode === "") {
+        if (isset($this->forkAccessMode)) {
             $writer .= " forkAccessMode=\"" . $this->forkAccessMode . "\"";
         }
-        if ($this->stars != null && !$this->stars === "") {
+        if (isset($this->stars) && $this->stars!=="") {
             $writer .= " stars=\"" . $this->stars . "\"";
         }
-        if ($this->isAdult != null) {
+        if (isset($this->isAdult)) {
             $writer .= " isAdult=\"true\"";
         }
-        if ($this->isFlagged != null) {
+        if (isset($this->isFlagged)) {
             $writer .= " isFlagged=\"true\"";
         }
-        if ($this->isExternal != null) {
+        if (isset($this->isExternal)) {
             $writer .= " isExternal=\"true\"";
         }
-        if ($this->showAds != null) {
+        if (isset($this->showAds)) {
             $writer .= " showAds=\"true\"";
         }
         $writer .= ">";
-        if ($this->description != null) {
+        if (isset($this->description)) {
             $writer .= "<description>";
             $writer .= Utils::escapeHTML($this->description);
             $writer .= "</description>";
         }
-        if ($this->details != null) {
+        if (isset($this->details)) {
             $writer .= "<details>";
             $writer .= Utils::escapeHTML($this->details);
             $writer .= "</details>";
         }
-        if ($this->disclaimer != null) {
+        if (isset($this->disclaimer)) {
             $writer .= "<disclaimer>";
             $writer .= Utils::escapeHTML($this->disclaimer);
             $writer .= "</disclaimer>";
         }
-        if ($this->categories != null) {
+        if (isset($this->categories)) {
             $writer .= "<categories>";
             $writer .= $this->categories;
             $writer .= "</categories>";
         }
-        if ($this->tags != null) {
+        if (isset($this->tags)) {
             $writer .= "<tags>";
             $writer .= $this->tags;
             $writer .= "</tags>";
         }
-        if ($this->license != null) {
+        if (isset($this->license)) {
             $writer .= "<license>";
             $writer .= $this->license;
             $writer .= "</license>";
         }
-        if ($this->website != null) {
+        if (isset($this->website)) {
             $writer .= "<website>";
             $writer .= $this->website;
             $writer .= "</website>";
         }
-        if ($this->subdomain != null) {
+        if (isset($this->subdomain)) {
             $writer .= "<subdomain>";
             $writer .= $this->subdomain;
             $writer .= "</subdomain>";
         }
-        if ($this->flaggedReason != null) {
+        if (isset($this->flaggedReason)) {
             $writer .= "<flaggedReason>";
             $writer .= Utils::escapeHTML($this->flaggedReason);
             $writer .= "</flaggedReason>";
@@ -168,39 +168,32 @@ abstract class WebMediumConfig extends Config
 
     public function parseXML($xml): void
     {
-        $xmlData = simplexml_load_string($xml);
-        if ($xmlData === false) {
-            echo "Failed loading XML: ";
-            foreach (libxml_get_errors() as $error) {
-                echo "<br>", $error->message;
-            }
+        $xmlData = Utils::loadXML($xml);
+        if($xmlData===false) {
             return;
-        } 
-        // else {
-        //     print_r($xmlData);
-        // }
+        }
         $this->id = $xmlData->attributes()->id;
         $this->name = $xmlData->attributes()->name;
         $this->creationDate = $xmlData->attributes()->creationDate;
-        $this->isPrivate = $xmlData->attributes()->isPrivate;
-        $this->isHidden = $xmlData->attributes()->isHidden;
-        $this->accessMode = $this-$xmlData->attributes()->accessMode;
-		$this->contentRating = $this-$xmlData->attributes()->contentRating;
-		$this->forkAccessMode = $this-$xmlData->attributes()->forkAccessMode;
-		$this->isAdmin = $this-$xmlData->attributes()->isAdmin;
-		$this->isAdult = $this-$xmlData->attributes()->isAdult;
-		$this->isFlagged = $this-$xmlData->attributes()->isFlagged;
-		$this->isExternal = $this-$xmlData->attributes()->isExternal;
-		$this->creator = $this-$xmlData->attributes()->creator;
-		$this->creationDate = $this-$xmlData->attributes()->creationDate;
-		$this->connects = $this-$xmlData->attributes()->connects;
-		$this->dailyConnects = $this-$xmlData->attributes()->dailyConnects;
-		$this->weeklyConnects = $this-$xmlData->attributes()->weeklyConnects;
-		$this->showAds = $this-$xmlData->attributes()->showAds;
-		$this->monthlyConnects = $this-$xmlData->attributes()->monthlyConnects;
+        $this->isPrivate = (bool) $xmlData->attributes()->isPrivate;
+        $this->isHidden = (bool) $xmlData->attributes()->isHidden;
+        $this->accessMode = $xmlData->attributes()->accessMode;
+		$this->contentRating = $xmlData->attributes()->contentRating;
+		$this->forkAccessMode = $xmlData->attributes()->forkAccessMode;
+		$this->isAdmin =(bool) $xmlData->attributes()->isAdmin;
+		$this->isAdult =(bool) $xmlData->attributes()->isAdult;
+		$this->isFlagged = (bool)$xmlData->attributes()->isFlagged;
+		$this->isExternal = (bool) $xmlData->attributes()->isExternal;
+		$this->creator = $xmlData->attributes()->creator;
+		$this->creationDate = $xmlData->attributes()->creationDate;
+		$this->connects = $xmlData->attributes()->connects;
+		$this->dailyConnects = $xmlData->attributes()->dailyConnects;
+		$this->weeklyConnects = $xmlData->attributes()->weeklyConnects;
+		$this->showAds = (bool)$xmlData->attributes()->showAds;
+		$this->monthlyConnects = $xmlData->attributes()->monthlyConnects;
         //Thumbs up and down
-        $this->thumbsUp = $this-$xmlData->attributes()->thumbsUp;
-        $this->thumbsDown = $this-$xmlData->attributes()->thumbsDown;
+        $this->thumbsUp = (int)$xmlData->attributes()->thumbsUp;
+        $this->thumbsDown = (int)$xmlData->attributes()->thumbsDown;
 
         //Tag Names
         $this->description = $xmlData->description;

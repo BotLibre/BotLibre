@@ -24,7 +24,8 @@ class ResponseSearchConfig extends Config {
 	public ?String $restrict;
 	public ?String $page;
 
-    public function toXML() : ?String {
+    public function toXML() : String {
+        $writer = "";
         $writer .= "<response-search";
         $this->writeCredentails($writer);
         $writer .= " responseType=\"" . $this->responseType . "\"";
