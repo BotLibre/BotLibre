@@ -21,7 +21,7 @@ class ConversationConfig extends Config {
     public ?String $creationDate;
     public ?String $type;
 
-    public $input = array();
+    
 
     public function parseXML($xml) : void {
         $xmlData = Utils::loadXML($xml);
@@ -32,10 +32,12 @@ class ConversationConfig extends Config {
         $this->creationDate = $xmlData->attributes()->creationDate;
         $this->type = $xmlData->attributes()->type;
         
-        foreach($xmlData->input as $input){
+
+        $inputs = array();
+        foreach($xmlData->input as $element){
             $config = new InputConfig();
-            $config->parseXML($input);
-            $input [] = $config;
+            $config->parseXML($element);
+            array_push($inputs, $config);
         }
     }
 

@@ -39,6 +39,7 @@ class ChannelConfig extends WebMediumConfig {
     }
 
     public function toXML() : String {
+        $writer = "";
         $writer .= "<channel";
         if(isset($this->type) && !empty($this->type)) {
             $writer .= " type=\"" . $this->type . "\"";

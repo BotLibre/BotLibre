@@ -59,7 +59,7 @@ class Config
     }
     public function writeCredentails(&$writer) : string
     {
-        if ($this->user != null && strlen($this->user > 0)) {
+        if (isset($this->user) && strlen($this->user > 0)) {
             $writer .= " user=\"" . $this->user . "\"";
         }
         if (isset($this->token) && strlen($this->token) > 0) {

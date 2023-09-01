@@ -22,6 +22,7 @@ class Speech extends Config {
     public ?String $mod;
 
     public function toXML() : String {
+        $writer = "";
         $writer .= "<speech";
         $this->writeCredentails($writer);
         if(isset($this->text)) {

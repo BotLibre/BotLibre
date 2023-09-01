@@ -31,13 +31,14 @@ class BotModeConfig extends Config {
     }
 
     public function toXML() : string {
+        $writer = "";
         $writer .= "<bot-mode";
         $this->writeCredentails($writer);
         if(isset($this->mode)){
-            $writer .= " mode=\"" + $this->mode + "\"";
+            $writer .= " mode=\"" . $this->mode . "\"";
         }
         if(isset($this->bot)){
-            $writer .= " bot=\"" + $this->bot + "\"";
+            $writer .= " bot=\"" . $this->bot . "\"";
         }
         $writer .= "/>";
         return $writer;

@@ -49,7 +49,7 @@ class InstanceConfig extends WebMediumConfig {
             $writer .= " allowForking=\"true\"";
         }
         if(isset($this->instanceAvatar)){
-            $writer .= " instanceAvatar=\"" . $this->instanceAvatar + "\"";
+            $writer .= " instanceAvatar=\"" . $this->instanceAvatar . "\"";
         }
         /*
         * When used together, the $ and & signs are used to pass variables by reference in PHP functions.
