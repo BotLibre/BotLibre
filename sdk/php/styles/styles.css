@@ -32,46 +32,73 @@ label {
 
 form {
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
 
 /* Apply Flexbox layout to the container element */
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 15vh;
+  position: fixed;
+  left:0;
+  top: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.927);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 5px solid black;
+  padding: 10px;
+  margin: 10px;
+  height: 120px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 fieldset {
-  height: 60vh;
-  overflow: auto;
   border: 2px solid #ccc;
   padding: 10px;
   border-radius: 10px;
+  width: auto;
+  padding: 10px;
+  margin:2%;
+  margin-top: 200px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 legend {
   border: 1px solid #ccc;
   padding: 5px 10px;
   font-weight: 500;
+  border-radius: 10px;
+  font-weight: 18px;
 }
 
 input {
   width: 80px;
   height: 30px;
-  font-size: 15px;
+  font-size: 18px;
 }
 
 select {
-  width: 250px;
-  font-size: 15px;
-  height: 20px;
+  width: 300px;
+  font-size: 18px;
+  height: 30px;
 }
 
+.boxRight {
+  position: fixed;
+  border: 5px solid rgb(163, 117, 43);
+  margin: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  height: 120px;
+  width: 50%;
+  overflow: auto;
+  top:0;
+  right: 0;
+  width: 25%;
+  background-color: #ffffffcf;
+}
+
+
+
 #box {
-  width: 97%;
   border: 5px solid rgb(163, 117, 43);
   margin: 10px;
   border-radius: 10px;
@@ -79,9 +106,5 @@ select {
 }
 
 strong {
-  padding: 10px; font-size: 18px;
-}
-
-u {
-  font-size: 18px;
+  font-size: 20px;
 }

@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 
-require_once "Credentials.php";
+require_once("Credentials.php");
 require_once('./config/UserConfig.php');
 require_once('./config/Config.php');
 require_once('./config/ChatConfig.php');
@@ -46,6 +46,8 @@ require_once('./config/ScriptSourceConfig.php');
 require_once('./config/ResponseSearchConfig.php');
 require_once('./config/TrainingConfig.php');
 require_once('./config/GraphicConfig.php');
+require_once('./config/ConversationConfig.php');
+require_once('./config/InputConfig.php');
 
 
 class SDKConnection
@@ -354,7 +356,7 @@ class SDKConnection
 	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
-	public function createChannelFileAttachment(string $file, MediaConfig $config)
+	public function createChannelFileAttachment($file, MediaConfig $config)
 	{
 		$config->addCredentials($this);
 		$xml = $this->POSTFILE($this->url . "/create-channel-attachment", $file, $config->name, $config->toXML());
@@ -374,7 +376,7 @@ class SDKConnection
 	/**
 	 * Create a new file/image/media attachment for a chat channel.
 	 */
-	public function createChannelImageAttachment(string $file, MediaConfig $config)
+	public function createChannelImageAttachment($file, MediaConfig $config)
 	{
 		$config->addCredentials($this);
 		$xml = $this->POSTIMAGE($this->url . "/create-channel-attachment", $file, $config->name, $config->toXML());
@@ -773,7 +775,6 @@ class SDKConnection
 			return $conversations;
 		}
 		try {
-			echo print_r($xml);
 			$xmlData = Utils::loadXML($xml);
 			if ($xmlData === false) {
 				return;
@@ -1179,7 +1180,7 @@ class SDKConnection
 		$config->addCredentials($this);
 		$xml = $this->POST($this->url . "/get-" . $config->getType() . "-admins", $config->toXML());
 		$users = array();
-		if ($users == null) {
+		if ($xml == null) {
 			return $users;
 		}
 		try {
@@ -1190,7 +1191,7 @@ class SDKConnection
 			foreach ($xmlData as $element) {
 				$user = new UserConfig();
 				$user->parseXML($element);
-				array_push($users, $user->user);
+				array_push($users, $user);
 			}
 
 			return $users;
@@ -1396,7 +1397,7 @@ class SDKConnection
 	public function saveChannelBotMode(BotModeConfig $config): void
 	{
 		$config->addCredentials($this);
-		$this->POST($this->url + "/save-channel-bot-mode", $config->toXML());
+		$this->POST($this->url . "/save-channel-bot-mode", $config->toXML());
 	}
 
 
@@ -1406,7 +1407,7 @@ class SDKConnection
 	public function saveForumBotMode(BotModeConfig $config): void
 	{
 		$config->addCredentials($this);
-		$this->POST($this->url + "/save-forum-bot-mode", $config->toXML());
+		$this->POST($this->url . "/save-forum-bot-mode", $config->toXML());
 	}
 
 	/**
@@ -1415,7 +1416,7 @@ class SDKConnection
 	public function saveLearning(LearningConfig $config): void
 	{
 		$config->addCredentials($this);
-		$this->POST($this->url + "/save-learning", $config->toXML());
+		$this->POST($this->url . "/save-learning", $config->toXML());
 	}
 
 
@@ -1425,7 +1426,7 @@ class SDKConnection
 	public function saveVoice(VoiceConfig $config): void
 	{
 		$config->addCredentials($this);
-		$this->POST($this->url + "/save-voice", $config->toXML());
+		$this->POST($this->url . "/save-voice", $config->toXML());
 	}
 
 	/**
@@ -1434,7 +1435,7 @@ class SDKConnection
 	public function saveBotAvatar(InstanceConfig $config): void
 	{
 		$config->addCredentials($this);
-		$this->POST($this->url + "/save-bot-avatar", $config->toXML());
+		$this->POST($this->url . "/save-bot-avatar", $config->toXML());
 	}
 
 	/**
@@ -1460,7 +1461,7 @@ class SDKConnection
 	/**
 	 * Save the image as the avatar's background.
 	 */
-	public function saveAvatarBackground(string $file, AvatarMedia $config): void
+	public function saveAvatarBackground($file, AvatarMedia $config): void
 	{
 		$config->addCredentials($this);
 		$this->POSTIMAGE($this->url . "/save-avatar-background", $file, $config->name, $config->toXML());
@@ -1469,10 +1470,10 @@ class SDKConnection
 	/**
 	 * Add the avatar media file to the avatar.
 	 */
-	public function createAvatarMedia(string $file, AvatarMedia $config): void
+	public function createAvatarMedia($file, AvatarMedia $config): void
 	{
 		$config->addCredentials($this);
-		if ((pathinfo($file, PATHINFO_EXTENSION) === "jpg") || (pathinfo($file, PATHINFO_EXTENSION) === "jpeg")) {
+		if (str_contains("image", $file->mime)) {
 			if ($config->hd) {
 				$this->POSTHDIMAGE($this->url . "/create-avatar-media", $file, $config->name, $config->toXML());
 			} else {
@@ -1486,10 +1487,10 @@ class SDKConnection
 	/**
 	 * Add the graphic media file to the graphic.
 	 */
-	public function createGraphicMedia(string $file, GraphicConfig $config): void
+	public function createGraphicMedia($file, GraphicConfig $config): void
 	{
 		$config->addCredentials($this);
-		if ((pathinfo($file, PATHINFO_EXTENSION) === "jpg") || (pathinfo($file, PATHINFO_EXTENSION) === "jpeg")) {
+		if (str_contains("image", $file->mime)) {
 			$this->POSTIMAGE($this->url . "/update-graphic-media", $file, $config->fileName, $config->toXML());
 		} else {
 			$this->POSTFILE($this->url . "/update-graphic-media", $file, $config->fileName, $config->toXML());
@@ -1501,10 +1502,10 @@ class SDKConnection
 	 * Update the user's icon.
 	 * The file will be uploaded to the server.
 	 */
-	public function updateIconUser(string $file, UserConfig $config): ?UserConfig
+	public function updateIconUser($file, UserConfig $config): ?UserConfig
 	{
 		$config->addCredentials($this);
-		$xml = $this->POSTIMAGE($this->url . "/update-user-icon", $file, "image.jpg", $config->toXML());
+		$xml = $this->POSTIMAGE($this->url . "/update-user-icon", $file, "name", $config->toXML());
 		if ($xml == null) {
 			return null;
 		}
@@ -1586,36 +1587,19 @@ class SDKConnection
 	}
 
 
-	public function POSTIMAGE(string $url, string $file, string $name, string $xml): ?string
+	public function POSTIMAGE(string $url, $file, string $name, string $xml): ?string
 	{
 		if ($this->debug) {
-			$debugComment = "POST_FILE: " . $name . "<br>" . $url . "<br>" . $file;
-			$debugInfo = htmlentities($xml);
-			include "./views/debug.php";
+			Utils::includeMessage("POST_IMAGE: " . $name . "<br>" > $url , null, htmlentities($xml));
 		}
 		try {
 			$curl = curl_init();
-			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
 			if ($this->debug) {
-				$debugComment = "POST: Sending xml request.";
-				$debugInfo = $xmlData;
-				include "./views/debug.php";
+				Utils::includeMessage("DATA: ", null, simplexml_load_string($xml));
 			}
 			curl_setopt($curl, CURLOPT_URL, $url);
-			$originalImage = imagecreatefromjpeg($file);
-			$resizedImage = imagecreatetruecolor(300, 300);
-
-			//Resizing the image
-			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, 300, 300, imagesx($originalImage), imagesy($originalImage));
-
-			// Create a temporary file to store the resized image
-			$tmpFilename = tempnam(sys_get_temp_dir(), 'upload');
-			imagejpeg($resizedImage, $tmpFilename, 90);
-			//curl file object
-			$fileBody = new CURLFile($tmpFilename, 'image/jpeg', $name);
-
 			$postData = array(
-				'file' => $fileBody,
+				'file' => $file,
 				'xml' => $xml
 			);
 
@@ -1623,24 +1607,17 @@ class SDKConnection
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$headers = [
-				'Content-Type: multipart/form-data',
-				'Accept: text/plain'
+				'Content-Type: multipart/form-data'
 			];
 
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-
-			ob_start(); //Start output buffering
-			print_r($fileBody);
-			echo ob_get_clean() . "<br>"; //End output buffering. 
-			//Get the output buffer contents and clear the buffer
 
 			//Execute request
 			$response = curl_exec($curl);
 
 			//Check for errors
 			if (curl_errno($curl)) {
-				echo "Error: " . curl_error($curl);
+				Utils::includeMessage("Error: POST IMAGE", null ,curl_error($curl), false);
 			} else {
 				if ($this->debug) {
 					$this->checkResponse($response);
@@ -1648,12 +1625,9 @@ class SDKConnection
 			}
 			//Clean up
 			curl_close($curl);
-			imagedestroy($originalImage);
-			imagedestroy($resizedImage);
-			unlink($tmpFilename);
 			return $response;
 		} catch (Exception $exception) {
-			echo "Error: " . $exception->getMessage();
+			Utils::includeMessage("Error: POST IMAGE", null, $exception->getMessage(), false);
 		}
 	}
 
@@ -1676,44 +1650,25 @@ class SDKConnection
 			} else {
 				$response .= "<br>200 OK";
 			}
+			Utils::includeMessage("RESPONSE:", null, $response);
 		}
-		Utils::includeMessage("Result after the request.", null, $response);
 		libxml_use_internal_errors(false); //Disable 
 	}
 
 
-	public function POSTHDIMAGE(string $url, string $file, string $name, string $xml): ?string
+	public function POSTHDIMAGE(string $url, $file, string $name, string $xml): ?string
 	{
 		if ($this->debug) {
-			$debugComment = "POST_FILE: " . $name . "<br>" . $url . "<br>" . $file;
-			$debugInfo = htmlentities($xml);
-			include "./views/debug.php";
+			Utils::includeMessage("POST_HD_IMAGE: " . $name . "<br>" > $url , null, htmlentities($xml));
 		}
 		try {
 			$curl = curl_init();
-			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
 			if ($this->debug) {
-				$debugComment = "POST: Sending xml request.";
-				$debugInfo = $xmlData;
-				include "./views/debug.php";
+				Utils::includeMessage("DATA: ", null, simplexml_load_string($xml));
 			}
 			curl_setopt($curl, CURLOPT_URL, $url);
-			$originalImage = imagecreatefromjpeg($file);
-			$resizedImage = imagecreatetruecolor(600, 600);
-
-			//Resizing the image
-			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, imagesx($originalImage), imagesy($originalImage));
-
-			//Compress the resized image to a JPEG byte array
-			//there is a code
-			ob_start();
-			imagejpeg($resizedImage, null, 90);
-			$byte_arr = ob_get_clean();
-			//curl file object
-			$fileBody = new CURLFile(null, 'image/jpeg', $name);
-			//Data
 			$postData = array(
-				'file' => $fileBody,
+				'file' => $file,
 				'xml' => $xml
 			);
 
@@ -1722,7 +1677,6 @@ class SDKConnection
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$headers = [
 				'Content-Type: application/xml',
-				'Accept: application/xml'
 			];
 
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -1731,38 +1685,30 @@ class SDKConnection
 
 			//Check for errors
 			if (curl_errno($curl)) {
-				echo "Error: " . curl_error($curl);
+				Utils::includeMessage("Error: POST HD IMAGE", null ,curl_error($curl), false);
 			} else {
 				if ($this->debug) {
 					$this->checkResponse($response);
 				}
 			}
 			curl_close($curl);
-			echo $response;
+			return $response;
 		} catch (Exception $exception) {
-			echo "Error: " . $exception->getMessage();
+			Utils::includeMessage("Error: POST HD IMAGE", null, $exception->getMessage(), false);
 		}
 	}
 
-	public function POSTFILE(string $url, string $path, string $name, string $xml): ?string
+	public function POSTFILE(string $url, $file, string $name, string $xml): ?string
 	{
 		if ($this->debug) {
-			$debugComment = "POST_FILE: " . $name . "<br>" . $url . "<br>" . $path;
-			$debugInfo = htmlentities($xml);
-			include "./views/debug.php";
+			Utils::includeMessage("POST_FILE: " . $name . "<br>" > $url , null, htmlentities($xml));
 		}
 		try {
-			$ch = curl_init();
-			$xmlData = simplexml_load_string($xml) or die("Error: Prior of xml request. Cannot create object");
+			$curl = curl_init();
 			if ($this->debug) {
-				$debugComment = "POST: Sending xml request.";
-				$debugInfo = $xmlData;
-				include "./views/debug.php";
+				Utils::includeMessage("DATA: ", null, simplexml_load_string($xml));
 			}
 			curl_setopt($curl, CURLOPT_URL, $url);
-			//curl file object
-			$file = new CURLFile($path, mime_content_type($path), basename($path));
-			//Data
 			$postData = array(
 				'file' => $file,
 				'xml' => $xml
@@ -1773,7 +1719,6 @@ class SDKConnection
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$headers = [
 				'Content-Type: multipart/form-data',
-				'Accept: application/xml' //text/plain
 			];
 
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -1782,16 +1727,16 @@ class SDKConnection
 
 			//Check for errors
 			if (curl_errno($curl)) {
-				echo "Error: " . curl_error($curl);
+				Utils::includeMessage("Error: POST FILE", null ,curl_error($curl), false);
 			} else {
 				if ($this->debug) {
 					$this->checkResponse($response);
 				}
 			}
 			curl_close($curl);
-			echo $response;
+			return $response;
 		} catch (Exception $exception) {
-			echo "Error: " . $exception->getMessage();
+			Utils::includeMessage("Error: POST FILE", null, $exception->getMessage(), false);
 		}
 	}
 }

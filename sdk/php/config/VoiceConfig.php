@@ -43,7 +43,7 @@ class VoiceConfig extends Config
 
     public function toXML(): string
     {
-        $writer .= "<voice";
+        $writer = "<voice";
         $this->writeCredentails($writer);
         if (isset($this->voice)) {
             $writer .= " voice=\"" . $this->voice . "\"";

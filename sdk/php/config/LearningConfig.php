@@ -36,6 +36,11 @@ class LearningConfig extends Config
     public ?string $conversationMatchPercentage;
     public ?string $discussionMatchPercentage;
 
+    public ?string $nlp;
+    public ?string $language;
+    public ?bool $disableFlag =false;
+    public ?bool $reduceQuestions=false;
+	public ?bool $trackCase=false;
 
     public function parseXML($xml): void
     {
@@ -56,6 +61,13 @@ class LearningConfig extends Config
         $this->synthesizeResponse = $xmlData->attributes()->synthesizeResponse;
         $this->fixFormulaCase = $xmlData->attributes()->fixFormulaCase;
         $this->checkExactMatchFirst = $xmlData->attributes()->checkExactMatchFirst;
+        $this->nlp = $xmlData->attributes()->nlp;
+        $this->language = $xmlData->attributes()->language;
+        $this->disableFlag= $xmlData->attributes()->disableFlag;
+        $this->reduceQuestions= $xmlData->attributes()->reduceQuestions;
+        $this->trackCase= $xmlData->attributes()->trackCase;
+
+
         $value = $xmlData->attributes()->scriptTimeout;
         if (isset($value) && strlen($value) > 0) {
             $this->scriptTimeout = (int) $value;
@@ -70,6 +82,7 @@ class LearningConfig extends Config
 
     public function toXML(): string
     {
+        $writer ="";
         $writer .= "<learning";
         $this->writeCredentails($writer);
         if (isset($this->learningMode)) {
@@ -80,25 +93,30 @@ class LearningConfig extends Config
         }
         $writer .= " enableComprehension=\"" . $this->enableComprehension . "\"";
         $writer .= " enableEmoting=\"" . $this->enableEmoting . "\"";
-        $writer .= " enableEmotions=\"" + $this->enableEmotions . "\"";
-        $writer .= " enableConsciousness=\"" + $this->enableConsciousness . "\"";
-        $writer .= " enableWiktionary=\"" + $this->enableWiktionary . "\"";
-        $writer .= " enableResponseMatch=\"" + $this->enableResponseMatch . "\"";
-        $writer .= " learnGrammar=\"" + $this->learnGrammar . "\"";
-        $writer .= " synthesizeResponse=\"" + $this->synthesizeResponse . "\"";
-        $writer .= " fixFormulaCase=\"" + $this->fixFormulaCase . "\"";
-        $writer .= " checkExactMatchFirst=\"" + $this->checkExactMatchFirst . "\"";
+        $writer .= " enableEmotions=\"" . $this->enableEmotions . "\"";
+        $writer .= " enableConsciousness=\"" . $this->enableConsciousness . "\"";
+        $writer .= " enableWiktionary=\"" . $this->enableWiktionary . "\"";
+        $writer .= " enableResponseMatch=\"" . $this->enableResponseMatch . "\"";
+        $writer .= " learnGrammar=\"" . $this->learnGrammar . "\"";
+        $writer .= " synthesizeResponse=\"" . $this->synthesizeResponse . "\"";
+        $writer .= " fixFormulaCase=\"" . $this->fixFormulaCase . "\"";
+        $writer .= " checkExactMatchFirst=\"" . $this->checkExactMatchFirst . "\"";
+        $writer .= " nlp=\"" . $this->nlp . "\"";
+        $writer .= " language=\"" . $this->language . "\"";
+        $writer .= " disableFlag=\"" . $this->disableFlag . "\"";
+        $writer .= " reduceQuestions=\"" . $this->reduceQuestions . "\"";
+        $writer .= " trackCase=\"" . $this->trackCase . "\"";
         if ($this->scriptTimeout != 0) {
-            $writer .= " scriptTimeout=\"" + $this->scriptTimeout . "\"";
+            $writer .= " scriptTimeout=\"" . $this->scriptTimeout . "\"";
         }
         if (isset($this->responseMatchTimeout)) {
-            $writer .= " responseMatchTimeout=\"" + $this->responseMatchTimeout . "\"";
+            $writer .= " responseMatchTimeout=\"" . $this->responseMatchTimeout . "\"";
         }
         if (isset($this->conversationMatchPercentage)) {
-            $writer .= " conversationMatchPercentage=\"" + $this->conversationMatchPercentage . "\"";
+            $writer .= " conversationMatchPercentage=\"" . $this->conversationMatchPercentage . "\"";
         }
         if (isset($this->learningRate)) {
-            $writer .= " learningRate=\"" + $this->learningRate . "\"";
+            $writer .= " learningRate=\"" . $this->learningRate . "\"";
         }
         $writer .= "/>";
         return $writer;

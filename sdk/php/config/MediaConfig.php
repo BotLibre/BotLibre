@@ -39,13 +39,11 @@
     }
 
     public function toXML():  String {
+        $writer = "";
         $writer .= "<media";
         $this->writeCredentails($writer);
         if(isset($this->name)) {
             $writer .= " name=\"" . $this->name . "\"";
-        }
-        if(isset($this->type)) {
-            $writer .= " type=\"" . $this->type . "\"";
         }
         if(isset($this->file)) {
             $writer .= " file=\"" . $this->file . "\"";

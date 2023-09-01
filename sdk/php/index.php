@@ -29,94 +29,98 @@
 <body>
 	<div class="container">
 		<form action="index.php" method="get">
-			<label for="api">API Endpoint:</label>
-			<select id="api" name="api">
-				<?php
-				if (isset($_GET["api"])) {
-					echo "<option value='" . $_GET["api"] . "'>/" . $_GET["api"] . "</option>";
-				} else {
-					echo "<option value=''>select</option>";
-				}
-				?>
-				<option value="">/</option>
-				<option value="connect">check-user</option>
-				<option value="chat">post-chat</option>
-				<option value="view-user">view-user</option>
-				<option value="check-forum-post">check-forum-post</option>
-				<option value="create-user">create-user</option>
-				<option value="update-user">update-user</option>
-				<option value="fetch-image">fetch-image</option>
-				<option value="create-forum-post">create-forum-post</option>
-				<option value="update-forum-post">update-forum-post</option>
-				<option value="delete-forum-post">delete-forum-post</option>
-				<option value="get-forum-posts">get-forum-posts</option>
-				<option value="create-channel-file-attachment">create-channel-file-attachment</option>
-				<option value="create-channel-image-attachment">create-channel-image-attachment</option>
-				<option value="create-post-reply">create-post-reply</option>
-				<option value="save-avatar-background">save-avatar-background</option>
-				<option value="delete-avatar-background">delete-avatar-background</option>
-				<option value="save-avatar-media">save-avatar-media</option>
-				<option value="delete-avatar-media">delete-avatar-media</option>
-				<option value="delete-response">delete-response</option>
-				<option value="save-response">save-response</option>
-				<option value="flag">flag</option>
-				<option value="subscribe-forum-post">subscribe-forum-post</option>
-				<option value="unsubscribe-forum-post">unsubscribe-forum-post</option>
-				<option value="subscribe-forum">subscribe-forum</option>
-				<option value="unsubscribe-forum">unsubscribe-forum</option>
-				<option value="thumbs-up-forum">thumbs-up-forum</option>
-				<option value="thumbs-down-forum">thumbs-down-forum</option>
-				<option value="star-forum">star-forum</option>
-				<option value="avatar-message">avatar-message</option>
-				<option value="tts">tts</option>
-				<option value="get-admins-forum">get-admins-forum</option>
-				<option value="get-users-forum">get-users-forum</option>
-				<option value="get-categories">get-categories</option>
-				<option value="get-tags">get-tags</option>
-				<option value="get-templates">get-templates</option>
-				<option value="get-channel-bot-mode">get-channel-bot-mode</option>
-				<option value="save-channel-bot-mode">save-channel-bot-mode</option>
-				<option value="save-forum-bot-mode">save-forum-bot-mode</option>
-				<option value="save-learning">save-learning</option>
-				<option value="save-voice">save-voice</option>
-				<option value="save-bot-avatar">save-bot-avatar</option>
-				<option value="train-instance">train-instance</option>
-				<option value="user-admin">user-admin</option>
-				<option value="create-avatar-media">create-avatar-media</option>
-				<option value="create-avatar">create-avatar</option>
-				<option value="create-graphic-media">create-graphic-media</option>
-				<option value="update-user-icon">update-user-icon</option>
-				<option value="get-forum-bot-mode">get-forum-bot-mode</option>
-				<option value="get-voice">get-voice</option>
-				<option value="get-default-responses">get-default-responses</option>
-				<option value="get-greetings">get-greetings</option>
-				<option value="get-responses">get-responses</option>
-				<option value="get-conversations">get-conversations</option>
-				<option value="get-learning">get-learning</option>
-				<option value="browse">browse</option>
-				<option value="get-avatar-media">get-avatar-media</option>
-				<option value="get-script-source">get-script-source</option>
-				<option value="save-script-source">save-script-source</option>
-				<option value="get-bot-script-source">get-bot-script-source</option>
-				<option value="get-bot-scripts">get-bot-scripts</option>
-				<option value="import-bot-script">import-bot-script</option>
-				<option value="import-bot-log">import-bot-log</option>
-				<option value="save-bot-script-source">save-bot-script-source</option>
-				<option value="delete-bot-script">delete-bot-script</option>
-				<option value="up-bot-script">up-bot-script</option>
-				<option value="down-bot-script">down-bot-script</option>
-			</select>
-			<br><br>
-			<input type="submit" value="TEST">
-
-			<?php
-			if (isset($_GET["api"])) {
-				echo "<strong>Selected API : </strong>" . "<u>" . $_GET["api"] . "</u>";
-			} else {
-				echo "<strong>Nothing is selected.</strong>";
-			}
-			?>
-
+			<table>
+				<tr>
+					<td><select id="api" name="api">
+							<?php
+							if (isset($_GET["api"])) {
+								echo "<option value='" . $_GET["api"] . "'>/" . $_GET["api"] . "</option>";
+							} else {
+								echo "<option value=''>select</option>";
+							}
+							?>
+							<option value="">/</option>
+							<option value="connect">check-user</option>
+							<option value="chat">post-chat</option>
+							<option value="view-user">view-user</option>
+							<option value="check-forum-post">check-forum-post</option>
+							<option value="create-user">create-user</option>
+							<option value="update-user">update-user</option>
+							<option value="fetch-image">fetch-image</option>
+							<option value="create-forum-post">create-forum-post</option>
+							<option value="update-forum-post">update-forum-post</option>
+							<option value="delete-forum-post">delete-forum-post</option>
+							<option value="get-forum-posts">get-forum-posts</option>
+							<option value="create-channel-file-attachment">create-channel-file-attachment</option>
+							<option value="create-channel-image-attachment">create-channel-image-attachment</option>
+							<option value="create-post-reply">create-post-reply</option>
+							<option value="save-avatar-background">save-avatar-background</option>
+							<option value="delete-avatar-background">delete-avatar-background</option>
+							<option value="save-avatar-media">save-avatar-media</option>
+							<option value="delete-avatar-media">delete-avatar-media</option>
+							<option value="delete-response">delete-response</option>
+							<option value="save-response">save-response</option>
+							<option value="flag">flag</option>
+							<option value="subscribe-forum-post">subscribe-forum-post</option>
+							<option value="unsubscribe-forum-post">unsubscribe-forum-post</option>
+							<option value="subscribe-forum">subscribe-forum</option>
+							<option value="unsubscribe-forum">unsubscribe-forum</option>
+							<option value="thumbs-up-forum">thumbs-up-forum</option>
+							<option value="thumbs-down-forum">thumbs-down-forum</option>
+							<option value="star-forum">star-forum</option>
+							<option value="avatar-message">avatar-message</option>
+							<option value="tts">tts</option>
+							<option value="get-admins-forum">get-admins-forum</option>
+							<option value="get-users-forum">get-users-forum</option>
+							<option value="get-categories">get-categories</option>
+							<option value="get-tags">get-tags</option>
+							<option value="get-templates">get-templates</option>
+							<option value="get-channel-bot-mode">get-channel-bot-mode</option>
+							<option value="save-channel-bot-mode">save-channel-bot-mode</option>
+							<option value="save-forum-bot-mode">save-forum-bot-mode</option>
+							<option value="save-learning">save-learning</option>
+							<option value="save-voice">save-voice</option>
+							<option value="save-bot-avatar">save-bot-avatar</option>
+							<option value="train-instance">train-instance</option>
+							<option value="user-admin">user-admin</option>
+							<option value="create-avatar-media">create-avatar-media</option>
+							<option value="create-avatar">create-avatar</option>
+							<option value="create-graphic-media">create-graphic-media</option>
+							<option value="update-user-icon">update-user-icon</option>
+							<option value="get-forum-bot-mode">get-forum-bot-mode</option>
+							<option value="get-voice">get-voice</option>
+							<option value="get-default-responses">get-default-responses</option>
+							<option value="get-greetings">get-greetings</option>
+							<option value="get-responses">get-responses</option>
+							<option value="get-conversations">get-conversations</option>
+							<option value="get-learning">get-learning</option>
+							<option value="browse">browse</option>
+							<option value="get-avatar-media">get-avatar-media</option>
+							<option value="get-script-source">get-script-source</option>
+							<option value="save-script-source">save-script-source</option>
+							<option value="get-bot-script-source">get-bot-script-source</option>
+							<option value="get-bot-scripts">get-bot-scripts</option>
+							<option value="import-bot-script">import-bot-script</option>
+							<option value="import-bot-log">import-bot-log</option>
+							<option value="save-bot-script-source">save-bot-script-source</option>
+							<option value="delete-bot-script">delete-bot-script</option>
+							<option value="up-bot-script">up-bot-script</option>
+							<option value="down-bot-script">down-bot-script</option>
+						</select></td>
+					<td><input type="submit" value="Test"></td>
+				</tr>
+				<tr>
+					<td>
+						<?php
+						if (isset($_GET["api"])) {
+							echo "<strong>Selected API: " . $_GET["api"] . "</strong>";
+						} else {
+							echo "<strong>Nothing is selected.</strong>";
+						}
+						?>
+					</td>
+				</tr>
+			</table>
 		</form>
 	</div>
 	<?php
@@ -164,7 +168,20 @@
 		 */
 		public static ?string $launchInstanceId = ""; // i.e. "171"
 		public static ?string $launchInstanceName = ""; // i.e. "Help Bot"
-	
+		public static ?string $imgUrl = "https://botlibre.com/avatars/a48927947.png";
+
+		//Please enter the id of each instance to be able to test them.
+		public static ?string $avatarInstanceId = "";
+		public static ?string $botInstanceId = "";
+		public static ?string $forumInstanceId = "";
+		public static ?string $postId = "";
+		public static ?string $graphicInstanceId = "";
+		public static ?string $scriptInstanceId = "";
+		public static ?string $channelInstanceId = "";
+		public static ?string $analyticInstanceId = "";
+
+		
+
 
 		public function __construct()
 		{
@@ -181,6 +198,8 @@
 			}
 
 		}
+
+
 
 		/**
 		 * Tested: passed
@@ -214,14 +233,10 @@
 			$config = new ChatConfig();
 			// Add a message here: $config->message = "How are you?"
 			$config->message = "How are you?";
-
 			// An ID of the bot example: ID: 165
 			$config->instance = "165";
-			if (isset($config->instance)) {
-				return Main::$connection->chat($config);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSendChatMessaage() in index.php</strong>");
-			return null;
+			return Main::$connection->chat($config);
+
 		}
 
 		/**
@@ -262,11 +277,7 @@
 			}
 			$forumPostConfig = new ForumPostConfig();
 			// $forumPostConfig->id = "";
-			if (isset($forumPostConfig->id)) {
-				return Main::$connection->fetchForumPost($forumPostConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testFetchUserDetails() in index.php</strong>");
-			return null;
+			return Main::$connection->fetchForumPost($forumPostConfig);
 		}
 
 		/**
@@ -360,13 +371,7 @@
 			// $postConfig->topic = "";
 			// $postConfig->details = "";
 			// $postConfig->tags = "";
-			if (isset($postConfig->details, $postConfig->forum, $postConfig->topic)) {
-				$postConfig = Main::$connection->createForumPost($postConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testCreatePostConfig() in index.php</strong>");
-				return null;
-			}
-			return $postConfig;
+			return Main::$connection->createForumPost($postConfig);
 		}
 
 		/**
@@ -389,12 +394,7 @@
 			// $postConfig->topic = "";
 			// $postConfig->details = "";
 			// $postConfig->tags = "";
-			if (isset($postConfig->details, $postConfig->forum, $postConfig->topic)) {
-				return Main::$connection->updateForumPost($postConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testUpdateForumPost() in index.php</strong>");
-				return null;
-			}
+			return Main::$connection->updateForumPost($postConfig);
 		}
 
 		/**
@@ -407,45 +407,42 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$postConfig = new ForumPostConfig();
 			// $postConfig->forum = ""; //required forum id.
 			// $postConfig->id = ""; // required post id to be deleted.
-			if (isset($postConfig->forum, $postConfig->id)) {
-				Main::$connection->deleteForumPost($postConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testDeleteForumPost() in index.php</strong>");
-			return false;
+			return Main::$connection->deleteForumPost($postConfig);
 		}
 
-		//Tested -> Failed, returned file name is null.
-		public function testCreateChannelFileAttachment()
+		//Tested: passed
+		//File was uploaded successfully but didn't show at the livechat. 
+		//Link was created i.e livechat?attachment=#123&key=#12345&name=name
+		public function testCreateChannelFileAttachment($file)
 		{
-			$mediaConfig = new MediaConfig();
-			// $mediaConfig->name = ""; //File name i.e: file.txt
-			// $mediaConfig->type = ""; //File Type i.e: text/plain
-			// $mediaConfig->instance = ""; //Channel ID is required
-			$file = ""; //Get file path
-			if (isset($mediaConfig->name, $mediaConfig->type, $file, $mediaConfig->instance)) {
-				return Main::$connection->createChannelFileAttachment($file, $mediaConfig);
+			//TODO: Set user
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			Utils::includeMessage("<strong>Please fill the required data @ testCreateChannelFileAttachment() in index.php</strong>");
-			return null;
+			$mediaConfig = new MediaConfig();
+			$mediaConfig->name = "name"; //File name i.e: file.txt
+			$mediaConfig->type = $file->mime; //File Type i.e: text/plain
+			$mediaConfig->instance = Main::$channelInstanceId; //Channel ID is required
+			return Main::$connection->createChannelFileAttachment($file, $mediaConfig);
 		}
 
-		public function testCreateChannelImageAttachment()
+		//Tested: passed
+		//Image was uploaded successfully but didn't show at the livechat. 
+		//Link was created i.e livechat?attachment=#123&key=#12345&name=name
+		public function testCreateChannelImageAttachment($imageFile)
 		{
-			$mediaConfig = new MediaConfig();
-			// $mediaConfig->name = ""; //File name i.e: file.txt
-			// $mediaConfig->type = ""; //File Type i.e: image/jpeg
-			// $mediaConfig->instance = ""; //Channel ID is required
-			$file = ""; //Get file path
-			if (isset($mediaConfig->name, $mediaConfig->type, $file, $mediaConfig->instance)) {
-				return Main::$connection->createChannelImageAttachment($file, $mediaConfig);
+			//TODO: Set user
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			Utils::includeMessage("<strong>Please fill the required data @ testCreateChannelImageAttachment() in index.php</strong>");
-			return null;
+			$mediaConfig = new MediaConfig();
+			$mediaConfig->name = "name"; //File name i.e: file.txt
+			$mediaConfig->type = $imageFile->mime; //File Type i.e: text/plain
+			$mediaConfig->instance = Main::$channelInstanceId; //Channel ID is required
+			return Main::$connection->createChannelImageAttachment($imageFile, $mediaConfig);
 		}
 
 
@@ -464,20 +461,17 @@
 			}
 			//TODO: Set ForumPostConfig
 			$postConfig = new ForumPostConfig();
-			// $postConfig->forum = ""; //Forum ID
-			// $postConfig->parent = ""; //Parent Post
-			// $postConfig->details = "";
-			// $postConfig->tags = "";
-			if (isset($postConfig->details, $postConfig->forum, $postConfig->parent)) {
-				return Main::$connection->createReply($postConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testCreateReply() in index.php</strong>");
-			return null;
+			$postConfig->forum = Main::$forumInstanceId; //Forum ID
+			$postConfig->parent = ""; //Parent Post
+			$postConfig->details = "";
+			$postConfig->tags = "";
+			return Main::$connection->createReply($postConfig);
 		}
 
 		public function testCreateUserMessage()
 		{
 			//Template
+			$writer = "";
 			$writer .= "user: ";
 			$writer .= "model: ";
 			$writer .= "face: ";
@@ -514,7 +508,7 @@
 				return;
 			}
 			$response = new ResponseConfig();
-			$response->instance = ""; //Bot ID
+			$response->instance = Main::$botInstanceId; //Bot ID
 			// $response->responseId ="";
 			// $response->questionId ="";
 			// $response->type = "";
@@ -534,46 +528,23 @@
 			// $response->command = "";
 			// $response->noRepeat = "";
 			// $response->requirePrevious = "";
-	
-			if (isset($response->instance)) {
-				Main::$connection->saveResponse($response);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveResponse() in index.php</strong>");
-			return false;
+			Main::$connection->saveResponse($response);
 		}
 
 		/**
-		 * Tested -> Failed, Result: File Name is null.
-		 * 
-		 * Function: Updting a background image of an Avatar.
+		 * Tested -> Passed
 		 */
-		public function testSaveAvatarBackground()
+		public function testSaveAvatarBackground($imageFile)
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			$avatarConfig = new AvatarMedia();
-			//image path directory
-			$imagePath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'imgtest.jpg';
-
-			// echo "image path: " . $imagePath;
-	
-
-			// $avatarConfig->name = "imgtest.jpg";
-			// $avatarConfig->type = "image/jpeg";
-			// $avatarConfig->application = Main::$applicationId;
-			// $avatarConfig->instance = ""; //instance id
-	
-			if (isset($avatarConfig->application, $avatarConfig->name, $avatarConfig->instance, $avatarConfig->type)) {
-				Main::$connection->saveAvatarBackground($imagePath, $avatarConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarBackground() in index.php</strong>");
-			return false;
+			$avatarConfig->name = "name";
+			$avatarConfig->type = $imageFile->mime;
+			$avatarConfig->instance = Main::$avatarInstanceId; //Avatar Instance id
+			return Main::$connection->saveAvatarBackground($imageFile, $avatarConfig);
 		}
 
 
@@ -586,11 +557,7 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			$config = new ResponseConfig();
-
-
 			// $config->instance = ""; //response id
 			// $config->type = "response"; //i.e conversation, greeting, response, flagged.
 			// $config->responseId = ""; // response ID.
@@ -598,13 +565,7 @@
 	
 			// $config->question = "";
 			// $config->response = "";
-	
-			if (isset($config->instance, $config->responseId)) {
-				Main::$connection->deleteResponse($config);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testDeleteResponse() in index.php</strong>");
-			return false;
+			return Main::$connection->deleteResponse($config);
 		}
 
 
@@ -617,47 +578,33 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
 			$avatarMedia = new AvatarMedia();
-
 			// $avatarMedia->mediaId = ""; //media ID.
 			// $avatarMedia->instance = "";//Instance ID.
-			if (isset($avatarMedia->instance, $avatarMedia->mediaId)) {
-				Main::$connection->deleteAvatarMedia($avatarMedia);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarMedia() in index.php</strong>");
-			return false;
+			return Main::$connection->deleteAvatarMedia($avatarMedia);
 		}
 
-
+		/**
+		 * Tested: passed
+		 * Avatar media must exist to establish the mediaId
+		 */
 		public function testSaveAvatarMedia()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
-
 			$avatarMedia = new AvatarMedia();
-
-			// $avatarMedia->mediaId = ""; //media ID.
-			// $avatarMedia->type=""; //media type.
-			// $avatarMedia->instance = "";//Instance ID.
-			// $avatarMedia->name = ""; //Media name.
-			// $avatarMedia->emotions = ""; //emotions
-			// $avatarMedia->actions = "";
-			// $avatarMedia->poses = "";
-			// $avatarMedia->talking ="";
-			// $avatarMedia->hd = false; 
-	
-			if (isset($avatarMedia->instance, $avatarMedia->type, $avatarMedia->name, $avatarMedia->emotions, $avatarMedia->talking, $avatarMedia->poses, $avatarMedia->actions, $avatarMedia->mediaId)) {
-				Main::$connection->saveAvatarMedia($avatarMedia);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveAvatarMedia() in index.php</strong>");
-			return false;
+			$avatarMedia->instance = Main::$avatarInstanceId; //Instance ID.
+			$avatarMedia->mediaId = ""; //media ID required.
+			$avatarMedia->type = "image/png"; //media type.
+			$avatarMedia->name = "Test"; //Media name.
+			$avatarMedia->emotions = "like"; //emotions
+			$avatarMedia->actions = "smile";
+			$avatarMedia->poses = "default";
+			$avatarMedia->talking = true;
+			$avatarMedia->hd = false;
+			return Main::$connection->saveAvatarMedia($avatarMedia);
 		}
 
 
@@ -671,17 +618,9 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-		
-
 			$avatarConfig = new AvatarConfig();
-			// $avatarConfig->id = ""; //Avatar id.
-	
-			if (isset($avatarConfig->id)) {
-				Main::$connection->deleteAvatarBackground($avatarConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testDeleteAvatarBackground() in index.php</strong>");
-			return false;
+			$avatarConfig->id = Main::$avatarInstanceId; //Avatar id.
+			return Main::$connection->deleteAvatarBackground($avatarConfig);
 
 		}
 
@@ -691,97 +630,70 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
-			//This can be applied on either (GraphicConfig, ChannelConfig, DomainConfig ..etc);
+			//This can be applied on either (GraphicConfig, ChannelConfig, DomainConfig, InstanceConfig ..etc);
 			$avatarConfig = new AvatarConfig();
-			$avatarConfig->flaggedReason = "Reason for flagging. " . $avatarConfig->getType();
-			//$avatarConfig->id = ""; //Avatar id.
-	
-			if (isset($avatarConfig->id, $avatarConfig->flaggedReason)) {
-				Main::$connection->flag($avatarConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testFlagInstance() in index.php</strong>");
-			return false;
+			$avatarConfig->flaggedReason = "Test flag an instance.";
+			$avatarConfig->id = Main::$avatarInstanceId; //Not allowed to flag your instance.
+			return Main::$connection->flag($avatarConfig);
 		}
 
 
 		public function testFlagUser()
 		{
 			//TODO: Set user
-			
-			$viewUser = new UserConfig();
-			// $viewUser->user = "";
-			// $viewUser->instance = "";
-			// $viewUser->flaggedReason = "Reason for flagging. ";
-	
-			if (isset($viewUser->user, $viewUser->flaggedReason, $viewUser->instance)) {
-				Main::$connection->flagUser($viewUser);
-				return true;
+			if (!$this->testConnectUserAccount()) {
+				return;
 			}
-			Utils::includeMessage("<strong>Please fill the required data @ testFlagUser() in index.php</strong>");
-			return false;
+			$userToFlag = new UserConfig();
+			$userToFlag->user = "";
+			$userToFlag->instance = "";
+			$userToFlag->flaggedReason = "Test flag a user account.";
+			return Main::$connection->flagUser($userToFlag);
 		}
 
 
+
+
+		//Tested, need to verify account
 		public function testSubscribeForumPost()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			$forumPostConfig = new ForumPostConfig();
-			//$forumPostConfig->id = ""; //ForumPostConfig id.
-			if (isset($forumPostConfig->id)) {
-				Main::$connection->subscribeForumPost($forumPostConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForumPost() in index.php</strong>");
-			return false;
+			$forumPostConfig->id = Main::$postId; //ForumPostConfig id.	
+			return Main::$connection->subscribeForumPost($forumPostConfig);
+		
 		}
 
+		//Tested, need to verify account
 		public function testUnsubscribeForumPost()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			$forumPostConfig = new ForumPostConfig();
-			//$forumPostConfig->id = ""; //ForumPostConfig id.
-			if (isset($forumPostConfig->id)) {
-				Main::$connection->unsubscribeForumPost($forumPostConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForumPost() in index.php</strong>");
-			return false;
+			$forumPostConfig->id = Main::$postId; //ForumPostConfig id.
+			Main::$connection->unsubscribeForumPost($forumPostConfig);
 		}
 
 		/**
 		 * Tested -> passed
 		 * Requirement: User login.
 		 */
-
 		public function testGetForumPosts()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
 			$browseForumPosts = new BrowseConfig();
 			$browseForumPosts->type = "Post";
 			$browseForumPosts->typeFilter = "Public";
 			$browseForumPosts->sort = "date";
-			if (isset($browseForumPosts->type, $browseForumPosts->typeFilter, $browseForumPosts->sort)) {
-				return Main::$connection->getPosts($browseForumPosts);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetForumPosts() in index.php</strong>");
-			return null;
+			return Main::$connection->getPosts($browseForumPosts);
 		}
 		/**
 		 * Tested -> passed
@@ -793,18 +705,9 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			$forum = new ForumConfig();
-
-			// $forum->id = ""; //ForumPost id.
-			if (isset($forum->id)) {
-				Main::$connection->subscribeForum($forum);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSubscribeForum() in index.php</strong>");
-
-			return false;
+			$forum->id = Main::$forumInstanceId; //ForumPost id.
+			return Main::$connection->subscribeForum($forum);
 		}
 
 		/**
@@ -817,82 +720,56 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			$forum = new ForumConfig();
-			// $forum->id = ""; //ForumPost id.
-			if (isset($forum->id)) {
-				Main::$connection->unsubscribeForum($forum);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testUnsubscribeForum() in index.php</strong>");
-
-			return false;
+			$forum->id = Main::$forumInstanceId; //ForumPost id.
+			return Main::$connection->unsubscribeForum($forum);
 		}
 
 
 
+		//Tested: passed
 		public function testThumbsUpForum()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
 			//FourmConfig, GraphicConfig, ForumPostConfig ..etc. Has getType() which return the type of the config object.
 			//Thus the function thumbsUp(takes an object of WebMediumConfig) which inherited from all the config objects.
-			$forumPost = new ForumConfig();
-
-			// $forumPost->id = ""; //ForumPost id.
-			if (isset($forumPost->id)) {
-				Main::$connection->thumbsUp($forumPost);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testThumbsUpForum() in index.php</strong>");
-
-			return false;
+			$forumConfig = new ForumConfig();
+			$forumConfig->id = Main::$forumInstanceId; //Forum id.{
+			return Main::$connection->thumbsUp($forumConfig);
 		}
 
+
+		//Tested: passed
 		public function testThumbsDownForum()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
 			//FourmConfig, GraphicConfig, ForumPostConfig ..etc. Has getType() which return the type of the config object.
 			//Thus the function thumbsDown(takes an object of WebMediumConfig) which inherited from all the config objects.
 			$forumPost = new ForumConfig();
-			//$forumPost->id = ""; //ForumPost id.
-			if (isset($forumPost->id)) {
-				Main::$connection->thumbsDown($forumPost);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testThumbsDownForum() in index.php</strong>");
-
-			return false;
+			$forumPost->id = Main::$forumInstanceId; //ForumPost id.
+			return Main::$connection->thumbsDown($forumPost);
 		}
 
+
+		//Tested: passed
 		public function testStarForum()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			
-	
 			//FourmConfig, GraphicConfig, ForumPostConfig ..etc. Has getType() which return the type of the config object.
 			//Thus the function testStarForum(takes an object of WebMediumConfig) which inherited from all the config objects.
-			$forumPost = new ForumConfig();
-
-			//$forumPost->id = ""; //ForumPost id.
-			if (isset($forumPost->id)) {
-				Main::$connection->star($forumPost);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testStarForum() in index.php</strong>");
-
-			return false;
+			$forum = new ForumConfig();
+			$forum->id = Main::$forumInstanceId; //ForumPost id.
+			$forum->stars=5;
+			Main::$connection->star($forum);
 		}
 
 		public function testAvatarMessage()
@@ -918,63 +795,45 @@
 			return null;
 		}
 
+
+
+		//Tested: passed
 		public function testTTS()
 		{
 			$ttsConfig = new Speech();
-			// $ttsConfig->voice = "";
-			// $ttsConfig->text= "";
-			// $ttsConfig->mod = "";
-			if (isset($ttsConfig->voice, $ttsConfig->text, $ttsConfig->mod)) {
-				return Main::$connection->tts($ttsConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testTTS() in index.php</strong>");
-			return null;
-
+			$ttsConfig->voice = "English : US : Female : SLT";
+			$ttsConfig->text= "Hello World";
+			$ttsConfig->mod = "default";
+			return Main::$connection->tts($ttsConfig);
 		}
 
+
+
+		//Tested: passed
 		public function testGetAdminsForum()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			//Connecting to a forum and establish validation
-	
 			$forumConfig = new ForumConfig();
-
-			// $forumConfig->id = ""; //Forum ID
-	
-
-			if (isset($forumConfig->id, $forumConfig->user)) {
-				return Main::$connection->getAdmins($forumConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetAdminsForum() in index.php</strong>");
-			return null;
-
+			$forumConfig->id = Main::$forumInstanceId; //Forum ID
+			return Main::$connection->getAdmins($forumConfig);
 		}
 
 
-
+		//Tested: passed
 		public function testGetUsersForum()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			//Connecting to a forum and establish validation
-	
 			$forumConfig = new ForumConfig();
-
-			// $forumConfig->id = ""; //Forum ID
-	
-
-			if (isset($forumConfig->id)) {
-				return Main::$connection->getUsersOfType($forumConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetUsersForum() in index.php</strong>");
-			return null;
+			$forumConfig->id = Main::$forumInstanceId; //Forum ID
+			return Main::$connection->getUsersOfType($forumConfig);
 		}
 
 		/**
@@ -987,15 +846,9 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$contentConfig = new ContentConfig();
-
 			$contentConfig->type = "Bot"; //Forum, Channel, Aavatar, Script, Domain.
-			if (isset($contentConfig->type)) {
-				return Main::$connection->getCategories($contentConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetCategories() in index.php</strong>");
-			return null;
+			return Main::$connection->getCategories($contentConfig);
 		}
 		/**
 		 * Tested -> passed
@@ -1007,162 +860,141 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$contentConfig = new ContentConfig();
-
 			$contentConfig->type = "Bot"; //Forum, Channel, Aavatar, Script, Domain.
-			if (isset($contentConfig->type)) {
-				return Main::$connection->getTags($contentConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetTags() in index.php</strong>");
-
-			return null;
+			return Main::$connection->getTags($contentConfig);
 		}
 
+		//Tested: passed
 		public function testGetTemplates()
 		{
 			return Main::$connection->getTemplates();
 		}
 
+
+
+		//tested: passed
 		public function testGetChannelBotMode()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$channelConfig = new ChannelConfig();
-
-			// $channelConfig->id = "";
-	
-			if (isset($channelConfig->user, $channelConfig->id)) {
-				return Main::$connection->getChannelBotMode($channelConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetChannelBotMode() in index.php</strong>");
-
-			return null;
+			$channelConfig->id = Main::$channelInstanceId;
+			return Main::$connection->getChannelBotMode($channelConfig);
 		}
 
+
+
+		//Tested
 		public function testSaveChannelBotMode()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
+			$mode = array("ListenOnly", "AnswerOnly", "AnswerAndListen");
 			$botModeConfig = new BotModeConfig();
-
-			// $botModeConfig->instance = "";
-			// $botModeConfig->bot = "";
-			// $botModeConfig->mode = "";
-	
-			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->bot, $botModeConfig->mode)) {
-				return Main::$connection->saveChannelBotMode($botModeConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveChannelBotMode() in index.php</strong>");
-			return null;
+			$botModeConfig->instance = Main::$channelInstanceId;
+			$botModeConfig->bot = Main::$botInstanceId;
+			$botModeConfig->mode = $mode[2];
+			return Main::$connection->saveChannelBotMode($botModeConfig);
 		}
 
 
+
+		//Tested
 		public function testSaveForumBotMode()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
+			$mode = array("ListenOnly", "AnswerOnly", "AnswerAndListen");
 			$botModeConfig = new BotModeConfig();
-
-			// $botModeConfig->instance = "";
-			// $botModeConfig->bot = "";
-			// $botModeConfig->mode = "";
-	
-			if (isset($botModeConfig->instance, $botModeConfig->user, $botModeConfig->bot, $botModeConfig->mode)) {
-				return Main::$connection->saveForumBotMode($botModeConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveForumBotMode() in index.php</strong>");
-			return null;
+			$botModeConfig->instance = Main::$forumInstanceId;
+			$botModeConfig->bot = Main::$botInstanceId;
+			$botModeConfig->mode = $mode[2];
+			return Main::$connection->saveForumBotMode($botModeConfig);
 		}
 
+
+
+		//Tested: passed
+		//Must be admin user.
+		//Must set content rating to mature.
 		public function testSaveLearning()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$learningConfig = new LearningConfig();
-
-			// $learningConfig->instance = "";
-			// $learningConfig->correctionMode = "";
-			// $learningConfig->learningMode = "";
-			// $learningConfig->learningRate = "";
-			// $learningConfig->scriptTimeout = 0;
-			// $learningConfig->responseMatchTimeout = 0;
-			// $learningConfig->conversationMatchPercentage = "";
-			// $learningConfig->discussionMatchPercentage = "";
-			// $learningConfig->enableEmoting = true;
-			// $learningConfig->enableEmotions = true;
-			// $learningConfig->enableComprehension = true;
-			// $learningConfig->enableConsciousness = true;
-			// $learningConfig->enableResponseMatch = true;
-			// $learningConfig->checkExactMatchFirst = true;
-			// $learningConfig->fixFormulaCase = true;
-			// $learningConfig->learnGrammar = true;
-			// $learningConfig->synthesizeResponse = true;
-	
-			if (isset($learningConfig->instance, $learningConfig->user, $learningConfig->learningMode, $learningConfig->learningRate)) {
-				Main::$connection->saveLearning($learningConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveLearning() in index.php</strong>");
-			return false;
-
+			$learningConfig->instance = Main::$botInstanceId;
+			$learningConfig->nlp = "4";
+			$learningConfig->language = "en";
+			$learningConfig->correctionMode = "Everyone";
+			$learningConfig->learningMode = "Everyone";
+			$learningConfig->learningRate = "55";
+			$learningConfig->scriptTimeout = 10000;
+			$learningConfig->responseMatchTimeout = 1000;
+			$learningConfig->conversationMatchPercentage = "50";
+			$learningConfig->discussionMatchPercentage = "90";
+			$learningConfig->enableEmoting = true;
+			$learningConfig->enableEmotions = true;
+			$learningConfig->enableComprehension = false; //only supported for dedicated servers
+			$learningConfig->enableConsciousness = false; //only supported for dedicated servers
+			$learningConfig->enableResponseMatch = true;
+			$learningConfig->checkExactMatchFirst = true;
+			$learningConfig->fixFormulaCase = true;
+			$learningConfig->learnGrammar = true;
+			$learningConfig->synthesizeResponse = true;
+			$learningConfig->disableFlag = false;
+			$learningConfig->reduceQuestions = true;
+			$learningConfig->trackCase = false;
+			return Main::$connection->saveLearning($learningConfig);
 		}
 
+
+
+
+		//Tested: passed
 		public function testSaveVoice()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$voiceConfig = new VoiceConfig();
-
-			// $voiceConfig->instance = "";
-			// $voiceConfig->voice = "";
-			// $voiceConfig->mod = "";
-			// $voiceConfig->language = "";
+			$voiceConfig->instance = Main::$botInstanceId;
+			$voiceConfig->voice = "English : US : Female : SLT";
+			$voiceConfig->mod = "";
+			$voiceConfig->language = "en";
 			// $voiceConfig->pitch = "";
 			// $voiceConfig->speechRate = "";
 			// $voiceConfig->nativeVoice = "";
-			if (isset($voiceConfig->instance, $voiceConfig->user, $voiceConfig->voice, $voiceConfig->mod)) {
-				Main::$connection->saveVoice($voiceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveVoice() in index.php</strong>");
-			return false;
+			return Main::$connection->saveVoice($voiceConfig);
 		}
 
+
+		//Tested: passed
 		public function testSaveBotAvatar()
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$instanceConfig = new InstanceConfig();
-
-			// $instanceConfig->instance = "";
-			// $instanceConfig->instanceAvatar = "";
-			if (isset($instanceConfig->instance, $instanceConfig->user, $instanceConfig->instanceAvatar)) {
-				Main::$connection->saveBotAvatar($instanceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveBotAvatar() in index.php</strong>");
-			return false;
+			$instanceConfig->id = Main::$botInstanceId;
+			$instanceConfig->instanceAvatar = Main::$avatarInstanceId;
+			return Main::$connection->saveBotAvatar($instanceConfig);
 		}
 
+
+
+
+		//Tested
 		public function testTrainInstance()
 		{
 			//TODO: Set user
@@ -1172,17 +1004,11 @@
 
 			$trainingConfig = new TrainingConfig();
 
-			// $trainingConfig->instance = "";
-			// $trainingConfig->operation = "";
-			// $trainingConfig->question = "";
-			// $trainingConfig->response = "";
-	
-			if (isset($trainingConfig->instance, $trainingConfig->operation, $trainingConfig->question, $trainingConfig->response)) {
-				Main::$connection->train($trainingConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testTrainInstance() in index.php</strong>");
-			return false;
+			$trainingConfig->instance = Main::$botInstanceId;
+			$trainingConfig->operation = "";
+			$trainingConfig->question = "";
+			$trainingConfig->response = "";
+			return Main::$connection->train($trainingConfig);
 		}
 
 		public function testUserAdmin()
@@ -1191,24 +1017,17 @@
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-
 			$userAdminConfig = new UserAdminConfig();
-
-			$userAdminConfig->instance = "";
-			// $userAdminConfig->type = "";
-			// $userAdminConfig->operation = ""; //example: 'Addadmin'
-			// $userAdminConfig->operationUser = "";
-	
-			if (isset($userAdminConfig->instance, $userAdminConfig->type, $userAdminConfig->operation, $trainingConfig->operationUser)) {
-				Main::$connection->userAdmin($userAdminConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testUserAdmin() in index.php</strong>");
-
-			return false;
+			$userAdminConfig->instance = Main::$botInstanceId;
+			$userAdminConfig->type = "Bot";
+			$userAdminConfig->operation = "AddUser"; //example: 'AddAdmin', 'AddUser', 'RemoveAdmin', 'RemoveUser'
+			$userAdminConfig->operationUser = "";
+			return Main::$connection->userAdmin($userAdminConfig);
 		}
 
 
+
+		//Tested: passed
 		public function testCreateAvatar()
 		{
 			//TODO: Set user
@@ -1216,125 +1035,72 @@
 				return;
 			}
 			$avatarConfig = new AvatarConfig();
-
 			$avatarConfig->name = "";
 			$avatarConfig->description = "";
-			// $avatarConfig->details = "";
-			// $avatarConfig->disclaimer = "";
-			// $avatarConfig->categories = "Misc";
-			// $avatarConfig->license = "";
-			// $avatarConfig->accessMode = "";
-			// $avatarConfig->isPrivate = false;
-			// $avatarConfig->isHidden = false;
-			if (isset($avatarConfig->name, $avatarConfig->description, $avatarConfig->details, $avatarConfig->accessMode, $avatarConfig->isPrivate)) {
-				Main::$connection->create($avatarConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatar() in index.php</strong>");
-
-			return false;
+			$avatarConfig->details = "";
+			$avatarConfig->disclaimer = "";
+			$avatarConfig->categories = "Misc";
+			$avatarConfig->license = "";
+			$avatarConfig->accessMode = "";
+			$avatarConfig->isPrivate = false;
+			$avatarConfig->isHidden = false;
+			return Main::$connection->create($avatarConfig);
 		}
 
-		public function testCreateAvatarMedia()
+
+		//Tested: passed (media is uploaded successfully), returned null.
+		public function testCreateAvatarMedia($mediaFile)
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
 			$mediaConfig = new AvatarMedia();
-
-
-
-			//Load file
-			$target_dir = "uploads/";
-			$file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-			$type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-			//Set up Avatar Media
-			$mediaConfig->instance = "";
-			$mediaConfig->name = $file; //Get file name
-			// $mediaConfig->type = $type; //Get file type.
-			// $mediaConfig->hd = "";
-	
-
-			if (isset($mediaConfig->instance, $mediaConfig->name, $mediaConfig->type, $file)) {
-				Main::$connection->createAvatarMedia($file, $mediaConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testCreateAvatarMedia() in index.php</strong>");
-
-			return false;
+			$mediaConfig->instance = Main::$avatarInstanceId;
+			$mediaConfig->name = "name"; //Get file name
+			$mediaConfig->type = $mediaFile->mime; //Get file type.
+			return Main::$connection->createAvatarMedia($mediaFile, $mediaConfig);
 		}
 
 
-		public function testCreateGraphicMedia()
+
+		//Tested: passed
+		public function testCreateGraphicMedia($mediaFile)
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
 			$graphicConfig = new GraphicConfig();
-
-
-
-			//Load file
-			$target_dir = "uploads/";
-			$file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-			// $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+			$graphicConfig->fileName = "name";
+			$graphicConfig->fileType = $mediaFile->mime;
 			//Set up Avatar Media
-			$graphicConfig->id = "";
-			// $graphicConfig->fileName = $file; //Get file name
-			// $graphicConfig->fileType = $type; //Get file type.
-	
-
-			if (isset($graphicConfig->id, $graphicConfig->fileName, $graphicConfig->fileType, $file)) {
-				//Main::$connection->createGraphicMedia($file, $graphicConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testCreateGraphicMedia() in index.php</strong>");
-
-			return false;
+			$graphicConfig->id = Main::$graphicInstanceId;
+			return Main::$connection->createGraphicMedia($mediaFile, $graphicConfig);
 		}
 
-		public function testUpdateUserIcon()
+
+
+		//Tested: passed
+		public function testUpdateUserIcon($imageFile)
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return;
 			}
-			//Load file
-			$target_dir = "uploads/";
-			$file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-			$type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-			echo "-----<br>";
-			echo "type: " . $type;
-			print_r($type);
-			echo "-----<br>";
-
-			if (isset($file)) {
-				// return Main::$connection->updateIconUser($file, $userConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testUpdateUserIcon() in index.php</strong>");
-			}
-			return null;
+			$userConfig = Main::$connection->getUser();
+			return Main::$connection->updateIconUser($imageFile, $userConfig);
 		}
 
-		public function testGetFroumBotMode(): ?BotModeConfig
+		public function testGetForumBotMode(): ?BotModeConfig
 		{
 			//TODO: Set user
 			if (!$this->testConnectUserAccount()) {
 				return null;
 			}
-
 			$forumConfig = new ForumConfig();
-
-			// $forumConfig->id = "";
-	
-			if (isset($forumConfig->id)) {
-				return Main::$connection->getForumBotMode($forumConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetFroumBotMode() in index.php</strong>");
-			}
-			return null;
+			$forumConfig->id = Main::$forumInstanceId;
+			return Main::$connection->getForumBotMode($forumConfig);
 		}
 
 		public function testGetVoice()
@@ -1344,16 +1110,9 @@
 				return;
 			}
 			$instanceConfig = new InstanceConfig();
-			// $instanceConfig->id = "";
-			// $instanceConfig->instance = "";
-	
-			if (isset($instanceConfig->id, $instanceConfig->instance)) {
-				return Main::$connection->getVoice($instanceConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetVoice() in index.php</strong>");
-			}
-			return null;
-
+			$instanceConfig->id = "";
+			$instanceConfig->instance = "";
+			return Main::$connection->getVoice($instanceConfig);
 		}
 		/**
 		 * Tested -> passed
@@ -1368,14 +1127,7 @@
 			$instanceConfig = new InstanceConfig();
 			// $instanceConfig->id = "";
 			// $instanceConfig->instance = "";
-	
-			if (isset($instanceConfig->id, $instanceConfig->instance)) {
-				return Main::$connection->getDefaultResponses($instanceConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetDefaultResponses() in index.php</strong>");
-			}
-			return null;
-
+			return Main::$connection->getDefaultResponses($instanceConfig);
 		}
 
 
@@ -1390,15 +1142,8 @@
 				return;
 			}
 			$instanceConfig = new InstanceConfig();
-			// $instanceConfig->id = "";
-			// $instanceConfig->instance = "";
-
-			if (isset($instanceConfig->id, $instanceConfig->instance)) {
-				return Main::$connection->getGreetings($instanceConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetGreetings() in index.php</strong>");
-			}
-			return null;
+			$instanceConfig->id = Main::$botInstanceId;
+			return Main::$connection->getGreetings($instanceConfig);
 		}
 
 		/**
@@ -1420,17 +1165,10 @@
 			$responseSearchConfig->inputType = "all";
 			$responseSearchConfig->restrict = "exact";
 			$responseSearchConfig->filter = ""; //response (From ResponseConfig)
-	
-
-			if (isset($responseSearchConfig->instance, $responseSearchConfig->responseType, $responseSearchConfig->filter)) {
-				return Main::$connection->getResponses($responseSearchConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetResponses() in index.php</strong>");
-			}
-			return null;
+			return Main::$connection->getResponses($responseSearchConfig);
 		}
 		/**
-		 * Tested -> Does not return conversations
+		 * Tested : passed
 		 * Requirement: Bot ID or instance
 		 */
 		public function testGetConversations()
@@ -1440,27 +1178,18 @@
 				return;
 			}
 			$responseSearchConfig = new ResponseSearchConfig();
-			// $responseSearchConfig->instance = ""; //Bot instance
-			$responseSearchConfig->responseType = "conversation"; //To get conversations. or response (to get responses)
-			$responseSearchConfig->duration = "day";
+			$responseSearchConfig->instance = Main::$botInstanceId; //Bot instance
+			$responseSearchConfig->responseType = "conversations"; //To get conversations. or responses (to get responses)
+			$responseSearchConfig->duration = "week";
+			$responseSearchConfig->sort = "date";
 			$responseSearchConfig->inputType = "all";
-			$responseSearchConfig->restrict = "none";
-			$responseSearchConfig->filter = "";
-
-
-			if (isset($responseSearchConfig->instance, $responseSearchConfig->responseType, $responseSearchConfig->filter)) {
-				return Main::$connection->getConversations($responseSearchConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetConversations() in index.php</strong>");
-			}
-			return null;
+			return Main::$connection->getConversations($responseSearchConfig);
 		}
-
 
 
 		/**
 		 * Tested -> Passed only when Learning Mode is enabled
-		 * Requirement: Bot ID and instance
+		 * Requirement: Bot ID
 		 */
 		public function testGetLearning()
 		{
@@ -1469,17 +1198,8 @@
 				return;
 			}
 			$instanceConfig = new InstanceConfig();
-
-			// $instanceConfig->instance = ""; //Need a bot ID
-			// $instanceConfig->id = "";
-	
-
-			if (isset($instanceConfig->instance)) {
-				return Main::$connection->getLearning($instanceConfig);
-			} else {
-				Utils::includeMessage("<strong>Please fill the required data @ testGetLearning() in index.php</strong>");
-			}
-			return null;
+			$instanceConfig->id = Main::$botInstanceId; // Bot Id
+			return Main::$connection->getLearning($instanceConfig);
 		}
 
 
@@ -1494,20 +1214,14 @@
 				return;
 			}
 			$browseConfig = new BrowseConfig();
-
 			$browseConfig->type = "Bot"; //Can be either Avatar, Forum, Graphic, Bot, Script ...etc
 			$browseConfig->typeFilter = "Featured";
 			$browseConfig->contentRating = "Everyone";
-
-
-			if (isset($browseConfig->type, $browseConfig->typeFilter, $browseConfig->contentRating)) {
-				return Main::$connection->browse($browseConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testBrowse() in index.php</strong>");
-
-			return null;
+			return Main::$connection->browse($browseConfig);
 		}
 
+
+		//Tested: Passed
 		public function testGetAvatarMedia()
 		{
 			//TODO: Set user
@@ -1516,18 +1230,12 @@
 			}
 			$avatarConfig = new AvatarConfig();
 
-			// $avatarConfig->id = "";
-			// $avatarConfig->instance = "";
-	
-
-			if (isset($browseConfig->instance)) {
-				return Main::$connection->getAvatarMedia($avatarConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetAvatarMedia() in index.php</strong>");
-
-			return null;
+			$avatarConfig->id = Main::$avatarInstanceId;
+			return Main::$connection->getAvatarMedia($avatarConfig);
 		}
 
+
+		//Tested: passed
 		public function testGetScriptSource()
 		{
 			//TODO: Set user
@@ -1535,20 +1243,13 @@
 				return;
 			}
 			$scriptConfig = new ScriptConfig();
-
-			// $scriptConfig->instance = "";
-			// $scriptConfig->id = "";
-	
-			if (isset($scriptConfig->instance, $scriptConfig->id)) {
-				return Main::$connection->getScriptSource($scriptConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetScriptSource() in index.php</strong>");
-
-			return null;
+			$scriptConfig->id = Main::$scriptInstanceId;
+			return Main::$connection->getScriptSource($scriptConfig);
 		}
 
 
 
+		//Tested: passed
 		public function testSaveScriptSource()
 		{
 			//TODO: Set user
@@ -1556,22 +1257,16 @@
 				return;
 			}
 			$scriptSourceConfig = new ScriptSourceConfig();
-
-			// $scriptSourceConfig->instance = "";
-			// $scriptSourceConfig->id = "";
-			// $scriptSourceConfig->source = "";
-	
-			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id, $scriptSourceConfig->source)) {
-				Main::$connection->saveScriptSource($scriptSourceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveScriptSource() in index.php</strong>");
-
-			return false;
+			$scriptSourceConfig->instance = "";
+			$scriptSourceConfig->source = "Hello World";
+			Main::$connection->saveScriptSource($scriptSourceConfig);
 		}
 
 
 
+
+
+		//Tested: passed
 		public function testGetBotScriptSource()
 		{
 			//TODO: Set user
@@ -1579,17 +1274,14 @@
 				return;
 			}
 			$scriptSourceConfig = new ScriptSourceConfig();
-
-			// $scriptSourceConfig->instance = "";
-			// $scriptSourceConfig->id = "";
-	
-			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
-				return Main::$connection->getBotScriptSource($scriptSourceConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetBotScriptSource() in index.php</strong>");
-			return null;
+			$scriptSourceConfig->instance = Main::$botInstanceId;
+			$scriptSourceConfig->id = Main::$scriptInstanceId;
+			return Main::$connection->getBotScriptSource($scriptSourceConfig);
 		}
 
+
+
+	
 		public function testGetBotScripts()
 		{
 			//TODO: Set user
@@ -1597,17 +1289,12 @@
 				return;
 			}
 			$instanceConfig = new InstanceConfig();
-
-			// $instanceConfig->instance = "";
-			// $instanceConfig->id = "";
-	
-			if (isset($instanceConfig->instance, $instanceConfig->id)) {
-				return Main::$connection->getBotScripts($instanceConfig);
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testGetBotScripts() in index.php</strong>");
-			return null;
+			$instanceConfig->id = Main::$botInstanceId;
+			return Main::$connection->getBotScripts($instanceConfig);
 		}
 
+
+		//Tested: passed
 		public function testImportBotScript()
 		{
 			//TODO: Set user
@@ -1615,16 +1302,13 @@
 				return;
 			}
 			$scriptConfig = new ScriptConfig();
-
-			// $scriptConfig->id = "";
-			if (isset($scriptConfig->id)) {
-				Main::$connection->importBotScript($scriptConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testImportBotScript() in index.php</strong>");
-			return false;
+			$scriptConfig->instance = Main::$botInstanceId;
+			$scriptConfig->id = Main::$scriptInstanceId;
+			return Main::$connection->importBotScript($scriptConfig);
 		}
 
+
+		//Tested
 		public function testImportBotLog()
 		{
 			//TODO: Set user
@@ -1632,17 +1316,12 @@
 				return;
 			}
 			$scriptConfig = new ScriptConfig();
-
-			// $scriptConfig->instance = "";
-			// $scriptConfig->id = "";
-	
-			if (isset($scriptConfig->instance, $scriptConfig->id)) {
-				Main::$connection->importBotLog($scriptConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testImportBotLog() in index.php</strong>");
-			return false;
+			$scriptConfig->instance = Main::$botInstanceId;
+			$scriptConfig->id = Main::$scriptInstanceId;
+			return Main::$connection->importBotLog($scriptConfig);
 		}
+
+
 
 		public function testSaveBotScript()
 		{
@@ -1651,16 +1330,10 @@
 				return;
 			}
 			$scriptSourceConfig = new ScriptSourceConfig();
-
-			// $scriptSourceConfig->instance = ""; //id
-			// $scriptSourceConfig->id = ""; //if not null, source id.
-			// $scriptSourceConfig->source = "";
-			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id, $scriptSourceConfig->source)) {
-				Main::$connection->saveBotScriptSource($scriptSourceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testSaveBotScript() in index.php</strong>");
-			return false;
+			$scriptSourceConfig->instance = Main::$botInstanceId; //id
+			$scriptSourceConfig->id = Main::$scriptInstanceId; //if not null, source id.
+			$scriptSourceConfig->source = "Hi";
+			Main::$connection->saveBotScriptSource($scriptSourceConfig);
 		}
 
 		/**
@@ -1673,14 +1346,9 @@
 				return;
 			}
 			$scriptSourceConfig = new ScriptSourceConfig();
-			// $scriptSourceConfig->instance = ""; //bot id
-			// $scriptSourceConfig->id = ""; // script id 
-			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
-				Main::$connection->deleteBotScript($scriptSourceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testDeleteBotScript() in index.php</strong>");
-			return false;
+			$scriptSourceConfig->instance = Main::$botInstanceId; //bot id
+			$scriptSourceConfig->id = Main::$scriptInstanceId; // script id 
+			Main::$connection->deleteBotScript($scriptSourceConfig);
 		}
 
 
@@ -1694,14 +1362,9 @@
 				return;
 			}
 			$scriptSourceConfig = new ScriptSourceConfig();
-			// $scriptSourceConfig->instance = ""; //bot id
-			// $scriptSourceConfig->id = ""; // script id 
-			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
-				Main::$connection->upBotScript($scriptSourceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testUpBotScript() in index.php</strong>");
-			return false;
+			$scriptSourceConfig->instance = Main::$botInstanceId; //bot id
+			$scriptSourceConfig->id = Main::$scriptInstanceId; // script id 
+			Main::$connection->upBotScript($scriptSourceConfig);
 		}
 		/**
 		 * Tested: passed
@@ -1713,14 +1376,9 @@
 				return;
 			}
 			$scriptSourceConfig = new ScriptSourceConfig();
-			// $scriptSourceConfig->instance = ""; //bot id
-			// $scriptSourceConfig->id = ""; // script id 
-			if (isset($scriptSourceConfig->instance, $scriptSourceConfig->id)) {
-				Main::$connection->downBotScript($scriptSourceConfig);
-				return true;
-			}
-			Utils::includeMessage("<strong>Please fill the required data @ testDownBotScript() in index.php</strong>");
-			return false;
+			$scriptSourceConfig->instance = Main::$botInstanceId; //bot id
+			$scriptSourceConfig->id = Main::$scriptInstanceId; // script id 
+			Main::$connection->downBotScript($scriptSourceConfig);
 		}
 	}
 
@@ -1772,15 +1430,15 @@
 					break;
 				case "delete-forum-post":
 					Utils::includeMessage("<strong>Delete forum post.</strong>");
-					$pass = $main->testDeleteForumPost();
+					$main->testDeleteForumPost();
 					break;
 				case "create-channel-file-attachment":
 					Utils::includeMessage("<strong>Create a channel file attachment.</strong>");
-					$channelAttachment = $main->testCreateChannelFileAttachment();
+					Utils::PostImageFromURL(Main::$imgUrl, [$main, 'testCreateChannelFileAttachment']);
 					break;
 				case "create-channel-image-attachment":
 					Utils::includeMessage("<strong>Create a channel image attachment.</strong>");
-					$channelAttachment = $main->testCreateChannelImageAttachment();
+					Utils::PostImageFromURL(Main::$imgUrl, [$main, 'testCreateChannelImageAttachment']);
 					break;
 				case "create-post-reply":
 					Utils::includeMessage("<strong>Create a post reply.</strong>");
@@ -1788,39 +1446,39 @@
 					break;
 				case "save-avatar-background":
 					Utils::includeMessage("<strong>Save - Upload avatar's background.</strong>");
-					$pass = $main->testSaveAvatarBackground();
+					Utils::PostImageFromURL(Main::$imgUrl, [$main, 'testSaveAvatarBackground']);
 					break;
 				case "delete-response":
 					Utils::includeMessage("<strong>Permanently delete the response, greetings, or default response.</strong>");
-					$pass = $main->testDeleteResponse();
+					$main->testDeleteResponse();
 					break;
 				case "delete-avatar-media":
 					Utils::includeMessage("<strong>Delete the avatar media.</strong>");
-					$pass = $main->testDeleteAvatarMedia();
+					$main->testDeleteAvatarMedia();
 					break;
 				case "delete-avatar-background":
 					Utils::includeMessage("<strong>Delete the avatar background.</strong>");
-					$pass = $main->testDeleteAvatarBackground();
+					$main->testDeleteAvatarBackground();
 					break;
 				case "save-avatar-media":
 					Utils::includeMessage("<strong>Save the avatar media.</strong>");
-					$pass = $main->testSaveAvatarMedia();
+					$main->testSaveAvatarMedia();
 					break;
 				case "flag":
 					Utils::includeMessage("<strong>Flag an instance.</strong>");
-					$pass = $main->testFlagInstance();
+					$main->testFlagInstance();
 					break;
 				case "subscribe-forum-post":
 					Utils::includeMessage("<strong>Subscribe a forum post.</strong>");
-					$pass = $main->testSubscribeForumPost();
+					$main->testSubscribeForumPost();
 					break;
 				case "unsubscribe-forum-post":
 					Utils::includeMessage("<strong>Unsubscribe a forum post.</strong>");
-					$pass = $main->testUnsubscribeForumPost();
+					$main->testUnsubscribeForumPost();
 					break;
 				case "subscribe-forum":
 					Utils::includeMessage("<strong>Subscribe to a forum.</strong>");
-					$pass = $main->testSubscribeForum();
+					$main->testSubscribeForum();
 					break;
 				case "get-forum-posts":
 					Utils::includeMessage("<strong>Return the list of forum posts for the forum browse criteria.</strong>");
@@ -1828,23 +1486,23 @@
 					break;
 				case "unsubscribe-forum":
 					Utils::includeMessage("<strong>Unsubscribe to a forum.</strong>");
-					$pass = $main->testUnsubscribeForum();
+					$main->testUnsubscribeForum();
 					break;
 				case "thumbs-up-forum":
 					Utils::includeMessage("<strong>Thumbs up to a forum.</strong>");
-					$pass = $main->testThumbsUpForum();
+					$main->testThumbsUpForum();
 					break;
 				case "thumbs-down-forum":
 					Utils::includeMessage("<strong>Thumbs down to a forum.</strong>");
-					$pass = $main->testThumbsDownForum();
+					$main->testThumbsDownForum();
 					break;
 				case "star-forum":
 					Utils::includeMessage("<strong>Evaluate a forum by placing a number of stars.</strong>");
-					$pass = $main->testStarForum();
+					$main->testStarForum();
 					break;
 				case "flag-user":
 					Utils::includeMessage("<strong>Flag user account.</strong>");
-					$pass = $main->testFlagUser();
+					$main->testFlagUser();
 					break;
 				case "avatar-message":
 					Utils::includeMessage("<strong>Process the avatar message and return the avatars response.</strong>");
@@ -1853,6 +1511,7 @@
 				case "tts":
 					Utils::includeMessage("<strong>Process the speech message and return the server generate text-to-speech audio file.</strong>");
 					$tts = $main->testTTS();
+					Utils::includeMessage("<strong>Play Sound</strong>", null, "<a href='" . Main::$WEBSITE . "/".$tts . "'>Play</a>");
 					break;
 				case "get-admins-forum":
 					Utils::includeMessage("<strong>Return the administrators of the content.</strong>");
@@ -1880,51 +1539,51 @@
 					break;
 				case "save-channel-bot-mode":
 					Utils::includeMessage("<strong>Save the channel's bot configuration.</strong>");
-					$botModeConfig = $main->testSaveChannelBotMode();
+					$main->testSaveChannelBotMode();
 					break;
 				case "save-forum-bot-mode":
 					Utils::includeMessage("<strong>Save the channel's bot configuration.</strong>");
-					$botModeConfig = $main->testSaveForumBotMode();
+					$main->testSaveForumBotMode();
 					break;
 				case "save-learning":
 					Utils::includeMessage("<strong>Save the bot's learning configuration.</strong>");
-					$pass = $main->testSaveLearning();
+					$main->testSaveLearning();
 					break;
 				case "save-voice":
 					Utils::includeMessage("<strong>Save the bot's voice configuration.</strong>");
-					$pass = $main->testSaveVoice();
+					$main->testSaveVoice();
 					break;
 				case "save-bot-avatar":
 					Utils::includeMessage("<strong>Save the bot's avatar configuration.</strong>");
-					$pass = $main->testSaveBotAvatar();
+					$main->testSaveBotAvatar();
 					break;
 				case "train-instance":
 					Utils::includeMessage("<strong>Train the bot with a new question/response pair.</strong>");
-					$pass = $main->testTrainInstance();
+					$main->testTrainInstance();
 					break;
 				case "user-admin":
 					Utils::includeMessage("<strong>Perform the user administration task (add or remove users, or administrators).</strong>");
-					$pass = $main->testUserAdmin();
+					$main->testUserAdmin();
 					break;
 				case "create-avatar":
 					Utils::includeMessage("<strong>Create the new content. Avatar.</strong>");
-					$pass = $main->testCreateAvatar();
+					$main->testCreateAvatar();
 					break;
 				case "create-avatar-media":
 					Utils::includeMessage("<strong>Add the avatar media file to the avatar.</strong>");
-					$pass = $main->testCreateAvatarMedia();
+					Utils::PostImageFromURL(Main::$imgUrl,[$main, 'testCreateAvatarMedia']);
 					break;
 				case "create-graphic-media":
 					Utils::includeMessage("<strong>Add the graphic media file to the graphic.</strong>");
-					$pass = $main->testCreateGraphicMedia();
+					Utils::PostImageFromURL(Main::$imgUrl, [$main, 'testCreateGraphicMedia']);
 					break;
 				case "update-user-icon":
 					Utils::includeMessage("<strong>Update the user's icon. The file will be uploaded to the server.</strong>");
-					$userConfig = $main->testUpdateUserIcon();
+					Utils::PostImageFromURL(Main::$imgUrl, [$main, 'testUpdateUserIcon']);
 					break;
 				case "get-forum-bot-mode":
 					Utils::includeMessage("<strong>Return the forum's bot configuration.</strong>");
-					$botModeConfig = $main->testGetFroumBotMode();
+					$botModeConfig = $main->testGetForumBotMode();
 					break;
 				case "get-voice":
 					Utils::includeMessage("<strong>Return the bot's voice configuration.</strong>");
@@ -1964,11 +1623,11 @@
 					break;
 				case "save-script-source":
 					Utils::includeMessage("<strong>Create or update script - Save the script source.</strong>");
-					$pass = $main->testSaveScriptSource();
+					$main->testSaveScriptSource();
 					break;
 				case "get-bot-script-source":
 					Utils::includeMessage("<strong>Return the source code for a single bot script.</strong>");
-					$pass = $main->testGetBotScriptSource();
+					$main->testGetBotScriptSource();
 					break;
 				case "get-bot-scripts":
 					Utils::includeMessage("<strong>Return a list of the bots scripts.</strong>");
@@ -1976,31 +1635,31 @@
 					break;
 				case "import-bot-script":
 					Utils::includeMessage("<strong>import a script to the bot.</strong>");
-					$pass = $main->testImportBotScript();
+					$main->testImportBotScript();
 					break;
 				case "import-bot-log":
 					Utils::includeMessage("<strong>import a chatlog/response list to the bot.</strong>");
-					$pass = $main->testImportBotLog();
+					$main->testImportBotLog();
 					break;
 				case "save-bot-script-source":
 					Utils::includeMessage("<strong>Save the bot script source.</strong>");
-					$pass = $main->testSaveBotScript();
+					$main->testSaveBotScript();
 					break;
 				case "delete-bot-script":
 					Utils::includeMessage("<strong>Delete selected bot script.</strong>");
-					$pass = $main->testDeleteBotScript();
+					$main->testDeleteBotScript();
 					break;
 				case "up-bot-script":
 					Utils::includeMessage("<strong>Move up one bot script.</strong>");
-					$pass = $main->testUpBotScript();
+					$main->testUpBotScript();
 					break;
 				case "down-bot-script":
 					Utils::includeMessage("<strong>Move down one bot script.</strong>");
-					$pass = $main->testDownBotScript();
+					$main->testDownBotScript();
 					break;
 				case "save-response":
 					Utils::includeMessage("<strong>Create, update, flag, unflag or invalidate a response.</strong>");
-					$pass = $main->testSaveResponse();
+					$main->testSaveResponse();
 					break;
 			}
 		}
@@ -2008,10 +1667,10 @@
 	</fieldset>
 
 	<!-- 
-		At the bottom of the page, there is a compact box that displays the returned readable 
+		A compact box that displays the returned readable 
 		information resulting from the executed test requests.
 	-->
-	<div id="box">
+	<div class="boxRight">
 		<strong>Details</strong>
 		<br>
 		<?php
@@ -2038,8 +1697,6 @@
 			if (isset($newPost->tags)) {
 				echo "<strong>Tags: </strong>" . $newPost->tags . "<br>";
 			}
-		} else if (isset($pass)) {
-			echo "<strong>Request: </strong>" . ($pass ? 'Posted' : 'Missing data') . "<br>";
 		} else if (isset($avatarMessage)) {
 			echo "<strong>Instance: </strong>" . $avatarMessage->instance . "<br>";
 			echo "<strong>Avatar: </strong>" . $avatarMessage->avatar . "<br>";

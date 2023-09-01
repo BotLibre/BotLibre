@@ -1,13 +1,13 @@
 <?php 
 
 class ScriptSourceConfig extends Config {
-    public String $id;
-    public String $creationDate;
-    public String $updateDate;
-    public bool $version;
-    public String $versionName;
-    public String $creator;
-    public String $source;
+    public ?String $id;
+    public ?String $creationDate;
+    public ?String $updateDate;
+    public ?string $version;
+    public ?String $versionName;
+    public ?String $creator;
+    public ?String $source;
 
 
     public function credentials () : ScriptSourceConfig {

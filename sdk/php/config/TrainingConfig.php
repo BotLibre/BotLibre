@@ -23,8 +23,8 @@ class TrainingConfig extends Config {
     
 
     public function toXML() : String {
-        $writer .= "<training";
-        $this->writeCredentails($this);
+        $writer = "<training";
+        $this->writeCredentails($writer);
         if(isset($this->operation)) {
             $writer .= " operation=\"" . $this->operation . "\"";
         }

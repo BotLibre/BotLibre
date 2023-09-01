@@ -24,8 +24,8 @@ class AvatarMedia extends Config
     public ?string $emotions;
     public ?string $actions;
     public ?string $poses;
-    public $hd;
-    public $talking;
+    public $hd = false;
+    public $talking = false;
 
     public function parseXML($xml): void
     {
@@ -56,9 +56,6 @@ class AvatarMedia extends Config
         }
         if (isset($this->name)) {
             $writer .= " name=\"" . $this->name . "\"";
-        }
-        if (isset($this->type)) {
-            $writer .= " type=\"" . $this->type . "\"";
         }
         if (isset($this->emotions)) {
             $writer .= " emotions=\"" . $this->emotions . "\"";
