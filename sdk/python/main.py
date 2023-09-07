@@ -57,8 +57,8 @@ class Main(object):
         userConfig.application = self.applicationId
         userConfig.user =self.username
         userConfig.password = self.password
-        if(userConfig.user =="" or userConfig.password == "" or userConfig.application == ""):
-            Utils.log("Please fill the required data @ connectUserAccount in main.py")
+        if(self.username =="" or self.password == "" or self.application == ""):
+            Utils.log("[Main]","Please fill the required data @ connectUserAccount in main.py")
             return False
         self.connection.connect(userConfig)
         return True
