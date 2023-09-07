@@ -53,7 +53,6 @@ class SDKConnection(object):
     # The user credentials are soted in the connection, and used on subsequent calls.
     # An SDKException is thrown if the connect failed.
     def connect(self, config: UserConfig) -> UserConfig:
-        print("test")
         config.addCredentials(self)
         xml = self.POST(self.url + "/check-user", config.toXML())
         if(xml == None):
