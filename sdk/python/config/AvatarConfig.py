@@ -16,35 +16,22 @@
 #
 ############################################################################
 from config.WebMediumConfig import WebMediumConfig
-from util.Utils import Writer
-from util.Utils import Utils
-class DomainConfig(WebMediumConfig):
-    creationMode: str
+from util.Utils import Writer, Utils
+
+class AvatarConfig(WebMediumConfig):
     
     def __init__(self):
-        self.creationMode
+        super().__init__()
     
-    def getType(self):
-        return "domain"
-    
-    def credentials(self) -> WebMediumConfig:
-        config = DomainConfig()
-        config.id = self.id
-        return config
+    def getType(self) -> str:
+        return "avatar"
     
     def toXML(self):
-        writer = Writer("<domain")
-        if(self.creationMode!=None):
-            writer.append(" creationMode=\"" + self.creationMode + "\"")
-        
-        self.writerXML(writer)
-        writer.append("</domain>")
+        writer = Writer("<avatar")
+        self.writeXML(writer)
+        writer.append("</avatar>")
         return writer
-        
+
+
     def parseXML(self, xml):
-        super().parseXML(xml)
-        root = Utils.loadXML(xml)
-        if(root == None):
-            return
-        print(root)
-        self.creationMode = root.attrib.get("creationMode")
+        super().parseXML(xml)        

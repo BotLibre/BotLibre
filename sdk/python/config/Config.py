@@ -17,16 +17,23 @@
 ############################################################################
 from sdk import SDKConnection
 from util.Utils import Writer
-from util import Utils
+from util.Utils import Utils
 
 class Config:
+    application: str
+    domain: str
+    user: str
+    token: str
+    instance: str
+    type: str
+    
     def __init__(self):
-        self.application = ""
-        self.domain = ""
-        self.user = ""
-        self.token = ""
-        self.instance = ""
-        self.type = ""
+        self.application = None
+        self.domain = None
+        self.user = None
+        self.token = None
+        self.instance = None
+        self.type = None
 
     def addCredentials(self, connection: SDKConnection):
         self.application = connection.getCredentials().getApplicationId()
@@ -40,7 +47,7 @@ class Config:
     def toXML():
         return "<config/>"
 
-    def parseXML(self, xml):
+    def parseXML(self, xml: str):
         root = Utils.loadXML(xml)
         if(root == None):
             return

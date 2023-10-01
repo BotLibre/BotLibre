@@ -16,31 +16,41 @@
 #
 ############################################################################
 import xml.etree.ElementTree as ET
+import requests
+import os, tempfile, mimetypes
+from PIL import Image
 import traceback
+import io
+
+
 class Utils(object):
     def __init__(self) -> None:
         pass
-    
-    @staticmethod
-    def loadXML(xml):
-        data = xml.content
-        root = ET.fromstring(data)
-        return root
-
 
     @staticmethod
-    def log(header, info):
+    def loadXML(xml: str) -> ET.Element:
+        if xml == None:
+            return None
+        try:
+            if isinstance(xml, ET.Element):
+                return xml
+            return ET.fromstring(xml)
+        except ET.ParseError as e:
+            print("Error parsing XML:", str(e))
+            return None
+
+    @staticmethod
+    def log(header: str, info: str = ""):
         print("\n")
         print("-"*50)
         print("|->" + str(header))
-        print("-"*50)
-        print("|--> " + str(info))
-        print("-"*50)
-        print("\n")
-        
-        
+        if(info != ""):
+            print("-"*50)
+            print("|-->\n" + str(info)+"\n|-->")
+            print("-"*50)
+
     @staticmethod
-    def log_err(header, e: Exception):
+    def log_err(header: str, e: Exception):
         print("\n")
         print("x"*50)
         print("x->" + str(header))
@@ -51,7 +61,7 @@ class Utils(object):
         print("\n")
 
     @staticmethod
-    def escapeHTML(html):
+    def escapeHTML(html:str):
         escape_map = {
             "&": "&amp;",
             "<": "&lt;",
@@ -64,25 +74,43 @@ class Utils(object):
             html = html.replace(char, entity)
         return html
 
+    # This function uses loads an image from a url and return's it as bytes.
+    # Also returns fileType, and fileName.
     @staticmethod
-    # Define a function to print all elements and their text recursively
-    def print_elements(element, indent=""):
-        print(indent + element.tag, element.attrib)
-        for child in element:
-            Utils.print_elements(child, indent + "  ")
-            if child.text and child.text.strip():
-                print(indent + "  Text:", child.text)
-    
-    
+    def PostImageFromURL(url: str):
+        response = requests.get(url)
+        if response.status_code == 200:
+            name = os.path.basename(url)
+            file = io.BytesIO()
+            file.write(response.content)
+            file.seek(0)  # file position to the beginning
+            mime_type, _ = mimetypes.guess_type(name)
+            return file, name, mime_type
+        else:
+            Utils.log_err("Status Code " + str(response.status_code), "Failed to get the image.")
+ 
+ 
+    # Resize image for POSTIMAGE and POSTHDIMAGE TODO: test
+    def resizeImage(self, sWith: int = 300, sHeight: int = 300, image = None):
+        if(image == None):
+            Utils.log_err("IMAGE NULL", "Need an image to resize.")
+            return
+        image = Image.open(image)
+        image = image.resize(sWith, sHeight)
+        byteArray = io.BytesIO()
+        image.save(byteArray, format='JPEG', quality=90)
+        byteArray.seek(0)
+        return byteArray
+
 class Writer:
     def __init__(self, initial_value=""):
         self.chars = list(initial_value)
 
-    def append(self, text):
+    def append(self, text: str):
         self.chars.extend(text)
 
     def clear(self):
         self.chars.clear()
-
+    
     def __str__(self):
         return "".join(self.chars)

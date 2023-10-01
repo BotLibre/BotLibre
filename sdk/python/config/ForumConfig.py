@@ -16,35 +16,49 @@
 #
 ############################################################################
 from config.WebMediumConfig import WebMediumConfig
-from util.Utils import Writer
-from util.Utils import Utils
-class DomainConfig(WebMediumConfig):
-    creationMode: str
+from util.Utils import Utils, Writer
+
+class ForumConfig(WebMediumConfig):
+    replyAccessMode: str
+    postAccessMode: str
+    posts: str
     
     def __init__(self):
-        self.creationMode
+        super().__init__()
+        self.replyAccessMode = None
+        self.postAccessMode = None
+        self.posts = None
     
-    def getType(self):
-        return "domain"
     
-    def credentials(self) -> WebMediumConfig:
-        config = DomainConfig()
+    def getType(self) -> str:
+        return "forum"
+    
+    
+    def stats(self) -> str:
+        return self.posts + " posts"
+    
+    def credentials(self):
+        config = ForumConfig()
         config.id = self.id
         return config
     
     def toXML(self):
-        writer = Writer("<domain")
-        if(self.creationMode!=None):
-            writer.append(" creationMode=\"" + self.creationMode + "\"")
+        writer = Writer("<forum")
+        if(self.replyAccessMode!=None):
+            writer.append(" replyAccessMode=\"" + self.replyAccessMode + "\"")
+            
+        if(self.postAccessMode!=None):
+            writer.append(" postAccessMode=\"" + self.postAccessMode + "\"")
         
-        self.writerXML(writer)
-        writer.append("</domain>")
+        self.writeXML(writer)
+        writer.append("</forum>")
         return writer
-        
+    
     def parseXML(self, xml):
         super().parseXML(xml)
         root = Utils.loadXML(xml)
         if(root == None):
-            return
-        print(root)
-        self.creationMode = root.attrib.get("creationMode")
+            return 
+        self.replyAccessMode = root.attrib.get("replyAccessMode")
+        self.postAccessMode = root.attrib.get("postAccessMode")
+        self.posts = root.attrib.get("posts")

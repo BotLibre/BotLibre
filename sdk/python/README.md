@@ -10,13 +10,25 @@ Before running this project, make sure you have Python and the `requests` librar
 
 You can download and install Python from the [official Python website](https://www.python.org/downloads/).
 
-### Installing the `requests` library
+### Installing the requests and requests-toolbelt libraries
+
+You need to install two Python libraries: `requests` and `requests-toolbelt`. They provide essential functionality for making HTTP requests and handling multipart data.
+
+#### Installing requests
 
 You can install the `requests` library using pip, the Python package manager. Open your terminal or command prompt and run the following command:
 
-```bash
+```shell
 pip install requests
 ```
+#### Installing requests-toolbelt
+As well you also need to install the requests-toolbelt library to simplify multipart encoding and file upload operations.
+
+```bash
+pip install requests-toolbelt
+```
+
+
 
 ## Usage
 
