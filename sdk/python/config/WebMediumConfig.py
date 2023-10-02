@@ -22,55 +22,91 @@ from util import Utils
 
 
 class WebMediumConfig(Config):
+    id:str
+    name:str
+    isAdmin:bool
+    isAdult:bool
+    isPrivate: bool
+    isHidden: bool
+    accessMode:str
+    isFlagged: bool
+    isExternal: bool
+    isPaphus: bool
+    showAds: bool
+    forkAccessMode:str
+    contentRating:str
+    description:str
+    details:str
+    disclaimer:str
+    website:str
+    subdomain:str
+    tags:str
+    categories:str
+    flaggedReason:str
+    creator:str
+    creationDate:str
+    lastConnectedUser:str
+    license:str
+    avatar:str
+    script:str
+    graphic:str
+    thumbsUp:int
+    thumbsDown:int
+    stars: str
+    connects: str
+    dailyConnects: str
+    weeklyConnects: str
+    monthlyConnects: str
     def __init__(self):
-        self.id
-        self.name
-        self.isAdmin
-        self.isAdult
-        self.isPrivate
-        self.isHidden
-        self.accessMode
-        self.isFlagged
-        self.isExternal
-        self.isPaphus
+        super().__init__()
+        self.id = None
+        self.name = None
+        self.isAdmin = False
+        self.isAdult = False
+        self.isPrivate = False
+        self.isHidden = False
+        self.accessMode = None
+        self.isFlagged = False
+        self.isExternal = False
+        self.isPaphus = False
         self.showAds = True
-        self.forkAccessMode
-        self.contentRating
-        self.description
-        self.details
-        self.disclaimer
-        self.website
-        self.subdomain
-        self.tags
-        self.categories
-        self.flaggedReason
-        self.creator
-        self.creationDate
-        self.lastConnectedUser
-        self.license
-        self.avatar
-        self.script
-        self.graphic
+        self.forkAccessMode = None
+        self.contentRating = None
+        self.description = None
+        self.details = None
+        self.disclaimer = None
+        self.website = None
+        self.subdomain = None
+        self.tags = None
+        self.categories = None
+        self.flaggedReason = None
+        self.creator = None
+        self.creationDate = None
+        self.lastConnectedUser = None
+        self.license = None
+        self.avatar = None
+        self.script = None
+        self.graphic = None
         self.thumbsUp = 0
         self.thumbsDown = 0
-        self.stars = ""
-        self.connects
-        self.dailyConnects
-        self.weeklyConnects
-        self.monthlyConnects
+        self.stars = None
+        self.connects = None
+        self.dailyConnects = None
+        self.weeklyConnects = None
+        self.monthlyConnects = None
 
     @abstractmethod
-    def getType(self):
+    def getType(self) -> str:
         pass
 
     @abstractmethod
     def credentials(self):
         pass
 
-    def stats(self):
+    def stats(self) -> str:
         return ""
 
-    def toString(self):
+    def toString(self) -> str:
         return self.name
 
     def getToken(self) -> int:
@@ -116,6 +152,7 @@ class WebMediumConfig(Config):
             writer.append(" showAds=\"true\"")
         if(self.isAdult != None and self.isAdult == True):
             writer.append(" isAdult=\"true\"")
+            
         writer.append(">")
         if (self.description != None):
             writer.append("<description>")

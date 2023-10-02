@@ -18,6 +18,20 @@
 from config.Config import Config
 from util.Utils import Writer, Utils
 class ChatConfig(Config):
+    conversation: str
+    correction: str
+    offensive: str
+    emote: str
+    action: str
+    message: str
+    speak: str
+    includeQuestion: str
+    avatarHD: str
+    avatarFormat: str
+    avatar: str
+    language: str
+    voice: str
+    
     def __init__(self):
         super().__init__()
         self.conversation = None

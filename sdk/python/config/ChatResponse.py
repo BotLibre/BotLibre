@@ -20,6 +20,31 @@ from util.Utils import Writer, Utils
 
 
 class ChatResponse(Config):
+    message :str
+    question :str
+    log :str
+    conversation :str
+    emote :str
+    action :str
+    pose :str
+    avatar :str
+    avatar2 :str
+    avatar3 :str
+    avatar4 :str
+    avatar5 :str
+    avatarType :str
+    avatarTalk :str
+    avatarTalkType :str
+    avatarAction :str
+    avatarActionType :str
+    avatarActionAudio :str
+    avatarActionAudioType :str
+    avatarAudio :str
+    avatarAudioType :str
+    avatarBackground :str
+    speech :str
+    command :str
+    
     def __init__(self):
         super().__init__()
         self.message = None

@@ -21,6 +21,32 @@ from sdk import SDKConnection
 from util.Utils import Writer
 from util.Utils import Utils
 class UserConfig(Config):
+    password: str
+    newPassword: str
+    hint: str
+    name:str
+    showName:bool
+    email:str
+    website:str
+    bio:str
+    over18:bool
+    avatar:str
+    connects:str
+    bots:str
+    posts:str
+    messages:str
+    forums:str
+    scripts:str
+    graphics:str
+    avatars:str
+    domains:str
+    channels:str
+    joined:str
+    lastConnect:str
+    type:str
+    isFlagged:bool
+    flaggedReason:str
+    
     def __init__(self):
         super().__init__()
         self.password = None
@@ -114,8 +140,8 @@ class UserConfig(Config):
         if(self.name != None):
             writer.append(" name=\"" + self.name + "\"")
         
-        if(self.showName != None):
-            writer.append(" showName=\"" + str(self.showName) + "\"")
+        if(self.showName != None and self.showName==True):
+            writer.append(" showName=\"true\"")
         
         if(self.email != None):
             writer.append(" email=\"" + self.email + "\"")
@@ -123,8 +149,8 @@ class UserConfig(Config):
         if(self.website != None):
             writer.append(" website=\"" + self.website + "\"")
         
-        if(self.over18 != None):
-            writer.append(" over18=\"" + str(self.over18) + "\"")
+        if(self.over18 != None and self.over18 == True):
+            writer.append(" over18=\"true\"")
         
         writer.append(">")
         
