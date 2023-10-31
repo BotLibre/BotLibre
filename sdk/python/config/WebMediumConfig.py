@@ -17,8 +17,7 @@
 ############################################################################
 from config.Config import Config
 from abc import abstractmethod
-from util.Utils import Writer
-from util import Utils
+from util.Utils import Writer, Utils
 
 
 class WebMediumConfig(Config):
@@ -139,7 +138,7 @@ class WebMediumConfig(Config):
             writer.append(" forkAccessMode=\"" + self.forkAccessMode + "\"")
 
         if(self.stars != None):
-            writer.append(" stars=\"" + self.stars + "\"")
+            writer.append(" stars=\"" + str(self.stars) + "\"")
 
         if(self.isAdult != None and self.isAdult == True):
             writer.append(" isAdult=\"true\"")
@@ -198,7 +197,6 @@ class WebMediumConfig(Config):
         root = Utils.loadXML(xml)
         if(root == None):
             return
-        print(root)
         self.id = root.attrib.get("id")
         self.name = root.attrib.get("name")
         self.creationDate = root.attrib.get("creationDate")

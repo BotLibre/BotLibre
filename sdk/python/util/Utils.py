@@ -48,6 +48,20 @@ class Utils(object):
             print("-"*50)
             print("|-->\n" + str(info)+"\n|-->")
             print("-"*50)
+    
+    def logs(header:str, *args: str):
+        lineLen: int = 40
+        headerLen: int = int(len(header)/2)
+        padding: int = int(((lineLen-6)+headerLen)/2)
+        print("\n")
+        print("-"*(lineLen+headerLen))
+        print("|->" + (" "*(padding-headerLen)) + str(header) + (" "*(padding-headerLen))+"<-|")
+        for string_arg in args:
+            if string_arg == None:
+                continue
+            print("-"*(lineLen+headerLen))
+            print("|-->\n" + str(string_arg)+"\n|-->")
+            print("-"*(lineLen+headerLen))
 
     @staticmethod
     def log_err(header: str, e: Exception):

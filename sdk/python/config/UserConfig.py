@@ -156,7 +156,7 @@ class UserConfig(Config):
         
         if(self.bio != None):
             writer.append("<bio>")
-            writer.append(Utils.escapeHTML(self.bio))
+            writer.append(Utils.escapeHTML(str(self.bio)))
             writer.append("</bio>")
 
         writer.append("</user>")
