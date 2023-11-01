@@ -41,7 +41,6 @@ class ResponseConfig(Config):
     command: str
 
     def __init__(self):
-        super().__init__()
         self.questionId = None
         self.responseId = None
         self.question = None
@@ -69,6 +68,7 @@ class ResponseConfig(Config):
 
     def writerXML(self, writer: Writer):
         writer = Writer("<response")
+        self.writeCredentials(writer)
         if(self.questionId != None):
             writer.append(" questionId=\"" + self.questionId + "\"")
         if(self.responseId != None):
@@ -91,10 +91,8 @@ class ResponseConfig(Config):
             writer.append(" correctness=\"" + self.correctness + "\"")
 
         writer.append(" noRepeat=\"true\"") if self.noRepeat == True else None
-        writer.append(
-            " requirePrevious=\"true\"") if self.requirePrevious == True else None
-        writer.append(
-            " requireTopic=\"true\"") if self.requireTopic == True else None
+        writer.append(" requirePrevious=\"true\"") if self.requirePrevious == True else None
+        writer.append(" requireTopic=\"true\"") if self.requireTopic == True else None
         writer.append(" flagged=\"true\"") if self.flagged == True else None
         writer.append(">")
         if(self.question != None):
@@ -123,7 +121,8 @@ class ResponseConfig(Config):
             writer.append("</command>")
         writer.append("</response>")
 
-    def parseXML(self, xml):
+    def parseXML(self, xml:str):
+        super().parseXML(xml)
         root = Utils.loadXML(xml)
         if(root == None):
             return
@@ -149,6 +148,8 @@ class ResponseConfig(Config):
             self.requirePrevious = root.find("requirePrevious")
         if(root.find("question") != None):
             self.question = root.find("question")
+        if(root.find("response") !=None):
+            self.response = root.find("response")
 
         if(root.find("command") != None):
             self.command = root.find("command")

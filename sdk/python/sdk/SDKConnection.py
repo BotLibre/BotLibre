@@ -16,6 +16,7 @@
 #
 ############################################################################
 import requests
+from typing import List
 from config.Config import Config
 from config.UserConfig import UserConfig
 from config.DomainConfig import DomainConfig
@@ -32,10 +33,24 @@ from config.ResponseConfig import ResponseConfig
 from config.AvatarMedia import AvatarMedia
 from config.AvatarConfig import AvatarConfig
 from config.ForumConfig import ForumConfig
+from config.BrowseConfig import BrowseConfig
+from config.BotModeConfig import BotModeConfig
+from config.InstanceConfig import InstanceConfig
+from config.VoiceConfig import VoiceConfig
+from config.ResponseSearchConfig import ResponseSearchConfig
+from config.ConversationConfig import ConversationConfig
+from config.LearningConfig import LearningConfig
+from config.ChannelConfig import ChannelConfig
+from config.ScriptConfig import ScriptConfig
+from config.GraphicConfig import GraphicConfig
+from config.Speech import Speech
+from config.ContentConfig import ContentConfig
+from config.TrainingConfig import TrainingConfig
+from config.ScriptSourceConfig import ScriptSourceConfig
+
+
+
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
-
-
 from typing import TypeVar
 T = TypeVar('T', bound=WebMediumConfig)
 
@@ -278,6 +293,8 @@ class SDKConnection(object):
     def saveAvatarBackground(self, file, config: AvatarMedia):
         config.addCredentials(self)
         self.POSTIMAGE(self.url + "/save-avatar-background", file, config.name, config.toXML())
+    
+    
     # Add the avatar media file to the avatar.
     def createAvatarMedia(self, file, config: AvatarMedia):
         config.addCredentials(self)
@@ -289,6 +306,29 @@ class SDKConnection(object):
         else:
             self.POSTFILE(self.url + "/create-avatar-media", file, config.name, config.toXML())
 
+
+    # Add the avatar media file to the avatar.
+    def createGraphicMedia(self, file, config: GraphicConfig):
+        config.addCredentials(self)
+        if(config.fileName.endswith(".jpg") or config.fileName.endswith(".jpeg") or config.fileName.endswith(".png")):
+            self.POSTIMAGE(self.url + "/update-graphic-media", file, config.fileName, config.toXML())
+        else:
+            self.POSTFILE(self.url + "/update-graphic-media", file, config.fileName, config.toXML())
+    
+    # Update the user's icon.
+    # The file will be uploaded to the server.
+    def updateIconUser(self, file, fileName, config: UserConfig) -> UserConfig:
+        config.addCredentials(self)
+        xml = self.POSTIMAGE(self.url + "/update-user-icon",file, fileName, config.toXML())
+        if(xml == None):
+            return None
+        try:
+            config = UserConfig()
+            config.parseXML(xml)
+            return config
+        except Exception as e:
+            Utils.log_err("update-user-icon", e)
+    
     # Permanently delete the forum post with the id.
     def deleteForumPost(self, config: ForumPostConfig):
         config.addCredentials(self)
@@ -330,7 +370,7 @@ class SDKConnection(object):
         self.POST(self.url + "/subscribe-post", config.toXML())
         
     # Unsubscribe from email updates for the post.
-    def unsubscribe(self, config: ForumPostConfig):
+    def unsubscribeForumPost(self, config: ForumPostConfig):
         config.addCredentials(self)
         self.POST(self.url + "/unsubscribe-post", config.toXML())
     
@@ -344,9 +384,244 @@ class SDKConnection(object):
         config.addCredentials(self)
         self.POST(self.url + "/unsubscribe-forum",config.toXML())
         
+        
+    # Thumbs up the content.
+    def thumbsUp(self, config: WebMediumConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/thumbs-up-"+config.getType(), config.toXML())
+    
+    # Thumbs down the content.
+    def thumbsDown(self, config: WebMediumConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/thumbs-down-" + config.getType(), config.toXML())    
+    
+    # Rate the content
+    def star(self, config: WebMediumConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/star-" + config.getType(), config.toXML())
+    
+    # Thumbs up forum post.
+    def thumbsUpPost(self, config: ForumPostConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/thumbs-up-post-"+config.getType(), config.toXML())
+    
+    # Thumbs down forum post.
+    def thumbsDownPost(self, config: ForumPostConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/thumbs-down-post-" + config.getType(), config.toXML())    
+    
+    # Rate the content.
+    def starPost(self, config: ForumPostConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/star-post", config.toXML())
+    
+    
+    # Flag the forum post as offensive, a reason is required.
+    def flagForumPost(self, config: ForumPostConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/flag-forum-post", config.toXML())
+    
+    
+    # Flag the user as offensive, a reason is required.
+    def flagUser(self, config: UserConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/flag-user", config.toXML())
+        
+    # Return the forum's bot configuration.
+    def getForumBotMode(self, config: ForumConfig) -> BotModeConfig:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-forum-bot-mode", config.toXML())
+        if(xml == None):
+            return None
+        try:
+            botMode = BotModeConfig()
+            botMode.parseXML(xml)
+            return botMode
+        except Exception as e:
+            Utils.log_err("/get-forum-bot-mode", e)
+            
+    # Return the bot's voice configuration.
+    def getVoice(self, config: InstanceConfig) -> VoiceConfig:
+        config.addCredentials(self)
+        xml = self.POST(self.url+"/get-voice", config.toXML())
+        if(xml==None):
+            return None
+        try:
+            voice = VoiceConfig()
+            voice.parseXML(xml)
+            return voice
+        except Exception as e:
+            Utils.log_err("/get-voice", e)
+    
+    # Return the bot's default responses.
+    def getDefaultResponses(self, config: InstanceConfig):
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-default-responses", config.toXML())
+        responses = []
+        if(xml == None):
+            return None
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for item in data:
+                responses.append(item.text)
+            return responses
+        except Exception as e:
+            Utils.log_err("/get-default-responses", e)
+    
+    # Return the bot's greetings
+    def getGreetings(self, config: InstanceConfig):
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-greetings", config.toXML())
+        greetings = []
+        if(xml == None):
+            return None
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return None
+            for item in data.iter():
+                greetings.append(item.text)
+            return greetings
+        except Exception as e:
+            Utils.log_err("/get-greetings", e)
+
+
+    # Search the bot's responses.
+    def getResponses(self, config: ResponseSearchConfig) -> List[ResponseConfig]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-responses", config.toXML())
+        responses = []
+        if(xml == None):
+            return responses
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return None
+            for item in data:
+                responseConfig = ResponseConfig()
+                responseConfig.parseXML(item)
+                responses.append(responseConfig)
+            return responses
+        except Exception as e:
+            Utils.log_err("/get-responses", e)
+
+    # Search the bot's conversations.
+    def getConversation(self, config: ResponseSearchConfig) -> List[ConversationConfig]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-conversations", config.toXML())
+        conversations = []
+        if(xml == None):
+            return None
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return None
+            for item in data:
+                conversationConfig = ConversationConfig()
+                conversationConfig.parseXML(item)
+                conversations.append(conversationConfig)
+            return conversations
+        except Exception as e:
+            Utils.log_err("get-conversations", e)
+            
+    # Return the bot's learning configuration.
+    def getLearning(self, config: InstanceConfig) -> LearningConfig:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-learning", config.toXML())
+        if(xml == None):
+            return None
+        try:
+            learningConfig = LearningConfig()
+            learningConfig.parseXML(xml)
+            return learningConfig
+        except Exception as e:
+            Utils.log_err("get-learning", e)
+            
+    # Return the list of content for the browse criteria.
+	# The type defines the content type (one of Bot, Forum, Channel, Domain).
+    def browse(self, config: BrowseConfig):
+        config.addCredentials(self)
+        type: str
+        if config.type == "Bot":
+            type = "/get-instances"
+        else:
+            type = "/get-" + config.type.lower() + "s"
+        Utils.log("Browse", "Type: " + type)
+        xml = self.POST(self.url + type, config.toXML())
+        instances = []
+        if(xml == None):
+            return None
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return instances
+            for item in data:
+                instance = None
+                if(config.type == "Bot"):
+                    instance = InstanceConfig()
+                elif (config.type == "Forum"):
+                    instance = ForumConfig()
+                elif (config.type == "Channel"):
+                    instance = ChannelConfig()
+                elif (config.type == "Domain"):
+                    instance = DomainConfig()
+                elif (config.type == "Avatar"):
+                    instance = AvatarConfig()
+                elif (config.type == "Script"):
+                    instance = ScriptConfig()
+                elif (config.type == "Graphic"):
+                    instance = GraphicConfig()
+                instance.parseXML(item)
+                instances.append(instance)
+            return instances
+        except Exception as e:
+            Utils.log_err(type, e)
+    
+    
+    # Return the list of media for the avatar.
+    def getAvatarMedia(self, config: AvatarConfig) -> List[AvatarMedia]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-avatar-media", config.toXML())
+        instances = []
+        if(xml == None):
+            return None
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return instances
+            for item in data:
+                instance = AvatarMedia()
+                instance.parseXML(item)
+                instances.append(instance)
+            return instances
+        except Exception as e:
+            Utils.log_err("get-avatar-media", e)
+            
+    
+    # Return the script source
+    def getScriptSource(self, config: ScriptConfig):
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-script-source", config.toXML())
+        if(xml == None):
+            return None
+        try:
+            script = ScriptSourceConfig()
+            script.parseXML(xml)
+            return script
+        except Exception as e:
+            Utils.log_err("/get-script-source", e)
+            
+    # Create or update script - Save the script source
+    def saveScriptSource(self, config: ScriptSourceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-script-source", config.toXML())
+        
+    
     # Create a new file/image/media attachment for a chat channel.
     def createChannelFileAttachment(self, file, config: MediaConfig) -> MediaConfig:
-        # TODO: Missing file
+        # TODO: test
         config.addCredentials(self)
         xml = self.POSTFILE(self.url + "/create-channel-attachment", file, config.name, config.toXML())
         if(xml == None):
@@ -360,7 +635,7 @@ class SDKConnection(object):
     
     # Create a new file/image/media attachment for a chat channel.       
     def createChannelImageAttachment(self, file, config: MediaConfig) -> MediaConfig:
-        #TODO: Missing file
+        #TODO: Test
         config.addCredentials(self)
         xml = self.POSTIMAGE(self.url + "/create-channel-attachment", file, config.name, config.toXML())
         if(xml == None):
@@ -385,7 +660,15 @@ class SDKConnection(object):
             return reply
         except Exception as e:
             Utils.log_err(e)
-            
+
+
+    # Process the speech message and return the server generate text-to-speech audio file.
+	# This allows for server-side speech generation.
+    def tts(self, config: Speech):
+        config.addCredentials(self)
+        return self.POST(self.url + "/speak", config.toXML())
+    
+
     # Create a user message.
 	# This can be used to send a user a direct message.
 	# SPAM will cause your account to be deleted.
@@ -424,11 +707,89 @@ class SDKConnection(object):
     def fetchImage(self, image: str):
         return "http://" + self.credentials.host + self.credentials.app + "/" + image
     
+    
+    
+    # Return the list of forum posts for the forum browse criteria.
+    def getPosts(self, config: BrowseConfig) -> [ForumPostConfig]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-forum-posts", config.toXML())
+        instances:[ForumPostConfig] = []
+        if(xml == None):
+            return instances
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for item in data:
+                config: ForumPostConfig = ForumPostConfig()
+                config.parseXML(item)
+                instances.append(config)
+                
+            return instances
+        except Exception as e:
+            Utils.log_err("get-forum-posts", e)
             
+    # Return the list of categories for the type, and domain.
+    def getCategories(self, config: ContentConfig) -> [ContentConfig]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-categories", config.toXML())
+        categories:[ContentConfig] = []
+        if(xml == None):
+            return categories
+        try: 
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for item in data:
+                config = ContentConfig()
+                config.parseXML(item)
+                categories.append(config)
+            return categories
+        except Exception as e:
+            Utils.log_err("get-categories", e)
+            
+            
+    # Return the list of tags for the type, and domain.
+    def getTags(self, config: ContentConfig) -> [str]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-tags", config.toXML())
+        tags = []
+        if(xml == None):
+            return 
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for tag in data:
+                tags.append(tag.attrib.get("name"))
+            return tags
+        except Exception as e:
+           Utils.log_err("get-tags", e)
+
+
+
+    # Return the list of bot templates
+    def getTemplates(self) -> [str]:
+        xml = self.GET(self.url + "/get-all-templates")
+        instances = []
+        if(xml == None):
+            return instances
+        try:
+            root = Utils.loadXML(xml)
+            if(root == None):
+                return
+            for item in root:
+                config = InstanceConfig()
+                config.parseXML(item)
+                instances.append(config)
+            return instances
+        except Exception as e:
+            Utils.log_err("get-all-templates", e)
     
     # Enable debugging, debug messages will be logged to System.out.
     def setDebug(self, debug: bool):
         self.debug = debug
+
 
     # Return the current domain.
 	# A domain is an isolated content space.
@@ -436,6 +797,7 @@ class SDKConnection(object):
         if(self.domain != None):
             return self.domain
         return None
+
 
     # Set the current domain.
 	# A domain is an isolated content space.
@@ -468,6 +830,101 @@ class SDKConnection(object):
     def isDebug(self) -> bool:
         return self.debug
     
+    
+    # Return the administrators of the content.
+    def getAdmins(self, config: WebMediumConfig):
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-" + config.getType() + "-admins", config.toXML())
+        users = []
+        if(xml == None):
+            return users
+        try: 
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for item in data:
+                config = UserConfig()
+                config.parseXML(item)
+                users.append(config)
+            return users
+        except Exception as e:
+            Utils.log_err("get-" + config.getType()+"-admins", e)
+    
+    
+    # Return the users for the content
+    def getUsers(self, config: WebMediumConfig):
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-" + config.getType() + "-users", config.toXML())
+        users = []
+        if(xml == None):
+            return users
+        try: 
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for item in data:
+                config = UserConfig()
+                config.parseXML(item)
+                users.append(config)
+            return users
+        except Exception as e:
+            Utils.log_err("get-" + config.getType()+"-users", e)
+    
+    # Return the channel's bot configuration.
+    def getChannelBotMode(self, config: ChannelConfig) -> BotModeConfig:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-channel-bot-mode", config.toXML())
+        if(xml == None):
+            return None
+        
+        try:
+            config = BotModeConfig()
+            config.parseXML(xml)
+            return config
+        except Exception as e:
+            Utils.log_err("get-channel-bot-mode", e)
+    
+    
+    
+    # Save the channel's bot configuration.
+    def saveChannelBotMode(self, config: BotModeConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-channel-bot-mode", config.toXML())
+    
+    
+    # Save the forum's bot configuration
+    def saveForumBotMode(self, config: BotModeConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-forum-bot-mode", config.toXML())
+        
+    # Save the bot's learning configuration.
+    def saveLearning(self, config: LearningConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-learning", config.toXML())
+    
+    # Save the bot's voice configureation.
+    def saveVoice(self, config: VoiceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-voice", config.toXML())
+    
+    
+    # Save the bot's avatar configuration.
+    def saveBotAvatar(self, config: InstanceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-bot-avatar", config.toXML())
+    
+    
+    # Train the bot with a new question/response pair.
+    def train(self, config: TrainingConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/train-instance", config.toXML())
+    
+    
+    # Perform the user administrators task (add or remove users, or administrators)
+    def userAdmin(self, config: TrainingConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/user-admin", config.toXML())
+    
     # Return the current connected user.
     def getUser(self) -> UserConfig:
         if(self.user!= None):
@@ -478,9 +935,6 @@ class SDKConnection(object):
 	# connect() should be used to validate and connect a user.
     def setUser(self, user: UserConfig):
         self.user = user
-    
-    
-    # TODO: GET (url: str) - response.content;
     
     
     def POST(self, url: str, xml: str):
@@ -503,12 +957,26 @@ class SDKConnection(object):
                 
         return response.text
     
+    def GET(self, url:str):
+        if(self.debug):
+            Utils.log("POST_URL", url)
+        response = requests.get(url)
+        if(200 <= response.status_code <= 299):
+            if(self.debug):
+                Utils.log("GET_SUCCESSFUL: "+ url, str(response.content)[:500]+"...")
+        else:
+            if(self.debug):
+                Utils.log("GET_FAILED: " + str(response.status_code), str(response.content)[:500]+"...")
+                return None
+        return response.text
     
     def POSTFILE(self, url, file, name: str, xml: str):
         if(self.debug):
-            Utils.log("POST_URL", url)
-            Utils.log("POST_XML",str(xml))
-            Utils.log("Name", str(name))
+            Utils.logs(
+                "POST IMAGE", "POST_URL: " + url,
+                "POST_XML: " + str(xml),
+                "Name: " + str(name)
+            )
         
         multipart_encoder = MultipartEncoder(fields= {
             'file': file,
@@ -542,9 +1010,11 @@ class SDKConnection(object):
     #TODO: resize image before uploading... 600x600
     def POSTHDIMAGE(self, url, image, name: str, xml: str):
         if(self.debug):
-            Utils.log("POST_URL", url)
-            Utils.log("POST_XML",str(xml))
-            Utils.log("Name", str(name))
+            Utils.logs(
+                "POST IMAGE", "POST_URL: " + url,
+                "POST_XML: " + str(xml),
+                "Name: " + str(name)
+            )
         
         # TODO: Resize image - TESTING
         # Utils.resizeImage(600, 600, image)
@@ -580,9 +1050,11 @@ class SDKConnection(object):
     #TODO: resize image before uploading... 300x300
     def POSTIMAGE(self, url, image, name: str, xml: str):
         if(self.debug):
-            Utils.log("POST_URL", url)
-            Utils.log("POST_XML",str(xml))
-            Utils.log("Name", str(name))
+            Utils.logs(
+                "POST IMAGE", "POST_URL: " + url,
+                "POST_XML: " + str(xml),
+                "Name: " + str(name)
+            )
         
         # TODO: Resize image - TESTING
         # Utils.resizeImage(image=image)

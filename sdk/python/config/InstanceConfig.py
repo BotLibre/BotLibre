@@ -21,17 +21,24 @@ from config.WebMediumConfig import WebMediumConfig
 from util.Utils import Writer, Utils
 
 class InstanceConfig(WebMediumConfig):
-    size: str = None
-    instanceAvatar: str = None
-    
-    allowedForking: bool = False
-    hasAPI: bool = False
-    template: bool = False
-    rank: int = None
-    wins: int = None
-    losses: int = None
+    size: str
+    instanceAvatar: str
+    allowedForking: bool
+    hasAPI: bool
+    template: str
+    rank: int
+    wins: int
+    losses: int
     def __init__(self):
         super().__init__()
+        self.size = None
+        self.instanceAvatar = None
+        self.allowedForking = False
+        self.hasAPI = False
+        self.template = None
+        self.rank = None
+        self.wins = None
+        self.losses = None
     
     def getType(self) -> str:
         return "instance"
@@ -44,10 +51,12 @@ class InstanceConfig(WebMediumConfig):
         config.id = self.id
         return config
     
-    def toXML(self) -> str:
+    def toXML(self):
         writer = Writer("<instance")
-        writer.append(" allowFokring=\"" + "true" if self.allowedForking else "false" + "\"")
-        writer.append(" instanceAvatar=\"" + "true" if self.instanceAvatar else "false" + "\"")
+        if(self.allowedForking):
+            writer.append(" allowFokring=\"true\"")
+        if(self.instanceAvatar!= None):
+            writer.append(" instanceAvatar=\"" + self.instanceAvatar + "\"")
         self.writeXML(writer)
         if self.template != None:
             writer.append("<template>")
