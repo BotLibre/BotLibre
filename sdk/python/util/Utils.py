@@ -91,7 +91,7 @@ class Utils(object):
     # This function uses loads an image from a url and return's it as bytes.
     # Also returns fileType, and fileName.
     @staticmethod
-    def PostImageFromURL(url: str):
+    def GetImageFromURL(url: str):
         response = requests.get(url)
         if response.status_code == 200:
             name = os.path.basename(url)

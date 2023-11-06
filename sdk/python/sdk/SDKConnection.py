@@ -619,9 +619,74 @@ class SDKConnection(object):
         self.POST(self.url + "/save-script-source", config.toXML())
         
     
+    # Return the source code for a single bot script
+    def getBotScriptSource(self, config: ScriptSourceConfig) -> ScriptSourceConfig:
+        config.addCredentials(self)
+        xml = self.POST(self.url+ "/get-bot-script-source", config.toXML())
+        if(xml == None):
+            return None
+        try:
+            botScript = ScriptSourceConfig()
+            botScript.parseXML(xml)
+            return botScript
+        except Exception as e:
+            Utils.log_err("/get-bot-script-source", e)
+    
+    # Return a list of the bots scripts
+    def getBotScripts(self, config: InstanceConfig) -> List[ScriptConfig]:
+        config.addCredentials(self)
+        xml = self.POST(self.url + "/get-bot-scripts", config.toXML())
+        botScripts = []
+        if(xml == None):
+            return None
+        try:
+            data = Utils.loadXML(xml)
+            if(data == None):
+                return
+            for item in data:
+                script = ScriptConfig()
+                script.parseXML(item)
+                botScripts.append(script)
+            return botScripts
+        except Exception as e:
+            Utils.log_err("/get-bot-scripts", e)
+            
+    
+    # Import a script to the bot
+    def importBotScript(self, config: ScriptConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/import-bot-script", config.toXML())
+        
+        
+    # Import a chatlog/response list to the bot
+    def importBotLog(self, config: ScriptConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/import-bot-log", config.toXML())
+        
+        
+    # Save the bot script source
+    def saveBotScriptSource(self, config: ScriptSourceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/save-bot-script-source", config.toXML())
+        
+    
+    # Delete selected bot script
+    def deleteBotScript(self, config: ScriptSourceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/delete-bot-script", config.toXML())
+        
+    # Move up one bot script
+    def upBotScript(self, config: ScriptSourceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/up-bot-script", config.toXML())
+        
+    # Move down one bot script
+    def downBotScript(self, config: ScriptSourceConfig):
+        config.addCredentials(self)
+        self.POST(self.url + "/down-bot-script", config.toXML())
+    
     # Create a new file/image/media attachment for a chat channel.
     def createChannelFileAttachment(self, file, config: MediaConfig) -> MediaConfig:
-        # TODO: test
         config.addCredentials(self)
         xml = self.POSTFILE(self.url + "/create-channel-attachment", file, config.name, config.toXML())
         if(xml == None):
@@ -635,7 +700,6 @@ class SDKConnection(object):
     
     # Create a new file/image/media attachment for a chat channel.       
     def createChannelImageAttachment(self, file, config: MediaConfig) -> MediaConfig:
-        #TODO: Test
         config.addCredentials(self)
         xml = self.POSTIMAGE(self.url + "/create-channel-attachment", file, config.name, config.toXML())
         if(xml == None):
@@ -667,6 +731,35 @@ class SDKConnection(object):
     def tts(self, config: Speech):
         config.addCredentials(self)
         return self.POST(self.url + "/speak", config.toXML())
+    
+    
+    # Return the list of the content types.
+    def getTypes(self) -> list:
+        return self.types
+    
+    # Return the channel types.
+    def getChannelTypes(self) -> list:
+        return self.channelTypes
+    
+    # Return the access mode types.
+    def getAccessModes(self) -> list:
+        return self.accessModes
+    
+    # Return the media access mode types.
+    def getMediaAccessModes(self) -> list:
+        return self.mediaAccessModes
+    
+    # Return learning mode types.
+    def getLearningModes(self) -> list:
+        return self.learningModes
+    
+    # Return the correction mode types.
+    def getCorrectionModes(self) -> list:
+        return self.correctionModes
+    
+    # Return the bot mode types.
+    def getBotModes(self) -> list:
+        return self.botModes
     
 
     # Create a user message.
