@@ -1,0 +1,105 @@
+<!--
+*  Copyright 2023 Paphus Solutions Inc.
+*
+*  Licensed under the Eclipse Public License, Version 1.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*      http://www.eclipse.org/legal/epl-v10.html
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Libre Nodejs SDK</title>
+    <link rel="stylesheet" type="text/css" href="./styles/main.css">
+</head>
+
+<body>
+    <h1>Bot Libre Nodejs SDK</h1>
+    <div>
+        <label id="apiLabel" for="apiSelector">Select API: </label>
+        <select id="apiSelector">
+            <option value="connect">connect</option>
+            <option value="chat">chat</option>
+            <!--TODO: Add more apis -->
+        </select>
+        <button onclick="executeAPI()">Test</button>
+    </div>
+
+    <div id="result">
+
+    </div>
+
+    <script>
+        //OBJECTS - DATA
+        let userDetails = {
+            username: "",
+            password: "",
+            applicationId: "",
+            token: "" //Must loggin to get the token.
+        }
+
+
+        //HELPER FUNCTIONS
+        function appendResult(data) {
+            let tag = document.getElementById("result")
+            tag.innerHTML = tag.innerHTML + data + "<br>"
+        }
+        function printProperties(any) {
+            document.getElementById("result").innerHTML = ""
+            for (const key in any) {
+                if (Object.hasOwnProperty.call(any, key)) {
+                    appendResult(key + ": " + any[key])
+                }
+            }
+        }
+        //Fetch helper function
+        function requestInit(method, body) {
+            return {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            }
+        }
+        async function sdkFetch(url, reqInit) {
+            let data
+            await fetch(url, reqInit).then(async (res) => {
+                if (res.ok) appendResult("SUCCESS")
+                else appendResult("FAILED")
+                data = await res.json()
+                printProperties(data)
+            }).catch(error => appendResult("ERROR"))
+            return data
+        }
+
+        //API CALLS
+        async function executeAPI() {
+            let selectedApi = document.getElementById("apiSelector").value;
+            switch (selectedApi) {
+                case "connect":
+                    let data = await sdkFetch("/connect", requestInit("POST", userDetails))
+                    userDetails.token = data.token
+                    break
+                case "chat":
+                    await sdkFetch("/chat", requestInit("POST", {message: "Hello World!", botId: "165"}))
+                    break
+                default:
+                    console.log("Invalid API selection")
+            }
+        }
+
+
+    </script>
+
+</body>
+
+</html>

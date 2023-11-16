@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+div {
+    margin-bottom: 10px;
+    border: black solid;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    text-align: center;
+    margin: 10px;
+}
+
+#result {
+    text-align: left;
+    overflow: auto;
+}
+
+#apiSelector {
+    width: 200px;
+    font-family: 14px;
+}
+
+#apiLabel {
+    width: 150px;
+    font-size: 25px;
+}
+
+label {
+    display: block;
+}
+
+select {
+    font-size: 19px;
+}
+
+button {
+    background-color: #93d495;
+    font-size: 18px;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    width: 100px;
+}
+
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+}
