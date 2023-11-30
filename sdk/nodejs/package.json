@@ -20,7 +20,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.6",
     "@types/xml2js": "^0.4.14",
+    "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
     "node-fetch": "^2.7.0",
     "xml2js": "^0.6.2"

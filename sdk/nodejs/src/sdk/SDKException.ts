@@ -13,7 +13,7 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
-class SDKException extends Error {
+export default class SDKException extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'SDKConnection';
@@ -21,4 +21,8 @@ class SDKException extends Error {
     }
 }
 
-export default SDKException
+export interface SDKError {
+    message: string,
+    statusCode: number,
+    data?:string | any
+}

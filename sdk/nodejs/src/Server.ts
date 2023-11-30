@@ -14,10 +14,9 @@
 *  limitations under the License.
 */
 import express from 'express'
-import * as path from 'path';
-import { Main } from './Main'
+import * as path from 'path'
+import {mainRouter} from './routes/MainRouter'
 
-let main: Main
 
 const app = express()
 app.use(express.json())
@@ -28,35 +27,15 @@ app.get('/', (req, res) => { //Loading home page.
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
-//TODO: MUST Implement router in another file.
 //////////////////////////////////////////
-app.post('/connect', async(req, res) => {
-    if(main == null) {
-        main = new Main({
-            debug: true,
-            adult: false,
-            applicationId: req.body.applicationId,
-            username: req.body.username,
-            password: req.body.password
-        })
-    }
-    let user = await main.connectUserAccount()
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(user));
-})
-
-app.post('/chat', async(req, res)=> {
-    if(main == undefined || main == null) {
-        res.json({message: "Must login first. Select API /connect to login"})
-        return
-    }
-    let result = await main.sendChatMessage(req.body.message, req.body.botId)
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(result))
-})
+////////      USEING ROUTERS     /////////
 //////////////////////////////////////////
 
 
+app.use(mainRouter)
+
+
+//////////////////////////////////////////
 
 
 const PORT = 3000

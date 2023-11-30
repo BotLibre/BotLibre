@@ -13,34 +13,35 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
+import Config from '../config/Config'
 import Credentials from './Credentials'
 import UserConfig from '../config/UserConfig'
 import DomainConfig from '../config/DomainConfig'
 import SDKException from './SDKException'
 import { Utils, XMLWriter } from '../util/Utils'
 import fetch from 'node-fetch';
-import { response } from 'express'
 import ChatResponse from '../config/ChatResponse'
 import ChatConfig from '../config/ChatConfig'
+import { SDKError } from './SDKException'
 
 
 class SDKConnection {
-    types: string[] = ["Bots", "Forums", "Graphics", "Live Chat", "Domains", "Scripts", "IssueTracker"]
-    channelTypes: string[] = ["ChatRoom", "OneOnOne"]
-    accessModes: string[] = ["Everyone", "Users", "Members", "Administrators"]
-    mediaAccessModes: string[] = ["Everyone", "Users", "Members", "Administrators", "Disabled"]
-    learningModes: string[] = ["Disabled", "Administrators", "Users", "Everyone"]
-    correctionModes: string[] = ["Disabled", "Administrators", "Users", "Everyone"]
-    botModes: string[] = ["ListenOnly", "AnswerOnly", "AnswerAndListen"]
+    static types: string[] = ["Bots", "Forums", "Graphics", "Live Chat", "Domains", "Scripts", "IssueTracker"]
+    static channelTypes: string[] = ["ChatRoom", "OneOnOne"]
+    static accessModes: string[] = ["Everyone", "Users", "Members", "Administrators"]
+    static mediaAccessModes: string[] = ["Everyone", "Users", "Members", "Administrators", "Disabled"]
+    static learningModes: string[] = ["Disabled", "Administrators", "Users", "Everyone"]
+    static correctionModes: string[] = ["Disabled", "Administrators", "Users", "Everyone"]
+    static botModes: string[] = ["ListenOnly", "AnswerOnly", "AnswerAndListen"]
     url?: string
-    credentials?: Credentials
-    debug: boolean = false
+    static credentials?: Credentials
+    private debug: boolean = false
     domain?: DomainConfig
     user?: UserConfig
     /* Create an SDK connection with the credentials.
     Use the Credentials subclass specific to your server. */
     constructor(credentials: Credentials, debug: boolean = false) {
-        this.credentials = credentials
+        SDKConnection.credentials = credentials
         this.debug = debug
         this.url = credentials.getUrl()
     }
@@ -50,46 +51,102 @@ class SDKConnection {
     defaultUserImage(): string {
         return "images/user-thumb.jpg"
     }
+
+    /**Helper function to make a api call request
+     * @returns: root of xml tree.
+     */
+    async sdkConnect<T>(config: Config, path: string, parseData: (root: any) => Promise<T>): Promise<T | SDKError> {
+        try {
+            config.addCredentials(this);
+            let xml = await this.POST(this.url + path, config.toXML());
+            let root = await Utils.loadXML(xml);
+
+            if (!root) {
+                return {
+                    message: 'Failed to load XML.',
+                    statusCode: 401,
+                    data: xml
+                }
+            }
+
+            const parsedData = await parseData(root);
+            return parsedData;
+        } catch (error) {
+            console.error(error);
+            return {
+                message: 'An error occurred.',
+                statusCode: 500,
+                data: error
+            }
+        }
+    }
+
+
     /*
         Validate the user credentials (password, or token).
         The user details are returned (with a connection token, password removed).
         The user credentials are soted in the connection, and used on subsequent calls.
         An SDKException is thrown if the connect failed.
     */
-    async connect(config: UserConfig): Promise<UserConfig | undefined> {
-        try {
-            config.addCredentials(this)
-            let xml = await this.POST(this.url + "/check-user", config.toXML())
-            let root = await Utils.loadXML(xml)
-            //console.log(root)
-            if(!root) {
-                this.user = undefined
-                throw new SDKException("User undefined.")
-            }
-            const user = new UserConfig()
+    async connect(config: UserConfig): Promise<UserConfig | SDKError> {
+        return await this.sdkConnect<UserConfig>(config, '/check-user', (root): Promise<UserConfig> => {
+            let user = new UserConfig()
             user.parseXML(root.user)
             this.user = user
-        }catch(error) {
-            console.error(error)
-        }
-        return this.user
+            return Promise.resolve(user)
+        })
     }
 
-    async chat(config: ChatConfig): Promise<ChatResponse | undefined> {
-        try {
-            config.addCredentials(this)
-            let xml = await this.POST(this.url + "/post-chat", config.toXML())
-            let root = await Utils.loadXML(xml)
-            if(!root) {
-                throw new SDKException("Chat undefined.")
-            }
+    /*
+     Process the bot chat message and return the bot's response.
+     The ChatConfig should contain the conversation id if part of a conversation.
+     If a new conversation the conversation id i returned in the response.
+    */
+    async chat(config: ChatConfig): Promise<ChatResponse | SDKError> {
+        return await this.sdkConnect<ChatResponse>(config, '/post-chat', (root): Promise<ChatResponse> => {
             let response = new ChatResponse()
             response.parseXML(root.response)
-            return response
-        } catch(error) {
-            console.log(error)
-        }
+            return Promise.resolve(response)
+        })
     }
+
+    /**
+     * Connect to the domain.
+     * A domain is an isolated content space.
+     * Any browse or query request will be specific to the domain's content.
+     */
+    async connectDomain(config: DomainConfig): Promise<DomainConfig | SDKError> {
+        return await this.sdkConnect<DomainConfig>(config, '/check-', (root): Promise<DomainConfig> => {
+            let domain = new DomainConfig()
+            domain.parseXML(root.domain)
+            return Promise.resolve(domain)
+        })
+    }
+
+    /**
+     * Fetch the user details.
+     */
+    async fetchUser(config: UserConfig): Promise<UserConfig | SDKError> {
+        return await this.sdkConnect<UserConfig>(config, '/view-user', (root): Promise<UserConfig> => {
+            let user = new UserConfig()
+            user.parseXML(root.user)
+            return Promise.resolve(user)
+        })
+    }
+
+    /**
+     * Fetch the URL for the image from the server.
+     */
+    fetchImage(image: string): string {
+        let url: string = "http://" + this.getCredentials().getHost() + this.getCredentials().getApp() + "/" + image
+        return url
+    }
+
+    /**
+     * Fetch the forum post details for the forum post id.
+     */
+    //TODO: fetchForumPost(...)
+
 
     /* Disconnect from the connection.
     An SDKConnection does not keep a live connection, but this resets its connected user and admin.*/
@@ -100,15 +157,15 @@ class SDKConnection {
 
     /* Return the current application credentials. */
     getCredentials(): Credentials {
-        if (this.credentials == undefined) {
+        if (SDKConnection.credentials == undefined) {
             throw new SDKException("Credentials undefined")
         }
-        return this.credentials
+        return SDKConnection.credentials
     }
 
     /* Set the application credentials. */
     setCredentials(credentials: Credentials) {
-        this.credentials = credentials
+        SDKConnection.credentials = credentials
         this.url = credentials.getUrl()
     }
 
@@ -117,6 +174,7 @@ class SDKConnection {
         return this.debug
     }
 
+    /* Enable debugging  */
     setDebug(debug: boolean): void {
         this.debug = debug
     }
@@ -149,43 +207,41 @@ class SDKConnection {
 
     async POST(url: string, xml: string): Promise<any> {
         return new Promise((resolve, reject) => {
-          if (this.debug) {
-            Utils.log("POST: " + url);
-            Utils.log("XML: " + xml);
-          }
-      
-          const headers = {
-            'Content-Type': 'application/xml'
-          };
-      
-          const requestOptions = {
-            method: 'POST',
-            headers: headers,
-            body: xml
-          };
-      
-          fetch(url, requestOptions)
-            .then(function (response) {
-              if (!response.ok) {
-                throw new SDKException("HTTP Error Status: " + response.status);
-              }
-              return response.text();
-            })
-            .then(function (responseText) {
-              Utils.log('Response: ' + responseText);
-              resolve(responseText); // Resolve the promise with the response data
-            })
-            .catch(function (error) {
-              console.error('Error: ' + error.message);
-              reject(error); // Reject the promise with the error
-            });
-        });
-      }
+            if (this.debug) {
+                Utils.log("POST: " + url)
+                Utils.log("XML: " + xml)
+            }
+
+            const headers = {
+                'Content-Type': 'application/xml'
+            }
+
+            const requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: xml
+            }
+            fetch(url, requestOptions)
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (responseText) {
+                    Utils.log('Response: ' + responseText)
+                    resolve(responseText) //Resolve the promise with the response data
+                    return responseText
+                })
+                .catch(function (error) {
+                    Utils.log('Error: ' + error.message)
+                    reject(error) //Reject the promise with the error
+                    return error.message
+                })
+        })
+    }
 
     toString(): string {
         let writer = new XMLWriter("SDKConnection\n")
         writer.append("URL: " + this.url + "\n")
-        writer.append("HOST: " +this.getCredentials().getHost() + "\n")
+        writer.append("HOST: " + this.getCredentials().getHost() + "\n")
         return writer.toString()
     }
 }
