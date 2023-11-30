@@ -125,7 +125,7 @@
                     await sdkFetch("/chat", requestInit("POST", { message: "Hello World!", botId: "165" }))
                     break
                 case "view-user":
-                    await sdkFetch("/view-user", requestInit("POST", { username: "OmarBajunaid" }))
+                    await sdkFetch("/view-user", requestInit("POST", { username: "" }))
                     break
                 default:
                     console.log("Invalid API selection")
