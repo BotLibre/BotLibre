@@ -21,7 +21,7 @@ export class Utils {
         let response: any
         xml2js.parseString(xml, (err, result) => {
             if (err) {
-                throw new SDKException('Error parsing XML:');
+                return undefined
             }
             response = result
         });

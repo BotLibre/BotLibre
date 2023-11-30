@@ -19,36 +19,38 @@ import BotlibreCredentials from "./sdk/BotlibreCredentials"
 import DomainConfig from "./config/DomainConfig"
 import UserConfig from "./config/UserConfig"
 import {Utils} from './util/Utils'
-import SDKException from "./sdk/SDKException"
+import SDKException, { SDKError } from "./sdk/SDKException"
 import ChatResponse from "./config/ChatResponse"
 import ChatConfig from "./config/ChatConfig"
 
+//TODO: REFACTOR: implement cookie to save token. use cookie-parser. Use map<string, Main> for every user.
+
 export class Main {
     public connection: SDKConnection
-    public domain?: DomainConfig
+    private domain?: DomainConfig
     public defaultType: string = "Bots"
     public showAds: boolean = true
-    public debug?: boolean
-    public applicationId: string
+    private debug?: boolean
+    private applicationId: string
     public adult?: boolean
-    public domainId?: string
-    public username: string
-    public password: string
-    public website: string = "http://www.botlibre.com"
-    public websiteHttps: string = "https://www.botlibre.com"
-    public server: string = "botlibre.com"
-    constructor(pack: {
+    private domainId?: string
+    private username: string
+    private password: string
+    public static website: string = "http://www.botlibre.com"
+    public static  websiteHttps: string = "https://www.botlibre.com"
+    public static server: string = "botlibre.com"
+    constructor(settings: {
         debug: boolean,
         adult: boolean,
         applicationId:string,
         username: string,
         password: string
     }) {
-        this.debug = pack.debug
-        this.adult = pack.adult
-        this.applicationId = pack.applicationId
-        this.username = pack.username
-        this.password = pack.password
+        this.debug = settings.debug
+        this.adult = settings.adult
+        this.applicationId = settings.applicationId
+        this.username = settings.username
+        this.password = settings.password
         this.connection = new SDKConnection(new BotlibreCredentials(this.applicationId), this.debug = true)
         if(this.domainId != undefined){
             this.domain = new DomainConfig()
@@ -63,7 +65,8 @@ export class Main {
         }
     }   
 
-    async connectUserAccount(): Promise<UserConfig> {
+    /** Login in with user credentials */
+    async connectUserAccount(): Promise<UserConfig | SDKError> {
         if(this.connection.user != undefined) {
             Utils.log("User logged in\nToken has been established already.")
             Utils.log("User: " + this.connection.getUser())
@@ -74,19 +77,24 @@ export class Main {
         config.user = this.username
         config.password = this.password
         let user = await this.connection.connect(config)
-        if(user == undefined) {
-            throw new SDKException(" Main User undefined.")
-        }
         return user
     }
 
-    async sendChatMessage(message:string, botId:string): Promise<ChatResponse | undefined> {
-        if(this.connection.getUser()==undefined){
-            throw new SDKException("Must be logged in first")
+    /*Send a chat message to a bot*/
+    async sendChatMessage(message:string, botId:string): Promise<ChatResponse | SDKError> {
+        if(!this.connection.getUser()){
+            throw new SDKException("Must be logged in first.")
         }
         let config = new ChatConfig
         config.instance = botId
         config.message = message
         return this.connection.chat(config)
+    }
+
+    /**Fetch user details */
+    async fetchUser(username: string): Promise<UserConfig | SDKError> {
+        let config = new UserConfig()
+        config.user = username
+        return this.connection.fetchUser(config)
     }
 }

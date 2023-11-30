@@ -2,6 +2,15 @@ body {
     font-family: Arial, sans-serif;
     margin: 20px;
 }
+table {
+    text-align: left;
+    width: 25%;
+}
+
+input {
+    width: 100%;
+    font-size: 15px;
+}
 
 div {
     margin-bottom: 10px;
@@ -11,6 +20,10 @@ div {
     display: flex;
     text-align: center;
     margin: 10px;
+}
+
+p {
+    font-size: 18px;
 }
 
 #result {
@@ -41,7 +54,10 @@ button {
     font-size: 18px;
     color: rgb(0, 0, 0);
     cursor: pointer;
+    border-color: rgb(132, 132, 255);
+    border-radius: 10px;
     width: 100px;
+    margin-left: 10px;
 }
 
 h1 {

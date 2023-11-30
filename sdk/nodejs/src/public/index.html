@@ -25,30 +25,58 @@
 
 <body>
     <h1>Bot Libre Nodejs SDK</h1>
+    <div style="display: block; text-align: left;">
+        <li>The Bot Libre Nodjs SDK allows you to easily integrate Bot Libre with a nodjs application.
+            Through the SDK you can connect to your bots on Bot Libre, send messages, and train and configure your bots.
+            You can also access Bot Libre analytics and AI services, and other content. Start by setting the
+            'Application ID', 'username' and 'password' are required. If you don't have an account yet, you can create
+            one at <a href="https://botlibre.com/login?sign-up=true">botlibre</a>. You can get an application ID from
+            any of the services websites (Bot Libre, Bot Libre for Business). </li>
+        <li>Once you have obtained your Credentials, you can start by testing the
+            API's<code>/connect</code> and <code>/chat</code> respectively, by selecting them from the dropdown menu
+            above. <code>/connect</code> is used to log the user in and establish a new token, which will be saved as a
+            cookie in the browser. <strong>Note:</strong> Once the user has logged in, there's no need to use the
+            <code>/connect</code> endpoint again every time. Instead, you can proceed with other operations, such as
+            using the <code>/chat</code> endpoint.
+        </li>
+        <li>There are other API calls that require additional information, which needs to be entered
+            manually. Please review the file <code>index.html</code> for further details.</li>
+    </div>
     <div>
         <label id="apiLabel" for="apiSelector">Select API: </label>
         <select id="apiSelector">
             <option value="connect">connect</option>
             <option value="chat">chat</option>
+            <option value="view-user">view-user</option>
             <!--TODO: Add more apis -->
         </select>
         <button onclick="executeAPI()">Test</button>
     </div>
-
+    <div>
+        <table>
+            <tr>
+                <th colspan="2">Login Credentials</th>
+            </tr>
+            <tr>
+                <td><label for="username">Username:</label></td>
+                <td><input type="text" id="username" name="username" required></td>
+            </tr>
+            <tr>
+                <td><label for="password">Password:</label></td>
+                <td><input type="password" id="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td><label for="id">Application Id:</label></td>
+                <td><input type="text" id="id" name="id" required></td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+    </div>
     <div id="result">
 
     </div>
-
     <script>
-        //OBJECTS - DATA
-        let userDetails = {
-            username: "",
-            password: "",
-            applicationId: "",
-            token: "" //Must loggin to get the token.
-        }
-
-
         //HELPER FUNCTIONS
         function appendResult(data) {
             let tag = document.getElementById("result")
@@ -62,8 +90,7 @@
                 }
             }
         }
-        //Fetch helper function
-        function requestInit(method, body) {
+        function requestInit(method, body) { //Fetch helper function
             return {
                 method: method,
                 headers: { "Content-Type": "application/json" },
@@ -77,27 +104,33 @@
                 else appendResult("FAILED")
                 data = await res.json()
                 printProperties(data)
-            }).catch(error => appendResult("ERROR"))
+            }).catch(error => appendResult("ERROR: " + error))
             return data
         }
+
+
 
         //API CALLS
         async function executeAPI() {
             let selectedApi = document.getElementById("apiSelector").value;
             switch (selectedApi) {
                 case "connect":
-                    let data = await sdkFetch("/connect", requestInit("POST", userDetails))
-                    userDetails.token = data.token
+                    let data = await sdkFetch("/connect", requestInit("POST", {
+                        username: document.getElementById("username").value,
+                        applicationId: document.getElementById("id").value,
+                        password: document.getElementById("password").value
+                    }))
                     break
                 case "chat":
-                    await sdkFetch("/chat", requestInit("POST", {message: "Hello World!", botId: "165"}))
+                    await sdkFetch("/chat", requestInit("POST", { message: "Hello World!", botId: "165" }))
+                    break
+                case "view-user":
+                    await sdkFetch("/view-user", requestInit("POST", { username: "OmarBajunaid" }))
                     break
                 default:
                     console.log("Invalid API selection")
             }
         }
-
-
     </script>
 
 </body>
