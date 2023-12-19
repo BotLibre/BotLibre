@@ -199,6 +199,9 @@ public class Facebook extends BasicSense {
 	
 	// Connect a webhook to a page
 	public void connectWebhook() throws FacebookException {
+		if(!getCustomApp()) {
+			return;
+		}
 		String appAccessToken = getOauthKey() + "|" + getOauthSecret();
 		log("Connecting webhook: " + getWebhook(), Level.INFO);
 		Map<String, String> params = new HashMap<>();
@@ -218,6 +221,9 @@ public class Facebook extends BasicSense {
 	}
 	
 	public void disconnectWebhook() throws FacebookException {
+		if(!getCustomApp()) {
+			return;
+		}
 		log("Disconnecting webhook", Level.INFO);
 		// Need to use app access token for delete API.
 		String appAccessToken = getConnection().getOAuthAppAccessToken().getToken(); //getOauthKey() + "|" + getOauthSecret();
