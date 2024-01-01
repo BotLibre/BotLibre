@@ -4,7 +4,7 @@
   "description": "The Bot Libre nodejs SDK allows you to easily integrate Bot Libre with a nodejs application",
   "main": "server.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "npm run build && node dist/server.js",
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc"
   },
@@ -21,9 +21,11 @@
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.6",
+    "@types/multer": "^1.4.11",
     "@types/xml2js": "^0.4.14",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
     "node-fetch": "^2.7.0",
     "xml2js": "^0.6.2"
   }
