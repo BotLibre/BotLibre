@@ -15,7 +15,6 @@
 */
 
 import * as xml2js from 'xml2js';
-import SDKException from '../sdk/SDKException';
 export class Utils {
     static async loadXML(xml: string): Promise<any> {
         let response: any
@@ -68,6 +67,14 @@ export class XMLReader {
     readElement(elemName: string): string | undefined {
         return this.root?.[elemName]?.[0] ?? undefined;
     }
+
+    readElements(elemName: string): any[] {
+        const elements = this.root?.[elemName]
+        if(elements){
+            return elements.map((element :any) => element);
+        }
+        return []
+    }
 }
 
 
@@ -83,7 +90,7 @@ export class XMLWriter {
         this.buffer.push(text);
     }
 
-    appendAttribute(attrTag: string, value?: string | boolean) {
+    appendAttribute(attrTag: string, value?: string | boolean | number) {
         if (attrTag && value) {
             Utils.log("Attr tag: " + attrTag + " Value: " + value)
             this.buffer.push(" " + attrTag + "=\"" + value + "\"")

@@ -25,7 +25,7 @@
 
 <body>
     <h1>Bot Libre Nodejs SDK</h1>
-    <div style="display: block; text-align: left;">
+    <div class="main" style="display: block; text-align: left;">
         <li>The Bot Libre Nodjs SDK allows you to easily integrate Bot Libre with a nodjs application.
             Through the SDK you can connect to your bots on Bot Libre, send messages, and train and configure your bots.
             You can also access Bot Libre analytics and AI services, and other content. Start by setting the
@@ -42,17 +42,27 @@
         <li>There are other API calls that require additional information, which needs to be entered
             manually. Please review the file <code>index.html</code> for further details.</li>
     </div>
-    <div>
+    <div class="main">
         <label id="apiLabel" for="apiSelector">Select API: </label>
         <select id="apiSelector">
             <option value="connect">connect</option>
             <option value="chat">chat</option>
             <option value="view-user">view-user</option>
-            <!--TODO: Add more apis -->
+            <option value="check-forum-post">check-forum-post</option>
+            <option value="create-ueser">create-ueser</option>
+            <option value="get-forum-admins">get-forum-admins</option>
+            <option value="get-forum-users">get-forum-users</option>
+            <option value="get-forum-posts">get-forum-posts</option>
+            <option value="get-categories">get-categories</option>
+            <option value="get-tags">get-tags</option>
+            <option value="get-all-templates">get-all-templates</option>
+            <option value="get-channel-bot-mode">get-channel-bot-mode</option>
+            <option value="save-avatar-background">save-avatar-background</option>
+            <!--TODO: Add more. Take a look at mainRouter.ts file.-->
         </select>
         <button onclick="executeAPI()">Test</button>
     </div>
-    <div>
+    <div class="main">
         <table>
             <tr>
                 <th colspan="2">Login Credentials</th>
@@ -73,6 +83,10 @@
             </tr>
         </table>
     </div>
+    <div class="main">
+        <input type="file" id="fileInput" style="display: none">
+        <img id="selectedImage" style="display: none; max-width: 30%;" alt="Selected Image">
+    </div>
     <div id="result">
 
     </div>
@@ -82,13 +96,28 @@
             let tag = document.getElementById("result")
             tag.innerHTML = tag.innerHTML + data + "<br>"
         }
-        function printProperties(any) {
-            document.getElementById("result").innerHTML = ""
-            for (const key in any) {
-                if (Object.hasOwnProperty.call(any, key)) {
-                    appendResult(key + ": " + any[key])
+        //Reading javascript objects
+        function stringifyObject(obj, depth = 0) {
+            let result = '';
+            for (const key in obj) {
+                if (Object.hasOwnProperty.call(obj, key)) {
+                    const value = obj[key]
+                    if (Array.isArray(value)) {
+                        result += key + ": {<br>"
+                        value.forEach((element) => {
+                            result += stringifyObject(element, depth + 1)
+                        })
+                        result += "]<br>"
+                    } else if (typeof value === 'object' && value  !== null) {
+                        result += key + ": {<br>"
+                        result += stringifyObject(value, depth + 1);
+                        result += "}<br>"
+                    } else {
+                        result += key + ": " + value + "<br>"
+                    }
                 }
             }
+            return result;
         }
         function requestInit(method, body) { //Fetch helper function
             return {
@@ -100,10 +129,11 @@
         async function sdkFetch(url, reqInit) {
             let data
             await fetch(url, reqInit).then(async (res) => {
+                document.getElementById("result").innerHTML = ''
                 if (res.ok) appendResult("SUCCESS")
                 else appendResult("FAILED")
                 data = await res.json()
-                printProperties(data)
+                appendResult(stringifyObject(data))
             }).catch(error => appendResult("ERROR: " + error))
             return data
         }
@@ -127,12 +157,88 @@
                 case "view-user":
                     await sdkFetch("/view-user", requestInit("POST", { username: "" }))
                     break
+                case "check-forum-post":
+                    await sdkFetch("/check-forum-post", requestInit("POST", { forumId: "" }))
+                    break;
+                case "create-user":
+                    await sdkFetch("/create-user", requestInit("POST", {
+                        user: "", password: "", hint: "", name: "", email: "",
+                        website: "", bio: "", showName: false
+                    }))
+                case "get-forum-admins":
+                    await sdkFetch("/get-forum-admins", requestInit('POST', {
+                        forumId: ""
+                    }))
+                    break
+                case "get-forum-users":
+                    await sdkFetch("/get-forum-users", requestInit('POST', {
+                        forumId: ""
+                    }))
+                    break
+                case "get-forum-posts":
+                    await sdkFetch("/get-forum-posts", requestInit('POST', {
+                        type: "Post",
+                        typeFilter: "Public",
+                        sort: "date"
+                    }))
+                    break
+                case "get-categories":
+                    await sdkFetch("/get-categories", requestInit('POST', { type: 'Bot' }))
+                    break
+                case "get-tags":
+                    await sdkFetch("/get-tags", requestInit('POST', { type: 'Bot' }))
+                    break
+                case "get-all-templates":
+                    await sdkFetch('/get-all-templates', requestInit('POST', { type: 'Bot' }))
+                    break
+                case "get-channel-bot-mode":
+                    await sdkFetch('/get-channel-bot-mode', requestInit('POST', { channelId: "" }))
+                    break
+                case "save-avatar-background":
+                    let fileInput = document.getElementById('fileInput')
+                    fileInput.addEventListener('change', (event) => {
+                        let formData = new FormData();
+                        formData.append('avatarId','')
+                        handleFileSelect(formData, '/save-avatar-background')
+                        fileInput.value = ''
+                    });
+                    fileInput.click()
+                    break
+                //TODO: Add more
                 default:
                     console.log("Invalid API selection")
             }
         }
+
+
+        //Select a file and fetch. Uploads an image and sends form data
+        async function handleFileSelect(formData, url) {
+            var fileInput = document.getElementById('fileInput')
+            var file = fileInput.files[0]
+            var imgElement = document.getElementById('selectedImage')
+            imgElement.src = URL.createObjectURL(file)
+            imgElement.style.display = 'block'
+            formData.append('file', file)
+            if (!file) {
+                alert('Please select a file first.');
+                return;
+            }
+            let result = await fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Upload successful:', data);
+                    alert('Upload successful!');
+                })
+                .catch(error => {
+                    console.error('Error uploading file:', error);
+                    alert('Error uploading file. Please try again.\nCheck the console for more detials.');
+                })
+
+            console.log(result)
+        }
     </script>
-
 </body>
-
 </html>

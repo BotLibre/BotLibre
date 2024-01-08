@@ -12,7 +12,7 @@ input {
     font-size: 15px;
 }
 
-div {
+div.main {
     margin-bottom: 10px;
     border: black solid;
     border-radius: 10px;
@@ -27,6 +27,10 @@ p {
 }
 
 #result {
+    border: solid black;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px;
     text-align: left;
     overflow: auto;
 }
