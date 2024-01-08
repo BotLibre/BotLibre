@@ -158,7 +158,7 @@ class Main:
         return self.connection.fetchUser(userConfig)
 
     # Fetch forum post
-    def fetchFormPost(self, FORUM_POST_ID: str = ID.FORUM_POST) -> ForumPostConfig:
+    def fetchForumPost(self, FORUM_POST_ID: str = ID.FORUM_POST) -> ForumPostConfig:
         check_user = self.connectUserAccount()
         if(check_user == False):
             return None
@@ -254,7 +254,6 @@ class Main:
         return self.connection.deleteForumPost(config)
 
     def createChannelFileAttachment(self, instanceId: str = ID.CHANNEL, fileName: str = None, fileType: str= None, file = None):
-        # TODO: Test
         isUser = self.connectUserAccount()
         if(isUser == False):
             return None
@@ -266,7 +265,6 @@ class Main:
         
 
     def createChannelImageAttachment(self, instanceId: str = ID.CHANNEL, fileName: str = None, fileType: str= None, file = None):
-        # TODO: Test
         isUser = self.connectUserAccount()
         if(isUser == False):
             return None
@@ -305,7 +303,7 @@ class Main:
         config.message = writer
         return self.connection.createUserMessage(config)
 
-    def saveResponse(self, botId: str = ID.BOT, responseId: str = ID.QUESTION, questionId: str=""):
+    def saveResponse(self, botId: str = ID.BOT, responseId: str = ID.RESPONSE, questionId: str=ID.QUESTION):
         isUser = self.connectUserAccount()
         if(isUser == False):
             return None
@@ -338,15 +336,19 @@ class Main:
             input("Require Topic (y, n): ").lower == "y") else False
         return self.connection.saveResponse(config)
 
-    def deleteResponse(self, responseId: str = ID.RESPONSE):
+    def deleteResponse(
+        self, botId:str = ID.BOT,
+        responseId: str = ID.RESPONSE,
+        questionId:str = ID.QUESTION):
+        
         isUser = self.connectUserAccount()
         if(isUser == False):
             return None
         config = ResponseConfig()
-        config.instance = responseId
+        config.instance = botId
         # config.type = input("Type (response, conversation, greeting, flagged):")
-        # config.questionId = questionId
-        # config.responseId = responseId
+        config.questionId = questionId
+        config.responseId = responseId
         return self.connection.deleteResponse(config)
     
     
@@ -787,8 +789,79 @@ class Main:
         config.instance = scriptId
         config.source = source
         return self.connection.saveScriptSource(config)
-        
     
+    def getBotScriptSource(self, botId:str = ID.BOT, scriptId: str = ID.SCRIPT):
+        # This will only retrieve the Script data that are included in Bot's Scripts -> ' Active Scripts ' #
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptSourceConfig()
+        config.instance = botId
+        config.id = scriptId
+        return self.connection.getBotScriptSource(config)
+    
+    def getBotScripts(self, botId:str = ID.BOT):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = InstanceConfig()
+        config.id = botId
+        return self.connection.getBotScripts(config)
+    
+    def importBotScript(self, botId: str = ID.BOT, scriptId: str = ID.SCRIPT):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptConfig()
+        config.id = scriptId
+        config.instance = botId
+        return self.connection.importBotScript(config)
+    
+    def importBotLog(self, botId: str = ID.BOT, scriptId:str = ID.SCRIPT):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptConfig()
+        config.instance = botId
+        config.id = scriptId
+        return self.connection.importBotLog(config)
+    
+    def saveBotScript(self, botId: str = ID.BOT, scriptId:str = ID.SCRIPT, source: str = "Hi"):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptSourceConfig()
+        config.id = scriptId
+        config.instance = botId
+        config.source = source
+        return self.connection.saveBotScriptSource(config)
+    
+    def deleteBotScript(self, botId:str = ID.BOT, scriptId:str = ID.SCRIPT):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptSourceConfig()
+        config.instance = botId
+        config.id = scriptId
+        return self.connection.deleteBotScript(config)
+        
+    def upBotScript(self, botId:str = ID.BOT, scriptId: str = ID.SCRIPT):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptSourceConfig()
+        config.id = scriptId
+        config.instance = botId
+        return self.connection.upBotScript(config)
+    
+    def downBotScript(self, botId:str = ID.BOT, scriptId: str = ID.SCRIPT):
+        isUser = self.connectUserAccount()
+        if(isUser == False):
+            return None
+        config = ScriptSourceConfig()
+        config.id = scriptId
+        config.instance = botId
+        return self.connection.downBotScript(config)
 
 ###### MAIN ######
 main = Main (
@@ -813,16 +886,16 @@ help = (
     8  - Update (Forum Post)
     9  - Delete (Forum Post)
     10 - Create Reply (Post)
-    11 - Save Response Question : Not tested
-    12 - Save Response Response : Not tested
-    13 - Delete Response : Not tested
+    11 - Save Response - Create a new Question and Response
+    12 - Save Response
+    13 - Delete Response
     14 - Create (Avatar) Media
     15 - Save (Avatar) Media
     16 - Delete (Avatar) Media
     17 - Save (Avatar) Background
     18 - Delete (Avatar) Background
-    19 - Create Channel File Attachement : Not tested
-    20 - Create Channel Image Attachement : Not tested
+    19 - Create Channel File Attachement
+    20 - Create Channel Image Attachement
     21 - Flag Instance (Bot) : Not tested
     22 - Flag Instance (Avatar) : Not tested
     23 - Flag Instance (Graphic) : Not tested
@@ -852,8 +925,8 @@ help = (
     47 - Create a new (Avatar)
     48 - Create (Graphic) Media
     49 - Update User Icon
-    50 - Get Forum Bot Mode : Not tested
-    51 - Get Voice : Not tested
+    50 - Get Forum Bot Mode
+    51 - Get Voice
     52 - Get Default Responses of (Bot)
     53 - Get Greetings of (Bot)
     54 - Get Responses of (Bot)
@@ -863,6 +936,14 @@ help = (
     58 - Get (Avatar) Media
     59 - Get (Script) Source
     60 - Save (Script) Source
+    61 - Get (Bot) (Script) Source
+    62 - Get (Scripts) of the (Bot)
+    63 - Import (Bot) (Script)
+    64 - Import (Bot) Logs, chatlog/response
+    65 - Save (Bot) (Script) Source | Create (Bot) (Script) Source
+    66 - Delete (Bot) (Script)
+    67 - Up (Bot) (Script)
+    68 - Down (Bot) (Script) 
     """
 )
 print(help)
@@ -916,13 +997,20 @@ def switch(option):
             replyPost = main.createReply()
             Utils.log("Rplied POST ID: " + str(replyPost.id))
         elif(int(option) == 11):
-            main.saveResponse()
+            # main.saveResponse(questionId="258352")
+            # Create a new question and response
+            Utils.logs("New question and response", "To create a question and a response",
+                       "Need to provide (quesiton, response)",
+                       "Skip the rest.",
+                       "Ids no required.")
+            main.saveResponse(questionId="", responseId="")
         elif(int(option) == 12):
-            main.saveResponse()
+            main.saveResponse(responseId="")
         elif(int(option) == 13):
-            main.deleteResponse()
+            # To remove/delete a response, need to provide botId, questionId and responseId.
+            main.deleteResponse(botId="",questionId="", responseId="")
         elif(int(option)==14):
-            file, name, type = Utils.PostImageFromURL(ID.TEMP_IMAGEURL)
+            file, name, type = Utils.GetImageFromURL(ID.TEMP_IMAGEURL)
             main.createAvatarMedia(
                 imageData=file,
                 fileName=name,
@@ -933,7 +1021,7 @@ def switch(option):
         elif(int(option)==16):
             main.deleteAvatarMedia()
         elif(int(option)==17):
-            file, name, type = Utils.PostImageFromURL(ID.TEMP_IMAGEURL)
+            file, name, type = Utils.GetImageFromURL(ID.TEMP_IMAGEURL)
             main.saveAvatarBackground(
                 imageData=file,
                 fileName=name,
@@ -942,12 +1030,17 @@ def switch(option):
         elif(int(option)==18):
             main.deleteAvatarBackground()
         elif(int(option)==19):
-            pass
-            #file, name, type = Utils.PostImageFromURL(ID.TEMP_IMAGEURL)
-            #main.createChannelFileAttachment(fileName=name, fileType=type, file=file)
-        elif(int(option)==20):
-            file, name, type = Utils.PostImageFromURL(ID.TEMP_IMAGEURL)
+            # File
+            file, name, type = Utils.GetImageFromURL(ID.TEMP_IMAGEURL)
             main.createChannelFileAttachment(
+                fileName=name,
+                fileType=type,
+                file=file
+            )
+        elif(int(option)==20):
+            # Image
+            file, name, type = Utils.GetImageFromURL(ID.TEMP_IMAGEURL)
+            main.createChannelImageAttachment(
                 fileName=name,
                 fileType=type,
                 file=file
@@ -1051,21 +1144,21 @@ def switch(option):
                        "Avatar Creator: " + content.creator,
                     )
         elif(int(option)==48):
-            file, name, type = Utils.PostImageFromURL(ID.TEMP_IMAGEURL)
+            file, name, type = Utils.GetImageFromURL(ID.TEMP_IMAGEURL)
             main.createGraphicMedia(
                 imageData=file,
                 fileName=name,
                 fileType=type
             )
         elif(int(option)==49):
-            file, name, type = Utils.PostImageFromURL(ID.TEMP_IMAGEURL)
+            file, name, type = Utils.GetImageFromURL(ID.TEMP_IMAGEURL)
             main.updateUserIcon(file, name)
         elif(int(option)==50):
             main.getForumBotMode()
         elif(int(option)==51):
             main.getVoice()
         elif(int(option)==52):
-            responses = main.getDefaultResponses(id=str(50010323), instanceId=str(50010323))
+            responses = main.getDefaultResponses(id="", instanceId="")
             print(responses)
         elif(int(option)==53):
             greetings = main.getGreetings()
@@ -1113,7 +1206,29 @@ def switch(option):
             print("Source: " + str(scriptSource.source))
         elif(int(option)==60):
             main.saveScriptSource()
-            
+        elif(int(option)==61):
+            botScript = main.getBotScriptSource()
+            Utils.logs(
+                "Bot Script Source",
+                "Version: " + str(botScript.version),
+                "ID: " + str(botScript.id)
+            )
+        elif(int(option)==62):
+            scripts = main.getBotScripts()
+            for script in scripts:
+                print(script.name)
+        elif(int(option)==63):
+            main.importBotScript()
+        elif(int(option)==64):
+            main.importBotLog()
+        elif(int(option)==65):
+            main.saveBotScript()
+        elif(int(option)==66):
+            main.deleteBotScript()
+        elif(int(option)==67):
+            main.upBotScript()
+        elif(int(option)==68):
+            main.downBotScript()
         else:
             pass
     except Exception as e:

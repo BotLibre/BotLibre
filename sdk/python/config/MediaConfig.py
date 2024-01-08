@@ -48,12 +48,10 @@ class MediaConfig(Config):
     def toXML(self):
         writer = Writer("<media")
         self.writeCredentials(writer)
-        if(self.id != 0):
+        if(self.id != "0" and self.id!=None):
             writer.append(" id=\"" + self.id + "\"")
         if(self.name != None):
             writer.append(" name=\"" + self.name + "\"")
-        if(self.type != None):
-            writer.append(" type=\"" + self.type + "\"")
         if(self.file != None):
             writer.append(" file=\"" + self.file + "\"")
         if(self.key != None):

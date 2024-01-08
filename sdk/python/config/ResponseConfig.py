@@ -41,6 +41,7 @@ class ResponseConfig(Config):
     command: str
 
     def __init__(self):
+        super().__init__()
         self.questionId = None
         self.responseId = None
         self.question = None
@@ -67,7 +68,7 @@ class ResponseConfig(Config):
         return writer
 
     def writerXML(self, writer: Writer):
-        writer = Writer("<response")
+        writer.append("<response")
         self.writeCredentials(writer)
         if(self.questionId != None):
             writer.append(" questionId=\"" + self.questionId + "\"")
@@ -80,7 +81,7 @@ class ResponseConfig(Config):
         if(self.keywords != None):
             writer.append(" keywords=\"" + self.keywords + "\"")
         if(self.required != None):
-            writer.append(" required=\"" + self.required + "\"")
+            writer.append(" required=\"" + str(self.required) + "\"")
         if(self.emotions != None):
             writer.append(" emotions=\"" + self.emotions + "\"")
         if(self.actions != None):
@@ -120,6 +121,7 @@ class ResponseConfig(Config):
             writer.append(Utils.escapeHTML(self.command))
             writer.append("</command>")
         writer.append("</response>")
+        return writer
 
     def parseXML(self, xml:str):
         super().parseXML(xml)
