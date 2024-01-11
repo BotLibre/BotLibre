@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/BotLibre/BotLibre)
+
 # Bot Libre
 An open source platform for artificial intelligence, nlp, chat bots, virtual agents, social media automation, and live chat automation.
 
