@@ -51,7 +51,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 /**
- * Enables receiving a sending messages through Facebook.
+ * Enables receiving a sending messages through Telegram.
  */
 public class Telegram extends BasicSense {
 	public static PolicyFactory sanitizer;
