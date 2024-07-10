@@ -120,12 +120,10 @@ public class LineAPI extends BasicSense {
 	 */
 	public void initProperties() {
 		if (this.initProperties) {
-			log("\n\ninitProperties Called returning immediately:", Level.INFO);
 			return;
 		}
 		synchronized (this) {
 			if (this.initProperties) {
-				log("\n\ninitProperties Called sync returning immediately:", Level.INFO);
 				return;
 			}
 			getBot().memory().loadProperties("Line");
@@ -133,7 +131,6 @@ public class LineAPI extends BasicSense {
 			Vertex line = memory.createVertex(getPrimitive());
 			
 			String property = this.bot.memory().getProperty("Line.authToken");
-			log("\n\ninitProperties Called sync retrieve authToken:", Level.INFO, property);
 			if (property != null) {
 				this.authToken = property;
 			}
@@ -142,7 +139,6 @@ public class LineAPI extends BasicSense {
 	}
 	
 	public void saveProperties(String authToken) {
-		log("\n\nSave Properties Called auth token:", Level.INFO, authToken);
 		Network memory = getBot().memory().newMemory();
 		memory.saveProperty("Line.authToken", authToken, true);
 		memory.save();
@@ -188,26 +184,13 @@ public class LineAPI extends BasicSense {
 	 * Send a message to the user.
 	 */
 	public void sendMessage(String text, String replyToken) {
-		log("Sending message:", Level.INFO, text, replyToken);
 		try {
-			// Map<String, String> params = new HashMap<String, String>();
 			Map<String, String> headers = new HashMap<String, String>();
-
-			// headers.put("Content-Type", "application/json");
 			headers.put("Authorization", "Bearer "+ this.authToken);
-
-			
-			// params.put("replyToken", replyToken);		
-			// params.put("messages", formattedMsg);
 			String strippedText = sanitize(text);
-	        String formattedMsg = String.format("[{'type': 'text', 'text': %s}]", strippedText);
-	        String json = "{\"replyToken\": \"" + replyToken + "\", \"messages\": [{\"type\": \"text\", \"text\": \"" + strippedText +"\"}]}";
-	        
-
-		
-			log("sendMessage:", Level.INFO, json);
+	        	String formattedMsg = String.format("[{'type': 'text', 'text': %s}]", strippedText);
+	        	String json = "{\"replyToken\": \"" + replyToken + "\", \"messages\": [{\"type\": \"text\", \"text\": \"" + strippedText +"\"}]}";
 			Utils.httpPOST("https://api.line.me/v2/bot/message/reply", "application/json", json, headers);
-		
 		}
 		catch (Exception exception) {
 			log(exception);
@@ -235,7 +218,6 @@ public class LineAPI extends BasicSense {
 			if (chat.get("text") != null) {
 				text = chat.getString("text").trim();
 				}
-			log("Processing message", Level.INFO, replyToken, userId, timestamp, messageId, text);
 			this.messagesProcessed++;
 			
 			Vertex user = network.createUniqueSpeaker(new Primitive(userId), Primitive.Line, userId);
@@ -297,13 +279,10 @@ public class LineAPI extends BasicSense {
 	@Override
 	public void output(Vertex output) {
 		if (!isEnabled()) {
-			log("OUTPUT: not Enabled returning", Level.INFO);	
-
 			notifyResponseListener();
 			return;
 		}
 		Vertex sense = output.mostConscious(Primitive.SENSE);
-		// Vertex input = output.getRelationship(Primitive.INPUT);
 		if ((sense == null) || (!getPrimitive().equals(sense.getData()))) {
 			notifyResponseListener();
 			return;
@@ -322,7 +301,6 @@ public class LineAPI extends BasicSense {
 				replyTo = user.getData().toString();
 			}
 		}
-		log("OUTPUT: got the user", Level.INFO);	
 		Vertex conversation = output.getRelationship(Primitive.CONVERSATION);
 		Vertex id = conversation.getRelationship(Primitive.ID);
 		String conversationId = id.printString();
@@ -334,7 +312,6 @@ public class LineAPI extends BasicSense {
 		
 		// Don't send empty messages.
 		if (text.isEmpty()) {
-			log("OUTPUT: text was empty", Level.INFO);	
 			return;
 		}
 		Vertex command = output.mostConscious(Primitive.COMMAND);
@@ -344,8 +321,6 @@ public class LineAPI extends BasicSense {
 		}
 		
 		String replyToken = conversation.getRelationship(Primitive.REPLY).printString();
-		log("OUTPUT: reply token", Level.INFO, replyToken);
-		log("OUTPUT: auth token", Level.INFO, this.authToken);
 		sendMessage(text, replyToken);
 	}
 	
