@@ -187,6 +187,7 @@ public class Primitive implements Serializable {
 	public static final Primitive FALSE = new Primitive("false");
 	
 	public static final Primitive SPEAKER = new Primitive("speaker");
+	public static final Primitive REPLY = new Primitive("reply");
 	public static final Primitive TARGET = new Primitive("target");
 	public static final Primitive INPUT = new Primitive("input");
 	public static final Primitive MIMIC = new Primitive("mimic");
@@ -476,6 +477,7 @@ public class Primitive implements Serializable {
 	public static final Primitive SMS = new Primitive("sms");
 	public static final Primitive IVR = new Primitive("ivr");
 	public static final Primitive TELEGRAM = new Primitive("telegram");
+	public static final Primitive Line = new Primitive("line");
 	public static final Primitive DISCORD = new Primitive("discord");
 	public static final Primitive TWITTER = new Primitive("twitter");
 	
